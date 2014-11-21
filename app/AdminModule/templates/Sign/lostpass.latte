@@ -1,0 +1,24 @@
+{block #titles}Zapomenuté heslo{/block}
+{block content}
+
+<h1>Forgotten password</h1>
+
+<form action="" class="form-signin" role="form" method="post">
+    <input type="hidden" name="terminal" value="open" />
+    <input type="hidden" name="namespace" value="Caloris" />
+    <input type="hidden" name="class" value="UserActions" />
+    <input type="hidden" name="_action" value="send" />
+    <h2 class="form-signin-heading" style="text-align: center;">
+        <img src="{$baseUri}/images/caloris-logo-midi.jpg" style="width: 180px; margin-bottom: 20px;" alt="logo" /></h2>
+    <p>[cal:t(lostPasswordInfoEmail;administrator) /]</p>
+
+    <input type="text" 
+           name="email" 
+           class="form-control"
+           placeholder="e-mailová adresa"
+           autocomplete="off" />
+    <br />
+    <button class="btn btn-lg btn-primary btn-block" type="submit">[cal:t(Send) /]</button>
+</form>
+
+<div><br /><a style="padding-left: 30px;" n:href=":Front:Sign:in" class="btn btn-default">Přihlásit</a></div>

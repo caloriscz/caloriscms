@@ -1,0 +1,23 @@
+{block #titles}Zapomenuté heslo{/block}
+{block content}
+
+<section class="container">
+
+    {foreach $flashes as $flash}
+        <div class="flash {$flash->type}">{$flash->message}</div>
+    {/foreach}
+
+    <h1>Zapomenuté heslo</h1>
+
+    <div class="contentBox">
+        <p>Zadejte své uživatelské jméno nebo e-mailovou adresu. Zašleme Vám e-mail s odkazem pro vytvoření Vašeho nového hesla.</p>
+        <br />
+
+        <div class="row">
+            <div class="col-md-9">
+                {control sendForm}
+            </div>
+        </div>
+    </div>
+
+</section>

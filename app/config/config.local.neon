@@ -1,0 +1,15 @@
+parameters:
+
+
+nette:
+	database:
+		dsn: ''
+		user: ''
+		password: ''
+		options:
+			lazy: yes
+
+services:
+    nette.latteFactory:
+        setup:
+            - setTempDirectory(null)

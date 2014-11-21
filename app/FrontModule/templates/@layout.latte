@@ -1,0 +1,24 @@
+{**
+ * @param string   $basePath web base path
+ * @param array    $flashes  flash messages
+*}
+
+{if $style}
+    <!DOCTYPE html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+        <title>{block #titles}{/block} | Mimix</title>
+        <link rel="stylesheet" href="{$baseUri}/css/style.css" type="text/css" media="screen,projection" />
+
+        <script src="{$baseUri}/js/libs/modernizr.custom.js"></script>
+    </head>
+
+   <h1>Homepage</h1>
+   
+    <script src="{$baseUri}/js/libs/jquery-1.11.1.min.js" type="text/javascript"></script>
+    <script src="{$baseUri}/js/netteForms.js" type="text/javascript"></script>
+    <script src="{$baseUri}/js/nette.ajax.js" type="text/javascript"></script>
+</body>
+</html>
+{/if}

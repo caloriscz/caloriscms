@@ -1,0 +1,18 @@
+{block #titles}Registrace{/block}
+{block content}
+
+<section class="container">
+    {foreach $flashes as $flash}
+        <div class="flash {$flash->type}">{$flash->message}</div>
+    {/foreach}
+
+    <h1>Registrace nového účtu</h1>
+    
+    <p>Všechna pole jsou povinná</p>
+
+    <div class="row">
+        <div class="col-lg-offset-1 col-md-8">
+            {control signUpForm}
+        </div>
+    </div>
+</section>

@@ -1,0 +1,22 @@
+{block #titles}Přihlášení{/block}
+{block content}
+
+<section class="container">
+    {foreach $flashes as $flash}
+        <div class="flash {$flash->type}">{$flash->message}</div>
+    {/foreach}
+
+    <h1>Přihlášení uživatele</h1>
+
+    <br />
+    <div class="row">
+        <div class="col-md-6 col-sm-12">
+            {control signInForm}
+        </div>
+    </div>
+    {var $x = 1}
+    {var $y = 5}
+    <p style="padding-top: 0px;">
+        <a n:href=":Front:Sign:lostpass">Zapomenuté heslo</a>
+    </p>
+</section>
