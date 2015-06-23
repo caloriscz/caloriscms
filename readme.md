@@ -1,4 +1,4 @@
 Caloris CMS
 -------------
 
-Content managemenet system running on Nette Frmaework.
+Content management system running on Nette Framework.

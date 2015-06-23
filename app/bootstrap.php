@@ -1,10 +1,10 @@
 <?php
 
-require __DIR__ . '/../vendor/Nette/loader.php';
+require __DIR__ . '/../vendor/autoload.php';
 
 $configurator = new Nette\Configurator;
 
-$configurator->setDebugMode('94.74.253.47'); // enable for your remote IP
+//$configurator->setDebugMode('42.42.42.42'); // enable for your remote IP
 $configurator->enableDebugger(__DIR__ . '/../log');
 error_reporting(E_ALL ^ E_NOTICE);
 
