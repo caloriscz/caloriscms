@@ -19,5 +19,5 @@
 		"nette/utils": "2.3.*",
 		"nette/application": "2.3.*",
 		"nette/component-model": "2.2.*"
-	},
+	}
 }
