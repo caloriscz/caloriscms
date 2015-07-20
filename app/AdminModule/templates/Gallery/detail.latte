@@ -1,0 +1,56 @@
+{block #titles}Galerie{/block}
+{block content}
+
+<h1 class="page-header">Album: {$album->title}  <a n:href="deleteImages! id => $album->id, category => $categoryId" class="btn btn-default btn-danger pull-right" 
+                                                   onclick="return confirm('Opravdu smazat všechny obrázky v albu?')">Smazat všechny obrázky v albu</a></h1>
+
+{control uploadForm}
+
+{control dropUploadForm}
+
+{var $albumSort = 0}
+{var $counter = 2}
+
+<div class="row">
+    {foreach $gallery as $item}
+        <div class="col-sm-6 col-md-2">
+            <div class="thumbnail" style="position: relative;">
+                <div style="height: 180px; text-align: center;">
+                    <a href="{$baseUri}/images/gallery/{$item->gallery_albums_id|padLeft:4:"0"}/{$item->name}">
+                        <img src="{$baseUri}/images/gallery/{$item->gallery_albums_id|padLeft:4:"0"}/tn_{$item->name}" class="img-responsive" style="max-height: 155px;" />
+                    </a>
+                </div>
+                <div class="caption" style="height: 150px;">
+                    <p>{$item->name}</p>
+                    <p>{$item->description} {$item->date_created|date:'j. n. H:i'}</p>
+                    <p class="cancel-icon"><a n:href="delete!, id => $item->id" onclick="return confirm('Opravdu smazat obrázek?')" role="button"><i class="fa fa-times cancel-circle"></i></a></p>
+                    <p><a n:href=":Admin:Gallery:image id => $item->id" class="btn btn-primary">Upravit</a>
+                        <a href="{$baseUri}/images/gallery/{$item->gallery_albums_id|padLeft:4:"0"}/{$item->name}" class="btn btn-default" role="button"><i class="fa fa-picture-o"></i></a>
+                            {var $albumCount = $database->table('gallery')->where('gallery_albums_id = ?', $item->gallery_albums_id)->count()}
+                            {var $firstArrow = 0}
+
+                        {if $iterator->first}
+                            <span class="btn btn-default"><i class="fa fa-arrow-up font-grey"></i></span>
+                            {elseif  $firstArrow == 1}    
+                            <span class="btn btn-default"><i class="fa fa-arrow-up font-grey"></i></span>
+                            {else}
+                            <a n:href="up!, id => $item->id, sorted => $item->sorted, album => $item->gallery_albums_id, category => $categoryId" class="btn btn-default">
+                                <i class="fa fa-arrow-up"></i>
+                            </a>
+                        {/if}
+                        &nbsp;
+                        {if $iterator->last}
+                            <span class="btn btn-default"><i class="fa fa-arrow-down font-grey"></i></span>
+                            {elseif  $counter - $albumCount == 0}    
+                            <span class="btn btn-default"><i class="fa fa-arrow-down font-grey"></i></span>
+                            {else}
+                            <a n:href="down!, id => $item->id, sorted => $item->sorted, album => $item->gallery_albums_id, category => $categoryId" class="btn btn-default">
+                                <i class="fa fa-arrow-down"></i>
+                            </a>
+                        {/if}
+                    </p>
+                </div>
+            </div>
+        </div>
+    {/foreach}
+</div>
