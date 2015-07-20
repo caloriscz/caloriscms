@@ -1,0 +1,21 @@
+{block #titles}Helpdesk{/block}
+{block content}
+
+<h1 class="page-header">Helpdesk</h1>
+
+<table class="table table-striped">
+    <tr>
+        <th class="col-xs-1"></th>
+        <th class="col-xs-1">Datum</th>
+        <th>Název</th>
+        <th>Zpráva</th>
+    </tr>
+    {foreach $helpdesk as $item}
+        <tr>
+            <td class="col-xs-1"><a n:href="delete!, id => $item->id" onclick="return confirm('Opravdu smazat?')"><i class="fa fa-times font-red"></i></a></td>
+            <td>{$item->date_created|date:'j. n. H:i'}</td>
+            <td>{$item->subject}</td>
+            <td>{$item->message}</td>
+        </tr>
+    {/foreach}
+</table>
