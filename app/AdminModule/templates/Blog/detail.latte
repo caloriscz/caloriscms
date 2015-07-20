@@ -1,0 +1,16 @@
+{block #titles}Blog: Detail{/block}
+{block content}
+
+<h1 class="page-header">Blog: detail</h1>
+
+{control editForm}
+
+<h2>Obrázek</h2>
+
+{control insertImageForm}
+
+{if file_exists($appDir.'/images/blog/id-'.str_pad($blog->id, 6, '0', STR_PAD_LEFT).'.jpg')}
+    <img src="{$baseUri}/images/blog/id-{$blog->id|padLeft:6:'0'}.jpg" style="max-width: 250px;" /><br />
+    <a n:href="deleteImage!, $blog->id" onclick="return confirm('Opravdu smazat?')">Smazat obrázek</a>
+{/if}
+<br /><br />
