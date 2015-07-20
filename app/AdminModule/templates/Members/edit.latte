@@ -1,0 +1,28 @@
+{block #titles}Členové: {$members->username}{/block}
+{block content}
+
+{foreach $flashes as $flash}
+    <br />
+    <div class="alert alert-warning alert-dismissable">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        <div class="flash {$flash->type}">{$flash->message}</div>
+    </div>
+{/foreach}
+
+<h1 class="page-header">Členové: {$members->username}</h1>
+
+<table class="table table-bordered table-condensed">
+    <tr>
+        <td class="col-md-1">Uživatel</td>
+        <td>{$member->username}</td>
+    </tr>
+    <tr>
+        <td class="col-md-1">E-mail</td>
+        <td>{$member->email}</td>
+    </tr>
+    <tr>
+        <td class="col-md-1">Vytvořeno</td>
+        <td>{$member->date_created|date:'j. n. Y'}</td>
+    </tr>
+</table>
+{control editForm}
