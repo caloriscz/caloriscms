@@ -1,0 +1,33 @@
+{block #titles}{_admin.files.filemanager}{/block}
+{block content}
+
+{foreach $flashes as $flash}
+    <div class="flash {$flash->type}">{$flash->message}</div>
+{/foreach}
+
+<h1>{_admin.files.filemanager}</h1>
+
+{control uploadForm}
+
+<h2>{_admin.files.listoffiles}</h2>
+
+<table class="table table-striped table-responsive">
+    <tr>
+        <th class="span1"></th>
+        <th>{_admin.files.thumbnail}</th>
+        <th>{_admin.files.filename}</th>
+        <th>{_admin.files.sizeinkb}</th>
+    </tr>
+    {foreach $files as $key => $file}
+        <tr>
+            <td></td>
+            <td>
+                {if exif_imagetype($key)}
+                    <a href="../../files/{$key|toBaseName}"><img src="../../files/{$key|toBaseName}" style="max-width: 80px;" /></a>
+                {/if}
+            </td>
+            <td>{$key|toBaseName}</td>
+            <td></td>
+        </tr>
+    {/foreach}
+</table>
