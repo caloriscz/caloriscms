@@ -24,6 +24,44 @@ class PagesPresenter extends BasePresenter
     }
 
     /**
+     * Insert page content
+     */
+    function createComponentInsertPageForm()
+    {
+        $form = new \Nette\Forms\BootstrapUIForm();
+        $form->getElementPrototype()->class = "form-horizontal";
+        $form->getElementPrototype()->role = 'form';
+        $form->getElementPrototype()->autocomplete = 'off';
+        $form->getElementPrototype()->class = 'form';
+
+        $form->addText("presenter", "Presenter");
+        $form->addText("title", "URL");
+        $form->addText("template", "Šablona");
+        $form->addText("name", "Název stránky");
+
+        $form->setDefaults(array(
+            "presenter" => "Stranky",
+        ));
+
+        $form->onSuccess[] = $this->insertPageFormSucceeded;
+        $form->addSubmit("submit", "Uložit");
+
+        return $form;
+    }
+
+    function insertPageFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
+    {
+        $this->database->table("pages")->insert(array(
+            'presenter' => $form->values->presenter,
+            'title' => $form->values->title,
+            'template' => $form->values->template,
+            'name' => $form->values->name,
+        ));
+
+        $this->redirect(":Admin:Pages:detail", array("id" => $form->values->title));
+    }
+
+    /**
      * Edit page content
      */
     function createComponentEditForm($lang)
@@ -33,19 +71,18 @@ class PagesPresenter extends BasePresenter
         $form->getElementPrototype()->class = "form-horizontal";
         $form->getElementPrototype()->role = 'form';
         $form->getElementPrototype()->autocomplete = 'off';
-        //$form->getElementPrototype()->onsubmit = 'return false;';
-        $form->getElementPrototype()->id = 'rpp';
-        $form->getElementPrototype()->class = 'form';
 
         $form->addHidden("id");
         $form->addHidden("title");
+        $form->addText("name")
+                ->setAttribute("placeholder", "Nadpis");
         $form->addTextArea("body")
                 ->setAttribute("class", "form-control")
                 ->setHtmlId('wysiwyg');
         $form->setDefaults(array(
             "id" => $pages->id,
             "title" => $pages->title,
-            "lang" => 'cs',
+            "name" => $pages->name,
             "body" => $pages->body,
         ));
 
@@ -60,18 +97,11 @@ class PagesPresenter extends BasePresenter
     {
         $this->database->table("pages")->where(array("id" => $form->values->id))
                 ->update(array(
-                    'body' . $form->values->lang => $form->values->body,
+                    'name' => $form->values->name,
+                    'body' => $form->values->body,
         ));
-        
-        if ($form->values->lang == '_en') {
-            $hash = '#en';
-        } elseif ($form->values->lang == '_de') {
-            $hash = '#de';
-        } elseif ($form->values->lang == '_ru') {
-            $hash = '#ru';
-        }
 
-        $this->redirect(":Admin:Pages:detail" . $hash, array("id" => $form->values->title));
+        $this->redirect(":Admin:Pages:detail", array("id" => $form->values->title));
     }
 
     /**
