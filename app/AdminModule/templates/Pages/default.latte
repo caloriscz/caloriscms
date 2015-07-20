@@ -1,0 +1,17 @@
+{block #titles}{_admin.navigation.pages}{/block}
+{block content}
+
+<h1 class="page-header">{_admin.navigation.pages}</h1>
+
+<table class="table table-striped">
+    <tr>
+        <th></th>
+        <th>{_admin.pages.name}</th>
+    </tr>
+    {foreach $pages as $page}
+        <tr>
+            <td class="col-xs-1"><a href=""><i class="fa fa-times font-red"></i></a></td>
+            <td><a n:href=":Admin:Pages:detail, id => $page->title">{$page->title}</a></td>
+        </tr>
+    {/foreach}
+</table>

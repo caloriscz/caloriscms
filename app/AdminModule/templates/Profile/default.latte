@@ -1,0 +1,32 @@
+{block #titles}Profil{/block}
+{block content}
+
+{if $isLoggedIn}
+
+    <h1 class="page-header">Profil</h1>
+
+    <div class="row">
+        <div class="col-sm-8 col-xs-12">
+            <table class="table">
+                <tr>
+                    <td class="col-xs-2">User</td>
+                    <td>{$member->username}</td>
+                    <td class="col-xs-4"></td>
+                </tr>
+                <tr>
+                    <td>E-mail</td>
+                    <td>{$member->email}</td>
+                    <td></td>
+                </tr>
+            </table>
+
+
+
+            {control editForm}
+
+            <h2>Změna hesla</h2>
+
+            {control changePasswordForm}
+        </div>
+
+    {/if}
