@@ -1,0 +1,42 @@
+{block #titles}Kontakty{/block}
+{block content}
+
+<h1 class="page-header">Kontakty</h1>
+
+{foreach $flashes as $flash}
+    <br />
+    <div class="flash {$flash->type}">{$flash->message}</div>
+    <br />
+{/foreach}
+
+<div class="row">
+    <div class="col-md-1"><a n:href=":Admin:Contacts:groups" class="btn btn-default">Skupiny</a></div>
+    <div class="col-md-11">{control insertForm}</div>
+</div>
+<br />
+
+<div class="col-md-12">
+    <table class="table table-striped">
+        <tr>
+            <th class="col-xs-1"></th>
+            <th>Jméno</th>
+            <th>Skupina</th>
+            <th class="hidden-xs">E-mail</th>
+            <th class="hidden-xs">Telefon</th>
+            <th class="hidden-xs">Adresa</th>
+        </tr>
+        {foreach $contacts as $item}
+            <tr>
+                <td class="col-xs-1"><a n:href="delete!, id => $item->id" class="btn" onclick="return confirm('Opravdu smazat kontakt?')" role="button"><i class="fa fa-times font-red"></i></a></td>
+                <td><a n:href=":Admin:Contacts:detail id => $item->id">{if $item->name}{$item->name}{else}<em>nemá jméno</em>{/if}</a></td>
+                <td>{$item->contacts_groups->group}</td>
+                <td class="hidden-xs">{$item->email}</td>
+                <td class="hidden-xs">{$item->phone}</td>
+                <td class="hidden-xs">
+                    {if $item->street}{$item->street}, {/if}
+                {if $item->zip}{$item->zip} {/if}{if $item->city}{$item->city}{/if}
+            </td>
+        </tr>
+    {/foreach}    
+</table>
+</div>
