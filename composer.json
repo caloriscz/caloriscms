@@ -17,9 +17,4 @@
         "nette/nette": "~2.3.0",
         "kdyby/translation": "*"
 	}
-	"extra": {
-        "installer-paths": {
-            "{$name}": ["caloriscz/caloriscms"]
-        }
-    }
 }
