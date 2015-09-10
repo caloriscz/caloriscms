@@ -19,7 +19,7 @@
 	},
 	"extra": {
         "installer-paths": {
-            "sites/example.com/modules/{$name}": ["vendor/package"]
+            "{$name}": ["caloriscz/caloriscms"]
         }
     }
 }
