@@ -1,0 +1,23 @@
+{block #titles}{_dictionary.main.productcatalogue}{/block}
+{block content}
+
+<h1 class="page-header">{_admin.catalogue.ProductCatalogue}</h1>
+
+<h2>{_dictionary.main.InsertProduct}</h2>
+
+{control insertProductForm}
+
+<table class="table table-striped">
+    <tr>
+        <th class="col-xs-1"></th>
+        <th class="col-xs-3">{_dictionary.main.date}</th>
+        <th>{_dictionary.main.category}</th>
+    </tr>
+    {foreach $catalogue as $item}
+        <tr>
+            <td class="col-xs-1"><a href=""><i class="fa fa-times font-red"></i></a></td>
+            <td><a n:href=":Admin:Catalogue:detail, id => $item->id">{$item->title}</a></td>
+            <td>{$item->category_id}</td>
+        </tr>
+    {/foreach}
+</table>

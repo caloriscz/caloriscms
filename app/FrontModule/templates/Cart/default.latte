@@ -1,0 +1,36 @@
+{block #titles}Cart{/block}
+{block content}
+
+<div class="container heading">
+    <h1>Cart</h1>
+</div>
+
+<div class="container">
+    <div class="col-md-12">
+        <table class="table">
+            {foreach $cart as $item}
+                <tr>
+                    <td>
+                        <a n:href=":Front:Catalogue:detail id=> $item->id">
+                            {var $image = $item->related('store_images', 'store_id')->limit(1)}
+                            {if $image->count() > 0}
+                                <img src="/images/catalogue/products/{$item->id|padLeft:6:'0'}/{$image->fetch()->filename}" style="max-height: 50px;" />
+                            {else}
+                                no image
+                            {/if}
+                        </a>
+                    </td>
+                    <td><a n:href=":Front:Catalogue:detail id => $item->store_id">{$item->store_stock_id}</a></td>
+                    <td>{$item->store_stock->title}</td>
+                    <td>{var $priceVat = $item->store_stock->price * (($item->store_stock->vat/100)+1)}{round($priceVat,0)} {$settings['currency_symbol']}</td>
+                    <td>{form changeAmountCartForm value => '1'}{input amount value => $item->amount} {input id 'value' => $item->id}{input submitm}{/form}</td>
+                    <td><a n:href="delete! id => $item->id" class="btn btn-danger">Delete</a></td>
+                </tr>
+            {/foreach}
+        </table>
+
+        <br />
+
+        <a n:href=":Front:Order:default" class="btn btn-success btn-lg">Continue</a>
+    </div>
+</div>

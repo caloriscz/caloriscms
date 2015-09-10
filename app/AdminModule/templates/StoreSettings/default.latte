@@ -1,0 +1,31 @@
+{block #titles}Store - {_dictionary.main.Settings}{/block}
+{block content}
+<br />
+<ul class="nav nav-tabs">
+    <li role="presentation" class="active"><a n:href=":Admin:StoreSettings:default">Basic</a></li>
+    <li role="presentation"><a n:href=":Admin:StoreSettings:vats">{_dictionary.main.VAT}</a></li>
+    <li role="presentation"><a n:href=":Admin:StoreSettings:shipping">{_dictionary.main.Shipping}</a></li>
+    <li role="presentation"><a n:href=":Admin:StoreSettings:payments">{_dictionary.main.Payments}</a></li>
+</ul>
+
+<h1 class="page-header">{_dictionary.main.Settings}</h1>
+
+<pre>
+    {_admin.settings.whenUsedInTemplate}: <span n:syntax="off">{$settings['currency_code']}</span>
+</pre>
+
+<br />
+
+<div>
+    {form editSettingsForm}
+        {foreach $settingsDb as $item}
+            <div class="form-group">
+                <label class="col-sm-2" for="exampleInput">{$item->description}</label>
+                <div class="col-sm-10"><input type=text name="set[{$item->setkey}]" class="form-control" value="{$item->setvalue}"></div>
+            </div>
+        {/foreach}
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10"><button type="submit">{_dictionary.main.save}</button></div>
+        </div>
+    {/form}
+</div>

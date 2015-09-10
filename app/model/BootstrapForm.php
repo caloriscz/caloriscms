@@ -39,3 +39,19 @@ class BootstrapUIForm extends \Nette\Application\UI\Form
     }
 
 }
+
+class FilterForm extends \Nette\Application\UI\Form
+{
+
+    public function __construct()
+    {
+        parent::__construct();
+        $renderer = $this->getRenderer();
+        $renderer->wrappers['controls']['container'] = '';
+        $renderer->wrappers['pair']['container'] = '';
+        $renderer->wrappers['label']['container'] = '';
+        $renderer->wrappers['control']['container'] = '';
+        $renderer->wrappers['control']['.submit'] = 'btn';
+    }
+
+}

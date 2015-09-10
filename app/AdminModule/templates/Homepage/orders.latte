@@ -1,0 +1,30 @@
+{block #titles}Objednávky{/block}
+{block content}
+
+<h1 class="page-header">Objednávky</h1>
+
+
+<table class="table table-striped">
+    <tr>
+        <th class="col-xs-1">Jméno</th>
+        <th class="col-xs-1">Ulice</th>
+        <th>PSČ Město</th>
+        <th>Kontakt</th>
+        <th>Počet</th>
+        <th>Cena</th>
+        <th>Celkem</th>
+        <th>Poznámka</th>
+    </tr>
+    {foreach $orders as $item}
+        <tr>
+            <td>{$item->name}</td>
+            <td>{$item->street}</td>
+            <td>{$item->zip} {$item->city}</td>
+            <td>{$item->email} {$item->phone}</td>
+            <td>{$item->amount}</td>
+            <td>{$item->price},-</td>
+            <td>{$item->pricetotal},-</td>
+            <td>{$item->notes}</td>
+        </tr>
+    {/foreach}
+</table>

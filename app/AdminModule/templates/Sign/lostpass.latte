@@ -1,4 +1,4 @@
-{block #titles}Zapomenuté heslo{/block}
+{block #titles}Forgotten password{/block}
 {block content}
 
 <h1>Forgotten password</h1>
@@ -10,7 +10,7 @@
     <input type="hidden" name="_action" value="send" />
     <h2 class="form-signin-heading" style="text-align: center;">
         <img src="{$baseUri}/images/caloris-logo-midi.jpg" style="width: 180px; margin-bottom: 20px;" alt="logo" /></h2>
-    <p>[cal:t(lostPasswordInfoEmail;administrator) /]</p>
+    <p>Lost Password Info Email</p>
 
     <input type="text" 
            name="email" 
@@ -18,7 +18,7 @@
            placeholder="e-mailová adresa"
            autocomplete="off" />
     <br />
-    <button class="btn btn-lg btn-primary btn-block" type="submit">[cal:t(Send) /]</button>
+    <button class="btn btn-lg btn-primary btn-block" type="submit">{_dictionary.main.send|firstUpper}</button>
 </form>
 
-<div><br /><a style="padding-left: 30px;" n:href=":Front:Sign:in" class="btn btn-default">Přihlásit</a></div>
+<div><br /><a style="padding-left: 30px;" n:href=":Front:Sign:in" class="btn btn-default">Login</a></div>

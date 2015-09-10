@@ -1,0 +1,40 @@
+{block #titles}Catalogue: Detail{/block}
+{block content}
+
+<div class="container">
+    <div class="col-xs-6">
+        <a href="#">
+            {foreach $store->related('store_images', 'store_id')->limit(4) as $item}
+                <img src="/images/catalogue/products/{$store->id|padLeft:6:'0'}/{$item->filename}" class="img-responsive" />
+            {/foreach}
+        </a>
+    </div>
+    <div class="col-xs-6">
+        <h3>{$store->title}</h3>
+        <p>{$store->description|noescape}</p>
+
+        <h3>{_dictionary.main.parametres|firstUpper}</h3>
+
+        <table class="table">
+            {foreach $store->related('store_params', 'store_id') as $item}
+                <tr>
+                    <td>{$item->store_param->{'param_'.$langSelected}}</td>
+                    <td>{$item->store_param->prefix}{$item->paramvalue}{$item->store_param->suffix}</td>
+                </tr>
+            {/foreach}
+        </table>
+    </div>
+</div>
+        
+<h3>{_dictionary.main.cart|firstUpper}</h3>
+
+<table class="table">
+    {foreach $store->related('store_stock', 'store_id') as $item}
+        <tr>
+            <td>{$item->title}</td>
+            <td>{form addToCartForm value => '1'}{$settings['currency_symbol']} {$item->price * (1+($item->store_settings_vats->vat/100))}</td>
+            <td class="col-xs-1">{input amount value => 1}</td>
+            <td>{input id 'value' => $item->store_id}{input stock 'value' => $item->id}{input submitm}{/form}</td>
+        </tr>
+    {/foreach}
+</table>

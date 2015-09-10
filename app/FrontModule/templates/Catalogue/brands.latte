@@ -1,0 +1,26 @@
+{block #titles}Catalogue: {_dictionary.main.Orders}{/block}
+{block content}
+
+<div class="container">
+    <div class="col-md-3">
+        {include 'components/filter.latte'}
+        {include 'components/categories.latte'}
+    </div>
+    <div class="col-md-9">
+        <h1>{_dictionary.main.ListOfBrands}</h1>
+
+        <div class="container-fluid">
+            <div class="row">
+                <table class="table">
+                    {foreach $store as $item}
+                        <tr>
+                            <td><a n:href=":Front:Catalogue:default, brand => $item->title">{$item->title}</a></td>
+                        </tr>
+                    {/foreach}
+                </table>
+            </div>
+        </div>
+
+        {include 'components/paging.latte', templ => 'default'}
+    </div>
+</div>

@@ -1,20 +1,2 @@
 {block content}
 
-<form action="[cal:def(paths;uri) /]/index.php" class="form-signin" role="form" method="post">
-    <input type="hidden" name="terminal" value="open"  />
-    <input type="hidden" name="namespace" value="Caloris"  />
-    <input type="hidden" name="class" value="UserActions"  />
-    <input type="hidden" name="_action" value="reset"  />
-    <input type="hidden" name="email" value="[cal:administrator.predefs(email) /]" />
-    <input type="hidden" name="activation" value="[cal:administrator.predefs(code) /]"  />
-    <img src="[cal:administrator.def(paths;uri) /]/caloris_administrator/binaries/app/caloris-logo-midi.jpg" 
-         style="width: 180px; margin-bottom: 20px;" alt="logo" />
-    <h2>[cal:t(newPassword;administrator) /]</h2>
-    <input type="password" name="pwd" placeholder="[cal:t(NewPassword;administrator) /]" class="form-control" autocomplete="off" required autofocus />
-    <input type="password" name="pwd2" placeholder="[cal:t(NewPasswordAgain;administrator) /]" class="form-control" autocomplete="off" required />
-    <button type="submit" class="btn btn-lg btn-primary btn-block">[cal:t(Save) /]</button> 
-    <br /><br />
-    <a style="padding-left: 30px;" href="[cal:def(paths;uri) /]/administrator/templates/login.html" class="btn btn-default">[cal:t(loggingIn;administrator) /]</a>
-</form>
-
-[cal:administrator.message /]

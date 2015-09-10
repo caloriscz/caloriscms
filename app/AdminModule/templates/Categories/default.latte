@@ -1,0 +1,17 @@
+{block #titles}Kategorie{/block}
+{block content}
+
+<h1 class="page-header">Kategorie</h1>
+
+<table class="table table-striped">
+    <tr>
+        <th class="col-xs-1"></th>
+        <th>Kategorie</th>
+    </tr>
+    {foreach $categories as $item}
+        <tr>
+            <td class="col-xs-1"><a href=""><i class="fa fa-times font-red"></i></a></td>
+            <td>{$item->title}</td>
+        </tr>
+    {/foreach}
+</table>

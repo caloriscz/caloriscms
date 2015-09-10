@@ -1,0 +1,63 @@
+<div class="well">
+    {form searchForm}
+        <div class="values group">
+
+            <div class="form-group">
+                <div class="col-sm-12 controls">
+                    <div class="input-group">
+                        {input src, class => 'form-control form-filter fff', placeholder => 'search'}
+                        <span class="input-group-addon" style="background-color: #2ba8db;">
+                            <button type="submit" style="background: none; border: 0; height: 18px;">
+                                <i class="fa fa-search" style="color: white !important;"></i>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputfield2" class="col-sm-4 control-label fontNormal">price from</label>
+                <div class="col-sm-8 controls">
+                    <div class="input-group">
+                        {input priceFrom, class => 'form-control form-filter', placeholder => 'price from'}
+                        <span class="input-group-addon">
+                            <a n:href=":Front:Homepage:default, (expand) $categoryArr, priceFrom => NULL">
+                                <i class="fa fa-times" style="color: #888;"></i></a>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputfield2" class="col-sm-4 control-label fontNormal">price to</label>
+                <div class="col-sm-8 controls">
+                    <div class="input-group">
+                        {input priceTo, class => 'form-control form-filter', placeholder => 'price to'}
+                        <span class="input-group-addon">
+                            <a n:href=":Front:Homepage:default, (expand) $categoryArr, priceTo => NULL"><i class="fa fa-times" style="color: #888;"></i></a>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputfield2" class="col-sm-4 control-label fontNormal">brand</label>
+                <div class="col-sm-8 controls">
+                    <div class="input-group">
+                        {input brand, class => 'form-control form-filter', placeholder => 'brand'}
+                        <span class="input-group-addon">
+                            <a n:href=":Front:Homepage:default, (expand) $categoryArr, brand => NULL">
+                                <i class="fa fa-times" style="color: #888;"></i>
+                            </a>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center" style="font-size: 0.9em; margin: 10px 0 15px 0; color: #555;">
+                <a id="erase" href="/?do=erase">erase all</a><br>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-12">
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">Hledat</button>
+                </div>
+            </div>
+        </div>
+    {/form}
+</div>

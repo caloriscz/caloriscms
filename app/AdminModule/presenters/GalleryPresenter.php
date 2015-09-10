@@ -66,13 +66,16 @@ class GalleryPresenter extends BasePresenter
             ));
 
             if ($imageExists->count() == 0) {
-                $this->database->table('gallery')->insert(array(
+                $id = $this->database->table('gallery')->insert(array(
                     'name' => $_FILES["the_file"]["name"],
                     'gallery_categories_id' => $form->values->category,
                     'gallery_albums_id' => $form->values->album,
                     'description' => $form->values->description,
                     'date_created' => date("Y-m-d H:i:s"),
                 ));
+				
+                //Sort
+                $this->database->table('gallery')->where(array("id" => $id))->update(array("sorted" => $id));
             }
 
             $fileName = $fileDirectory . $_FILES["the_file"]["name"];
@@ -148,12 +151,15 @@ class GalleryPresenter extends BasePresenter
             ));
 
             if ($checkImage->count() == 0) {
-                $this->database->table('gallery')->insert(array(
+                $id = $this->database->table('gallery')->insert(array(
                     'name' => $fileName,
                     'gallery_categories_id' => $form->values->category,
                     'gallery_albums_id' => $form->values->album,
                     'date_created' => date("Y-m-d H:i:s"),
                 ));
+	
+                //Sort
+                $this->database->table('gallery')->where(array("id" => $id))->update(array("sorted" => $id));
             }
         }
 
@@ -358,7 +364,7 @@ class GalleryPresenter extends BasePresenter
         $albums = $this->database->table('gallery_albums')->where(array("gallery_categories_id" => $id));
 
         foreach ($albums as $album) {
-            foreach ($album->related('gallery', 'gallery_albums_id') as $gallery) { // oh oh ? what for
+            foreach ($album->related('gallery', 'gallery_albums_id') as $gallery) {
                 Model\IO::removeDirectory(APP_DIR . '/images/gallery/' . Nette\Utils\Strings::padLeft($album->id, 4, '0'));
             }
 

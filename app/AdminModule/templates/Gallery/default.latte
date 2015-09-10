@@ -1,41 +1,25 @@
-{block #titles}Kategorie: {$category->title}{/block}
+{block #titles}Gallery{/block}
 {block content}
 
-<h1 class="page-header">Kategorie: {$category->title} 
-    {if $categoryId != 0}
-        <a n:href=":Admin:Gallery:category, id => $categoryId" class="btn btn-primary pull-right">Nastavení kategorie</a>
-    {/if}
-</h1>
+<h1 class="page-header">Gallery</h1>
 
 <div class="row">
-    {if $categoryId == 0}
-        {control insertCategoryForm}
-    {else}
-        {control insertAlbumForm}
-
-        <h2>Seznam alb</h2>
-
-        {foreach $gallery as $item}
-            <div class="col-sm-6 col-md-2">
-                <div class="thumbnail">
-                    <div style="height: 200px; text-align: center;">
-                        <a n:href=":Admin:Gallery:detail id => $item->id, category => $categoryId">
-                            {if file_exists($basePath.'images/gallery-albums/' . \Nette\Utils\Strings::padLeft($item->id, 4, '0') . '.jpg')}
-                                <img src="{$baseUri}/images/gallery-albums/{$item->id|padLeft:4:"0"}.jpg" class="img-responsive" />
-                            {else}
-                                <br />
-                                <span class="text-info">Není obrázek</span>
-                            {/if}
-                        </a>
-                    </div>
-                    <div class="caption" style="height: 100px;">
-                        <p>{$item->title}</p>
-                        <p><a n:href="deleteAlbum!, id => $item->id" class="btn btn-danger" role="button" onclick="return confirm('Opravdu smazat celou kategorii i se všemi obrázky?')">Smazat</a> 
-                            <a n:href=":Admin:Gallery:album id => $item->id" class="btn btn-default" role="button">Nastavení alba</a></p>
-                    </div>
+    {foreach $gallery as $item}
+        <div class="col-sm-6 col-md-2">
+            <div class="thumbnail">
+                <div style="height: 200px; text-align: center;">
+                    <a n:href=":Admin:Gallery:detail id => $item->id, category => $categoryId">
+                        <img src="{$baseUri}/images/gallery-albums/{$item->id|padLeft:4:"0"}.jpg" class="img-responsive" />
+                    </a>
+                </div>
+                <div class="caption" style="height: 100px;">
+                    <p>{$item->title}</p>
+                    <p>{$item->description}</p>
+                    <p><a n:href="delete!, filename => $item->title" class="btn btn-danger" role="button" onclick="return confirm('Opravdu smazat celou kategorii i se všemi obrázky?')">Smazat</a> 
+                        <a n:href=":Admin:Gallery:detail id => $item->id" class="btn btn-default" role="button">Upravit</a></p>
                 </div>
             </div>
-            {var $id = $item->id}
-        {/foreach}
-    {/if}
+        </div>
+        {var $id = $item->id}
+    {/foreach}
 </div>

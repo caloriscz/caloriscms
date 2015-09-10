@@ -47,11 +47,11 @@ class FilesPresenter extends BasePresenter
      */
     function uploadFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
     {
-        $filePath = _CALSET_PATHS_BASE . '/caloris_www/binaries/app/' . $filename;
-        $filePathThumb = _CALSET_PATHS_BASE . '/caloris_www/binaries/app/t200_' . $filename;
+        $filePath = _CALSET_PATHS_BASE . '/www/binaries/app/' . $filename;
+        $filePathThumb = _CALSET_PATHS_BASE . '/www/binaries/app/t200_' . $filename;
 
         if (file_exists($filePath)) {
-            $msg = 'Soubor již existuje';
+            $msg = 'File exists';
         }
 
         copy($_FILES["the_file"]["tmp_name"], $filePath);

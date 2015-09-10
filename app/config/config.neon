@@ -25,3 +25,11 @@ services:
 	- App\Model\Authenticator
 	- App\RouterFactory
 	router: @App\RouterFactory::createRouter
+
+extensions:
+    translation: Kdyby\Translation\DI\TranslationExtension
+
+translation:
+    default: cs
+    fallback: [cs_CZ, cs]
+    whitelist: [cs, en]

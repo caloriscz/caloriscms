@@ -1,0 +1,9 @@
+navigation:
+    about: "O nás"
+helpdesk:
+    name: "Jméno"
+    email: "E-mail"
+    phone: "Telefon"
+    message: "Zpráva"
+    request: "Poptávka"    
+    send: "Odeslat"

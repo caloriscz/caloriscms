@@ -1,0 +1,9 @@
+navigation:
+    about: "About us"
+helpdesk:
+    name: "Name"
+    email: "E-mail"
+    phone: "Phone"
+    message: "Message"
+    request: "Request"
+    send: "Send"

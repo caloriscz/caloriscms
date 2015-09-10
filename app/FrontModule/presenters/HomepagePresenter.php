@@ -8,9 +8,11 @@ use Nette,
 /**
  * Homepage presenter.
  */
-class HomepagePresenter extends BasePresenter {
+class HomepagePresenter extends BasePresenter
+{
 
-    protected function startup() {
+    protected function startup()
+    {
         parent::startup();
 
         if (!$this->user->isLoggedIn()) {

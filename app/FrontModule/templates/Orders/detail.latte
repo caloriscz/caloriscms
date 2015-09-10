@@ -1,0 +1,67 @@
+{block #titles}{$order->oid}{/block}
+{block content}
+
+<h1 class="page-header">{$order->oid}</h1>
+
+<div class="row">
+    <div class="col-lg-4">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                Billing Address
+            </div>
+            <div class="panel-body">
+                {control editBillingForm}
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                Delivery Address
+            </div>
+            <div class="panel-body">
+                {control editDeliveryAddressForm}
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                Message
+            </div>
+            <div class="panel-body">
+                {control editForm}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                Order summary
+            </div>
+            <div class="panel-body">
+                <table class="table">
+                    {foreach $order->related('orders_items', 'orders_id') as $item}
+                        <tr>
+                            <td>{$item->store->title}</td>
+                            <td>{$item->store_stock->title}</td>
+                            <td>{var $price += $item->store_stock->price}{$item->store_stock->price}</td>
+                            <td>{$item->store_stock->vat}</td>
+                            <td>{var $amount += $item->amount}{$item->amount}</td>
+                        </tr>
+                    {/foreach}
+                    <tr>
+                        <td>TOTAL</td>
+                        <td></td>
+                        <td>{$price}</td>
+                        <td></td>
+                        <td>{$amount}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

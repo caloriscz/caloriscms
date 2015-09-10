@@ -1,0 +1,60 @@
+{block #titles}Summary{/block}
+{block content}
+
+<div class="container heading">
+    <h1>Summary</h1>
+</div>
+
+<div class="container">
+    <div class="col-md-12">
+        {foreach $flashes as $flash}
+            <br />
+            <div class="flash {$flash->type}">{$flash->message}</div>
+            <br />
+        {/foreach}
+
+        <p>Check your data</p>
+
+        <p>shipping: {$info->store_settings_shipping->title}</p>
+        <p>payment: {$info->store_settings_payments->title}</p>
+
+        <h2>Address</h2>
+
+        {$address['billing']['name']}<br />
+        {$address['billing']['street']}<br />
+        {$address['billing']['zip']} {$address['billing']['city']}<br />
+        <br />
+        <h3>Delivery address</h3>
+        {$address['delivery']['name']}<br />
+        {$address['delivery']['street']}<br />
+        {$address['delivery']['zip']} {$address['delivery']['city']}<br />
+        <br />
+        <div class="well">
+            <p>Message:<br />{$info->note}</p>
+        </div>
+
+        <h2>Cart</h2>
+
+        <table class="table">
+            {foreach $items as $item}
+                <tr>
+                    <td></td>
+                    <td>{$item->store->title}</td>
+                    <td>{$item->store_stock->title}</td>
+                    <td>{$item->price}</td>
+                    <td>{$item->vat}</td>
+                    <td>{$item->amount}</td>
+                </tr>
+            {/foreach}
+        </table>
+
+        {form finishOrderForm}
+            {input agree} <a href="">conditions</a><br />
+
+            <div id="agree-container">{input submitm}</div>
+
+        {/form}
+
+
+    </div>
+</div>

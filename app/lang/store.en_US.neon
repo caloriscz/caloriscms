@@ -1,0 +1,8 @@
+cart:
+    add: "Add to cart"
+order:
+    ChooseShipping: "Choose shipping"
+    ChoosePayment: "Choose payment"
+    ClickToChooseAddress: "Click to choose address"
+    CreateNewAddress: "Create new address"
+    DeliveryAddress: "Delivery Address"

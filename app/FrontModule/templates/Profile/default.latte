@@ -1,0 +1,28 @@
+{block #titles}Profile{/block}
+{block content}
+
+<div class="container heading">
+    <h1>Profile</h1>
+</div>
+
+<div class="container">
+    <div class="col-md-3">
+        <ul class="nav nav-pills nav-stacked">
+            <li class="active"><a n:href=":Front:Profile:default">Contact information</a></li>
+            <li><a n:href=":Front:Profile:foto">Profile image</a></li>
+            <li><a n:href=":Front:Profile:password">Password change</a></li>
+            <li><a n:href=":Front:Profile:addresses">Addresses</a></li>
+            <li><a n:href=":Front:Orders:default">Orders</a></li>
+        </ul>
+    </div>
+    <div class="col-md-9">
+        {foreach $flashes as $flash}
+            <div class="flash {$flash->type}">{$flash->message}</div>
+            <br />
+        {/foreach}
+
+        {control editForm}
+        <br />
+        <p><span style="color: red;">*</span> these items are required</p>
+    </div>
+</div>

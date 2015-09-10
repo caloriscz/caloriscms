@@ -37,7 +37,7 @@ class Authenticator extends Nette\Object implements Security\IAuthenticator
 
         $arr = $row->toArray();
         unset($arr['password']);
-        return new Security\Identity($row->id, $row->role, $arr);
+        return new Security\Identity($row->id, $row->role,$arr);
     }
 
 }

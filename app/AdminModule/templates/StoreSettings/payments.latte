@@ -1,0 +1,30 @@
+{block #titles}Store - {_dictionary.main.Shipping} {_dictionary.main.Settings}{/block}
+{block content}
+<br />
+<ul class="nav nav-tabs">
+    <li role="presentation"><a n:href=":Admin:StoreSettings:default">Basic</a></li>
+    <li role="presentation"><a n:href=":Admin:StoreSettings:vats">{_dictionary.main.VAT}</a></li>
+    <li role="presentation"><a n:href=":Admin:StoreSettings:shipping">{_dictionary.main.Shipping}</a></li>
+    <li role="presentation" class="active"><a n:href=":Admin:StoreSettings:payments">{_dictionary.main.Payments}</a></li>
+</ul>
+
+<h1 class="page-header">{_dictionary.main.Payments} - {_dictionary.main.Settings}</h1>
+
+{control insertPaymentForm}
+
+<table class="table table-striped">
+    <tr>
+        <th class="col-xs-1"></th>
+        <th class="col-xs-3">{_dictionary.main.Title}</th>
+        <th>{_dictionary.main.Value}</th>
+        <th>{_dictionary.main.VAT}</th>
+    </tr>
+    {foreach $payments as $item}
+        <tr>
+            <td class="col-xs-1"><a n:href="deletePayment!, id => $item->id" onclick="return confirm('Delete really?')"><i class="fa fa-times font-red"></i></a></td>
+            <td>{$item->title}</td>
+            <td>{$item->payment}</td>
+            <td>{$item->vat}</td>
+        </tr>
+    {/foreach}
+</table>

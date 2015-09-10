@@ -1,0 +1,29 @@
+navigation:
+    categories: "Categories"
+    catalogue: "Catalogue"
+    files: "Files"
+    homepage: "Homepage"
+    gallery: "Gallery"
+    logout: "Log out"
+    members: "Members"
+    pages: "Pages"
+    myprofile: "My profile"
+catalogue:
+    deletereallymessage: "Do you really want to delete this parameter?"
+    ListOfBrands: "List of Boards"
+    ProductCatalogue: "Product catalogue"
+    ProductGallery: "Product gallery"
+homepage:
+    welcome: "Welcome"
+pages:
+    name: "Name"
+files:
+    choosefile: "Choose file"
+    filemanager: "File Manager"
+    filename: "File name"
+    listoffiles: "List of files"
+    sizeinkb: "Size (in kB)"
+    thumbnail: "Thumbnail"
+    upload: "Upload"
+settings:
+    whenUsedInTemplate: "When used in template"

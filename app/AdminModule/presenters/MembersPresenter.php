@@ -60,56 +60,6 @@ class MembersPresenter extends BasePresenter
     }
 
     /**
-     * Edit language
-     */
-    function createComponentChangeLanguageForm()
-    {
-        $form = new \Nette\Forms\BootstrapUIForm;
-        $form->getElementPrototype()->class = "form-horizontal";
-        $form->getElementPrototype()->role = 'form';
-        $form->getElementPrototype()->autocomplete = 'off';
-
-        $languages = array("en" => "English", "cs" => "česky");
-
-        $form->addSelect("language", "[cal:t(Language) /]", $languages)
-                ->setAttribute("class", "form-control");
-        $form->setDefaults(array(
-            "_action" => "editPersonal",
-        ));
-
-        $form->addSubmit('submitm', '[cal:t(Save) /]');
-
-
-        return $form;
-    }
-
-    /**
-     * Change password
-     */
-    function createComponentChangePasswordForm()
-    {
-        $user = $_REQUEST["idf"];
-
-        if (strcmp($user, $_COOKIE["auser"]) == 0) {
-            $form = new \Nette\Forms\BootstrapUIForm;
-            $form->getElementPrototype()->class = "form-horizontal";
-            $form->getElementPrototype()->role = 'form';
-            $form->getElementPrototype()->autocomplete = 'off';
-
-            $form->addPassword("pwd", "[cal:t(Password) /]");
-            $form->addPassword("pwd2", "[cal:t(PasswordRetype;usermanager) /]");
-            $form->setDefaults(array(
-                "_action" => "editPass",
-            ));
-
-            $form->addSubmit('submitm', '[cal:t(changePassword;usermanager) /]');
-        }
-
-
-        return $form;
-    }
-
-    /**
      * Insert new user
      */
     function createComponentInsertForm()
@@ -169,7 +119,7 @@ class MembersPresenter extends BasePresenter
             );
 
             $mail = new \Nette\Mail\Message;
-            $mail->setFrom('G-centrum <caloris@caloris.cz>')
+            $mail->setFrom($this->template->settings["site_title"] . ' <' . $this->template->settings["contact_email"] . '>')
                     ->addTo($form->values->email)
                     ->setHTMLBody($latte->renderToString(substr(__DIR__, 0, -10) . '/templates/Members/components/member-new-email.latte', $params));
 
@@ -215,40 +165,6 @@ class MembersPresenter extends BasePresenter
                 "idf" => filter_input(INPUT_COOKIE, "auser")
             )
         );
-
-        return $params;
-    }
-
-    /**
-     * Edit pass
-     */
-    function editPassFormSucceeded($cols)
-    {
-        $ppwd = $_POST["pwd"];
-        $ppwd2 = $_POST["pwd2"];
-        $ppwd_enc = ACL::passHash($ppwd);
-        $user = $_COOKIE["auser"];
-
-        if (strcasecmp($ppwd, $ppwd2) != 0) {
-            $msg .= '[cal:t(passwordsAreNotSame;usermanager) /]';
-        }
-
-        if (ACL::passCheck($ppwd) == false) {
-            $msg .= '[cal:t(passwordsForbiddenCharacters;usermanager) /]';
-        }
-
-        $xmlUser = simplexml_load_file(_CALSET_PATHS_BASE . '/caloris/data/users.xml');
-        $xmlUserEdit = $xmlUser->xpath('//user[@id="' . $user . '"]');
-
-        if (count($xmlUserEdit) != 0 && strlen($msg) == 0) {
-            // Saving to users.xml
-            $xmlUserEdit[0]->password = $ppwd_enc;
-            $xmlUser->asXML(_CALSET_PATHS_BASE . '/caloris/data/users.xml');
-
-            setcookie("apwd", $ppwd_enc, time() + time() + 60 * 60 * 24 * 30, "/");
-        } else {
-            $msg .= '[cal:t(passwordsNotCorrect;usermanager) /]';
-        }
 
         return $params;
     }

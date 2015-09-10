@@ -8,7 +8,8 @@ use Nette,
 /**
  * Sign in/out presenters.
  */
-class SignPresenter extends BasePresenter {
+class SignPresenter extends BasePresenter
+{
 
     /** @persistent */
     public $backlink = '';
@@ -17,7 +18,8 @@ class SignPresenter extends BasePresenter {
      * Sign-in form factory.
      * @return Nette\Application\UI\Form
      */
-    protected function createComponentSignInForm() {
+    protected function createComponentSignInForm()
+    {
         $form = new \Nette\Forms\BootstrapUIForm;
         $form->getElementPrototype()->class = "form-horizontal";
         $form->getElementPrototype()->role = 'form';
@@ -34,143 +36,176 @@ class SignPresenter extends BasePresenter {
         return $form;
     }
 
-    public function signInFormSucceeded($form, $values) {
-        try {
-            $this->getUser()->login($values->username, $values->password);
-        } catch (Nette\Security\AuthenticationException $e) {
-            $form->addError($e->getMessage());
-            return;
+    public function signInFormSucceeded($form, $values)
+    {
+        $member = new \App\Model\MemberModel($this->database);
+        $blocked = $member->getState($form->values->username);
+
+        if ($blocked == FALSE) {
+            $this->flashMessage("Musíte nejdříve ověřit váš účet", 'error');
+            $this->redirect(':Front:Sign:in');
         }
 
-        $this->restoreRequest($this->backlink);
-        $this->redirect('Homepage:');
+        try {
+            $this->getUser()->login($values->username, $values->password);
+
+            $this->redirect(':Front:Homepage:default');
+        } catch (Nette\Security\AuthenticationException $e) {
+            $this->flashMessage("Nesprávné heslo", 'error');
+            $this->redirect(':Front:Sign:in');
+        }
     }
 
-    public function createComponentSignUpForm() {
+    public function createComponentSignUpForm()
+    {
         $form = new \Nette\Forms\BootstrapUIForm;
         $form->getElementPrototype()->class = "form-horizontal";
         $form->getElementPrototype()->role = 'form';
         $form->getElementPrototype()->autocomplete = 'off';
 
-        $form->addText("namefirst", "Jméno")
-                ->setRequired('Příliš krátké jméno');
-        $form->addText("name", "Příjmení")
-                ->setRequired('Příliš krátké jméno');
+        $form->addText("name", "Jméno a příjmení")
+                ->setRequired('Zadejte jméno')
+                ->addRule(\Nette\Forms\Form::MIN_LENGTH, 'Zadejte jméno', 3)
+                ->addRule(\Nette\Forms\Form::MAX_LENGTH, 'Zadejte jméno', 200);
         $form->addText("email", "E-mail")
-                ->setType('email')->setRequired('E-mail');
-        $form->addText("district", "Oblast (město)")
+                ->addRule(\Nette\Forms\Form::EMAIL, 'Zadejte platný email.')
+                ->setRequired('Vložte e-mail.');
+        $form->addText("district", "Region (město)")
                 ->setOption('description', (string) "Zadejte místo, které nemusí být místem vašeho bydliště, ale "
                         . "mohlo by sloužit jako cenná informace pro případné zájemce o osobní odběr (např. nejbližší"
-                        . " velké město v okolí)");
+                        . " velké město v okolí)")
+                ->setRequired('Zadejte region nebo město.')
+                ->addCondition(\Nette\Forms\Form::FILLED);
 
         $form->addText("username", "Uživatelské jméno")
-                ->setRequired('Uživatelské jméno');
+                ->setOption('description', (string) "Povoleny jsou pouze znaky a-z, 0-9 (pouze malá písmena)")
+                ->setRequired('Zvolte si uživatelské jméno')
+                ->addRule(\Nette\Forms\Form::PATTERN, 'Uživatelské jméno může obsahovat pouze znaky a-z, 0-9 (pouze malá písmena)', '[a-z0-9-]+')
+                ->addRule(\Nette\Forms\Form::MIN_LENGTH, 'Zvolte uživatelské jméno s alespoň %d znaky', 5)
+                ->addRule(\Nette\Forms\Form::MAX_LENGTH, 'Zvolte uživatelské jméno s nejvýše %d znaky', 40);
 
         $form->addPassword("pwd", "Heslo")
-                ->setRequired('Nesprávné heslo')
                 ->setOption('description', (string) "6 - 40 znaků")
-                ->addCondition(\Nette\Forms\Form::MIN_LENGTH, 6);
+                ->setRequired('Zvolte si heslo')
+                ->addRule(\Nette\Forms\Form::MIN_LENGTH, 'Zvolte heslo s alespoň %d znaky', 6)
+                ->addRule(\Nette\Forms\Form::MAX_LENGTH, 'Zvolte heslo s nejvýše %d znaky', 40);
 
         $form->addPassword("pwd2", "Zopakovat heslo")
-                ->setRequired('Nesprávné heslo')
-                ->setOption('description', (string) "6 - 40 znaků");
+                ->setRequired('Zadejte prosím heslo ještě jednou pro kontrolu')
+                ->addRule(\Nette\Forms\Form::EQUAL, 'Hesla se neshodují', $form['pwd']);
 
-        $form->addCheckbox("newsletter", "\xC2\xA0" . "Chcete odebírat zprávy?")
+        $form->addCheckbox("newsletter", "\xC2\xA0" . "Chci odebírat zprávy?")
                 ->setDefaultValue(TRUE);
-        $form->addCheckbox("confirmation", "\xC2\xA0" . "Souhlasím s podmínkami");
+        $form->addCheckbox("confirmation", "\xC2\xA0" . "Souhlasím s podmínkami")
+                ->setRequired('Pro pokračování zaškrtněte Souhlasím s podmínkami');
         $form->setDefaults(array(
-            "username" => $form->getValues()->user,
-            "email" => $form->getValues()->email,
-            "name" => $form->getValues()->name,
+            "name" => $this->getParameter("name"),
+            "username" => $this->getParameter("user"),
+            "email" => $this->getParameter("email"),
+            "district" => $this->getParameter("district"),
+            "newsletter" => $this->getParameter("newsletter"),
         ));
 
         $form->addSubmit("submit", "Registrovat se")
                 ->setAttribute("class", "btn-large btn-info");
+
+        $form->setDefaults(array(
+            "email" => $this->getParameter("email"),
+            "username" => $this->getParameter("username"),
+            "district" => $this->getParameter("district"),
+            "newsletter" => $this->getParameter("newsletter"),
+        ));
+
         $form->onSuccess[] = $this->signUpFormSucceeded;
 
         return $form;
     }
 
-    function signUpFormSucceeded(\Nette\Forms\BootstrapUIForm $form) {
-        if ($form->getValues()->confirmation !== "on") {
-            $this->flashMessage("Musíte odsouhlasit podmínky!");
-            $this->redirect(":Front:Sign:up");
-        }
-
-        $userCorrects = preg_match("/^[abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_]{6,40}$/", $form->getValues()->username, $test);
+    function signUpFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
+    {
+        $userCorrects = preg_match("/^[abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_]{4,40}$/", $form->getValues()->username, $userTest);
 
         $member = new \App\Model\MemberModel($this->database);
-        $userExists = $member->getUserName($form->getValues()->username);
-        $emailExists = $member->getEmail($form->getValues()->email);
+        $userExists = $member->getUserName($form->values->username);
+        $emailExists = $member->getEmail($form->values->email);
+
+        $formVal = $form->getValues(TRUE);
 
         if ($userExists > 0) {
-            $this->flashMessage('Uživatelské jméno již existuje');
-        } elseif (\Nette\Utils\Validators::isEmail($form->getValues()->email) == FALSE) {
-            $this->flashMessage('Neplatná e-mailová adresa');
+            unset($formVal["username"]);
+            $this->flashMessage('Uživatelské jméno již existuje', 'error');
+        } elseif (\Nette\Utils\Validators::isEmail($form->values->email) == FALSE) {
+            unset($formVal["email"]);
+            $this->flashMessage('Neplatná e-mailová adresa', 'error');
         } elseif ($emailExists > 0) {
-            $this->flashMessage('E-mail již existuje');
-        } elseif ($userCorrects == 0) {
-            $this->flashMessage('Uživatelské jméno obsahuje nepovolené znaky');
-        } elseif (strcmp($form->getValues()->pwd, $form->getValues()->pwd2) <> 0) {
-            $this->flashMessage('Hesla se neshodují');
-        } elseif (strlen($form->getValues()->name) < 2) {
-            $this->flashMessage('Příliš krátké jméno');
-        } elseif (strlen($form->getValues()->namefirst) < 2) {
-            $this->flashMessage('Příliš krátké jméno');
+            unset($formVal["email"]);
+            $this->flashMessage('E-mail již existuje', 'error');
+        } elseif ($userTest == 0) {
+            unset($formVal["username"]);
+            $this->flashMessage('Uživatelské jméno obsahuje nepovolené znaky', 'error');
+        } elseif (strlen($form->values->name) < 2) {
+            $this->flashMessage('Příliš krátké jméno', 'error');
         } else {
             $msg = 1;
         }
 
-        if ($msg == '') {
-            $this->redirect(":Front:Sign:up");
+        if ($msg != 1) {
+            unset($formVal["pwd"], $formVal["pwd2"], $formVal["confirmation"]);
+
+            $this->redirect(":Front:Sign:up", $formVal);
         }
 
         $activationCode = \Nette\Utils\Strings::random(12, "987654321zyxwvutsrqponmlkjihgfedcba");
-        $password = \Nette\Security\Passwords::hash($form->getValues()->pwd);
+        $password = \Nette\Security\Passwords::hash($form->values->pwd);
+
+        $userId = $this->database->table("users")
+                ->insert(array(
+            "email" => $form->values->email,
+            "username" => $form->values->username,
+            "name" => $form->values->name,
+            "district" => $form->values->district,
+            "password" => $password,
+            "activation" => $activationCode,
+            "newsletter" => (bool) $form->values->newsletter,
+            "state" => 0,
+            "date_created" => date("Y-m-d H:i:s")
+        ));
 
         $this->database->table("users")
-                ->insert(array(
-                    "email" => $form->getValues()->email,
-                    "uid" => 'MU' . str_pad(abs(substr($this->database->table("users")->max("uid"), 2)) + 1, 6, "0", STR_PAD_LEFT),
-                    "username" => $form->getValues()->username,
-                    "name" => $form->getValues()->name,
-                    "namefirst" => $form->getValues()->namefirst,
-                    "district" => $form->getValues()->district,
-                    "password" => $password,
-                    "activation" => $activationCode,
-                    "newsletter" => (bool) $form->getValues()->newsletter,
-                    "state" => 0,
-                    "date_created" => date("Y-m-d H:i:s")
+                ->where(array("id" => $userId->id
+                ))->update(array(
+            "uid" => 'MU' . \Nette\Utils\Strings::padLeft($userId->id, 6, '0'),
         ));
 
         $latte = new \Latte\Engine;
         $params = array(
+            'username' => $form->values->username,
             'activationCode' => $activationCode,
         );
 
         try {
             $mail = new \Nette\Mail\Message;
-            $mail->setFrom('Mimix <info@mimix.cz>')
-                    ->addTo($form->getValues()->email)
+            $mail->setFrom('Mimix <no-reply@mimix.cz>')
+                    ->addTo($form->values->email)
                     ->setSubject("Informace o novém účtu")
                     ->setHTMLBody($latte->renderToString(substr(__DIR__, 0, -10) . '/templates/Sign/components/email.latte', $params));
 
             $mailer = new \Nette\Mail\SendmailMailer;
             $mailer->send($mail);
 
-            $msg = 'Registrace byla úspěšná';
+            $this->flashMessage('Vaše registrace proběhla úspěšně. Po ověření se můžete přihlásit.', 'note');
+            $this->redirect(":Front:Sign:ed");
         } catch (Exception $e) {
-            $msg = 'Neznámá chyba. E-mail nebyl odeslán' . $e->getMessage;
+            $this->flashMessage('E-mail nebyl odeslán' . $e->getMessage, 'error');
+            $this->redirect(":Front:Sign:up");
         }
-
-        $this->flashMessage($msg);
-        $this->redirect(":Front:Sign:up");
     }
 
     /**
      * Form: Resets passwords in database, user fill in new password
      */
-    public function createComponentResetForm() {
+    public function createComponentResetForm()
+    {
         $form = new \Nette\Forms\BootstrapUIForm;
         $form->getElementPrototype()->class = "form-horizontal";
         $form->getElementPrototype()->role = 'form';
@@ -189,7 +224,8 @@ class SignPresenter extends BasePresenter {
         return $form;
     }
 
-    function resetFormSucceeded(\Nette\Forms\BootstrapUIForm $form) {
+    function resetFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
+    {
         $email = $form->getValues()->email;
         $emailExists = $this->database->table('users')->where(array(
                     'email' => $email,
@@ -220,7 +256,8 @@ class SignPresenter extends BasePresenter {
      * Form: User fills in e-mail address to send e-mail with a password generator link
      * @return string
      */
-    function createComponentSendForm() {
+    function createComponentSendForm()
+    {
         $form = new \Nette\Forms\BootstrapUIForm;
         $form->getElementPrototype()->class = "form-horizontal";
         $form->getElementPrototype()->role = 'form';
@@ -232,7 +269,8 @@ class SignPresenter extends BasePresenter {
         return $form;
     }
 
-    function sendFormSucceeded(\Nette\Forms\BootstrapUIForm $form) {
+    function sendFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
+    {
         $email = $form->getValues()->email;
 
         if (!\Nette\Utils\Validators::isEmail($email)) {
@@ -257,7 +295,7 @@ class SignPresenter extends BasePresenter {
         );
 
         $mail = new \Nette\Mail\Message;
-        $mail->setFrom('Mimix <info@mimix.cz>')
+        $mail->setFrom('Mimix <no-reply@mimix.cz>')
                 ->addTo($email)
                 ->setSubject("Mimix: Informace o novém hesle")
                 ->setHTMLBody($latte->renderToString(substr(__DIR__, 0, -10) .
@@ -273,14 +311,17 @@ class SignPresenter extends BasePresenter {
     /**
      * Verification form for invitations
      */
-    function createComponentVerifyForm() {
+    function createComponentVerifyForm()
+    {
         $form = new \Nette\Forms\BootstrapUIForm;
         $form->getElementPrototype()->class = "form-horizontal";
         $form->getElementPrototype()->role = 'form';
         $form->getElementPrototype()->autocomplete = 'off';
-        $form->addText("code", "[cal:www.t(InvitationCode;members) /]");
-        $form->addText("email", "[cal:www.t(E-mail) /]");
-        $form->addSubmit('submit', '[cal:www.t(Verify;members) /]');
+        $form->setMethod("GET");
+        $form->addText("code", "Kód");
+        $form->addText("email", "E-mail");
+        $form->addSubmit('submitm', 'Ověřit');
+        $form->onSuccess[] = $this->verifyFormSucceeded;
 
         return $form;
     }
@@ -288,36 +329,45 @@ class SignPresenter extends BasePresenter {
     /**
      * Verify member's password
      */
-    function verifySucceeded(\Nette\Forms\BootstrapUIForm $form) {
-        $activation = $form->getValues()->activation;
+    function verifyFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
+    {
+        $userLoggedDb = $this->database->table('users')->where(array(
+            'activation' => $this->getParameter("code"),
+            'username' => $this->getParameter("user")
+        ));
 
-        $userLogged = $this->database->table('users')->where(array(
-                    'activation' => $activation
-                ))->fetch();
-
-        if ($userLogged->count() == 0) {
-            $message = 'Aktivace není platná';
+        if ($userLoggedDb->count() == 0) {
+            $this->flashMessage('Aktivace není platná', 'error');
+            $this->redirect(":Front:Sign:verify");
         } else {
             $this->database->table("users")->where(array(
-                "activation" => $activation,
+                "activation" => $this->getParameter("code"),
+                'username' => $this->getParameter("user")
             ))->update(array(
                 "state" => 1
             ));
 
-            $message = 'Úspěšně ověřeno. Nyní se můžete přihlásit.';
+            $this->flashMessage('Úspěšně ověřeno. Nyní se můžete přihlásit.', 'note');
+            $this->redirect(":Front:Sign:in");
         }
-
-        $this->flashMessage($message);
-        $this->redirect(":Front:Sign:verify");
     }
 
-    public function actionOut() {
+    public function actionOut()
+    {
         $this->getUser()->logout();
         $this->flashMessage('Byli jste odhlášeni.');
         $this->redirect('in');
     }
 
-    function renderResetpass() {
+    function renderIn()
+    {
+        if ($this->getParameter('msg') == 1) {
+            $this->template->msg = TRUE;
+        }
+    }
+
+    function renderResetpass()
+    {
         $activation = $this->database->table("users")->where(array(
             "email" => $this->getParameter("email"),
             "activation" => $this->getParameter("code"),

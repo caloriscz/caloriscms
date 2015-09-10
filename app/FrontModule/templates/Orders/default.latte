@@ -1,0 +1,17 @@
+{block #titles}{_dictionary.main.Orders}{/block}
+{block content}
+
+<h1 class="page-header">{_dictionary.main.Orders}</h1>
+
+<table class="table table-striped">
+    <tr>
+        <th class="col-xs-3">ID</th>
+        <th>{_dictionary.main.date}</th>
+    </tr>
+    {foreach $orders as $item}
+        <tr>
+            <td><a n:href=":Front:Orders:detail, id => $item->id">{$item->oid}</a></td>
+            <td>{$item->date_created|date:'j. n. Y H:i'}</td>
+        </tr>
+    {/foreach}
+</table>

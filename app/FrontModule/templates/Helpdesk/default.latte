@@ -1,0 +1,11 @@
+{block #titles}Homepage{/block}
+{block content}
+
+
+<h1>{_messages.helpdesk.request}</h1>
+
+{foreach $flashes as $flash}
+    <div class="flash {$flash->type}">{$flash->message}</div>
+{/foreach}
+
+{control sendForm}
