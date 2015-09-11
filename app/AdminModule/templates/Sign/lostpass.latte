@@ -1,7 +1,7 @@
-{block #titles}Forgotten password{/block}
+{block #titles}{_dictionary.main.cForgottenPassword}{/block}
 {block content}
 
-<h1>Forgotten password</h1>
+<h1>{_dictionary.main.ForgottenPassword}</h1>
 
 <form action="" class="form-signin" role="form" method="post">
     <input type="hidden" name="terminal" value="open" />
@@ -21,4 +21,4 @@
     <button class="btn btn-lg btn-primary btn-block" type="submit">{_dictionary.main.send|firstUpper}</button>
 </form>
 
-<div><br /><a style="padding-left: 30px;" n:href=":Front:Sign:in" class="btn btn-default">Login</a></div>
+<div><br /><a style="padding-left: 30px;" n:href=":Front:Sign:in" class="btn btn-default">{_dictionary.main.login|firstUpper}</a></div>

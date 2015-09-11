@@ -1,16 +1,16 @@
-{block #titles}Addresses{/block}
+{block #titles}{_dictionary.main.addresses|firstUpper}{/block}
 {block content}
 <div class="container heading">
-    <h1>Addresses</h1>
+    <h1>{_dictionary.main.addresses|firstUpper}</h1>
 </div>
 
 <div class="container">
     <div class="col-md-3">
         <ul class="nav nav-pills nav-stacked">
-            <li><a n:href=":Front:Profile:default">Contact information</a></li>
-            <li><a n:href=":Front:Profile:foto">Profile image</a></li>
-            <li><a n:href=":Front:Profile:password">Password change</a></li>
-            <li class="active"><a n:href=":Front:Profile:addresses">Addresses</a></li>
+            <li><a n:href=":Front:Profile:default">{_store.order.ContactInformation}</a></li>
+            <li><a n:href=":Front:Profile:foto">{_store.profile.ProfileImage}</a></li>
+            <li><a n:href=":Front:Profile:password">{_store.profile.PasswordChange}</a></li>
+            <li class="active"><a n:href=":Front:Profile:addresses">{_dictionary.main.addresses|firstUpper}</a></li>
         </ul>
     </div>
     <div class="col-md-9">

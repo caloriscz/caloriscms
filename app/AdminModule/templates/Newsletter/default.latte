@@ -1,18 +1,18 @@
-{block #titles}Helpdesk{/block}
+{block #titles}Newsletter{/block}
 {block content}
 
-<h1 class="page-header">Helpdesk</h1>
+<h1 class="page-header">Newsletter</h1>
 
 <table class="table table-striped">
     <tr>
         <th class="col-xs-1"></th>
-        <th class="col-xs-1">Datum</th>
-        <th>Název</th>
-        <th>Zpráva</th>
+        <th class="col-xs-1">{_dictionary.main.date|firstUpper}</th>
+        <th>{_dictionary.main.name|firstUpper}</th>
+        <th>{_dictionary.main.message|firstUpper}</th>
     </tr>
     {foreach $newsletter as $item}
         <tr>
-            <td class="col-xs-1"><a n:href="delete!, id => $item->id" onclick="return confirm('Opravdu smazat?')"><i class="fa fa-times font-red"></i></a></td>
+            <td class="col-xs-1"><a n:href="delete!, id => $item->id" onclick="return confirm('Delete really?')"><i class="fa fa-times font-red"></i></a></td>
             <td>{$item->email}</td>
         </tr>
     {/foreach}

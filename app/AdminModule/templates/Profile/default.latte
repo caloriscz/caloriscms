@@ -1,4 +1,4 @@
-{block #titles}Profil{/block}
+{block #titles}{_dictionary.main.profile|firstUpper}{/block}
 {block content}
 
 {if $isLoggedIn}
@@ -9,12 +9,12 @@
         <div class="col-sm-8 col-xs-12">
             <table class="table">
                 <tr>
-                    <td class="col-xs-2">User</td>
+                    <td class="col-xs-2">{_dictionary.main.member|firstUpper}</td>
                     <td>{$member->username}</td>
                     <td class="col-xs-4"></td>
                 </tr>
                 <tr>
-                    <td>E-mail</td>
+                    <td>{_dictionary.main.email|firstUpper}</td>
                     <td>{$member->email}</td>
                     <td></td>
                 </tr>
@@ -24,7 +24,7 @@
 
             {control editForm}
 
-            <h2>Změna hesla</h2>
+            <h2>{_store.profile.PasswordChange}</h2>
 
             {control changePasswordForm}
         </div>

@@ -1,8 +1,16 @@
 cart:
     add: "Add to cart"
+forms:
+    TheseItemsAreRequired: "these items are required"
 order:
+    BillingAddress: "Billing Address"
     ChooseShipping: "Choose shipping"
     ChoosePayment: "Choose payment"
+    ContactInformation: "Contact information"
     ClickToChooseAddress: "Click to choose address"
     CreateNewAddress: "Create new address"
     DeliveryAddress: "Delivery Address"
+    OrderSummary: "Order Summary"
+profile:
+    ProfileImage: "Profile Image"
+    PasswordChange: "Password change"

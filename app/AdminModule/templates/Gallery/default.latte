@@ -15,8 +15,8 @@
                 <div class="caption" style="height: 100px;">
                     <p>{$item->title}</p>
                     <p>{$item->description}</p>
-                    <p><a n:href="delete!, filename => $item->title" class="btn btn-danger" role="button" onclick="return confirm('Opravdu smazat celou kategorii i se všemi obrázky?')">Smazat</a> 
-                        <a n:href=":Admin:Gallery:detail id => $item->id" class="btn btn-default" role="button">Upravit</a></p>
+                    <p><a n:href="delete!, filename => $item->title" class="btn btn-danger" role="button" onclick="return confirm('Opravdu smazat celou kategorii i se všemi obrázky?')">{_dictionary.main.delete|firstUpper}</a> 
+                        <a n:href=":Admin:Gallery:detail id => $item->id" class="btn btn-default" role="button">{_dictionary.main.edit|firstUpper}</a></p>
                 </div>
             </div>
         </div>

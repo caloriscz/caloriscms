@@ -1,7 +1,7 @@
-{block #titles}Skupiny{/block}
+{block #titles}{_dictionary.main.groups|firstUpper}{/block}
 {block content}
 
-<h1 class="page-header">Skupiny</h1>
+<h1 class="page-header">{_dictionary.main.groups|firstUpper}</h1>
 
 {foreach $flashes as $flash}
     <br />
@@ -10,7 +10,7 @@
 {/foreach}
 
 <div class="row">
-    <div class="col-md-1"><a n:href=":Admin:Contacts:default" class="btn btn-default">Kontakty</a></div>
+    <div class="col-md-1"><a n:href=":Admin:Contacts:default" class="btn btn-default">{_dictionary.main.contacts|firstUpper}</a></div>
     <div class="col-md-11">{control insertGroupForm}</div>
 </div>
 <br />
@@ -20,12 +20,12 @@
     <table class="table table-striped">
         <tr>
             <th class="col-xs-1"></th>
-            <th>Skupina</th>
+            <th>{_dictionary.main.group|firstUpper}</th>
         </tr>
         {foreach $groups as $group}
             <tr>
                 <td class="col-xs-1"><a n:href="deleteGroup!, id => $group->id" class="btn" 
-                                        onclick="return confirm('Opravdu smazat skupina a všechny kontakty přesunout do hlavní skupiny?')" role="button"><i class="fa fa-times font-red"></i></a></td>
+                                        onclick="return confirm('Do you really want to delete all contacts and group')" role="button"><i class="fa fa-times font-red"></i></a></td>
                 <td>{$group->group}</td>
             </tr>
         {/foreach}    

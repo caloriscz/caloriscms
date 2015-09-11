@@ -1,7 +1,7 @@
-{block #titles}Galerie{/block}
+{block #titles}{_dictionary.main.gallery|firstUpper}{/block}
 {block content}
 
-<h1 class="page-header">Galerie</h1>
+<h1 class="page-header">{_dictionary.main.gallery|firstUpper}</h1>
 
 {control uploadForm}
 
@@ -17,7 +17,7 @@
         </div>
     </div>
     <div class="col-sm-12">
-        <button type="submit">Hledat</button>
+        <button type="submit">{_dictionary.main.search|firstUpper}</button>
     </div>
 {/form}
 
@@ -33,8 +33,8 @@
                 <div class="caption" style="height: 150px;">
                     <p>{$item->name}</p>
                     <p>{$item->description}, {$item->date_created|date:'j. n. H:i'}</p>
-                    <p><a n:href="delete!, filename => $item->name" class="btn btn-danger" role="button">Smazat</a> 
-                        <a href="{$baseUri}/images/gallery/{$item->gallery_albums_id|padLeft:4:"0"}/{$item->name}" class="btn btn-default" role="button">Otevřít</a></p>
+                    <p><a n:href="delete!, filename => $item->name" class="btn btn-danger" role="button">{_dictionary.main.delete|firstUpper}</a> 
+                        <a href="{$baseUri}/images/gallery/{$item->gallery_albums_id|padLeft:4:"0"}/{$item->name}" class="btn btn-default" role="button">{_dictionary.main.open|firstUpper}</a></p>
                 </div>
             </div>
         </div>

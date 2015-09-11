@@ -1,8 +1,16 @@
 cart:
     add: "Přidat do košíku"
+forms:
+    TheseItemsAreRequired: "takto označené položky jsou povinné"
 order:
+    BillingAddress: "Fakturační adresa"
     ChooseShipping: "Vyberte způsob dopravy"
     ChoosePayment: "Vyberte způsob platby"
     ClickToChooseAddress: "Kliknutím vyberete adresu"
+    ContactInformation: "Contact information"
     CreateNewAddress: "Create new address"
     DeliveryAddress: "Adresa doručení"
+    OrderSummary: "Shrnutí objednávky"
+profile:
+    ProfileImage: "Profilový obrázek"
+    PasswordChange: "Změna hesla"

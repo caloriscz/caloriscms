@@ -1,23 +1,23 @@
-{block #titles}Novinky{/block}
+{block #titles}{_dictionary.main.blog|firstUpper}{/block}
 {block content}
 
-<h1>Novinky</h1>
+<h1>{_dictionary.main.blog|firstUpper}</h1>
 
-<p><a n:href="insert!" class="btn btn-success">Vytvořit novinku (objeví se na homepage)</a></p>
+<p><a n:href="insert!" class="btn btn-success">Create new</a></p>
 
 <div class="table-responsive">
     <table class="table table-striped">
         <tr>
             <th class="col-xs-1"></th>
-            <th class="col-xs-4">Titulek</th>
-            <th>Stav</th>
-            <th>Datum</th>
+            <th class="col-xs-4">{_dictionary.main.title|firstUpper}</th>
+            <th>{_dictionary.main.state|firstUpper}</th>
+            <th>{_dictionary.main.date|firstUpper}</th>
         </tr>
         {foreach $blog as $item}
             <tr>
-                <td class="col-xs-1"><a n:href="delete!, id => $item->id" onclick="return confirm('Opravdu smazat?')"><i class="fa fa-times font-red"></i></a></td>
+                <td class="col-xs-1"><a n:href="delete!, id => $item->id" onclick="return confirm('Delete really?')"><i class="fa fa-times font-red"></i></a></td>
                 <td class="col-xs-4"><a n:href=":Admin:Blog:detail, id => $item->id">{$item->title}</a></td>
-                <td><a n:href="changeState!, id => $item->id, public => $item->public">{if $item->public == 1}publikováno{else}koncept{/if}</a></td>
+                <td><a n:href="changeState!, id => $item->id, public => $item->public">{if $item->public == 1}{_dictionary.main.published}{else}{_dictionary.main.concept}{/if}</a></td>
                 <td>{$item->date_created|date:'j. n. Y H:i'}</td>
             </tr>
         {/foreach}

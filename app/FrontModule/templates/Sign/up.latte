@@ -1,4 +1,4 @@
-{block #titles}Registrace{/block}
+{block #titles}{_dictionary.main.signup|firstUpper}{/block}
 {block content}
 
 <section class="container">
@@ -6,7 +6,7 @@
         <div class="flash {$flash->type}">{$flash->message}</div>
     {/foreach}
 
-    <h1>Registrace nového účtu</h1>
+    <h1>{_dictionary.main.signup|firstUpper}</h1>
     
     <p>Všechna pole jsou povinná</p>
 

@@ -1,12 +1,12 @@
-{block #titles}Kategorie{/block}
+{block #titles}{_dictionary.main.categories|firstUpper}{/block}
 {block content}
 
-<h1 class="page-header">Kategorie</h1>
+<h1 class="page-header">{_dictionary.main.categories|firstUpper}</h1>
 
 <table class="table table-striped">
     <tr>
         <th class="col-xs-1"></th>
-        <th>Kategorie</th>
+        <th>{_dictionary.main.category|firstUpper}</th>
     </tr>
     {foreach $categories as $item}
         <tr>

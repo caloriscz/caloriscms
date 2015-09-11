@@ -18,7 +18,7 @@
         <p>shipping: {$info->store_settings_shipping->title}</p>
         <p>payment: {$info->store_settings_payments->title}</p>
 
-        <h2>Address</h2>
+        <h2>{_dictionary.main.address|firstUpper}</h2>
 
         {$address['billing']['name']}<br />
         {$address['billing']['street']}<br />
@@ -30,10 +30,10 @@
         {$address['delivery']['zip']} {$address['delivery']['city']}<br />
         <br />
         <div class="well">
-            <p>Message:<br />{$info->note}</p>
+            <p>{_dictionary.main.message|firstUpper}:<br />{$info->note}</p>
         </div>
 
-        <h2>Cart</h2>
+        <h2>{_dictionary.main.cart|firstUpper}</h2>
 
         <table class="table">
             {foreach $items as $item}

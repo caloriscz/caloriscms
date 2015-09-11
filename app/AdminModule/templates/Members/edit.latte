@@ -1,4 +1,4 @@
-{block #titles}Členové: {$members->username}{/block}
+{block #titles}{_dictionary.main.members|firstUpper}: {$members->username}{/block}
 {block content}
 
 {foreach $flashes as $flash}
@@ -9,19 +9,19 @@
     </div>
 {/foreach}
 
-<h1 class="page-header">Členové: {$members->username}</h1>
+<h1 class="page-header">{_dictionary.main.members|firstUpper}: {$members->username}</h1>
 
 <table class="table table-bordered table-condensed">
     <tr>
-        <td class="col-md-1">Uživatel</td>
+        <td class="col-md-1">{_dictionary.main.member|firstUpper}</td>
         <td>{$member->username}</td>
     </tr>
     <tr>
-        <td class="col-md-1">E-mail</td>
+        <td class="col-md-1">{_dictionary.main.email|firstUpper}</td>
         <td>{$member->email}</td>
     </tr>
     <tr>
-        <td class="col-md-1">Vytvořeno</td>
+        <td class="col-md-1">{_dictionary.main.created|firstUpper}</td>
         <td>{$member->date_created|date:'j. n. Y'}</td>
     </tr>
 </table>

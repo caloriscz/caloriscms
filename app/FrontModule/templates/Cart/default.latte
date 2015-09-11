@@ -1,8 +1,8 @@
-{block #titles}Cart{/block}
+{block #titles}{_dictionary.main.cart|firstUpper}{/block}
 {block content}
 
 <div class="container heading">
-    <h1>Cart</h1>
+    <h1>{_dictionary.main.cart|firstUpper}</h1>
 </div>
 
 <div class="container">
@@ -24,13 +24,13 @@
                     <td>{$item->store_stock->title}</td>
                     <td>{var $priceVat = $item->store_stock->price * (($item->store_stock->vat/100)+1)}{round($priceVat,0)} {$settings['currency_symbol']}</td>
                     <td>{form changeAmountCartForm value => '1'}{input amount value => $item->amount} {input id 'value' => $item->id}{input submitm}{/form}</td>
-                    <td><a n:href="delete! id => $item->id" class="btn btn-danger">Delete</a></td>
+                    <td><a n:href="delete! id => $item->id" class="btn btn-danger">{_dictionary.main.delete|firstUpper}</a></td>
                 </tr>
             {/foreach}
         </table>
 
         <br />
 
-        <a n:href=":Front:Order:default" class="btn btn-success btn-lg">Continue</a>
+        <a n:href=":Front:Order:default" class="btn btn-success btn-lg">{_dictionary.main.continue|firstUpper}</a>
     </div>
 </div>
