@@ -8,8 +8,3 @@ nette:
 		password: ''
 		options:
 			lazy: yes
-
-services:
-    nette.latteFactory:
-        setup:
-            - setTempDirectory(null)
