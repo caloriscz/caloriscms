@@ -16,7 +16,7 @@
                 <ul class="shipping">
                     {foreach $shippingMethods as $item}
                         <li>
-                            <input type="radio" name="shipping" value="{$item->id}" {if $item->id == $cartInfo->store_settings_shipping_id}checked{/if} /> 
+                            <input type="radio" name="shipping" value="{$item->id}" {if $item->id == $cartInfo->store_settings_shipping_id}{elseif $iterator->first}checked{/if} /> 
                             {$item->title} - {$settings['currency_symbol']} {$item->shipping},-
                             {if $item->id == 6}
                                  <div id="pickups">

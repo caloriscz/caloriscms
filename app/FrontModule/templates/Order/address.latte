@@ -5,6 +5,12 @@
     <h1>{_dictionary.main.order|firstUpper}</h1>
 </div>
 
+{foreach $flashes as $flash}
+    <br />
+    <div class="flash {$flash->type}">{$flash->message}</div>
+    <br />
+{/foreach}
+
 <div class="container">
     <div class="col-md-12">
         <h2>{_dictionary.main.address|firstUpper}</h2>
@@ -56,12 +62,13 @@
             {/if}
 
             <h2>{_store.order.DeliveryAddress}</h2>
-
+            {if $cartD}
+                {var $open = 'x'}
+            {/if}
             <a href="" id="delivery_show">{_store.order.ClickToChooseAddress}:</a></p>
 
-            <div class="delivery">
+            <div class="delivery{$open}">
                 {if $user->loggedIn}
-
                     {foreach $contacts as $item}
                         <div class="address-selector{if $cartD == $item->id} address-selected{/if}">
                             <a n:href="changeAddress! id => $item->id, cart => $cartId, type => 2">{$item->name}<br />

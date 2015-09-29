@@ -62,6 +62,41 @@ class CataloguePresenter extends BasePresenter
     /**
      * Edit product
      */
+    protected function createComponentUpdateCategoryForm()
+    {
+        $form = new \Nette\Forms\BootstrapUIForm;
+        $form->setTranslator($this->translator->domain('dictionary.main'));
+        $form->getElementPrototype()->class = "form-horizontal";
+        $form->getElementPrototype()->role = 'form';
+        $form->getElementPrototype()->autocomplete = 'off';
+        $form->addHidden('id', 'ID:');
+        $form->addText('title', 'name');
+        $form->addSubmit('submitm', 'save');
+
+        $category = $this->database->table("store_categories")->get($this->getParameter("id"));
+
+        $form->setDefaults(array(
+            "id" => $category->id,
+            "title" => $category->title,
+        ));
+
+        $form->onSuccess[] = $this->updateCategoryFormSucceeded;
+        return $form;
+    }
+
+    public function updateCategoryFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
+    {
+        $this->database->table("store_categories")->get($form->values->id)
+                ->update(array(
+                    "title" => $form->values->title,
+        ));
+
+        $this->redirect(":Admin:Catalogue:categoriesDetail", array("id" => $form->values->id));
+    }
+
+    /**
+     * Edit product
+     */
     protected function createComponentEditForm()
     {
         $catalogue = $this->database->table("store")
@@ -81,7 +116,7 @@ class CataloguePresenter extends BasePresenter
                 ->setAttribute("class", "form-control")
                 ->setHtmlId("wysiwyg");
 
-        $form->addSubmit('submitm', 'Save');
+        $form->addSubmit('submitm', 'save');
 
         $form->setDefaults(array(
             "id" => $catalogue->id,
@@ -130,7 +165,7 @@ class CataloguePresenter extends BasePresenter
         $form->addText('paramkey', 'parameter')
                 ->setAttribute("data-params", rtrim($params, ";"));
         $form->addText('paramvalue', 'value');
-        $form->addSubmit('submitm', 'Insert');
+        $form->addSubmit('submitm', 'insert');
 
         $form->setDefaults(array(
             "id" => $this->getParameter("id"),
@@ -219,9 +254,9 @@ class CataloguePresenter extends BasePresenter
         $form->getElementPrototype()->role = 'form';
         $form->getElementPrototype()->autocomplete = 'off';
         $form->addHidden('id');
-        $form->addText('title', 'Title');
-        $form->addText('price', 'Price');
-        $form->addText('amount', 'Amount');
+        $form->addText('title', 'title');
+        $form->addText('price', 'price');
+        $form->addText('amount', 'amount');
 
         if ($this->template->settings["vat_payee"] == 1) {
             $form->addSelect('vat', 'VAT', $this->template->vats)
@@ -229,7 +264,7 @@ class CataloguePresenter extends BasePresenter
                     ->setTranslator(NULL);
         }
 
-        $form->addSubmit('submitm', 'Insert');
+        $form->addSubmit('submitm', 'insert');
 
         $form->setDefaults(array(
             "id" => $this->getParameter("id"),
@@ -262,6 +297,64 @@ class CataloguePresenter extends BasePresenter
     /**
      * Insert parameter
      */
+    protected function createComponentEditStockForm()
+    {
+        $form = new \Nette\Forms\BootstrapUIForm;
+        $form->setTranslator($this->translator);
+        $form->getElementPrototype()->class = "ajax form-horizontal";
+        $form->getElementPrototype()->role = 'form';
+        $form->getElementPrototype()->autocomplete = 'off';
+        $form->addHidden('id');
+        $form->addHidden('prodid');
+        $form->addText('title', 'dictionary.main.title')
+                ->setAttribute("class", "form-control");
+        $form->addText('price', 'dictionary.main.price')
+                ->setAttribute("class", "form-control");
+        $form->addText('amount', 'dictionary.main.amount')
+                ->setAttribute("class", "form-control")
+                ->setType('number')
+                ->setDefaultValue(1)
+                ->addRule(\Nette\Forms\Form::INTEGER, 'Must be numeric value');
+
+        if ($this->template->settings["vat_payee"] == 1) {
+            $form->addSelect('vat', 'dictionary.main.VAT', $this->template->vats)
+                    ->setAttribute("class", "form-control")
+                    ->setTranslator(NULL);
+        }
+
+        $form->addSubmit('submitm', 'dictionary.main.insert')
+                ->setAttribute("class", "btn btn-primary");
+
+        $form->setDefaults(array(
+            "prodid" => $this->getParameter("id"),
+        ));
+
+        $form->onSuccess[] = $this->editStockFormSucceeded;
+        return $form;
+    }
+
+    public function editStockFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
+    {
+        if ($this->template->settings["vat_payee"] == 1) {
+            $vat = $form->values->vat;
+        } else {
+            $vat = 0;
+        }
+
+        $this->database->table("store_stock")->get($form->values->id)
+                ->update(array(
+                    "title" => $form->values->title,
+                    "price" => $form->values->price,
+                    "amount" => $form->values->amount,
+                    "store_settings_vats_id" => $vat,
+        ));
+
+        $this->redirect(":Admin:Catalogue:detailStock", array("id" => $form->values->prodid));
+    }
+
+    /**
+     * Insert parameter
+     */
     protected function createComponentInsertBrandForm()
     {
         $form = new \Nette\Forms\BootstrapUIForm;
@@ -271,7 +364,7 @@ class CataloguePresenter extends BasePresenter
         $form->getElementPrototype()->autocomplete = 'off';
 
         $form->addText('title', 'Title');
-        $form->addSubmit('submitm', 'Insert');
+        $form->addSubmit('submitm', 'insert');
 
         $form->onSuccess[] = $this->insertBrandFormSucceeded;
         return $form;
@@ -287,6 +380,58 @@ class CataloguePresenter extends BasePresenter
     }
 
     /**
+     * Insert category
+     */
+    protected function createComponentInsertCategoryForm()
+    {
+        $form = new \Nette\Forms\BootstrapUIForm;
+        $form->setTranslator($this->translator->domain('dictionary.main'));
+        $form->getElementPrototype()->class = "form-horizontal";
+        $form->getElementPrototype()->role = 'form';
+        $form->getElementPrototype()->autocomplete = 'off';
+
+        $form->addHidden("parent");
+        $form->addText('title', 'title')
+                ->setAttribute("class", "form-control");
+        $form->addSubmit('submitm', 'insert')
+                ->setAttribute("class", "btn btn-primary");
+
+        $form->onSuccess[] = $this->insertCategoryFormSucceeded;
+        return $form;
+    }
+
+    public function insertCategoryFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
+    {
+        $category = $this->database->table("store_categories")->where(array(
+            "parent_id" => $form->values->parent,
+            "title" => $form->values->title,
+        ));
+
+        if ($category->count() > 0) {
+            $this->flashMessage("Category already exists", "error");
+            $this->redirect(":Admin:Catalogue:categories");
+        }
+
+        if ($form->values->title == "") {
+            $this->flashMessage("Category must have some name", "error");
+            $this->redirect(":Admin:Catalogue:categories");
+        }
+
+        if (is_numeric($form->values->parent) == FALSE) {
+            $parent = NULL;
+        } else {
+            $parent = $form->values->parent;
+        }
+
+        $this->database->table("store_categories")->insert(array(
+            "title" => $form->values->title,
+            "parent_id" => $parent,
+        ));
+
+        $this->redirect(":Admin:Catalogue:categories");
+    }
+
+    /**
      * Insert parameter
      */
     protected function createComponentInsertNewParamForm()
@@ -298,7 +443,7 @@ class CataloguePresenter extends BasePresenter
         $form->getElementPrototype()->autocomplete = 'off';
 
         $form->addText('param', 'Title');
-        $form->addSubmit('submitm', 'Insert');
+        $form->addSubmit('submitm', 'insert');
 
         $form->onSuccess[] = $this->insertNewParamFormSucceeded;
         return $form;
@@ -330,7 +475,7 @@ class CataloguePresenter extends BasePresenter
                 ->addRule(\Nette\Forms\Form::MIME_TYPE, 'Invalid type of image:', $imageTypes);
         $form->addTextarea("description", "Description")
                 ->setAttribute("class", "form-control");
-        $form->addSubmit('send', 'Insert');
+        $form->addSubmit('send', 'insert');
 
         $form->setDefaults(array(
             "id" => $this->getParameter("id"),
@@ -402,7 +547,23 @@ class CataloguePresenter extends BasePresenter
 
     public function renderDefault()
     {
-        $this->template->catalogue = $this->database->table("store")->order("title");
+        $filter = new \App\Model\ProductFilter($this->database);
+        $filter->order($this->getParameter("o"));
+        $filter->setCategories($this->getParameter("id"));
+        $filter->setManufacturer($this->getParameter("brand"));
+        $filter->setUser($this->getParameter("user"));
+        $filter->setText($this->getParameter("src"));
+        $assembleSQL = $filter->assemble();
+
+        $paginator = new \Nette\Utils\Paginator;
+        $paginator->setItemCount($assembleSQL->count("*"));
+        $paginator->setItemsPerPage(20);
+        $paginator->setPage($this->getParameter("page"));
+
+        $this->template->categoryArr = $this->getParameters();
+        $this->template->store = $assembleSQL->order("id");
+        $this->template->paginator = $paginator;
+        $this->template->productsArr = $assembleSQL->limit($paginator->getLength(), $paginator->getOffset());
     }
 
     public function renderDetail()
@@ -423,8 +584,6 @@ class CataloguePresenter extends BasePresenter
         }
 
         $this->template->categories = $categories;
-
-        //echo print_r($this->template->categoriesSelected);
     }
 
     public function renderDetailParams()
@@ -461,6 +620,26 @@ class CataloguePresenter extends BasePresenter
         $this->template->store = $brands->order("title");
         $this->template->paginator = $paginator;
         $this->template->productsArr = $brands->limit($paginator->getLength(), $paginator->getOffset());
+    }
+
+    function renderCategories()
+    {
+        $this->template->menu = $this->database->table('store_categories')->where('parent_id', NULL);
+
+        $categoriesSelected = $this->database->table('store_category')->where(array(
+            'store_id' => $this->getParameter("id"),
+        ));
+
+        foreach ($categoriesSelected as $arr) {
+            $categories[] = $arr->store_categories_id;
+        }
+
+        $this->template->categories = $categories;
+    }
+
+    function renderCategoriesDetail()
+    {
+        
     }
 
     function renderParametres()

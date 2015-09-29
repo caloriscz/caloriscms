@@ -106,31 +106,31 @@ class OrderPresenter extends BasePresenter
                     ->addRule($form::MIN_LENGTH, 'Enter valid ZIP', 5);
         }
 
-        $form->addText("email", "messages.helpdesk.email")
+        $form->addText("email", "dictionary.main.email")
                 ->addRule($form::EMAIL, 'Incorrect email address')
-                ->setAttribute("placeholder", "messages.helpdesk.email")
+                ->setAttribute("placeholder", "dictionary.main.email")
                 ->setAttribute("class", "form-control")
                 ->setOption("description", 1);
-        $form->addText("phone", "messages.helpdesk.phone")
-                ->setAttribute("placeholder", "messages.helpdesk.phone")
+        $form->addText("phone", "dictionary.main.phone")
+                ->setAttribute("placeholder", "dictionary.main.phone")
                 ->setAttribute("class", "form-control")
                 ->setOption("description", 1)
                 ->addCondition($form::FILLED)
                 ->addRule($form::MIN_LENGTH, 'Enter valid phone number', 5);
-        $form->addTextArea("note", "messages.helpdesk.message")
-                ->setAttribute("placeholder", "messages.helpdesk.message")
+        $form->addTextArea("note", "dictionary.main.message")
+                ->setAttribute("placeholder", "dictionary.main.message")
                 ->setAttribute("class", "form-control");
-        $form->addText("del_name", "messages.helpdesk.name")
-                ->setAttribute("placeholder", "messages.helpdesk.name")
+        $form->addText("del_name", "dictionary.main.name")
+                ->setAttribute("placeholder", "dictionary.main.name")
                 ->setAttribute("class", "form-control");
-        $form->addText("del_street", "Address")
-                ->setAttribute("placeholder", "Address")
+        $form->addText("del_street", "dictionary.main.street")
+                ->setAttribute("placeholder", "dictionary.main.street")
                 ->setAttribute("class", "form-control");
-        $form->addText("del_city", "City")
-                ->setAttribute("placeholder", "City")
+        $form->addText("del_city", "dictionary.main.city")
+                ->setAttribute("placeholder", "dictionary.main.city")
                 ->setAttribute("class", "form-control");
-        $form->addText("del_zip", "Address")
-                ->setAttribute("placeholder", "ZIP")
+        $form->addText("del_zip", "dictionary.main.ZIP")
+                ->setAttribute("placeholder", "dictionary.main.ZIP")
                 ->setAttribute("class", "form-control");
 
         $cart = new Model\Cart($this->database, $this->user);
@@ -151,7 +151,7 @@ class OrderPresenter extends BasePresenter
             "note" => $cartInfo->note,
         ));
 
-        $form->addSubmit("submitm", "Continue")
+        $form->addSubmit("submitm", "dictionary.main.continue")
                 ->setAttribute("class", "btn btn-success btn-lg");
 
         $form->onSuccess[] = $this->insertAddressFormSucceeded;
@@ -161,6 +161,17 @@ class OrderPresenter extends BasePresenter
     function insertAddressFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
     {
         $cart = new Model\Cart($this->database, $this->user);
+
+        // Check if some address were chosen
+        $billingDb = $this->database->table("cart_addresses")->where(array(
+            "cart_id" => $cart->getCart(),
+            "type" => 1,
+        ));
+
+        if ($billingDb->count() == 0) {
+            $this->flashMessage("Choose address", "error");
+            $this->redirect(":Front:Order:address");
+        }
 
         if (!$this->user->isLoggedIn()) {
             $cart->setBillingAddress($form);
@@ -172,7 +183,7 @@ class OrderPresenter extends BasePresenter
 
         $cart->setInfo($form);
 
-        $this->redirect(":Front:Order");
+        $this->redirect(":Front:Order:summary");
     }
 
     /**
@@ -214,7 +225,7 @@ class OrderPresenter extends BasePresenter
             "city" => $form->values->city,
         ));
 
-        $this->redirect(":Front:Profile:addresses");
+        $this->redirect(":Front:Order:address");
     }
 
     /**
@@ -312,7 +323,7 @@ class OrderPresenter extends BasePresenter
         $mail = new \Nette\Mail\Message;
         $mail->setFrom($this->template->settings["contact_email"]);
         $mail->addTo($cart->email);
-        $mail->setSubject("Zpráva: Poptávka");
+        $mail->setSubject("Order: Your order");
         $mail->setHTMLBody($latte->renderToString(substr(APP_DIR, 0, -4) . '/app/AdminModule/templates/StoreSettings/components/state-2.latte', $params));
 
         $mailer = new \Nette\Mail\SendmailMailer;
