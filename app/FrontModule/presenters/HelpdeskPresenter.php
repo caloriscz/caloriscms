@@ -87,13 +87,13 @@ class HelpdeskPresenter extends BasePresenter
         $mail = new \Nette\Mail\Message;
         $mail->setFrom($this->template->settings["contact_email"]);
         $mail->addTo($this->template->settings["contact_email"]);
-        $mail->setSubject("Zpráva: Poptávka");
+        $mail->setSubject("Message: Request");
         $mail->setHTMLBody($latte->renderToString(substr(__DIR__, 0, -10) . 'templates/Helpdesk/components/request-admin-email.latte', $params));
 
         $mailA = new \Nette\Mail\Message;
         $mailA->setFrom($this->template->settings["contact_email"]);
         $mailA->addTo($form->values->email);
-        $mailA->setSubject("Zpráva: Poptávka");
+        $mailA->setSubject("Message: Request");
         $mailA->setHTMLBody($latte->renderToString(substr(__DIR__, 0, -10) . 'templates/Helpdesk/components/request-customer-email.latte', $params));
 
         $mailer = new \Nette\Mail\SendmailMailer;

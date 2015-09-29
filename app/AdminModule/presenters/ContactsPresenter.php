@@ -36,7 +36,7 @@ class ContactsPresenter extends BasePresenter
         $form->getElementPrototype()->role = 'form';
         $form->getElementPrototype()->autocomplete = 'off';
 
-        $form->addSubmit("submitm", "Create new contact")
+        $form->addSubmit("submitm", "Vytvořit nový kontakt")
                 ->setAttribute("class", "btn btn-success");
 
         $form->onSuccess[] = $this->insertFormSucceeded;
@@ -91,12 +91,12 @@ class ContactsPresenter extends BasePresenter
                 ->setAttribute("class", "form-control");
         $form->addSelect("groups", "Skupina (kde se objeví)", $groups)
                 ->setAttribute("class", "form-control");
-        /*$form->addGroup('Address');
-                 $form->addText("street", "Street")
+        /*$form->addGroup('Adresa');
+                 $form->addText("street", "Ulice")
           ->setAttribute("placeholder", "Ulice")
           ->setOption("description", 1);
           $form->addText("zip", "PSČ")
-          ->setAttribute("placeholder", "ZIP")
+          ->setAttribute("placeholder", "PSČ")
           ->setOption("description", 1);
           $form->addText("city", "Město")
           ->setAttribute("placeholder", "Město")
