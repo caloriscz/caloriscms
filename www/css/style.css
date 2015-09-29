@@ -64,3 +64,15 @@ ul.shipping li {
 .sidebar .nav-third-level li a {
     padding-left: 52px;
 }
+
+/* Error messages */
+
+div.flash.note, div.flash.info {
+    color: #2aabd2 !important;
+    font-weight: bold !important;
+}
+
+div.flash.error {
+    color: red;
+    font-weight: bold !important;
+}
