@@ -45,7 +45,6 @@ class SignPresenter extends BasePresenter
 
     public function signInFormSucceeded($form, $values)
     {
-
         try {
             $this->getUser()->login($values->username, $values->password);
         } catch (Nette\Security\AuthenticationException $e) {
@@ -53,15 +52,26 @@ class SignPresenter extends BasePresenter
             return;
         }
 
+        $role = $this->user->getRoles();
+        $roleCheck = $this->database->table("users_roles")->get($role[0]);
+
+        if ($roleCheck->admin_access == 0) {
+            $this->flashMessage($this->translator->translate('messages.sign.no-access'), "error");
+            $this->redirect(':Admin:Sign:in');
+        } else {
+            $this->database->table("users")->get($this->user->getId())->update(array("date_visited" => date("Y-m-d H:i:s")));
+        }
+
         $this->restoreRequest($this->backlink);
-        $this->redirect(':Admin:Homepage:default');
+        $this->redirect(':Admin:Homepage:default', array("id" => null));
     }
 
     public function actionOut()
     {
         $this->getUser()->logout();
-        $this->flashMessage('Byli jste odhlášeni.');
+        $this->flashMessage($this->translator->translate('messages.sign.logged-out'), 'note');
         $this->redirect('in');
+
     }
 
 }

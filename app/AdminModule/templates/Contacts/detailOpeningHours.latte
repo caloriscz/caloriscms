@@ -1,0 +1,36 @@
+{block #titles}{_dictionary.main.Contacts}{/block}
+{block content}
+
+<br />
+<ul class="nav nav-tabs">
+    <li role="presentation"><a n:href=":Admin:Contacts:detail, id => $presenter->getParameter('id')">{_dictionary.main.Contacts}</a></li>
+    <li role="presentation"><a n:href=":Admin:Contacts:detailCommunications, id => $presenter->getParameter('id')">Komunikace</a></li>
+    <li role="presentation"><a n:href=":Admin:Contacts:detailDocuments, id => $presenter->getParameter('id')">{_dictionary.main.Documents}</a></li>
+    <li role="presentation" class="active"><a n:href=":Admin:Contacts:detailOpeningHours, id => $presenter->getParameter('id')">{_dictionary.main.OpeningHours}</a></li>
+    <li role="presentation"><a n:href=":Admin:Contacts:detailImages, id => $presenter->getParameter('id')">{_dictionary.main.Images}</a></li>
+    <li role="presentation"><a n:href=":Admin:Contacts:detailMember, id => $presenter->getParameter('id')">{_dictionary.main.Member}</a></li>
+</ul>
+
+<h1 class="page-header">{_dictionary.main.Contacts} - {$page->title}</h1>
+
+{foreach $flashes as $flash}
+    <br />
+    <div class="flash {$flash->type}">{$flash->message}</div>
+    <br />
+{/foreach}
+
+<h2>{_dictionary.main.OpeningHours}</h2>
+
+<p class="text-info">Pokud přidáte nový záznam k již zadanému dni, starší záznam bude přepsán.</p>
+<br />
+{control insertHourForm}
+
+<table class="table">
+    {foreach $contact->related('contacts_openinghours', 'contacts_id') as $open}
+        <tr>
+            <td class="col-xs-1"><a n:href="deleteHour! id => $open->id, contact => $open->contacts_id"><i class="fa fa-times font-red"></i></a></td>
+            <td class="col-md-1">{$open->day|numericday}</td>
+            <td>{$open->hourstext}</td>
+        </tr>
+    {/foreach}
+</table>

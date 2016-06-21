@@ -1,3 +1,5 @@
+events:
+    DateWasNotSet: "Date was not set yet"
 navigation:
     about: "About us"
 helpdesk:
@@ -7,3 +9,25 @@ helpdesk:
     message: "Message"
     request: "Request"
     send: "Send"
+sign:
+    no-access: "You are not allowed to enter administration"
+    logged-out: "You were logged out"
+    passwords-not-same: "Passwords are not same"
+    invalidLogin: "You need to log in"
+error:
+    invalidTypeOfImage: "Invalid type of image"
+    CannotBeDeleted: "Nelze smazat"
+    CannotBeDeletedUsedInOrders: "Item cannot be deleted. It is used in orders. You can hide product. Je používáno v objednávkách. Můeže jej však skrýt"
+    CantDeleteMainGroup: "You can't delete main group"
+    categoryAlreadyExists: "Kategorie tohoto jména již existuje"
+    categoryMustHaveSomeName: "Category must have some name"
+    fillInName: "Fill in your name"
+    fillInEmail: "Fill in your e-mail"
+    fillInMessage: "Fill in your message"
+    MustAgreeWithConditions: "You must agree with conditions to finish the order"
+    NoItemsBoughtYet: "You haven't bought any items"
+    NoItemsInCart: "You have no items in your cart"
+    noPermissionForAdmin: "You don't have permission to enter admnistration"
+    NotFound: "Not found"
+    thanksForMessage: "Děkujeme za Vaši zprávu"
+    youWereLoggedIn: "You were logged in"

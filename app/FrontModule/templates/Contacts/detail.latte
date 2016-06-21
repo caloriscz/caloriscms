@@ -1,0 +1,33 @@
+{block #titles}{$contact->name}{/block}
+{block content}
+
+<div class="heading-color">
+    <div class="container heading">
+        <h1>{$contact->name}</h1>
+    </div>
+</div>
+
+
+<div class="container white content padded-top padded-btm">
+    <div class="col-md-4">
+        {var $contactImage = $contact->related('contacts_images', 'contacts_id')}
+
+        {if $contactImage->count() > 0}
+            {var $contactPortrait = $contactImage->fetch()}
+            <a n:href=":Front:Contacts:detail id => $contact->id . '-'. $template->webalize($contact->name)">
+                <img src="{$baseUri}/images/contacts/contact/{$contact->id|padLeft:6:'0'}/{$contactPortrait->filename}" 
+                     class="img-responsive" style="max-height: 300px;" /><br />
+            </a>
+        {/if}
+    </div>
+    <div class="col-md-8">
+        <p id="post">{$contact->post|noescape}</p>
+
+        <p class="tym-kontakt-detail">
+            <abbr title="Telefon">T</abbr>: {$contact->phone}
+            <br />
+            <abbr title="E-mail">E</abbr>: <a href="mailto:{$contact->email}">{$contact->email}</a>
+        </p>
+
+    </div>
+</div>

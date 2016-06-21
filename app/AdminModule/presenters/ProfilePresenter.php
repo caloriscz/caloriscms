@@ -11,29 +11,12 @@ use Nette,
  */
 class ProfilePresenter extends BasePresenter
 {
-
-    public function startup()
-    {
-        parent::startup();
-
-        if (!$this->user->isLoggedIn()) {
-            if ($this->user->logoutReason === \Nette\Security\IUserStorage::INACTIVITY) {
-                $this->flashMessage('You were logged in');
-            }
-
-            $this->redirect('Sign:in', array('backlink' => $this->storeRequest()));
-        }
-    }
-
     /**
      * Verification form for invitations
      */
     function createComponentExportForm()
     {
-        $form = new \Nette\Forms\BootstrapUIForm;
-        $form->getElementPrototype()->class = "form-horizontal";
-        $form->getElementPrototype()->role = 'form';
-        $form->getElementPrototype()->autocomplete = 'off';
+        $form = $this->baseFormFactory->createUI();
 
         $form->addSubmit("submitm", "Export");
 
@@ -46,10 +29,7 @@ class ProfilePresenter extends BasePresenter
      */
     function createComponentEditForm()
     {
-        $form = new \Nette\Forms\BootstrapUIForm();
-        $form->getElementPrototype()->class = 'form-horizontal';
-        $form->getElementPrototype()->role = 'form';
-        $form->getElementPrototype()->autocomplete = 'off';
+        $form = $this->baseFormFactory->createUI();
 
         $members = $this->database->table("users")
                 ->get($this->user->getId());
@@ -67,14 +47,13 @@ class ProfilePresenter extends BasePresenter
             "name" => $cols["name"],
         ));
 
-        $form->addSubmit("submit", "Uložit");
+        $form->addSubmit("submit", "dictionary.main.Save");
         $form->onSuccess[] = array($this, 'editFormSucceeded');
         return $form;
     }
 
     /**
      * Edit user settings by user
-     * @global object $cols Table columns
      * @return array Redirect parameters
      */
     function editFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
@@ -92,10 +71,7 @@ class ProfilePresenter extends BasePresenter
      */
     function createComponentUploadImageForm()
     {
-        $form = new \Nette\Forms\BootstrapUIForm();
-        $form->getElementPrototype()->class = 'form-horizontal';
-        $form->getElementPrototype()->role = 'form';
-        $form->getElementPrototype()->autocomplete = 'off';
+        $form = $this->baseFormFactory->createUI();
 
         $form->addUpload("the_file", "Choose image");
         $form->addSubmit("submit", "Nahrát");
@@ -118,7 +94,7 @@ class ProfilePresenter extends BasePresenter
                 \App\Model\IO::upload(substr(__DIR__, 0, -27) . "/www/users/" . $uid, "avatar.jpg", 0644);
             }
 
-            $image = \Nette\Image::fromFile(substr(__DIR__, 0, -27) . "/www/users/" . $uid . "/avatar.jpg");
+            $image = \Nette\Utils\Image::fromFile(substr(__DIR__, 0, -27) . "/www/users/" . $uid . "/avatar.jpg");
 
             if ($image->width < $image->height) {
                 $imageW = NULL;
@@ -129,9 +105,9 @@ class ProfilePresenter extends BasePresenter
                 $imageH = NULL;
             }
 
-            $image->resize($imageW, $imageH, \Nette\Image::SHRINK_ONLY);
+            $image->resize($imageW, $imageH, \Nette\Utils\Image::SHRINK_ONLY);
             $image->sharpen();
-            $image->save(substr(__DIR__, 0, -27) . "/www/users/" . $uid . "/avatar.jpg", 98, \Nette\Image::JPEG);
+            $image->save(substr(__DIR__, 0, -27) . "/www/users/" . $uid . "/avatar.jpg", 98, \Nette\Utils\Image::JPEG);
         }
 
         $this->redirect(":Admin:Profile:default", array("" => \Nette\Utils\Strings::random(8, "a-z0-9")));
@@ -142,12 +118,10 @@ class ProfilePresenter extends BasePresenter
      */
     function createComponentChangePasswordForm()
     {
-        $form = new \Nette\Forms\BootstrapUIForm;
-        $form->getElementPrototype()->class = "form-horizontal";
-        $form->getElementPrototype()->role = 'form';
-        $form->addPassword("password1", "Heslo");
+        $form = $this->baseFormFactory->createUI();
+        $form->addPassword("password1", "dictionary.main.Password");
         $form->addPassword("password2", "Opište heslo");
-        $form->addSubmit('name', 'Uložit');
+        $form->addSubmit('name', 'dictionary.main.Save');
 
         $form->onSuccess[] = $this->changePasswordFormSucceeded;
         return $form;
@@ -161,7 +135,7 @@ class ProfilePresenter extends BasePresenter
         $passwordEncrypted = \Nette\Security\Passwords::hash($ppwd);
 
         if (strcasecmp($ppwd, $ppwd2) != 0) {
-            $this->flashMessage('Hesla se neshodují');
+            $this->flashMessage($this->translator->translate('messages.sign.passwords-not-same'), 'error');
         }
 
         $this->database->table("users")->where(array(
@@ -172,7 +146,7 @@ class ProfilePresenter extends BasePresenter
 
         setcookie("calpwd", $passwordEncrypted, time() + time() + 60 * 60 * 24 * 30, "/");
 
-        $this->redirect(':Admin:Profile:default');
+        $this->redirect(':Admin:Profile:default', array("id" => null));
     }
 
     function handleDeletePortrait()

@@ -1,0 +1,20 @@
+{block #titles}Galerie{/block}
+{block content}
+{var $id = $presenter->getParameter('id')}
+<div class="container heading">
+    <h1>Galerie</h1>
+</div>
+
+<div class="container white padded-top padded-btm">
+    <div class="col-md-12">
+        <div class="row">
+            {foreach $galleries as $itemCat}
+                {control album $itemCat}
+            {/foreach}
+        </div>
+
+        <div class="text-center">
+            {control paging, $args, $paginator}
+        </div>
+    </div>
+</div>

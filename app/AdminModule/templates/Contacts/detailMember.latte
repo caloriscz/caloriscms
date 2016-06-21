@@ -1,0 +1,66 @@
+{block #titles}{_dictionary.main.Contacts}{/block}
+{block content}
+
+<br>
+
+<ul class="nav nav-tabs">
+    <li role="presentation">
+        <a n:href=":Admin:Contacts:detail, id => $presenter->getParameter('id')">{_dictionary.main.Contacts}</a></li>
+    <li role="presentation">
+        <a n:href=":Admin:Contacts:detailDocuments, id => $presenter->getParameter('id')">{_dictionary.main.Documents}</a>
+    </li>
+    <li role="presentation">
+        <a n:href=":Admin:Contacts:detailOpeningHours, id => $presenter->getParameter('id')">{_dictionary.main.OpeningHours}</a>
+    </li>
+    <li role="presentation">
+        <a n:href=":Admin:Contacts:detailImages, id => $presenter->getParameter('id')">{_dictionary.main.Images}</a>
+    </li>
+    <li role="presentation" class="active">
+        <a n:href=":Admin:Contacts:detailMember, id => $presenter->getParameter('id')">{_dictionary.main.Member}</a>
+    </li>
+</ul>
+
+<h1 class="page-header">{_dictionary.main.Contacts} - {$page->title}</h1>
+
+{if $contacts->users->id > 0}
+    <h2>{$contacts->users->username}</h2>
+
+    <div class="col-md-4">
+        <table class="table">
+            <tr>
+                <td>uživatelské jméno</td>
+                <td>{$contacts->users->username} (<a n:href=":Admin:Members:edit, id => $contacts->users->id">upravit</a>)</td>
+            </tr>
+            <tr>
+                <td>e-mail</td>
+                <td>{$contacts->users->email}</td>
+            </tr>
+            <tr>
+                <td>successful logins</td>
+                <td>{$contacts->users->login_success}</td>
+            </tr>
+            <tr>
+                <td>unsuccessful logins</td>
+                <td>{$contacts->users->login_error}</td>
+            </tr>
+        </table>
+    </div>
+
+    <br />
+    {foreach $flashes as $flash}
+        {if $flash->message == 'pass'}
+            <div class="col-md-12">
+                <div class="flash {$flash->type}">
+                    {_dictionary.main.Address}: {$settings['site:url:base']}/sign/in<br />
+                    {_dictionary.main.Member}: {$contacts->users->username}<br />
+                    {_dictionary.main.Password}: {$presenter->getParameter('pdd')}
+                </div>
+            </div>
+        {/if}
+    {/foreach}
+
+    {control sendLoginForm}
+{else}
+    <br />
+    Uživatel není nebo nebyl nalezen
+{/if}

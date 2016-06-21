@@ -17,14 +17,14 @@ class OrdersPresenter extends BasePresenter
 
         if (!$this->user->isLoggedIn()) {
             if ($this->user->logoutReason === Nette\Security\IUserStorage::INACTIVITY) {
-                $this->flashMessage('You have been signed out due to inactivity. Please sign in again.');
+                $this->flashMessage('Byli jste odhlášeni', 'note');
             }
             $this->redirect('Sign:in', array('backlink' => $this->storeRequest()));
         }
 
         $this->template->orderStates = $this->database->table("orders_states")->fetchPairs("id", "title");
-        $this->template->shippingMethods = $this->database->table("store_settings_shipping")->fetchPairs("id", "title");
-        $this->template->paymentMethods = $this->database->table("store_settings_payments")->fetchPairs("id", "title");
+        $this->template->shippingMethods = $this->database->table("store_settings_shipping")->where("show = 1")->fetchPairs("id", "title");
+        $this->template->paymentMethods = $this->database->table("store_settings_payments")->where("show = 1")->fetchPairs("id", "title");
         $this->template->order = $this->database->table("orders")->get($this->getParameter("id"));
     }
 
@@ -36,16 +36,11 @@ class OrdersPresenter extends BasePresenter
         $order = $this->database->table("orders")->get($this->getParameter("id"));
 
         if ($order) {
-            $orderBilling = $order->related("orders_addresses", "orders_id")->where("type = 1");
+            $orderBilling = $order->related("orders", "contacts_id");
             $contacts = $this->database->table("contacts")->get($orderBilling->fetch()->id);
         }
 
-        $form = new \Nette\Forms\BootstrapUIForm;
-        $form->setTranslator($this->translator);
-        $form->getElementPrototype()->class = "form-horizontal";
-        $form->getElementPrototype()->role = 'form';
-        $form->getElementPrototype()->autocomplete = 'off';
-
+        $form = $this->baseFormFactory->createUI();
         $form->addHidden("id");
         $form->addHidden("contact_id");
         $form->addText("name", "messages.helpdesk.name")
@@ -89,7 +84,7 @@ class OrdersPresenter extends BasePresenter
                     "zip" => $form->values->zip,
         ));
 
-        $this->redirect(":Admin:Orders:detail", array(
+        $this->redirect(":Front:Orders:detail", array(
             "id" => $form->values->id,
         ));
     }
@@ -102,21 +97,18 @@ class OrdersPresenter extends BasePresenter
         $order = $this->database->table("orders")->get($this->getParameter("id"));
 
         if ($order) {
-            $orderBilling = $order->related("orders_addresses", "orders_id")->where("type = 2");
+            $orderBilling = $order->related("orders", "delivery_contacts_id");
             $contacts = $this->database->table("contacts")->get($orderBilling->fetch()->id);
         }
 
-
-        $form = new \Nette\Forms\BootstrapUIForm;
-        $form->setTranslator($this->translator);
-        $form->getElementPrototype()->class = "form-horizontal";
-        $form->getElementPrototype()->role = 'form';
-        $form->getElementPrototype()->autocomplete = 'off';
-
+        $form = $this->baseFormFactory->createUI();
         $form->addHidden("id");
         $form->addHidden("contact_id");
         $form->addText("name", "messages.helpdesk.name")
                 ->setAttribute("placeholder", "messages.helpdesk.name")
+                ->setAttribute("class", "form-control");
+        $form->addText("company", "Společnost")
+                ->setAttribute("placeholder", "Společnost")
                 ->setAttribute("class", "form-control");
         $form->addText("street", "Address")
                 ->setAttribute("placeholder", "Address")
@@ -155,7 +147,7 @@ class OrdersPresenter extends BasePresenter
                     "zip" => $form->values->zip,
         ));
 
-        $this->redirect(":Admin:Orders:detail", array(
+        $this->redirect(":Front:Orders:detail", array(
             "id" => $form->values->id,
         ));
     }
@@ -167,16 +159,11 @@ class OrdersPresenter extends BasePresenter
     {
         $order = $this->template->order;
 
-        $form = new \Nette\Forms\BootstrapUIForm;
-        $form->setTranslator($this->translator);
-        $form->getElementPrototype()->class = "form-horizontal";
-        $form->getElementPrototype()->role = 'form';
-        $form->getElementPrototype()->autocomplete = 'off';
-
+        $form = $this->baseFormFactory->createUI();
         $form->addHidden("id");
-        $form->addSelect("shipping", "Shipping Method", $this->template->shippingMethods)
+        $form->addSelect("shipping", "Poštovné", $this->template->shippingMethods)
                 ->setAttribute("class", "form-control");
-        $form->addSelect("payment", "Payment Method", $this->template->paymentMethods)
+        $form->addSelect("payment", "Platební metoda", $this->template->paymentMethods)
                 ->setAttribute("class", "form-control");
         $form->addTextArea("note", "messages.helpdesk.message")
                 ->setDisabled()
@@ -190,7 +177,7 @@ class OrdersPresenter extends BasePresenter
             "note_admin" => $order->note_admin,
         ));
 
-        $form->addSubmit("submitm", "Save")
+        $form->addSubmit("submitm", "dictionary.main.Save")
                 ->setAttribute("class", "btn btn-success btn-lg");
 
         $form->onSuccess[] = $this->editFormSucceeded;
@@ -204,9 +191,9 @@ class OrdersPresenter extends BasePresenter
                 ->update(array(
                     "store_settings_shipping_id" => $form->values->shipping,
                     "store_settings_payments_id" => $form->values->payment,
-                    ));
+        ));
 
-        $this->redirect(":Admin:Orders:detail", array(
+        $this->redirect(":Front:Orders:detail", array(
             "id" => $form->values->id,
         ));
     }
@@ -214,6 +201,28 @@ class OrdersPresenter extends BasePresenter
     public function renderDefault()
     {
         $this->template->orders = $this->database->table("orders")->order("date_created DESC");
+    }
+
+    public function renderDetail()
+    {
+        $order = $this->database->table("orders")->get($this->getParameter("id"));
+
+        if ($order) {
+            $orderBilling = $order->related("orders", "contacts_id");
+
+            $contactsB = $this->database->table("contacts")->get($orderBilling->fetch()->contacts_id);
+        }
+
+        $orderD = $this->database->table("orders")->get($this->getParameter("id"));
+
+        if ($orderD) {
+            $orderDelivery = $orderD->related("orders", "contacts_id");
+
+            $contactsD = $this->database->table("contacts")->get($orderDelivery->fetch()->contacts_id);
+        }
+
+        $this->template->contactsB = $contactsB;
+        $this->template->contactsD = $contactsD;
     }
 
 }

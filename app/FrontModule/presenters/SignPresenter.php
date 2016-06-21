@@ -20,17 +20,15 @@ class SignPresenter extends BasePresenter
      */
     protected function createComponentSignInForm()
     {
-        $form = new \Nette\Forms\BootstrapUIForm;
-        $form->getElementPrototype()->class = "form-horizontal";
-        $form->getElementPrototype()->role = 'form';
-        $form->getElementPrototype()->autocomplete = 'off';
-        $form->addText('username', 'Uživatelské jméno:')
+        $form = $this->baseFormFactory->createUI();
+        $form->addText('username', 'dictionary.main.User')
                 ->setRequired('Vložte uživatelské jméno.');
 
-        $form->addPassword('password', 'Heslo:')
+        $form->addPassword('password', 'dictionary.main.Password')
                 ->setRequired('Vložte heslo.');
 
-        $form->addSubmit('send', 'Přihlásit');
+        $form->addSubmit('send', 'dictionary.main.login')
+                ->setAttribute("class", "btn btn-success");
 
         $form->onSuccess[] = $this->signInFormSucceeded;
         return $form;
@@ -38,6 +36,7 @@ class SignPresenter extends BasePresenter
 
     public function signInFormSucceeded($form, $values)
     {
+        $oldid = session_id();
         $member = new \App\Model\MemberModel($this->database);
         $blocked = $member->getState($form->values->username);
 
@@ -48,9 +47,24 @@ class SignPresenter extends BasePresenter
 
         try {
             $this->getUser()->login($values->username, $values->password);
+            $newid = session_id();
+
+            if ($this->template->settings['store:enabled']) {
+                $this->database->table("orders")->where(array("uid" => $oldid))->update(array("uid" => $newid));
+            }
+
+
+            $this->database->table("users")->get($this->user->getId())->update(array(
+                "date_visited" => date("Y-m-d H:i:s"),
+                "login_success" => new \Nette\Database\SqlLiteral("login_success + 1")
+            ));
 
             $this->redirect(':Front:Homepage:default');
         } catch (Nette\Security\AuthenticationException $e) {
+            $this->database->table("users")->where(array("username" => $values->username))->update(array(
+                "login_error" => new \Nette\Database\SqlLiteral("login_error + 1")
+            ));
+
             $this->flashMessage("Nesprávné heslo", 'error');
             $this->redirect(':Front:Sign:in');
         }
@@ -58,31 +72,27 @@ class SignPresenter extends BasePresenter
 
     public function createComponentSignUpForm()
     {
-        $form = new \Nette\Forms\BootstrapUIForm;
-        $form->getElementPrototype()->class = "form-horizontal";
-        $form->getElementPrototype()->role = 'form';
-        $form->getElementPrototype()->autocomplete = 'off';
+        $form = $this->baseFormFactory->createUI();
 
-        $form->addText("name", "Jméno a příjmení")
-                ->setRequired('Zadejte jméno')
-                ->addRule(\Nette\Forms\Form::MIN_LENGTH, 'Zadejte jméno', 3)
-                ->addRule(\Nette\Forms\Form::MAX_LENGTH, 'Zadejte jméno', 200);
+        $form->addGroup("Uživatelské informace");
         $form->addText("email", "E-mail")
                 ->addRule(\Nette\Forms\Form::EMAIL, 'Zadejte platný email.')
                 ->setRequired('Vložte e-mail.');
-        $form->addText("district", "Region (město)")
-                ->setOption('description', (string) "Zadejte místo, které nemusí být místem vašeho bydliště, ale "
-                        . "mohlo by sloužit jako cenná informace pro případné zájemce o osobní odběr (např. nejbližší"
-                        . " velké město v okolí)")
-                ->setRequired('Zadejte region nebo město.')
-                ->addCondition(\Nette\Forms\Form::FILLED);
-
         $form->addText("username", "Uživatelské jméno")
                 ->setOption('description', (string) "Povoleny jsou pouze znaky a-z, 0-9 (pouze malá písmena)")
                 ->setRequired('Zvolte si uživatelské jméno')
                 ->addRule(\Nette\Forms\Form::PATTERN, 'Uživatelské jméno může obsahovat pouze znaky a-z, 0-9 (pouze malá písmena)', '[a-z0-9-]+')
                 ->addRule(\Nette\Forms\Form::MIN_LENGTH, 'Zvolte uživatelské jméno s alespoň %d znaky', 5)
                 ->addRule(\Nette\Forms\Form::MAX_LENGTH, 'Zvolte uživatelské jméno s nejvýše %d znaky', 40);
+
+        if ($this->template->settings['members:groups:enabled']) {
+            $groups = $this->database->table("categories")->where(
+                            "parent_id", $this->template->settings['members:group:categoryId']
+                    )->fetchPairs("id", "title");
+
+            $form->addSelect("group", "Skupina", $groups)
+                    ->setAttribute("class", "form-control");
+        }
 
         $form->addPassword("pwd", "Heslo")
                 ->setOption('description', (string) "6 - 40 znaků")
@@ -94,34 +104,67 @@ class SignPresenter extends BasePresenter
                 ->setRequired('Zadejte prosím heslo ještě jednou pro kontrolu')
                 ->addRule(\Nette\Forms\Form::EQUAL, 'Hesla se neshodují', $form['pwd']);
 
+        if ($this->template->settings['members:signup:contactEnabled']) {
+            $form->addGroup("Kontaktní údaje");
+            $form->addText("name", "Jméno a příjmení")
+                    ->setRequired('Zadejte jméno')
+                    ->addRule(\Nette\Forms\Form::MIN_LENGTH, 'Zadejte jméno', 3)
+                    ->addRule(\Nette\Forms\Form::MAX_LENGTH, 'Zadejte jméno', 200);
+            $form->addText("street", "dictionary.main.Street")
+                    ->setRequired('Zadejte ulici')
+                    ->addRule(\Nette\Forms\Form::MIN_LENGTH, 'Zadejte ulici', 3)
+                    ->addRule(\Nette\Forms\Form::MAX_LENGTH, 'Zadejte ulici', 200)
+                    ->setAttribute("class", "smartform-street-and-number");
+            $form->addText("zip", "PSČ")
+                    ->setRequired('Zadejte PSČ')
+                    ->addRule(\Nette\Forms\Form::MIN_LENGTH, 'Zadejte PSČ', 3)
+                    ->addRule(\Nette\Forms\Form::MAX_LENGTH, 'Zadejte PSČ', 20)
+                    ->setAttribute("class", "smartform-city");
+            $form->addText("city", "Město")
+                    ->setRequired('Zadejte město')
+                    ->addRule(\Nette\Forms\Form::MIN_LENGTH, 'Zadejte město', 1)
+                    ->addRule(\Nette\Forms\Form::MAX_LENGTH, 'Zadejte město', 80)
+                    ->setAttribute("class", "smartform-zip");
+        }
+
+        if ($this->template->settings['members:signup:contactEnabled']) {
+            $form->addGroup("Firemní informace");
+            $form->addText("company", "dictionary.main.Company");
+            $form->addText("vatin", "dictionary.main.VatIn");
+            $form->addText("vatid", "dictionary.main.VatId");
+        }
+
+
         $form->addCheckbox("newsletter", "\xC2\xA0" . "Chci odebírat zprávy?")
                 ->setDefaultValue(TRUE);
         $form->addCheckbox("confirmation", "\xC2\xA0" . "Souhlasím s podmínkami")
                 ->setRequired('Pro pokračování zaškrtněte Souhlasím s podmínkami');
         $form->setDefaults(array(
-            "name" => $this->getParameter("name"),
             "username" => $this->getParameter("user"),
             "email" => $this->getParameter("email"),
-            "district" => $this->getParameter("district"),
             "newsletter" => $this->getParameter("newsletter"),
+            "name" => $this->getParameter("name"),
+            "street" => $this->getParameter("street"),
+            "city" => $this->getParameter("city"),
+            "zip" => $this->getParameter("zip"),
         ));
 
         $form->addSubmit("submit", "Registrovat se")
-                ->setAttribute("class", "btn-large btn-info");
+                ->setAttribute("class", "btn-lg btn-cart-in");
 
         $form->setDefaults(array(
             "email" => $this->getParameter("email"),
             "username" => $this->getParameter("username"),
-            "district" => $this->getParameter("district"),
             "newsletter" => $this->getParameter("newsletter"),
         ));
 
         $form->onSuccess[] = $this->signUpFormSucceeded;
+        $form->onValidate[] = $this->signUpFormValidated;
 
         return $form;
     }
 
-    function signUpFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
+    function signUpFormValidated(\Nette\Forms\BootstrapUIForm $form)
     {
         $userCorrects = preg_match("/^[abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_]{4,40}$/", $form->getValues()->username, $userTest);
 
@@ -154,49 +197,100 @@ class SignPresenter extends BasePresenter
 
             $this->redirect(":Front:Sign:up", $formVal);
         }
+    }
 
+    function signUpFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
+    {
         $activationCode = \Nette\Utils\Strings::random(12, "987654321zyxwvutsrqponmlkjihgfedcba");
         $password = \Nette\Security\Passwords::hash($form->values->pwd);
 
-        $userId = $this->database->table("users")
-                ->insert(array(
+        $arr = array(
             "email" => $form->values->email,
             "username" => $form->values->username,
-            "name" => $form->values->name,
-            "district" => $form->values->district,
             "password" => $password,
             "activation" => $activationCode,
             "newsletter" => (bool) $form->values->newsletter,
             "state" => 0,
             "date_created" => date("Y-m-d H:i:s")
-        ));
+        );
+
+        if ($this->template->settings['members:groups:enabled']) {
+            $arr["categories_id"] = $form->values->group;
+        }
+
+        $userId = $this->database->table("users")
+                ->insert($arr);
 
         $this->database->table("users")
                 ->where(array("id" => $userId->id
                 ))->update(array(
-            "uid" => 'MU' . \Nette\Utils\Strings::padLeft($userId->id, 6, '0'),
+            "uid" => \Nette\Utils\Strings::padLeft($userId->id, 6, '0'),
         ));
+
+        if ($this->template->settings['members:signup:contactEnabled']) {
+            $arrContacts = array(
+                "categories_id" => 44,
+                "users_id" => $userId,
+                "name" => $form->values->name,
+                "street" => $form->values->street,
+                "city" => $form->values->city,
+                "zip" => $form->values->zip,
+                "countries_id" => 1,
+            );
+
+            if ($this->template->settings['members:signup:companyEnabled']) {
+                $arrContacts["company"] = $form->values->company;
+                $arrContacts["vatin"] = $form->values->vatin;
+                $arrContacts["vatid"] = $form->values->vatid;
+            }
+
+            $contactId = $this->database->table("contacts")->insert($arrContacts);
+            $this->database->table("contacts")->get($contactId)->update(array("order" => $contactId));
+        }
+
+        if ($form->values->vatin) {
+            $ares = new \h4kuna\Ares\Ares();
+            $aresArr = $ares->loadData('04203992')->toArray();
+        }
 
         $latte = new \Latte\Engine;
         $params = array(
             'username' => $form->values->username,
             'activationCode' => $activationCode,
+            'settings' => $this->template->settings,
+            'form' => $form,
+            'aresArr' => $aresArr,
         );
 
         try {
-            $mail = new \Nette\Mail\Message;
-            $mail->setFrom('Mimix <no-reply@mimix.cz>')
-                    ->addTo($form->values->email)
-                    ->setSubject("Informace o novém účtu")
-                    ->setHTMLBody($latte->renderToString(substr(__DIR__, 0, -10) . '/templates/Sign/components/email.latte', $params));
+            if ($this->template->settings['members:signup:confirmByAdmin']) {
+                $mail = new \Nette\Mail\Message;
+                $mail->setFrom($this->template->settings['contacts:email:hq'])
+                        ->addTo($form->values->email)
+                        ->setHTMLBody($latte->renderToString(substr(__DIR__, 0, -10) . '/templates/Sign/components/signup-member-confirmbyadmin.latte', $params));
 
-            $mailer = new \Nette\Mail\SendmailMailer;
-            $mailer->send($mail);
+                $this->mailer->send($mail);
 
-            $this->flashMessage('Vaše registrace proběhla úspěšně. Po ověření se můžete přihlásit.', 'note');
+                $mailA = new \Nette\Mail\Message;
+                $mailA->setFrom($this->template->settings['contacts:email:hq'])
+                        ->addTo($this->template->settings['contacts:email:hq'])
+                        ->setHTMLBody($latte->renderToString(substr(__DIR__, 0, -10) . '/templates/Sign/components/signup-admin-confirm.latte', $params));
+
+                $this->mailer->send($mailA);
+                $this->flashMessage('Registrace byla dokončena. Po ověření Vám bude zaslán e-mail, po kterém se můžete přihlásit', 'note');
+            } else {
+                $mail = new \Nette\Mail\Message;
+                $mail->setFrom($this->template->settings['contacts:email:hq'])
+                        ->addTo($form->values->email)
+                        ->setHTMLBody($latte->renderToString(substr(__DIR__, 0, -10) . '/templates/Sign/components/signup-member.latte', $params));
+
+                $this->mailer->send($mail);
+                $this->flashMessage('Vaše registrace proběhla úspěšně. Po ověření se můžete přihlásit.', 'note');
+            }
+
             $this->redirect(":Front:Sign:ed");
-        } catch (Exception $e) {
-            $this->flashMessage('E-mail nebyl odeslán' . $e->getMessage, 'error');
+        } catch (Nette\Mail\SmtpException $e) {
+            $this->flashMessage('E-mail nebyl odeslán' . $e->getMessage(), 'error');
             $this->redirect(":Front:Sign:up");
         }
     }
@@ -206,10 +300,7 @@ class SignPresenter extends BasePresenter
      */
     public function createComponentResetForm()
     {
-        $form = new \Nette\Forms\BootstrapUIForm;
-        $form->getElementPrototype()->class = "form-horizontal";
-        $form->getElementPrototype()->role = 'form';
-        $form->getElementPrototype()->autocomplete = 'off';
+        $form = $this->baseFormFactory->createUI();
         $form->addHidden("email");
         $form->addHidden("code");
         $form->addPassword("password", "Nové heslo");
@@ -258,10 +349,7 @@ class SignPresenter extends BasePresenter
      */
     function createComponentSendForm()
     {
-        $form = new \Nette\Forms\BootstrapUIForm;
-        $form->getElementPrototype()->class = "form-horizontal";
-        $form->getElementPrototype()->role = 'form';
-        $form->getElementPrototype()->autocomplete = 'off';
+        $form = $this->baseFormFactory->createUI();
         $form->addText("email", "E-mail");
         $form->addSubmit('submit', 'Odeslat');
 
@@ -295,7 +383,7 @@ class SignPresenter extends BasePresenter
         );
 
         $mail = new \Nette\Mail\Message;
-        $mail->setFrom('Mimix <no-reply@mimix.cz>')
+        $mail->setFrom($this->template->settings['site:title'] . ' ' . $this->template->settings['contacts:email:hq'])
                 ->addTo($email)
                 ->setSubject("Mimix: Informace o novém hesle")
                 ->setHTMLBody($latte->renderToString(substr(__DIR__, 0, -10) .
@@ -313,10 +401,7 @@ class SignPresenter extends BasePresenter
      */
     function createComponentVerifyForm()
     {
-        $form = new \Nette\Forms\BootstrapUIForm;
-        $form->getElementPrototype()->class = "form-horizontal";
-        $form->getElementPrototype()->role = 'form';
-        $form->getElementPrototype()->autocomplete = 'off';
+        $form = $this->baseFormFactory->createUI();
         $form->setMethod("GET");
         $form->addText("code", "Kód");
         $form->addText("email", "E-mail");
@@ -354,7 +439,16 @@ class SignPresenter extends BasePresenter
 
     public function actionOut()
     {
+        $oldid = session_id();
+
         $this->getUser()->logout();
+
+        $newid = session_id();
+
+        if ($this->template->settings['store:enabled']) {
+            $this->database->table("orders")->where(array("uid" => $oldid))->update(array("uid" => $newid));
+        }
+
         $this->flashMessage('Byli jste odhlášeni.');
         $this->redirect('in');
     }

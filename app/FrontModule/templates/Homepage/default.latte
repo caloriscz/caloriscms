@@ -1,5 +1,49 @@
 {block #titles}Homepage{/block}
 {block content}
 
-Welcome to Caloris CMS
-<br /><br />
+<div class="container">
+    {control carouselBox}
+</div>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="blog">
+                <h2><a n:href=":Front:Blog:default">Blog</a> <a n:href=":Api:Blog:default" class="pull-right"><i
+                                class="fa fa-rss-square"></i></a></h2>
+
+                {control blogPreview}
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="calendar">
+                <h2>{_dictionary.main.Contact}</h2>
+                {control contact 14}
+            </div>
+
+            <div class="newsletter">
+                <h2>Newsletter</h2>
+
+                {control newsletterForm}
+            </div>
+
+            <h2>{_dictionary.main.Calendar}</h2>
+
+            <div class="calendar">
+                {control eventsCalendar}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    {if $settings['store:enabled'] == 1}
+        <div class="row">
+            {foreach $store as $item}
+                <div class="col-tn-12 col-xs-6 col-md-3">
+                    {control product $item}
+                </div>
+            {/foreach}
+        </div>
+    {/if}
+</div>

@@ -11,18 +11,6 @@ use Nette,
 class SettingsPresenter extends BasePresenter
 {
 
-    protected function startup()
-    {
-        parent::startup();
-
-        if (!$this->user->isLoggedIn()) {
-            if ($this->user->logoutReason === Nette\Security\IUserStorage::INACTIVITY) {
-                $this->flashMessage('Byli jste odhlášeni. Přihlaste se znovu.');
-            }
-            $this->redirect('Sign:in', array('backlink' => $this->storeRequest()));
-        }
-    }
-
     /**
      * Settings save
      */
@@ -34,7 +22,7 @@ class SettingsPresenter extends BasePresenter
         $form->getElementPrototype()->autocomplete = 'off';
 
         $form->addHidden('setkey');
-        $form->addText("setvalue", "Popisek:");
+        $form->addText("setvalue", "dictionary.main.Description");
         $form->addSubmit('send', 'Upravit');
 
         $form->onSuccess[] = $this->editSettingsSucceeded;
@@ -45,10 +33,8 @@ class SettingsPresenter extends BasePresenter
     {
         $values = $form->getHttpData($form::DATA_TEXT); // get value from html input
 
-        dump($values);
-
         foreach ($values["set"] as $key => $value) {
-            $this->database->table('settings')->where(array(
+            $this->database->table("settings")->where(array(
                         "setkey" => $key,
                     ))
                     ->update(array(
@@ -56,12 +42,26 @@ class SettingsPresenter extends BasePresenter
             ));
         }
 
-        exit();
+        $this->redirect(":Admin:Settings:default", array("id" => null));
     }
 
     public function renderDefault()
     {
-        $this->template->settingsDb = $this->database->table("settings");
+        $this->template->categoryId = $this->template->settings['categories:id:settings'];
+
+        if (!$this->getParameter("id")) {
+            $arr = array(
+                "admin_editable" => 1,
+            );
+        } else {
+            $arr = array(
+                "admin_editable" => 1,
+                "categories_id" => $this->getParameter("id"),
+            );
+        }
+
+        $this->template->settingsDb = $this->database->table("settings")
+                ->where($arr);
     }
 
 }

@@ -1,7 +1,34 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8">
+    <meta name=robots content=noindex>
+    <meta name=generator content="Nette Framework">
+    <link rel="stylesheet" href="/css/front.css" type="text/css" />
+            <!--[if IE 8]><link rel="stylesheet" href="{$baseUri}/css/ie8.css" type="text/css" media="screen,projection" /><![endif]-->
+    <script src="{$baseUri}/js/modernizr.custom.js"></script>
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="{$baseUri}/js/respond.js"></script>
+    <![endif]-->
+    <title>{$settings['site:title']}:  404 Page Not Found</title>
+</head>
+<body>
+    <br /><br />
+    <header>
+        <div class="container">
+            <div class="col-md-8">
+                <a n:href=":Front:Homepage:default">{$settings['site:title']}</a>
+            </div>
+            <div class="col-md-4">
+            </div>
+        </div>
+    </header>
+    <div class="container">
+        <p>The page you requested could not be found. It is possible that the address is
+            incorrect, or that the page no longer exists. Please use a search engine to find
+            what you are looking for.</p>
 
-
-<p>The page you requested could not be found. It is possible that the address is
-incorrect, or that the page no longer exists. Please use a search engine to find
-what you are looking for.</p>
-
-<p><small>error 404</small></p>
+        <p><small>error 404</small></p>
+    </div>
+</body>

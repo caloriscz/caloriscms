@@ -1,22 +1,28 @@
-{block #titles}{_dictionary.main.login|firstUpper}{/block}
+{block #titles}{_dictionary.main.LoggingIn}{/block}
 {block content}
 
 <section class="container">
+    <br />
     {foreach $flashes as $flash}
         <div class="flash {$flash->type}">{$flash->message}</div>
     {/foreach}
+    <div class="col-md-6">
+        <h2>{_dictionary.main.LoggingIn}</h2>
 
-    <h1>{_dictionary.main.login|firstUpper}</h1>
-
-    <br />
-    <div class="row">
-        <div class="col-md-6 col-sm-12">
+        <br />
+        <div class="row">
             {control signInForm}
         </div>
+        <h3>Nemůžete si vzpomenout na své heslo?</h3>
+
+        <p>Na následující adrese si můžete nechat zaslat nové heslo.</p>
+        <br />
+        <p><a n:href=":Front:Sign:lostpass" class="btn-lg btn-cart-in">{_dictionary.main.ForgottenPassword}</a></p>
     </div>
-    {var $x = 1}
-    {var $y = 5}
-    <p style="padding-top: 0px;">
-        <a n:href=":Front:Sign:lostpass">{_dictionary.main.ForgottenPassword}</a>
-    </p>
+    <div class="col-md-6">
+        <h2>Nemáte ještě účet?</h2>
+        <br />
+        <p><a n:href=":Front:Sign:up" class="btn btn-cart btn-lg">Zaregistrujte se</a></p>
+    </div>
 </section>
+<br /><br />

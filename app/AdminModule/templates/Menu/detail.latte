@@ -1,0 +1,13 @@
+{block #titles}{_dictionary.main.categories|firstUpper}{/block}
+{block content}
+
+<h1 class="page-header">{_dictionary.main.categories|firstUpper}</h1>
+
+{control updateCategoryForm}
+
+<h2>{_dictionary.main.Images}</h2>
+
+{if file_exists($basePath.'images/menu/' . $presenter->getParameter('id') . '.png')}
+    <img src="{$baseUri}/images/menu/{$presenter->getParameter('id')}.png?{rand(0,400)}" /><br /><br />
+    <a n:href="deleteImage!, id => $presenter->getParameter('id')" class="btn btn-primary btn-xs">{_dictionary.main.delete|firstUpper}</a>
+{/if}

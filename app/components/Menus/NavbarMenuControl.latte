@@ -1,0 +1,68 @@
+<ul class="nav navbar-nav">
+    {foreach $categories as $rowCategories} 
+        {var $dbSubs = $rowCategories->related('categories', 'parent_id')}
+        {if $rowCategories->id == $presenter->getParameter('page_id')}
+            {var $linkActive = 'active '}
+            {var $dropdown = 'dropdown '}
+        {else}
+            {var $dropdown = ' '}
+            {var $linkActive = ' '}
+        {/if}
+
+        {if $dbSubs->count() > 0} 
+            {var $hasSubs = 'has-subs'}
+        {else}
+            {var $hasSubs = ' '}
+        {/if}
+
+        <li class="{$dropdown}{$hasSubs}{$linkActive}">
+            {if strlen($rowCategories->pages_id)  != 0}
+                <a href="{plink ':'.$presenter->getName().':'.$rowCategories->pages->slug}" data-category="{$rowCategories->id}"
+                   {if $dbSubs->count() > 0} class="dropdown-toggle disabled" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"{/if}>
+                {else}
+                    <a href="{$baseUri}{$rowCategories->url}" data-category="{$rowCategories->id}" 
+                       {if $dbSubs->count() > 0} class="dropdown-toggle{if $iterator->counter == 5} fifth{/if} disabled" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"{/if}>
+                    {/if}
+                    {if file_exists($appDir . '/images/categories/icons/' . $rowCategories->id . '.png')}
+                        <span class="image-thumb">
+                            <img src="{$baseUri}/images/categories/icons/{$rowCategories->id}.png" /><br class="hidden-tn" />
+                        </span>
+                    {/if}
+                    {var $title = str_replace(' ', '<br />', $rowCategories->title)}
+                    <span class="title">{$title|noescape}</span>
+                </a>
+                {foreach $dbSubs as $rowCategoriesSub}
+                    {var $dbSubs2 = $rowCategoriesSub->related('categories', 'parent_id')}
+                    {if $iterator->isFirst()}
+                        <ul {if $dbSubs->count() > 0} class="dropdown-menu"{/if}>
+                        {/if}
+
+                        {if $rowCategoriesSub->pages->slug == $presenter->getParameter('id')}
+                            {var $sublinkActive = 'active '}
+                        {else}
+                            {var $sublinkActive = ' '}
+                        {/if} 
+
+                        {if $dbSubs2->count() > 0}
+                            {var $subLinkDrop = 'dropdown-submenu '}
+                        {else}
+                            {var $subLinkDrop = ' '}
+                        {/if}
+
+                        <li class="{$sublinkActive}{$sublinkDrop}">
+                            {if strlen($rowCategoriesSub->pages_id) != 0}
+                                <a href="{plink ':'.$presenter->getName().':'.$rowCategoriesSub->pages->slug}" 
+                                   data-category="{$rowCategoriesSub->id}">
+                                {else}
+                                    <a href="{$baseUri}{$rowCategoriesSub->url}" data-category="{$rowCategoriesSub->id}">
+                                    {/if}
+                                    <span>{$rowCategoriesSub->title}</span>
+                                </a>
+                        </li>
+                        {if $iterator->isLast()}
+                        </ul>
+                    {/if}
+                {/foreach}
+        </li>
+    {/foreach}
+</ul>

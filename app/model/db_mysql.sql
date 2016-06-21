@@ -1,0 +1,380 @@
+SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
+SET time_zone = "+00:00";
+
+CREATE TABLE IF NOT EXISTS `categories` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `parent_id` int(11) DEFAULT NULL,
+  `description` text COLLATE utf8_czech_ci,
+  `title` varchar(80) COLLATE utf8_czech_ci NOT NULL,
+  `sorted` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  KEY `parent_id` (`parent_id`)
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS `contacts` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `categories_id` int(11) DEFAULT NULL,
+  `pages_id` int(11) NOT NULL,
+  `users_id` int(11) DEFAULT '0',
+  `type` tinyint(1) NOT NULL DEFAULT '0',
+  `post` varchar(80) COLLATE utf8_czech_ci DEFAULT NULL,
+  `notes` text COLLATE utf8_czech_ci,
+  `name` varchar(120) COLLATE utf8_czech_ci NOT NULL,
+  `company` varchar(120) COLLATE utf8_czech_ci DEFAULT NULL,
+  `street` varchar(120) COLLATE utf8_czech_ci DEFAULT NULL,
+  `city` varchar(80) COLLATE utf8_czech_ci DEFAULT NULL,
+  `zip` varchar(10) COLLATE utf8_czech_ci DEFAULT NULL,
+  `countries_id` int(11) DEFAULT '1',
+  `email` varchar(80) COLLATE utf8_czech_ci DEFAULT NULL,
+  `phone` varchar(150) COLLATE utf8_czech_ci DEFAULT NULL,
+  `vatin` varchar(10) COLLATE utf8_czech_ci DEFAULT NULL,
+  `vatid` varchar(10) COLLATE utf8_czech_ci DEFAULT NULL,
+  `banking_account` varchar(80) COLLATE utf8_czech_ci DEFAULT NULL,
+  `order` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `users_id` (`users_id`),
+  KEY `categories_id` (`categories_id`),
+  KEY `countries_id` (`countries_id`),
+  KEY `pages_id` (`pages_id`)
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS `contacts_communication` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `contacts_id` int(11) NOT NULL,
+  `communication_type` varchar(80) NOT NULL,
+  `communication_value` varchar(250) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `contacts_id` (`contacts_id`)
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS `contacts_docs` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `categories_id` int(11) DEFAULT NULL,
+  `contacts_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `contacts_id` (`contacts_id`),
+  KEY `categories_id` (`categories_id`)
+) ENGINE=InnoDB;
+
+
+CREATE TABLE IF NOT EXISTS `contacts_openinghours` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `day` smallint(6) NOT NULL,
+  `hourstext` varchar(80) COLLATE utf8_czech_ci NOT NULL,
+  `contacts_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `contacts_id` (`contacts_id`)
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS `countries` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title_cs` varchar(120) COLLATE utf8_czech_ci NOT NULL,
+  `title_en` varchar(120) COLLATE utf8_czech_ci NOT NULL,
+  `show` tinyint(1) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS `events` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `date_event` datetime DEFAULT NULL,
+  `date_event_end` datetime DEFAULT NULL,
+  `all_day` tinyint(1) NOT NULL DEFAULT '1',
+  `show` tinyint(1) NOT NULL DEFAULT '0',
+  `pages_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `pages_id` (`pages_id`)
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS `helpdesk` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(100) COLLATE utf8_czech_ci NOT NULL,
+  `description` text COLLATE utf8_czech_ci,
+  `fill_phone` smallint(6) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS `helpdesk_emails` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `template` varchar(40) COLLATE utf8_czech_ci NOT NULL,
+  `subject` varchar(250) COLLATE utf8_czech_ci NOT NULL,
+  `body` text COLLATE utf8_czech_ci NOT NULL,
+  `helpdesk_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `helpdesk_id` (`helpdesk_id`)
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS `helpdesk_messages` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `subject` varchar(80) COLLATE utf8_czech_ci DEFAULT NULL,
+  `message` text COLLATE utf8_czech_ci,
+  `helpdesk_id` int(11) DEFAULT NULL,
+  `contacts_id` int(11) DEFAULT NULL,
+  `email` varchar(120) COLLATE utf8_czech_ci DEFAULT NULL,
+  `phone` varchar(40) COLLATE utf8_czech_ci NOT NULL,
+  `session_id` varchar(40) COLLATE utf8_czech_ci DEFAULT NULL,
+  `users_id` int(11) DEFAULT NULL,
+  `ipaddress` varchar(80) COLLATE utf8_czech_ci NOT NULL,
+  `date_created` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `contacts_id` (`contacts_id`),
+  KEY `helpdesk_id` (`helpdesk_id`),
+  KEY `users_id` (`users_id`)
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS `languages` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `code` varchar(8) COLLATE utf8_czech_ci NOT NULL,
+  `title` varchar(40) COLLATE utf8_czech_ci NOT NULL,
+  `used` tinyint(1) NOT NULL DEFAULT '1',
+  `default` tinyint(1) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB;
+
+
+
+CREATE TABLE IF NOT EXISTS `links` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `categories_id` int(11) DEFAULT NULL,
+  `url` varchar(250) COLLATE utf8_czech_ci DEFAULT NULL,
+  `title` varchar(250) COLLATE utf8_czech_ci DEFAULT NULL,
+  `description` text COLLATE utf8_czech_ci,
+  PRIMARY KEY (`id`),
+  KEY `links_category_id` (`categories_id`)
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS `media` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(80) CHARACTER SET utf8 COLLATE utf8_czech_ci NOT NULL,
+  `file_type` tinyint(1) NOT NULL DEFAULT '0',
+  `filesize` int(11) NOT NULL DEFAULT '0',
+  `pages_id` int(11) DEFAULT NULL,
+  `title` varchar(250) DEFAULT NULL,
+  `description` text CHARACTER SET utf8 COLLATE utf8_czech_ci NOT NULL,
+  `date_created` datetime NOT NULL,
+  `sorted` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `albums_id` (`pages_id`)
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS `menu` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `parent_id` int(11) DEFAULT NULL,
+  `description` text COLLATE utf8_czech_ci,
+  `title` varchar(80) COLLATE utf8_czech_ci NOT NULL,
+  `pages_id` int(11) DEFAULT NULL,
+  `url` varchar(200) COLLATE utf8_czech_ci DEFAULT NULL,
+  `sorted` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  KEY `pages_id` (`pages_id`),
+  KEY `parent_id` (`parent_id`)
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS `pages` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `slug` varchar(250) COLLATE utf8_czech_ci DEFAULT NULL,
+  `slug_en` varchar(250) COLLATE utf8_czech_ci DEFAULT NULL,
+  `title` varchar(250) COLLATE utf8_czech_ci DEFAULT NULL,
+  `title_en` varchar(250) COLLATE utf8_czech_ci DEFAULT NULL,
+  `document` text COLLATE utf8_czech_ci,
+  `document_en` text COLLATE utf8_czech_ci,
+  `preview` text COLLATE utf8_czech_ci,
+  `preview_en` text COLLATE utf8_czech_ci,
+  `pages_id` int(11) DEFAULT NULL,
+  `users_id` int(11) DEFAULT NULL,
+  `public` int(11) DEFAULT '0',
+  `metadesc` varchar(200) COLLATE utf8_czech_ci DEFAULT NULL,
+  `metadesc_en` varchar(200) COLLATE utf8_czech_ci DEFAULT NULL,
+  `metakeys` varchar(150) COLLATE utf8_czech_ci DEFAULT NULL,
+  `metakeys_en` varchar(150) COLLATE utf8_czech_ci DEFAULT NULL,
+  `date_created` datetime DEFAULT NULL,
+  `date_published` datetime DEFAULT NULL,
+  `pages_types_id` int(11) DEFAULT '1',
+  `sorted` int(11) NOT NULL DEFAULT '0',
+  `editable` int(11) NOT NULL DEFAULT '1',
+  `presenter` varchar(80) COLLATE utf8_czech_ci DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `users_id` (`users_id`),
+  KEY `pages_id` (`pages_id`),
+  KEY `content_type` (`pages_types_id`)
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS `pages_related` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `pages_id` int(11) NOT NULL,
+  `related_pages_id` int(11) DEFAULT NULL,
+  `description` varchar(120) COLLATE utf8_czech_ci DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `store_id` (`pages_id`,`related_pages_id`),
+  KEY `related_store_id` (`related_pages_id`),
+  KEY `blog_id` (`pages_id`),
+  KEY `related_blog_id` (`related_pages_id`)
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS `pages_types` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `content_type` varchar(40) COLLATE utf8_czech_ci NOT NULL,
+  `presenter` varchar(40) COLLATE utf8_czech_ci NOT NULL,
+  `action` varchar(40) COLLATE utf8_czech_ci NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS `param` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `param_cs` varchar(80) COLLATE utf8_czech_ci NOT NULL,
+  `param_en` varchar(80) COLLATE utf8_czech_ci NOT NULL,
+  `prefix` varchar(40) COLLATE utf8_czech_ci DEFAULT NULL,
+  `suffix` varchar(40) COLLATE utf8_czech_ci DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS `params` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `pages_id` int(11) NOT NULL,
+  `group` varchar(40) COLLATE utf8_czech_ci NOT NULL,
+  `param_id` int(11) NOT NULL,
+  `paramvalue` varchar(120) COLLATE utf8_czech_ci NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `store_id` (`pages_id`),
+  KEY `store_param_id` (`param_id`)
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS `pricelist` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `categories_id` int(11) DEFAULT NULL,
+  `title` varchar(400) COLLATE utf8_czech_ci NOT NULL,
+  `description` text COLLATE utf8_czech_ci,
+  `price` double NOT NULL,
+  `price_info` varchar(80) COLLATE utf8_czech_ci DEFAULT NULL,
+  `sorted` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  KEY `pricelist_categories_id` (`categories_id`)
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS `pricelist_daily` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `categories_id` int(11) DEFAULT NULL,
+  `title` text COLLATE utf8_czech_ci NOT NULL,
+  `pricelist_dates_id` int(11) NOT NULL,
+  `price` double NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `pricelist_categories_id` (`categories_id`),
+  KEY `pricelist_dates_id` (`pricelist_dates_id`),
+  KEY `pricelist_dates_id_2` (`pricelist_dates_id`)
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS `pricelist_dates` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `day` date NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS `settings` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `categories_id` int(11) DEFAULT NULL,
+  `setkey` varchar(40) COLLATE utf8_czech_ci NOT NULL,
+  `setvalue` varchar(120) COLLATE utf8_czech_ci NOT NULL,
+  `description_cs` varchar(150) COLLATE utf8_czech_ci DEFAULT NULL,
+  `description_en` varchar(150) COLLATE utf8_czech_ci DEFAULT NULL,
+  `type` varchar(40) COLLATE utf8_czech_ci DEFAULT NULL,
+  `admin_editable` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  KEY `categories_id` (`categories_id`)
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS `snippets` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `keyword` varchar(80) COLLATE utf8_czech_ci NOT NULL,
+  `content` text COLLATE utf8_czech_ci,
+  `pages_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `pages_id` (`pages_id`)
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS `users` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `username` char(40) NOT NULL,
+  `categories_id` int(11) DEFAULT NULL,
+  `uid` varchar(10) DEFAULT NULL,
+  `email` char(80) NOT NULL,
+  `sex` int(11) NOT NULL DEFAULT '0',
+  `name` varchar(80) DEFAULT NULL,
+  `password` char(60) NOT NULL,
+  `date_created` datetime DEFAULT NULL,
+  `date_visited` datetime DEFAULT NULL,
+  `state` int(11) NOT NULL DEFAULT '0',
+  `activation` char(40) DEFAULT NULL,
+  `newsletter` int(11) DEFAULT '0',
+  `type` int(11) NOT NULL DEFAULT '1',
+  `role` int(11) DEFAULT '0',
+  `login_error` int(11) NOT NULL DEFAULT '0',
+  `login_success` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  KEY `categories_id` (`categories_id`)
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS `users_roles` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(40) COLLATE utf8_czech_ci NOT NULL,
+  `admin_access` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB;
+
+ALTER TABLE `categories`
+  ADD CONSTRAINT `categories_ibfk_3` FOREIGN KEY (`parent_id`) REFERENCES `categories` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+ALTER TABLE `contacts`
+  ADD CONSTRAINT `contacts_ibfk_6` FOREIGN KEY (`pages_id`) REFERENCES `pages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `contacts_ibfk_2` FOREIGN KEY (`users_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `contacts_ibfk_4` FOREIGN KEY (`countries_id`) REFERENCES `countries` (`id`) ON DELETE SET NULL ON UPDATE SET NULL,
+  ADD CONSTRAINT `contacts_ibfk_5` FOREIGN KEY (`categories_id`) REFERENCES `categories` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+
+ALTER TABLE `contacts_docs`
+  ADD CONSTRAINT `contacts_docs_ibfk_1` FOREIGN KEY (`contacts_id`) REFERENCES `contacts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `contacts_docs_ibfk_3` FOREIGN KEY (`categories_id`) REFERENCES `categories` (`id`) ON DELETE SET NULL ON UPDATE SET NULL;
+
+ALTER TABLE `events`
+  ADD CONSTRAINT `events_ibfk_1` FOREIGN KEY (`pages_id`) REFERENCES `pages` (`id`) ON DELETE SET NULL ON UPDATE SET NULL;
+
+ALTER TABLE `helpdesk_emails`
+  ADD CONSTRAINT `helpdesk_emails_ibfk_1` FOREIGN KEY (`helpdesk_id`) REFERENCES `helpdesk` (`id`) ON DELETE SET NULL ON UPDATE SET NULL;
+
+ALTER TABLE `helpdesk_messages`
+  ADD CONSTRAINT `helpdesk_messages_ibfk_4` FOREIGN KEY (`users_id`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE SET NULL,
+  ADD CONSTRAINT `helpdesk_messages_ibfk_1` FOREIGN KEY (`contacts_id`) REFERENCES `contacts` (`id`) ON DELETE SET NULL ON UPDATE SET NULL,
+  ADD CONSTRAINT `helpdesk_messages_ibfk_3` FOREIGN KEY (`helpdesk_id`) REFERENCES `helpdesk` (`id`) ON DELETE SET NULL ON UPDATE SET NULL;
+
+ALTER TABLE `links`
+  ADD CONSTRAINT `links_ibfk_1` FOREIGN KEY (`categories_id`) REFERENCES `categories` (`id`) ON DELETE SET NULL ON UPDATE SET NULL;
+
+ALTER TABLE `media`
+  ADD CONSTRAINT `media_ibfk_4` FOREIGN KEY (`pages_id`) REFERENCES `pages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+ALTER TABLE `pages`
+  ADD CONSTRAINT `pages_ibfk_4` FOREIGN KEY (`users_id`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE SET NULL,
+  ADD CONSTRAINT `pages_ibfk_5` FOREIGN KEY (`pages_id`) REFERENCES `pages` (`id`) ON DELETE SET NULL ON UPDATE SET NULL,
+  ADD CONSTRAINT `pages_ibfk_6` FOREIGN KEY (`pages_types_id`) REFERENCES `pages_types` (`id`) ON DELETE SET NULL ON UPDATE SET NULL;
+
+ALTER TABLE `pages_related`
+  ADD CONSTRAINT `pages_related_ibfk_4` FOREIGN KEY (`related_pages_id`) REFERENCES `pages` (`id`) ON DELETE SET NULL ON UPDATE SET NULL,
+  ADD CONSTRAINT `pages_related_ibfk_3` FOREIGN KEY (`pages_id`) REFERENCES `pages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+ALTER TABLE `params`
+  ADD CONSTRAINT `params_ibfk_4` FOREIGN KEY (`param_id`) REFERENCES `param` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `params_ibfk_3` FOREIGN KEY (`pages_id`) REFERENCES `pages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+ALTER TABLE `pricelist`
+  ADD CONSTRAINT `pricelist_ibfk_1` FOREIGN KEY (`categories_id`) REFERENCES `categories` (`id`) ON DELETE SET NULL ON UPDATE SET NULL;
+
+ALTER TABLE `pricelist_daily`
+  ADD CONSTRAINT `pricelist_daily_ibfk_5` FOREIGN KEY (`categories_id`) REFERENCES `categories` (`id`) ON DELETE SET NULL ON UPDATE SET NULL,
+  ADD CONSTRAINT `pricelist_daily_ibfk_2` FOREIGN KEY (`pricelist_dates_id`) REFERENCES `pricelist_dates` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+ALTER TABLE `settings`
+  ADD CONSTRAINT `settings_ibfk_1` FOREIGN KEY (`categories_id`) REFERENCES `categories` (`id`) ON DELETE SET NULL ON UPDATE SET NULL;
+
+ALTER TABLE `snippets`
+  ADD CONSTRAINT `snippets_ibfk_1` FOREIGN KEY (`pages_id`) REFERENCES `pages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+ALTER TABLE `users`
+  ADD CONSTRAINT `users_ibfk_1` FOREIGN KEY (`categories_id`) REFERENCES `categories` (`id`) ON DELETE SET NULL ON UPDATE SET NULL;

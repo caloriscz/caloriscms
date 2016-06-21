@@ -15,103 +15,7 @@ class CataloguePresenter extends BasePresenter
     {
         parent::startup();
 
-        $this->template->menu = $this->database->table('store_categories')->where('parent_id', NULL);
-    }
-
-    /**
-     * Finish order request
-     */
-    function createComponentAddToCartForm()
-    {
-        $form = new \Nette\Forms\BootstrapUIForm;
-        $form->setTranslator($this->translator);
-        $form->getElementPrototype()->class = "form-horizontal";
-        $form->getElementPrototype()->role = 'form';
-        $form->getElementPrototype()->autocomplete = 'off';
-
-        $form->addHidden("id");
-        $form->addHidden("stock");
-        $form->addText("amount")
-                ->setType("number")
-                ->setAttribute("class", "form-control text-right");
-
-        $form->addSubmit("submitm", "store.cart.add")
-                ->setAttribute("class", "btn btn-success btn-sm");
-
-        $form->onSuccess[] = $this->addToCartFormSucceeded;
-        return $form;
-    }
-
-    function addToCartFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
-    {
-        if ($this->user->isLoggedIn()) {
-            $users_id = $this->user->getId();
-
-            $storeDb = $this->database->table("cart")->where(array("users_id" => $users_id));
-
-            if ($storeDb->count() == 0) {
-                $storeId = $this->database->table("cart")->insert(array(
-                    "users_id" => $users_id,
-                    "uid" => $_COOKIE["PHPSESSID"],
-                    "store_settings_shipping_id" => 3, // TODO: Get primary shipping method instead of guessing
-                    "store_settings_payments_id" => 6, // TODO: Get primary payment method instead of guessing
-                    "date_created" => date('Y-m-d H:i:s'),
-                ));
-            } else {
-                $storeId = $storeDb->fetch()->id;
-
-                $this->database->table("cart")->get($storeId)
-                        ->update(array(
-                            "date_created" => date('Y-m-d H:i:s'),
-                ));
-            }
-        } else {
-            $storeDb = $this->database->table("cart")->where(array("uid" => $_COOKIE["PHPSESSID"]));
-
-            if ($storeDb->count() == 0) {
-                $storeId = $this->database->table("cart")->insert(array(
-                    "users_id" => 0,
-                    "uid" => $_COOKIE["PHPSESSID"],
-                    "store_settings_shipping_id" => 3, // TODO: Get primary shipping method instead of guessing
-                    "store_settings_payments_id" => 6, // TODO: Get primary payment method instead of guessing
-                    "date_created" => date('Y-m-d H:i:s'),
-                ));
-            } else {
-                $storeId = $storeDb->fetch()->id;
-
-                $this->database->table("cart")->where(array("uid" => $_COOKIE["PHPSESSID"]))
-                        ->update(array(
-                            "date_created" => date('Y-m-d H:i:s'),
-                ));
-            }
-
-            $users_id = 0;
-        }
-
-        $productPrice = $this->database->table("store_stock")->where(array(
-            "id" => $form->values->stock,
-            "store_id" => $form->values->id,
-        ));
-
-        if ($productPrice->count() > 0) {
-            $stock = $productPrice->fetch();
-        } else {
-            echo 'No stock found';
-            exit();
-        }
-
-        $this->database->table("cart_items")->insert(array(
-            "cart_id" => $storeId,
-            "store_id" => $form->values->id,
-            "store_stock_id" => $form->values->stock,
-            "users_id" => $users_id,
-            "amount" => $form->values->amount,
-            "price" => $stock->price,
-            "vat" => $stock->vat,
-            "date_created" => date('Y-m-d H:i:s'),
-        ));
-
-        $this->redirect(':Front:Catalogue:detail', array("id" => $form->values->id));
+        $this->template->menu = $this->database->table('categories')->where('parent_id', NULL);
     }
 
     /**
@@ -120,12 +24,12 @@ class CataloguePresenter extends BasePresenter
     function createComponentSortingForm()
     {
         $sortCols = array(
-            "dd" => "od nejnovějšího",
-            "da" => "od nejstaršího",
-            "pa" => "od nejlevnějšího",
-            "pd" => "od nejdražšího",
-            "na" => "A-Z",
-            "nd" => "Z-A",
+            "dd" => "dictionary.sorting.new",
+            "da" => "dictionary.sorting.old",
+            "pa" => "dictionary.sorting.cheap",
+            "pd" => "dictionary.sorting.expensive",
+            "na" => "dictionary.sorting.az",
+            "nd" => "dictionary.sorting.za",
         );
 
         if ($this->getParameter("o") == '') {
@@ -142,6 +46,7 @@ class CataloguePresenter extends BasePresenter
         $form->getElementPrototype()->class = 'simpleSort';
         $form->getElementPrototype()->id = 'order-me';
         $form->getElementPrototype()->onchange = 'document.getElementById("order-me").submit(); ';
+        $form->setTranslator($this->translator);
         $form->addHidden("brand");
         $form->addHidden("id");
         $form->addHidden("page");
@@ -149,7 +54,7 @@ class CataloguePresenter extends BasePresenter
         $form->addHidden("priceTo");
         $form->addHidden("src");
         $form->addHidden("user");
-        $form->addSelect("o", 'Seřadit: ', $sortCols)
+        $form->addSelect("o", 'dictionary.main.Sort', $sortCols)
                 ->setAttribute("class", "sortsel");
         $form->addSubmit("sort", 'Seřadit')
                 ->setAttribute("class", "btn btn-primary btn-xs sortBtn")
@@ -159,7 +64,7 @@ class CataloguePresenter extends BasePresenter
             "src" => $this->getParameter("src"),
             "brand" => $this->getParameter("brand"),
             "category" => $this->getParameter("id"),
-            "o" => $sort,
+            "o" => $this->translator->translate($sort),
             "priceFrom" => $this->getParameter("priceFrom"),
             "priceTo" => $this->getParameter("priceTo"),
             "page" => $this->getParameter("page"),
@@ -172,7 +77,9 @@ class CataloguePresenter extends BasePresenter
 
     function sortingFormSucceeded($form = \Nette\Forms\FilterForm)
     {
-        $this->redirect(":Front:Catalogue:default", $form->getValues(TRUE));
+        $filter = array_filter($form->getValues(TRUE));
+
+        $this->redirect(":Front:Catalogue:default", $filter);
     }
 
     /**
@@ -203,7 +110,7 @@ class CataloguePresenter extends BasePresenter
             ));
         }
 
-        $form->addSubmit('submitm', 'save')
+        $form->addSubmit('submitm', 'dictionary.main.Search')
                 ->setAttribute("class", "btn btn-info btn-lg");
 
 
@@ -228,14 +135,10 @@ class CataloguePresenter extends BasePresenter
      */
     protected function createComponentParamSearchForm()
     {
-        $form = new \Nette\Forms\BootstrapPHForm();
-        $form->setTranslator($this->translator->domain('dictionary.main'));
+        $form = $this->baseFormFactory->createPH();
         $form->setMethod("GET");
-        $form->getElementPrototype()->class = "form-inline";
-        $form->getElementPrototype()->role = 'form';
-        $form->getElementPrototype()->autocomplete = 'off';
 
-        $form->addHidden('idr', 'ID:');
+        $form->addHidden('idr');
         $form->addHidden('src');
         $form->addHidden("priceFrom");
         $form->addHidden("priceTo");
@@ -249,7 +152,7 @@ class CataloguePresenter extends BasePresenter
             "brand" => $this->getParameter("brand"),
         ));
 
-        $form->addSubmit('submitm', 'save')
+        $form->addSubmit('submitm', 'dictionary.main.Save')
                 ->setAttribute("class", "btn btn-info btn-lg");
 
 
@@ -268,9 +171,25 @@ class CataloguePresenter extends BasePresenter
 
     function renderDefault()
     {
-        $filter = new \App\Model\ProductFilter($this->database);
+        $catId = $this->getParameter("page_id");
+        if ($catId) {
+            $catByName = $this->database->table("pages")->get($catId);
+
+            if ($catByName) {
+                $category = $catByName;
+            } else {
+                $category = null;
+            }
+        } else {
+            $category = null;
+        }
+        
+        $this->template->category = category;
+
+        $filter = new \App\Model\Store\Filter($this->database);
         $filter->order($this->getParameter("o"));
-        $filter->setCategories($this->getParameter("id"));
+        $filter->setOptions($this->template->settings);
+        $filter->setCategories($category);
         $filter->setManufacturer($this->getParameter("brand"));
         $filter->setUser($this->getParameter("user"));
         $filter->setText($this->getParameter("src"));
@@ -282,23 +201,34 @@ class CataloguePresenter extends BasePresenter
 
         $paginator = new \Nette\Utils\Paginator;
         $paginator->setItemCount($assembleSQL->count("*"));
-        $paginator->setItemsPerPage(6);
+        $paginator->setItemsPerPage(20);
         $paginator->setPage($this->getParameter("page"));
 
         $this->template->categoryArr = $this->getParameters();
-        $this->template->store = $assembleSQL->order("id");
+        $this->template->store = $assembleSQL->order("pages.id");
         $this->template->paginator = $paginator;
         $this->template->productsArr = $assembleSQL->limit($paginator->getLength(), $paginator->getOffset());
 
         //Parametres
-        $params = $this->database->table("store_param");
+        $params = $this->database->table("param")->where(array(
+            ":store_param_categories.pages_id" => $category,
+        ));
+
         $this->template->database = $this->database;
         $this->template->params = $params;
+
+        if ($this->getParameter("slug")) {
+            $catName = new \App\Model\Category($this->database);
+            $this->template->categoryName = $catName->getName($category);
+
+            $this->template->breadcrumbs = $catName->getBreadcrumb($category);
+        }
     }
 
     function renderBrands()
     {
-        $brands = $this->database->table("store_brands");
+        $brands = $this->database->table("contacts")
+                ->where("categories_id", $this->template->settings['categories:id:contactsBrands']);
 
         $paginator = new \Nette\Utils\Paginator;
         $paginator->setItemCount($brands->count("*"));
@@ -313,7 +243,20 @@ class CataloguePresenter extends BasePresenter
 
     function renderDetail()
     {
-        $this->template->store = $this->database->table("store")->get($this->getParameter("id"));
+        $productDetail = $this->database->table("store")->where("slug.title", $this->getParameter("slug"))->fetch();
+
+        $this->template->store = $productDetail;
+
+        $categoryDb = $this->database->table("store_category")->where("store_id", $productDetail->id)->fetch();
+        $this->template->categoryId = $categoryDb->categories_id;
+
+        $this->template->parentCategory = $this->database->table("categories")->get($categoryDb->categories_id)->ref('categories', 'parent_id');
+
+        $category = new Model\Category($this->database);
+
+        $this->template->breadcrumbs = $category->getBreadcrumb($categoryDb->categories_id);
+
+        $this->template->database = $this->database;
     }
 
 }

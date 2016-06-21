@@ -13,6 +13,11 @@ catalogue:
     ListOfBrands: "List of Boards"
     ProductCatalogue: "Product catalogue"
     ProductGallery: "Product gallery"
+categories:
+    NothingRelated: "Nothing related"
+    PageSelectedManually: "Page selected manually"
+    RelatedCategory: "Related category"
+    SelectPage: "Select page"
 homepage:
     welcome: "Welcome"
 pages:

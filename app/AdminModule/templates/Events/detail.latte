@@ -1,0 +1,71 @@
+{block #titles}{_dictionary.main.Events}: {$page->slug}{/block}
+{block content}
+<br>
+<ul class="nav nav-tabs">
+    <li role="presentation" class="active">
+        <a n:href=":Admin:Events:default, id => $presenter->getParameter('id')">Basic</a></li>
+    <li role="presentation">
+        <a n:href=":Admin:Events:images, id => $presenter->getParameter('id')">{_dictionary.main.Images}</a>
+    </li>
+</ul>
+
+
+<h1 class="page-header">{$page->title}
+    <a href="/{$page->slug}" class="btn btn-info pull-right" target="_blank">{_dictionary.main.Preview}</a>
+</h1>
+
+<div class="row">
+    <div class="col-lg-8">
+        {control langSelector}
+
+        {control documentEditor}
+    </div>
+    <div class="col-lg-4">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                {_dictionary.main.Event}
+            </div>
+            <div class="panel-body">
+                {form editEventForm}
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">{_dictionary.main.DateEventStarted}</label>
+                        <div class="col-sm-4">
+                            {input date_event}
+                        </div>
+                        <div class="col-sm-3">
+                            {input hour_event}
+                        </div>
+                        <div class="col-sm-3">
+                            {input minute_event}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">{_dictionary.main.DateEventEnded}</label>
+                        <div class="col-sm-4">
+                            {input date_event_end}
+                        </div>
+                        <div class="col-sm-3">
+                            {input hour_event_end}
+                        </div>
+                        <div class="col-sm-3">
+                            {input minute_event_end}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label"></label>
+                        <div class="col-sm-9">
+                            {input allday}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-12">
+                            {input submitm}
+                        </div>
+                    </div>
+                {/form}
+            </div>
+        </div>
+
+        {control pageSettings}
+    </div>
+</div>

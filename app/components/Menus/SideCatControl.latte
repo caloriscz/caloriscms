@@ -1,0 +1,55 @@
+<ul class="nav nav-stacked {$style} first">
+    {foreach $categories as $rowCategories} 
+        {var $dbSubs = $rowCategories->related('pages', 'pages_id')}
+
+        {if $rowCategories->id == $presenter->getParameter('page_id')}
+            {var $linkActive = 'active '}
+            {var $dropdown = 'dropdown '}
+        {else}
+            {var $dropdown = ' '}
+            {var $linkActive = ' '}
+        {/if}
+
+        {var $isCat = $database->table('pages')->get($presenter->getParameter('page_id'))}
+
+        {if $isCat->id == $rowCategories->id or $isCat->pages_id == $rowCategories->id}
+            {var $active = true}
+        {else}
+            {var $active = false}
+        {/if}
+
+        <li class="{$linkActive}{if $dbSubs->count() > 0} has-subs{/if}">
+            <a href="/{$rowCategories->slug}" data-category="{$rowCategories->id}">
+                {if file_exists($basePath . '/www/media/' . $rowCategories->id)}
+                    <img src="{$baseUri}/media/{$rowCategories->id}" />
+                {/if}
+                <span>{$rowCategories->title}</span>
+            </a>
+            {if $level > 1 || $level < 1}
+                {foreach $dbSubs as $rowCategoriesSub}
+                    {if $rowCategoriesSub->slug == $presenter->getParameter('id')}
+                        {var $sublinkActive = 'active'}
+                    {else}
+                        {var $sublinkActive =  ''}
+                    {/if} 
+
+                    {if $iterator->isFirst()}
+                        <ul class="second">
+                        {/if}
+                        {if $active}
+                            <li class="{$sublinkActive}">
+                                <a href="/{$rowCategoriesSub->slug}" data-category="{$rowCategoriesSub->id}">
+                                    <span>{$rowCategoriesSub->title}</span>
+                                </a>
+                            </li>
+                        {/if}
+                        {if $iterator->isLast()}
+                        </ul>
+
+                    {/if}
+
+                {/foreach}
+            {/if}
+        </li>
+    {/foreach}
+</ul>

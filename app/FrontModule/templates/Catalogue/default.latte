@@ -1,28 +1,44 @@
-{block #titles}Catalogue{/block}
+{block #titles}{$categoryName}{/block}
 {block content}
+{var $today = date('Y-m-d H:i:s')}
 
-<div class="container">
-    <div class="col-md-3">
-        {include 'components/categories.latte'}
-        <br />
-        {include 'components/filter.latte'}
-        <br />
-        <div class="well">
-            <ul>
-                <li><a n:href=":Front:Catalogue:brands">{_dictionary.main.brands|firstUpper}</a></li>
-            </ul>
+<div class="container content">
+    <div class="row">
+        <div class="heading">
+            <div class="row">
+                <div class="col-sm-6">
+                    <h1 style="border: 0;">{$categoryName}</h1>
+                </div>
+                <div class="col-sm-6 text-right">
+                    {if count($breadcrumbs) > 0}
+                        <ol class="breadcrumb breadcrumb-categories">
+                            {foreach $breadcrumbs as $crumbId => $crumbValue}
+                                <li><a href="/{$crumbId}">{$crumbValue}</a></li>
+                            {/foreach}
+                        </ol>
+                    {/if}
+                </div>
+            </div>
         </div>
     </div>
-    <div class="col-md-9">
-        <div class="container-fluid">
+
+    <div class="row">
+        <div class="col-md-3">
+            <div class="row">
+                {control sideCat}
+            </div>
+        </div>
+        <div class="col-md-9">
             <div class="row">
                 <div class="col-md-4">
                     {control sortingForm}
                 </div>
                 <div class="col-md-8 text-right">
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
-                        {_dictionary.main.Parametres}
-                    </button>
+                    {if is_numeric($category)}
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+                            {_dictionary.main.Parametres}
+                        </button>
+                    {/if}
                 </div>
             </div>
             <br />
@@ -42,8 +58,8 @@
                                         <div class="col-md-4" style="border: 1px solid red; min-height: 150px;">
                                             <label for="inputEmail3" class="control-label">{$item->{'param_'.$langSelected}}</label>
                                             <div >
-                                                {foreach $database->table('store_params')->where('store_param_id = ?', $item->id)->group('paramvalue')->order('paramvalue') as $value}
-                                                    <input type="checkbox" name="param[{$value->store_param_id}][]" value="{$value->paramvalue}" /> {$value->paramvalue}{sep}<br />{/sep}
+                                                {foreach $database->table('params')->where('param_id = ?', $item->id)->group('paramvalue')->order('paramvalue') as $value}
+                                                    <input type="checkbox" name="param[{$value->param_id}][]" value="{$value->paramvalue}" /> {$value->paramvalue}{sep}<br />{/sep}
                                                 {/foreach}
                                             </div>
                                         </div>
@@ -62,29 +78,14 @@
 
             <div class="row">
                 {foreach $store as $item}
-                    <div class="col-xs-6 col-md-4">
-                        <div class="thumbnail" style="height: 380px;">
-                            <a n:href=":Front:Catalogue:detail id=> $item->id">
-                                {var $image = $item->related('store_images', 'store_id')->limit(1)}
-                                {if $image->count() > 0}
-                                    <img src="/images/catalogue/products/{$item->id|padLeft:6:'0'}/{$image->fetch()->filename}" style="max-height: 150px;" />
-                                {else}
-                                    no image
-                                {/if}
-                            </a>
-                            <div class="caption">
-                                <h3><a n:href=":Front:Catalogue:detail id => $item->id">{$item->title}</a></h3>
-                                <p>{$item->description|noescape|truncate:80:'...'}</p>
-                                <p>from {$item->minprice} {$settings['currency_symbol']}</p>
-                                <p><a href="#" class="btn btn-primary" role="button">Button</a> <a href="#" class="btn btn-default" role="button">{_store.cart.add}</a></p>
-                            </div>
-                        </div>
+                    <div class="col-tn-12 col-xs-6 col-md-4">
+                        {control product $item}
                     </div>
                 {/foreach}
             </div>
+            <div class="text-center">
+                {control paging, $categoryArr, $paginator}
+            </div>
         </div>
-
-        {include 'components/paging.latte', templ => 'default'}
-
     </div>
 </div>

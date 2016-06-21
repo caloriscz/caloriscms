@@ -1,0 +1,22 @@
+{block #titles}{$events->pages->title}{/block}
+{block content}
+{var $id = $presenter->getParameter('id')}
+
+<div class="container heading">
+    <h1>{_dictionary.main.Events}</h1>
+</div>
+
+<div class="container padded-top white">
+    <div class="row">
+        <div class="col-sm-8">
+            <h2>{$events->pages->title}</h2>
+
+            <p><small>{$events->date_event|date:'j. n. Y H:i'}</small></span></p>
+
+            <p>{$events->pages->document|noescape}</p>
+        </div>
+        <div class="col-sm-4">
+        </div>
+
+    </div>
+</div>

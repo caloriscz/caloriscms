@@ -1,0 +1,81 @@
+{if $settings['store:enabled'] == 1}
+    {if $cart->count() > 0}
+        <div class="cart-list">
+            {foreach $cartItems as $item}
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="col-xs-2">
+                            {var $store = $item->pages}
+                            {var $image = $store->related('media', 'pages_id')->where('file_type = 1')->limit(1)}
+                            {var $imageInfo = $image->fetch()}
+                            {if $image->count() > 0}
+                                <span class="image">
+                                <img src="/media/{$store->id}/tn/{$imageInfo->name}" alt="{$imageInfo->name}"
+                                     class="img-responsive"/>
+                            </span>
+                            {/if}
+                        </div>
+                        <div class="col-xs-4">
+                        <span class="title">
+                            <a href="/{$item->pages->slug}">{$item->title}</a>
+                        </span>
+                            {if $item->pages->title != $item->stock->title}
+                                <span class="title-stock">
+                                <a href="/{$item->pages->slug}">{$item->pages->title}</a>
+                            </span>
+                            {/if}
+                        </div>
+                        <div class="col-xs-1 text-right">
+                        <span class="amount">
+                            {$item->amount}
+                        </span>
+                        <span class="price">
+                            {if $settings['store:order:isVatIncluded']}
+                                {var $vat = round($item->price * round($item->store_settings_vats->vat/(100+$item->store_settings_vats->vat),4), 0)}
+                                {$item->price - $vat} {$settings['store:currency:symbol']}
+                            {else}
+                                {var $vat = $item->store->price * ($item->store_settings_vats->vat/100)}
+                                {$item->price} {$settings['store:currency:symbol']}
+                            {/if}
+                        </span>
+                            <span class="vat">{$item->store_settings_vats->vat}%</span>
+                        <span class="price-vat-item">
+                            {if $settings['store:order:isVatIncluded']}
+                                {number_format($item->price, 0, ',', ' ')} {$settings['store:currency:symbol']}
+                            {else}
+                                {number_format($item->price * (1+($item->store_settings_vats->vat/100)), 0, ',', ' ')} {$settings['store:currency:symbol']}
+                            {/if}
+                        </span>
+                        </div>
+                        <div class="col-xs-4 text-right">
+                        <span class="price-vat-item-total">
+                            {if $settings['store:order:isVatIncluded']}
+                                {number_format($item->price * $item->amount, 0)} {$settings['store:currency:symbol']}
+                            {else}
+                                {number_format(($item->price * (1+($item->store_settings_vats->vat/100))) * $item->stock->amount, 0, ',', ' ')} {$settings['store:currency:symbol']}
+                            {/if}
+                        </span>
+                        </div>
+                    </div>
+                </div>
+            {/foreach}
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="col-xs-1"></div>
+                    <div class="col-xs-5">{_dictionary.main.Total}</div>
+                    <div class="col-xs-1 text-right">{$cartItems->sum('amount')}</div>
+                    <div class="col-xs-4 text-right">
+                        <strong>{number_format($cartTotal, 0, ',', ' ')} {$settings['store:currency:symbol']}</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center">
+            <a href="{plink ':Front:Cart:default'}" class="btn btn-primary btn-block">{_dictionary.main.Cart}</a>
+        </div>
+    {else}
+        <br/>
+        <p class="text-primary"><big>Do košíku jste zatím nevložili žádný výrobek</big></p>
+    {/if}
+{/if}

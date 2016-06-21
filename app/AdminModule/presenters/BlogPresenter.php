@@ -15,131 +15,80 @@ class BlogPresenter extends BasePresenter
     {
         parent::startup();
 
-        if (!$this->user->isLoggedIn()) {
-            if ($this->user->logoutReason === Nette\Security\IUserStorage::INACTIVITY) {
-                $this->flashMessage('You have been signed out due to inactivity. Please sign in again.');
-            }
-            $this->redirect('Sign:in', array('backlink' => $this->storeRequest()));
-        }
+        $this->template->catalogue = $this->database->table("pages")->get($this->getParameter("id"));
     }
+
 
     /**
      * Delete post
      */
     function handleDelete($id)
     {
-        $this->database->table("blog")->get($id)->delete();
-        $directory_images = APP_DIR . '/caloris_blog/' . $xmlSetting->directories->images;
-        //IO::remove($directory_images . '/' . $cols["bid"] . '/header-' . $cols["bid"] . '.jpg');
-        //IO::remove($directory_images . '/' . $cols["bid"]);
+        Model\IO::removeDirectory(APP_DIR . '/media/' . $id);
+        $this->database->table("pages")->get($id)->delete();
 
-        $this->redirect(":Admin:Blog:default");
+        $this->redirect(":Admin:Blog:default", array("id" => null));
     }
 
+
     /**
-     * Edit article
+     * Search related
      */
-    function createComponentEditForm()
+    protected function createComponentSearchRelatedForm()
     {
-        $catalogue = $this->database->table("blog")
-                ->get($this->getParameter("id"));
-
-        $form = new \Nette\Forms\BootstrapUIForm;
-        $form->getElementPrototype()->class = "form-horizontal";
-        $form->getElementPrototype()->role = 'form';
-        $form->getElementPrototype()->autocomplete = 'off';
-        $form->addHidden('id', 'ID:');
-        $form->addText('title', 'Název:');
-        $form->addTextArea("article")
-                ->setAttribute("class", "form-control")
-                ->setHtmlId('wysiwyg');
-
-        $form->addSubmit('submitm', 'Uložit');
+        $form = $this->baseFormFactory->createUI();
+        $form->addHidden('id');
+        $form->addText('src', 'dictionary.main.Title');
+        $form->addSubmit('submitm', 'dictionary.main.Insert');
 
         $form->setDefaults(array(
             "id" => $this->getParameter("id"),
-            "title" => $catalogue->title,
-            "article" => $catalogue->article,
         ));
 
-        $form->onSuccess[] = $this->editFormSucceeded;
+        $form->onSuccess[] = $this->searchRelatedFormSucceeded;
         return $form;
     }
 
-    /**
-     * Edit post
-     */
-    function editFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
+    public function searchRelatedFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
     {
-        $this->database->table("blog")->get($form->values->id)
-                ->update(array(
-                    "title" => $form->values->title,
-                    "blog_categories_id" => 1,
-                    "article" => $form->values->article,
-                    "public" => 1,
+        $this->redirect(":Admin:Blog:detailRelated", array(
+            "id" => $form->values->id,
+            "src" => $form->values->src,
         ));
-
-        $this->redirect(":Admin:Blog:detail", array("id" => $form->values->id));
     }
 
     /**
-     * Sign-in form factory.
-     * @return Nette\Application\UI\Form
+     * Edit page content
      */
-    protected function createComponentInsertImageForm()
+    function createComponentInsertForm()
     {
-        $catalogue = $this->database->table("blog")
-                ->get($this->getParameter("id"));
-
-        $form = new \Nette\Forms\BootstrapUIForm;
-        $form->getElementPrototype()->class = "form-horizontal";
-        $form->getElementPrototype()->role = 'form';
-        $form->getElementPrototype()->autocomplete = 'off';
-        $form->addHidden('id');
-        $form->addUpload('the_file', 'Obrázek:');
-
-        $form->addSubmit('submitm', 'Uložit');
+        $form = $this->baseFormFactory->createUI();
+        $form->addHidden("id");
+        $form->addHidden("section")
+            ->setAttribute("class", "form-control");
+        $form->addText("title", "dictionary.main.Title");
 
         $form->setDefaults(array(
-            "id" => $catalogue->id,
+            "section" => $this->getParameter('id'),
         ));
 
-        $form->onSuccess[] = $this->insertImageFormSucceeded;
+        $form->addSubmit("submit", "dictionary.main.Create")
+            ->setHtmlId('formxins');
+
+        $form->onSuccess[] = $this->insertFormSucceeded;
+
         return $form;
     }
 
-    function insertImageFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
+    function insertFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
     {
+        $doc = new Model\Document($this->database);
+        $doc->setType(2);
+        $doc->setTitle($form->values->title);
+        $page = $doc->create($this->user->getId());
+        Model\IO::directoryMake(substr(APP_DIR, 0, -4) . '/www/media/' . $page, 0755);
 
-        copy($_FILES["the_file"]["tmp_name"], APP_DIR . '/images/blog/' . $form->values->the_file->name);
-
-        $image = \Nette\Utils\Image::fromFile(APP_DIR . '/images/blog/' . $form->values->the_file->name);
-        $image->resize(250, 200, \Nette\Image::EXACT);
-        $image->sharpen();
-        $image->save(APP_DIR . '/images/blog/id-' . \Nette\Utils\Strings::padLeft($form->values->id, 6, '0') . '.jpg', 98, \Nette\Image::JPEG);
-        chmod(APP_DIR . '/images/blog/id-' . \Nette\Utils\Strings::padLeft($form->values->id, 6, '0') . '.jpg', 0644);
-        \App\Model\IO::remove(APP_DIR . '/images/blog/' . $form->values->the_file->name);
-        header("Refresh: 0;url='REDIRECTION URI'");
-
-        $this->redirect(":Admin:Blog:detail", array("id" => $form->values->id, "" => \Nette\Utils\Random::generate(4)));
-    }
-
-    function handleInsert()
-    {
-        $blogInsert = $this->database->table("blog")->insert(array(
-            "title" => "Článek",
-            "date_created" => date("Y-m-d H:i:s"),
-            "public" => 0,
-            "blog_categories_id" => 1,
-        ));
-
-        $this->redirect(":Admin:Blog:detail", array("id" => $blogInsert->id));
-    }
-
-    function handleDeleteImage($id)
-    {
-        \App\Model\IO::remove(APP_DIR . '/images/blog/id-' . \Nette\Utils\Strings::padLeft($id, 6, '0') . '.jpg');
-        $this->redirect(":Admin:Blog:detail", array("id" => $id, "rnd" => \Nette\Utils\Random::generate(4)));
+        $this->redirect(":Admin:Blog:detail", array("id" => $page));
     }
 
     function handleChangeState($id, $public)
@@ -150,22 +99,88 @@ class BlogPresenter extends BasePresenter
             $idState = 0;
         }
 
-        $this->database->table("blog")->get($id)
-                ->update(array(
-                    "public" => $idState,
-        ));
+        $this->database->table("pages")->get($id)
+            ->update(array(
+                "public" => $idState,
+            ));
 
-        $this->redirect(":Admin:Blog:default");
+        $this->redirect(":Admin:Blog:default", array("id" => null));
+    }
+
+    function handleDeleteRelated($id)
+    {
+        $this->database->table("pages_related")->get($id)->delete();
+        $this->redirect(":Admin:Blog:detailRelated", array("id" => $this->getParameter("item")));
+    }
+
+    function handleInsertRelated($id)
+    {
+        $this->database->table("pages_related")->insert(array(
+            "pages_id" => $this->getParameter("item"),
+            "related_pages_id" => $id,
+        ));
+        $this->redirect(":Admin:Blog:detailRelated", array("id" => $this->getParameter("item")));
     }
 
     public function renderDefault()
     {
-        $this->template->blog = $this->database->table("blog")->order("title");
+        if ($this->getParameter("id") == null) {
+            $blog = $this->database->table("pages")->where(array("pages_types_id" => 2));
+        } else {
+            $blog = $this->database->table("pages")
+                ->where("categories_id = ? AND content_type = 2", $this->getParameter("id"));
+        }
+
+        $paginator = new \Nette\Utils\Paginator;
+        $paginator->setItemCount($blog->count("*"));
+        $paginator->setItemsPerPage(20);
+        $paginator->setPage($this->getParameter("page"));
+
+        $this->template->blog = $blog->order("date_published DESC")->limit($paginator->getLength(), $paginator->getOffset());
+        $this->template->paginator = $paginator;
+        $this->template->args = $this->getParameters();
     }
 
     public function renderDetail()
     {
-        $this->template->blog = $this->database->table("blog")->where(array("id" => $this->getParameter("id")))->fetch();
+        $this->template->page = $this->database->table("pages")->get($this->getParameter("id"));
+        $slugParam = $this->getParameter("slug");
+
+        if ($slugParam) {
+            $slugDb = $this->database->table("pages")->where(array("title" => $slugParam));
+
+            if ($slugDb->count() > 0) {
+                $this->redirect(":Admin:Blog:detail", array("id" => $slugDb->fetch()->id));
+            } else {
+                $this->redirect(":Admin:Blog:default");
+            }
+        }
+
+        $this->template->blog = $this->database->table("pages")->where(array("id" => $this->getParameter("id")))->fetch();
+    }
+
+    public function renderDetailFiles()
+    {
+        $this->template->page = $this->database->table("pages")->get($this->getParameter("id"));
+        $this->template->files = $this->database->table("media")
+            ->where(array("pages_id" => $this->getParameter("id"), "file_type" => 0));
+    }
+
+    public function renderDetailImages()
+    {
+        $this->template->page = $this->database->table("pages")->get($this->getParameter("id"));
+    }
+
+    public function renderDetailRelated()
+    {
+        $this->template->page = $this->database->table("pages")->get($this->getParameter("id"));
+        $src = $this->getParameter("src");
+
+        $this->template->relatedSearch = $this->database->table("pages")
+            ->where(array("title LIKE ?" => '%' . $src . '%'))->limit(20);
+        $this->template->related = $this->database->table("pages_related")
+            ->where(array("pages_id" => $this->getParameter("id")));
+        $this->template->catalogue = $this->database->table("pages")->get($this->getParameter("id"));
     }
 
 }

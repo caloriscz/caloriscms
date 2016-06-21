@@ -3,7 +3,7 @@
 <html lang="cs">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-        <title>Caloris</title>
+        <title>{$settings['site:title']}: Nový e-mail</title>
         <style>
 
         </style>
@@ -14,7 +14,7 @@
         <table style="width: 800px; margin: 0 auto 0 auto;">
             <tr>
                 <td colspan="2" style="color: white; vertical-align: middle; background-color: #8e8e8e; 
-                    font-size: 1.82em; height: 80px; border-bottom: 4px solid #ac3535; font-weight: bold; padding-left: 20px;">Caloris</td>
+                    font-size: 1.82em; height: 80px; border-bottom: 4px solid #ac3535; font-weight: bold; padding-left: 20px;">{$settings['site:title']}</td>
             </tr>
             <tr>
                 <td style="text-align: left;">
@@ -22,9 +22,9 @@
                     Your account was successfully created. You can now log in.
                     <br /><br />
                     user name: {$username}<br />
-                    {_dictionary.main.password|firstUpper}: {$password}<br />
+                    password: {$password}<br />
                     <br /><br />
-                    Log in: <a href="{$baseUri}/admin">{$baseUri}/admin</a>
+                    Log in: <a href="{$settings['site:url:base']}/admin">{$settings['site:url:base']}/admin</a>
                 </td>
             </tr>
         </table>

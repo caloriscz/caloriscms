@@ -1,0 +1,82 @@
+{block #titles}{_admin.navigation.homepage}{/block}
+{block content}
+
+<h1 class="page-header">{_admin.homepage.welcome}</h1>
+<div class="row">
+    <div class="col-lg-4 col-md-6">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-xs-3">
+                        <i class="fa fa-shopping-cart fa-5x"></i>
+                    </div>
+                    <div class="col-xs-9 text-right">
+                        <div class="huge">{$orders}</div>
+                        <div>{_dictionary.main.orders|firstUpper}</div>
+                    </div>
+                </div>
+            </div>
+            <a href="#">
+                <div class="panel-footer">
+                    <span class="pull-left"><a n:href=":AdminStore:Orders:default">{_dictionary.main.View}</a></span>
+                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                    <div class="clearfix"></div>
+                </div>
+            </a>
+        </div>
+    </div>
+    <div class="col-lg-8 col-md-6">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <i class="fa fa-bar-chart-o fa-fw"></i> Statistika objednávek: {$statsLabel}
+                <div class="pull-right">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
+                            Změnit statistiky
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu pull-right" role="menu">
+                            <li><a n:href=":Admin:Homepage:default, stats => 'td'">Obrat - denní</a></li>
+                            <li><a n:href=":Admin:Homepage:default, stats => 'tm'">Obrat - měsíční</a></li>
+                            <li><a n:href=":Admin:Homepage:default, stats => 'ad'">Prodeje - denní</a></li>
+                            <li><a n:href=":Admin:Homepage:default, stats => 'am'">Prodeje - měsíční</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- /.panel-heading -->
+            <div class="panel-body">
+                <div>
+                    <canvas id="myChart" height="70">1</canvas>
+                </div>
+            </div>
+            <!-- /.panel-body -->
+        </div>
+        <!-- /.panel -->
+    </div>
+</div>
+<script>
+    var options = {
+        maintainAspectRatio: true,
+        responsive: true
+    };
+    
+    var arrayTitles = [{$turnoverDays|noescape}];
+
+    var riceData = {
+        labels: arrayTitles,
+        datasets:
+                [
+                    {
+                        fillColor: "rgba(66,202,139,0.5)",
+                        strokeColor: "rgba(66,202,139,1)",
+                        pointColor: "#fff",
+                        pointStrokeColor: "#9DB86D",
+                        data: [{$turnoverValues|noescape}]
+                    }
+                ]
+    }
+
+    var rice = document.getElementById('myChart').getContext('2d');
+    new Chart(rice).Line(riceData, options);
+</script>

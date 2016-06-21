@@ -1,16 +1,30 @@
 {block #titles}{_dictionary.main.blog|firstUpper}: {_dictionary.main.detail|firstUpper}{/block}
 {block content}
 
-<h1 class="page-header">{_dictionary.main.detail|firstUpper}</h1>
+<br/>
 
-{control editForm}
+<ul class="nav nav-tabs">
+    <li role="presentation" class="active"><a n:href=":Admin:Blog:detail, id => $presenter->getParameter('id')">Příspěvek</a>
+    </li>
+    <li role="presentation">
+        <a n:href=":Admin:Blog:detailImages, id => $presenter->getParameter('id')">{_dictionary.main.images|firstUpper}</a>
+    </li>
+    <li role="presentation">
+        <a n:href=":Admin:Blog:detailFiles, id => $presenter->getParameter('id')">{_dictionary.main.Files}</a></li>
+    <li role="presentation"><a n:href=":Admin:Blog:detailRelated, id => $presenter->getParameter('id')">Související
+            příspěvky</a></li>
+    <li class="pull-right"><a n:href=":Front:Blog:detail, id => $catalogue->slug" class="btn btn-info"
+                target="_blank">{_dictionary.main.Preview}</a></li>
+</ul>
+<h1 class="page-header">{_dictionary.main.Contacts} - {$page->title}</h1>
 
-<h2>{_dictionary.main.image|firstUpper}</h2>
+<div class="row">
+    <div class="col-lg-9">
+        {control langSelector}
 
-{control insertImageForm}
-
-{if file_exists($appDir.'/images/blog/id-'.str_pad($blog->id, 6, '0', STR_PAD_LEFT).'.jpg')}
-    <img src="{$baseUri}/images/blog/id-{$blog->id|padLeft:6:'0'}.jpg" style="max-width: 250px;" /><br />
-    <a n:href="deleteImage!, $blog->id" onclick="return confirm('Opravdu smazat?')">{_dictionary.main.delete|firstUpper}</a>
-{/if}
-<br /><br />
+        {control documentEditor}
+    </div>
+    <div class="col-lg-3">
+        {control pageSettings}
+    </div>
+</div>

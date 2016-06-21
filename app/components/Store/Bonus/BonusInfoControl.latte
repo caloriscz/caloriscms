@@ -1,0 +1,5 @@
+{if $settings['bonus:enabled'] && ($settings['bonus:registeredUsersOnly'] && $isLoggedIn) && !$bonusEnabled}
+    <p>Pro získání dárku Vám chybí ještě {$amountBonus} {$settings['store:currency:symbol']}</p>
+{else}
+    <p>Můžete si vyrat dárek<p>
+{/if}

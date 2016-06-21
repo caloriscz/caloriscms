@@ -1,0 +1,14 @@
+<div class="col-sm-6 col-md-3 albums-item">
+    <div class="thumbnail text-center">
+        {var $selected = $itemCat->related('media', 'categories_id')->order('name DESC')}
+        {var $selectedImage = $selected->fetch()}
+        {var $mediaThumb = $selectedImage->name}
+        {var $mediaCategory = $selectedImage->categories_id}
+        <a href="{plink ':Front:Gallery:album', 'id' => $itemCat->id}">
+            {if $selected->count() > 0}
+                <img src="{$baseUri}/media/{$mediaCategory}/{$mediaThumb}" class="img-responsive"  style="height: 150px; overflow: hidden;" />
+            {/if}
+            <span>{$itemCat->title}</span>
+        </a>
+    </div>
+</div>

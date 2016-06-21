@@ -1,0 +1,54 @@
+<div class="subnav">
+    <ul class="nav nav-pills nav-stacked {$style} first">
+        {foreach $categories as $rowCategories} 
+            {var $dbSubs = $rowCategories->related('categories', 'parent_id')}
+            <li class="{if $rowCategories->id == $category->parent_id or $rowCategories->id == $category->id} active{/if}{if $dbSubs->count() > 0} has-subs{/if}">
+                {if strlen($rowCategories->pages_id)  != 0}
+                    <a href="{plink ':'.$presenter->getName().':'.$rowCategories->pages->slug}" data-category="{$rowCategories->id}">
+                    {else}
+                        <a href="{$baseUri}{$rowCategories->url}" data-category="{$rowCategories->id}">
+                        {/if}
+                        {if file_exists($basePath . '/images/categories/icons/' . $rowCategories->id . '.png')}
+                            <img src="{$baseUri}/images/categories/icons/{$rowCategories->id}.png" />
+                        {/if}
+                        <span>{$rowCategories->title}</span>
+                    </a>
+                    {foreach $dbSubs as $rowCategoriesSub}
+                        {if $iterator->isFirst()}
+                            <ul class="second">
+                            {/if}
+                            <li{if $category->id == $rowCategoriesSub->id} class="active" {/if}>
+                                {if strlen($rowCategoriesSub->pages_id) != 0}
+                                    <a href="{plink ':'.$presenter->getName().':'.$rowCategoriesSub->pages->slug}" data-category="{$rowCategoriesSub->id}">
+                                    {else}
+                                        <a href="{$baseUri}{$rowCategoriesSub->url}" data-category="{$rowCategoriesSub->id}">
+                                        {/if}
+                                        <span>{$rowCategoriesSub->title}</span>
+                                    </a>
+
+                                    {var $dbSubs2 = $rowCategoriesSub->related('categories', 'parent_id')}
+
+                                    {foreach $dbSubs2 as $rowCategoriesSub2}
+                                        {if $iterator->isFirst()}
+                                            <ul>
+                                            {/if}
+                                            <li{if $categoryArr['id'] == $rowCategoriesSub2->id} class="active" {/if}>
+                                                <a href="{$rowCategoriesSub2->url}" data-category="{$rowCategoriesSub2->id}">
+                                                    <span><i class="fa fa-angle-right"></i> {$rowCategoriesSub2->title}</span>
+                                                </a>
+                                            </li>
+                                            {if $iterator->isLast()}
+                                            </ul>
+                                        {/if}
+                                    {/foreach}
+                            </li>
+                            {if $iterator->isLast()}
+                            </ul>
+                        {/if}
+                    {/foreach}
+            </li>
+        {/foreach}
+    </ul>
+
+
+</div>

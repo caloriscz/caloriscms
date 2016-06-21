@@ -1,0 +1,35 @@
+{block #titles}{_dictionary.main.Contacts}{/block}
+{block content}
+
+<br/>
+<ul class="nav nav-tabs">
+    <li role="presentation">
+        <a n:href=":Admin:Contacts:detail, id => $presenter->getParameter('id')">{_dictionary.main.Contacts}</a></li>
+    <li role="presentation"><a n:href=":Admin:Contacts:detailCommunications, id => $presenter->getParameter('id')">Komunikace</a>
+    </li>
+    <li role="presentation" class="active">
+        <a n:href=":Admin:Contacts:detailDocuments, id => $presenter->getParameter('id')">{_dictionary.main.Documents}</a>
+    </li>
+    <li role="presentation">
+        <a n:href=":Admin:Contacts:detailOpeningHours, id => $presenter->getParameter('id')">{_dictionary.main.OpeningHours}</a>
+    </li>
+    <li role="presentation">
+        <a n:href=":Admin:Contacts:detailImages, id => $presenter->getParameter('id')">{_dictionary.main.Images}</a>
+    </li>
+    <li role="presentation">
+        <a n:href=":Admin:Contacts:detailMember, id => $presenter->getParameter('id')">{_dictionary.main.Member}</a>
+    </li>
+</ul>
+
+<h1 class="page-header">{_dictionary.main.Contacts}</h1>
+
+<div class="row">
+    <div class="col-lg-9">
+        {control langSelector}
+
+        {control documentEditor}
+    </div>
+    <div class="col-lg-3">
+        {control pageSettings}
+    </div>
+</div>

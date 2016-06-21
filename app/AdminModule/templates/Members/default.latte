@@ -9,27 +9,24 @@
     </div>
 {/foreach}
 
+
+
 <h1 class="page-header">Členové</h1>
 
-{control insertForm}
+<div class="row">
+    <div class="col-lg-3">
+        {control adminPanel $categoryId}
 
-<h2>Seznam uživatelů</h2>
-
-<table class="table table-striped">
-    <tr>
-        <th class="col-md-1"></th>
-        <th class="col-md-1">ID</th>
-        <th class="col-md-3">Uživatel</th>
-        <th>E-mail</th>
-        <th class="col-md-1">Vytvořeno</th>
-    </tr>
-    {foreach $members as $member}
-        <tr>
-            <td class="col-xs-1"><a n:href="delete!, id => $member->id" onclick="return confirm('Opravdu smazat?')"><i class="fa fa-times font-red"></i></a></td>
-            <td>XY{$member->id|padLeft:6:0}</td>
-            <td>{$member->username}</td>
-            <td>{$member->email}</td>
-            <td>{$member->date_created|date:'j. n. Y H.i'}</td>
-        </tr>
-    {/foreach}
-</table>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                Vytvořit uživatele
+            </div>
+            <div class="panel-body">
+                {control insertForm}
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-9">
+        {control membersGrid}
+    </div>
+</div>

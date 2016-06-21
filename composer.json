@@ -1,20 +1,33 @@
 {
-	"name": "caloriscz/caloriscms",
-	"type": "CMS",
-	"description": "CMS running on Nette framework",
-	"keywords": ["nette", "CMS"],
-	"homepage": "http://github.com/caloriscz/caloriscms",
-	"license": "GPL3",
-	"authors": [
-		{
-			"name": "Petr Karásek",
-			"homepage": "http://caloris.cz",
-			"role": "Developer"
-		}
-	],
-	"require" : {
-		"php": ">= 5.3.0",
-        "nette/nette": "~2.3.0",
-        "kdyby/translation": "dev-master"
-	}
+    "name": "caloriscz/caloriscms",
+    "type": "CMS",
+    "description": "CMS running on Nette framework",
+    "keywords": ["nette", "CMS"],
+    "homepage": "http://github.com/caloriscz/caloriscms",
+    "license": "GPL-3.0",
+    "authors": [
+        {
+            "name": "Petr Karásek",
+            "homepage": "http://caloris.cz",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": ">= 5.3.0",
+        "nette/application": "~2.3",
+        "nette/bootstrap": "~2.3",
+        "nette/database": "~2.3",
+        "nette/robot-loader": "~2.3",
+        "latte/latte": "~2.3",
+        "tracy/tracy": "~2.3",
+        "endroid/qrcode": "dev-master",
+        "kdyby/translation": "dev-master",
+        "ipub/mobile-detect": "dev-master",
+        "nette/forms": "v2.3.6",
+        "nette/mail": "v2.3.3",
+        "joseki/pdf-response": "dev-master",
+        "h4kuna/ares": "dev-master",
+        "ublaboo/datagrid": "dev-master",
+        "ezyang/htmlpurifier": "v4.7.0"
+    }
 }

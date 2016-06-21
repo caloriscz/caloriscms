@@ -1,0 +1,45 @@
+{block #titles}Store - {_dictionary.main.Shipping} - {_dictionary.main.Settings}{/block}
+{block content}
+<br />
+<ul class="nav nav-tabs">
+    <li role="presentation"><a n:href=":AdminStore:Settings:default">Basic</a></li>
+    <li role="presentation"><a n:href=":AdminStore:Settings:vats">{_dictionary.main.VAT}</a></li>
+    <li role="presentation" class="active"><a n:href=":AdminStore:Settings:shipping">{_dictionary.main.Shipping}</a></li>
+    <li role="presentation"><a n:href=":AdminStore:Settings:payments">{_dictionary.main.Payments}</a></li>
+</ul>
+
+<h1 class="page-header">{_dictionary.main.Shipping} - {_dictionary.main.Settings}</h1>
+
+{control insertShippingForm}
+
+<table class="table table-striped">
+    <tr>
+        <th class="col-xs-1"></th>
+        <th class="col-xs-3">{_dictionary.main.Title}</th>
+        <th>{_dictionary.main.Value}</th>
+        <th>{_dictionary.main.VAT}</th>
+    </tr>
+    {foreach $shipping as $item}
+        <tr>
+            <td class="col-xs-1">
+                <a n:href="deleteShipping!, id => $item->id" onclick="return confirm('Opravdu smazat?')">
+                    <i class="fa fa-times font-red"></i>
+                </a>
+
+                <a n:href="toggleShipping!, id => $item->id">
+                    {if $item->show}
+                        <i class="fa fa-toggle-on" title="vypnout"></i>
+                    {else}
+                        <i class="fa fa-toggle-off" title="zapnout"></i>
+                    {/if}
+                </a>
+            </td>
+            <td>
+                <a n:href=":AdminStore:Settings:shippingDetail, id => $item->id">
+                    {$item->title}
+                </a></td>
+            <td>{$item->shipping} {$settings['store:currency:symbol']}</td>
+            <td>{$item->store_settings_vats->vat}%</td>
+        </tr>
+    {/foreach}
+</table>

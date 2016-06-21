@@ -1,0 +1,59 @@
+{block #titles}{$page->title}{/block}
+{block content}
+<br/>
+<ul class="nav nav-tabs">
+    <li role="presentation"><a n:href=":AdminStore:Product:default, id => $presenter->getParameter('id')">Basic</a></li>
+    <li role="presentation">
+        <a n:href=":AdminStore:Product:params, id => $presenter->getParameter('id')">{_dictionary.main.parametres|firstUpper}</a>
+    </li>
+    <li role="presentation">
+        <a n:href=":AdminStore:Product:stock, id => $presenter->getParameter('id')">{_dictionary.main.stock|firstUpper}</a>
+    </li>
+    <li role="presentation">
+        <a n:href=":AdminStore:Product:images, id => $presenter->getParameter('id')">{_dictionary.main.images|firstUpper}</a>
+    </li>
+    <li role="presentation">
+        <a n:href=":AdminStore:Product:files, id => $presenter->getParameter('id')">{_dictionary.main.Files}</a></li>
+    <li role="presentation" class="active">
+        <a n:href=":AdminStore:Product:related, id => $presenter->getParameter('id')">{_dictionary.main.RelatedProducts|firstUpper}</a>
+    </li>
+    <li class="pull-right"><a href="{$settings['site:url:base']}/{$page->slug}"
+                              target="_blank">{_dictionary.main.Preview}</a></li>
+</ul>
+<br/>
+
+<h2>Související produkty</h2>
+
+<table class="table">
+    {foreach $related as $item}
+        <tr>
+            <td class="col-xs-1">
+                <a n:href="deleteRelated!, id => $item->id, product => $page->id" class="btn" role="button"
+                                                                                       onclick="return confirm('{_admin.catalogue.deletereallymessage}')">
+                    <i class="fa fa-times font-red"></i>
+                </a>
+            <td>
+                <a n:href=":AdminStore:Product:default, id => $item->related_pages_id">{$item->related_pages->title}</a>
+            </td>
+        </tr>
+    {/foreach}
+</table>
+
+<h2>Vyberte související produkt</h2>
+
+{control searchRelatedForm}
+
+<table class="table">
+    {foreach $relatedSearch as $item}
+        {if $item->id <> $page->id && !in_array($item->id, $relatedPairs)}
+            <tr>
+                <td class="col-xs-1">
+                    <a n:href="insertRelated!, id => $item->id, page => $page->pages->id, store => $page->id"
+                            class="btn btn-success btn-xs" role="button">
+                        {_dictionary.main.Insert}
+                    </a>
+                <td>{$item->title}</td>
+            </tr>
+        {/if}
+    {/foreach}
+</table>

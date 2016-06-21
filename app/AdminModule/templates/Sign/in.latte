@@ -6,7 +6,11 @@
     <h3 n:block="title" class="panel-title">{_dictionary.main.login|firstUpper}</h3>
 </div>
 <div class="panel-body">
-
+    {foreach $flashes as $flash}
+        <br />
+        <div class="flash {$flash->type}">{$flash->message}</div>
+        <br />
+    {/foreach}
 
     {control signInForm}
 </div>

@@ -1,4 +1,17 @@
-{block #titles}User verify{/block}
+{block #titles}Aktivace účtu{/block}
 {block content}
 
-<h1>User verify</h1>
+<section class="section">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-offset-2 col-lg-8 text-center">
+                <div class="headline">
+                    <h1>Aktivace účtu</h1>
+
+                    {foreach $flashes as $flash}
+                        <div class="flash {$flash->type}">{$flash->message}</div>
+                    {/foreach}
+                </div>
+            </div>
+        </div>
+</section>

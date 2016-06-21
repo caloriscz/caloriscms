@@ -11,17 +11,20 @@ use Nette,
 class HomepagePresenter extends BasePresenter
 {
 
-    protected function startup()
+    public function renderDefault()
     {
-        parent::startup();
+        $filter = new \App\Model\Store\Filter($this->database);
+        $filter->order('sd');
+        $filter->setOptions($this->template->settings);
+        $filter->setManufacturer($this->getParameter("brand"));
+        $filter->setUser($this->getParameter("user"));
+        $filter->setText($this->getParameter("src"));
+        $filter->setSize($this->getParameter("size"));
+        $filter->setPrice($this->getParameter("priceFrom"), $this->getParameter("priceTo"));
+        $filter->setParametres($this->getParameters());
 
-        if (!$this->user->isLoggedIn()) {
-            /* if ($this->user->logoutReason === Nette\Security\IUserStorage::INACTIVITY) {
-              $this->flashMessage('Byli jste odhlášeni');
-              }
-
-              $this->redirect('Sign:in', array('backlink' => $this->storeRequest())); */
-        }
+        $this->template->store = $filter->assemble()->limit(4, 0);
+        $this->template->snippets = $this->database->table("snippets")->where("pages_id", 1)->fetchPairs('id', 'content');
     }
 
 }

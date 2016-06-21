@@ -1,0 +1,18 @@
+{foreach $images as $item}
+    <div class="col-sm-6 col-md-3 col-lg-2">
+        <div class="thumbnail" style="height: 250px;">
+            <a href="/media/{$item->pages_id}/{$item->name}">
+                <img src="/media/{$item->pages_id}/tn/{$item->name}" alt="{$item->name}" style="max-height: 160px;">
+            </a>
+            <div class="caption">
+                <p>
+                    <small>{$item->name|truncate:28}</small>
+                </p>
+                <p>{$item->description}</p>
+                <p><a href="{link delete, id => $catalogue->id, name => $item->id}" class="btn" role="button"
+                      onclick="return confirm('Opravdu smazat?')">
+                        <i class="fa fa-times font-red"></i></a>
+            </div>
+        </div>
+    </div>
+{/foreach}

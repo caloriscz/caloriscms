@@ -1,0 +1,32 @@
+{block #titles}Zajímavé odkazy{/block}
+{block content}
+{var $chosen = $presenter->getParameter('id')}
+<div class="container heading">
+    <h1>Zajímavé odkazy</h1>
+</div>
+
+<div class="container white padded-top padded-btm">
+    <div class="col-md-8">
+        {foreach $links as $odkaz}
+            {var $x = preg_match($youtube, $odkaz->url, $matches)}
+            {if $matches}
+                {var $videoId = explode('?v=', $odkaz->url)}
+                {var $videoId = $videoId[1]}
+                <div class="col-xs-12 col-md-4">
+                    <div class="embed-responsive embed-responsive-16by9">
+                        <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/{$videoId}" frameborder="0" allowfullscreen></iframe>
+                    </div>
+                </div>
+            {else}
+                <p>{if $odkaz->url}<a href="{$odkaz->url}">{/if}{$odkaz->title}{if $odkaz->url}</a>{/if}</p>
+
+                {if $odkaz->description}<p>{$odkaz->description|noescape}</p>{/if}
+            {/if}
+
+
+        {/foreach}
+    </div>
+    <div class="col-md-4">
+        {control sideCat, $settings['categories:id:link']}
+    </div>
+</div>

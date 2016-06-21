@@ -1,0 +1,32 @@
+{block #titles}Store - {_dictionary.main.VAT} {_dictionary.main.Settings}{/block}
+{block content}
+<br />
+<ul class="nav nav-tabs">
+    <li role="presentation"><a n:href=":AdminStore:Settings:default">Basic</a></li>
+    <li role="presentation" class="active"><a n:href=":AdminStore:Settings:vats">{_dictionary.main.VAT}</a></li>
+    <li role="presentation"><a n:href=":AdminStore:Settings:shipping">{_dictionary.main.Shipping}</a></li>
+    <li role="presentation"><a n:href=":AdminStore:Settings:payments">{_dictionary.main.Payments}</a></li>
+</ul>
+
+<h1 class="page-header">{_dictionary.main.VAT} - {_dictionary.main.Settings}</h1>
+
+{control insertVatForm}
+
+<table class="table table-striped">
+    <tr>
+        <th class="col-xs-1"></th>
+        <th class="col-xs-3">{_dictionary.main.VAT}</th>
+        <th>{_dictionary.main.Value}</th>
+    </tr>
+    {foreach $vats as $item}
+        <tr>
+            <td class="col-xs-1">
+                <a n:href="deleteVat!, id => $item->id" onclick="return confirm('Opravdu smazat?')">
+                    <i class="fa fa-times font-red"></i>
+                </a>
+            </td>
+            <td>{$item->title}</td>
+            <td>{$item->vat}</td>
+        </tr>
+    {/foreach}
+</table>

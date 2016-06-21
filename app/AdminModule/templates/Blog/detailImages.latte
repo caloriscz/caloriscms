@@ -1,0 +1,31 @@
+{block #titles}{$catalogue->title} - {_dictionary.main.images|firstUpper}{/block}
+{block content}
+
+<br/>
+
+<ul class="nav nav-tabs">
+    <li role="presentation"><a n:href=":Admin:Blog:detail, id => $presenter->getParameter('id')">Příspěvek</a></li>
+    <li role="presentation" class="active">
+        <a n:href=":Admin:Blog:detailImages, id => $presenter->getParameter('id')">{_dictionary.main.images|firstUpper}</a>
+    </li>
+    <li role="presentation">
+        <a n:href=":Admin:Blog:detailFiles, id => $presenter->getParameter('id')">{_dictionary.main.Files}</a></li>
+    <li role="presentation"><a n:href=":Admin:Blog:detailRelated, id => $presenter->getParameter('id')">Související
+            příspěvky</a></li>
+    <li class="pull-right"><a n:href=":Front:Blog:detail, id => $catalogue->slug" class="btn btn-info"
+                target="_blank">{_dictionary.main.Preview}</a></li>
+</ul>
+
+<h1 class="page-header">{_dictionary.main.Contacts} - {$page->title}</h1>
+
+{control dropZone, 1}
+
+{control imageUpload, 1}
+
+<h2>{_admin.catalogue.ProductGallery}</h2>
+
+<div class="row">
+    <div class="col-md-12">
+        {control imageBrowser}
+    </div>
+</div>

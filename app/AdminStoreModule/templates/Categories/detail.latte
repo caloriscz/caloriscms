@@ -1,0 +1,30 @@
+{block #titles}{_dictionary.main.categories|firstUpper}{/block}
+{block content}
+<br>
+<ul class="nav nav-tabs">
+    <li role="presentation" class="active">
+        <a n:href=":AdminStore:Product:default, id => $presenter->getParameter('id')">Basic</a>
+    </li>
+    <li class="pull-right">
+        <a href="{$settings['site:url:base']}/{$page->pages->slug}"
+           target="_blank">{_dictionary.main.Preview}</a></li>
+</ul>
+
+<h1 class="page-header">{$page->title}</h1>
+
+<div class="row">
+    <div class="col-lg-9">
+        {control documentEditor}
+    </div>
+    <div class="col-lg-3">
+        {control pageSettings}
+
+        {control updateCategoryForm}
+    </div>
+</div>
+
+<em>Cesta: {$baseUri}/{$page->slug}</em>
+
+{control dropZone, 1}
+
+{control imageBrowser}

@@ -1,0 +1,25 @@
+{var $stock = $page->related('stock', 'pages_id')}
+{var $store = $database->table('store')->where('pages_id', $page->id)->fetch()}
+
+<p class="price">{number_format($store->price, 2, ',', ' ')} {$settings['store:currency:symbol']}</p>
+<table class="table">
+
+
+    {foreach $stock as $item}
+        <tr>
+            <td class="col-xs-2 text-right">
+                <p class="price">{$item->title}</p>
+            </td>
+            <td class="col-xs-2 text-right">
+                {form addToCartForm value => '1'}
+                {input amount value => 1, type => 'number', min => '1'}
+                {input id 'value' => $item->id}
+            </td>
+            <td class="col-xs-1">
+                {input stock 'value' => $item->id}
+                {input submitm}
+                {/form}
+            </td>
+        </tr>
+    {/foreach}
+</table>

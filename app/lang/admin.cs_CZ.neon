@@ -15,6 +15,11 @@ catalogue:
     ListOfBrands: "Seznam značek"
     ProductCatalogue: "Katalog výrobků"
     ProductGallery: "Galerie výrobku"
+categories:
+    NothingRelated: "Nemá propojenou kategorii"
+    PageSelectedManually: "Stránka zvolena manuálně"
+    RelatedCategory: "Navazující kategorie"
+    SelectPage: "Vybrat stránku"
 pages:
     name: "Název"
 files:

@@ -1,5 +1,7 @@
 cart:
     add: "Add to cart"
+    pricePerPiece: "Cena za kus"
+    priceWithVAT: "Cena s DPH"
 forms:
     TheseItemsAreRequired: "these items are required"
 order:

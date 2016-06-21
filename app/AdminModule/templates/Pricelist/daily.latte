@@ -1,0 +1,32 @@
+{block #titles}{_dictionary.main.Pricelist}{/block}
+{block content}
+
+<br />
+    {control insertDailyForm}
+
+<div class="row-fluid">
+    <div class="col-md-offset-1 col-md-10">
+        <h1>{_dictionary.main.Pricelist}</h1>
+        {var $category = 0}
+        <table class="table">
+            {foreach $menu as $item}
+
+                {if $category != $item->categories_id}
+                    <tr>
+                        <td colspan="3">
+                            <strong>{$item->categories->title|nl2br}</strong>
+                        </td>
+                    </tr>
+                {else}
+                {/if}
+
+                <tr>
+                    <td><a n:href="deleteDaily!, id => $item->id, day => $item->pricelist_dates_id" onclick="return confirm('Opravdu smazat?')"><i class="fa fa-times font-red"></i></a></td>
+                    <td>{$item->amenu|noescape}</td>
+                    <td class="text-right">{$item->price},- Kč</td>
+                </tr>
+                {var $category = $item->categories_id}
+            {/foreach}
+        </table>
+    </div>
+</div>

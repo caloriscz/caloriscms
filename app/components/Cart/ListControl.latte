@@ -1,0 +1,81 @@
+{if $cart->count() > 0}
+    <div class="cart-list">
+        {foreach $cartItems as $item}
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="col-xs-2">
+                        {var $page = $item->pages}
+                        {var $store = $item->pages->related('store', 'pages_id')->fetch()}
+                        {var $image = $page->related('media', 'pages_id')->limit(1)}
+                        {var $imageInfo = $image->fetch()}
+                        {if $image->count() > 0}
+                            <span class="image">
+                                <img src="/media/{$page->id}/tn/{$imageInfo->name}" alt="{$imageInfo->name}" class="img-responsive" />
+                            </span>
+                        {/if}
+                    </div>
+                    <div class="col-xs-3">
+                        <span class="title">
+                            <a href="/{$item->pages->slug}">{$item->pages->title}</a>
+                        </span>
+                        {if $item->pages->title != $item->stock->title}
+                            <span class="title-stock">
+                                <a href="/{$item->pages->slug}">{$item->stock->title}</a>
+                            </span>
+                        {/if}
+                    </div>
+                    <div class="col-xs-3">
+                        {form changeAmountCartForm value => '1'}
+                            {input amount value => $item->amount} {input id 'value' => $item->id}{input submitm}
+
+                            <a n:href="delete! id => $item->id"><i class="fa fa-trash fa-2x"></i></a>
+                        {/form}
+                    </div>
+                    <div class="col-xs-2 text-right">
+                        <span class="amount">
+                            {$item->amount}
+                        </span>
+                        <span class="price">{round($item->store_settings_vats->vat/(100+$item->store_settings_vats->vat),4)}
+                            {if $settings['store:order:isVatIncluded']}
+                                {var $vat = round($store->price * round($item->store_settings_vats->vat/(100+$item->store_settings_vats->vat),4), 0)}
+                                {$store->price - $vat} {$settings['store:currency:symbol']}
+                            {else}
+                                {var $vat = $store->price * ($item->store_settings_vats->vat/100)}
+                                {$store->price} {$settings['store:currency:symbol']}
+                            {/if}
+                        </span>
+                        <span class="vat-price">{number_format($vat, 0, ',', ' ')} {$settings['store:currency:symbol']}</span>
+                        <span class="vat">{$item->store_settings_vats->vat}%</span>
+                        <span class="price-vat-item">
+                            {if $settings['store:order:isVatIncluded']}
+                                {number_format($item->price, 0, ',', ' ')} {$settings['store:currency:symbol']}
+                            {else}
+                                {number_format($item->price * (1+($item->store_settings_vats->vat/100)), 0, ',', ' ')} {$settings['store:currency:symbol']}
+                            {/if}
+                        </span>
+                    </div>
+                    <div class="col-xs-2 text-right">
+                        <span class="price-vat-item-total">
+                            {if $settings['store:order:isVatIncluded']}
+                                {number_format($store->price * $item->amount, 0)} {$settings['store:currency:symbol']}
+                            {else}
+                                {number_format(($store->price * (1+($store->store_settings_vats->vat/100))) * $item->amount, 0)} {$settings['store:currency:symbol']}
+                            {/if}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        {/foreach}
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="col-xs-4"><strong>{_dictionary.main.Total}</strong></div>
+                <div class="col-xs-4 text-right">{$cartItems->sum('amount')} kusů</div>
+                <div class="col-xs-2"></div>
+                <div class="col-xs-2 text-right"><strong>{number_format($cartTotal, 0)} {$settings['store:currency:symbol']}</strong></div>
+            </div>
+        </div>
+    </div>
+{else}
+    <br />
+    <p class="text-primary"><big>Do košíku jste zatím nevložili žádný výrobek</big></p>
+{/if}

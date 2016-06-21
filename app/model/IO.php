@@ -21,7 +21,7 @@ class IO
     /**
      *  Uploads file
      */
-    public static function upload($pathDirectory, $fileName, $chmod = 0777)
+    public static function upload($pathDirectory, $fileName, $chmod = 0644)
     {
         $path = $pathDirectory . '/' . $fileName;
 
@@ -167,6 +167,36 @@ class IO
             }
         }
         return $count_size;
+    }
+
+    /**
+     * Am I image or what?
+     * @param type $path
+     * @return boolean
+     */
+    public static function isImage($path)
+    {
+        $finfo = finfo_open(FILEINFO_MIME_TYPE);
+        $type = finfo_file($finfo, $path);
+
+        $valid_image_type = array();
+        $valid_image_type['image/png'] = '';
+        $valid_image_type['image/jpg'] = '';
+        $valid_image_type['image/jpeg'] = '';
+        //$valid_image_type['image/jpe'] = '';
+        $valid_image_type['image/gif'] = '';
+        //$valid_image_type['image/tif'] = '';
+        //$valid_image_type['image/tiff'] = '';
+        //$valid_image_type['image/svg'] = '';
+        //$valid_image_type['image/ico'] = '';
+        //$valid_image_type['image/icon'] = '';
+        //$valid_image_type['image/x-icon'] = '';
+
+        if (isset($valid_image_type[$type])) {
+            return TRUE;
+        } else {
+            return FALSE;
+        }
     }
 
 }

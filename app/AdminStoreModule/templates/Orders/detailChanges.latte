@@ -1,0 +1,36 @@
+{block #titles}{$order->oid}{/block}
+{block content}
+
+<br />
+<ul class="nav nav-tabs">
+    <li role="presentation"><a n:href=":AdminStore:Orders:detail, id => $presenter->getParameter('id')">Souhrn</a></li>
+    <li role="presentation"><a n:href=":AdminStore:Orders:detailAddresses, id => $presenter->getParameter('id')">Adresy</a></li>
+    <li role="presentation" class="active"><a n:href=":AdminStore:Orders:detailChanges, id => $presenter->getParameter('id')">Změny</a></li>
+        <li role="presentation"><a n:href=":AdminStore:Orders:detailItems, id => $presenter->getParameter('id')">Položky</a></li>
+</ul>
+
+
+<h1 class="page-header">{$order->oid}</h1>
+
+<div class="row">
+    <div class="col-lg-6">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                {_dictionary.main.message|firstUpper}
+            </div>
+            <div class="panel-body">
+                {control editForm}
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                {_dictionary.main.State}
+            </div>
+            <div class="panel-body">
+                {control changeStateForm}
+            </div>
+        </div>
+    </div>
+</div>

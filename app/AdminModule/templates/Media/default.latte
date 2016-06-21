@@ -1,0 +1,154 @@
+{block #titles}{_dictionary.main.Media}{/block}
+{block content}
+
+<h1 class="page-header">{_dictionary.main.Media}</h1>
+
+{if count($breadcrumbs) > 0}
+    <ol class="breadcrumb">
+        {foreach $breadcrumbs as $crumbId => $crumbValue}
+            <li><a n:href=":Admin:Media:default, id => $crumbId, type => $pageId">{$crumbValue}</a></li>
+        {/foreach}
+    </ol>
+{/if}
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="col-xs-6 col-md-3 col-lg-2">
+            <div class="thumbnail" style="height: 260px;">
+                <div style="height: 180px; padding-top: 60px;" class="text-center">
+                    <a href="" type="button" data-toggle="modal" data-target="#myModal">
+                        <i class="fa fa-envelope-square fa-5x"></i>
+                    </a>
+                </div>
+                <div class="caption text-center">
+                    <div>
+                        <a href="" type="button" data-toggle="modal" data-target="#myModal"><span
+                                    style="font-weight: bold; font-size: 1.25em;">+Přidat nové album</span></a>
+                    </div>
+                    <div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        {foreach $media as $item}
+            <div class="col-xs-6 col-md-3 col-lg-2">
+                <div class="thumbnail" style="height: 260px;">
+                    <div style="height: 180px; padding-top: 60px;" class="text-center">
+                        <a n:href=":Admin:Media:default, id => $item->id, type => $pageId">
+                            <i class="fa fa-envelope fa-5x"></i>
+                            <img src="" alt="{$item->title}"
+                                 class="hidden img-responsive"
+                                 style="max-height: 150px;"/>
+                        </a>
+                    </div>
+                    <div class="caption text-center">
+                        <div>
+                            <a n:href=":Admin:Media:default, id => $item->id, type => $pageId">
+                                <span style="font-weight: bold; font-size: 1.25em;">{$item->title}</span>
+                            </a>
+                        </div>
+                        <div style="margin-top: 5px;">
+                            <a n:href="delete!, id => $item->id, type => $pageId" onclick="return confirm('Opravdu smazat?')">
+                                <i class="fa fa-times font-red"></i>
+                            </a>
+                            <a n:href=":Admin:Media:detail id => $item->id, type => $pageId" class="btn btn-default btn-xs"
+                                                                           role="button">{_dictionary.main.Edit}</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {/foreach}
+    </div>
+</div>
+
+
+<div class="row">
+    {control dropUploadForm}
+    <div class="container">
+        <div class="btn-group pull-right" role="group">
+            <a n:href="toggle! mediatype => 'image', type => $presenter->getParameter('type')"><i class="fa fa-picture-o fa-2x"></i></a>
+            <a n:href="toggle! mediatype => 'list', type => $presenter->getParameter('type')"><i class="fa fa-list-ol fa-2x"></i></a>
+        </div>
+    </div>
+    <br/>
+
+    {if $mediatype == 'image'}
+        <div class="row">
+            {foreach $documents as $item}
+                <div class="col-xs-6 col-md-3">
+                    <div class="thumbnail" style="height: 260px;">
+                        <div style="height: 180px;">
+                            <a href="{$baseUri}/media/{$idN}/{$item->name}" class="gallery-lightbox">
+                                <img src="{$baseUri}/media/{$idN}/{$item->name}" alt="{$item->name}"
+                                     class="img-responsive" style="max-height: 150px;"/>
+                            </a>
+                        </div>
+                        <div class="caption text-center">
+                            <div>
+                                <small>{$item->name}</small>
+                            </div>
+                            <div>
+                                <a n:href="delete!, id => $item->id, type => $pageId" onclick="return confirm('Opravdu smazat?')">
+                                    <i class="fa fa-times font-red"></i>
+                                </a>
+                                <a n:href=":Admin:Media:image id => $item->id" class="btn btn-default btn-xs"
+                                                                               role="button">{_dictionary.main.Edit}</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {/foreach}
+        </div>
+    {else}
+        <div class="table-responsive">
+            <table class="table">
+                {foreach $documents as $item}
+                    <tr>
+                        <td class="col-xs-1">
+                            <a n:href="delete!, id => $item->id, type => $pageId" onclick="return confirm('Opravdu smazat?')">
+                                <i class="fa fa-times font-red"></i>
+                            </a>
+                            <a n:href=":Admin:Media:image id => $item->id, type => $pageId" class="btn btn-default btn-xs"
+                                                                           role="button">{_dictionary.main.Edit}</a>
+                        </td>
+                        <td>
+
+                            <a href="{$baseUri}/media/{$idN}/{$item->name}">{$item->name}</a>
+                            {if file_exists($appDir.'/media/'.$idN.'/tn/'.$item->name)}
+                                (<a href="{$baseUri}/media/{$idN}/tn/{$item->name}">náhled</a>)
+                            {/if}
+                        </td>
+                    </tr>
+                    {var $id = $item->id}
+                {/foreach}
+            </table>
+        </div>
+    {/if}
+
+    <div class="text-center">
+        {control paging, $args, $paginator}
+    </div>
+</div>
+</div>
+
+<!-- Modal -->
+<div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Modal Header</h4>
+            </div>
+            <div class="modal-body">
+                {control insertForm}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+
+    </div>
+</div>

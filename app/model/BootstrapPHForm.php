@@ -21,6 +21,10 @@ class BootstrapPHForm extends \Nette\Application\UI\Form
         $renderer->wrappers['control']['.select'] = "form-control";
         $renderer->wrappers['control']['.password'] = "form-control";
         $renderer->wrappers['control']['.email'] = "form-control";
+        $renderer->wrappers['error'] = array(
+            'container' => 'div class=errors',
+            'item' => NULL,
+        );
 
         $form = $this->getForm();
 

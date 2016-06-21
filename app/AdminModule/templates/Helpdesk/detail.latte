@@ -1,0 +1,42 @@
+{block #titles}Helpdesk{/block}
+{block content}
+
+<h1 class="page-header"><i class="fa fa-life-ring"></i> Helpdesk</h1>
+
+<div class="row">
+    <div class="col-lg-8">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+
+                {$message->subject} <a n:href="delete!, id => $message->id"
+                        onclick="return confirm('Opravdu smazat?')"
+                        class="btn btn-danger btn-xs pull-right">{_dictionary.main.Delete}</a>
+            </div>
+            <div class="panel-body">
+                <textarea name="" id="" cols="30" rows="10"
+                          class="wysiwyg-disabled">{$message->message|noescape}
+                </textarea>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <table class="table table-striped">
+            <tr>
+                <td class="col-xs-2">{_dictionary.main.date|firstUpper}</td>
+                <td>{$message->date_created|date:'j. n. H:i'}</td>
+            </tr>
+            <tr>
+                <td>{_dictionary.main.Phone}</td>
+                <td>{$message->phone}</td>
+            </tr>
+            <tr>
+                <td>{_dictionary.main.Email}</td>
+                <td>{$message->email}</td>
+            </tr>
+            <tr>
+                <td>{_dictionary.main.IPAddress}</td>
+                <td>{$message->ipaddress}</td>
+            </tr>
+        </table>
+    </div>
+</div>

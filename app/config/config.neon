@@ -13,23 +13,42 @@ php:
 
 nette:
 	application:
-		errorPresenter: Error
+		errorPresenter: Front:Error
 		mapping:
 			*: App\*Module\Presenters\*Presenter
 
 	session:
 		expiration: 14 days
+		autostart: true
+		savePath: "%tempDir%/sessions"
+	mailer:
+		smtp: true
+		host: ''
+		username: ''
+		password: ''
+		secure: 'tls'
+		port: 587
+	routing:
+		debugger: true
+	container:
+		accessors: true
 
 
 services:
 	- App\Model\Authenticator
+	- App\Model\Category
+	- BaseForm
 	- App\RouterFactory
+	- Model\SlugManager
 	router: @App\RouterFactory::createRouter
 
 extensions:
     translation: Kdyby\Translation\DI\TranslationExtension
+    mobileDetect: IPub\MobileDetect\DI\MobileDetectExtension
 
 translation:
     default: cs
     fallback: [cs_CZ, cs]
     whitelist: [cs, en]
+    resolvers:
+        header: off

@@ -1,0 +1,33 @@
+{block #titles}{_messages.navigation.menu}{/block}
+{block content}
+
+<div class="faucet">
+    <img src="{$baseUri}/images/pipa.png" alt="pípa" class="img-responsive" />
+</div>
+
+<div class="row-fluid">
+    <div class="col-md-offset-1 col-md-10">
+        <h1>{_messages.navigation.dailymenu}</h1>
+        <br />
+        <p class="whatIsDay">{$whatIsDay|dnove} {$whatIsDate}</p>
+        {var $category = 0}
+        <table class="table" id="dailyMenuTable">
+            {foreach $menu as $item}
+
+                {if $category != $item->pricelist->categories_id}
+                    <tr>
+                        <td colspan="2" class="typeDailyMenu">
+                            {$item->categories->title}:
+                        </td>
+                    </tr>
+                {else}
+                {/if}
+                <tr>
+                    <td class="dailyMenuText dotLeaders"><div><span>{$item->amenu|noescape}</span></div></td>
+                    <td class="dailyMenuText text-right" style="vertical-align: bottom; width: 65px; padding-left: 0;">{$item->price},- {$settings['store:currency:symbol']}</td>
+                </tr>
+                {var $category = $item->categories_id}
+            {/foreach}
+        </table>
+    </div>
+</div>

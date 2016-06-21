@@ -1,0 +1,9 @@
+{if $settings['store:enabled'] == 1}
+    <a href="{plink ':Front:Cart:default'}" data-toggle="dropdown" class="dropdown-toggle cart-box">
+        <span class="cart-icon">
+            <i class="fa fa-cart-plus fa-2x" style="color: white;"></i>
+        </span>
+        <span class="price">{$cartSum}</span>
+        <span class="currency">{number_format($cartTotal, 0, ',', ' ')} {$settings['store:currency:symbol']}</span>
+    </a>
+{/if}

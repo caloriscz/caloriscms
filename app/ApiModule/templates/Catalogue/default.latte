@@ -1,0 +1,16 @@
+[
+{foreach $products as $item}
+    {var $image = $item->related('store_images', 'store_id')->limit(1)}
+    {if $image->count() > 0}
+        {var $imagePath = '/images/catalogue/products/' . $item->id . '/' . $image->fetch()->filename}
+    {else}
+        {var $imagePath = ''}
+    {/if}
+    {
+    "price": "{$item->price} {$settings['store:currency:symbol']}",
+    "value": "{$item->title}",
+    "slug": "{$item->slug->title}",
+    "image": "{$imagePath}"
+    }{sep},{/sep}
+{/foreach}
+]

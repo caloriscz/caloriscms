@@ -1,0 +1,22 @@
+{block #titles}{$album->title}{/block}
+{block content}
+{var $id = $presenter->getParameter('id')}
+<div class="container heading">
+    <h1>{$album->title}</h1>
+</div>
+
+<div class="container white padded-top padded-btm">
+    <div class="col-md-12">
+        {foreach $gallery as $item}
+            <div class="col-sm-6 col-md-3" style="height: 200px;">
+                <div class="thumbnail">
+                    <div style="text-align: center;">
+                        <a href="{$baseUri}/media/{$item->pages_id}/{$item->name}" class="gallery">
+                            <img src="{$baseUri}/media/{$item->pages_id}/tn/tn_{$item->name}" class="img-responsive" style="max-height: 130px;" />
+                        </a>
+                    </div>
+                </div>
+            </div>
+        {/foreach}
+    </div>
+</div>

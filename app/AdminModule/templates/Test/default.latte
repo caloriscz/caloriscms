@@ -1,0 +1,26 @@
+{block #titles}{_dictionary.main.Links}{/block}
+{block content}
+
+<h1 class="page-header">{_dictionary.main.Links}</h1>
+
+{foreach $flashes as $flash}
+    <br />
+    <div class="flash {$flash->type}">{$flash->message}</div>
+    <br />
+{/foreach}
+<div class="row">
+
+    {var $test = 5}
+    {snippet form}
+        {form testForm}
+            {input test, value => $test}<br />
+            {input submitm}
+
+        {/form}
+    {/snippet}
+
+    {snippet header}
+        <h1>Hello .... {$articles}</h1>
+    {/snippet}
+
+</div>

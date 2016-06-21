@@ -6,82 +6,264 @@ use Nette,
     App\Model;
 
 /**
- * Homepage presenter.
+ * Pages presenter.
  */
 class PagesPresenter extends BasePresenter
 {
-
-    protected function startup()
+    public function __construct(\Nette\Database\Context $database)
     {
-        parent::startup();
-
-        if (!$this->user->isLoggedIn()) {
-            if ($this->user->logoutReason === Nette\Security\IUserStorage::INACTIVITY) {
-                $this->flashMessage('You have been signed out due to inactivity. Please sign in again.');
-            }
-            $this->redirect('Sign:in', array('backlink' => $this->storeRequest()));
-        }
+        $this->database = $database;
     }
 
     /**
      * Edit page content
      */
-    function createComponentEditForm($lang)
+    function createComponentEditSnippetForm()
     {
-        $pages = $this->database->table("pages")->where(array("title" => $this->getParameter("id")))->fetch();
-        $form = new \Nette\Forms\BootstrapPHForm;
-        $form->getElementPrototype()->class = "form-horizontal";
-        $form->getElementPrototype()->role = 'form';
-        $form->getElementPrototype()->autocomplete = 'off';
-        //$form->getElementPrototype()->onsubmit = 'return false;';
-        $form->getElementPrototype()->id = 'rpp';
-        $form->getElementPrototype()->class = 'form';
+        $form = $this->baseFormFactory->createPH();
 
         $form->addHidden("id");
-        $form->addHidden("title");
-        $form->addTextArea("body")
-                ->setAttribute("class", "form-control")
-                ->setHtmlId('wysiwyg');
+        $form->addHidden("pages_id");
+        $form->addTextArea("content")
+            ->setAttribute("class", "form-control")
+            ->setAttribute("height", "250px")
+            ->setHtmlId('wysiwyg-sm');
         $form->setDefaults(array(
-            "id" => $pages->id,
-            "title" => $pages->title,
-            "lang" => 'cs',
-            "body" => $pages->body,
+            "pages_id" => $this->getParameter("id"),
         ));
 
-        $form->onSuccess[] = $this->editFormSucceeded;
-        $form->addSubmit("submit", "Uložit")
-                ->setHtmlId('formxins');
+        $form->onSuccess[] = $this->editSnippetFormSucceeded;
+        $form->addSubmit("submitm", "dictionary.main.Save")
+            ->setAttribute("class", "btn btn-success")
+            ->setHtmlId('formxins');
 
         return $form;
     }
 
-    function editFormSucceeded(\Nette\Forms\BootstrapPHForm $form)
+    function editSnippetFormSucceeded(\Nette\Forms\BootstrapPHForm $form)
     {
-        $this->database->table("pages")->where(array("id" => $form->values->id))
-                ->update(array(
-                    'body' . $form->values->lang => $form->values->body,
+        $content = $form->getHttpData($form::DATA_TEXT, 'content');
+
+        $this->database->table("snippets")->get($form->values->id)->update(array(
+            "content" => $content,
         ));
-        
-        if ($form->values->lang == '_en') {
-            $hash = '#en';
-        } elseif ($form->values->lang == '_de') {
-            $hash = '#de';
-        } elseif ($form->values->lang == '_ru') {
-            $hash = '#ru';
+
+        $this->redirect(":Admin:Pages:snippets", array("id" => $form->values->pages_id));
+    }
+
+    /**
+     * Edit page content
+     */
+    function createComponentInsertForm()
+    {
+        $form = $this->baseFormFactory->createUI();
+        $form->addHidden("id");
+        $form->addText("title", "dictionary.main.Title");
+
+        $form->setDefaults(array(
+            "section" => $this->getParameter('id'),
+        ));
+
+        $form->addSubmit("submit", "dictionary.main.Create")
+            ->setHtmlId('formxins');
+
+        $form->onSuccess[] = $this->insertFormSucceeded;
+
+        return $form;
+    }
+
+    function insertFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
+    {
+        $doc = new Model\Document($this->database);
+        $doc->setType(1);
+        $doc->setTitle($form->values->title);
+        $page = $doc->create($this->user->getId());
+        Model\IO::directoryMake(substr(APP_DIR, 0, -4) . '/www/media/' . $page, 0755);
+
+        $this->redirect(":Admin:Pages:detail", array("id" => $page));
+    }
+
+    /**
+     * Search related
+     */
+    protected function createComponentSearchRelatedForm()
+    {
+        $form = $this->baseFormFactory->createUI();
+        $form->addHidden('id');
+        $form->addText('src', 'dictionary.main.Title');
+        $form->addSubmit('submitm', 'dictionary.main.Insert');
+
+        $form->setDefaults(array(
+            "id" => $this->getParameter("id"),
+        ));
+
+        $form->onSuccess[] = $this->searchRelatedFormSucceeded;
+        return $form;
+    }
+
+    public function searchRelatedFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
+    {
+        $this->redirect(":Admin:Pages:detailRelated", array(
+            "id" => $form->values->id,
+            "src" => $form->values->src,
+        ));
+    }
+
+    /**
+     * Edit page content
+     */
+    function createComponentInsertSnippetForm()
+    {
+        $form = $this->baseFormFactory->createUI();
+        $form->addHidden("id")
+            ->setAttribute("class", "form-control");
+        $form->addText("title", "dictionary.main.Title");
+
+        $form->setDefaults(array(
+            "id" => $this->getParameter('id'),
+        ));
+
+        $form->addSubmit("submit", "dictionary.main.Create")
+            ->setHtmlId('formxins');
+
+        $form->onSuccess[] = $this->insertSnippetFormSucceeded;
+
+        return $form;
+    }
+
+    function insertSnippetFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
+    {
+        $this->database->table("snippets")->insert(array(
+            "keyword" => $form->values->title,
+            "pages_id" => $form->values->id,
+        ));
+
+        $this->redirect(":Admin:Pages:snippets", array("id" => $form->values->id));
+    }
+
+    function handleChangeState($id, $public)
+    {
+        if ($public == 0) {
+            $idState = 1;
+        } else {
+            $idState = 0;
         }
 
-        $this->redirect(":Admin:Pages:detail" . $hash, array("id" => $form->values->title));
+        $this->database->table("pages")->get($id)
+            ->update(array(
+                "public" => $idState,
+            ));
+
+        $this->redirect(":Admin:Pages:default", array("id" => null));
+    }
+
+    function handleDeleteRelated($id)
+    {
+        $this->database->table("pages_related")->get($id)->delete();
+        $this->redirect(":Admin:Pages:detailRelated", array("id" => $this->getParameter("item")));
+    }
+
+    /**
+     * Delete image
+     */
+    function handleDeleteImage($id)
+    {
+        $this->database->table("media")->get($id)->delete();
+
+        \App\Model\IO::remove(APP_DIR . '/media/' . $id . '/' . $this->getParameter("name"));
+        \App\Model\IO::remove(APP_DIR . '/media/' . $id . '/tn/' . $this->getParameter("name"));
+
+        $this->redirect(":Admin:Pages:detailImages", array("id" => $this->getParameter("name"),));
+    }
+
+    /**
+     * Delete file
+     */
+    function handleDeleteFile($id)
+    {
+        $this->database->table("media")->get($id)->delete();
+
+        \App\Model\IO::remove(APP_DIR . '/media/' . $id . '/' . $this->getParameter("name"));
+
+        $this->redirect(":Admin:Pages:detailFiles", array("id" => $this->getParameter("name"),));
+    }
+
+    function handleInsertRelated($id)
+    {
+        $this->database->table("pages_related")->insert(array(
+            "pages_id" => $this->getParameter("item"),
+            "related_pages_id" => $id,
+        ));
+        $this->redirect(":Admin:Pages:detailRelated", array("id" => $this->getParameter("item")));
+    }
+
+    /**
+     * Delete page
+     */
+    function handleDelete($id)
+    {
+        $doc = new Model\Document($this->database);
+        $doc->delete($id);
+        Model\IO::removeDirectory(APP_DIR . '/media/' . $id);
+
+        $this->redirect(":Admin:Pages:default", array("id" => null));
+    }
+
+    /**
+     * Delete snippet
+     */
+    function handleDeleteSnippet($id)
+    {
+        $this->database->table("snippets")->get($id)->delete();
+
+        $this->redirect(":Admin:Pages:snippets", array("id" => $this->getParameter("page")));
     }
 
     public function renderDefault()
     {
-        $this->template->pages = $this->database->table("pages")->order("title");
+        $this->template->pages = $this->database->table("pages")->where(array("pages_types_id" => 1))->order("title");
     }
 
     public function renderDetail()
     {
-        $this->template->pages = $this->database->table("pages")->where(array("title" => $this->getParameter("id")))->fetch();
+        $this->template->pages = $this->database->table("pages")->get($this->getParameter("id"));
+    }
+
+    public function renderSettings()
+    {
+        $this->template->pages = $this->database->table("pages")->get($this->getParameter("id"));
+    }
+
+    public function renderDetailImages()
+    {
+        $this->template->catalogue = $this->database->table("pages")->get($this->getParameter("id"));
+        $this->template->images = $this->database->table("media")
+            ->where(array("pages_id" => $this->getParameter("id"), "file_type" => 1));
+    }
+
+    public function renderDetailFiles()
+    {
+        $this->template->catalogue = $this->database->table("pages")->get($this->getParameter("id"));
+        $this->template->files = $this->database->table("media")
+            ->where(array("pages_id" => $this->getParameter("id"), "file_type" => 0));
+    }
+
+    public function renderSnippets()
+    {
+        $this->template->catalogue = $this->database->table("pages")->get($this->getParameter("id"));
+        $this->template->snippets = $this->database->table("snippets")
+            ->where(array("pages_id" => $this->getParameter("id")));
+    }
+
+    public function renderDetailRelated()
+    {
+        $src = $this->getParameter("src");
+
+        $this->template->relatedSearch = $this->database->table("pages")
+            ->where(array("title LIKE ?" => '%' . $src . '%'))->limit(20);
+        $this->template->related = $this->database->table("pages_related")
+            ->where(array("pages_id" => $this->getParameter("id")));
+        $this->template->catalogue = $this->database->table("pages")->get($this->getParameter("id"));
     }
 
 }

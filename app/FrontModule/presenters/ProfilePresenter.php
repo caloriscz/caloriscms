@@ -2,6 +2,8 @@
 
 namespace App\FrontModule\Presenters;
 
+use App\Model\Document;
+
 class ProfilePresenter extends \App\FrontModule\Presenters\BasePresenter
 {
 
@@ -23,11 +25,9 @@ class ProfilePresenter extends \App\FrontModule\Presenters\BasePresenter
      */
     function createComponentChangePortraitForm()
     {
-        $form = new \Nette\Forms\BootstrapUIForm;
-        $form->getElementPrototype()->class = "form-horizontal";
-        $form->getElementPrototype()->role = 'form';
+        $form = $this->baseFormFactory->createUI();
         $form->addUpload("the_file", "Vyberte obrázek (nepovinné)");
-        $form->addSubmit('submitm', 'Uložit');
+        $form->addSubmit('submitm', 'dictionary.main.Insert');
         $form->onSuccess[] = $this->changePortraitFormSucceeded;
 
         return $form;
@@ -38,19 +38,19 @@ class ProfilePresenter extends \App\FrontModule\Presenters\BasePresenter
         $membersDb = $this->database->table("users")->where(array("id" => $this->user->getId()));
 
         if ($membersDb->count() > 0) {
-            $uid = $membersDb->fetch()->uid;
+            $uid = $membersDb->fetch()->id;
 
-            \App\Model\IO::directoryMake(substr(__DIR__, 0, -27) . '/www/images/portraits/' . $uid, 0755);
+            \App\Model\IO::directoryMake(substr(__DIR__, 0, -27) . '/www/portraits/', 0755);
 
-            if (file_exists(substr(__DIR__, 0, -27) . '/www/images/portraits/' . $uid . "/portrait.jpg")) {
-                \App\Model\IO::remove(substr(__DIR__, 0, -27) . '/www/images/portraits/' . $uid . "/portrait.jpg");
-                \App\Model\IO::upload(substr(__DIR__, 0, -27) . '/www/images/portraits/' . $uid, "portrait.jpg", 0644);
+            if (file_exists(substr(__DIR__, 0, -27) . '/www/images/profiles/portrait-' . $uid . '.jpg')) {
+                \App\Model\IO::remove(substr(__DIR__, 0, -27) . '/www/images/profiles/portrait-' . $uid . '.jpg');
+                \App\Model\IO::upload(substr(__DIR__, 0, -27) . '/www/images/profiles', 'portrait-' . $uid . '.jpg', 0644);
             } else {
-                \App\Model\IO::upload(substr(__DIR__, 0, -27) . '/www/images/portraits/' . $uid, "portrait.jpg", 0644);
+                \App\Model\IO::upload(substr(__DIR__, 0, -27) . '/www/images/profiles', 'portrait-' . $uid . '.jpg', 0644);
             }
         }
 
-        $this->redirect(":Front:Profile:foto", array("" => \Nette\Utils\Strings::random(8, "a-z0-9")));
+        $this->redirect(":Front:Profile:image");
     }
 
     /**
@@ -59,12 +59,10 @@ class ProfilePresenter extends \App\FrontModule\Presenters\BasePresenter
      */
     function createComponentChangePasswordForm()
     {
-        $form = new \Nette\Forms\BootstrapUIForm;
-        $form->getElementPrototype()->class = "form-horizontal";
-        $form->getElementPrototype()->role = 'form';
-        $form->addPassword("password1", "Heslo");
+        $form = $this->baseFormFactory->createUI();
+        $form->addPassword("password1", "dicitionary.main.Password");
         $form->addPassword("password2", "Znovu napište heslo");
-        $form->addSubmit('name', 'Uložit');
+        $form->addSubmit('name', 'dictionary.main.Change');
 
         $form->onSuccess[] = $this->changePasswordFormSucceeded;
         return $form;
@@ -97,29 +95,25 @@ class ProfilePresenter extends \App\FrontModule\Presenters\BasePresenter
      */
     function createComponentEditForm()
     {
-        $form = new \Nette\Forms\BootstrapUIForm;
-        $form->getElementPrototype()->class = "form-horizontal";
-        $form->getElementPrototype()->role = 'form';
-        $form->getElementPrototype()->autocomplete = 'off';
-
+        $form = $this->baseFormFactory->createUI();
         $form->addGroup("Osobní údaje");
         $form->addText("username", "Uživatel")
-                ->setAttribute("style", "border: 0; font-size: 1.5em;")
-                ->setDisabled();
+            ->setAttribute("style", "border: 0; font-size: 1.5em;")
+            ->setDisabled();
         $form->addRadioList('sex', 'Pohlaví', array(
             1 => "\xC2\xA0" . 'žena',
             2 => "\xC2\xA0" . 'muž',
         ))->setAttribute("class", "checkboxlistChoose");
         $form->addGroup("Firemní údaje");
-        $form->addText("ic", "IČ");
-        $form->addText("company", "Společnost");
+        $form->addText("ic", "dictionary.main.VatId");
+        $form->addText("company", "dictionary.main.Company");
 
         $form->setDefaults(array(
             "name" => $this->template->member->name,
             "username" => $this->template->member->username,
         ));
 
-        $form->addSubmit("submit", "Uložit");
+        $form->addSubmit("submit", "dictionary.main.Save");
         $form->onSuccess[] = $this->editFormSucceeded;
         return $form;
     }
@@ -127,18 +121,18 @@ class ProfilePresenter extends \App\FrontModule\Presenters\BasePresenter
     function editFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
     {
         $this->database->table("users")->where(array(
-                    "id" => $this->user->getId()
-                ))
-                ->update(array(
-                    "name" => $form->values->name,
-                    "address" => $form->values->address,
-                    "city" => $form->values->city,
-                    "zip" => $form->values->zip,
-                    "district" => $form->values->district,
-                    "ic" => $form->values->ic,
-                    "company" => $form->values->company,
-                    "sex" => $form->values->sex,
-        ));
+            "id" => $this->user->getId()
+        ))
+            ->update(array(
+                "name" => $form->values->name,
+                "address" => $form->values->address,
+                "city" => $form->values->city,
+                "zip" => $form->values->zip,
+                "district" => $form->values->district,
+                "ic" => $form->values->ic,
+                "company" => $form->values->company,
+                "sex" => $form->values->sex,
+            ));
 
         $this->redirect(":Front:Profile:default");
     }
@@ -148,22 +142,19 @@ class ProfilePresenter extends \App\FrontModule\Presenters\BasePresenter
      */
     function createComponentInsertAddressForm()
     {
-        $form = new \Nette\Forms\BootstrapUIForm;
-        $form->getElementPrototype()->class = "form-horizontal";
-        $form->getElementPrototype()->role = 'form';
-
+        $form = $this->baseFormFactory->createUI();
         $form->addHidden("id");
         $form->addHidden("contacts_id");
-        $form->addText("name", "Name");
-        $form->addText("street", "Street");
-        $form->addText("zip", "ZIP");
-        $form->addText("city", "city");
+        $form->addText("name", "dictionary.main.Name");
+        $form->addText("street", "dictionary.main.Street");
+        $form->addText("zip", "dictionary.main.ZIP");
+        $form->addText("city", "dictionary.main.City");
 
         $form->setDefaults(array(
             "contacts_group_id" => 2,
         ));
 
-        $form->addSubmit('submitm', 'Uložit');
+        $form->addSubmit('submitm', 'dictionary.main.Save');
         $form->onSuccess[] = $this->insertAddressFormSucceeded;
 
         return $form;
@@ -171,9 +162,16 @@ class ProfilePresenter extends \App\FrontModule\Presenters\BasePresenter
 
     function insertAddressFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
     {
+        $doc = new Document($this->database);
+        $doc->setType(5);
+        $doc->createSlug("contact-" . $form->values->name);
+        $doc->setTitle($form->values->name);
+        $page = $doc->create($this->user->getId());
+
         // create new contact
         $this->database->table("contacts")->insert(array(
-            "contacts_groups_id" => 2,
+            "categories_id" => 44,
+            "pages_id" => $page,
             "users_id" => $this->user->getId(),
             "name" => $form->values->name,
             "street" => $form->values->street,
@@ -189,29 +187,25 @@ class ProfilePresenter extends \App\FrontModule\Presenters\BasePresenter
      */
     function createComponentEditAddressForm()
     {
-        $form = new \Nette\Forms\BootstrapUIForm;
-        $form->getElementPrototype()->class = "form-horizontal";
-        $form->getElementPrototype()->role = 'form';
-
+        $form = $this->baseFormFactory->createUI();
         $form->addHidden("id");
         $form->addHidden("contacts_id");
-        $form->addText("name", "Name");
-        $form->addText("street", "Address");
-        $form->addText("zip", "ZIP");
-        $form->addText("city", "city");
+        $form->addText("name", "dictionary.main.Name");
+        $form->addText("street", "dictionary.main.Street");
+        $form->addText("zip", "dictionary.main.ZIP");
+        $form->addText("city", "dictionary.main.City");
 
-        $address = $this->database->table("orders_addresses")->get($this->getParameter("id"));
+        $address = $this->database->table("contacts")->get($this->getParameter("id"));
 
         $form->setDefaults(array(
             "id" => $address->id,
-            "contacts_id" => $address->contacts->id,
-            "name" => $address->contacts->name,
-            "street" => $address->contacts->street,
-            "zip" => $address->contacts->zip,
-            "city" => $address->contacts->city,
+            "name" => $address->name,
+            "street" => $address->street,
+            "zip" => $address->zip,
+            "city" => $address->city,
         ));
 
-        $form->addSubmit('submitm', 'Uložit');
+        $form->addSubmit('submitm', 'dictionary.main.Save');
         $form->onSuccess[] = $this->editAddressFormSucceeded;
 
         return $form;
@@ -231,44 +225,15 @@ class ProfilePresenter extends \App\FrontModule\Presenters\BasePresenter
         $this->redirect(":Front:Profile:address", array("id" => $form->values->id));
     }
 
-    function handleDelete($id)
-    {
-        $idf = \Nette\Utils\Strings::padLeft($id, 5, "0");
-        $idfFolder = substr(__DIR__, 0, -27) . '/www/images/products/MX' . $idf;
-
-        $this->database->table("mimix_items")->get($id)->delete();
-
-        \App\Model\IO::removeDirectory($idfFolder);
-
-        $this->redirect(this);
-    }
-
     function handleDeletePortrait()
     {
-        $idf = \Nette\Utils\Strings::padLeft($this->user->getId(), 6, "0");
-        $idfFolder = substr(__DIR__, 0, -27) . '/www/images/portraits/MU' . $idf;
+        $idfFolder = substr(__DIR__, 0, -27) . '/www';
 
-        if (file_exists($idfFolder . "/portrait.jpg")) {
-            \App\Model\IO::remove($idfFolder . "/portrait.jpg");
+        if (file_exists($idfFolder . "/images/profiles/portrait-" . $this->user->getId() . ".jpg")) {
+            \App\Model\IO::remove($idfFolder . "/images/profiles/portrait-" . $this->user->getId() . ".jpg");
         }
 
         $this->redirect(this);
-    }
-
-    function handleUpdateMember($type)
-    {
-        if ($type == 4) {
-            $typeX = 1;
-        } else {
-            $typeX = 4;
-        }
-
-        $this->database->table("users")->get($this->user->getId())->update(
-                array(
-                    "plan" => (int) $typeX
-        ));
-
-        $this->redirect(":Front:Profile:mojeClenstvi", array("" => \Nette\Utils\Random::generate(10)));
     }
 
     function renderAddresses()

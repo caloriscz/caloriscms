@@ -1,24 +1,27 @@
-{block #titles}{_dictionary.main.cForgottenPassword}{/block}
+{block #titles}{_dictionary.main.ForgottenPassword}{/block}
 {block content}
 
-<h1>{_dictionary.main.ForgottenPassword}</h1>
+<div class="panel-heading">
+    <h3 n:block="title" class="panel-title">{_dictionary.main.ForgottenPassword}</h3>
+</div>
+<div class="panel-body">
+    <form action="" class="form-signin" role="form" method="post">
+        <input type="hidden" name="terminal" value="open" />
+        <input type="hidden" name="namespace" value="Caloris" />
+        <input type="hidden" name="class" value="UserActions" />
+        <input type="hidden" name="_action" value="send" />
+        <h2 class="form-signin-heading" style="text-align: center;">
+            <img src="{$baseUri}/images/admin/logo_caloris.png" style="width: 180px; margin-bottom: 20px;" alt="logo" /></h2>
+        <p>Ztracené heslo do e-mailu</p>
 
-<form action="" class="form-signin" role="form" method="post">
-    <input type="hidden" name="terminal" value="open" />
-    <input type="hidden" name="namespace" value="Caloris" />
-    <input type="hidden" name="class" value="UserActions" />
-    <input type="hidden" name="_action" value="send" />
-    <h2 class="form-signin-heading" style="text-align: center;">
-        <img src="{$baseUri}/images/caloris-logo-midi.jpg" style="width: 180px; margin-bottom: 20px;" alt="logo" /></h2>
-    <p>Lost Password Info Email</p>
+        <input type="text" 
+               name="email" 
+               class="form-control"
+               placeholder="e-mailová adresa"
+               autocomplete="off" />
+        <br />
+        <button class="btn btn-lg btn-primary btn-block" type="submit">{_dictionary.main.Send}</button>
+    </form>
 
-    <input type="text" 
-           name="email" 
-           class="form-control"
-           placeholder="e-mailová adresa"
-           autocomplete="off" />
-    <br />
-    <button class="btn btn-lg btn-primary btn-block" type="submit">{_dictionary.main.send|firstUpper}</button>
-</form>
-
-<div><br /><a style="padding-left: 30px;" n:href=":Front:Sign:in" class="btn btn-default">{_dictionary.main.login|firstUpper}</a></div>
+    <div><br /><a style="padding-left: 30px;" n:href=":Front:Sign:in" class="btn btn-default">{_dictionary.main.Login}</a></div>
+</div>

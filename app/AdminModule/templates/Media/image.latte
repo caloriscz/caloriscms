@@ -1,0 +1,33 @@
+{block #titles}{_dictionary.main.File} - {$file->name}{/block}
+{block content}
+
+<h1 class="page-header">{_dictionary.main.File} - {$file->name}</h1>
+
+
+<div class="row">
+    <div class="col-lg-6">
+        {control editFileForm}
+    </div>
+    <div class="col-lg-6">
+        <table class="table">
+            <tr>
+                <td>{_dictionary.main.File}</a></td>
+                <td><a href="/media/{$file->pages_id}/{$file->name}">{$file->name}</a></td>
+            </tr>
+            <tr>
+                <td>{_dictionary.main.FileType}</td>
+                <td>{$fileType}</td>
+            </tr>
+            <tr>
+                <td>{_dictionary.main.Size}</td>
+                <td>{$file->filesize}</td>
+            </tr>
+        </table>
+
+        {if $isImage}
+            <a href="/media/{$file->pages_id}/{$file->name}">
+                <img src="/media/{$file->pages_id}/{$file->name}" class="img-responsive"/>
+            </a>
+        {/if}
+    </div>
+</div>

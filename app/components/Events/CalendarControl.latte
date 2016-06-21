@@ -1,0 +1,36 @@
+{var (int) $weekDay = $firstDayofMonth}
+{var (int) $days = 7}
+<table>
+    <tr>
+        <td class="calendar-month-year"><a href="?m={$prevMonth}&y={$prevYear}"><i class="fa fa-angle-left"></i></a></td>
+        <td colspan="5" class="calendar-month-year">{$nameMonth} {$nameYear}</td>
+        <td class="calendar-month-year"><a href="?m={$nextMonth}&y={$nextYear}"><i class="fa fa-angle-right"></i></a></td>
+    </tr>
+    <tr>
+        {for $j = 1; $j < $weekDay;$j++}
+            <td><div></div></td>
+        {/for}
+        {for $i = 1; $i <= $daysInMonth; $i++}
+            {var $day = date('N', mktime(0, 0, 0, $month, $i, $year))}
+            {var $events = explode(';', $eventsDates[$i])}
+            <td{if count($events) > 1} class="active"{/if}><div>
+                    {if count($events) > 1}
+                        <a href="{plink 'Events:default'}" class="tooltips">
+                            {$i} (d:{count($events)})
+                            <span>
+                                {foreach $events as $ev}
+                                    {$ev}{sep}<br />{/sep}
+                                {/foreach}
+                            </span>
+                        </a>
+                    {else}
+                        {$i}
+                    {/if}
+                </div>
+            </td>
+            {if $day == 7}
+            </tr>
+            <tr>
+            {/if}
+        {/for}
+</table>

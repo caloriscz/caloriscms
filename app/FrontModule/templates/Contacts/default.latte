@@ -1,0 +1,42 @@
+{block #titles}{_dictionary.main.Contacts}{/block}
+{block content}
+
+<div class="heading-color">
+    <div class="container heading">
+        <h1>{_dictionary.main.Contacts}</h1>
+    </div>
+</div>
+
+
+<div class="container white padded-top pad-btm-20">
+    <div class="row">
+        {foreach $contacts as $contact}
+            <div class="col-xs-6 col-md-3" style="height: 270px; margin-bottom: 40px;">
+                <div class="thumbnail">
+                    <div class="text-center" style="height: 150px">
+                        {var $contactImage = $contact->related('contacts_images', 'contacts_id')}
+
+                        {if $contactImage->count() > 0}
+                            {var $contactPortrait = $contactImage->fetch()}
+                            <a n:href=":Front:Contacts:detail id => $contact->id . '-'. $template->webalize($contact->name)">
+                                <img src="{$baseUri}/images/contacts/contact/{$contact->id|padLeft:6:'0'}/{$contactPortrait->filename}" 
+                                     class="img-responsive" style="max-height: 150px;" /><br />
+                            </a>
+                        {/if}
+                    </div>
+                    <div class="caption" style="height: 120px">
+                        <a n:href=":Front:Contacts:detail id => $contact->id . '-'. $template->webalize($contact->name)" class="name">
+                            <span style="letter-spacing: -0.05em;">{$contact->name}</span>
+                        </a>
+                        <br />
+                        <a n:href=":Front:Contacts:detail id => $contact->id . '-'. $template->webalize($contact->name)" class="post" style="text-decoration: none;">
+                            {$contact->post}
+                        </a>
+                        {if $contact->phone}Telefon: {/if}{$contact->phone}<br />
+                        {if $contact->email}E-mail: {/if}<a href="mailto:{$contact->email}">{$contact->email}</a>
+                    </div>
+                </div>
+            </div>
+        {/foreach}
+    </div>
+</div>

@@ -1,0 +1,38 @@
+{block #titles}{_dictionary.main.Events}{/block}
+{block content}
+{var $id = $presenter->getParameter('id')}
+
+<div class="container heading">
+    <h1>{_dictionary.main.Events}</h1>
+</div>
+
+<section id="events">
+    <div class="container padded-top white">
+        <div class="row">
+            <div class="col-sm-8">
+                {foreach $blog as $item}
+                    {if date('mY', strtotime($item->date_event)) != $thisMonth}
+                        <p class="event-month">{var $eventMonthNr = date('n', strtotime($item->date_event))}{$eventMonthNr|numericmonth}</p>
+                    {/if}
+                    <h2>
+                        <a n:href=":Front:Events:detail, id => $item->slug">
+                            {if $item->pages->title == FALSE}
+                                {$item->date_event|date:'j. n. Y'}{else}{$item->doc->title}
+                            {/if}
+                        </a>
+                        <span class="pull-right"><small>{$item->date_event|date:'j. n. Y'}</small></span>
+                    </h2>
+                    <p>{html_entity_decode($item->doc->document)|striptags|truncate:400:'...'}</p>
+                    <br/>
+                    {var $thisMonth = date('mY', strtotime($item->date_event))}
+                {/foreach}
+
+                <div class="text-center">
+                    {control paging, $args, $paginator}
+                </div>
+            </div>
+            <div class="col-sm-4">
+            </div>
+        </div>
+    </div>
+</section>

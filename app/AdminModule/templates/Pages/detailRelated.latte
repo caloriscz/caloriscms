@@ -1,0 +1,53 @@
+{block #titles}{$catalogue->title}{/block}
+{block content}
+
+<br/>
+
+<ul class="nav nav-tabs">
+    <li role="presentation"><a n:href=":Admin:Pages:detail, id => $presenter->getParameter('id')">Stránka</a></li>
+    <li role="presentation"><a n:href=":Admin:Pages:detail, id => $presenter->getParameter('id')">Ústřižky</a></li>
+    <li role="presentation">
+        <a n:href=":Admin:Pages:detailImages, id => $presenter->getParameter('id')">{_dictionary.main.images|firstUpper}</a>
+    </li>
+    <li role="presentation">
+        <a n:href=":Admin:Pages:detailFiles, id => $presenter->getParameter('id')">{_dictionary.main.Files}</a></li>
+    <li role="presentation" class="active"><a n:href=":Admin:Pages:detailRelated, id => $presenter->getParameter('id')">Související
+            příspěvky</a></li>
+    <li class="pull-right"><a href="/{$catalogue->slug}"target="_blank">{_dictionary.main.Preview}</a></li>
+</ul>
+
+<h2>Související produkty</h2>
+
+<table class="table">
+    {foreach $related as $item}
+        <tr>
+            <td class="col-xs-1">
+                <a n:href="deleteRelated!, id => $item->id, item => $catalogue->id" class="btn" role="button"
+                                                                                    onclick="return confirm('{_admin.catalogue.deletereallymessage}')">
+                    <i class="fa fa-times font-red"></i>
+                </a>
+            <td>
+                <a n:href=":Admin:Blog:detail, id => $item->related_pages_id">{$item->ref('pages', 'related_pages_id')->title}</a>
+            </td>
+        </tr>
+    {/foreach}
+</table>
+
+<h2>Vyberte související produkt</h2>
+
+{control searchRelatedForm}
+
+<table class="table">
+    {foreach $relatedSearch as $item}
+        {if $item->id <> $catalogue->id}
+            <tr>
+                <td class="col-xs-1">
+                    <a n:href="insertRelated!, id => $item->id, item => $catalogue->id" class="btn btn-success btn-xs"
+                                                                                        role="button">
+                        {_dictionary.main.Insert}
+                    </a>
+                <td><a n:href=":Admin:Blog:detail, id => $item->id">{$item->title}</a></td>
+            </tr>
+        {/if}
+    {/foreach}
+</table>

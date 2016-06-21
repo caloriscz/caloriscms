@@ -1,0 +1,157 @@
+{var $transId = str_pad($order->id, 6, '0', STR_PAD_LEFT)}
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="cs">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>{$settings['site:title']}: Transakce č. {$transId}</title>
+    <style n:syntax="off">
+        * {
+            font-family: Arial;
+        }
+
+        .text-right {
+            text-align: right;
+        }
+    </style>
+</head>
+<body bgcolor="#ffffff" topmargin="0" leftmargin="0" marginheight="0" marginwidth="0"
+      style="width:100% !important; text-align: center; font-family: Arial sans-serif;">
+
+<table style="width: 800px; margin: 0 auto 0 auto; font-family: Arial sans-serif;">
+    <tr>
+        <td colspan="2" style="color: white; vertical-align: middle; background-color: #8e8e8e;
+                    font-size: 1.82em; height: 60px; border-bottom: 4px solid #0064b4; font-weight: bold; padding-left: 20px;">
+            Transakce č. {$transId}
+        </td>
+    </tr>
+    <tr>
+        <td style="text-align: left;">
+            <br/>
+            <p>Poštovné: {$order->store_settings_shipping->title}</p>
+            <p>Platební metoda: {$order->store_settings_payments->title}</p>
+            <p>E-mail: {$order->email}</p>
+            <p>Telefon: {$order->phone}</p>
+
+            <h3>Fakturační adresa</h3>
+
+            {$order->contacts->name}<br/>
+            {$order->contacts->company}<br/>
+            {$order->contacts->street}<br/>
+            {$order->contacts->zip} {$order->contacts->city}<br/>
+
+            {if $order->contacts->vatin}<p>IČ: {$order->contacts->vatin}</p>{/if}
+            {if $order->contacts->vatin}<p>DIČ: {$order->contacts->vatid}</p>{/if}
+            <br/>
+
+            {if $order->ref('contacts', 'delivery_contacts_id')->name && $order->ref('contacts', 'delivery_contacts_id')->street}
+                <h3>Doručovací adresa</h3>
+            {/if}
+
+            {if $order->ref('contacts', 'delivery_contacts_id')->name}{$order->ref('contacts', 'delivery_contacts_id')->name}
+                <br/>{/if}
+            {if $order->ref('contacts', 'delivery_contacts_id')->company}{$order->ref('contacts', 'delivery_contacts_id')->company}
+                <br/>{/if}
+            {if $order->ref('contacts', 'delivery_contacts_id')->street}{$order->ref('contacts', 'delivery_contacts_id')->street}
+                <br/>{/if}
+            {if $order->ref('contacts', 'delivery_contacts_id')->city}
+                {$order->ref('contacts', 'delivery_contacts_id')->zip} {$order->ref('contacts', 'delivery_contacts_id')->city}
+                <br/><br/>
+            {/if}
+
+            {if $info->note}
+                <div class="well">
+                    <p>Zpráva:<br/>{$info->note}</p>
+                </div>
+            {/if}
+
+            {if $order->store_bonus_id}
+                <h2>Bonus</h2>
+
+                Váš dárek: {$info->store_bonus->store->title}.
+            {/if}
+
+
+            <h2>Shrnutí objednávky</h2>
+
+            <table style="width: 100%;">
+                <tr>
+                    <th style="text-align: left;">Název</th>
+                    <th class="text-right">Cena/kus</th>
+                    <th class="text-right">DPH</th>
+                    <th class="text-right">Sazba DPH</th>
+                    <th class="text-right">Množství</th>
+                    <th class="text-right">Cena celkem</th>
+                </tr>
+                {var $vatCoef = round($item->store_settings_vats->vat/(100+$item->store_settings_vats->vat),4)}
+                {foreach $order->related('orders_items', 'orders_id') as $item}
+                    {if $settings['store:order:isVatIncluded']}
+                        <tr>
+                            <td>{$item->store->title}</td>
+                            <td class="text-right">{var $vat = round($item->price * $vatCoef, 0)}
+                                {$item->price - $vat} Kč
+                            </td>
+                            <td class="text-right">{number_format($vat, 2, ',', ' ')} Kč</td>
+                            <td class="text-right">{$item->store_settings_vats->vat}%</td>
+                            <td class="text-right">{$item->amount}</td>
+                            <td class="text-right">{number_format($item->price * $item->amount, 2, ',', ' ')}
+                                Kč
+                            </td>
+                        </tr>
+                    {else}
+                        <tr>
+                            <td>{$item->store->title}</td>
+                            <td class="text-right">
+                                {var $vat = $item->price * ($item->store_settings_vats->vat/100)}
+                                {number_format($item->price - $vat, 2, ',', ' ')} Kč
+                            </td>
+                            <td class="text-right">{number_format($vat, 2, ',', ' ')} Kč</td>
+                            <td class="text-right">{$item->store_settings_vats->vat}%</td>
+                            <td class="text-right">{$item->amount}</td>
+                            <td class="text-right">{number_format(($item->price * (1+($item->store_settings_vats->vat/100))) * $item->amount, 2, ',', ' ')}
+                                Kč
+                            </td>
+                        </tr>
+                    {/if}
+                {/foreach}
+                <tr>
+                    <td colspan="5">Poštovné</td>
+                    <td class="text-right">
+                        {var $freeFrom = $info->store_settings_shipping->free_from}
+
+                        {if $total <= $freeFrom}
+                            {var $ship = $info->store_settings_shipping->shipping}{$ship}
+
+                        {else}
+                            {var $ship = 0}{$ship}
+                        {/if} Kč
+                    </td>
+                </tr>
+                {var $paym = $shipPrice}{if $shiPrice == ''}{var $paym = 0}{/if}
+                {if $paym != 0}
+                    <tr>
+                        <td colspan="5">Dobírka</td>
+                        <td class="text-right">{$paym} Kč</td>
+                    </tr>
+                {/if}
+                <tr>
+                    <td>CELKEM</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td class="text-right">{$amount}</td>
+                    <td class="text-right">{number_format($total + $ship + $paym,  2, ',', ' ')} Kč</td>
+                </tr>
+            </table>
+
+            <br/><br/>
+            Vaše objednávka byla přijata. O jejím průběhu budete informování e-mailem.
+            <br/><br/>
+
+        </td>
+    </tr>
+</table>
+
+</body>
+</html>

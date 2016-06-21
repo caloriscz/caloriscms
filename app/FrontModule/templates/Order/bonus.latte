@@ -1,0 +1,39 @@
+{block #titles}{_dictionary.main.Bonus}{/block}
+{block content}
+
+<div class="container banner_produkty">
+    <div class="banner-text_header">
+        <h1>{_dictionary.main.Bonus}</h1>
+    </div>
+</div>
+
+<div class="container content">
+    <div class="col-md-12">
+        <p>Kliknutím na tlačítko Vybrat vyberte dárek</p>
+        <br/>
+
+        {foreach $bonuses as $item}
+            <div class="col-xs-6 col-md-3">
+                <div class="thumbnail" style="height: 300px;">
+                    {var $page = $item->ref('stock', 'stock_id')->pages}
+
+                    {var $store = $page->id}
+                    {var $image = $database->table('media')->where('pages_id', $store)->limit(1)}
+                    {if $image->count() > 0}
+                        <img src="/media/{$page->id}/{$image->fetch()->name}"
+                             style="height: 150px;"/>
+                    {/if}
+                    <div class="caption text-center">
+                        <p>{$page->title} {$page->title}</p>
+                        <p>{$page->preview|noescape|truncate:80:'...'}</p>
+                    </div>
+                    <div class="text-center">
+                        <p><a n:href="addBonus! id => $item->id" class="btn btn-cart btn-lg">Vybrat</a></p>
+                        <br/>
+                    </div>
+                </div>
+            </div>
+        {/foreach}
+    </div>
+</div>
+<br/>

@@ -1,0 +1,20 @@
+{block content}
+<?xml version="1.0" encoding="utf-8"?> 
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>{$member->username}</title>
+        <link>{$baseUri}</link>
+        <atom:link href="{$settings['site:url:base']}" rel="self" type="application/rss+xml" />
+        <description>Blog</description>
+        <language>cs</language>
+        {foreach $items as $item}
+        <item>
+            <title>{$item->title}</title>
+            <link>{$baseUri}/{$item->id}</link>
+            <guid>{$baseUri}/{$item->id}</guid>
+            <description>{$item->document}</description>
+            <pubDate>{$item->date_published|date:'D, d M Y H:i:s T'}</pubDate>
+        </item>        
+        {/foreach}
+    </channel>
+</rss>

@@ -1,0 +1,53 @@
+{block #titles}{_dictionary.main.Blog}{/block}
+{block content}
+{var $id = $presenter->getParameter('id')}
+
+<div class="container heading">
+    <h1>Aktuality</h1>
+</div>
+
+<div class="container padded-top white">
+    <div class="row">
+        <div class="col-sm-8">
+            <h2>{$blog->title}</h2>
+
+            <p><small>{$blog->date_published|date:'j. n. Y'}</small></span></p>
+
+            <p>{$blog->document|noescape}</p>
+
+            {var $blogImages = $blog->related('media', 'pages_id')}
+
+            {if $blogImages->count() > 0}
+                <hr />
+                <h3>Obrázky</h3>
+                <br />
+            {/if}
+
+            <div class="row">
+                {foreach $blogImages->where('file_type = 1') as $image}
+                    <div class="col-xs-6 col-md-4" style="max-height: 150px;">
+                        <a href="{$baseUri}/media/{$blog->id}/{$image->name}" class="thumbnail gallery">
+                            <img src="/media/{$blog->id}/tn/{$image->name}" class="img-responsive" style="max-height: 120px;" />
+                        </a>
+                    </div>
+                {/foreach}
+            </div>
+
+            {var $blogImages = $blog->related('media', 'pages_id')}
+
+            {if $blogImages->count() > 0}
+                <hr />
+                <h3>Dokumenty ke stažení</h3>
+            {/if}
+
+            <table class="table table-no-border">
+                {foreach $blogImages->where('file_type = 0') as $item}
+                    <tr>
+                        <td>{$item->name}</td>
+                        <td><a href="{$baseUri}/media/{$item->pages_id}/{$item->name}" class="btn btn-default">Stáhnout</a></td>
+                    </tr>
+                {/foreach}
+            </table>
+        </div>
+    </div>
+</div>

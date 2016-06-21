@@ -1,66 +1,128 @@
-{block #titles}{$order->oid}{/block}
+{block #titles}Objednávka č. {$order->oid}{/block}
 {block content}
 
-<h1 class="page-header">{$order->oid}</h1>
-
-<div class="row">
-    <div class="col-lg-4">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                {_store.order.BillingAddress}
-            </div>
-            <div class="panel-body">
-                {control editBillingForm}
-            </div>
-        </div>
-    </div>
-    <div class="col-lg-4">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                {_store.order.DeliveryAddress}
-            </div>
-            <div class="panel-body">
-                {control editDeliveryAddressForm}
-            </div>
-        </div>
-    </div>
-    <div class="col-lg-4">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                {_dictionary.main.message|firstUpper}
-            </div>
-            <div class="panel-body">
-                {control editForm}
-            </div>
-        </div>
+<div class="container banner_produkty">
+    <div class="banner-text_header">
+        <h1>Objednávka č. {$order->oid}</h1> 
     </div>
 </div>
 
-<div class="row">
-    <div class="col-lg-12">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                Order summary
+<div class="container pad-top-30">
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Fakturační adresa
+                </div>
+                <div class="panel-body">
+                    {$contactsB->name}<br />
+                    {$contactsB->street}<br />
+                    {$contactsB->zip} {$contactsB->city}
+
+                </div>
             </div>
-            <div class="panel-body">
-                <table class="table">
-                    {foreach $order->related('orders_items', 'orders_id') as $item}
+            <br />
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Doručovací adresa
+                </div>
+                <div class="panel-body">
+                    {$contactsD->name}<br />
+                    {$contactsD->street}<br />
+                    {$contactsD->zip} {$contactsD->city}
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    {_dictionary.main.message|firstUpper}
+                </div>
+                <div class="panel-body">
+                    {control editForm}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Shrnutí objednávky
+                </div>
+                <div class="panel-body">
+                    <table class="table">
                         <tr>
-                            <td>{$item->store->title}</td>
-                            <td>{$item->store_stock->title}</td>
-                            <td>{var $price += $item->store_stock->price}{$item->store_stock->price}</td>
-                            <td>{$item->store_stock->vat}</td>
-                            <td>{var $amount += $item->amount}{$item->amount}</td>
+                            <th>Název</th>
+                            <th class="text-right">Cena za kus</th>
+                            <th class="text-right">Cena DPH</th>
+                            <th class="text-right col-xs-1">Množství</th>
+                            <th class="text-right col-xs-1">DPH</th>
+                            <th class="text-right col-xs-1">Celková cena s DPH</th>
+                            <th class="col-xs-1"></th>
                         </tr>
-                    {/foreach}
-                    <tr>
-                        <td>TOTAL</td>
-                        <td></td>
-                        <td>{$price}</td>
-                        <td></td>
-                        <td>{$amount}</td>
-                    </tr>
-                </table>
+                        {foreach $order->related('orders_items', 'orders_id') as $item}
+                            {if $settings['store:order:isVatIncluded']}
+                                <tr>
+                                    <td>{$item->title} {if $item->partnr} ({$item->partnr}){/if}</td>
+                                    <td class="text-right">
+                                        {var $vat = round($item->price * round($item->vat/(100+$item->vat),4), 2)}
+                                        {$item->price - $vat} {$settings['store:currency:symbol']}
+                                    </td>
+                                    <td class="text-right">{$vat} {$settings['store:currency:symbol']}</td>
+                                    <td class="text-right">{$item->amount}</td>
+                                    <td class="text-right">{$item->vat}%</td>
+                                    <td class="text-right">{$item->price * $item->amount} {$settings['store:currency:symbol']}</td>
+                                </tr>
+                                {var $vatAll += 0}
+                                {var $amount += $item->amount}
+                                {var $total += $item->stock->price * $item->amount}
+                            {else}
+                                <tr>
+                                    <td>{$item->title} {if $item->partnr} ({$item->partnr}){/if}</td>
+                                    <td class="text-right">
+                                        {var $vat = $item->price * ($item->vat/100)}
+                                        {number_format($item->price, 2, ',', ' ')} {$settings['store:currency:symbol']}
+                                    </td>
+                                    <td class="text-right">{number_format($item->price * ($item->vat/100), 2, ',', ' ')} {$settings['store:currency:symbol']}</td>
+                                    <td class="text-right">{$item->amount}</td>
+                                    <td class="text-right">{$item->vat}%</td>
+                                    <td class="text-right">{number_format(($item->price * (1+($item->vat/100))) * $item->amount, 2, ',', ' ')} {$settings['store:currency:symbol']}</td>
+                                </tr>
+                                {var $vatAll += $item->price * ($item->vat/100)}
+                                {var $amount += $item->amount}
+                                {var $total += $item->price * $item->amount}
+                            {/if}
+                        {/foreach}
+                        <tr>
+                            <td colspan="2">Poštovné</td>
+                            <td></td>
+                            <td></td>
+                            <td class="text-right"></td>
+                            <td class="text-right">
+                                {$order->payment_price} {$settings['store:currency:symbol']}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">Dobírka</td>
+                            <td></td>
+                            <td></td>
+                            <td class="text-right"></td>
+                            <td class="text-right">
+                                {$order->shipping_price} Kč
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Celkem</td>
+                            <td></td>
+                            <td class="text-right"></td>
+                            <td class="text-right">{$amount}</td>
+                            <td class="text-right"></td>
+                            <td class="text-right">{number_format($total + $vatAll + $order->payment_price + $order->shipping_price, 2, ',', ' ')} Kč</td>
+                        </tr>
+                    </table>
+                </div>
             </div>
         </div>
     </div>

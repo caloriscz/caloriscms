@@ -1,0 +1,41 @@
+{block #titles}{_admin.catalogue.ProductCatalogue}{/block}
+{block content}
+
+{var $counter = 2}
+
+<h1 class="page-header">{_admin.catalogue.ProductCatalogue}</h1>
+
+{if count($breadcrumbs) > 0}
+    <ol class="breadcrumb">
+        {foreach $breadcrumbs as $crumbId => $crumbValue}
+            <li><a n:href=":AdminStore:Catalogue:default, id => $crumbId">{$crumbValue}</a></li>
+            {/foreach}
+    </ol>
+{/if}
+
+<div class="row">
+    <div class="col-lg-12">
+        {if $settings['store:enabled']}
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    {_dictionary.main.InsertProduct}
+                </div>
+                <div class="panel-body">
+                    {control insertProductForm}
+                </div>
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    {_dictionary.main.Catalogue}
+                </div>
+
+                <div class="panel-body">
+                    {control simpleGrid}
+                </div>
+            </div>
+        {else}
+            <p>Obchod není povolen v nastavení</p>
+        {/if}
+    </div>
+</div>

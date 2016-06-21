@@ -1,0 +1,84 @@
+{if $member->username == 'admin'}
+{var $admin = true}
+{/if}
+
+<div class="navbar-default sidebar" role="navigation">
+    <div class="sidebar-nav navbar-collapse">
+        <ul class="nav" id="side-menu">
+            <li><a n:href=":Admin:Homepage:default, id => NULL"><i
+                            class="fa fa-home fa-fw"></i> {_admin.navigation.homepage}</a></li>
+
+            <li>
+                <a n:href=":Admin:Menu:default, id => null">
+                    <i class="fa fa-sort-amount-desc fa-fw"></i> Menu
+                </a>
+            </li>
+            <li><a n:href=":Admin:Pages:default, id => NULL"><i
+                            class="fa fa-files-o fa-fw"></i> {_admin.navigation.pages}</a></li>
+            <li><a n:href=":Admin:Blog:default, id => NULL"><i
+                            class="fa fa-newspaper-o fa-fw"></i> {_dictionary.main.blog|firstUpper}</a></li>
+            <li><a n:href=":Admin:Contacts:default, id => NULL"><i
+                            class="fa fa-database fa-fw"></i> {_dictionary.main.contacts|firstUpper}</a>
+            </li>
+            <li><a n:href=":Admin:Media:default, id => null, type => 6">
+                    <i class="fa fa-file-archive-o fa-fw"></i> {_dictionary.main.Galleries}</a>
+            </li>
+            <li>
+                <a n:href=":Admin:Media:default, id => null, type => 8">
+                    <i class="fa fa-file-image-o fa-fw"></i> {_dictionary.main.Documents}</a>
+            </li>
+            <li><a n:href=":Admin:Files:default">
+                    <i class="fa fa-image fa-fw"></i> Grafika na stránce</a></li>
+            <li><a n:href=":Admin:Pricelist:default, id => NULL">
+                    <i class="fa fa-list-ol fa-fw"></i> {_dictionary.main.Pricelist}</a></li>
+            <li><a n:href=":Admin:Members:default, id => NULL"><i
+                            class="fa fa-users fa-fw"></i> {_admin.navigation.members}</a></li>
+            <li><a n:href=":Admin:Events:default, id => NULL"><i
+                            class="fa fa-calendar fa-fw"></i> {_dictionary.main.Events}</a></li>
+            <li><a n:href=":Admin:Links:default, id => NULL"><i
+                            class="fa fa-link fa-fw"></i> {_dictionary.main.Links}</a></li>
+            <li><a n:href=":Admin:Helpdesk:default, id => NULL"><i
+                            class="fa fa-life-ring fa-fw"></i> {_dictionary.main.Helpdesk}</a></li>
+            {if $settings['store:enabled']}
+                <li>
+                    <a href="#"><i class="fa fa-shopping-cart fa-fw"></i> {_dictionary.main.Store}</a>
+                    <ul class="nav nav-second-level collapse" aria-expanded="false">
+                        <li>
+                            <a n:href=":AdminStore:Catalogue:default, id => NULL"> {_admin.navigation.catalogue|firstUpper}</a>
+                        </li>
+                        <li>
+                            <a n:href=":AdminStore:Orders:default, id => NULL"> {_dictionary.main.orders|firstUpper}</a>
+                        </li>
+                        <li>
+                            <a n:href=":AdminStore:Categories:default, id => NULL"> {_dictionary.main.Categories}</a>
+                        </li>
+                        {if $admin}
+                            <li>
+                                <a n:href=":AdminStore:Settings:default, id => NULL"> {_dictionary.main.settings|firstUpper}</a>
+                            </li>
+                            <li>
+                                <a n:href=":AdminStore:Catalogue:brands, id => NULL">{_dictionary.main.brands|firstUpper}</a>
+                            </li>
+                            <li>
+                                <a n:href=":AdminStore:Params:default, id => NULL">{_dictionary.main.parametres|firstUpper}</a>
+                            </li>
+                            <li><a n:href=":AdminStore:Bonus:default, id => NULL">Bonusy</a></li>
+                        {/if}
+                    </ul>
+                </li>
+            {/if}
+            {if $admin}
+                <li><a n:href=":Admin:Settings:default, id => NULL"><i
+                                class="fa fa-gear fa-fw"></i> {_dictionary.main.settings|firstUpper}</a>
+                </li>
+            {/if}
+            {if $settings['categories:adminEnabled'] || $member->username == 'admin'}
+                <li>
+                    <a n:href=":Admin:Categories:default, id => NULL">
+                        <i class="fa fa-sitemap fa-fw"></i> {_dictionary.main.categories|firstUpper}
+                    </a>
+                </li>
+            {/if}
+        </ul>
+    </div>
+</div>

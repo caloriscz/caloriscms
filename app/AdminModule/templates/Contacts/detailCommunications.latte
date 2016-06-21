@@ -1,0 +1,39 @@
+{block #titles}{_dictionary.main.Contacts}{/block}
+{block content}
+
+<br />
+<ul class="nav nav-tabs">
+    <li role="presentation"><a n:href=":Admin:Contacts:detail, id => $presenter->getParameter('id')">{_dictionary.main.Contacts}</a></li>
+    <li role="presentation" class="active"><a n:href=":Admin:Contacts:detailCommunications, id => $presenter->getParameter('id')">Komunikace</a></li>
+    <li role="presentation"><a n:href=":Admin:Contacts:detailDocuments, id => $presenter->getParameter('id')">{_dictionary.main.Documents}</a></li>
+    <li role="presentation"><a n:href=":Admin:Contacts:detailOpeningHours, id => $presenter->getParameter('id')">{_dictionary.main.OpeningHours}</a></li>
+    <li role="presentation"><a n:href=":Admin:Contacts:detailImages, id => $presenter->getParameter('id')">{_dictionary.main.Images}</a></li>
+    <li role="presentation"><a n:href=":Admin:Contacts:detailMember, id => $presenter->getParameter('id')">{_dictionary.main.Member}</a></li>
+</ul>
+
+<h1 class="page-header">{_dictionary.main.Contacts} - {$page->title}</h1>
+
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+    {_dictionary.main.Insert}
+</button>
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel">Zásoby</h4>
+            </div>
+            <div class="modal-body">
+                {control insertCommunicationForm}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">{_dictionary.main.close|firstUpper}</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{control communicationsGrid}

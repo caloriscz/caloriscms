@@ -3,15 +3,44 @@
 
 <h1 class="page-header">{_admin.navigation.pages}</h1>
 
-<table class="table table-striped">
-    <tr>
-        <th></th>
-        <th>{_admin.pages.name}</th>
-    </tr>
-    {foreach $pages as $page}
-        <tr>
-            <td class="col-xs-1"><a href=""><i class="fa fa-times font-red"></i></a></td>
-            <td><a n:href=":Admin:Pages:detail, id => $page->title">{$page->title}</a></td>
-        </tr>
-    {/foreach}
-</table>
+<div class="row">
+    <div class="col-md-3">
+        <div class="panel panel-default">
+            <div class="panel-heading">{_dictionary.main.NewPage}</div>
+            <div class="panel-body">
+                {foreach $flashes as $flash}
+                    <br/>
+                    <div class="flash {$flash->type}">{$flash->message}</div>
+                    <br/>
+                {/foreach}
+
+                {control insertForm}
+            </div>
+        </div>
+    </div>
+    <div class="col-md-9">
+        <table class="table table-striped">
+            <tr>
+                <th></th>
+                <th>{_admin.pages.name}</th>
+                <th>Webový název</th>
+                <th>Náhled</th>
+            </tr>
+            {foreach $pages as $page}
+                <tr>
+                    <td class="col-xs-1">
+                        <a n:href="delete!, id => $page->id" onclick="return confirm('Delete really?')"><i
+                                    class="fa fa-times font-red"></i></a>&nbsp;
+                        <a n:href=":Admin:Pages:settings, id => $page->id"><i class="fa fa-edit"></i></a>
+                    </td>
+                    <td><a n:href=":Admin:Pages:detail, id => $page->id">
+                            {$page->title}
+                        </a></td>
+                    <td>{$page->slug}</td>
+                    <td><a href="/{$page->slug|webalize}/" target="_blank"><i
+                                    class="fa fa-edit"></i></a></td>
+                </tr>
+            {/foreach}
+        </table>
+    </div>
+</div>

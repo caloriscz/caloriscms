@@ -1,0 +1,34 @@
+{block #titles}Dokumenty{/block}
+{block content}
+{var $id = $presenter->getParameter('id')}
+<div class="container heading">
+    <h1>Dokumenty</h1>
+</div>
+
+<div class="container white padded-top padded-btm">
+    <div class="col-md-8">
+        <table class="table">
+            {foreach $documents as $item}
+                <tr>
+                    <td style="border: 0;">
+                        <a href="{$baseUri}/files/documents/{$item->categories_id|padLeft:4:"0"}/{$item->name}">
+                            {if $item->description}
+                                {$item->description}
+                            {else}
+                                {$item->name}
+                            {/if}
+                        </a>
+                    </td>
+                    <td style="border: 0;" class="col-md-2 text-right">{round($item->filesize/1024,2)} kB</td>
+                </tr>
+            {/foreach}
+        </table>
+    </div>
+    <div class="col-md-4">
+        <ul class="nav nav-pills nav-stacked nav-skola">
+            {foreach $documentsCat as $itemCat}
+                <li{if $id == $itemCat->id} class="active"{/if}><a n:href=":Front:Documents:default, id => $itemCat->id">{$itemCat->title}</a></li>
+                {/foreach}
+        </ul>
+    </div>
+</div>

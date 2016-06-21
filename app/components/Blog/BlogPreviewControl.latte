@@ -1,0 +1,37 @@
+{foreach $blog as $item}
+    <div class="item">
+        <h3>
+            <a href="{plink ':Front:Blog:detail', id => $item->id}">
+                {if $item->title == FALSE}
+                    {$item->date_published|date:'j. n. Y'}{else}{$item->title}
+                {/if}
+            </a>
+            {if $settings['blog:short:showDate']}<span
+                    class="date">{$item->date_published|date:'j. n. Y'}</span>{/if}
+        </h3>
+
+        {var $image = $item->related('media', 'pages_id')->limit(1)}
+        {var $imageInfo = $image->fetch()}
+        {if $settings['blog:short:showImage']}
+            {if $image->count() > 0}
+                <span class="image">
+                    <img src="/images/blog/{$item->id}/tn_{$imageInfo->filename}" alt="{$imageInfo->filename}"
+                         class="img-responsive"/>
+                </span>
+            {/if}
+        {/if}
+        {if $settings['blog:short:showAuthor']}
+            <span class="author">{$item->users->username}</span>
+        {/if}
+        {if $settings['blog:short:showPreview']}
+            <p class="about">
+                {if $settings['blog:preview:length'] > 0}
+                    {$item->document|striptags|truncate:$settings['blog:preview:length']}
+                {else}
+                    {$item->document|noescape}
+                {/if}
+            </p>
+        {/if}
+        <span class="more"><a href="{plink ':Front:Blog:detail', id => $item->id}"></a></span>
+    </div>
+{/foreach}

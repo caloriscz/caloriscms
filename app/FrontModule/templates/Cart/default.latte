@@ -1,36 +1,39 @@
-{block #titles}{_dictionary.main.cart|firstUpper}{/block}
+{block #titles}{_dictionary.main.Cart}{/block}
 {block content}
-
+<br />
 <div class="container heading">
-    <h1>{_dictionary.main.cart|firstUpper}</h1>
+    <ul class="breadcrumb order-process">
+        <li><a n:href=":Front:Cart:default">{_dictionary.main.Cart}</a></li>
+        {if $settings['bonus:enabled'] && ($settings['bonus:registeredUsersOnly'] && $isLoggedIn) && $bonusEnabled}
+            <li>{_dictionary.main.ChooseAGift}</li>
+        {/if}
+        <li>{_dictionary.main.ShippingAndPayment}</li>
+        <li>{_dictionary.main.ContactInformation}</li>
+        <li>{_dictionary.main.SummaryAndOrderCompletion}</li>
+    </ul>
 </div>
 
 <div class="container">
-    <div class="col-md-12">
-        <table class="table">
-            {foreach $cart as $item}
-                <tr>
-                    <td>
-                        <a n:href=":Front:Catalogue:detail id=> $item->id">
-                            {var $image = $item->related('store_images', 'store_id')->limit(1)}
-                            {if $image->count() > 0}
-                                <img src="/images/catalogue/products/{$item->id|padLeft:6:'0'}/{$image->fetch()->filename}" style="max-height: 50px;" />
-                            {else}
-                                no image
-                            {/if}
-                        </a>
-                    </td>
-                    <td><a n:href=":Front:Catalogue:detail id => $item->store_id">{$item->store_stock_id}</a></td>
-                    <td>{$item->store_stock->title}</td>
-                    <td>{var $priceVat = $item->store_stock->price * (($item->store_stock->vat/100)+1)}{round($priceVat,0)} {$settings['currency_symbol']}</td>
-                    <td>{form changeAmountCartForm value => '1'}{input amount value => $item->amount} {input id 'value' => $item->id}{input submitm}{/form}</td>
-                    <td><a n:href="delete! id => $item->id" class="btn btn-danger">{_dictionary.main.delete|firstUpper}</a></td>
-                </tr>
-            {/foreach}
-        </table>
-
+    {foreach $flashes as $flash}
         <br />
+        <div class="flash {$flash->type}">{$flash->message}</div>
+        <br />
+    {/foreach}
 
-        <a n:href=":Front:Order:default" class="btn btn-success btn-lg">{_dictionary.main.continue|firstUpper}</a>
+    {control cartList 'classic'}
+    <br />
+
+    <div class="col-md-12">
+        {control bonusInfo, $member}
     </div>
+
+    <p class="pull-left"><a n:href=":Front:Homepage:default" class="btn btn-cart-in btn-lg">{_dictionary.main.ContinueShopping}</a></p>
+
+    <p class="pull-right">
+        {if $settings['bonus:enabled'] && $settings['bonus:registeredUsersOnly'] && $isLoggedIn && $bonusEnabled}
+            <a n:href=":Front:Order:bonus" class="btn btn-cart-in btn-lg">{_dictionary.main.ChooseAGift}</a>
+        {else}
+            <a n:href=":Front:Order:delivery" class="btn btn-cart btn-lg">{_dictionary.main.ProceedToCheckout}</a>
+        {/if}
+    </p>
 </div>

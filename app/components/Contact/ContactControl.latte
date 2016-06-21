@@ -1,0 +1,12 @@
+<address>
+    <strong><span style="font-size: 1.15em;">{$contact->name}</span></strong><br />
+    {if $contact->street}{$contact->street}<br />{/if}
+{if $contact->zip}{$contact->zip}{/if} {if $contact->city}{$contact->city}<br />{/if}<br />
+{if $contact->countries->title_cs}{$contact->countries->title_cs}<br /><br />{/if}
+
+{if $contact->vatin}{_dictionary.main.VatIn}: {$contact->vatin}<br />{/if}
+{if $contact->vatid}{_dictionary.main.VatId}: {$contact->vatid}<br />{/if}
+
+{if $contact->email}<abbr title="E-mail">E:</abbr> <a href="mailto:{$contact->email}">{$contact->email}</a><br />{/if}
+{if $contact->phone}<abbr title="Telefon">T:</abbr> {$contact->phone}{/if}
+</address>
