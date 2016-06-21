@@ -20,7 +20,6 @@
         "nette/robot-loader": "~2.3",
         "latte/latte": "~2.3",
         "tracy/tracy": "~2.3",
-        "endroid/qrcode": "dev-master",
         "kdyby/translation": "dev-master",
         "ipub/mobile-detect": "dev-master",
         "nette/forms": "v2.3.6",
