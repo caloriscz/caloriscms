@@ -24,11 +24,10 @@ class SlugManager extends Nette\Object
     public function getRowBySlug($slug, $lang = null)
     {
         if ($lang != null) {
-            $arr = array("slug_" . $lang => $slug);
+            $arr = array("slug_" . $lang => $slug, "public" => 1);
         } else {
-            $arr = array("slug" => $slug);
+            $arr = array("slug" => $slug, "public" => 1);
         }
-
 
 
         $db = $this->database->table("pages")->where($arr);
@@ -43,7 +42,7 @@ class SlugManager extends Nette\Object
 
     public function getDefault()
     {
-        $row = $this->database->table("pages")->where(array("id" => 47))->fetch();
+        $row = $this->database->table("pages")->where(array("id" => 1))->fetch();
         if ($row) {
             return $row;
         } else {

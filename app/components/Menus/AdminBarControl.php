@@ -87,7 +87,7 @@ class AdminBarControl extends Control
         $role = $this->presenter->user->getRoles();
         $template->roleCheck = $this->database->table("users_roles")->get($role[0]);
 
-        if ($template->roleCheck) {
+        if ($template->roleCheck && $template->settings['site:admin:adminBarEnabled']) {
             $template->enabled = true;
         } else {
             $template->enabled = false;
