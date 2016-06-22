@@ -4,8 +4,8 @@ SET time_zone = "+00:00";
 CREATE TABLE IF NOT EXISTS `categories` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `parent_id` int(11) DEFAULT NULL,
-  `description` text COLLATE utf8_czech_ci,
-  `title` varchar(80) COLLATE utf8_czech_ci NOT NULL,
+  `description` text,
+  `title` varchar(80) NOT NULL,
   `sorted` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `parent_id` (`parent_id`)
@@ -17,19 +17,19 @@ CREATE TABLE IF NOT EXISTS `contacts` (
   `pages_id` int(11) NOT NULL,
   `users_id` int(11) DEFAULT '0',
   `type` tinyint(1) NOT NULL DEFAULT '0',
-  `post` varchar(80) COLLATE utf8_czech_ci DEFAULT NULL,
-  `notes` text COLLATE utf8_czech_ci,
-  `name` varchar(120) COLLATE utf8_czech_ci NOT NULL,
-  `company` varchar(120) COLLATE utf8_czech_ci DEFAULT NULL,
-  `street` varchar(120) COLLATE utf8_czech_ci DEFAULT NULL,
-  `city` varchar(80) COLLATE utf8_czech_ci DEFAULT NULL,
-  `zip` varchar(10) COLLATE utf8_czech_ci DEFAULT NULL,
+  `post` varchar(80) DEFAULT NULL,
+  `notes` text,
+  `name` varchar(120) NOT NULL,
+  `company` varchar(120) DEFAULT NULL,
+  `street` varchar(120) DEFAULT NULL,
+  `city` varchar(80) DEFAULT NULL,
+  `zip` varchar(10) DEFAULT NULL,
   `countries_id` int(11) DEFAULT '1',
-  `email` varchar(80) COLLATE utf8_czech_ci DEFAULT NULL,
-  `phone` varchar(150) COLLATE utf8_czech_ci DEFAULT NULL,
-  `vatin` varchar(10) COLLATE utf8_czech_ci DEFAULT NULL,
-  `vatid` varchar(10) COLLATE utf8_czech_ci DEFAULT NULL,
-  `banking_account` varchar(80) COLLATE utf8_czech_ci DEFAULT NULL,
+  `email` varchar(80) DEFAULT NULL,
+  `phone` varchar(150) DEFAULT NULL,
+  `vatin` varchar(10) DEFAULT NULL,
+  `vatid` varchar(10) DEFAULT NULL,
+  `banking_account` varchar(80) DEFAULT NULL,
   `order` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `users_id` (`users_id`),
@@ -60,7 +60,7 @@ CREATE TABLE IF NOT EXISTS `contacts_docs` (
 CREATE TABLE IF NOT EXISTS `contacts_openinghours` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `day` smallint(6) NOT NULL,
-  `hourstext` varchar(80) COLLATE utf8_czech_ci NOT NULL,
+  `hourstext` varchar(80),
   `contacts_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `contacts_id` (`contacts_id`)
@@ -68,8 +68,8 @@ CREATE TABLE IF NOT EXISTS `contacts_openinghours` (
 
 CREATE TABLE IF NOT EXISTS `countries` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `title_cs` varchar(120) COLLATE utf8_czech_ci NOT NULL,
-  `title_en` varchar(120) COLLATE utf8_czech_ci NOT NULL,
+  `title_cs` varchar(120),
+  `title_en` varchar(120),
   `show` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
@@ -87,17 +87,17 @@ CREATE TABLE IF NOT EXISTS `events` (
 
 CREATE TABLE IF NOT EXISTS `helpdesk` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `title` varchar(100) COLLATE utf8_czech_ci NOT NULL,
-  `description` text COLLATE utf8_czech_ci,
+  `title` varchar(100) NOT NULL,
+  `description` text,
   `fill_phone` smallint(6) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
 CREATE TABLE IF NOT EXISTS `helpdesk_emails` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `template` varchar(40) COLLATE utf8_czech_ci NOT NULL,
-  `subject` varchar(250) COLLATE utf8_czech_ci NOT NULL,
-  `body` text COLLATE utf8_czech_ci NOT NULL,
+  `template` varchar(40) NOT NULL,
+  `subject` varchar(250) NOT NULL,
+  `body` text NOT NULL,
   `helpdesk_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `helpdesk_id` (`helpdesk_id`)
@@ -105,15 +105,15 @@ CREATE TABLE IF NOT EXISTS `helpdesk_emails` (
 
 CREATE TABLE IF NOT EXISTS `helpdesk_messages` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `subject` varchar(80) COLLATE utf8_czech_ci DEFAULT NULL,
-  `message` text COLLATE utf8_czech_ci,
-  `helpdesk_id` int(11) DEFAULT NULL,
-  `contacts_id` int(11) DEFAULT NULL,
-  `email` varchar(120) COLLATE utf8_czech_ci DEFAULT NULL,
-  `phone` varchar(40) COLLATE utf8_czech_ci NOT NULL,
-  `session_id` varchar(40) COLLATE utf8_czech_ci DEFAULT NULL,
+  `subject` varchar(80) DEFAULT NULL,
+  `message` text,
+  `helpdesk_id` int(11),
+  `contacts_id` int(11),
+  `email` varchar(120) DEFAULT NULL,
+  `phone` varchar(40) NOT NULL,
+  `session_id` varchar(40) DEFAULT NULL,
   `users_id` int(11) DEFAULT NULL,
-  `ipaddress` varchar(80) COLLATE utf8_czech_ci NOT NULL,
+  `ipaddress` varchar(80) NOT NULL,
   `date_created` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `contacts_id` (`contacts_id`),
@@ -123,8 +123,8 @@ CREATE TABLE IF NOT EXISTS `helpdesk_messages` (
 
 CREATE TABLE IF NOT EXISTS `languages` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `code` varchar(8) COLLATE utf8_czech_ci NOT NULL,
-  `title` varchar(40) COLLATE utf8_czech_ci NOT NULL,
+  `code` varchar(8) NOT NULL,
+  `title` varchar(40) NOT NULL,
   `used` tinyint(1) NOT NULL DEFAULT '1',
   `default` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
@@ -135,21 +135,21 @@ CREATE TABLE IF NOT EXISTS `languages` (
 CREATE TABLE IF NOT EXISTS `links` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `categories_id` int(11) DEFAULT NULL,
-  `url` varchar(250) COLLATE utf8_czech_ci DEFAULT NULL,
-  `title` varchar(250) COLLATE utf8_czech_ci DEFAULT NULL,
-  `description` text COLLATE utf8_czech_ci,
+  `url` varchar(250) DEFAULT NULL,
+  `title` varchar(250) DEFAULT NULL,
+  `description` text,
   PRIMARY KEY (`id`),
   KEY `links_category_id` (`categories_id`)
 ) ENGINE=InnoDB;
 
 CREATE TABLE IF NOT EXISTS `media` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(80) CHARACTER SET utf8 COLLATE utf8_czech_ci NOT NULL,
+  `name` varchar(80) NOT NULL,
   `file_type` tinyint(1) NOT NULL DEFAULT '0',
   `filesize` int(11) NOT NULL DEFAULT '0',
   `pages_id` int(11) DEFAULT NULL,
   `title` varchar(250) DEFAULT NULL,
-  `description` text CHARACTER SET utf8 COLLATE utf8_czech_ci NOT NULL,
+  `description` text  NOT NULL,
   `date_created` datetime NOT NULL,
   `sorted` int(11) NOT NULL,
   PRIMARY KEY (`id`),
@@ -159,10 +159,10 @@ CREATE TABLE IF NOT EXISTS `media` (
 CREATE TABLE IF NOT EXISTS `menu` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `parent_id` int(11) DEFAULT NULL,
-  `description` text COLLATE utf8_czech_ci,
-  `title` varchar(80) COLLATE utf8_czech_ci NOT NULL,
+  `description` text,
+  `title` varchar(80) NOT NULL,
   `pages_id` int(11) DEFAULT NULL,
-  `url` varchar(200) COLLATE utf8_czech_ci DEFAULT NULL,
+  `url` varchar(200) DEFAULT NULL,
   `sorted` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `pages_id` (`pages_id`),
@@ -171,27 +171,23 @@ CREATE TABLE IF NOT EXISTS `menu` (
 
 CREATE TABLE IF NOT EXISTS `pages` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `slug` varchar(250) COLLATE utf8_czech_ci DEFAULT NULL,
-  `slug_en` varchar(250) COLLATE utf8_czech_ci DEFAULT NULL,
-  `title` varchar(250) COLLATE utf8_czech_ci DEFAULT NULL,
-  `title_en` varchar(250) COLLATE utf8_czech_ci DEFAULT NULL,
-  `document` text COLLATE utf8_czech_ci,
-  `document_en` text COLLATE utf8_czech_ci,
-  `preview` text COLLATE utf8_czech_ci,
-  `preview_en` text COLLATE utf8_czech_ci,
+  `slug` varchar(250) DEFAULT NULL,
+  `slug_en` varchar(250) DEFAULT NULL,
+  `title` varchar(250) DEFAULT NULL,
+  `document` text,
+  `preview` text,
   `pages_id` int(11) DEFAULT NULL,
   `users_id` int(11) DEFAULT NULL,
   `public` int(11) DEFAULT '0',
-  `metadesc` varchar(200) COLLATE utf8_czech_ci DEFAULT NULL,
-  `metadesc_en` varchar(200) COLLATE utf8_czech_ci DEFAULT NULL,
-  `metakeys` varchar(150) COLLATE utf8_czech_ci DEFAULT NULL,
-  `metakeys_en` varchar(150) COLLATE utf8_czech_ci DEFAULT NULL,
+  `metadesc` varchar(200) DEFAULT NULL,
+  `metakeys` varchar(150) DEFAULT NULL,
   `date_created` datetime DEFAULT NULL,
   `date_published` datetime DEFAULT NULL,
   `pages_types_id` int(11) DEFAULT '1',
   `sorted` int(11) NOT NULL DEFAULT '0',
   `editable` int(11) NOT NULL DEFAULT '1',
-  `presenter` varchar(80) COLLATE utf8_czech_ci DEFAULT NULL,
+  `presenter` varchar(80) DEFAULT NULL,
+  `template` varchar(80) DEFAULT NULL
   PRIMARY KEY (`id`),
   KEY `users_id` (`users_id`),
   KEY `pages_id` (`pages_id`),
@@ -212,27 +208,27 @@ CREATE TABLE IF NOT EXISTS `pages_related` (
 
 CREATE TABLE IF NOT EXISTS `pages_types` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `content_type` varchar(40) COLLATE utf8_czech_ci NOT NULL,
-  `presenter` varchar(40) COLLATE utf8_czech_ci NOT NULL,
-  `action` varchar(40) COLLATE utf8_czech_ci NOT NULL,
+  `content_type` varchar(40) NOT NULL,
+  `presenter` varchar(40) NOT NULL,
+  `action` varchar(40) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
 CREATE TABLE IF NOT EXISTS `param` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `param_cs` varchar(80) COLLATE utf8_czech_ci NOT NULL,
-  `param_en` varchar(80) COLLATE utf8_czech_ci NOT NULL,
-  `prefix` varchar(40) COLLATE utf8_czech_ci DEFAULT NULL,
-  `suffix` varchar(40) COLLATE utf8_czech_ci DEFAULT NULL,
+  `param_cs` varchar(80) NOT NULL,
+  `param_en` varchar(80) NOT NULL,
+  `prefix` varchar(40) DEFAULT NULL,
+  `suffix` varchar(40) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
 CREATE TABLE IF NOT EXISTS `params` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `pages_id` int(11) NOT NULL,
-  `group` varchar(40) COLLATE utf8_czech_ci NOT NULL,
+  `group` varchar(40) NOT NULL,
   `param_id` int(11) NOT NULL,
-  `paramvalue` varchar(120) COLLATE utf8_czech_ci NOT NULL,
+  `paramvalue` varchar(120) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `store_id` (`pages_id`),
   KEY `store_param_id` (`param_id`)
@@ -241,10 +237,10 @@ CREATE TABLE IF NOT EXISTS `params` (
 CREATE TABLE IF NOT EXISTS `pricelist` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `categories_id` int(11) DEFAULT NULL,
-  `title` varchar(400) COLLATE utf8_czech_ci NOT NULL,
-  `description` text COLLATE utf8_czech_ci,
+  `title` varchar(400) NOT NULL,
+  `description` text,
   `price` double NOT NULL,
-  `price_info` varchar(80) COLLATE utf8_czech_ci DEFAULT NULL,
+  `price_info` varchar(80) DEFAULT NULL,
   `sorted` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `pricelist_categories_id` (`categories_id`)
@@ -253,7 +249,7 @@ CREATE TABLE IF NOT EXISTS `pricelist` (
 CREATE TABLE IF NOT EXISTS `pricelist_daily` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `categories_id` int(11) DEFAULT NULL,
-  `title` text COLLATE utf8_czech_ci NOT NULL,
+  `title` text NOT NULL,
   `pricelist_dates_id` int(11) NOT NULL,
   `price` double NOT NULL,
   PRIMARY KEY (`id`),
@@ -271,11 +267,11 @@ CREATE TABLE IF NOT EXISTS `pricelist_dates` (
 CREATE TABLE IF NOT EXISTS `settings` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `categories_id` int(11) DEFAULT NULL,
-  `setkey` varchar(40) COLLATE utf8_czech_ci NOT NULL,
-  `setvalue` varchar(120) COLLATE utf8_czech_ci NOT NULL,
-  `description_cs` varchar(150) COLLATE utf8_czech_ci DEFAULT NULL,
-  `description_en` varchar(150) COLLATE utf8_czech_ci DEFAULT NULL,
-  `type` varchar(40) COLLATE utf8_czech_ci DEFAULT NULL,
+  `setkey` varchar(40) NOT NULL,
+  `setvalue` varchar(120) NOT NULL,
+  `description_cs` varchar(150) DEFAULT NULL,
+  `description_en` varchar(150) DEFAULT NULL,
+  `type` varchar(40) DEFAULT NULL,
   `admin_editable` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `categories_id` (`categories_id`)
@@ -283,8 +279,8 @@ CREATE TABLE IF NOT EXISTS `settings` (
 
 CREATE TABLE IF NOT EXISTS `snippets` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `keyword` varchar(80) COLLATE utf8_czech_ci NOT NULL,
-  `content` text COLLATE utf8_czech_ci,
+  `keyword` varchar(80) NOT NULL,
+  `content` text,
   `pages_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `pages_id` (`pages_id`)
@@ -314,7 +310,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 
 CREATE TABLE IF NOT EXISTS `users_roles` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `title` varchar(40) COLLATE utf8_czech_ci NOT NULL,
+  `title` varchar(40) NOT NULL,
   `admin_access` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
