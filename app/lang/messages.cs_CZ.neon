@@ -13,6 +13,7 @@ sign:
     no-access: "Nemáte oprávnění vstupu do administrace"
     logged-out: "Byli jste odhlášeni"
     passwords-not-same: "Hesla se neshodují"
+    thanksForMessage: "Děkujeme a Vaši zprávu"
     invalidLogin: "Musíte se přihlásit"
 error:
     invalidTypeOfImage: "Neplatný typ obrázku"
@@ -29,5 +30,4 @@ error:
     NoItemsInCart: "Nemáte žádné položky v košíku"
     noPermissionForAdmin: "Nemáte oprávnění vstoupit do administrace"
     NotFound: "Nebylo nalezeno"
-    thanksForMessage: "Děkujeme a Vaši zprávu"
     youWereLoggedIn: "Byli jste odhlášeni"

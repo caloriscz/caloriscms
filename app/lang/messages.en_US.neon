@@ -13,6 +13,7 @@ sign:
     no-access: "You are not allowed to enter administration"
     logged-out: "You were logged out"
     passwords-not-same: "Passwords are not same"
+    thanksForMessage: "Děkujeme za Vaši zprávu"
     invalidLogin: "You need to log in"
 error:
     invalidTypeOfImage: "Invalid type of image"
@@ -29,5 +30,4 @@ error:
     NoItemsInCart: "You have no items in your cart"
     noPermissionForAdmin: "You don't have permission to enter admnistration"
     NotFound: "Not found"
-    thanksForMessage: "Děkujeme za Vaši zprávu"
     youWereLoggedIn: "You were logged in"
