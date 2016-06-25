@@ -1,32 +1,38 @@
-{block #titles}Členové{/block}
+{block #titles}{_dictionary.main.Members}{/block}
 {block content}
 
 {foreach $flashes as $flash}
-    <br />
+    <br/>
     <div class="alert alert-warning alert-dismissable">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
         <div class="flash {$flash->type}">{$flash->message}</div>
     </div>
 {/foreach}
 
+<h1 class="page-header">{_dictionary.main.Members}</h1>
 
 
-<h1 class="page-header">Členové</h1>
 
-<div class="row">
-    <div class="col-lg-3">
-        {control adminPanel $categoryId}
+{if $member->users_role->members_display}
+    <div class="row">
+        <div class="col-lg-3">
+            {control adminPanel $categoryId}
 
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                Vytvořit uživatele
-            </div>
-            <div class="panel-body">
-                {control insertForm}
-            </div>
+            {if $member->users_role->members_create}
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        {_dictionary.main.CreateNewAccount}
+                    </div>
+                    <div class="panel-body">
+                        {control insertForm}
+                    </div>
+                </div>
+            {/if}
+        </div>
+        <div class="col-lg-9">
+            {control membersGrid}
         </div>
     </div>
-    <div class="col-lg-9">
-        {control membersGrid}
-    </div>
-</div>
+{else}
+    <p>Nemáte oprávnění k zobrazení této stránky</p>
+{/if}

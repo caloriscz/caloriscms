@@ -4,7 +4,7 @@
 <h1 class="page-header">{_dictionary.main.members|firstUpper}: {$members->username}</h1>
 
 {foreach $flashes as $flash}
-    <br />
+    <br/>
     <div class="alert alert-warning alert-dismissable">
         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
         <div class="flash {$flash->type}">{$flash->message}</div>
@@ -12,47 +12,57 @@
 {/foreach}
 
 
-<div class="row">
-    <div class="col-lg-3">
-        {control editForm}
+
+{if $member->users_role->members_display}
+    <div class="row">
+        <div class="col-lg-3">
+            <div class="panel panel-primary">
+                <div class="panel-heading">Upravit informace o uživateli</div>
+                <div class="panel-body">
+                    {control editForm}
+                </div>
+            </div>
+
+            <div class="panel panel-success">
+                <div class="panel-heading">Zaslat uživateli znovu heslo</div>
+                <div class="panel-body">
+                    {control sendLoginForm}
+                </div>
+            </div>
+
+        </div>
+        <div class="col-lg-9">
+
+            <table class="table table-bordered table-condensed">
+                <tr>
+                    <td class="col-md-1">{_dictionary.main.member|firstUpper}</td>
+                    <td>{$members->username}</td>
+                </tr>
+                <tr>
+                    <td class="col-md-1">{_dictionary.main.email|firstUpper}</td>
+                    <td>{$members->email}</td>
+                </tr>
+                <tr>
+                    <td class="col-md-1">{_dictionary.main.created|firstUpper}</td>
+                    <td>{$members->date_created|date:'j. n. Y'}</td>
+                </tr>
+            </table>
 
 
-        {if ($role[0] == 1)}
-            <h3>Zaslat uživateli znovu heslo</h3>
-            {control sendLoginForm}
-        {/if}
-    </div>
-    <div class="col-lg-9">
+            <h2>Přiřazené kontakty <span class="pull-right">{control insertContactForm}</span></h2>
 
-        <table class="table table-bordered table-condensed">
-            <tr>
-                <td class="col-md-1">{_dictionary.main.member|firstUpper}</td>
-                <td>{$members->username}</td>
-            </tr>
-            <tr>
-                <td class="col-md-1">{_dictionary.main.email|firstUpper}</td>
-                <td>{$members->email}</td>
-            </tr>
-            <tr>
-                <td class="col-md-1">{_dictionary.main.created|firstUpper}</td>
-                <td>{$members->date_created|date:'j. n. Y'}</td>
-            </tr>
-        </table>
-
-
-        <h2>Přiřazené kontakty <span class="pull-right">{control insertContactForm}</span></h2>
-
-        <table class="table">
-            {var $membersRelated = $members->related('contacts', 'users_id')}
-            {if $membersRelated->count() > 0}
+            <table class="table">
+                {var $membersRelated = $members->related('contacts', 'users_id')}
+                {if $membersRelated->count() > 0}
                 {foreach $membersRelated as $item}
                     <tr>
                         <td class="col-xs-1">
-                            <a n:href="deleteContact!, id => $item->id, contact => $members->id" onclick="return confirm('Opravdu smazat?')">
+                            <a n:href="deleteContact!, id => $item->id, contact => $members->id"
+                                    onclick="return confirm('Opravdu smazat?')">
                                 <i class="fa fa-times font-red"></i>
                             </a>
                         </td>
-                        <td><a n:href=":Admin:Contacts:detail, id => $item->id">{$item->name}</a></td>
+                        <td><a n:href=":Admin:Contacts:detail, id => $item->pages_id">{$item->name}</a></td>
                         <td>{$item->street}</td>
                         <td>{$item->zip}</td>
                         <td>{$item->city}</td>
@@ -61,22 +71,25 @@
                 {/foreach}
             </table>
 
-        {else}
-            Žádné kontakty nebyly nalezeny
-        {/if}
+            {else}
+            <p>Žádné kontakty nebyly nalezeny</p>
+            {/if}
 
-        {if $settings['store:enabled']}
-            <h2>Přiřazené objednávky</h2>
-            <p>
-                {var $ordersRelated = $members->related('orders', 'users_id')}
-                {foreach $ordersRelated as $item}
-                    <a n:href=":AdminStore:Orders:default, id => $item->id">{$item->oid}</a>{sep}, {/sep}
-                {/foreach}
+            {if $settings['store:enabled']}
+                <h2>Přiřazené objednávky</h2>
+                <p>
+                    {var $ordersRelated = $members->related('orders', 'users_id')}
+                    {foreach $ordersRelated as $item}
+                        <a n:href=":AdminStore:Orders:default, id => $item->id">{$item->oid}</a>{sep}, {/sep}
+                    {/foreach}
 
-                {if $ordersRelated->count() == 0}
-                    Žádné objednávky nebyly nalezeny
-                {/if}
-            </p>
-        {/if}
+                    {if $ordersRelated->count() == 0}
+                        Žádné objednávky nebyly nalezeny
+                    {/if}
+                </p>
+            {/if}
+        </div>
     </div>
-</div>
+{else}
+    <p>Nemáte oprávnění k zobrazení této stránky</p>
+{/if}

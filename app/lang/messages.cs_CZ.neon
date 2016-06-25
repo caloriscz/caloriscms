@@ -9,6 +9,12 @@ helpdesk:
     message: "Zpráva"
     request: "Poptávka"
     send: "Odeslat"
+members:
+    sendLoginEmail: "odeslat e-mail s přihlašovacími informacemi"
+    memberAlreadyExists: "Člen již existuje"
+    emailAlreadyExists: "Člen s tímto e-mailem již existuje"
+    invalidEmailFormat: "Napište správný formát e-mailu"
+    PermissionDenied: "Nemáte oprávnění"
 sign:
     no-access: "Nemáte oprávnění vstupu do administrace"
     logged-out: "Byli jste odhlášeni"

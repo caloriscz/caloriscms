@@ -9,6 +9,12 @@ helpdesk:
     message: "Message"
     request: "Request"
     send: "Send"
+members:
+    sendLoginEmail: "send e-mail with login information"
+    memberAlreadyExists: "Member already exists"
+    emailAlreadyExists: "Member with this e-mail already exists"
+    invalidEmailFormat: "Enter correct e-mail"
+    PermissionDenied: "Permission denied"
 sign:
     no-access: "You are not allowed to enter administration"
     logged-out: "You were logged out"
@@ -18,7 +24,7 @@ sign:
 error:
     invalidTypeOfImage: "Invalid type of image"
     CannotBeDeleted: "Nelze smazat"
-    CannotBeDeletedUsedInOrders: "Item cannot be deleted. It is used in orders. You can hide product. Je používáno v objednávkách. Můeže jej však skrýt"
+    CannotBeDeletedUsedInOrders: "Item cannot be deleted. It is used in orders. You can hide product."
     CantDeleteMainGroup: "You can't delete main group"
     categoryAlreadyExists: "Kategorie tohoto jména již existuje"
     categoryMustHaveSomeName: "Category must have some name"
