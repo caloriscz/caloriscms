@@ -38,7 +38,7 @@ INSERT INTO `helpdesk_emails` (`id`, `template`, `subject`, `body`, `helpdesk_id
 INSERT INTO `pages_types` (`id`, `content_type`, `presenter`, `action`) VALUES
 (0, 'Template', '', ''),
 (1, 'Page', 'Front:Services', 'default'),
-(2, 'Blog', 'Front:Blog', 'detail'),
+(2, 'Blog', 'Front:Blog', 'detail'),	
 (3, 'Event', 'Front:Events', 'detail'),
 (4, 'Product', 'Front:Product', 'default'),
 (5, 'Contacts', 'Front:Contacts', 'detail'),
@@ -114,13 +114,8 @@ INSERT INTO `users` (`id`, `username`, `categories_id`, `uid`, `email`, `sex`, `
 (0, 'guest', NULL, '', '', 0, NULL, '', NULL, NULL, 0, NULL, 0, 4, 4, 0, 0),
 (1, 'admin', NULL, '000001', '', 2, '', '$2y$10$DLhMCsYpbB.xHJ501e.xMOvhneiT1U6YypGAcOna/V2kzIGZOwxla', NULL, NULL, 1, NULL, 1, 1, 1, 3, 7);
 
-INSERT INTO `users_roles` (`id`, `title`, `admin_access`) VALUES
-(1, 'Admin', 1),
-(2, 'Super User', 1),
-(3, 'Editor', 1),
-(4, 'Site User', 0);
 
-INSERT INTO `users_roles` (`id`, `title`, `admin_access`, `appearance_images`, `helpdesk_edit`, `settings_edit`, `members_display`, `members_create`, `members_delete`) VALUES
+INSERT INTO `users_roles` (`id`, `title`, `admin_access`, `appearance_images`, `helpdesk_edit`, `settings_edit`, `members_display`, `members_edit`, `members_create`, `members_delete`) VALUES
 (1, 'Admin', 1, 0, 1, 1, 1, 1, 1, 1),
 (2, 'Super User', 1, 0, 1, 1, 1, 1, 1, 1),
 (3, 'Editor', 1, 0, 1, 0, 0, 0, 0, 0),

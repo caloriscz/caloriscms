@@ -6,7 +6,7 @@ use Nette,
     App\Model;
 
 /**
- * Categories presenter.
+ * Menu presenter.
  */
 class MenuPresenter extends BasePresenter
 {
@@ -14,7 +14,7 @@ class MenuPresenter extends BasePresenter
     /**
      * Insert menu
      */
-    protected function createComponentInsertCategoryForm()
+    protected function createComponentInsertMenuForm()
     {
         $form = $this->baseFormFactory->createUI();
         $form->addHidden("parent");
@@ -23,12 +23,12 @@ class MenuPresenter extends BasePresenter
         $form->addSubmit('submitm', 'dictionary.main.Insert')
             ->setAttribute("class", "btn btn-primary");
 
-        $form->onSuccess[] = $this->insertCategoryFormSucceeded;
-        $form->onValidate[] = $this->validateCategoryFormSucceeded;
+        $form->onSuccess[] = $this->insertMenuFormSucceeded;
+        $form->onValidate[] = $this->validateMenuFormSucceeded;
         return $form;
     }
 
-    public function validateCategoryFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
+    public function validateMenuFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
     {
         $category = $this->database->table("menu")->where(array(
             "parent_id" => $form->values->parent,
@@ -46,10 +46,18 @@ class MenuPresenter extends BasePresenter
         }
     }
 
-    public function insertCategoryFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
+    public function insertMenuFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
     {
-        $category = new Model\Category($this->database);
-        $category->setCategory($form->values->title, $form->values->parent);
+        if (is_numeric($form->values->parent) == false) {
+            $parent = null;
+        } else {
+            $parent = $form->values->parent;
+        }
+
+        $this->database->table("menu")->insert(array(
+            "title" => $form->values->title,
+            "parent_id" => $parent,
+        ));
 
         $this->redirect(":Admin:Menu:default", array("id" => null));
     }
@@ -104,13 +112,7 @@ class MenuPresenter extends BasePresenter
             }
         }
 
-        $slugName = new Model\Slug($this->database);
-
-        if ($form->values->slug !== $form->values->slug_old && is_numeric($form->values->slug_type)) {
-            $slugName->update($form->values->slug, $form->values->slug_old);
-        }
-
-        $this->database->table("categories")->get($form->values->id)
+        $this->database->table("menu")->get($form->values->id)
             ->update(array(
                 "title" => $form->values->title,
                 "pages_id" => $form->values->page,
@@ -145,7 +147,7 @@ class MenuPresenter extends BasePresenter
 
     function handleUp($id, $sorted)
     {
-        $sortDb = $this->database->table("categories")->where(array(
+        $sortDb = $this->database->table("menu")->where(array(
             "sorted > ?" => $sorted,
             "parent_id" => $this->getParameter("category"),
         ))->order("sorted")->limit(1);
@@ -162,7 +164,7 @@ class MenuPresenter extends BasePresenter
 
     function handleDown($id, $sorted, $category)
     {
-        $sortDb = $this->database->table("categories")->where(array(
+        $sortDb = $this->database->table("menu")->where(array(
             "sorted < ?" => $sorted,
             "parent_id" => $category,
         ))->order("sorted DESC")->limit(1);

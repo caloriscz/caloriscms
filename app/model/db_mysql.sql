@@ -187,7 +187,7 @@ CREATE TABLE IF NOT EXISTS `pages` (
   `sorted` int(11) NOT NULL DEFAULT '0',
   `editable` int(11) NOT NULL DEFAULT '1',
   `presenter` varchar(80) DEFAULT NULL,
-  `template` varchar(80) DEFAULT NULL
+  `template` varchar(80) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `users_id` (`users_id`),
   KEY `pages_id` (`pages_id`),
@@ -301,7 +301,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `activation` char(40) DEFAULT NULL,
   `newsletter` int(11) DEFAULT '0',
   `type` int(11) NOT NULL DEFAULT '1',
-  `role` int(11) DEFAULT '0',
+  `users_roles_id` int(11) DEFAULT '0',
   `login_error` int(11) NOT NULL DEFAULT '0',
   `login_success` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
