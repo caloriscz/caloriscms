@@ -20,7 +20,9 @@
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
                     <li class="active">
+                        {if $settings['store:enabled']}
                         <a href="{plink ':AdminStore:Catalogue:default'}">{_dictionary.main.Catalogue}</a></li>
+                    {/if}
                     {if $page != false}
                         {if $page->pages_types_id == 1}
                             <li><a href="{plink ':Admin:Pages:detail', id => $page->id}">uprav</a></li>
@@ -29,14 +31,18 @@
                         {elseif $page->pages_types_id == 3}
                             <li><a href="{plink ':Admin:Events:detail', id => $page->id}">uprav</a></li>
                         {elseif $page->pages_types_id == 4}
-                            <li class="navbar-text">Blog: </li>
-                            <li><a href="{plink ':AdminStore:Product:default', id => $page->id}">uprav</a></li>
-                            <li><a href="{plink ':AdminStore:Product:images', id => $page->id}">obrázek</a></li>
-                            <li><a href="{plink ':AdminStore:Product:stock', id => $page->id}">zásoby</a></li>
+                            {if $settings['store:enabled']}
+                                <li class="navbar-text">Blog:</li>
+                                <li><a href="{plink ':AdminStore:Product:default', id => $page->id}">uprav</a></li>
+                                <li><a href="{plink ':AdminStore:Product:images', id => $page->id}">obrázek</a></li>
+                                <li><a href="{plink ':AdminStore:Product:stock', id => $page->id}">zásoby</a></li>
+                            {/if}
                         {elseif $page->pages_types_id == 6}
                             <li><a href="{plink ':Admin:Media:default', id => 6}">uprav</a></li>
                         {elseif $page->pages_types_id == 7}
-                            <li><a href="{plink ':AdminStore:Categories:detail', id => $page->id}">uprav</a></li>
+                            {if $settings['store:enabled']}
+                                <li><a href="{plink ':AdminStore:Categories:detail', id => $page->id}">uprav</a></li>
+                            {/if}
                         {/if}
                     {/if}
                 </ul>
