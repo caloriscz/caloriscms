@@ -19,7 +19,8 @@ INSERT INTO `categories` (`id`, `parent_id`, `description`, `title`, `sorted`) V
 (16, 1, NULL, 'Contacts', 166),
 (17, 1, NULL, 'Social', 176),
 (18, 2, NULL, 'Místa k vyzvednutí', 46),
-(19, 2, NULL, 'Newsletter', 153);
+(19, 2, NULL, 'Newsletter', 153),
+(19, 2, NULL, 'Vzhled', 154);
 
 INSERT INTO `countries` (`id`, `title_cs`, `title_en`, `show`) VALUES
 (1, 'Česká Republika', 'Czech Republic', 1),
@@ -104,7 +105,11 @@ INSERT INTO `settings` (`categories_id`, `setkey`, `setvalue`, `description_cs`,
 (13, 'store:stock:shippingByWeight', '1', 'Cena poštovného podle hmotnosti', 'Shipping price calculated by weight', 'boolean', 1),
 (13, 'store:order:guestOrderEnabled', '1', 'Povolit objednání neregistrovaným uživatelům', 'Unregistered user order enabled', 'boolean', 1),
 (13, 'store:order:isVatIncluded', '1', 'Je DPH připočítáváno nebo odpočítáváno (1 je připočítáváno)', 'Is VAT included (1 means included)', 'boolean', 0),
-(13, 'store:stock:deductStock', '0', 'Odečítat zboží po jeho koupi', 'Subtract the stock after purchase', 'boolean', 1);
+(13, 'store:stock:deductStock', '0', 'Odečítat zboží po jeho koupi', 'Subtract the stock after purchase', 'boolean', 1),
+(20, 'appearance:paths:logo', 'logo.png', 'Obrázek loga ve vysokém rozlišení a barvě', 'Image of logo in high resolution and color', 'local_path', 0),
+(20, 'appearance:paths:favicon:ico', 'favicon.ico', 'Favicon s příponou ico', 'Favicon with ico suffix', 'local_path', 0),
+(20, 'appearance:carousel:directions', '0', 'Zobrazit indikátory (levá a pravá šipka)', 'Show indicators (left and right arrow)', 'boolean', 1),
+(20, 'appearance:carousel:indicators', '0', 'Zobrazit menu', 'Show menu', 'boolean', 1);
 
 INSERT INTO `languages` (`id`, `code`, `title`, `used`, `default`) VALUES
 (1, 'cs', 'čeština', 1, 1);

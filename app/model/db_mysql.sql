@@ -1,6 +1,16 @@
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
 
+CREATE TABLE IF NOT EXISTS `carousel` (
+  `id` int(11) NOT NULL,
+  `title` varchar(80) DEFAULT NULL,
+  `description` text,
+  `uri` varchar(250) NOT NULL,
+  `image` varchar(120) NOT NULL,
+  `visible` tinyint(1) NOT NULL DEFAULT '1',
+  `sorted` int(11) NOT NULL
+) ENGINE=InnoDB
+
 CREATE TABLE IF NOT EXISTS `categories` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `parent_id` int(11) DEFAULT NULL,
