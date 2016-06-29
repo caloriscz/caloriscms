@@ -1,16 +1,24 @@
-{block #titles}{$contact->name}{/block}
+{block #titles}{$page->title}{/block}
 {block content}
 
 <div class="heading-color">
     <div class="container heading">
-        <h1>{$contact->name}</h1>
+        <h1>{$page->title}</h1>
     </div>
+</div>
+
+<div class="container white content padded-top padded-btm nase-stranky">
+    <div class="col-md-9">
+        {$page->document|noescape|f}
+    </div>
+    <div class="col-md-3"></div>
 </div>
 
 
 <div class="container white content padded-top padded-btm">
     <div class="col-md-4">
-        {var $contactImage = $contact->related('contacts_images', 'contacts_id')}
+        {var $contactImage = $page->related('media', 'pages_id')}
+        {var $contact = $page->ref('contacts', 'pages_id')}
 
         {if $contactImage->count() > 0}
             {var $contactPortrait = $contactImage->fetch()}

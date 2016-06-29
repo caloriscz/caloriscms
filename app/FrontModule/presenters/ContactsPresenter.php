@@ -18,10 +18,8 @@ class ContactsPresenter extends BasePresenter
 
     function renderDetail()
     {
-        $detail = substr($this->getParameter("id"), 0, strpos($this->getParameter("id"), '-'));
-
-        $this->template->contact = $this->database->table("contacts")
-                ->get($detail);
+        $page = $this->database->table("pages")->get($this->getParameter("page_id"));
+        $this->template->page = $page;
     }
 
 }

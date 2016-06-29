@@ -40,10 +40,10 @@ INSERT INTO `pages_types` (`id`, `content_type`, `presenter`, `action`) VALUES
 (1, 'Page', 'Front:Services', 'default'),
 (2, 'Blog', 'Front:Blog', 'detail'),	
 (3, 'Event', 'Front:Events', 'detail'),
-(4, 'Product', 'Front:Product', 'default'),
+(4, 'Product', 'FrontStore:Product', 'default'),
 (5, 'Contacts', 'Front:Contacts', 'detail'),
 (6, 'Galerie', 'Front:Gallery', 'album'),
-(7, 'Product Category', 'Front:Catalogue', 'default'),
+(7, 'Product Category', 'FrontStore:Catalogue', 'default'),
 (8, 'Dokumenty', 'Front:Documents', 'default');
 
 INSERT INTO `pages` (`slug`, `title`, `document`, `preview`, `pages_id`, `users_id`, `public`, `metadesc`, `metakeys`, `date_created`, `date_published`, `pages_types_id`, `sorted`, `editable`, `presenter`) VALUES
@@ -107,11 +107,9 @@ INSERT INTO `settings` (`categories_id`, `setkey`, `setvalue`, `description_cs`,
 (13, 'store:stock:deductStock', '0', 'Odečítat zboží po jeho koupi', 'Subtract the stock after purchase', 'boolean', 1);
 
 INSERT INTO `languages` (`id`, `code`, `title`, `used`, `default`) VALUES
-(1, 'cs', 'čeština', 1, 1),
-(2, 'en', 'English', 1, 0);
+(1, 'cs', 'čeština', 1, 1);
 
 INSERT INTO `users` (`id`, `username`, `categories_id`, `uid`, `email`, `sex`, `name`, `password`, `date_created`, `date_visited`, `state`, `activation`, `newsletter`, `type`, `role`, `login_error`, `login_success`) VALUES
-(0, 'guest', NULL, '', '', 0, NULL, '', NULL, NULL, 0, NULL, 0, 4, 4, 0, 0),
 (1, 'admin', NULL, '000001', '', 2, '', '$2y$10$DLhMCsYpbB.xHJ501e.xMOvhneiT1U6YypGAcOna/V2kzIGZOwxla', NULL, NULL, 1, NULL, 1, 1, 1, 3, 7);
 
 
