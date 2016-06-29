@@ -227,6 +227,68 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
         return $control;
     }
 
+    protected function createComponentNavbarMenu()
+    {
+        $control = new \Caloriscz\Menus\NavbarMenuControl($this->database);
+        return $control;
+    }
+
+    protected function createComponentBlogPreview()
+    {
+        $control = new \BlogPreviewControl($this->database);
+        return $control;
+    }
+
+    protected function createComponentEventsCalendar()
+    {
+        $control = new \EventsCalendarControl($this->database);
+        return $control;
+    }
+
+    protected function createComponentSearch()
+    {
+        $control = new \Caloriscz\Product\SearchControl($this->database);
+        return $control;
+    }
+
+    protected function createComponentAlbum()
+    {
+        $control = new \AlbumControl($this->database);
+        return $control;
+    }
+
+    protected function createComponentHelpdesk()
+    {
+        $control = new \HelpdeskControl($this->database);
+        return $control;
+    }
+
+    protected function createComponentCarouselBox()
+    {
+        $control = new \CarouselBoxControl($this->database);
+        return $control;
+    }
+
+    protected function createComponentNewsletterForm()
+    {
+        $control = new \NewsletterFormControl($this->database);
+        return $control;
+    }
+
+    protected function createComponentAdminBar()
+    {
+        $control = new \Caloriscz\Menus\AdminBarControl($this->database);
+        return $control;
+    }
+	
+	protected function createComponentMenu()
+    {
+        $control = new \Caloriscz\Menus\MenuControl($this->database);
+        return $control;
+    }
+	
+    /* Store components  ----------------------------------------------------------------------------------------------- */
+
     protected function createComponentCartUpdater()
     {
         $control = new \Caloriscz\Cart\CartUpdaterControl($this->database);
@@ -245,71 +307,9 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
         return $control;
     }
 
-    protected function createComponentNavbarMenu()
-    {
-        $control = new \Caloriscz\Menus\NavbarMenuControl($this->database);
-        return $control;
-    }
-
-    protected function createComponentBlogPreview()
-    {
-        $control = new \BlogPreviewControl($this->database);
-        return $control;
-    }
-
-    protected
-    function createComponentEventsCalendar()
-    {
-        $control = new \EventsCalendarControl($this->database);
-        return $control;
-    }
-
-    protected
-    function createComponentProduct()
-    {
-        $control = new \ProductControl($this->database);
-        return $control;
-    }
-
-    protected
-    function createComponentSearch()
+    protected function createComponentSearch()
     {
         $control = new \Caloriscz\Product\SearchControl($this->database);
-        return $control;
-    }
-
-    protected
-    function createComponentAlbum()
-    {
-        $control = new \AlbumControl($this->database);
-        return $control;
-    }
-
-    protected
-    function createComponentHelpdesk()
-    {
-        $control = new \HelpdeskControl($this->database);
-        return $control;
-    }
-
-    protected
-    function createComponentCarouselBox()
-    {
-        $control = new \CarouselBoxControl($this->database);
-        return $control;
-    }
-
-    protected
-    function createComponentNewsletterForm()
-    {
-        $control = new \NewsletterFormControl($this->database);
-        return $control;
-    }
-
-    protected
-    function createComponentAdminBar()
-    {
-        $control = new \Caloriscz\Menus\AdminBarControl($this->database);
         return $control;
     }
 
