@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS `carousel` (
   `image` varchar(120) NOT NULL,
   `visible` tinyint(1) NOT NULL DEFAULT '1',
   `sorted` int(11) NOT NULL
-) ENGINE=InnoDB
+) ENGINE=InnoDB;
 
 CREATE TABLE IF NOT EXISTS `categories` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
