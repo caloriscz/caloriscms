@@ -18,9 +18,9 @@ class CarouselBoxControl extends Control
         $template = $this->template;
         $template->settings = $this->presenter->template->settings;
 
-        $template->carousel = $this->database->table("appearance_carousel")->where(array(
+        $template->carousel = $this->database->table("carousel")->where(array(
             "visible" => 1
-        ));
+        ))->order("sorted");
 
         $template->setFile(__DIR__ . '/CarouselBoxControl.latte');
 

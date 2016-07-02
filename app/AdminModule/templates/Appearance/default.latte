@@ -1,0 +1,38 @@
+{block #titles}{_dictionary.main.Settings}{/block}
+{block content}
+
+<h1 class="page-header">Cesty k obrázkům</h1>
+
+<div class="row">
+    <div class="col-lg-9">
+
+        {foreach $settingsDb as $item}
+            <form n:name="editSettingsForm" class="form-horizontal" role="form">
+                <div class="row">
+                    <div class="col-sm-2">
+                        {if file_exists($appDir . '/images/paths/' . $item->setvalue)}
+                            <img src="/images/paths/{$item->setvalue}" alt="{$item->setvalue}" title="{$item->setvalue}"
+                                 class="img-responsive">
+                        {else}
+                            <p>Nenalezen</p>
+                        {/if}
+                    </div>
+                    <div class="col-sm-6">
+
+                        {if $item->type == 'local_path'}
+                            <p><strong>{$item->description_cs}</strong></p>
+                            <input type="hidden" n:name="path_id" value="{$item->id}">
+                            <input type="file" n:name="path">
+                            <br>
+                        {/if}
+                    </div>
+                    <div class="col-sm-4">
+                        <button type="submit" class="btn btn-success">{_dictionary.main.save}</button>
+                    </div>
+                </div>
+            </form>
+        {/foreach}
+    </div>
+
+</div>
+</div>

@@ -12,7 +12,7 @@
     <div class="carousel-inner" role="listbox">
         {foreach $carousel as $item}
             <div class="item{if $iterator->first} active{/if}">
-                <a href="{$item->uri}"><img src="{$item->image}"/></a>
+                <a href="{$item->uri}"><img src="/images/carousel/{$item->image}"/></a>
                 <div class="carousel-caption">
                     {$item->title}
                 </div>
