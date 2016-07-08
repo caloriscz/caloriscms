@@ -13,12 +13,12 @@
 
 
 
-{if $member->users_role->members_display}
+{if $member->users_roles->members_display}
     <div class="row">
         <div class="col-lg-3">
             {control adminPanel $categoryId}
 
-            {if $member->users_role->members_create}
+            {if $member->users_roles->members_create}
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         {_dictionary.main.CreateNewAccount}

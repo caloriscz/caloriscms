@@ -307,11 +307,5 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
         return $control;
     }
 
-    protected function createComponentSearch()
-    {
-        $control = new \Caloriscz\Product\SearchControl($this->database);
-        return $control;
-    }
-
 
 }

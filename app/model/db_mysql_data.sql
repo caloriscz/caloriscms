@@ -20,7 +20,7 @@ INSERT INTO `categories` (`id`, `parent_id`, `description`, `title`, `sorted`) V
 (17, 1, NULL, 'Social', 176),
 (18, 2, NULL, 'Místa k vyzvednutí', 46),
 (19, 2, NULL, 'Newsletter', 153),
-(20, 2, NULL, 'Vzhled', 154);
+(20, 1, NULL, 'Vzhled', 154);
 
 INSERT INTO `countries` (`id`, `title_cs`, `title_en`, `show`) VALUES
 (1, 'Česká Republika', 'Czech Republic', 1),

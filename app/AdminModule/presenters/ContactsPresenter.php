@@ -57,7 +57,7 @@ class ContactsPresenter extends BasePresenter
         }
 
         $arr = array(
-            "categories_id" => $contactId,
+            "users_id" => null,
             "pages_id" => $page,
             "type" => $form->values->type,
         );

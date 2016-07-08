@@ -8,7 +8,8 @@ CREATE TABLE IF NOT EXISTS `carousel` (
   `uri` varchar(250) NOT NULL,
   `image` varchar(120) NOT NULL,
   `visible` tinyint(1) NOT NULL DEFAULT '1',
-  `sorted` int(11) NOT NULL
+  `sorted` int(11) NOT NULL,
+	PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
 CREATE TABLE IF NOT EXISTS `categories` (
