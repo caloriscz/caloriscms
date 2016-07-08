@@ -7,10 +7,10 @@
     <div class="col-lg-3">
         {control adminPanel $categoryId}
 
-        <br />
+        <br/>
 
         <pre>
-            {_admin.settings.whenUsedInTemplate}: <br />
+            {_admin.settings.whenUsedInTemplate}: <br/>
 <span n:syntax="off">{$settings['site:currency:code']}</span>
         </pre>
     </div>
@@ -23,18 +23,33 @@
                         <label class="col-sm-4" for="exampleInput">{$item->{'description_' . $langSelected}}</label>
                         <div class="col-sm-4">
                             {if $item->type == 'boolean'}
-                                <input type="radio"  name="set[{$item->setkey}]" value="1"{if $item->setvalue == 1} checked{/if} /> ano 
-                                <input type="radio" name="set[{$item->setkey}]" value="0"{if $item->setvalue == 0} checked{/if}/> ne
+                                <input type="radio" name="set[{$item->setkey}]"
+                                       value="1"{if $item->setvalue == 1} checked{/if} /> ano
+                                <input type="radio" name="set[{$item->setkey}]"
+                                       value="0"{if $item->setvalue == 0} checked{/if}/> ne
+                            {elseif substr($item->type, 0, 5) == 'table'}
+                                {var $itemSelect = explode(';', $item->type)}
+                                {var $table = explode(':', $itemSelect[0])}
+                                {var $column = explode(':', $itemSelect[1])}
+                                <select name="set[{$item->setkey}]" class="form-control">{$column}
+                                    {foreach $database->table("$table[1]")->order("$column[1]") as $itemTable}
+                                        <option value="{$itemTable->id}" {if $itemTable->id == $item->setvalue} selected{/if}>{$itemTable->{"$column[1]"}}</option>
+                                    {/foreach}
+                                </select>
                             {else}
-                                <input type=text name="set[{$item->setkey}]" class="form-control tool-tip" value="{$item->setvalue}">
+                                <input type=text name="set[{$item->setkey}]" class="form-control tool-tip"
+                                       value="{$item->setvalue}">
                             {/if}
                         </div>
-                        <div class="col-sm-4"><pre><small><span n:syntax="off">{$settings['</span>{$item->setkey}<span n:syntax="off">']}</span></small></pre>
+                        <div class="col-sm-4">
+                            <pre><small><span n:syntax="off">{$settings['</span>{$item->setkey}<span n:syntax="off">']}</span></small></pre>
                         </div>
                     </div>
                 {/foreach}
                 <div class="form-group">
-                    <div class="col-sm-offset-2 col-sm-10"><button type="submit">{_dictionary.main.save}</button></div>
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <button type="submit">{_dictionary.main.save}</button>
+                    </div>
                 </div>
             {/form}
         </div>

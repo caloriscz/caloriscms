@@ -221,7 +221,7 @@ class PagesPresenter extends BasePresenter
 
     public function renderDefault()
     {
-        $this->template->pages = $this->database->table("pages")->where(array("pages_types_id" => 1))->order("title");
+        $this->template->pages = $this->database->table("pages")->where(array("pages_types_id" => array(0, 1)))->order("title");
     }
 
     public function renderDetail()

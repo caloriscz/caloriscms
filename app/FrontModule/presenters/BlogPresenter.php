@@ -16,6 +16,8 @@ class BlogPresenter extends BasePresenter
         parent::startup();
 
         $this->template->categories = $this->database->table("categories");
+		
+		        $this->template->snippets = $this->database->table("snippets")->where("pages_id", 3)->fetchPairs('id', 'content');
     }
 
     public function renderDefault()

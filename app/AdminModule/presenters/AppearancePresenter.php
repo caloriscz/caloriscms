@@ -40,16 +40,25 @@ class AppearancePresenter extends BasePresenter
 
         $form->setDefaults(array_filter($arr));
 
-        $form->onSuccess[] = $this->updateCategoryFormSucceeded;
+        $form->onSuccess[] = $this->carouselEditFormSucceeded;
         return $form;
     }
 
-    public function updateCategoryFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
+    public function carouselEditFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
     {
         $image = $form->values->the_file->name;
 
+        $arr = array(
+            "title" => $form->values->title,
+            "description" => $form->values->description,
+            "uri" => $form->values->uri,
+            "visible" => $form->values->visible,
+        );
+
         if ($form->values->the_file->error == 0) {
             if (file_exists(APP_DIR . "/images/carousel/" . $image)) {
+                $arr['image'] = $image;
+
                 \App\Model\IO::remove(APP_DIR . "/images/carousel/" . $image);
                 \App\Model\IO::upload(APP_DIR . "/images/carousel/", $image, 0644);
             } else {
@@ -58,13 +67,7 @@ class AppearancePresenter extends BasePresenter
         }
 
         $this->database->table("carousel")->get($form->values->carousel_id)
-            ->update(array(
-                "title" => $form->values->title,
-                "description" => $form->values->description,
-                "uri" => $form->values->uri,
-                "image" => $image,
-                "visible" => $form->values->visible,
-            ));
+            ->update($arr);
 
 
         $this->redirect(":Admin:Appearance:carouselDetail", array("carousel_id" => $form->values->carousel_id));

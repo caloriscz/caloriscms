@@ -26,11 +26,15 @@
 
 <div class="row">
     <div class="col-lg-9">
-        {control documentEditor}
+        {if $pages->pages_types->id == 0}
+            <p>přednastavená stránka - text této stránky se upravuje přímo ve zdrojovém kódu nebo pomocí
+                <a n:href=":Admin:Pages:snippets, id => $presenter->getParameter('id')">ústřižků nahoře</a>
+            </p>
+        {else}
+            {control documentEditor}
+        {/if}
     </div>
     <div class="col-lg-3">
         {control pageSettings}
     </div>
 </div>
-
-

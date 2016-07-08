@@ -21,9 +21,13 @@ class SettingsPresenter extends BasePresenter
         $form->getElementPrototype()->role = 'form';
         $form->getElementPrototype()->autocomplete = 'off';
 
+        $form->addHidden('return');
         $form->addHidden('setkey');
         $form->addText("setvalue", "dictionary.main.Description");
-        $form->addSubmit('send', 'Upravit');
+
+        $form->setDefaults(array("return" => $this->getParameter("id")));
+
+        $form->addSubmit('send', 'dictionary.main.Save');
 
         $form->onSuccess[] = $this->editSettingsSucceeded;
         return $form;
@@ -42,7 +46,7 @@ class SettingsPresenter extends BasePresenter
             ));
         }
 
-        $this->redirect(":Admin:Settings:default", array("id" => null));
+        $this->redirect(":Admin:Settings:default", array("id" => $values['return']));
     }
 
     public function renderDefault()
@@ -62,6 +66,7 @@ class SettingsPresenter extends BasePresenter
 
         $this->template->settingsDb = $this->database->table("settings")
                 ->where($arr);
+        $this->template->database = $this->database;
     }
 
 }

@@ -22,20 +22,22 @@
         <table class="table table-striped">
             <tr>
                 <th></th>
-                <th>{_admin.pages.name}</th>
-                <th>Webový název</th>
-                <th>Náhled</th>
+                <th>{_dictionary.main.Title}</th>
+                <th>{_dictionary.main.Slug}</th>
+                <th>{_dictionary.main.PagePreview}</th>
             </tr>
             {foreach $pages as $page}
                 <tr>
                     <td class="col-xs-1">
-                        <a n:href="delete!, id => $page->id" onclick="return confirm('Delete really?')"><i
+                        <a n:href="delete!, id => $page->id" onclick="return confirm('Opravdu smazat?')"><i
                                     class="fa fa-times font-red"></i></a>&nbsp;
                         <a n:href=":Admin:Pages:settings, id => $page->id"><i class="fa fa-edit"></i></a>
                     </td>
-                    <td><a n:href=":Admin:Pages:detail, id => $page->id">
-                            {$page->title}
-                        </a></td>
+                    <td>
+                        <a n:href=":Admin:Pages:detail, id => $page->id">{$page->title}</a>
+                        {if $page->pages_types->id == 0} (přednastavená stránka){/if}
+                        {if $page->slug == ''} (homepage){/if}
+                    </td>
                     <td>{$page->slug}</td>
                     <td><a href="/{$page->slug|webalize}/" target="_blank"><i
                                     class="fa fa-edit"></i></a></td>
