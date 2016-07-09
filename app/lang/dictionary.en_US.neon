@@ -173,6 +173,7 @@ main:
     OrderStatistics: "Order Stats"
     orders: "orders"
     Orders: "Orders"
+    Page: "Page"
     PageGraphics: "Page graphics"
     PagePreview: "Page Preview"
     parameter: "parameter"

@@ -118,6 +118,35 @@
                 height: 200
             });
         }
+		
+	$('#wysiwyg-page').summernote({
+            width: "99%",
+            height: 500,
+            onImageUpload: function (files, editor, welEditable) {
+                //welEditable.focus();
+                sendFile(files[0], editor, welEditable);
+            }
+        });
+
+        function sendFile(file, editor, welEditable) {
+            data = new FormData();
+            data.append("file", file);
+            data.append("do", "documentEditor-imageAddForm-submit");
+            data.append("page_id", $(".data-wysiwyg").data("ids"));
+            $.ajax({
+                data: data,
+                type: "POST",
+                url: "/admin",
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function (url) {
+                    console.log(file.name);
+                    console.log($(".data-wysiwyg").data("ids"));
+                    $('#wysiwyg-page').summernote("insertImage", '/media/' + $(".data-wysiwyg").data("ids") + '/' + file.name);
+                }
+            });
+        }
     });
 </script>
 </body>

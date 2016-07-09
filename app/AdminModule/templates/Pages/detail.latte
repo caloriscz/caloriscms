@@ -1,25 +1,8 @@
 {block #titles}{$pages->title}{/block}
 {block content}
 
-<br/>
+{include 'components/top-navigation.latte'}
 
-<ul class="nav nav-tabs">
-    <li role="presentation" class="active">
-        <a n:href=":Admin:Pages:detail, id => $presenter->getParameter('id')">Stránka</a>
-    </li>
-    <li role="presentation"><a n:href=":Admin:Pages:snippets, id => $presenter->getParameter('id')">Ústřižky</a></li>
-    <li role="presentation">
-        <a n:href=":Admin:Pages:detailImages, id => $presenter->getParameter('id')">{_dictionary.main.images|firstUpper}</a>
-    </li>
-    <li role="presentation">
-        <a n:href=":Admin:Pages:detailFiles, id => $presenter->getParameter('id')">{_dictionary.main.Files}</a></li>
-    <li role="presentation"><a n:href=":Admin:Pages:detailRelated, id => $presenter->getParameter('id')">Související
-            příspěvky</a></li>
-    <li class="pull-right"><a href="/{$pages->slug}" class="btn btn-primary"
-                              target="_blank">{_dictionary.main.Preview}</a></li>
-</ul>
-
-<br>
 {control langSelector}
 
 <h1 class="page-header">{$pages->title}</h1>
@@ -27,9 +10,9 @@
 <div class="row">
     <div class="col-lg-9">
         {if $pages->pages_types->id == 0}
-            <p>přednastavená stránka - text této stránky se upravuje přímo ve zdrojovém kódu nebo pomocí
-                <a n:href=":Admin:Pages:snippets, id => $presenter->getParameter('id')">ústřižků nahoře</a>
-            </p>
+        <p>přednastavená stránka - text této stránky se upravuje přímo ve zdrojovém kódu nebo pomocí
+            <a n:href=":Admin:Pages:snippets, id => $presenter->getParameter('id')">ústřižků nahoře</a>
+        </p>
         {else}
             {control documentEditor}
         {/if}

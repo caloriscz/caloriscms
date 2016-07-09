@@ -1,0 +1,24 @@
+{var $view = $presenter->getView()}
+<br>
+<ul class="nav nav-tabs">
+    <li><a n:href=":Admin:Pages:default, id => null"><i class="fa fa-angle-left"></i> Všechny stránky</a></li>
+    <li role="presentation" {if $view == 'detail'}class="active"{/if}>
+        <a n:href=":Admin:Pages:detail, id => $presenter->getParameter('id')">{_dictionary.main.Page}</a>
+    </li>
+    <li role="presentation" {if $view == 'snippets'}class="active"{/if}>
+        <a n:href=":Admin:Pages:snippets, id => $presenter->getParameter('id')">{_dictionary.main.Snippets}</a>
+    </li>
+    <li role="presentation" {if $view == 'detailImages'}class="active"{/if}>
+        <a n:href=":Admin:Pages:detailImages, id => $presenter->getParameter('id')">{_dictionary.main.Images}</a>
+    </li>
+    <li role="presentation" {if $view == 'detailFiles'}class="active"{/if}>
+        <a n:href=":Admin:Pages:detailFiles, id => $presenter->getParameter('id')">{_dictionary.main.Files}</a>
+    </li>
+    <li role="presentation" {if $view == 'detailRelated'}class="active"{/if}>
+        <a n:href=":Admin:Pages:detailRelated, id => $presenter->getParameter('id')">Související příspěvky</a>
+    </li>
+    <li class="pull-right">
+        <a href="/{$catalogue->slug}" class="btn btn-primary" target="_blank">{_dictionary.main.Preview}</a>
+    </li>
+</ul>
+<br>

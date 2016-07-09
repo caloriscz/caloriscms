@@ -1,20 +1,7 @@
 {block #titles}{$catalogue->title}{/block}
 {block content}
 
-<br/>
-
-<ul class="nav nav-tabs">
-    <li role="presentation"><a n:href=":Admin:Pages:detail, id => $presenter->getParameter('id')">Příspěvek</a></li>
-    <li role="presentation" class="active"><a n:href=":Admin:Pages:detail, id => $presenter->getParameter('id')">Ústřižky</a></li>
-    <li role="presentation">
-        <a n:href=":Admin:Pages:detailImages, id => $presenter->getParameter('id')">{_dictionary.main.images|firstUpper}</a>
-    </li>
-    <li role="presentation">
-        <a n:href=":Admin:Pages:detailFiles, id => $presenter->getParameter('id')">{_dictionary.main.Files}</a></li>
-    <li role="presentation"><a n:href=":Admin:Pages:detailRelated, id => $presenter->getParameter('id')">Související
-            příspěvky</a></li>
-    <li class="pull-right"><a href="/{$catalogue->slug}" target="_blank">{_dictionary.main.Preview}</a></li>
-</ul>
+{include 'components/top-navigation.latte'}
 
 <h1 class="page-header">{$catalogue->title} - {_dictionary.main.Snippets}</h1>
 

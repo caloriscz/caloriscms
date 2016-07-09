@@ -58,6 +58,8 @@ class MenuPresenter extends BasePresenter
             "title" => $form->values->title,
             "parent_id" => $parent,
         ));
+		
+        $this->database->table("menu")->get($id)->update(array("sorted" => $id));
 
         $this->redirect(":Admin:Menu:default", array("id" => null));
     }
