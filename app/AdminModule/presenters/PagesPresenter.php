@@ -58,7 +58,8 @@ class PagesPresenter extends BasePresenter
     {
         $form = $this->baseFormFactory->createUI();
         $form->addHidden("id");
-        $form->addText("title", "dictionary.main.Title");
+        $form->addText("title", "dictionary.main.Title")
+            ->setRequired($this->translator->translate('messages.pages.NameThePage'));
 
         $form->setDefaults(array(
             "section" => $this->getParameter('id'),

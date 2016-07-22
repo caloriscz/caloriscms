@@ -15,6 +15,8 @@ members:
     emailAlreadyExists: "Member with this e-mail already exists"
     invalidEmailFormat: "Enter correct e-mail"
     PermissionDenied: "Permission denied"
+pages:
+    NameThePage: "Enter the name of the page"
 sign:
     no-access: "You are not allowed to enter administration"
     logged-out: "You were logged out"

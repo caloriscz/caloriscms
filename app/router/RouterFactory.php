@@ -78,6 +78,13 @@ class RouterFactory
             'action' => 'default',
             'id' => NULL,
         ));
+		
+        $router[] = new Route('[<locale=cs cs|en>/]<presenter>/<action>/<id>', array(
+            'module' => 'FrontStore',
+            'presenter' => 'Homepage',
+            'action' => 'default',
+            'id' => NULL,
+        ));
 
         return $router;
     }
