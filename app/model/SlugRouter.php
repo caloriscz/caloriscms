@@ -129,7 +129,7 @@ class SlugRouter extends Nette\Object implements Nette\Application\IRouter
             if (isset($params['page_id'])) {
                 $row = $this->slugManager->getSlugById($params['page_id']);
 
-                if ($params['locale'] == 'cs') {
+                if (isset($params['locale']) == 'cs') {
                     unset($params['locale']);
                 }
 
@@ -149,7 +149,9 @@ class SlugRouter extends Nette\Object implements Nette\Application\IRouter
 
         if (isset($params['locale'])) {
             $locale = $params['locale'] . '/';
-        }
+        } else {
+			$locale = null;
+		}
 
         $url = $refUrl->getScheme() . '://' . $refUrl->getHost() . $refUrl->getPath() . $locale . $slug;
         $params = $appRequest->getParameters();
