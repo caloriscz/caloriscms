@@ -143,7 +143,6 @@ class Document
         return $this->slug;
     }
 
-
     function getSlug()
     {
         if ($this->slug) {
@@ -249,6 +248,7 @@ class Document
 
         if ($this->getSlug()) {
             $slug = $this->getSlug();
+
         } else {
             if ($this->checkReservedNames($arr["title"])) {
                 $slug = $arr["title"] . '-name';
@@ -311,6 +311,12 @@ class Document
             $arr["slug" . '_' . $this->getLanguage()] = $this->getSlug();
         } elseif ($this->getSlug()) {
             $arr["slug"] = $this->getSlug();
+        }
+
+        if ($this->getParent()) {
+            $arr["pages_id"] = $this->getParent();
+        } elseif ($this->getSlug()) {
+            $arr["pages_id"] = $this->getParent();
         }
 
         if ($this->getDatePublished()) {
