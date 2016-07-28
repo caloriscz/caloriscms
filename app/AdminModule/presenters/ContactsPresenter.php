@@ -28,7 +28,8 @@ class ContactsPresenter extends BasePresenter
         $form = $this->baseFormFactory->createPH();
         $form->addHidden("pages_id", $this->getParameter("id"));
         $form->addRadioList("type", "Osoba nebo organizace", array(0 => " osoby", 1 => " organizace"));
-        $form->addText("title", "dictionary.main.Title");
+        $form->addText("title", "dictionary.main.Title")
+            ->setRequired($this->translator->translate('messages.pages.NameThePage'));
 
         $form->setDefaults(array(
             "type" => 0
@@ -162,7 +163,7 @@ class ContactsPresenter extends BasePresenter
 
         $form = $this->baseFormFactory->createUI();
         $form->addGroup('');
-        $form->addHidden('id');
+        $form->addHidden('contact_id');
         $form->addHidden('pages_id');
         $form->addText("name", "dictionary.main.Name")
             ->setAttribute("placeholder", "dictionary.main.Name");
@@ -207,8 +208,9 @@ class ContactsPresenter extends BasePresenter
         $form->addTextArea("notes", "dictionary.main.Notes")
             ->setAttribute("class", "form-control");
 
+
         $form->setDefaults(array(
-            "id" => $this->template->contact->id,
+            "contact_id" => $this->template->contact->id,
             "pages_id" => $this->template->contact->pages_id,
             "name" => $this->template->contact->name,
             "company" => $this->template->contact->company,
@@ -246,7 +248,7 @@ class ContactsPresenter extends BasePresenter
     {
         $this->database->table("contacts")
             ->where(array(
-                "id" => $form->values->id,
+                "contact_id" => $form->values->contact_id,
             ))
             ->update(array(
                 "name" => $form->values->name,
@@ -275,7 +277,6 @@ class ContactsPresenter extends BasePresenter
             $aresArr = $ares->loadData($button->form->values->vatin)->toArray();
 
             if (count($aresArr) > 0) {
-
                 $this->database->table("contacts")
                     ->where(array(
                         "id" => $this->template->id,
@@ -295,7 +296,7 @@ class ContactsPresenter extends BasePresenter
             $this->flashMessage($this->translator->translate('messages.sign.NotFound'), "error");
         }
 
-        $this->redirect(":Admin:Contacts:detail", array("id" => $button->form->values->id));
+        $this->redirect(":Admin:Contacts:detail", array("id" => $button->form->values->pages_id));
     }
 
     /**
