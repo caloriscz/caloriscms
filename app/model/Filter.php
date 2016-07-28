@@ -261,6 +261,7 @@ class Filter
                 . "SUM(:stock.amount) AS sumstock, price, "
                 . ":params.param_id, :params.paramvalue, pages.sorted, pages.pages_types_id");
 
+        $connect->where(':store_category.pages_id = pages.id'); // if not added, store_category may be referenced with category_pages_id
         $connect->group("pages.title, pages.document");
 
         if ($this->search != FALSE) {
