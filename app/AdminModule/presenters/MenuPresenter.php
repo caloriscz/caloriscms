@@ -54,7 +54,7 @@ class MenuPresenter extends BasePresenter
             $parent = $form->values->parent;
         }
 
-        $this->database->table("menu")->insert(array(
+        $id = $this->database->table("menu")->insert(array(
             "title" => $form->values->title,
             "parent_id" => $parent,
         ));
