@@ -20,6 +20,10 @@ class MenuPresenter extends BasePresenter
         $form->addHidden("parent");
         $form->addText('title', 'dictionary.main.Title')
             ->setAttribute("class", "form-control");
+
+        $form->addText('url', 'dictionary.main.URL')
+            ->setAttribute("class", "form-control");
+
         $form->addSubmit('submitm', 'dictionary.main.Insert')
             ->setAttribute("class", "btn btn-primary");
 
@@ -32,6 +36,7 @@ class MenuPresenter extends BasePresenter
     {
         $category = $this->database->table("menu")->where(array(
             "parent_id" => $form->values->parent,
+            "url" => $form->values->url,
             "title" => $form->values->title,
         ));
 
@@ -54,12 +59,12 @@ class MenuPresenter extends BasePresenter
             $parent = $form->values->parent;
         }
 
-        $id = $this->database->table("menu")->insert(array(
+        $this->database->table("menu")->insert(array(
             "title" => $form->values->title,
             "parent_id" => $parent,
         ));
-		
-        $this->database->table("menu")->get($id)->update(array("sorted" => $id));
+
+        $this->database->query("SET @i = 1;UPDATE `menu` SET `sorted` = @i:=@i+2 ORDER BY `sorted` ASC");
 
         $this->redirect(":Admin:Menu:default", array("id" => null));
     }
@@ -78,6 +83,8 @@ class MenuPresenter extends BasePresenter
         $form = $this->baseFormFactory->createUI();
         $form->addHidden('id');
         $form->addText('title', 'dictionary.main.Title');
+        $form->addTextarea('description', 'dictionary.main.Description')
+            ->setAttribute("class", "form-control");
         $form->addSelect('parent', 'Nadřazená kategorie', $categories)
             ->setPrompt('admin.categories.NothingRelated')
             ->setAttribute("class", "form-control");
@@ -85,13 +92,12 @@ class MenuPresenter extends BasePresenter
             ->setPrompt('admin.categories.PageSelectedManually')
             ->setAttribute("class", "form-control");
         $form->addText('url', 'dictionary.main.URL');
-        $form->addUpload('the_file', 'dictionary.main.Icon');
         $form->addSubmit('submitm', 'dictionary.main.Save');
-
 
         $arr = array(
             "id" => $category->id,
             "title" => $category->title,
+            "description" => $category->description,
             "page" => $category->pages_id,
             "parent" => $category->parent_id,
             "url" => $category->url,
@@ -105,15 +111,6 @@ class MenuPresenter extends BasePresenter
 
     public function updateCategoryFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
     {
-        if ($form->values->the_file->error == 0) {
-            if (file_exists(APP_DIR . "/images/menu/" . $form->values->id . ".png")) {
-                \App\Model\IO::remove(APP_DIR . "/images/menu/" . $form->values->id . ".png");
-                \App\Model\IO::upload(APP_DIR . "/images/menu/", $form->values->id . ".png", 0644);
-            } else {
-                \App\Model\IO::upload(APP_DIR . "/images/menu/", $form->values->id . ".png", 0644);
-            }
-        }
-
         $this->database->table("menu")->get($form->values->id)
             ->update(array(
                 "title" => $form->values->title,
@@ -126,6 +123,56 @@ class MenuPresenter extends BasePresenter
     }
 
     /**
+     * Edit category
+     */
+    protected function createComponentUpdateImagesForm()
+    {
+        $form = $this->baseFormFactory->createUI();
+        $form->addHidden('menu_id');
+        $form->addUpload('the_file', 'dictionary.main.Image');
+        $form->addUpload('the_file_2', 'Obrázek (hover)');
+        $form->addUpload('the_file_3', 'Aktivní obrázek');
+        $form->addUpload('the_file_4', 'Aktivní obrázek (hover)');
+
+        $form->setDefaults(array("menu_id" => $this->getParameter("id")));
+
+        $form->addSubmit('submitm', 'dictionary.main.Save');
+
+        $form->onSuccess[] = $this->updateImagesFormSucceeded;
+        return $form;
+    }
+
+    public function updateImagesFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
+    {
+        /* Main image */
+        if ($form->values->the_file->error == 0) {
+            copy($_FILES["the_file"]["tmp_name"], APP_DIR . "/images/menu/" . $form->values->menu_id . ".png");
+            chmod(APP_DIR . "/images/menu/" . $form->values->menu_id . ".png", 0644);
+        }
+
+        /* Hover image */
+        if ($form->values->the_file_2->error == 0) {
+            copy($_FILES["the_file_2"]["tmp_name"], APP_DIR . "/images/menu/" . $form->values->menu_id . "_h.png");
+            chmod(APP_DIR . "/images/menu/" . $form->values->menu_id . "_h.png", 0644);
+        }
+
+        /* Active image */
+        if ($form->values->the_file_3->error == 0) {
+            copy($_FILES["the_file_3"]["tmp_name"], APP_DIR . "/images/menu/" . $form->values->menu_id . "_a.png");
+            chmod(APP_DIR . "/images/menu/" . $form->values->menu_id . "_a.png", 0644);
+        }
+
+        /* Active hover image */
+        if ($form->values->the_file_4->error == 0) {
+            copy($_FILES["the_file_4"]["tmp_name"], APP_DIR . "/images/menu/" . $form->values->menu_id . "_ah.png");
+            chmod(APP_DIR . "/images/menu/" . $form->values->menu_id . "_ah.png", 0644);
+        }
+
+
+        $this->redirect(":Admin:Menu:detail", array("id" => $form->values->menu_id));
+    }
+
+    /**
      * Delete categories
      */
     function handleDelete($id)
@@ -134,7 +181,7 @@ class MenuPresenter extends BasePresenter
 
         $this->database->table("menu")->where("id", $menu->getSubIds($id))->delete();
 
-        $this->redirect(":Admin:Menu:default");
+        $this->redirect(":Admin:Menu:default", array("id" => null));
     }
 
     /**
@@ -142,7 +189,9 @@ class MenuPresenter extends BasePresenter
      */
     function handleDeleteImage($id)
     {
-        \App\Model\IO::remove(APP_DIR . '/images/categories/icons/' . $id . '.png');
+        $type = $this->getParameter("type");
+
+        \App\Model\IO::remove(APP_DIR . '/images/menu/' . $id . $type . '.png');
 
         $this->redirect(":Admin:Menu:detail", array("id" => $id));
     }

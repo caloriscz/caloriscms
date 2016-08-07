@@ -5,7 +5,16 @@
 <h1 class="page-header">Menu</h1>
 
 <div class="row">
-
+    <div class="col-lg-3">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                Vložit menu
+            </div>
+            <div class="panel-body">
+                {control insertMenuForm}
+            </div>
+        </div>
+    </div>
     <div class="col-lg-9">
         {foreach $flashes as $flash}
             <br/>
@@ -75,6 +84,10 @@
                                                     <label class="col-sm-3 control-label">{label title /}</label>
                                                     <div class="col-sm-9">{input title}</div>
                                                 </div>
+                                                <div class="form-group">
+                                                    <label class="col-sm-3 control-label">{label url /}</label>
+                                                    <div class="col-sm-9">{input url}</div>
+                                                </div>
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-default"
@@ -94,16 +107,6 @@
                     {/foreach}
                 </ul>
             {/block}
-        </div>
-    </div>
-    <div class="col-lg-3">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                Vložit menu
-            </div>
-            <div class="panel-body">
-                {control insertMenuForm}
-            </div>
         </div>
     </div>
 </div>
