@@ -1,6 +1,26 @@
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
 
+CREATE TABLE IF NOT EXISTS `blacklist` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(100) COLLATE utf8_czech_ci DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS `board` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `parent_id` int(11) DEFAULT NULL,
+  `author` varchar(80) NOT NULL,
+  `email` varchar(150) DEFAULT NULL,
+  `subject` text NOT NULL,
+  `body` text,
+  `date_created` datetime DEFAULT NULL,
+  `show` smallint(6) NOT NULL DEFAULT '0',
+  `ipaddress` varchar(32) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `parent_id` (`parent_id`)
+) ENGINE=InnoDB
+
 CREATE TABLE IF NOT EXISTS `carousel` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(80) DEFAULT NULL,
