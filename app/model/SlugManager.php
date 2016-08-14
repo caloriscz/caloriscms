@@ -21,14 +21,20 @@ class SlugManager extends Nette\Object
         $this->translator = $translator;
     }
 
-    public function getRowBySlug($slug, $lang = null)
+    public function getRowBySlug($slug, $lang = null, $prefix = null)
     {
-        if ($lang != null) {
-            $arr = array("slug_" . $lang => $slug, "public" => 1);
+        if ($lang != null && $lang != 'cs') {
+            $arr['slug_'. $lang] = $slug;
         } else {
-            $arr = array("slug" => $slug, "public" => 1);
+            $arr['slug'] = $slug;
         }
 
+
+        if ($prefix != null) {
+            $arr['pages_types.prefix'] = $prefix;
+        }
+
+        $arr["public"] = 1;
 
         $db = $this->database->table("pages")->where($arr);
         $row = $db->fetch();

@@ -242,6 +242,7 @@ CREATE TABLE IF NOT EXISTS `pages_types` (
   `content_type` varchar(40) NOT NULL,
   `presenter` varchar(40) NOT NULL,
   `action` varchar(40) NOT NULL,
+  `prefix` varchar(60) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 

@@ -35,24 +35,35 @@ class SlugRouter extends Nette\Object implements Nette\Application\IRouter
         $params = array();
         $lang = array();
 
-
         if ($path !== '') {
             $parts = explode($url->scriptPath, $path, 4);
+
+//            echo print_r($parts);
 
             if (in_array($parts[0], $this->slugManager->getLocale())) {
                 $params['locale'] = $parts[0];
                 $lang = $parts[0];
                 unset($parts[0]);
                 $parts = array_values($parts);
-                $slugName = $parts[0];
+
+                if (count($parts) == 2) {
+                    $slugName = $parts[1];
+                    $params['prefix'] = $parts[0];
+                } else {
+                    $slugName = $parts[0];
+                }
+
             } else {
-                $slugName = $parts[0];
+                if (count($parts) == 2) {
+                    $slugName = $parts[1];
+                    $params['prefix'] = $parts[0];
+                } else {
+                    $slugName = $parts[0];
+                }
             }
 
-
-
             //get row by slug
-            $row = $this->slugManager->getRowBySlug($slugName, $lang);
+            $row = $this->slugManager->getRowBySlug($slugName, $lang, $params['prefix']);
         } else {
             $parts = array('Homepage', 'default');
             $row = $this->slugManager->getDefault();
@@ -121,7 +132,7 @@ class SlugRouter extends Nette\Object implements Nette\Application\IRouter
         $params = $appRequest->getParameters();
 
         $query = $params;
-        unset($query['action'], $query['page_id'], $query['slug'], $query['id'], $query['locale']);
+        unset($query['action'], $query['page_id'], $query['slug'], $query['id'], $query['locale'], $query['prefix']);
 
         if (isset($params['slug'])) {
             $slug = strtolower($params['slug']);
@@ -150,10 +161,16 @@ class SlugRouter extends Nette\Object implements Nette\Application\IRouter
         if (isset($params['locale'])) {
             $locale = $params['locale'] . '/';
         } else {
-			$locale = null;
-		}
+            $locale = null;
+        }
 
-        $url = $refUrl->getScheme() . '://' . $refUrl->getHost() . $refUrl->getPath() . $locale . $slug;
+        if (isset($params['prefix'])) {
+            $prefix = $params['prefix'] . '/';
+        } else {
+            $prefix = null;
+        }
+
+        $url = $refUrl->getScheme() . '://' . $refUrl->getHost() . $refUrl->getPath() . $locale . $prefix . $slug;
         $params = $appRequest->getParameters();
 
         if (isset($params['action']) && $params['action'] !== 'default') {
