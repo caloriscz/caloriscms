@@ -42,7 +42,7 @@ INSERT INTO `pages_types` (`id`, `content_type`, `presenter`, `action`, `prefix`
 (2, 'Blog', 'Front:Blog', 'detail', 'blog'),	
 (3, 'Event', 'Front:Events', 'detail', ''),
 (4, 'Product', 'FrontStore:Product', 'default', ''),
-(5, 'Contacts', 'Front:Contacts', 'detail'),
+(5, 'Contacts', 'Front:Contacts', 'detail', ''),
 (6, 'Galerie', 'Front:Gallery', 'album', ''),
 (7, 'Product Category', 'FrontStore:Catalogue', 'default', ''),
 (8, 'Dokumenty', 'Front:Documents', 'default', ''),

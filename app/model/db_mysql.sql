@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS `board` (
   `ipaddress` varchar(32) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `parent_id` (`parent_id`)
-) ENGINE=InnoDB
+) ENGINE=InnoDB;
 
 CREATE TABLE IF NOT EXISTS `carousel` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
