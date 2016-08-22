@@ -248,7 +248,7 @@ class ContactsPresenter extends BasePresenter
     {
         $this->database->table("contacts")
             ->where(array(
-                "contact_id" => $form->values->contact_id,
+                "id" => $form->values->contact_id,
             ))
             ->update(array(
                 "name" => $form->values->name,
@@ -274,12 +274,12 @@ class ContactsPresenter extends BasePresenter
     {
         if ($button->form->values->vatin) {
             $ares = new \h4kuna\Ares\Ares();
-            $aresArr = $ares->loadData($button->form->values->vatin)->toArray();
+            $aresArr = $ares->loadData(str_replace(" ", "", $button->form->values->vatin))->toArray();
 
             if (count($aresArr) > 0) {
                 $this->database->table("contacts")
                     ->where(array(
-                        "id" => $this->template->id,
+                        "id" => $button->form->values->contact_id,
                     ))
                     ->update(array(
                         "name" => $aresArr['company'],

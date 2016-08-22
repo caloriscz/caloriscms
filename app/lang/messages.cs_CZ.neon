@@ -19,6 +19,7 @@ pages:
     NameThePage: "Zadejte název stránky"
 sign:
     no-access: "Nemáte oprávnění vstupu do administrace"
+	NotFound: "Nenalezeno"
     logged-out: "Byli jste odhlášeni"
     passwords-not-same: "Hesla se neshodují"
     thanksForMessage: "Děkujeme a Vaši zprávu"

@@ -12,6 +12,7 @@ helpdesk:
 members:
     sendLoginEmail: "send e-mail with login information"
     memberAlreadyExists: "Member already exists"
+	NotFound: "Not Found"
     emailAlreadyExists: "Member with this e-mail already exists"
     invalidEmailFormat: "Enter correct e-mail"
     PermissionDenied: "Permission denied"
@@ -28,7 +29,7 @@ error:
     CannotBeDeleted: "Nelze smazat"
     CannotBeDeletedUsedInOrders: "Item cannot be deleted. It is used in orders. You can hide product."
     CantDeleteMainGroup: "You can't delete main group"
-    categoryAlreadyExists: "Kategorie tohoto jména již existuje"
+    categoryAlreadyExists: "Category with this name already exists"
     categoryMustHaveSomeName: "Category must have some name"
     fillInName: "Fill in your name"
     fillInEmail: "Fill in your e-mail"
