@@ -155,7 +155,6 @@ class Category
 
         $this->database->table("categories")->insert(array(
             "title" => $title,
-            "slug_id" => $slug,
             "parent_id" => $parent,
         ));
 
