@@ -129,6 +129,19 @@ CREATE TABLE IF NOT EXISTS `events` (
   KEY `pages_id` (`pages_id`)
 ) ENGINE=InnoDB;
 
+CREATE TABLE IF NOT EXISTS `events_signed` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(150) NOT NULL,
+  `email` varchar(150) NOT NULL,
+  `phone` varchar(30) DEFAULT NULL,
+  `note` text,
+  `events_id` int(11) NOT NULL,
+  `ipaddress` varchar(15) NOT NULL,
+  `date_created` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `events_id` (`events_id`)
+) ENGINE=InnoDB;
+
 CREATE TABLE IF NOT EXISTS `helpdesk` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(100) NOT NULL,
@@ -383,6 +396,9 @@ ALTER TABLE `contacts_docs`
 
 ALTER TABLE `events`
   ADD CONSTRAINT `events_ibfk_1` FOREIGN KEY (`pages_id`) REFERENCES `pages` (`id`) ON DELETE SET NULL ON UPDATE SET NULL;
+  
+ALTER TABLE `events_signed`
+  ADD CONSTRAINT `events_signed_ibfk_1` FOREIGN KEY (`events_id`) REFERENCES `events` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 ALTER TABLE `helpdesk_emails`
   ADD CONSTRAINT `helpdesk_emails_ibfk_1` FOREIGN KEY (`helpdesk_id`) REFERENCES `helpdesk` (`id`) ON DELETE SET NULL ON UPDATE SET NULL;
