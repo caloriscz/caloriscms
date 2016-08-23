@@ -112,10 +112,10 @@ class EventsPresenter extends BasePresenter
             "date_event" => $dateEvent,
             "date_event_end" => $dateEventEnd,
             "all_day" => $form->values->allday,
-            "user_price" => $form->values->user_price,
+            "price" => $form->values->price,
             "capacity" => $form->values->capacity,
             "capacity_start" => $form->values->capacity_start,
-            "contact" => $form->values->contact,
+            "contacts_id" => $form->values->contact,
             "time_range" => $form->values->time_range,
         );
 
@@ -134,6 +134,8 @@ class EventsPresenter extends BasePresenter
             "07" => "07", "08" => "08", "09" => "09", "10" => "10", "11" => "11", "12" => "12",
             "13" => "13", "14" => "14", "15" => "15", "16" => "16", "17" => "17", "18" => "18", "19" => "19", "20" => "20", "21" => "21", "22" => "22", "23" => "23");
         $minutes = array("00" => "00", "05" => "05", "10" => "10", "15" => "15", "20" => "20", "25" => "25", "30" => "30", "40" => "40", "45" => "45", "50" => "50", "55" => "55");
+
+        $contacts = $this->database->table("contacts")->where("categories_id", 22)->fetchPairs('id', 'company');
 
         $form = $this->baseFormFactory->createUI();
         $form->addHidden('id');
@@ -162,7 +164,7 @@ class EventsPresenter extends BasePresenter
             ->setTranslator(null);
         $form->addText('user_price', 'dictionary.main.Price')
             ->setAttribute("class", "form-control");
-        $form->addText('contact', 'dictionary.main.Place')
+        $form->addSelect('contact', 'dictionary.main.Place', $contacts)
             ->setAttribute("class", "form-control");
         $form->addText('time_range', 'Rozsah')
             ->setAttribute("class", "form-control");
@@ -189,8 +191,8 @@ class EventsPresenter extends BasePresenter
         $date_start = \DateTime::createFromFormat('j. n. Y', $form->values->date_event);
         $date1 = $date_start->format('Y-m-d');
 
-        $date_start = \DateTime::createFromFormat('j. n. Y', $form->values->date_event_end);
-        $date2 = $date_start->format('Y-m-d');
+        $date_end = \DateTime::createFromFormat('j. n. Y', $form->values->date_event_end);
+        $date2 = $date_end->format('Y-m-d');
 
         if ($form->values->date_event == '') {
             $dateEvent = null;
@@ -217,8 +219,8 @@ class EventsPresenter extends BasePresenter
                 "date_event" => $dateEvent,
                 "date_event_end" => $dateEventEnd,
                 "all_day" => $form->values->allday,
-                "user_price" => $form->values->user_price,
-                "contact" => $form->values->contact,
+                "price" => $form->values->price,
+                "contacts_id" => $form->values->contact,
                 "time_range" => $form->values->time_range,
                 "capacity" => $form->values->capacity,
                 "capacity_start" => $form->values->capacity_start,
@@ -279,7 +281,7 @@ class EventsPresenter extends BasePresenter
                 "date_event" => date('Y-m-d H:i:s', strtotime(date("Y-m-d H:i:s", strtotime($event->date_event)) . " +1 week")),
                 "date_event_end" => date('Y-m-d H:i:s', strtotime(date("Y-m-d H:i:s", strtotime($event->date_event_end)) . " +1 week")),
                 "all_day" => $event->all_day,
-                "user_price" => $event->price,
+                "price" => $event->price,
                 "contact" => $event->contact,
                 "time_range" => $event->time_range,
                 "pages_id" => $this->getParameter("page"),
@@ -301,7 +303,7 @@ class EventsPresenter extends BasePresenter
                 "date_event" => date('Y-m-d H:i:s', strtotime(date("Y-m-d H:i:s") . " +1 week")),
                 "date_event_end" => date('Y-m-d H:i:s', strtotime(date("Y-m-d H:i:s") . " +1 week")),
                 "all_day" => $event->all_day,
-                "user_price" => $event->price,
+                "price" => $event->price,
                 "contact" => $event->contact,
                 "time_range" => $event->time_range,
                 "pages_id" => $this->getParameter("page"),
@@ -495,6 +497,8 @@ class EventsPresenter extends BasePresenter
 
     public function renderDetail()
     {
+        $this->template->contacts = $this->database->table("contacts")->where("categories_id", 22);
+
         $this->template->hours = array("00" => "00", "01" => "01", "02" => "02", "03" => "03", "04" => "04", "05" => "05", "06" => "06",
             "07" => "07", "08" => "08", "09" => "09", "10" => "10", "11" => "11", "12" => "12",
             "13" => "13", "14" => "14", "15" => "15", "16" => "16", "17" => "17", "18" => "18", "19" => "19", "20" => "20", "21" => "21", "22" => "22", "23" => "23");

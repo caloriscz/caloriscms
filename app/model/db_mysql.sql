@@ -119,14 +119,15 @@ CREATE TABLE IF NOT EXISTS `events` (
   `all_day` tinyint(1) NOT NULL DEFAULT '1',
   `show` tinyint(1) NOT NULL DEFAULT '0',
   `pages_id` int(11) DEFAULT NULL,
-  `contact` varchar(120) NOT NULL,
+  `contacts_id` int(11) DEFAULT NULL,
   `capacity` int(11) NOT NULL DEFAULT '0',
   `capacity_start` int(11) NOT NULL DEFAULT '0',
   `capacity_filled` int(11) NOT NULL DEFAULT '0',
   `price` int(11) DEFAULT NULL,
   `time_range` int(11) DEFAULT '0',
   PRIMARY KEY (`id`),
-  KEY `pages_id` (`pages_id`)
+  KEY `pages_id` (`pages_id`),
+  KEY `contacts_id` (`contacts_id`)
 ) ENGINE=InnoDB;
 
 CREATE TABLE IF NOT EXISTS `events_signed` (
@@ -395,6 +396,7 @@ ALTER TABLE `contacts_docs`
   ADD CONSTRAINT `contacts_docs_ibfk_3` FOREIGN KEY (`categories_id`) REFERENCES `categories` (`id`) ON DELETE SET NULL ON UPDATE SET NULL;
 
 ALTER TABLE `events`
+  ADD CONSTRAINT `events_ibfk_2` FOREIGN KEY (`contacts_id`) REFERENCES `contacts` (`id`) ON DELETE SET NULL ON UPDATE SET NULL,
   ADD CONSTRAINT `events_ibfk_1` FOREIGN KEY (`pages_id`) REFERENCES `pages` (`id`) ON DELETE SET NULL ON UPDATE SET NULL;
   
 ALTER TABLE `events_signed`

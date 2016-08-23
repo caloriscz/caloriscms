@@ -185,6 +185,7 @@ main:
     Payments: "Payments"
     phone: "phone"
     Phone: "Phone"
+	Place? "Place"
     post: "Post"
     Preview: "Preview"
     previous: "previous"

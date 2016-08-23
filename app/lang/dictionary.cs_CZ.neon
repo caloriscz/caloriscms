@@ -186,6 +186,7 @@ main:
     Payments: "Platby"
     phone: "telefon"
     Phone: "Telefon"
+	Place: "Místo"
     Post: "Pozice"
     Preview: "Náhled"
     previous: "předchozí"

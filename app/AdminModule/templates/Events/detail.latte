@@ -167,7 +167,13 @@
                                         </div>
                                         <div class="form-group">
                                             <label class="col-sm-3 control-label">{label contact /}</label>
-                                            <div class="col-sm-9">{input contact, value => $item->contact}</div>
+                                            <div class="col-sm-9">
+                                                <select name="contact" class="form-control">
+                                                    {foreach $contacts as $contact}
+                                                        <option value="{$contact->id}" {if $contact->id == $item->contacts_id} selected{/if}>{$contact->company}</option>
+                                                    {/foreach}
+                                                </select>
+                                            </div>
                                         </div>
 
                                     </div>
