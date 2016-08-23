@@ -1,0 +1,29 @@
+{block #titles}{$page->title} - {_dictionary.main.images|firstUpper}{/block}
+{block content}
+
+{include 'components/top-navigation.latte'}
+
+<h1 class="page-header">{$page->title}</h1>
+
+{control imageEditForm}
+
+<div class="row">
+        <div class="col-sm-6 col-md-3">
+            <div class="thumbnail" style="min-height: 330px;">
+                <a href="/media/{$image->pages->id}/{$image->name}" class="gallery-lightbox">
+                        <img src="/media/{$image->pages->id}/tn/{$image->name}" alt="obrázek {$image->name}" />
+                </a>
+                <div class="caption">
+                    <p>{$item->name}
+                    <a href="/media/{$item->pages->id}/{$item->name}">
+                        <small>{$item->name}</small>
+                    </a>
+                    </p>
+                    <p>{$item->description}</p>
+                    <p><a n:href="deleteImage!, id => $item->id, name => $page->id" class="btn" role="button" onclick="return confirm('Opravdu smazat?')">
+                            {_dictionary.main.Delete}</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+</div>

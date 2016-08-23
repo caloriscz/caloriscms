@@ -105,6 +105,13 @@ CREATE TABLE IF NOT EXISTS `countries` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
+CREATE TABLE `d68895_demo`.`currencies` (
+`id` int(11) NOT NULL AUTO_INCREMENT,
+`title` VARCHAR( 60 ) NULL ,
+`code` VARCHAR( 8 ) NULL ,
+PRIMARY KEY ( `id` )
+) ENGINE = InnoDB;
+
 CREATE TABLE IF NOT EXISTS `events` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `date_event` datetime DEFAULT NULL,
@@ -112,6 +119,12 @@ CREATE TABLE IF NOT EXISTS `events` (
   `all_day` tinyint(1) NOT NULL DEFAULT '1',
   `show` tinyint(1) NOT NULL DEFAULT '0',
   `pages_id` int(11) DEFAULT NULL,
+  `contact` varchar(120) NOT NULL,
+  `capacity` int(11) NOT NULL DEFAULT '0',
+  `capacity_start` int(11) NOT NULL DEFAULT '0',
+  `capacity_filled` int(11) NOT NULL DEFAULT '0',
+  `price` int(11) DEFAULT NULL,
+  `time_range` int(11) DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `pages_id` (`pages_id`)
 ) ENGINE=InnoDB;

@@ -61,13 +61,8 @@ class AdminBarControl extends Control
 
     public function insertCategoryFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
     {
-        if (is_numeric($form->values->type)) {
-            $slugName = new \App\Model\Slug($this->database);
-            $slugId = $slugName->insert($form->values->title, $form->values->type);
-        }
-
-        $category = new \App\Model\Category($this->database);
-        $category->setCategory($form->values->title, $form->values->parent_id, $slugId);
+        $category = new Category($this->database);
+        $category->setCategory($form->values->title, $form->values->parent_id);
 
         $redirectTo = $this->presenter->getName();
 

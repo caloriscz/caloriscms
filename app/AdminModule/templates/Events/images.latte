@@ -1,13 +1,11 @@
 {block #titles}{$page->title} - {_dictionary.main.images|firstUpper}{/block}
 {block content}
 
-<br />
-<ul class="nav nav-tabs">
-    <li role="presentation"><a n:href=":Admin:Events:default, id => $presenter->getParameter('id')">Basic</a></li>
-    <li role="presentation" class="active"><a n:href=":Admin:Events:images, id => $presenter->getParameter('id')">{_dictionary.main.Images}</a></li>
-</ul>
+{include 'components/top-navigation.latte'}
 
-<h1 class="page-header">{$page->title} - {_dictionary.main.images|firstUpper}</h1>
+{control langSelector}
+
+<h1 class="page-header">{$page->title}</h1>
 
 {control dropZone, 1}
 
@@ -18,18 +16,19 @@
         <div class="col-sm-6 col-md-3">
             <div class="thumbnail" style="min-height: 330px;">
                 <a href="/media/{$item->pages->id}/{$item->name}" class="gallery-lightbox">
-                    <img src="/media/{$item->pages->id}/tn/{$item->name}" alt="{$item->name}" />
+                    <img src="/media/{$item->pages->id}/tn/{$item->name}" alt="{$item->name}"/>
                 </a>
                 <div class="caption">
                     <p>
                         <a href="/images/catalogue/products/{$item->pages->id}/{$item->name}">
-                            <small>{$item->name}</small>
+                            <small>{$image->name}</small>
                         </a>
                     </p>
                     <p>{$item->description}</p>
-                    <p><a n:href="deleteImage!, id => $item->id, name => $page->id" class="btn" role="button" onclick="return confirm('Opravdu smazat?')">
+                    <p><a n:href="deleteImage!, id => $item->id, name => $page->id" class="btn" role="button"
+                                                                                    onclick="return confirm('Opravdu smazat?')">
                             <i class="fa fa-times font-red"></i></a>
-                        <a n:href=":AdminStore:Product:imagesDetail, id => $item->id, name => $page->id" class="btn">
+                        <a n:href=":Admin:Events:imagesDetail, id => $image->id, name => $page->id" class="btn">
                             <i class="fa fa-edit"></i></a>
                     </p>
                 </div>

@@ -1,71 +1,214 @@
-{block #titles}{_dictionary.main.Events}: {$page->slug}{/block}
+{block #titles}{_dictionary.main.Events}: {$page->title}{/block}
 {block content}
-<br>
-<ul class="nav nav-tabs">
-    <li role="presentation" class="active">
-        <a n:href=":Admin:Events:default, id => $presenter->getParameter('id')">Basic</a></li>
-    <li role="presentation">
-        <a n:href=":Admin:Events:images, id => $presenter->getParameter('id')">{_dictionary.main.Images}</a>
-    </li>
-</ul>
 
+{include 'components/top-navigation.latte'}
 
-<h1 class="page-header">{$page->title}
-    <a href="/{$page->slug}" class="btn btn-info pull-right" target="_blank">{_dictionary.main.Preview}</a>
-</h1>
+<h1 class="page-header">{$page->title}</h1>
 
-<div class="row">
-    <div class="col-lg-8">
-        {control langSelector}
+<button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#myModalInsert">Přidat událost
+</button>
 
-        {control documentEditor}
-    </div>
-    <div class="col-lg-4">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                {_dictionary.main.Event}
+<div class="modal fade" id="myModalInsert" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+
+    <div class="modal-dialog" role="document">
+        {form insertEventForm}
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel">Přidat událost</h4>
             </div>
-            <div class="panel-body">
-                {form editEventForm}
-                    <div class="form-group">
-                        <label class="col-sm-2 control-label">{_dictionary.main.DateEventStarted}</label>
-                        <div class="col-sm-4">
-                            {input date_event}
-                        </div>
-                        <div class="col-sm-3">
-                            {input hour_event}
-                        </div>
-                        <div class="col-sm-3">
-                            {input minute_event}
-                        </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <div class="col-md-offset-3 col-sm-9">{input allday}</div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">od</label>
+                    <div class="col-sm-9">{input date_event, style => 'width: 110px; display: inline;'}
+                        {input hour_event, style => 'width: 80px; display: inline;'}
+                        {input minute_event, style => 'width: 80px; display: inline;'}
                     </div>
-                    <div class="form-group">
-                        <label class="col-sm-2 control-label">{_dictionary.main.DateEventEnded}</label>
-                        <div class="col-sm-4">
-                            {input date_event_end}
-                        </div>
-                        <div class="col-sm-3">
-                            {input hour_event_end}
-                        </div>
-                        <div class="col-sm-3">
-                            {input minute_event_end}
-                        </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">do</label>
+                    <div class="col-sm-9">
+                        {input date_event_end, style => 'width: 110px; display: inline;'}
+                        {input hour_event_end, style => 'width: 80px; display: inline;'}
+                        {input minute_event_end, style => 'width: 80px; display: inline;'}
                     </div>
-                    <div class="form-group">
-                        <label class="col-sm-2 control-label"></label>
-                        <div class="col-sm-9">
-                            {input allday}
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-sm-12">
-                            {input submitm}
-                        </div>
-                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">{label  user_price /}</label>
+                    <div class="col-sm-9">{input user_price}</div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">{label  time_range /}</label>
+                    <div class="col-sm-9">{input time_range}</div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">{label  capacity /}</label>
+                    <div class="col-sm-9">{input capacity}</div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">{label  capacity_start /}</label>
+                    <div class="col-sm-9">{input capacity_start}</div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">{label contact /}</label>
+                    <div class="col-sm-9">{input contact}</div>
+                </div>
                 {/form}
             </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">
+                    {_dictionary.main.close|firstUpper}
+                </button>
+                {input submitm}
+            </div>
         </div>
-
-        {control pageSettings}
     </div>
+</div>
+<br><br>
+
+<div class="row">
+
+    <div class="col-lg-12">
+        <table class="table table-striped">
+            <tr>
+                <th class="col-xs-1"></th>
+                <th class="col-xs-1"></th>
+                <th class="col-xs-1"></th>
+                <th>{_dictionary.main.DateEventStarted}</th>
+                <th>{_dictionary.main.DateEventEnded}</th>
+                <th>{_dictionary.main.Place}</th>
+                <th class="text-right">Naplněno/Kapacita</th>
+                <th class="text-right">Rozsah</th>
+                <th class="text-right">{_dictionary.main.Price}</th>
+                <th class="col-xs-1"></th>
+            </tr>
+            {var $viewType = 1}
+            {foreach $events as $item}
+            <tr>
+                <td>
+                    <button type="button" class="btn btn-primary btn-sm" data-toggle="modal"
+                            data-target="#myModal{$item->id}">
+                        {_dictionary.main.edit|firstUpper}
+                    </button>
+
+                    <div class="modal fade" id="myModal{$item->id}" tabindex="-1" role="dialog"
+                         aria-labelledby="myModalLabelEdit">
+
+                        <div class="modal-dialog" role="document">
+                            <form n:name="editEventForm" class="form-horizontal" role="form">
+                                {input event_id, value => $item->id}
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                        <h4 class="modal-title" id="myModalLabelEdit">Upravit událost</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="form-group">
+                                            <div class="col-md-offset-3 col-sm-9">{input allday, value => $item->all_day}</div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">od</label>
+                                            <div class="col-sm-9">
+                                                {input date_event, value => date('j. n. Y', strtotime($item->date_event)), style => 'width: 110px; display: inline;'}
+                                                <select name="hour_event" class="form-control"
+                                                        style="width: 80px; display: inline;">
+                                                    {foreach $hours as $hour}
+                                                        <option value="{$hour}" {if $hour == date('H', strtotime($item->date_event))} selected{/if}>{$hour}</option>
+                                                    {/foreach}
+                                                </select>
+                                                <select name="minute_event" class="form-control"
+                                                        style="width: 80px; display: inline;">
+                                                    {foreach $minutes as $minute}
+                                                        <option value="{$minute}" {if $minute == date('i', strtotime($item->date_event))} selected{/if}>{$minute}</option>
+                                                    {/foreach}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">do</label>
+                                            <div class="col-sm-9">
+                                                {input date_event_end, value => date('j. n. Y', strtotime($item->date_event_end)), style => 'width: 110px; display: inline;'}
+                                                <select name="hour_event_end" class="form-control"
+                                                        style="width: 80px; display: inline;">
+                                                    {foreach $hours as $hour}
+                                                        <option value="{$hour}" {if $hour == date('H', strtotime($item->date_event_end))} selected{/if}>{$hour}</option>
+                                                    {/foreach}
+                                                </select>
+                                                <select name="minute_event_end" class="form-control"
+                                                        style="width: 80px; display: inline;">
+                                                    {foreach $minutes as $minute}
+                                                        <option value="{$minute}" {if $minute == date('i', strtotime($item->date_event_end))} selected{/if}>{$minute}</option>
+                                                    {/foreach}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">{label  user_price /}</label>
+                                            <div class="col-sm-9">{input user_price, value => $item->price}</div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">{label  time_range /}</label>
+                                            <div class="col-sm-9">{input time_range, value => $item->time_range}</div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">{label  capacity /}</label>
+                                            <div class="col-sm-9">{input capacity, value => $item->capacity}</div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">{label  capacity_start /}</label>
+                                            <div class="col-sm-9">{input capacity_start, value => $item->capacity_start}</div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label">{label contact /}</label>
+                                            <div class="col-sm-9">{input contact, value => $item->contact}</div>
+                                        </div>
+
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">
+                                            {_dictionary.main.close|firstUpper}
+                                        </button>
+                                        {input submitm}
+                                    </div>
+                            </form>
+                        </div>
+                    </div>
+    </div>
+    </td>
+    <td>
+        <a n:href=":Admin:Events:signed, id => $item->pages_id, event => $item->id" class="btn btn-info btn-sm">registrovaní</a>
+    </td>
+    <td>
+        <a n:href="addNextWeek! id => $item->id, page => $item->pages_id" title="přidat za týden od akce">+T</a>
+    </td>
+    <td>{$item->date_event|date:'j. n. H:i'}</td>
+    <td>{$item->date_event_end|date:'j. n. H:i'}</td>
+    <td>{$item->contact}</td>
+    <td class="text-right">{$database->table('events_signed')->where('events_id', $item->id)->count()}
+        /{$item->capacity}</td>
+    <td class="text-right">{$item->time_range}</td>
+    <td class="text-right">{$item->price} {$settings['store:currency:symbol']}</td>
+    <td><a n:href="deleteDate! id => $item->id, event => $item->pages_id"
+                class="btn btn-danger btn-sm">{_dictionary.main.Delete}</a></td>
+    </tr>
+    {if $viewType == 0}
+        {var $ev_after = $ev}
+    {/if}
+    {if $iterator->last}
+        {var $lastId = $item->id}
+    {/if}
+    {/foreach}
+    </table>
+
+    {if $events->count() > 0}
+        <a n:href="addNextSameDay! id => $lastId, page => $presenter->getParameter('id')">Přidat aktuálně ve stejný
+            den</a>
+    {/if}
 </div>

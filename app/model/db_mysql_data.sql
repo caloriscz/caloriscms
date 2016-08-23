@@ -12,7 +12,7 @@ INSERT INTO `categories` (`id`, `parent_id`, `description`, `title`, `sorted`) V
 (9, 2, NULL, 'Kontakty na stránce', 45),
 (10, 1, NULL, 'Základní nastavení', 146),
 (11, 1, NULL, 'Kategorie', 149),
-(12, 1, NULL, 'Konakty členů', 148),
+(12, 1, NULL, 'Kontakty členů', 148),
 (13, 1, NULL, 'Obchod', 147),
 (14, 13, NULL, 'Bonus', 167),
 (15, 1, NULL, 'Blog', 154),
@@ -21,11 +21,17 @@ INSERT INTO `categories` (`id`, `parent_id`, `description`, `title`, `sorted`) V
 (18, 2, NULL, 'Místa k vyzvednutí', 46),
 (19, 2, NULL, 'Newsletter', 153),
 (20, 1, NULL, 'Vzhled', 154),
-(21, 20, NULL, 'Carousel', 155);
+(21, 20, NULL, 'Carousel', 155),
+(22, 20, NULL, 'Události', 157);
 
 INSERT INTO `countries` (`id`, `title_cs`, `title_en`, `show`) VALUES
 (1, 'Česká Republika', 'Czech Republic', 1),
 (2, 'Slovensko', 'Slovakia', 1);
+
+
+INSERT INTO `currencies` (`title`, `code`) VALUES
+('Česká koruna', 'Kč'),
+('Euro', '€');
 
 INSERT INTO `helpdesk` (`id`, `title`, `description`, `fill_phone`) VALUES
 (1, 'Kontaktní formulář', 'Tento formulář slouží Vašim zákazníkům, aby vás mohli kontaktovat ohledně jejich otázek nebo potávek.', 1),
