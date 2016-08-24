@@ -188,6 +188,8 @@ class EventsPresenter extends BasePresenter
 
     function insertEventFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
     {
+
+
         $date_start = \DateTime::createFromFormat('j. n. Y', $form->values->date_event);
         $date1 = $date_start->format('Y-m-d');
 
@@ -462,6 +464,21 @@ class EventsPresenter extends BasePresenter
         $this->redirect(":Admin:Events:signed", array("id" => $event->pages_id, "event" => $event->id));
     }
 
+    /**
+     * Toggle display
+     */
+    function handleToggle()
+    {
+        if ($this->getParameter('viewtype') == 'table') {
+            $this->context->httpResponse->setCookie('viewtype', 'table', '180 days');
+        } else {
+            $this->context->httpResponse->setCookie('viewtype', 'calendar', '180 days');
+        }
+
+
+        $this->redirect(":Admin:Events:default", array("type" => $this->getParameter("type")));
+    }
+
     public function renderDefault()
     {
         $type = 1;
@@ -493,6 +510,8 @@ class EventsPresenter extends BasePresenter
 
         $this->template->paginator = $paginator;
         $this->template->args = $this->getParameters();
+
+        $this->template->viewtype = $this->context->httpRequest->getCookie('viewtype');
     }
 
     public function renderDetail()
