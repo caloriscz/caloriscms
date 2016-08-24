@@ -242,10 +242,7 @@ class MembersPresenter extends BasePresenter
         for ($a = 0; $a < count($id); $a++) {
             $member = $this->database->table("users")->get($id[$a]);
 
-            if ($member->username == 'guest') {
-                $this->flashMessage('Nemůžete smazat účet hosta', 'error');
-                $this->redirect(":Admin:Members:default", array("id" => null));
-            } elseif ($member->username == 'admin') {
+            if ($member->username == 'admin') {
                 $this->flashMessage('Nemůžete smazat účet administratora', 'error');
                 $this->redirect(":Admin:Members:default", array("id" => null));
             } elseif ($member->id == $this->user->getId()) {

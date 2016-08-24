@@ -1,0 +1,13 @@
+/* IE 8 */
+.element {
+  margin-bottom: 20px;
+}
+.ie8 .element {
+  margin-bottom: 15px;
+}
+* + html .element {
+  margin-bottom: 10px;
+}
+*:first-child + html .element {
+  margin-bottom: 10px;
+}
