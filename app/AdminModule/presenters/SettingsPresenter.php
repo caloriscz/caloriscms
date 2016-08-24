@@ -60,6 +60,7 @@ class SettingsPresenter extends BasePresenter
             );
         }
 
+		$this->template->database = $this->database;
         $this->template->settingsDb = $this->database->table("settings")
                 ->where($arr);
     }
