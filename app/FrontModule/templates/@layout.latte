@@ -91,7 +91,10 @@
                 {control search}
             </div>
             <div class="col-md-6" style="padding-left: 0;">
-                <ul class="nav navbar-nav navbar-right" style="padding: 0;">
+
+
+			{if $settings['store:enabled']}
+			<ul class="nav navbar-nav navbar-right" style="padding: 0;">
                     <li class="dropdown">
                         {control cartBox}
                         <ul class="dropdown-menu" style="padding: 0;">
@@ -104,6 +107,7 @@
                         </ul>
                     </li>
                 </ul>
+				{/if}
             </div>
         </div>
     </div>

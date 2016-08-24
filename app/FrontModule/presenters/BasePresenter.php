@@ -41,6 +41,40 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
         if (session_status() == PHP_SESSION_NONE) {
             session_start();
         }
+		
+		 $this->template->settings = $this->database->table("settings")->fetchPairs("setkey", "setvalue");
+
+        /* IP mode */
+        $ip = explode(";", $this->template->settings["site_ip_whitelist"]);
+
+        if (strlen($this->template->settings["site_ip_whitelist"]) < 4 || in_array($_SERVER['REMOTE_ADDR'], $ip)) {
+        } else {
+            if (empty($this->template->settings["maintenance_message"])) {
+                include_once('.maintenance.php');
+            } else {
+                echo $this->template->settings["maintenance_message"];
+            }
+
+            exit();
+        }
+
+        /* Secret password mode */
+        $secret = $_COOKIE["secretx"];
+
+        if ($secret == $this->template->settings["maintenance_message"]) {
+        } else {
+            if ($_GET["secretx"] == $this->template->settings["maintenance_message"]) {
+                setcookie("secretx", $this->template->settings["maintenance_message"], time() + 3600000);
+            } else {
+                if (empty($this->template->settings["maintenance_message"])) {
+                    include_once('.maintenance.php');
+                } else {
+                    echo $this->template->settings["maintenance_message"];
+                }
+
+                exit();
+            }
+        }
 
         // Arguments for language switch box
         $parametres = $this->getParameters(TRUE);
@@ -62,7 +96,6 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
             $this->template->isLoggedIn = FALSE;
         }
 
-        $this->template->settings = $this->database->table("settings")->fetchPairs("setkey", "setvalue");
         $this->template->appDir = APP_DIR;
         $this->template->languageSelected = $this->translator->getLocale();
 
@@ -289,6 +322,8 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
 	
     /* Store components  ----------------------------------------------------------------------------------------------- */
 
+	
+	/* enable by uncomment this part
     protected function createComponentCartUpdater()
     {
         $control = new \Caloriscz\Cart\CartUpdaterControl($this->database);
@@ -306,6 +341,6 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
         $control = new \Caloriscz\Cart\BoxControl($this->database);
         return $control;
     }
-
+*/
 
 }
