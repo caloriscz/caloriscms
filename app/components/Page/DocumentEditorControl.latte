@@ -1,3 +1,11 @@
+{if $enabled == false}
+    <p class="text-danger">Nemáte oprávnění editovat tento dokument</p>
+{/if}
+
+{foreach $flashes as $flash}
+    <div class="flash {$flash->type}">{$flash->message}</div>
+{/foreach}
+
 {control editForm}
 
 <span class="data-wysiwyg hidden" data-ids="{$page_id}"></span>

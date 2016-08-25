@@ -33,12 +33,19 @@ class DocumentEditorControl extends Control
         $form->getElementPrototype()->autocomplete = 'off';
         $l = $this->presenter->getParameter("l");
 
+        if ($this->presenter->template->member->users_roles->pages_document) {
+            $enabled = false;
+        } else {
+            $enabled = true;
+        }
+
         $form->addHidden("id");
         $form->addHidden("l");
         $form->addHidden("docs_id");
         $form->addTextArea("document")
             ->setAttribute("class", "form-control")
-            ->setHtmlId('wysiwyg-page');
+            ->setHtmlId('wysiwyg-page')
+            ->setDisabled($enabled);
 
         if ($l == '') {
             $form->setDefaults(array(
@@ -54,10 +61,18 @@ class DocumentEditorControl extends Control
         }
 
         $form->onSuccess[] = $this->editFormSucceeded;
+        $form->onValidate[] = $this->permissionValidated;
         $form->addSubmit("submit", "dictionary.main.Save")
             ->setHtmlId('formxins');
 
         return $form;
+    }
+
+    function permissionValidated(\Nette\Forms\BootstrapUIForm $form) {
+        if ($this->template->member->users_roles->pages_edit == 0) {
+            $this->flashMessage("Nemáte oprávnění k této akci", "error");
+            $this->presenter->redirect(this);
+        }
     }
 
     function editFormSucceeded(\Nette\Forms\BootstrapPHForm $form)
@@ -145,6 +160,12 @@ class DocumentEditorControl extends Control
     {
         $template = $this->template;
         $template->settings = $this->presenter->template->settings;
+
+        if ($this->presenter->template->member->users_roles->pages_document) {
+            $template->enabled = true;
+        } else {
+            $template->enabled = false;
+        }
 
         $template->page_id = $this->presenter->getParameter("id");
 

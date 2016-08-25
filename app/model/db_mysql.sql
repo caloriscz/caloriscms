@@ -381,6 +381,8 @@ CREATE TABLE IF NOT EXISTS `users_roles` (
   `members_edit` tinyint(1) NOT NULL DEFAULT '0',
   `members_create` tinyint(1) NOT NULL DEFAULT '0',
   `members_delete` tinyint(1) NOT NULL DEFAULT '0',
+  `pages_edit` tinyint(1) NOT NULL DEFAULT '0',
+  `pages_document` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 

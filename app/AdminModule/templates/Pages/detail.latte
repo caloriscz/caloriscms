@@ -18,6 +18,12 @@
         {/if}
     </div>
     <div class="col-lg-3">
+        {foreach $flashes as $flash}
+            <br />
+            <div class="flash {$flash->type}">{$flash->message}</div>
+            <br />
+        {/foreach}
+
         {control pageSettings}
     </div>
 </div>

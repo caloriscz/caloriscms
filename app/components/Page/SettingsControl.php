@@ -68,10 +68,18 @@ class SettingsControl extends Control
         }
 
         $form->onSuccess[] = $this->setFormSucceeded;
+        $form->onValidate[] = $this->permissionValidated;
         $form->addSubmit("submit", "dictionary.main.Save")
             ->setHtmlId('formxins');
 
         return $form;
+    }
+
+    function permissionValidated(\Nette\Forms\BootstrapPHForm $form) {
+        if ($this->presenter->template->member->users_roles->pages_edit == 0) {
+            $this->flashMessage("Nemáte oprávnění k této akci", "error");
+            $this->redirect(this);
+        }
     }
 
     function setFormSucceeded(\Nette\Forms\BootstrapPHForm $form)

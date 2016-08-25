@@ -128,6 +128,7 @@ class PagesPresenter extends BasePresenter
             ->setHtmlId('formxins');
 
         $form->onSuccess[] = $this->insertSnippetFormSucceeded;
+        $form->onValidate[] = $this->permissionValidated;
 
         return $form;
     }
@@ -141,6 +142,14 @@ class PagesPresenter extends BasePresenter
 
         $this->redirect(":Admin:Pages:snippets", array("id" => $form->values->id));
     }
+
+    function permissionValidated(\Nette\Forms\BootstrapUIForm $form) {
+        if ($this->template->member->users_roles->pages_edit == 0) {
+            $this->flashMessage("Nemáte oprávnění k této akci", "error");
+            $this->redirect(this);
+        }
+    }
+
 
     function handleChangeState($id, $public)
     {
