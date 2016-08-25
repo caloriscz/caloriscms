@@ -13,7 +13,7 @@
     <li role="presentation">
         <a n:href=":Admin:Settings:countries, id => null">Země</a>
     </li>
-    <li role="presentation" class="active">
+    <li role="presentation">
         <a n:href=":Admin:Settings:currencies, id => null">Měny</a>
     </li>
 </ul>
@@ -26,7 +26,7 @@
     <br/>
 {/foreach}
 
-{if $member->username == 'admin'}
+{if $member->users_roles->settings_display}
     <div class="row">
         <div class="col-lg-3">
             {control insertLanguage}
@@ -55,4 +55,6 @@
             </table>
         </div>
     </div>
+{else}
+    <p>Nemáte oprávnění k zobrazení této stránky</p>
 {/if}

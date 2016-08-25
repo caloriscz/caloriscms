@@ -132,10 +132,10 @@ INSERT INTO `users` (`id`, `username`, `categories_id`, `uid`, `email`, `sex`, `
 
 
 INSERT INTO `users_roles` (`id`, `title`, `admin_access`, `appearance_images`, `helpdesk_edit`, `settings_edit`, `members_display`, `members_edit`, `members_create`, `members_delete`) VALUES
-(1, 'Admin', 1, 0, 1, 1, 1, 1, 1, 1),
-(2, 'Super User', 1, 0, 1, 1, 1, 1, 1, 1),
-(3, 'Editor', 1, 0, 1, 0, 0, 0, 0, 0),
-(4, 'Site User', 0, 0, 0, 0, 0, 0, 0, 0);
+(1, 'Admin', 1, 0, 1, 1, 1, 1, 1, 1, 1),
+(2, 'Super User', 1, 0, 1, 1, 1, 1, 1, 1, 1),
+(3, 'Editor', 1, 0, 1, 0, 0, 0, 0, 0, 0),
+(4, 'Site User', 0, 0, 0, 0, 0, 0, 0, 0, 0);
 
 INSERT INTO `blacklist` (`title`) VALUES
 ('viagra'),

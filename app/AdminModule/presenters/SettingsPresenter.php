@@ -33,6 +33,7 @@ class SettingsPresenter extends BasePresenter
             ->setAttribute("class", "btn btn-success");
 
         $form->onSuccess[] = $this->editSettingsSucceeded;
+        $form->onValidate[] = $this->permissionValidated;
         return $form;
     }
 
@@ -64,7 +65,15 @@ class SettingsPresenter extends BasePresenter
             ->setAttribute("class", "btn btn-success");
 
         $form->onSuccess[] = $this->insertLanguageSucceeded;
+        $form->onValidate[] = $this->permissionValidated;
         return $form;
+    }
+
+    function permissionValidated(\Nette\Forms\BootstrapUIForm $form) {
+        if ($this->template->member->users_roles->settings_edit == 0) {
+            $this->flashMessage("Nemáte oprávnění k této akci", "error");
+            $this->redirect(this);
+        }
     }
 
     function insertLanguageSucceeded(\Nette\Forms\BootstrapUIForm $form)
@@ -97,6 +106,7 @@ class SettingsPresenter extends BasePresenter
             ->setAttribute("class", "btn btn-success");
 
         $form->onSuccess[] = $this->insertCountrySucceeded;
+        $form->onValidate[] = $this->permissionValidated;
         return $form;
     }
 
@@ -131,6 +141,7 @@ class SettingsPresenter extends BasePresenter
             ->setAttribute("class", "btn btn-success");
 
         $form->onSuccess[] = $this->insertCurrencySucceeded;
+        $form->onValidate[] = $this->permissionValidated;
         return $form;
     }
 
@@ -177,46 +188,54 @@ class SettingsPresenter extends BasePresenter
 
     function handleMakeDefault($id)
     {
-        $this->database->query("UPDATE languages SET `default` = NULL");
-        $this->database->table("languages")->get($id)->update(array("default" => 1));
+        if ($this->template->member->users_roles->settings_edit == 0) {
+            $this->database->query("UPDATE languages SET `default` = NULL");
+            $this->database->table("languages")->get($id)->update(array("default" => 1));
+        }
 
         $this->redirect(":Admin:Settings:languages");
     }
 
     function handleMakeDefaultCurrency($id)
     {
-        $this->database->query("UPDATE currencies SET `used` = NULL");
-        $this->database->table("currencies")->get($id)->update(array("used" => 1));
+        if ($this->template->member->users_roles->settings_edit == 0) {
+            $this->database->query("UPDATE currencies SET `used` = NULL");
+            $this->database->table("currencies")->get($id)->update(array("used" => 1));
+        }
 
         $this->redirect(":Admin:Settings:languages");
     }
 
     function handleToggle($id)
     {
-        $toggle = $this->database->table("languages")->get($id);
+        if ($this->template->member->users_roles->settings_edit == 0) {
+            $toggle = $this->database->table("languages")->get($id);
 
-        if ($toggle->used) {
-            $state = 0;
-        } else {
-            $state = 1;
+            if ($toggle->used) {
+                $state = 0;
+            } else {
+                $state = 1;
+            }
+
+            $this->database->table("languages")->get($id)->update(array("used" => $state));
         }
-
-        $this->database->table("languages")->get($id)->update(array("used" => $state));
 
         $this->redirect(":Admin:Settings:languages");
     }
 
     function handleToggleCountry($id)
     {
-        $toggle = $this->database->table("countries")->get($id);
+        if ($this->template->member->users_roles->settings_edit == 0) {
+            $toggle = $this->database->table("countries")->get($id);
 
-        if ($toggle->show) {
-            $state = 0;
-        } else {
-            $state = 1;
+            if ($toggle->show) {
+                $state = 0;
+            } else {
+                $state = 1;
+            }
+
+            $this->database->table("countries")->get($id)->update(array("show" => $state));
         }
-
-        $this->database->table("countries")->get($id)->update(array("show" => $state));
 
         $this->redirect(":Admin:Settings:countries");
     }
@@ -243,6 +262,7 @@ class SettingsPresenter extends BasePresenter
         if (!$this->getParameter("id")) {
             $arr = array(
                 "admin_editable" => 1,
+                "categories_id" => 10,
             );
         } else {
             $arr = array(

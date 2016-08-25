@@ -21,12 +21,12 @@
 <h1 class="page-header">Měny</h1>
 
 {foreach $flashes as $flash}
-    <br />
+    <br/>
     <div class="flash {$flash->type}">{$flash->message}</div>
-    <br />
+    <br/>
 {/foreach}
 
-{if $member->username == 'admin'}
+{if $member->users_roles->settings_display}
     <div class="row">
         <div class="col-lg-3">
             {control insertCurrency}
@@ -48,4 +48,6 @@
             </table>
         </div>
     </div>
+{else}
+    <p>Nemáte oprávnění k zobrazení této stránky</p>
 {/if}

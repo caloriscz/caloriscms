@@ -367,6 +367,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `login_success` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `categories_id` (`categories_id`)
+  KEY `users_roles_id` (`users_roles_id`)
 ) ENGINE=InnoDB;
 
 CREATE TABLE IF NOT EXISTS `users_roles` (
@@ -445,4 +446,5 @@ ALTER TABLE `snippets`
   ADD CONSTRAINT `snippets_ibfk_1` FOREIGN KEY (`pages_id`) REFERENCES `pages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 ALTER TABLE `users`
+  ADD CONSTRAINT `users_ibfk_2` FOREIGN KEY (`users_roles_id`) REFERENCES `users_roles` (`id`) ON DELETE SET NULL ON UPDATE SET NULL,
   ADD CONSTRAINT `users_ibfk_1` FOREIGN KEY (`categories_id`) REFERENCES `categories` (`id`) ON DELETE SET NULL ON UPDATE SET NULL;
