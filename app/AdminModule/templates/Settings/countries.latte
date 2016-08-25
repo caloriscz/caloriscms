@@ -1,0 +1,52 @@
+{block #titles}Země{/block}
+{block content}
+
+<br>
+
+<ul class="nav nav-tabs">
+    <li role="presentation">
+        <a n:href=":Admin:Settings:default, id => null">{_dictionary.main.Settings}</a>
+    </li>
+    <li role="presentation">
+        <a n:href=":Admin:Settings:languages, id => null">Jazykové mutace</a>
+    </li>
+    <li role="presentation" class="active">
+        <a n:href=":Admin:Settings:countries, id => null">Země</a>
+    </li>
+    <li role="presentation">
+        <a n:href=":Admin:Settings:currencies, id => null">Měny</a>
+    </li>
+</ul>
+
+<h1 class="page-header">Země</h1>
+
+{foreach $flashes as $flash}
+    <br/>
+    <div class="flash {$flash->type}">{$flash->message}</div>
+    <br/>
+{/foreach}
+
+{if $member->username == 'admin'}
+    <div class="row">
+        <div class="col-lg-3">
+            {control insertCurrency}
+        </div>
+        <div class="col-lg-9">
+
+
+            <table class="table table-striped">
+                {foreach $countries as $item}
+                    <tr>
+                        <td class="col-xs-1">
+                            <a n:href="toggleCountry! id => $item->id"
+                                    class="btn{if $item->show} btn-success{else} btn-danger{/if} btn-xs">
+                                {if $item->show}povoleno{else}zakázáno{/if}
+                            </a>
+                        </td>
+                        <td>{$item->title_cs}</td>
+                    </tr>
+                {/foreach}
+            </table>
+        </div>
+    </div>
+{/if}

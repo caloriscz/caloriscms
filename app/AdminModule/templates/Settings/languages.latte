@@ -1,0 +1,58 @@
+{block #titles}Jazykové mutace{/block}
+{block content}
+
+<br>
+
+<ul class="nav nav-tabs">
+    <li role="presentation">
+        <a n:href=":Admin:Settings:default, id => null">{_dictionary.main.Settings}</a>
+    </li>
+    <li role="presentation" class="active">
+        <a n:href=":Admin:Settings:languages, id => null">Jazykové mutace</a>
+    </li>
+    <li role="presentation">
+        <a n:href=":Admin:Settings:countries, id => null">Země</a>
+    </li>
+    <li role="presentation" class="active">
+        <a n:href=":Admin:Settings:currencies, id => null">Měny</a>
+    </li>
+</ul>
+
+<h1 class="page-header">Jazykové mutace</h1>
+
+{foreach $flashes as $flash}
+    <br/>
+    <div class="flash {$flash->type}">{$flash->message}</div>
+    <br/>
+{/foreach}
+
+{if $member->username == 'admin'}
+    <div class="row">
+        <div class="col-lg-3">
+            {control insertLanguage}
+        </div>
+        <div class="col-lg-9">
+
+
+            <table class="table table-striped">
+                {foreach $languages as $item}
+                    <tr>
+                        <td class="col-xs-1">{$item->code}</td>
+                        <td>{$item->title}</td>
+                        <td>
+                            <a n:href="install! id => $item->code" class="btn btn-default btn-xs"
+                                                                   onclick="return confirm('Opravdu nainstalovat?')">
+                                Instalovat
+                            </a>
+                            <a n:href="toggle! id => $item->id" class="btn btn-default btn-xs">
+                                {if $item->used}povoleno{else}zakázáno{/if}
+                            </a>
+                            {if $item->default == null}<a n:href="makeDefault! id => $item->id"
+                                class="btn btn-default btn-xs">Make default</a>{/if}
+                        </td>
+                    </tr>
+                {/foreach}
+            </table>
+        </div>
+    </div>
+{/if}

@@ -106,9 +106,11 @@ CREATE TABLE IF NOT EXISTS `countries` (
 ) ENGINE=InnoDB;
 
 CREATE TABLE `d68895_demo`.`currencies` (
-`id` int(11) NOT NULL AUTO_INCREMENT,
-`title` VARCHAR( 60 ) NULL ,
-`code` VARCHAR( 8 ) NULL ,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(60) DEFAULT NULL,
+  `code` varchar(8) DEFAULT NULL,
+  `symbol` varchar(20) DEFAULT NULL,
+  `used` tinyint(1) DEFAULT NULL,
 PRIMARY KEY ( `id` )
 ) ENGINE = InnoDB;
 

@@ -1,6 +1,23 @@
 {block #titles}{_dictionary.main.Settings}{/block}
 {block content}
 
+<br>
+
+<ul class="nav nav-tabs">
+    <li role="presentation" class="active">
+        <a n:href=":Admin:Settings:default, id => null">{_dictionary.main.Settings}</a>
+    </li>
+    <li role="presentation">
+        <a n:href=":Admin:Settings:languages, id => null">Jazykové mutace</a>
+    </li>
+    <li role="presentation" class="active">
+        <a n:href=":Admin:Settings:countries, id => null">Země</a>
+    </li>
+    <li role="presentation" class="active">
+        <a n:href=":Admin:Settings:currencies, id => null">Měny</a>
+    </li>
+</ul>
+
 <h1 class="page-header">{_dictionary.main.Settings}</h1>
 
 <div class="row">
@@ -28,13 +45,14 @@
                                 <input type="radio" name="set[{$item->setkey}]"
                                        value="0"{if $item->setvalue == 0} checked{/if}/> ne
                             {elseif substr($item->type, 0, 5) == 'table'}
-                                {var $itemSelect = explode(';', $item->type)}
-                                {var $table = explode(':', $itemSelect[0])}
-                                {var $column = explode(':', $itemSelect[1])}
-                                <select name="set[{$item->setkey}]" class="form-control">{$column}
+                            {var $itemSelect = explode(';', $item->type)}
+                            {var $table = explode(':', $itemSelect[0])}
+                            {var $column = explode(':', $itemSelect[1])}
+                                <select name="set[{$item->setkey}]" class="form-control">
                                     {foreach $database->table("$table[1]")->order("$column[1]") as $itemTable}
                                         <option value="{$itemTable->id}" {if $itemTable->id == $item->setvalue} selected{/if}>{$itemTable->{"$column[1]"}}</option>
                                     {/foreach}
+
                                 </select>
                             {else}
                                 <input type=text name="set[{$item->setkey}]" class="form-control tool-tip"

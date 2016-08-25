@@ -26,12 +26,12 @@ INSERT INTO `categories` (`id`, `parent_id`, `description`, `title`, `sorted`) V
 
 INSERT INTO `countries` (`id`, `title_cs`, `title_en`, `show`) VALUES
 (1, 'Česká Republika', 'Czech Republic', 1),
-(2, 'Slovensko', 'Slovakia', 1);
+(2, 'Slovensko', 'Slovakia', 0);
 
 
-INSERT INTO `currencies` (`title`, `code`) VALUES
-('Česká koruna', 'Kč'),
-('Euro', '€');
+INSERT INTO `currencies` (`id`, `title`, `code`, `symbol`, `used`) VALUES
+(1, 'Česká koruna', 'CZK', 'Kč', 1),
+(2, 'Euro', 'EUR', '€', NULL);
 
 INSERT INTO `helpdesk` (`id`, `title`, `description`, `fill_phone`) VALUES
 (1, 'Kontaktní formulář', 'Tento formulář slouží Vašim zákazníkům, aby vás mohli kontaktovat ohledně jejich otázek nebo potávek.', 1),
