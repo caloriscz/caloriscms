@@ -41,8 +41,19 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
         if (session_status() == PHP_SESSION_NONE) {
             session_start();
         }
-		
-		 $this->template->settings = $this->database->table("settings")->fetchPairs("setkey", "setvalue");
+
+        $this->template->settings = $this->database->table("settings")->fetchPairs("setkey", "setvalue");
+
+        /* Maintenance mode */
+        if ($this->template->settings["maintenance_enabled"]) {
+            if (empty($this->template->settings["maintenance_message"])) {
+                include_once('.maintenance.php');
+            } else {
+                echo $this->template->settings["maintenance_message"];
+            }
+
+            exit();
+        }
 
         /* IP mode */
         $ip = explode(";", $this->template->settings["site_ip_whitelist"]);
@@ -61,18 +72,20 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
         /* Secret password mode */
         $secret = $_COOKIE["secretx"];
 
-        if ($secret == $this->template->settings["maintenance_message"]) {
-        } else {
-            if ($_GET["secretx"] == $this->template->settings["maintenance_message"]) {
-                setcookie("secretx", $this->template->settings["maintenance_message"], time() + 3600000);
-            } else {
-                if (empty($this->template->settings["maintenance_message"])) {
-                    include_once('.maintenance.php');
+        if ($this->template->settings['site_cookie_whitelist'] != '') {
+            if ($this->template->settings["site_cookie_whitelist"] != $secret) {
+                if ($_GET["secretx"] == $this->template->settings["site_cookie_whitelist"]) {
+                    setcookie("secretx", $this->template->settings["site_cookie_whitelist"], time() + 3600000);
                 } else {
-                    echo $this->template->settings["maintenance_message"];
+                    if (empty($this->template->settings["maintenance_message"])) {
+                        include_once('.maintenance.php');
+                    } else {
+                        echo $this->template->settings["maintenance_message"];
+                    }
+                    exit();
                 }
-
-                exit();
+            } else {
+                $message = "5";
             }
         }
 
@@ -313,17 +326,15 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
         $control = new \Caloriscz\Menus\AdminBarControl($this->database);
         return $control;
     }
-	
-	protected function createComponentMenu()
+
+    protected function createComponentMenu()
     {
         $control = new \Caloriscz\Menus\MenuControl($this->database);
         return $control;
     }
-	
-    /* Store components  ----------------------------------------------------------------------------------------------- */
 
-	
-	/* enable by uncomment this part
+    /* Store components  ----------------------------------------------------------------------------------------------- */
+    /* enable by uncomment this part
     protected function createComponentCartUpdater()
     {
         $control = new \Caloriscz\Cart\CartUpdaterControl($this->database);
