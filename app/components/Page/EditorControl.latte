@@ -1,0 +1,109 @@
+{foreach $flashes as $flash}
+    <div class="flash {$flash->type}">{$flash->message}</div>
+{/foreach}
+
+<form n:name="editForm" class="form-horizontal" role="form">
+    <div class="row">
+        <div class="col-xs-12 col-sm-9">
+            {control langSelector}
+
+        </div>
+        <div class="col-xs-6 col-sm-1 text-right">
+            {if $page->public == 0}
+                <a href="{link public!}" class="btn btn-default btn-lg">
+                    <i class="fa fa-toggle-off"></i>
+                    Povolit
+                </a>
+            {else}
+                <a href="{link public!}" class="btn btn-default btn-lg">
+                    <i class="fa fa-toggle-on"></i>
+                    Zakázat
+                </a>
+            {/if}
+
+        </div>
+        <div class="col-xs-6 col-sm-2 text-right">
+            <button type="submit" class="btn btn-success btn-lg">{_dictionary.main.Save}</button>
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-md-8">
+            {if $page->pages_types->id == 0}
+                <div class="alert alert-warning">
+                    <p><i class="fa fa-exclamation-triangle"> </i><strong>Tato stránka je šablona</strong></p>
+                    <p>Text této stránky se upravuje přímo ve zdrojovém kódu. Obsah, který napíšete do políčka dole se
+                        nemusí objevit přímo na stránce. Pokud chcete, aby se tento text objevil na stránce, konzultujte
+                        to s administrátorem stránky.</p>
+                </div>
+            {/if}
+
+            <textarea n:name="document" id="wysiwyg-page" class="form-control" cols="3"></textarea>
+        </div>
+        <div class="col-md-4">
+            <div class="form-group">
+                <label for="inputTitle" class="col-sm-3 control-label">{_dictionary.main.Title}</label>
+                <div class="col-sm-9">
+                    <input type="text" n:name="title" class="form-control" id="inputTitle"
+                           placeholder="{_dictionary.main.Title}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputSlug" class="col-sm-3 control-label">{_dictionary.main.Slug}</label>
+                <div class="col-sm-9">
+                    <input type="text" n:name="slug" class="form-control" id="inputSlug"
+                           placeholder="{_dictionary.main.Slug}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputParent" class="col-sm-3 control-label">Nadřazená stránka</label>
+                <div class="col-sm-9">
+                    <select name="parent" class="form-control" id="inputParent">
+                        <option value="" selected="selected">Nadřazená stránka nevybrána --</option>
+                        {foreach $pages as $item}
+                            <option value="{$item->id}" {if $item->id == $page->pages_id} selected{/if}>{$item->title}</option>
+                        {/foreach}
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputTemplate" class="col-sm-3 control-label">Šablona stránky</label>
+                <div class="col-sm-9">
+                    <select name="template" class="form-control" id="inputTemplate">
+                        <option value="" selected="selected">Základní šablona --</option>
+                        {foreach $templates as $item}
+                            <option value="{$item->id}" {if $item->id == $page->pages_templates_id} selected{/if}>{$item->template}</option>
+                        {/foreach}
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inputDatePublished" class="col-sm-3 control-label">{_dictionary.main.PublishedForm}</label>
+                <div class="col-sm-9">
+                    <input type="text" n:name="date_published" class="form-control datepicker" id="inputDatePublished"
+                           placeholder="{_dictionary.main.PublishedForm}">
+                </div>
+            </div>
+            <fieldset>
+                <legend>Meta značky</legend>
+
+                <div class="form-group">
+                    <label for="inputMetaDesc" class="col-sm-3 control-label">{_dictionary.main.MetaDesc}</label>
+                    <div class="col-sm-9">
+                        <textarea type="text" n:name="metadesc" class="form-control" id="inputMetaDesc"
+                                  placeholder="{_dictionary.main.MetaDesc}"></textarea>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputMetaKeys" class="col-sm-3 control-label">{_dictionary.main.MetaKeys}</label>
+                    <div class="col-sm-9">
+                        <textarea type="text" n:name="metakeys" class="form-control" id="inputMetaKeys"
+                                  placeholder="{_dictionary.main.MetaKeys}"></textarea>
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+    </div>
+</form>
+
+<span class="data-wysiwyg hidden" data-ids="{$page_id}"></span>

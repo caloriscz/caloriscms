@@ -172,9 +172,9 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
         return $control;
     }
 
-    protected function createComponentDocumentEditor()
+    protected function createComponentEditor()
     {
-        $control = new \Caloriscz\Page\DocumentEditorControl($this->database);
+        $control = new \Caloriscz\Page\EditorControl($this->database);
         return $control;
     }
 

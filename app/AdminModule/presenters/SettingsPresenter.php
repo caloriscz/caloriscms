@@ -69,7 +69,8 @@ class SettingsPresenter extends BasePresenter
         return $form;
     }
 
-    function permissionValidated(\Nette\Forms\BootstrapUIForm $form) {
+    function permissionValidated(\Nette\Forms\BootstrapUIForm $form)
+    {
         if ($this->template->member->users_roles->settings_edit == 0) {
             $this->flashMessage("Nemáte oprávnění k této akci", "error");
             $this->redirect(this);
@@ -169,9 +170,8 @@ class SettingsPresenter extends BasePresenter
         $default = $this->database->table("languages")->where("default = 1");
 
         if (strcmp($default->fetch()->code, $id) === "0") {
-            echo "This is default language. Cannot be installed with suffix.";
-        } else {
-            echo "This is the right language";
+            $this->flashMessage("This is default language. Cannot be installed with suffix.");
+            $this->redirect(":Admin:Settings:languages");
         }
 
         $this->checkColumn("pages", "title", "varchar(250)", $id);
@@ -181,7 +181,7 @@ class SettingsPresenter extends BasePresenter
         $this->checkColumn("pages", "metakeys", "varchar(150)", $id);
         $this->checkColumn("pages", "metadesc", "varchar(200)", $id);
         $this->checkColumn("menu", "title", "varchar(80)", $id);
-        $this->checkColumn("description", "title", "text", $id);
+        $this->checkColumn("menu", "description", "text", $id);
 
         $this->redirect(":Admin:Settings:languages");
     }

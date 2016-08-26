@@ -169,7 +169,12 @@ class Document
 
     function setParent($parent = false)
     {
-        $this->parent = $parent;
+        if ($parent == false) {
+            $this->parent = 0;
+        } else {
+            $this->parent = $parent;
+        }
+
         return $this->parent;
     }
 
@@ -315,8 +320,8 @@ class Document
 
         if ($this->getParent()) {
             $arr["pages_id"] = $this->getParent();
-        } elseif ($this->getSlug()) {
-            $arr["pages_id"] = $this->getParent();
+        } elseif ($this->getParent() == 0) {
+            $arr["pages_id"] = null;
         }
 
         if ($this->getDatePublished()) {

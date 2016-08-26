@@ -69,12 +69,10 @@ class SlugRouter extends Nette\Object implements Nette\Application\IRouter
             $row = $this->slugManager->getDefault();
         }
 
-
         if (!$row) {
             //throw new Nette\Application\BadRequestException('Page does not exist');
             return null;
         }
-
 
         //action
         if (isset($parts[1])) {
@@ -112,8 +110,14 @@ class SlugRouter extends Nette\Object implements Nette\Application\IRouter
             $presenter = $row->presenter;
         } else {
             $presenter = $row->pages_types->presenter;
+        }
+
+        if ($row->pages_templates_id != null) {
+            $params['action'] =$row->pages_templates->template;
+        } else {
             $params['action'] = $row->pages_types->action;
         }
+
 
 //        echo $presenter;
         //      exit();
@@ -139,6 +143,8 @@ class SlugRouter extends Nette\Object implements Nette\Application\IRouter
         } else {
             if (isset($params['page_id'])) {
                 $row = $this->slugManager->getSlugById($params['page_id']);
+
+                // todo peekay Change cs for selected language
 
                 if (isset($params['locale']) == 'cs') {
                     unset($params['locale']);
@@ -169,7 +175,6 @@ class SlugRouter extends Nette\Object implements Nette\Application\IRouter
         } else {
             $prefix = null;
         }
-
         $url = $refUrl->getScheme() . '://' . $refUrl->getHost() . $refUrl->getPath() . $locale . $prefix . $slug;
         $params = $appRequest->getParameters();
 
@@ -185,7 +190,6 @@ class SlugRouter extends Nette\Object implements Nette\Application\IRouter
         }
 
         if (count($query) > 0) {
-
             $queryString = '?';
 
             foreach ($query as $key => $parameter) {

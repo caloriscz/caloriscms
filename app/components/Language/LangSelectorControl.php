@@ -18,7 +18,7 @@ class LangSelectorControl extends Control
         $template = $this->template;
         $template->id = $this->presenter->getParameter('id');
 
-        $template->languages = $this->database->table("languages")->where("used", 1)->order("id");
+        $template->languages = $this->database->table("languages");
         $template->langSelected = $this->presenter->getParameter("l");
 
         $template->settings = $this->presenter->template->settings;

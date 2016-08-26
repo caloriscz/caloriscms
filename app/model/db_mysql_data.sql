@@ -59,7 +59,8 @@ UPDATE `pages_types` SET `id` = 0 WHERE `id` = 9;
 INSERT INTO `pages` (`slug`, `title`, `document`, `preview`, `pages_id`, `users_id`, `public`, `metadesc`, `metakeys`, `date_created`, `date_published`, `pages_types_id`, `sorted`, `editable`, `presenter`) VALUES
 ('', 'Homepage', NULL, NULL, NULL, NULL, 1, '', '', NULL, NULL, 0, 1, 0, 'Front:Homepage'),
 ('kontakt', 'Kontakty', NULL, NULL, NULL, NULL, 1, '', '', NULL, NULL, 0, 2, 0, 'Front:Contact'),
-('blog', 'Blog', NULL, NULL, NULL, NULL, 1, '', '', NULL, NULL, 0, 3, 0, 'Front:Blog');
+('blog', 'Blog', NULL, NULL, NULL, NULL, 1, '', '', NULL, NULL, 0, 3, 0, 'Front:Blog')
+('galerie', 'Galerie', NULL, NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL, 0, 4, 0, 'Front:Gallery', 'default';
 
 INSERT INTO `settings` (`categories_id`, `setkey`, `setvalue`, `description_cs`, `description_en`, `type`, `admin_editable`) VALUES 
 (15, 'blog:short:showPreview', '1', 'Zobrazovat zkrácenou verzi článku v krátké verzi blogu.', 'Show preview of an article.', 'boolean', 1),

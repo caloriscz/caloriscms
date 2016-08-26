@@ -111,7 +111,7 @@ class PagesPresenter extends BasePresenter
     }
 
     /**
-     * Edit page content
+     * Insert page content
      */
     function createComponentInsertSnippetForm()
     {

@@ -91,6 +91,86 @@ class BlogPresenter extends BasePresenter
         $this->redirect(":Admin:Blog:detail", array("id" => $page));
     }
 
+    /**
+     * Insert page snippet
+     */
+    function createComponentInsertSnippetForm()
+    {
+        $form = $this->baseFormFactory->createUI();
+        $form->addHidden("id")
+            ->setAttribute("class", "form-control");
+        $form->addText("title", "dictionary.main.Title");
+
+        $form->setDefaults(array(
+            "id" => $this->getParameter('id'),
+        ));
+
+        $form->addSubmit("submit", "dictionary.main.Create")
+            ->setHtmlId('formxins');
+
+        $form->onSuccess[] = $this->insertSnippetFormSucceeded;
+        return $form;
+    }
+
+    function insertSnippetFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
+    {
+        $this->database->table("snippets")->insert(array(
+            "keyword" => $form->values->title,
+            "pages_id" => $form->values->id,
+        ));
+
+        $this->redirect(":Admin:Blog:snippets", array("id" => $form->values->id));
+    }
+
+    /**
+     * Delete snippet
+     */
+    function handleDeleteSnippet($id)
+    {
+        $this->database->table("snippets")->get($id)->delete();
+
+        $this->redirect(":Admin:Blog:snippets", array("id" => $this->getParameter("page")));
+    }
+
+    /**
+     * Edit page content
+     */
+    function createComponentEditSnippetForm()
+    {
+        $form = $this->baseFormFactory->createPH();
+
+        $form->addHidden("id");
+        $form->addHidden("pages_id");
+        $form->addTextArea("content")
+            ->setAttribute("class", "form-control")
+            ->setAttribute("height", "250px")
+            ->setHtmlId('wysiwyg-sm');
+        $form->setDefaults(array(
+            "pages_id" => $this->getParameter("id"),
+        ));
+
+        $form->onSuccess[] = $this->editSnippetFormSucceeded;
+        $form->addSubmit("submitm", "dictionary.main.Save")
+            ->setAttribute("class", "btn btn-success")
+            ->setHtmlId('formxins');
+
+        return $form;
+    }
+
+    /*
+     * Edit snippet
+     */
+    function editSnippetFormSucceeded(\Nette\Forms\BootstrapPHForm $form)
+    {
+        $content = $form->getHttpData($form::DATA_TEXT, 'content');
+
+        $this->database->table("snippets")->get($form->values->id)->update(array(
+            "content" => $content,
+        ));
+
+        $this->redirect(":Admin:Blog:snippets", array("id" => $form->values->pages_id));
+    }
+
     function handleChangeState($id, $public)
     {
         if ($public == 0) {
@@ -158,6 +238,14 @@ class BlogPresenter extends BasePresenter
 
         $this->template->blog = $this->database->table("pages")->where(array("id" => $this->getParameter("id")))->fetch();
     }
+
+    public function renderSnippets()
+    {
+        $this->template->catalogue = $this->database->table("pages")->get($this->getParameter("id"));
+        $this->template->snippets = $this->database->table("snippets")
+            ->where(array("pages_id" => $this->getParameter("id")));
+    }
+
 
     public function renderDetailFiles()
     {

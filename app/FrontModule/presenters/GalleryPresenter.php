@@ -25,12 +25,12 @@ class GalleryPresenter extends BasePresenter
         }
 
         $cols = array(
-            "file_type" => 1,
+            "pages_types_id" => 6,
             "pages_id" => $mediaId,
         );
 
         $this->template->galleryId = $this->getParameter("id");
-        $gallery = $this->database->table("media")
+        $gallery = $this->database->table("pages")
             ->where($cols);
 
         $paginator = new \Nette\Utils\Paginator;
@@ -46,6 +46,19 @@ class GalleryPresenter extends BasePresenter
     public function renderAlbum()
     {
         $this->template->album = $this->database->table("pages")
+            ->get($this->getParameter("page_id"));
+
+        $cols = array(
+            "pages_id" => $this->getParameter("page_id"),
+        );
+
+        $this->template->gallery = $this->database->table("media")
+            ->where($cols)->order("name");
+    }
+
+    public function renderAlbumWithDescription()
+    {
+        $this->template->page = $this->database->table("pages")
             ->get($this->getParameter("page_id"));
 
         $cols = array(

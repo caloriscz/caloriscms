@@ -3,27 +3,6 @@
 
 {include 'components/top-navigation.latte'}
 
-{control langSelector}
-
 <h1 class="page-header">{$pages->title}</h1>
 
-<div class="row">
-    <div class="col-lg-9">
-        {if $pages->pages_types->id == 0}
-        <p>přednastavená stránka - text této stránky se upravuje přímo ve zdrojovém kódu nebo pomocí
-            <a n:href=":Admin:Pages:snippets, id => $presenter->getParameter('id')">ústřižků nahoře</a>
-        </p>
-        {else}
-            {control documentEditor}
-        {/if}
-    </div>
-    <div class="col-lg-3">
-        {foreach $flashes as $flash}
-            <br />
-            <div class="flash {$flash->type}">{$flash->message}</div>
-            <br />
-        {/foreach}
-
-        {control pageSettings}
-    </div>
-</div>
+{control editor}

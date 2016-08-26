@@ -1,8 +1,14 @@
-{block #titles}{$album->title}{/block}
+{block #titles}{$page->title}{/block}
 {block content}
 {var $id = $presenter->getParameter('id')}
 <div class="container heading">
-    <h1>{$album->title}</h1>
+    <h1>{$page->title}</h1>
+</div>
+
+<div class="container">
+    <div class="description">
+        {$page->document|f|noescape}
+    </div>
 </div>
 
 <div class="container white padded-top padded-btm">

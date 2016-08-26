@@ -244,10 +244,10 @@ CREATE TABLE IF NOT EXISTS `pages` (
   `date_created` datetime DEFAULT NULL,
   `date_published` datetime DEFAULT NULL,
   `pages_types_id` int(11) DEFAULT '1',
+  `pages_templates_id` int(11) DEFAULT NULL,
   `sorted` int(11) NOT NULL DEFAULT '0',
   `editable` int(11) NOT NULL DEFAULT '1',
   `presenter` varchar(80) DEFAULT NULL,
-  `template` varchar(80) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `users_id` (`users_id`),
   KEY `pages_id` (`pages_id`),
@@ -264,6 +264,14 @@ CREATE TABLE IF NOT EXISTS `pages_related` (
   KEY `related_store_id` (`related_pages_id`),
   KEY `blog_id` (`pages_id`),
   KEY `related_blog_id` (`related_pages_id`)
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS `pages_templates` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `pages_types_id` int(11) DEFAULT NULL,
+  `template` varchar(250) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `pages_types_id` (`pages_types_id`)
 ) ENGINE=InnoDB;
 
 CREATE TABLE IF NOT EXISTS `pages_types` (
@@ -424,7 +432,8 @@ ALTER TABLE `media`
 ALTER TABLE `pages`
   ADD CONSTRAINT `pages_ibfk_4` FOREIGN KEY (`users_id`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE SET NULL,
   ADD CONSTRAINT `pages_ibfk_5` FOREIGN KEY (`pages_id`) REFERENCES `pages` (`id`) ON DELETE SET NULL ON UPDATE SET NULL,
-  ADD CONSTRAINT `pages_ibfk_6` FOREIGN KEY (`pages_types_id`) REFERENCES `pages_types` (`id`) ON DELETE SET NULL ON UPDATE SET NULL;
+  ADD CONSTRAINT `pages_ibfk_6` FOREIGN KEY (`pages_types_id`) REFERENCES `pages_types` (`id`) ON DELETE SET NULL ON UPDATE SET NULL,
+  ADD CONSTRAINT `pages_ibfk_7` FOREIGN KEY (`pages_templates_id`) REFERENCES `pages_templates` (`id`) ON DELETE SET NULL ON UPDATE SET NULL;
 
 ALTER TABLE `pages_related`
   ADD CONSTRAINT `pages_related_ibfk_4` FOREIGN KEY (`related_pages_id`) REFERENCES `pages` (`id`) ON DELETE SET NULL ON UPDATE SET NULL,
