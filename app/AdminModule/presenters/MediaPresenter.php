@@ -44,7 +44,6 @@ class MediaPresenter extends BasePresenter
         $doc->setType($form->values->type);
         $doc->setTitle($form->values->title);
         $doc->setPreview($form->values->preview);
-        $doc->setSlug($form->values->slug);
         $page = $doc->create($this->user->getId(), $form->values->category);
 
         Model\IO::directoryMake(APP_DIR . '/media/' . $page);
@@ -194,6 +193,8 @@ class MediaPresenter extends BasePresenter
 
     function uploadImageJsFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
     {
+
+        // todo peekay Finish ImageJsForm
         $folder = '';
 
         //$fileUpload = new \Nette\Http\FileUpload($_FILES['uploadfile']);
@@ -201,8 +202,8 @@ class MediaPresenter extends BasePresenter
 
         echo '{
     "uploaded": 1,
-    "fileName": "foto_plazak.png",
-    "url": "http://demo.cz/media/50/foto.png"
+    "fileName": "foto.png",
+    "url": "http://demo.cz/foto.png"
 }';
         exit();
     }
@@ -374,11 +375,14 @@ class MediaPresenter extends BasePresenter
         $this->template->mediatype = $this->context->httpRequest->getCookie('mediatype');
     }
 
+    function renderDetail() {
+        $this->template->page = $this->database->table("pages")->get($this->getParameter("id"));
+    }
+
     public function renderImage()
     {
         $this->template->file = $this->database->table("media")
             ->get($this->getParameter('id'));
-
 
         $isItImage = mime_content_type(APP_DIR . '/media/' . $this->template->file->pages_id . '/' . $this->template->file->name);
 
