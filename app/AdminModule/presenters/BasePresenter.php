@@ -178,12 +178,6 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
         return $control;
     }
 
-    protected function createComponentPageSettings()
-    {
-        $control = new \Caloriscz\Page\SettingsControl($this->database);
-        return $control;
-    }
-
     protected function createComponentImageBrowser()
     {
         $control = new \Caloriscz\Media\ImageBrowserControl($this->database);
