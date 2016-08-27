@@ -285,22 +285,25 @@ CREATE TABLE IF NOT EXISTS `pages_types` (
 
 CREATE TABLE IF NOT EXISTS `param` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `param_cs` varchar(80) NOT NULL,
+  `param` varchar(80) NOT NULL,
   `param_en` varchar(80) NOT NULL,
   `prefix` varchar(40) DEFAULT NULL,
   `suffix` varchar(40) DEFAULT NULL,
+  `preset` varchar(40) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
-CREATE TABLE IF NOT EXISTS `params` (
+
+CREATE TABLE IF NOT EXISTS `param` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `pages_id` int(11) NOT NULL,
-  `group` varchar(40) NOT NULL,
-  `param_id` int(11) NOT NULL,
-  `paramvalue` varchar(120) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `store_id` (`pages_id`),
-  KEY `store_param_id` (`param_id`)
+  `param` varchar(80) NOT NULL,
+  `param_en` varchar(80) NOT NULL,
+  `prefix` varchar(40) DEFAULT NULL COMMENT 'Will be automatically filled before value',
+  `suffix` varchar(40) DEFAULT NULL COMMENT 'Will be automatically filled after value',
+  `preset` varchar(80) DEFAULT NULL COMMENT 'Value in preset will be autofilled',
+  `ignore_front` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'Hide in parametres in presentations',
+  `ignore_admin` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'Hide in admin params view',
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
 CREATE TABLE IF NOT EXISTS `pricelist` (
