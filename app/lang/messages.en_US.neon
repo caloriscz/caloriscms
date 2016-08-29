@@ -12,7 +12,7 @@ helpdesk:
 members:
     sendLoginEmail: "send e-mail with login information"
     memberAlreadyExists: "Member already exists"
-	NotFound: "Not Found"
+    NotFound: "Not Found"
     emailAlreadyExists: "Member with this e-mail already exists"
     invalidEmailFormat: "Enter correct e-mail"
     PermissionDenied: "Permission denied"

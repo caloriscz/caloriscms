@@ -9,7 +9,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{block #titles}{/block} | Caloris Admin</title>
-    <link href="{$baseUri}/css/admin.css" rel="stylesheet"/>
+    <link href="{$baseUri}/css/back.css" rel="stylesheet"/>
     <script src="/js/Chart.min.js"></script>
 </head>
 <body>
@@ -73,82 +73,10 @@
 {/if}
 
 <script src="{$baseUri}/js/kea-back.js"></script>
-
 <script>
-    $('#event_start').datepicker({
-        language: 'cs',
-        format: 'yyyy-mm-dd',
-        startDate: '0d',
-        endDate: '+2m'
-    }).on('changeDate', function (ev) {
-        $('input[name="date_event_end"]').val($('#event_start').val());
-        console.log($('#event_start').val());
-    });
-
-    $(document).ready(function () {
-        if ($('input[name="allday"]').attr('checked')) {
-            $('#event_hour, #event_minute, #event_end_hour, #event_end_minute').hide();
-        } else {
-            $('#event_hour, #event_minute, #event_end_hour, #event_end_minute').show();
-        }
-
-        $('input[name="allday"]').change(function () {
-            if (this.checked) {
-                $('#event_hour, #event_minute, #event_end_hour, #event_end_minute').hide();
-            } else {
-                $('#event_hour, #event_minute, #event_end_hour, #event_end_minute').show();
-            }
-        });
-
-        $('.wysiwyg-disabled').summernote({
-            toolbar: [
-                // [groupName, [list of button]]
-                ['fullscreen', ['fullscreen']],
-            ],
-            height: 500
-        });
-        $('.wysiwyg-disabled').summernote('disabled');
-
-        for (a = 0; a < 20; a++) {
-            $('#wysiwyg-sm-' + a).summernote({
-                toolbar: [
-                    // [groupName, [list of button]]
-                    ['style', ['bold', 'italic', 'underline', 'clear']],
-                    ['view', ['fullscreen', 'codeview']],
-                ],
-                height: 200
-            });
-        }
-		
-	$('#wysiwyg-page').summernote({
-            width: "99%",
-            height: 500,
-            onImageUpload: function (files, editor, welEditable) {
-                //welEditable.focus();
-                sendFile(files[0], editor, welEditable);
-            }
-        });
-
-        function sendFile(file, editor, welEditable) {
-            data = new FormData();
-            data.append("file", file);
-            data.append("do", "documentEditor-imageAddForm-submit");
-            data.append("page_id", $(".data-wysiwyg").data("ids"));
-            $.ajax({
-                data: data,
-                type: "POST",
-                url: "/admin",
-                cache: false,
-                contentType: false,
-                processData: false,
-                success: function (url) {
-                    console.log(file.name);
-                    console.log($(".data-wysiwyg").data("ids"));
-                    $('#wysiwyg-page').summernote("insertImage", '/media/' + $(".data-wysiwyg").data("ids") + '/' + file.name);
-                }
-            });
-        }
-    });
+    $('#myModal').on('shown.bs.modal', function () {
+        $('#frm-insertForm-title').focus();
+    })
 </script>
 </body>
 </html>

@@ -105,14 +105,14 @@ CREATE TABLE IF NOT EXISTS `countries` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
-CREATE TABLE `d68895_demo`.`currencies` (
+CREATE TABLE `currencies` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(60) DEFAULT NULL,
   `code` varchar(8) DEFAULT NULL,
   `symbol` varchar(20) DEFAULT NULL,
   `used` tinyint(1) DEFAULT NULL,
-PRIMARY KEY ( `id` )
-) ENGINE = InnoDB;
+PRIMARY KEY (`id`)
+) ENGINE=InnoDB;
 
 CREATE TABLE IF NOT EXISTS `events` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -287,23 +287,22 @@ CREATE TABLE IF NOT EXISTS `param` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `param` varchar(80) NOT NULL,
   `param_en` varchar(80) NOT NULL,
-  `prefix` varchar(40) DEFAULT NULL,
-  `suffix` varchar(40) DEFAULT NULL,
-  `preset` varchar(40) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB;
-
-
-CREATE TABLE IF NOT EXISTS `param` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `param` varchar(80) NOT NULL,
-  `param_en` varchar(80) NOT NULL,
   `prefix` varchar(40) DEFAULT NULL COMMENT 'Will be automatically filled before value',
   `suffix` varchar(40) DEFAULT NULL COMMENT 'Will be automatically filled after value',
   `preset` varchar(80) DEFAULT NULL COMMENT 'Value in preset will be autofilled',
   `ignore_front` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'Hide in parametres in presentations',
   `ignore_admin` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'Hide in admin params view',
   PRIMARY KEY (`id`)
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS `params` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `pages_id` int(11) NOT NULL,
+  `param_id` int(11) NOT NULL,
+  `paramvalue` varchar(120) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `store_id` (`pages_id`),
+  KEY `store_param_id` (`param_id`)
 ) ENGINE=InnoDB;
 
 CREATE TABLE IF NOT EXISTS `pricelist` (
@@ -377,7 +376,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `login_error` int(11) NOT NULL DEFAULT '0',
   `login_success` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
-  KEY `categories_id` (`categories_id`)
+  KEY `categories_id` (`categories_id`),
   KEY `users_roles_id` (`users_roles_id`)
 ) ENGINE=InnoDB;
 
@@ -387,6 +386,7 @@ CREATE TABLE IF NOT EXISTS `users_roles` (
   `admin_access` tinyint(1) NOT NULL DEFAULT '0',
   `appearance_images` tinyint(1) NOT NULL DEFAULT '0',
   `helpdesk_edit` tinyint(1) NOT NULL DEFAULT '0',
+  `settings_display` tinyint(1) NOT NULL DEFAULT '0',
   `settings_edit` tinyint(1) NOT NULL DEFAULT '0',
   `members_display` tinyint(1) NOT NULL DEFAULT '0',
   `members_edit` tinyint(1) NOT NULL DEFAULT '0',
@@ -446,8 +446,8 @@ ALTER TABLE `pages_templates`
   ADD CONSTRAINT `pages_templates_ibfk_1` FOREIGN KEY (`pages_types_id`) REFERENCES `pages_types` (`id`) ON DELETE SET NULL ON UPDATE SET NULL;
 
 ALTER TABLE `params`
-  ADD CONSTRAINT `params_ibfk_4` FOREIGN KEY (`param_id`) REFERENCES `param` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `params_ibfk_3` FOREIGN KEY (`pages_id`) REFERENCES `pages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `params_ibfk_3` FOREIGN KEY (`pages_id`) REFERENCES `pages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `params_ibfk_4` FOREIGN KEY (`param_id`) REFERENCES `param` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 ALTER TABLE `pricelist`
   ADD CONSTRAINT `pricelist_ibfk_1` FOREIGN KEY (`categories_id`) REFERENCES `categories` (`id`) ON DELETE SET NULL ON UPDATE SET NULL;
