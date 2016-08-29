@@ -146,7 +146,7 @@ class SlugRouter extends Nette\Object implements Nette\Application\IRouter
 
                 // todo peekay Change cs for selected language
 
-                if (isset($params['locale']) == 'cs') {
+				if (isset($params['locale'])) {
                     unset($params['locale']);
                 }
 
