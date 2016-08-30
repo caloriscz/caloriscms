@@ -54,12 +54,6 @@ class MenuPresenter extends BasePresenter
             "url" => $form->values->url,
             "title" => $form->values->title,
         );
-        $languages = $this->database->table("languages")->where("default", null);
-
-        foreach ($languages as $item) {
-            $arr["url_" . $item->code] = $form->values->{'url_' . $item->code};
-            $arr["title_" . $item->code] = $form->values->{'title_' . $item->code};
-        }
 
         $category = $this->database->table("menu")->where($arr);
 
@@ -77,15 +71,22 @@ class MenuPresenter extends BasePresenter
     public function insertMenuFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
     {
         if (is_numeric($form->values->parent) == false) {
-            $parent = null;
+            $arr["parent_id"] = null;
         } else {
-            $parent = $form->values->parent;
+            $arr["parent_id"] = $form->values->parent;
         }
 
-        $this->database->table("menu")->insert(array(
-            "title" => $form->values->title,
-            "parent_id" => $parent,
-        ));
+        $arr['title'] = $form->values->title;
+        $arr['url'] = $form->values->url;
+
+        $languages = $this->database->table("languages")->where("default", null);
+
+        foreach ($languages as $item) {
+            $arr["url_" . $item->code] = $form->values->{'url_' . $item->code};
+            $arr["title_" . $item->code] = $form->values->{'title_' . $item->code};
+        }
+
+        $this->database->table("menu")->insert($arr);
 
         $this->database->query("SET @i = 1;UPDATE `menu` SET `sorted` = @i:=@i+2 ORDER BY `sorted` ASC");
 
