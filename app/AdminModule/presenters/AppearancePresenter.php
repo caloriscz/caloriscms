@@ -56,8 +56,9 @@ class AppearancePresenter extends BasePresenter
         );
 
         if ($form->values->the_file->error == 0) {
+			$arr['image'] = $image;
+			
             if (file_exists(APP_DIR . "/images/carousel/" . $image)) {
-                $arr['image'] = $image;
 
                 \App\Model\IO::remove(APP_DIR . "/images/carousel/" . $image);
                 \App\Model\IO::upload(APP_DIR . "/images/carousel/", $image, 0644);
@@ -100,6 +101,7 @@ class AppearancePresenter extends BasePresenter
         if (file_exists($_FILES['path']['tmp_name']) || is_uploaded_file($_FILES['path']['tmp_name'])) {
 
             copy($_FILES['path']['tmp_name'], APP_DIR . '/images/paths/' . $form->values->path->name);
+            chmod(APP_DIR . '/images/paths/' . $form->values->path->name, 0644);
             chmod(APP_DIR . '/images/paths/' . $form->values->path->name, 0644);
 
             if (file_exists(APP_DIR . '/www/images/paths/' . $form->values->path->name)) {
