@@ -4,9 +4,9 @@
 <h1 class="page-header">{_dictionary.main.Links}</h1>
 
 {foreach $flashes as $flash}
-    <br />
+    <br/>
     <div class="flash {$flash->type}">{$flash->message}</div>
-    <br />
+    <br/>
 {/foreach}
 <div class="row">
     <div class="col-lg-3">
@@ -24,11 +24,18 @@
                 </tr>
                 {foreach $links as $item}
                     <tr>
-                        <td class="col-xs-1"><a n:href="delete!, id => $item->id" class="btn" onclick="return confirm('Opravdu smazat kontakt?')" role="button"><i class="fa fa-times font-red"></i></a></td>
-                        <td><a n:href=":Admin:Links:detail id => $item->id">{if $item->title}{$item->title}{else}<em>nemá jméno</em>{/if}</a></td>
+                        <td class="col-xs-1">
+                            <a n:href="delete!, id => $item->id" class="btn"
+                                                                 onclick="return confirm('Opravdu smazat odkaz?')"
+                                                                 role="button">
+                                <i class="fa fa-times font-red"></i>
+                            </a>
+                        </td>
+                        <td><a n:href=":Admin:Links:detail id => $item->id">{if $item->title}{$item->title}{else}<em>nemá
+                                    jméno</em>{/if}</a></td>
                         <td>{$item->categories->title}</td>
                     </tr>
-                {/foreach}    
+                {/foreach}
             </table>
         </div>
 
