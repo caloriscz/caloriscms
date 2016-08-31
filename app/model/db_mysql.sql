@@ -211,6 +211,7 @@ CREATE TABLE IF NOT EXISTS `media` (
   `title` varchar(250) DEFAULT NULL,
   `description` text  NOT NULL,
   `date_created` datetime NOT NULL,
+  `detail_view` tinyint(1) NOT NULL DEFAULT '1',
   `sorted` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `albums_id` (`pages_id`)
