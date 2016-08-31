@@ -105,17 +105,15 @@ class SlugRouter extends Nette\Object implements Nette\Application\IRouter
         }
 
 
-        // 3) GET PRESENTER
+        // Presenter preset
         if ($row->pages_types_id == 0) {
             $presenter = $row->presenter;
         } else {
-            $presenter = $row->pages_types->presenter;
-        }
-
-        if ($row->pages_templates_id != null) {
-            $params['action'] =$row->pages_templates->template;
-        } else {
-            $params['action'] = $row->pages_types->action;
+            if (!empty($row->presenter)) {
+                $presenter = $row->presenter;
+            } else {
+                $presenter = $row->pages_types->presenter;
+            }
         }
 
 
