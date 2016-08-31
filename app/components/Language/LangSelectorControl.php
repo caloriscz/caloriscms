@@ -20,6 +20,7 @@ class LangSelectorControl extends Control
 
         $template->languages = $this->database->table("languages");
         $template->langSelected = $this->presenter->getParameter("l");
+        $template->arr = $this->presenter->getParameters();
 
         $template->settings = $this->presenter->template->settings;
         $template->setFile(__DIR__ . '/LangSelectorControl.latte');

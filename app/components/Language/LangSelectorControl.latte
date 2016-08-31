@@ -15,7 +15,7 @@
             {else}
                 {var $active = ""}
             {/if}
-            <a href="{plink this, id => $id, l => $code}" class="btn{$active}">{$item->code}</a>
+            <a href="{plink this, id => $id, (expand) $arr, l => $code}" class="btn{$active}">{$item->title}</a>
         {/foreach}
     </p>
 {/if}
