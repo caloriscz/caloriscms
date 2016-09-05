@@ -115,6 +115,7 @@ INSERT INTO `settings` (`categories_id`, `setkey`, `setvalue`, `description_cs`,
 (13, 'store:enabled', '0', 'Provozujete obchod?', 'Is it store?', 'boolean', 1),
 (13, 'store:stock:hideEmpty', '1', 'Schovávat zboží, které není na skladu', 'Hide products not in stock', 'boolean', 1),
 (13, 'store:new:days', '14', 'Počet dní, kdy je produkt označován jako nový', 'Number of days when product is displayed as new', NULL, 1),
+(13, 'store_admin_dashboard', '1', 'Zobrazit dashboard obchodu na homepage administrace', 'View store dashboard in administration''s homepage', 'boolean', '1'),)
 (13, 'store:order:generateIdsOnOrderConfirm', '1', 'Vytvářet automaticky čísla objednávek už při dokončení objednávky', 'Generate purchase order identifiers immediately aftter checkout', 'boolean', 1),
 (13, 'store:currency:code', 'CZK', 'Kód měny', 'Currency code', NULL, 1),
 (13, 'store:currency:symbol', 'Kč', 'Symbol měny', 'Currency symbol', NULL, 1),
