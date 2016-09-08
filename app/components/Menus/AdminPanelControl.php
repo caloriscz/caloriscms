@@ -45,7 +45,6 @@ class AdminPanelControl extends Control
         $category = $this->database->table("categories")->where(array(
             "parent_id" => $form->values->parent_id,
             "title" => $form->values->title,
-            "type" => $form->values->type,
         ));
 
         if ($category->count() > 0) {
