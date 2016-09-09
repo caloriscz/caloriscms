@@ -2,26 +2,21 @@
 {block content}
 
 <div class="panel-heading">
-    <h3 n:block="title" class="panel-title">{_dictionary.main.ForgottenPassword}</h3>
+    <h3 class="panel-title">{_dictionary.main.ForgottenPassword}</h3>
 </div>
 <div class="panel-body">
-    <form action="" class="form-signin" role="form" method="post">
-        <input type="hidden" name="terminal" value="open" />
-        <input type="hidden" name="namespace" value="Caloris" />
-        <input type="hidden" name="class" value="UserActions" />
-        <input type="hidden" name="_action" value="send" />
-        <h2 class="form-signin-heading" style="text-align: center;">
-            <img src="{$baseUri}/images/admin/logo_caloris.png" style="width: 180px; margin-bottom: 20px;" alt="logo" /></h2>
-        <p>Ztracené heslo do e-mailu</p>
+    {foreach $flashes as $flash}
+        <br/>
+        <div class="flash {$flash->type}">{$flash->message}</div>
+        <br/>
+    {/foreach}
 
-        <input type="text" 
-               name="email" 
-               class="form-control"
-               placeholder="e-mailová adresa"
-               autocomplete="off" />
-        <br />
-        <button class="btn btn-lg btn-primary btn-block" type="submit">{_dictionary.main.Send}</button>
-    </form>
+    <h2 class="form-signin-heading text-center">
+        <img src="{$baseUri}/images/admin/logo_caloris.png" style="width: 180px; margin-bottom: 20px;" alt="logo"/></h2>
 
-    <div><br /><a style="padding-left: 30px;" n:href=":Front:Sign:in" class="btn btn-default">{_dictionary.main.Login}</a></div>
+    {control lostPass, 'admin'}
+    <br>
+    <div>
+        <a n:href=":Front:Sign:in" class="btn btn-default">{_dictionary.main.Login}</a>
+    </div>
 </div>

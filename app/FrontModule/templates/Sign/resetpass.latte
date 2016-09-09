@@ -3,7 +3,7 @@
 
 <section class="container">
     {foreach $flashes as $flash}
-        <div class="flash {$flash->type}">{$flash->message}</div>
+    <div class="flash {$flash->type}">{$flash->message}</div>
     {/foreach}
 
     <div class="col-md-9">
@@ -11,7 +11,7 @@
         {if $activationValid}
             <p>Hesla rozeznávají malá a velká písmena a mohou obsahovat písmena a číslice od 6 až 40 znaků</p>
             <br /><br />
-            {control resetForm}
+        {control resetPass}
         {else}
             Aktivace není platná nebo je prošlá.<br />
             Zkuste to znovu.
