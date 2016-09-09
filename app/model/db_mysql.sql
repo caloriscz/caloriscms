@@ -306,36 +306,6 @@ CREATE TABLE IF NOT EXISTS `params` (
   KEY `store_param_id` (`param_id`)
 ) ENGINE=InnoDB;
 
-CREATE TABLE IF NOT EXISTS `pricelist` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `categories_id` int(11) DEFAULT NULL,
-  `title` varchar(400) NOT NULL,
-  `description` text,
-  `price` double NOT NULL,
-  `price_info` varchar(80) DEFAULT NULL,
-  `sorted` int(11) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`),
-  KEY `pricelist_categories_id` (`categories_id`)
-) ENGINE=InnoDB;
-
-CREATE TABLE IF NOT EXISTS `pricelist_daily` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `categories_id` int(11) DEFAULT NULL,
-  `title` text NOT NULL,
-  `pricelist_dates_id` int(11) NOT NULL,
-  `price` double NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `pricelist_categories_id` (`categories_id`),
-  KEY `pricelist_dates_id` (`pricelist_dates_id`),
-  KEY `pricelist_dates_id_2` (`pricelist_dates_id`)
-) ENGINE=InnoDB;
-
-CREATE TABLE IF NOT EXISTS `pricelist_dates` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `day` date NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB;
-
 CREATE TABLE IF NOT EXISTS `settings` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `categories_id` int(11) DEFAULT NULL,
@@ -453,13 +423,6 @@ ALTER TABLE `pages_templates`
 ALTER TABLE `params`
   ADD CONSTRAINT `params_ibfk_3` FOREIGN KEY (`pages_id`) REFERENCES `pages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `params_ibfk_4` FOREIGN KEY (`param_id`) REFERENCES `param` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
-ALTER TABLE `pricelist`
-  ADD CONSTRAINT `pricelist_ibfk_1` FOREIGN KEY (`categories_id`) REFERENCES `categories` (`id`) ON DELETE SET NULL ON UPDATE SET NULL;
-
-ALTER TABLE `pricelist_daily`
-  ADD CONSTRAINT `pricelist_daily_ibfk_5` FOREIGN KEY (`categories_id`) REFERENCES `categories` (`id`) ON DELETE SET NULL ON UPDATE SET NULL,
-  ADD CONSTRAINT `pricelist_daily_ibfk_2` FOREIGN KEY (`pricelist_dates_id`) REFERENCES `pricelist_dates` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 ALTER TABLE `settings`
   ADD CONSTRAINT `settings_ibfk_1` FOREIGN KEY (`categories_id`) REFERENCES `categories` (`id`) ON DELETE SET NULL ON UPDATE SET NULL;

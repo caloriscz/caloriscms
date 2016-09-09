@@ -3,7 +3,6 @@
 INSERT INTO `categories` (`id`, `parent_id`, `description`, `title`, `sorted`) VALUES
 (1, NULL, NULL, 'Nastavení', 145),
 (2, NULL, '', 'Kontakty', 43),
-(3, NULL, '', 'Ceník', 54),
 (4, NULL, '', 'Links', 57),
 (5, NULL, '', 'Členové', 60),
 (6, 2, NULL, 'Značky zboží', 169),
