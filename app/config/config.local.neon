@@ -1,13 +1,12 @@
 parameters:
 
 
-nette:
-	database:
-		dsn: 'mysql:host=;dbname='
-		user: ''
-		password: ''
-		options:
-			lazy: yes
+database:
+	dsn: 'mysql:host=wm61.wedos.net;dbname=d68895_devcal'
+	user: 'a68895_devcal'
+	password: 'LE86TErH'
+	options:
+		lazy: yes
 
 services:
 	nette.latteFactory:
