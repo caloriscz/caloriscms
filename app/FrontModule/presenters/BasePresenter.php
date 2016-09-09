@@ -329,7 +329,7 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
 
     protected function createComponentAdminBar()
     {
-        $control = new \Caloriscz\Menus\AdminBarControl($this->database);
+        $control = new \Caloriscz\Menus\Admin\AdminBarControl($this->database);
         return $control;
     }
 
