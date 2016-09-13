@@ -7,20 +7,6 @@ CREATE TABLE IF NOT EXISTS `blacklist` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
-CREATE TABLE IF NOT EXISTS `board` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `parent_id` int(11) DEFAULT NULL,
-  `author` varchar(80) NOT NULL,
-  `email` varchar(150) DEFAULT NULL,
-  `subject` text NOT NULL,
-  `body` text,
-  `date_created` datetime DEFAULT NULL,
-  `show` smallint(6) NOT NULL DEFAULT '0',
-  `ipaddress` varchar(32) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `parent_id` (`parent_id`)
-) ENGINE=InnoDB;
-
 CREATE TABLE IF NOT EXISTS `carousel` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(80) DEFAULT NULL,
@@ -188,18 +174,6 @@ CREATE TABLE IF NOT EXISTS `languages` (
   `used` tinyint(1) NOT NULL DEFAULT '1',
   `default` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB;
-
-
-
-CREATE TABLE IF NOT EXISTS `links` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `categories_id` int(11) DEFAULT NULL,
-  `url` varchar(250) DEFAULT NULL,
-  `title` varchar(250) DEFAULT NULL,
-  `description` text,
-  PRIMARY KEY (`id`),
-  KEY `links_category_id` (`categories_id`)
 ) ENGINE=InnoDB;
 
 CREATE TABLE IF NOT EXISTS `media` (
@@ -396,9 +370,6 @@ ALTER TABLE `helpdesk_messages`
   ADD CONSTRAINT `helpdesk_messages_ibfk_4` FOREIGN KEY (`users_id`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE SET NULL,
   ADD CONSTRAINT `helpdesk_messages_ibfk_1` FOREIGN KEY (`contacts_id`) REFERENCES `contacts` (`id`) ON DELETE SET NULL ON UPDATE SET NULL,
   ADD CONSTRAINT `helpdesk_messages_ibfk_3` FOREIGN KEY (`helpdesk_id`) REFERENCES `helpdesk` (`id`) ON DELETE SET NULL ON UPDATE SET NULL;
-
-ALTER TABLE `links`
-  ADD CONSTRAINT `links_ibfk_1` FOREIGN KEY (`categories_id`) REFERENCES `categories` (`id`) ON DELETE SET NULL ON UPDATE SET NULL;
 
 ALTER TABLE `media`
   ADD CONSTRAINT `media_ibfk_4` FOREIGN KEY (`pages_id`) REFERENCES `pages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
