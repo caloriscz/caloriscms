@@ -20,37 +20,10 @@ class ProfilePresenter extends \App\FrontModule\Presenters\BasePresenter
         }
     }
 
-    /**
-     * Form: User fills in e-mail address to send e-mail with a password generator link
-     */
-    function createComponentChangePortraitForm()
+    protected function createComponentProfileChangePortrait()
     {
-        $form = $this->baseFormFactory->createUI();
-        $form->addUpload("the_file", "Vyberte obrázek (nepovinné)");
-        $form->addSubmit('submitm', 'dictionary.main.Insert');
-        $form->onSuccess[] = $this->changePortraitFormSucceeded;
-
-        return $form;
-    }
-
-    function changePortraitFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
-    {
-        $membersDb = $this->database->table("users")->where(array("id" => $this->user->getId()));
-
-        if ($membersDb->count() > 0) {
-            $uid = $membersDb->fetch()->id;
-
-            \App\Model\IO::directoryMake(substr(__DIR__, 0, -27) . '/www/portraits/', 0755);
-
-            if (file_exists(substr(__DIR__, 0, -27) . '/www/images/profiles/portrait-' . $uid . '.jpg')) {
-                \App\Model\IO::remove(substr(__DIR__, 0, -27) . '/www/images/profiles/portrait-' . $uid . '.jpg');
-                \App\Model\IO::upload(substr(__DIR__, 0, -27) . '/www/images/profiles', 'portrait-' . $uid . '.jpg', 0644);
-            } else {
-                \App\Model\IO::upload(substr(__DIR__, 0, -27) . '/www/images/profiles', 'portrait-' . $uid . '.jpg', 0644);
-            }
-        }
-
-        $this->redirect(":Front:Profile:image");
+        $control = new \Caloriscz\Profile\ChangePortraitControl($this->database);
+        return $control;
     }
 
     /**
