@@ -17,12 +17,27 @@ class MenuPresenter extends BasePresenter
     protected function createComponentInsertMenuForm()
     {
         $form = $this->baseFormFactory->createUI();
+
+        $languages = $this->database->table("languages")->where("default", null);
+
+        if ($languages->count() > 0) {
+            $form->addGroup("čeština");
+        }
+
         $form->addHidden("parent");
         $form->addText('title', 'dictionary.main.Title')
             ->setAttribute("class", "form-control");
-
         $form->addText('url', 'dictionary.main.URL')
             ->setAttribute("class", "form-control");
+
+        foreach ($languages as $item) {
+            $form->addGroup($item->title);
+
+            $form->addText("title_" . $item->code, 'dictionary.main.Title')
+                ->setAttribute("class", "form-control");
+            $form->addText("url_" . $item->code, 'dictionary.main.URL')
+                ->setAttribute("class", "form-control");
+        }
 
         $form->addSubmit('submitm', 'dictionary.main.Insert')
             ->setAttribute("class", "btn btn-primary");
@@ -34,11 +49,13 @@ class MenuPresenter extends BasePresenter
 
     public function validateMenuFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
     {
-        $category = $this->database->table("menu")->where(array(
+        $arr = array(
             "parent_id" => $form->values->parent,
             "url" => $form->values->url,
             "title" => $form->values->title,
-        ));
+        );
+
+        $category = $this->database->table("menu")->where($arr);
 
         if ($category->count() > 0) {
             $this->flashMessage($this->translator->translate('messages.sign.categoryAlreadyExists'), "error");
@@ -54,15 +71,22 @@ class MenuPresenter extends BasePresenter
     public function insertMenuFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
     {
         if (is_numeric($form->values->parent) == false) {
-            $parent = null;
+            $arr["parent_id"] = null;
         } else {
-            $parent = $form->values->parent;
+            $arr["parent_id"] = $form->values->parent;
         }
 
-        $this->database->table("menu")->insert(array(
-            "title" => $form->values->title,
-            "parent_id" => $parent,
-        ));
+        $arr['title'] = $form->values->title;
+        $arr['url'] = $form->values->url;
+
+        $languages = $this->database->table("languages")->where("default", null);
+
+        foreach ($languages as $item) {
+            $arr["url_" . $item->code] = $form->values->{'url_' . $item->code};
+            $arr["title_" . $item->code] = $form->values->{'title_' . $item->code};
+        }
+
+        $this->database->table("menu")->insert($arr);
 
         $this->database->query("SET @i = 1;UPDATE `menu` SET `sorted` = @i:=@i+2 ORDER BY `sorted` ASC");
 
@@ -240,6 +264,7 @@ class MenuPresenter extends BasePresenter
         $this->template->database = $this->database;
         $this->template->menu = $this->database->table("menu")->where('parent_id', $categoryId)
             ->order("sorted DESC");
+        $this->template->languages = $this->database->table("languages")->where("default", null);
     }
 
     function renderDetail()

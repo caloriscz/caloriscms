@@ -168,7 +168,7 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
 
     protected function createComponentAdminPanel()
     {
-        $control = new \Caloriscz\Menus\AdminPanelControl($this->database);
+        $control = new \Caloriscz\Menus\Admin\AdminPanelControl($this->database);
         return $control;
     }
 
@@ -198,10 +198,16 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
 
     protected function createComponentAdminCategoryPanel()
     {
-        $control = new \Caloriscz\Menus\AdminCategoryPanelControl($this->database);
+        $control = new \Caloriscz\Menus\Admin\AdminCategoryPanelControl($this->database);
         return $control;
     }
 
+    protected function createComponentMainMenu()
+    {
+        $control = new \Caloriscz\Menus\Admin\MainMenuControl($this->database);
+        return $control;
+    }
+	
     protected function createComponentLangSelector()
     {
         $control = new \LangSelectorControl($this->database);

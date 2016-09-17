@@ -9,6 +9,7 @@
                     <small>{$item->name|truncate:28}</small>
                 </p>
                 <p>{$item->description}</p>
+				<p><a href="{plink ':AdminStore:Product:imagesDetail', id => $item->pages_id, image => $item->id}">{_dictionary.main.Edit}</a></p>
                 <p><a href="{link delete, id => $catalogue->id, name => $item->id}" class="btn" role="button"
                       onclick="return confirm('Opravdu smazat?')">
                         <i class="fa fa-times font-red"></i></a>

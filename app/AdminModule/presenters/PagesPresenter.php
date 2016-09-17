@@ -21,16 +21,30 @@ class PagesPresenter extends BasePresenter
     function createComponentEditSnippetForm()
     {
         $form = $this->baseFormFactory->createPH();
+        $l = $this->presenter->getParameter("l");
+        $snippet = $this->database->table("snippets")->get($this->getParameter("snippet"));
 
-        $form->addHidden("id");
+        $form->addHidden("page_id");
+        $form->addHidden("snippet_id");
         $form->addHidden("pages_id");
+        $form->addHidden("l");
         $form->addTextArea("content")
             ->setAttribute("class", "form-control")
             ->setAttribute("height", "250px")
             ->setHtmlId('wysiwyg-sm');
-        $form->setDefaults(array(
-            "pages_id" => $this->getParameter("id"),
-        ));
+
+        if ($l == '') {
+            $arr["content"] = $snippet->content;
+        } else {
+            $arr["content"] = $snippet->{'content_' . $l};
+            $arr["l"] = $this->getParameter("l");
+        }
+
+        $arr["page_id"] = $this->getParameter("id");
+        $arr["snippet_id"] = $this->getParameter("snippet");
+
+
+        $form->setDefaults($arr);
 
         $form->onSuccess[] = $this->editSnippetFormSucceeded;
         $form->addSubmit("submitm", "dictionary.main.Save")
@@ -44,11 +58,19 @@ class PagesPresenter extends BasePresenter
     {
         $content = $form->getHttpData($form::DATA_TEXT, 'content');
 
-        $this->database->table("snippets")->get($form->values->id)->update(array(
-            "content" => $content,
+        if ($form->values->l != '') {
+            $langSuffix = '_' . $form->values->l;
+        }
+
+        $this->database->table("snippets")->get($form->values->snippet_id)->update(array(
+            "content" . $langSuffix => $content,
         ));
 
-        $this->redirect(":Admin:Pages:snippets", array("id" => $form->values->pages_id));
+        $this->redirect(":Admin:Pages:snippetsDetail", array(
+            "id" => $form->values->page_id,
+            "snippet" => $form->values->snippet_id,
+            "l" => $form->values->l
+        ));
     }
 
     /**
@@ -143,7 +165,8 @@ class PagesPresenter extends BasePresenter
         $this->redirect(":Admin:Pages:snippets", array("id" => $form->values->id));
     }
 
-    function permissionValidated(\Nette\Forms\BootstrapUIForm $form) {
+    function permissionValidated(\Nette\Forms\BootstrapUIForm $form)
+    {
         if ($this->template->member->users_roles->pages_edit == 0) {
             $this->flashMessage("Nemáte oprávnění k této akci", "error");
             $this->redirect(this);
@@ -263,6 +286,12 @@ class PagesPresenter extends BasePresenter
         $this->template->catalogue = $this->database->table("pages")->get($this->getParameter("id"));
         $this->template->snippets = $this->database->table("snippets")
             ->where(array("pages_id" => $this->getParameter("id")));
+    }
+
+    public function renderSnippetsDetail()
+    {
+        $this->template->page = $this->database->table("pages")->get($this->getParameter("id"));
+        $this->template->snippet = $this->database->table("snippets")->get($this->getParameter("snippet"));
     }
 
     public function renderDetailRelated()

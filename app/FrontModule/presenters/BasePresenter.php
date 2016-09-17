@@ -249,6 +249,12 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
         return $control;
     }
 
+    protected function createComponentLinkList()
+    {
+        $control = new \Caloriscz\Links\LinkListControl($this->database);
+        return $control;
+    }
+	
     protected function createComponentSocialFacebook()
     {
         $control = new \Caloriscz\Social\FacebookControl;
@@ -323,7 +329,7 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
 
     protected function createComponentAdminBar()
     {
-        $control = new \Caloriscz\Menus\AdminBarControl($this->database);
+        $control = new \Caloriscz\Menus\Admin\AdminBarControl($this->database);
         return $control;
     }
 
