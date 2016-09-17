@@ -26,41 +26,10 @@ class ProfilePresenter extends \App\FrontModule\Presenters\BasePresenter
         return $control;
     }
 
-    /**
-     * Form: User fills in e-mail address to send e-mail with a password generator link
-     * @return string
-     */
-    function createComponentChangePasswordForm()
+    protected function createComponentProfileChangePassword()
     {
-        $form = $this->baseFormFactory->createUI();
-        $form->addPassword("password1", "dicitionary.main.Password");
-        $form->addPassword("password2", "Znovu napište heslo");
-        $form->addSubmit('name', 'dictionary.main.Change');
-
-        $form->onSuccess[] = $this->changePasswordFormSucceeded;
-        return $form;
-    }
-
-    function changePasswordFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
-    {
-        $ppwd = $form->values->password1;
-        $ppwd2 = $form->values->password2;
-
-        $passwordEncrypted = \Nette\Security\Passwords::hash($ppwd);
-
-        if (strcasecmp($ppwd, $ppwd2) != 0) {
-            $this->flashMessage('Hesla se neshodují');
-        }
-
-        $this->database->table("users")->where(array(
-            "id" => $this->user->getId(),
-        ))->update(array(
-            "password" => $passwordEncrypted,
-        ));
-
-        setcookie("calpwd", $passwordEncrypted, time() + time() + 60 * 60 * 24 * 30, "/");
-
-        $this->redirect(':Front:Profile:heslo');
+        $control = new \Caloriscz\Profile\ChangePasswordControl($this->database);
+        return $control;
     }
 
     protected function createComponentProfileEdit()

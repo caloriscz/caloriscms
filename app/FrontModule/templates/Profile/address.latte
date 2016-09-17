@@ -11,6 +11,9 @@
             <li><a n:href=":Front:Profile:foto">{_store.profile.ProfileImage}</a></li>
             <li><a n:href=":Front:Profile:password">{_store.profile.PasswordChange}</a></li>
             <li class="active"><a n:href=":Front:Profile:addresses">{_dictionary.main.addresses|firstUpper}</a></li>
+            {if $settings['store:enabled']}
+                <li><a href="/orders">{_dictionary.main.orders|firstUpper}</a></li>
+            {/if}
         </ul>
     </div>
     <div class="col-md-9">
