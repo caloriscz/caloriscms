@@ -182,47 +182,10 @@ class ProfilePresenter extends \App\FrontModule\Presenters\BasePresenter
         $this->redirect(":Front:Profile:addresses");
     }
 
-    /**
-     * Form: User fills in e-mail address to send e-mail with a password generator link
-     */
-    function createComponentEditAddressForm()
+    protected function createComponentProfileEditAddress()
     {
-        $form = $this->baseFormFactory->createUI();
-        $form->addHidden("id");
-        $form->addHidden("contacts_id");
-        $form->addText("name", "dictionary.main.Name");
-        $form->addText("street", "dictionary.main.Street");
-        $form->addText("zip", "dictionary.main.ZIP");
-        $form->addText("city", "dictionary.main.City");
-
-        $address = $this->database->table("contacts")->get($this->getParameter("id"));
-
-        $form->setDefaults(array(
-            "id" => $address->id,
-            "name" => $address->name,
-            "street" => $address->street,
-            "zip" => $address->zip,
-            "city" => $address->city,
-        ));
-
-        $form->addSubmit('submitm', 'dictionary.main.Save');
-        $form->onSuccess[] = $this->editAddressFormSucceeded;
-
-        return $form;
-    }
-
-    function editAddressFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
-    {
-        $this->database->table("contacts")->where(array(
-            "id" => $form->values->contacts_id,
-        ))->update(array(
-            "name" => $form->values->name,
-            "street" => $form->values->street,
-            "zip" => $form->values->zip,
-            "city" => $form->values->city,
-        ));
-
-        $this->redirect(":Front:Profile:address", array("id" => $form->values->id));
+        $control = new \Caloriscz\Profile\EditAddressControl($this->database);
+        return $control;
     }
 
     function handleDeletePortrait()
