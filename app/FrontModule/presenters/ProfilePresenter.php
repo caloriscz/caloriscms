@@ -63,51 +63,10 @@ class ProfilePresenter extends \App\FrontModule\Presenters\BasePresenter
         $this->redirect(':Front:Profile:heslo');
     }
 
-    /**
-     * Edit your profile
-     */
-    function createComponentEditForm()
+    protected function createComponentProfileEdit()
     {
-        $form = $this->baseFormFactory->createUI();
-        $form->addGroup("Osobní údaje");
-        $form->addText("username", "Uživatel")
-            ->setAttribute("style", "border: 0; font-size: 1.5em;")
-            ->setDisabled();
-        $form->addRadioList('sex', 'Pohlaví', array(
-            1 => "\xC2\xA0" . 'žena',
-            2 => "\xC2\xA0" . 'muž',
-        ))->setAttribute("class", "checkboxlistChoose");
-        $form->addGroup("Firemní údaje");
-        $form->addText("ic", "dictionary.main.VatId");
-        $form->addText("company", "dictionary.main.Company");
-
-        $form->setDefaults(array(
-            "name" => $this->template->member->name,
-            "username" => $this->template->member->username,
-        ));
-
-        $form->addSubmit("submit", "dictionary.main.Save");
-        $form->onSuccess[] = $this->editFormSucceeded;
-        return $form;
-    }
-
-    function editFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
-    {
-        $this->database->table("users")->where(array(
-            "id" => $this->user->getId()
-        ))
-            ->update(array(
-                "name" => $form->values->name,
-                "address" => $form->values->address,
-                "city" => $form->values->city,
-                "zip" => $form->values->zip,
-                "district" => $form->values->district,
-                "ic" => $form->values->ic,
-                "company" => $form->values->company,
-                "sex" => $form->values->sex,
-            ));
-
-        $this->redirect(":Front:Profile:default");
+        $control = new \Caloriscz\Profile\EditControl($this->database);
+        return $control;
     }
 
     protected function createComponentProfileInsertAddress()
