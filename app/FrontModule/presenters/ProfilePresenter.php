@@ -137,49 +137,10 @@ class ProfilePresenter extends \App\FrontModule\Presenters\BasePresenter
         $this->redirect(":Front:Profile:default");
     }
 
-    /**
-     * Form: User fills in e-mail address to send e-mail with a password generator link
-     */
-    function createComponentInsertAddressForm()
+    protected function createComponentProfileInsertAddress()
     {
-        $form = $this->baseFormFactory->createUI();
-        $form->addHidden("id");
-        $form->addHidden("contacts_id");
-        $form->addText("name", "dictionary.main.Name");
-        $form->addText("street", "dictionary.main.Street");
-        $form->addText("zip", "dictionary.main.ZIP");
-        $form->addText("city", "dictionary.main.City");
-
-        $form->setDefaults(array(
-            "contacts_group_id" => 2,
-        ));
-
-        $form->addSubmit('submitm', 'dictionary.main.Save');
-        $form->onSuccess[] = $this->insertAddressFormSucceeded;
-
-        return $form;
-    }
-
-    function insertAddressFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
-    {
-        $doc = new Document($this->database);
-        $doc->setType(5);
-        $doc->createSlug("contact-" . $form->values->name);
-        $doc->setTitle($form->values->name);
-        $page = $doc->create($this->user->getId());
-
-        // create new contact
-        $this->database->table("contacts")->insert(array(
-            "categories_id" => 5,
-            "pages_id" => $page,
-            "users_id" => $this->user->getId(),
-            "name" => $form->values->name,
-            "street" => $form->values->street,
-            "zip" => $form->values->zip,
-            "city" => $form->values->city,
-        ));
-
-        $this->redirect(":Front:Profile:addresses");
+        $control = new \Caloriscz\Profile\InsertAddressControl($this->database);
+        return $control;
     }
 
     protected function createComponentProfileEditAddress()
