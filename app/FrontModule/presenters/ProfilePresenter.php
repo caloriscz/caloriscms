@@ -170,7 +170,7 @@ class ProfilePresenter extends \App\FrontModule\Presenters\BasePresenter
 
         // create new contact
         $this->database->table("contacts")->insert(array(
-            "categories_id" => 44,
+            "categories_id" => 5,
             "pages_id" => $page,
             "users_id" => $this->user->getId(),
             "name" => $form->values->name,
