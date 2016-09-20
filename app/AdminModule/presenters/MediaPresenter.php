@@ -225,6 +225,18 @@ class MediaPresenter extends BasePresenter
             "type" => $this->getParameter("type"),
         ));
     }
+    
+/**
+     * Delete page
+     */
+    function handleDeletePage($id)
+    {
+        $doc = new Model\Document($this->database);
+        $doc->delete($id);
+        Model\IO::removeDirectory(APP_DIR . '/media/' . $id);
+
+        $this->redirect(":Admin:Media:default", array("id" => null, "type" => $this->getParameter("type")));
+    }
 
     /**
      * Toggle display
@@ -328,16 +340,20 @@ class MediaPresenter extends BasePresenter
     {
         $idMedia = $this->template->settings['categories:id:media'];
 
-        if ($this->getParameter("id")) {
-            $mediaId = $this->getParameter('id');
+        if ($this->template->pageId == 6 && $this->getParameter('id') == false) {
+            $pageId = 4;
+        } elseif ($this->template->pageId == 8 && $this->getParameter('id') == false) {
+            $pageId = 5;
         } else {
-            $mediaId = null;
+            $pageId = $this->getParameter('id');
         }
 
-        $this->template->media = $this->database->table("pages")->where(array(
+        $arr = array(
             "pages_types_id" => $this->template->pageId,
-            "pages_id" => $mediaId,
-        ));
+            "pages_id" => $pageId,
+        );
+
+        $this->template->media = $this->database->table("pages")->where($arr);
 
         if ($this->getParameter("id")) {
             $idN = $this->getParameter('id');
