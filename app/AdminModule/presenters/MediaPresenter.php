@@ -27,8 +27,16 @@ class MediaPresenter extends BasePresenter
         $form->addTextarea("preview", "dictionary.main.Description")
             ->setAttribute("class", "form-control");
 
+        if ($this->getParameter("type") && $this->getParameter('id') == false) {
+            $category = 4;
+        } elseif ($this->getParameter("type") == 8 && $this->getParameter('id') == false) {
+            $category = 107;
+        } else {
+            $category = $this->getParameter('id');
+        }
+
         $form->setDefaults(array(
-            "category" => $this->getParameter("id"),
+            "category" => $category,
             "type" => $this->getParameter("type")
         ));
 
