@@ -74,23 +74,12 @@ class SlugRouter extends Nette\Object implements Nette\Application\IRouter
             return null;
         }
 
-        //action
-        if (isset($parts[1])) {
-            $action = $parts[1];
-        } else {
-            $action = 'default';
-        }
-
         //id
         if (isset($parts[2])) {
             $id = $parts[2];
         }
 
-        //params
-
-        $params['action'] = $action;
         $params['page_id'] = $row->id;
-        //$params['locale'] = 'en';
         if (isset($id)) {
             $params['id'] = $id;
         }
@@ -104,7 +93,6 @@ class SlugRouter extends Nette\Object implements Nette\Application\IRouter
             }
         }
 
-
         // Presenter preset
         if ($row->pages_types_id == 0) {
             $presenter = $row->presenter;
@@ -116,9 +104,12 @@ class SlugRouter extends Nette\Object implements Nette\Application\IRouter
             }
         }
 
-
-//        echo $presenter;
-        //      exit();
+        // Action
+        if ($row->pages_templates_id != null) {
+            $params['action'] = $row->pages_templates->template;
+        } else {
+            $params['action'] = $row->pages_types->action;
+        }
 
         return new App\Request($presenter, $httpRequest->getMethod(), $params, $httpRequest->getPost(), $httpRequest->getFiles(), array(App\Request::SECURED => $httpRequest->isSecured()));
 
