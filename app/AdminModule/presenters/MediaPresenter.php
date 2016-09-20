@@ -30,7 +30,7 @@ class MediaPresenter extends BasePresenter
         if ($this->getParameter("type") && $this->getParameter('id') == false) {
             $category = 4;
         } elseif ($this->getParameter("type") == 8 && $this->getParameter('id') == false) {
-            $category = 107;
+            $category = 5;
         } else {
             $category = $this->getParameter('id');
         }
