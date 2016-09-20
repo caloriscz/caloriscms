@@ -18,15 +18,9 @@ class GalleryPresenter extends BasePresenter
 
     public function renderDefault()
     {
-        if ($this->getParameter("id")) {
-            $mediaId = $this->getParameter('id');
-        } else {
-            $mediaId = null;
-        }
-
         $cols = array(
             "pages_types_id" => 6,
-            "pages_id" => $mediaId,
+            "pages_id" => $this->getParameter("page_id"),
         );
 
         $this->template->galleryId = $this->getParameter("id");
