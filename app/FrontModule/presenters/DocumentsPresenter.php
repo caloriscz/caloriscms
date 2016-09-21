@@ -10,7 +10,7 @@ use Nette,
  */
 class DocumentsPresenter extends BasePresenter
 {
-   protected function startup()
+    protected function startup()
     {
         parent::startup();
 
@@ -20,23 +20,26 @@ class DocumentsPresenter extends BasePresenter
 
         $this->template->documentsCat = $this->database->table("pages")->where($cols);
     }
-	
+
     public function renderDefault()
     {
-        if ($this->getParameter("id")) {
-            $cols = array(
-                "categories_id" => $this->getParameter("id"),
-            );
-        } else {
-            $cols = array(
-                "categories_id = ?" => 8,
-            );
-        }
+        $cols = array(
+            "file_type" => 1,
+            "pages_id" => $this->getParameter("page_id"),
+        );
+
+        $this->template->galleryId = $this->getParameter("id");
+        $docs = $this->database->table("media")
+            ->where($cols);
+
+        $paginator = new \Nette\Utils\Paginator;
+        $paginator->setItemCount($docs->count());
+        $paginator->setItemsPerPage(20);
+        $paginator->setPage($this->getParameter("page"));
 
         $this->template->documentId = $this->getParameter("id");
 
-        $this->template->documents = $this->database->table("media")
-                        ->where($cols)->order("name");
+        $this->template->documents = $docs;
     }
 
 }

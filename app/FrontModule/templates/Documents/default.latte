@@ -11,9 +11,9 @@
             {foreach $documents as $item}
                 <tr>
                     <td style="border: 0;">
-                        <a href="{$baseUri}/files/documents/{$item->categories_id|padLeft:4:"0"}/{$item->name}">
-                            {if $item->description}
-                                {$item->description}
+                        <a href="{$baseUri}/media/{$item->id}/{$item->name}">
+                            {if $item->title}
+                                {$item->title}
                             {else}
                                 {$item->name}
                             {/if}
@@ -27,7 +27,7 @@
     <div class="col-md-4">
         <ul class="nav nav-pills nav-stacked nav-skola">
             {foreach $documentsCat as $itemCat}
-                <li{if $id == $itemCat->id} class="active"{/if}><a n:href=":Front:Documents:default, id => $itemCat->id">{$itemCat->title}</a></li>
+                <li{if $id == $itemCat->id} class="active"{/if}><a href="/{$itemCat->slug}">{$itemCat->title}</a></li>
                 {/foreach}
         </ul>
     </div>
