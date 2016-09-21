@@ -20,6 +20,12 @@ class ContactsPresenter extends BasePresenter
             ->where(array("pages_id" => $this->template->page->id))->fetch();
     }
 
+    protected function createComponentSendLogin()
+    {
+        $control = new \Caloriscz\Contacts\ContactForms\SendLoginControl($this->database);
+        return $control;
+    }
+
     /**
      * Insert contact
      */
@@ -300,65 +306,6 @@ class ContactsPresenter extends BasePresenter
     }
 
     /**
-     * Send member login information
-     */
-    function createComponentSendLoginForm()
-    {
-        $form = $this->baseFormFactory->createUI();
-        $form->addHidden("user");
-        $form->addCheckbox("sendmail", "\xC2\xA0" . "Odeslat e-mail s přihlašovacími informacemi")
-            ->setValue(0);
-
-        $form->setDefaults(array(
-            "user" => $this->getParameter('id'),
-        ));
-
-        $form->addSubmit('submitm', 'Zaslat uživateli')->setAttribute("class", "btn btn-success");
-        $form->onSuccess[] = $this->sendLoginFormSucceeded;
-
-        return $form;
-    }
-
-    function sendLoginFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
-    {
-        $pwd = Nette\Utils\Random::generate(10);
-        $pwdEncrypted = \Nette\Security\Passwords::hash($pwd);
-
-        $contacts = $this->database->table("contacts")->get($form->values->user);
-
-        $this->database->table("users")
-            ->get($contacts->users_id)
-            ->update(array(
-                "password" => $pwdEncrypted,
-            ));
-
-
-        $user = $this->database->table("users")->get($contacts->users_id);
-
-        if ($form->values->sendmail) {
-            $latte = new \Latte\Engine;
-            $params = array(
-                'username' => $user->username,
-                'email' => $user->email,
-                'password' => $pwd,
-                'settings' => $this->template->settings,
-            );
-
-            $mail = new \Nette\Mail\Message;
-            $mail->setFrom($this->template->settings["site:title"] . ' <' . $this->template->settings["contacts:email:hq"] . '>')
-                ->addTo($user->email)
-                ->setHTMLBody($latte->renderToString(substr(APP_DIR, 0, -4) . '/app/AdminModule/templates/Members/components/member-resend-login.latte', $params));
-
-            $mailer = new \Nette\Mail\SendmailMailer;
-            $mailer->send($mail);
-        } else {
-            $this->flashMessage("pass", "success");
-        }
-
-        $this->redirect(":Admin:Contacts:detailMember", array("id" => $form->values->user, "pdd" => $pwd));
-    }
-
-    /**
      * Insert hour
      */
     function createComponentInsertHourForm()
@@ -611,7 +558,7 @@ public function renderDetail()
     public function renderDetailMember()
     {
         $this->template->page = $this->database->table("pages")->get($this->getParameter("id"));
-        $this->template->contacts = $this->database->table("contacts")->get($this->getParameter('id'));
+        $this->template->contacts = $this->database->table("contacts")->where("pages_id", $this->getParameter('id'))->fetch();
     }
 
     public function renderCommunications()
