@@ -10,16 +10,17 @@ use Nette,
  */
 class DocumentsPresenter extends BasePresenter
 {
-    protected function startup()
+   protected function startup()
     {
         parent::startup();
 
-                $cols = array(
-            "parent_id" => $this->template->settings["categories:id:mediaDocs"],
+        $cols = array(
+            "pages_id" => 5,
         );
-        
-        $this->template->documentsCat = $this->database->table("categories")->where($cols);
+
+        $this->template->documentsCat = $this->database->table("pages")->where($cols);
     }
+	
     public function renderDefault()
     {
         if ($this->getParameter("id")) {
