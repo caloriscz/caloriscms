@@ -11,6 +11,12 @@ use Nette,
 class MembersPresenter extends BasePresenter
 {
 
+    protected function createComponentSendLogin()
+    {
+        $control = new \Caloriscz\Contacts\ContactForms\SendLoginControl($this->database);
+        return $control;
+    }
+
     /**
      * Edit user data
      */
@@ -172,61 +178,6 @@ class MembersPresenter extends BasePresenter
         }
 
         $this->redirect(":Admin:Members:edit", array("id" => $userId));
-    }
-
-    /**
-     * Send member login information
-     */
-    function createComponentSendLoginForm()
-    {
-        $form = $this->baseFormFactory->createUI();
-        $form->addHidden("user");
-        $form->addCheckbox("sendmail", "messages.members.sendLoginEmail")
-            ->setValue(1);
-
-        $form->setDefaults(array(
-            "user" => $this->getParameter('id'),
-        ));
-
-        $form->addSubmit('submitm', 'dictionary.main.Confirm')->setAttribute("class", "btn btn-success");
-        $form->onSuccess[] = $this->sendLoginFormSucceeded;
-
-        return $form;
-    }
-
-    function sendLoginFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
-    {
-        $pwd = Nette\Utils\Random::generate(10);
-        $pwdEncrypted = \Nette\Security\Passwords::hash($pwd);
-
-        $this->database->table("users")
-            ->get($form->values->user)
-            ->update(array(
-                "password" => $pwdEncrypted,
-            ));
-
-        $user = $this->database->table("users")->get($form->values->user);
-
-        if ($form->values->sendmail) {
-            $latte = new \Latte\Engine;
-            $params = array(
-                'username' => $user->username,
-                'email' => $user->email,
-                'password' => $pwd,
-                'settings' => $this->template->settings,
-            );
-
-            $mail = new \Nette\Mail\Message;
-            $mail->setFrom($this->template->settings["site:title"] . ' <' . $this->template->settings["contacts:email:hq"] . '>')
-                ->addTo($user->email)
-                ->setHTMLBody($latte->renderToString(substr(APP_DIR, 0, -4) . '/app/AdminModule/templates/Members/components/member-resend-login.latte', $params));
-
-            $this->mailer->send($mail);
-        } else {
-            $this->flashMessage("Heslo uživatele je $pwd", 'note');
-        }
-
-        $this->redirect(":Admin:Members:edit", array("id" => $form->values->user));
     }
 
     /**

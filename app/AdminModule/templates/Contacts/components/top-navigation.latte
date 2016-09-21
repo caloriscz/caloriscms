@@ -1,0 +1,34 @@
+{var $view = $presenter->getView()}
+<br>
+
+<ul class="nav nav-tabs">
+    <li>
+        <a n:href=":Admin:Contacts:default, id => null"><i class="fa fa-angle-left"></i> Všechny položky</a>
+    </li>
+    <li role="presentation" {if $view == 'detail'}class="active"{/if}>
+        <a n:href=":Admin:Contacts:detail, id => $presenter->getParameter('id')">Kontakt</a>
+    </li>
+    <li role="presentation" {if $view == 'detailCommunications'}class="active"{/if}>
+        <a n:href=":Admin:Contacts:detailCommunications, id => $presenter->getParameter('id')">Komunikace</a>
+    </li>
+    <li role="presentation" {if $view == 'detailOpeningHours'}class="active"{/if}>
+        <a n:href=":Admin:Contacts:detailOpeningHours, id => $presenter->getParameter('id')">{_dictionary.main.OpeningHours}</a>
+    </li>
+    <li role="presentation" {if $view == 'detailDocuments'}class="active"{/if}>
+        <a n:href=":Admin:Contacts:detailDocuments, id => $presenter->getParameter('id')">Stránka</a>
+    </li>
+    <li role="presentation" {if $view == 'detailImages'}class="active"{/if}>
+        <a n:href=":Admin:Contacts:detailImages, id => $presenter->getParameter('id')">{_dictionary.main.Images}</a>
+    </li>
+
+    {if $user}
+    <li role="presentation">
+        <a n:href=":Admin:Members:edit, id => $user->id">{_dictionary.main.Member}</a>
+    </li>
+    {/if}
+
+    <li class="pull-right">
+        <a href="/{$pages->slug}" class="btn btn-primary" target="_blank">{_dictionary.main.Preview}</a>
+    </li>
+</ul>
+<br>

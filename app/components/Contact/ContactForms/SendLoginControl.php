@@ -24,12 +24,12 @@ class SendLoginControl extends Control
         $form->getElementPrototype()->class = "form-horizontal";
         $form->getElementPrototype()->role = 'form';
         $form->getElementPrototype()->autocomplete = 'off';
-        $form->addHidden("page_id");
+        $form->addHidden("contact_id");
         $form->addCheckbox("sendmail", "\xC2\xA0" . "Odeslat e-mail s přihlašovacími informacemi")
             ->setValue(0);
 
         $form->setDefaults(array(
-            "page_id" => $this->presenter->getParameter('id'),
+            "contact_id" => $this->presenter->getParameter('id'),
         ));
 
         $form->addSubmit('submitm', 'Zaslat uživateli')->setAttribute("class", "btn btn-success");
@@ -43,14 +43,8 @@ class SendLoginControl extends Control
         $pwd = \Nette\Utils\Random::generate(10);
         $pwdEncrypted = \Nette\Security\Passwords::hash($pwd);
 
-        $contacts = $this->database->table("contacts")->where("pages_id", $form->values->page_id);
 
-        if ($contacts->count() == 0) {
-            $this->presenter->flashMessage("Odpovídající kontakt nebyl nalezen", "error");
-            $this->presenter->redirect(this, array("id" => $form->values->page_id));
-        } else {
-            $user = $contacts->fetch()->ref('users', 'users_id');
-        }
+        $user = $this->database->table('users')->get($form->values->contact_id);
 
         $this->database->table("users")->get($user->id)
             ->update(array(
@@ -82,7 +76,7 @@ class SendLoginControl extends Control
             $this->presenter->flashMessage("pass", "success");
         }
 
-        $this->presenter->redirect(this, array("id" => $form->values->page_id, "pdd" => $pwd));
+        $this->presenter->redirect(this, array("id" => $form->values->contact_id,"pdd" => $pwd));
     }
 
     public function render()

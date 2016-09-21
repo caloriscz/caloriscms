@@ -18,12 +18,7 @@ class ContactsPresenter extends BasePresenter
         $this->template->page = $this->database->table("pages")->get($this->getParameter("id"));
         $this->template->contact = $this->database->table("contacts")
             ->where(array("pages_id" => $this->template->page->id))->fetch();
-    }
-
-    protected function createComponentSendLogin()
-    {
-        $control = new \Caloriscz\Contacts\ContactForms\SendLoginControl($this->database);
-        return $control;
+        $this->template->user = $this->database->table("users")->get($this->template->contact->users_id);
     }
 
     /**
@@ -553,12 +548,6 @@ public function renderDetail()
     public function renderMember()
     {
         $this->template->page = $this->database->table("pages")->get($this->getParameter("id"));
-    }
-
-    public function renderDetailMember()
-    {
-        $this->template->page = $this->database->table("pages")->get($this->getParameter("id"));
-        $this->template->contacts = $this->database->table("contacts")->where("pages_id", $this->getParameter('id'))->fetch();
     }
 
     public function renderCommunications()
