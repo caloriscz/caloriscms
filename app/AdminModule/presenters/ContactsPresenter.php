@@ -52,12 +52,6 @@ class ContactsPresenter extends BasePresenter
         $page = $doc->create($this->user->getId());
         Model\IO::directoryMake(substr(APP_DIR, 0, -4) . '/www/media/' . $page, 0755);
 
-        if ($this->getParameter("id")) {
-            $contactId = $this->getParameter("id");
-        } else {
-            $contactId = $this->template->settings['categories:id:contact'];
-        }
-
         $arr = array(
             "users_id" => null,
             "pages_id" => $page,
@@ -105,7 +99,7 @@ class ContactsPresenter extends BasePresenter
 
     function insertCommunicationFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
     {
-        $id = $this->database->table("contacts_communication")
+        $this->database->table("contacts_communication")
             ->insert(array(
                 "contacts_id" => $form->values->id,
                 "communication_type" => $form->values->type,

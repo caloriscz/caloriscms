@@ -17,12 +17,12 @@
                     <h2>
                         <a n:href=":Front:Events:detail, id => $item->slug">
                             {if $item->pages->title == FALSE}
-                                {$item->date_event|date:'j. n. Y'}{else}{$item->doc->title}
+                                {$item->date_event|date:'j. n. Y'}{else}{$item->pages->title}
                             {/if}
                         </a>
                         <span class="pull-right"><small>{$item->date_event|date:'j. n. Y'}</small></span>
                     </h2>
-                    <p>{html_entity_decode($item->doc->document)|striptags|truncate:400:'...'}</p>
+                    <p>{html_entity_decode($item->pages->document)|striptags|truncate:400:'...'}</p>
                     <br/>
                     {var $thisMonth = date('mY', strtotime($item->date_event))}
                 {/foreach}
