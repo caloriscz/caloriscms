@@ -27,59 +27,17 @@ class ContactsPresenter extends BasePresenter
         return $control;
     }
 
+    protected function createComponentInsertContact()
+    {
+        $control = new \Caloriscz\Contacts\ContactForms\InsertContactControl($this->database);
+        return $control;
+    }
+
+
     protected function createComponentLoadVat()
     {
         $control = new \Caloriscz\Contacts\ContactForms\LoadVatControl($this->database);
         return $control;
-    }
-
-    /**
-     * Insert contact
-     */
-    function createComponentInsertForm()
-    {
-        $form = $this->baseFormFactory->createPH();
-        $form->addHidden("pages_id", $this->getParameter("id"));
-        $form->addRadioList("type", "Osoba nebo organizace", array(0 => " osoby", 1 => " organizace"));
-        $form->addText("title", "dictionary.main.Title")
-            ->setRequired($this->translator->translate('messages.pages.NameThePage'));
-
-        $form->setDefaults(array(
-            "type" => 0
-        ));
-
-        $form->addSubmit("submitm", "dictionary.main.CreateNewContact")
-            ->setAttribute("class", "btn btn-success");
-
-        $form->onSuccess[] = $this->insertFormSucceeded;
-        return $form;
-    }
-
-    function insertFormSucceeded(\Nette\Forms\BootstrapPHForm $form)
-    {
-        $doc = new Model\Document($this->database);
-        $doc->setType(5);
-        $doc->createSlug("contact-" . $form->values->title);
-        $doc->setTitle($form->values->title);
-        $page = $doc->create($this->user->getId());
-        Model\IO::directoryMake(substr(APP_DIR, 0, -4) . '/www/media/' . $page, 0755);
-
-        $arr = array(
-            "users_id" => null,
-            "pages_id" => $page,
-            "type" => $form->values->type,
-        );
-
-        if ($form->values->type == 0) {
-            $arr["name"] = $form->values->title;
-        } else {
-            $arr["company"] = $form->values->title;
-        }
-
-        $id = $this->database->table("contacts")
-            ->insert($arr);
-
-        $this->redirect(":Admin:Contacts:detail", array("id" => $page));
     }
 
     /**
@@ -152,7 +110,7 @@ class ContactsPresenter extends BasePresenter
                 }
             }
         }
-        
+
         $this->redirect(":Admin:Contacts:default", array("id" => NULL));
     }
 
@@ -365,7 +323,7 @@ class ContactsPresenter extends BasePresenter
             $image->resize(400, 250, \Nette\Utils\Image::SHRINK_ONLY);
             $image->sharpen();
             $image->save(APP_DIR . '/images/contacts/contact/' . $album . '/' . $thumbName . $_FILES["the_file"]["name"]);
-            chmod(APP_DIR . '/images/contacts/contact/' . $album . '/' . $thumbName . $_FILES["the_file"]["name"], 0777);
+            chmod(APP_DIR . '/images/contacts/contact/' . $album . '/' . $thumbName . $_FILES["the_file"]["name"], 0755);
         }
 
         $this->redirect(":Admin:Contacts:detailImages", array(
@@ -391,7 +349,7 @@ class ContactsPresenter extends BasePresenter
         $this->template->menu = $this->database->table("categories")->where('parent_id', $this->template->settings['categories:id:contact']);
     }
 
-public function renderDetail()
+    public function renderDetail()
     {
         $this->template->page = $this->database->table("pages")->get($this->getParameter("id"));
     }
