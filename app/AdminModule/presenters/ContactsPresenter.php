@@ -105,8 +105,6 @@ class ContactsPresenter extends BasePresenter
                     $doc = new Model\Document($this->database);
                     $doc->delete($page->id);
                     Model\IO::removeDirectory(APP_DIR . '/media/' . $page->id);
-
-                    $this->database->table("contacts")->get($id[$a])->delete();
                 }
             }
         }
