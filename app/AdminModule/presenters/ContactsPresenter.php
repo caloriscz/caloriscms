@@ -21,6 +21,18 @@ class ContactsPresenter extends BasePresenter
         $this->template->user = $this->database->table("users")->get($this->template->contact->users_id);
     }
 
+    protected function createComponentEditContact()
+    {
+        $control = new \Caloriscz\Contacts\ContactForms\EditContactControl($this->database);
+        return $control;
+    }
+
+    protected function createComponentLoadVat()
+    {
+        $control = new \Caloriscz\Contacts\ContactForms\LoadVatControl($this->database);
+        return $control;
+    }
+
     /**
      * Insert contact
      */
@@ -110,7 +122,7 @@ class ContactsPresenter extends BasePresenter
     }
 
     /**
-     * Delete contact
+     * Delete contact for communication
      */
     function handleDeleteCommunication($id)
     {
@@ -142,156 +154,6 @@ class ContactsPresenter extends BasePresenter
         }
         
         $this->redirect(":Admin:Contacts:default", array("id" => NULL));
-    }
-
-    /**
-     * Edit contact
-     */
-    function createComponentEditForm()
-    {
-        $this->template->id = $this->getParameter('id');
-
-        $categories = new Model\Category($this->database);
-        $cats = $categories->getSubIds($this->template->settings['categories:id:contact']);
-        $groups = $this->database->table("categories")
-            ->where("id", $cats)->fetchPairs("id", "title");
-
-        $form = $this->baseFormFactory->createUI();
-        $form->addGroup('');
-        $form->addHidden('contact_id');
-        $form->addHidden('pages_id');
-        $form->addText("name", "dictionary.main.Name")
-            ->setAttribute("placeholder", "dictionary.main.Name");
-        $form->addText("company", "dictionary.main.Company")
-            ->setAttribute("placeholder", "dictionary.main.Company");
-        $form->addRadioList("type", "Osoba nebo organizace", array(0 => " osoby", 1 => " organizace"));
-        $form->addText("post", "dictionary.main.Post")
-            ->setAttribute("placeholder", "dictionary.main.Post")
-            ->setOption("description", 1);
-        $form->addText("email", "E-mail")
-            ->setAttribute("placeholder", "E-mail")
-            ->setAttribute("class", "form-control");
-        $form->addText("phone", "dictionary.main.Phone")
-            ->setAttribute("placeholder", "dictionary.main.Phone")
-            ->setAttribute("class", "form-control");
-        $form->addSelect("categories_id", "dictionary.main.Category", $groups)
-            ->setAttribute("class", "form-control");
-
-        $form->addGroup('Adresa');
-        $form->addText("street", "Ulice")
-            ->setAttribute("placeholder", "Ulice")
-            ->setOption("description", 1);
-        $form->addText("zip", "PSČ")
-            ->setAttribute("placeholder", "PSČ")
-            ->setOption("description", 1);
-        $form->addText("city", "Město")
-            ->setAttribute("placeholder", "Město")
-            ->setOption("description", 1);
-        $form->addGroup('Firemní údaje');
-        $form->addText("vatin", "IČ")
-            ->setAttribute("placeholder", "dictionary.main.VatIn")
-            ->setOption("description", 1);
-        $form->addSubmit("loadVatIn", "Načíst")->onClick[] = $this->loadVatInFormSucceeded;
-        $form->addText("vatid", "DIČ")
-            ->setAttribute("placeholder", "dictionary.main.VatId")
-            ->setHtmlId("kurzy_ico")
-            ->setOption("description", 1);
-        $form->addText("banking_account", "Bankovní účet")
-            ->setAttribute("placeholder", "Bankovní účet")
-            ->setOption("description", 1);
-        $form->addGroup('Ostatní');
-        $form->addTextArea("notes", "dictionary.main.Notes")
-            ->setAttribute("class", "form-control");
-
-
-        $form->setDefaults(array(
-            "contact_id" => $this->template->contact->id,
-            "pages_id" => $this->template->contact->pages_id,
-            "name" => $this->template->contact->name,
-            "company" => $this->template->contact->company,
-            "post" => $this->template->contact->post,
-            "type" => $this->template->contact->type,
-            "email" => $this->template->contact->email,
-            "phone" => $this->template->contact->phone,
-            "categories_id" => $this->template->contact->categories_id,
-            "street" => $this->template->contact->street,
-            "zip" => $this->template->contact->zip,
-            "city" => $this->template->contact->city,
-            "banking_account" => $this->template->contact->banking_account,
-            "vatin" => $this->template->contact->vatin,
-            "vatid" => $this->template->contact->vatid,
-            "notes" => $this->template->contact->notes,
-        ));
-
-        $form->addSubmit("submitm", "dictionary.main.Save")
-            ->setAttribute("class", "btn btn-primary");
-
-        $form->onSuccess[] = $this->editFormSucceeded;
-        $form->onValidate[] = $this->editFormValidated;
-        return $form;
-    }
-
-    function editFormValidated(\Nette\Forms\BootstrapUIForm $form)
-    {
-        if (\Nette\Utils\Validators::isEmail($form->values->email) == FALSE && strlen($form->values->email) > 0) {
-            $this->flashMessage($this->translator->translate('messages.sign.fillInEmail'), "error");
-            $this->redirect(":Admin:Contacts:detail", array("id" => NULL));
-        }
-    }
-
-    function editFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
-    {
-        $this->database->table("contacts")
-            ->where(array(
-                "id" => $form->values->contact_id,
-            ))
-            ->update(array(
-                "name" => $form->values->name,
-                "company" => $form->values->company,
-                "post" => $form->values->post,
-                "type" => $form->values->type,
-                "email" => $form->values->email,
-                "phone" => $form->values->phone,
-                "categories_id" => $form->values->categories_id,
-                "street" => $form->values->street,
-                "zip" => $form->values->zip,
-                "city" => $form->values->city,
-                "vatin" => $form->values->vatin,
-                "vatid" => $form->values->vatid,
-                "banking_account" => $form->values->banking_account,
-                "notes" => $form->values->notes,
-            ));
-
-        $this->redirect(":Admin:Contacts:detail", array("id" => $form->values->pages_id));
-    }
-
-    function loadVatInFormSucceeded(Nette\Forms\Controls\SubmitButton $button)
-    {
-        if ($button->form->values->vatin) {
-            $ares = new \h4kuna\Ares\Ares();
-            $aresArr = $ares->loadData(str_replace(" ", "", $button->form->values->vatin))->toArray();
-
-            if (count($aresArr) > 0) {
-                $this->database->table("contacts")
-                    ->where(array(
-                        "id" => $button->form->values->contact_id,
-                    ))
-                    ->update(array(
-                        "name" => $aresArr['company'],
-                        "street" => $aresArr['street'],
-                        "zip" => $aresArr['zip'],
-                        "city" => $aresArr['city'],
-                        "vatin" => $aresArr['in'],
-                        "vatid" => $aresArr['tin'],
-                    ));
-            } else {
-                $this->flashMessage($this->translator->translate('messages.sign.NotFound'), "error");
-            }
-        } else {
-            $this->flashMessage($this->translator->translate('messages.sign.NotFound'), "error");
-        }
-
-        $this->redirect(":Admin:Contacts:detail", array("id" => $button->form->values->pages_id));
     }
 
     /**
