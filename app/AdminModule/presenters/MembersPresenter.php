@@ -23,88 +23,10 @@ class MembersPresenter extends BasePresenter
         return $control;
     }
 
-
-    /**
-     * Insert new user
-     */
-    function createComponentInsertForm()
+    protected function createComponentInsertMember()
     {
-        $roles = $this->database->table("users_roles")->fetchPairs("id", "title");
-        $form = $this->baseFormFactory->createUI();
-        $form->addText("username", "dictionary.main.Member")
-            ->addRule(\Nette\Forms\Form::MIN_LENGTH, 'Uživatelské jméno musí mít aspoň %d znaků', 3);
-        $form->addText("email", "dictionary.main.Email");
-        if ($this->template->member->username == 'admin') {
-            $form->addSelect("role", "dictionary.main.Role", $roles)
-                ->setAttribute("class", "form-control");
-        }
-        $form->addCheckbox("sendmail", "messages.members.sendLoginEmail")
-            ->setValue(1);
-
-        $form->addSubmit('submitm', 'dictionary.main.Create')->setAttribute("class", "btn btn-success");
-        $form->onSuccess[] = $this->insertFormSucceeded;
-        $form->onValidate[] = $this->insertFormValidated;
-
-        return $form;
-    }
-
-    function insertFormValidated(\Nette\Forms\BootstrapUIForm $form)
-    {
-        $member = new \App\Model\MemberModel($this->database);
-        $userExists = $member->getUserName($form->values->username);
-        $emailExists = $member->getEmail($form->values->email);
-
-        if (!$this->template->member->users_roles->members_create) {
-            $this->flashMessage($this->translator->translate("messages.members.PermissionDenied"), 'error');
-            $this->redirect(":Admin:Members:default", array("id" => null));
-        }
-
-        if (\Nette\Utils\Validators::isEmail($form->values->email) == false) {
-            $this->flashMessage($this->translator->translate("messages.members.invalidEmailFormat"), 'error');
-            $this->redirect(":Admin:Members:default", array("id" => null));
-        } elseif ($emailExists > 0) {
-            $this->flashMessage($this->translator->translate("messages.members.emailAlreadyExists"), 'error');
-            $this->redirect(":Admin:Members:default", array("id" => null));
-        } elseif ($userExists > 0) {
-            $this->flashMessage($this->translator->translate("messages.members.memberAlreadyExists"), 'error');
-            $this->redirect(":Admin:Members:default", array("id" => null));
-        }
-    }
-
-    function insertFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
-    {
-        $pwd = Nette\Utils\Random::generate(10);
-        $pwdEncrypted = \Nette\Security\Passwords::hash($pwd);
-
-        $userId = $this->database->table("users")
-            ->insert(array(
-                "email" => $form->values->email,
-                "username" => $form->values->username,
-                "password" => $pwdEncrypted,
-                "date_created" => date("Y-m-d H:i:s"),
-                "users_roles_id" => $form->values->role,
-                "state" => 1,
-            ));
-
-        if ($form->values->sendmail) {
-            $latte = new \Latte\Engine;
-            $params = array(
-                'username' => $form->values->username,
-                'password' => $pwd,
-                'settings' => $this->template->settings,
-            );
-
-            $mail = new \Nette\Mail\Message;
-            $mail->setFrom($this->template->settings["site:title"] . ' <' . $this->template->settings["contacts:email:hq"] . '>')
-                ->addTo($form->values->email)
-                ->setHTMLBody($latte->renderToString(substr(APP_DIR, 0, -4) . '/app/AdminModule/templates/Members/components/member-new-email.latte', $params));
-
-            $this->mailer->send($mail);
-        } else {
-            $this->flashMessage("Heslo uživatele je $pwd", 'note');
-        }
-
-        $this->redirect(":Admin:Members:edit", array("id" => $userId));
+        $control = new \Caloriscz\Members\InsertMemberControl($this->database);
+        return $control;
     }
 
     /**
