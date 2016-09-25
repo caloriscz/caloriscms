@@ -39,50 +39,17 @@ class ContactsPresenter extends BasePresenter
         return $control;
     }
 
+    protected function createComponentInsertCommunication()
+    {
+        $control = new \Caloriscz\Contacts\ContactForms\InsertCommunicationControl($this->database);
+        return $control;
+    }
+
 
     protected function createComponentLoadVat()
     {
         $control = new \Caloriscz\Contacts\ContactForms\LoadVatControl($this->database);
         return $control;
-    }
-
-    /**
-     * Insert communication
-     */
-    function createComponentInsertCommunicationForm()
-    {
-        $types = array(
-            "E-mail" => "E-mail", "Telefon, domácí" => "Telefon, domácí",
-            "Telefon, pracovní" => "Telefon, pracovní", "Fax" => "Fax",
-            "Webová adresa" => "Webová adresa", "Skype" => "Skype"
-        );
-
-        $form = $this->baseFormFactory->createUI();
-        $form->addHidden("id");
-        $form->addSelect('type', 'Typ komunikace', $types)
-            ->setAttribute('class', 'form-control');
-        $form->addText('type_value', 'Hodnota');
-        $form->addSubmit("submitm", "dictionary.main.Insert")
-            ->setAttribute("class", "btn btn-success");
-
-        $form->setDefaults(array(
-            "id" => $this->getParameter('id'),
-        ));
-
-        $form->onSuccess[] = $this->insertCommunicationFormSucceeded;
-        return $form;
-    }
-
-    function insertCommunicationFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
-    {
-        $this->database->table("contacts_communication")
-            ->insert(array(
-                "contacts_id" => $form->values->id,
-                "communication_type" => $form->values->type,
-                "communication_value" => $form->values->type_value,
-            ));
-
-        $this->redirect(":Admin:Contacts:detailCommunications", array("id" => $form->values->id));
     }
 
     /**
