@@ -17,85 +17,12 @@ class MembersPresenter extends BasePresenter
         return $control;
     }
 
-    /**
-     * Edit user data
-     */
-    function createComponentEditForm()
+    protected function createComponentEditMember()
     {
-        $form = $this->baseFormFactory->createUI();
-        $user = $this->database->table("users")->get($this->getParameter("id"));
-
-        $form->addHidden('id');
-        $form->addRadioList("sex", "Pohlaví", array(1 => ' žena', 2 => ' muž'));
-        $form->addRadioList("newsletter", "Odebírat newsletter", array(1 => ' ano', 2 => ' ne'));
-        $form->addRadioList("state", "Stav účtu", array(1 => ' povolen', 2 => ' blokován'));
-
-        $roles = $this->database->table("users_roles")->fetchPairs("id", "title");
-
-        if ($this->template->member->username == 'admin') {
-            $form->addSelect("role", "Role", $roles)
-                ->setAttribute("class", "form-control");
-        }
-
-        if ($this->template->settings['members:groups:enabled']) {
-            $groups = $this->database->table("categories")->where(
-                "parent_id", $this->template->settings['members:group:categoryId']
-            )->fetchPairs("id", "title");
-
-            $form->addSelect("group", "Skupina", $groups)
-                ->setAttribute("class", "form-control");
-        }
-
-        $arr = array(
-            "id" => $this->getParameter("id"),
-            "sex" => $user->sex,
-            "newsletter" => $user->newsletter,
-            "state" => $user->state,
-            "role" => $user->role,
-            "group" => $user->categories_id,
-        );
-
-        $form->setDefaults(array_filter($arr));
-
-        $form->addSubmit('submitm', 'dictionary.main.Save')
-            ->setAttribute("class", "btn btn-primary");
-
-        $form->onSuccess[] = $this->editFormSucceeded;
-        $form->onValidate[] = $this->editFormValidated;
-
-        return $form;
+        $control = new \Caloriscz\Members\EditMemberControl($this->database);
+        return $control;
     }
 
-    function editFormValidated(Nette\Forms\BootstrapUIForm $form)
-    {
-        if (!$this->template->member->users_roles->members_edit) {
-            $this->flashMessage($this->translator->translate("messages.members.PermissionDenied"), 'error');
-            $this->redirect(":Admin:Members:default", array("id" => null));
-        }
-    }
-
-    function editFormSucceeded(Nette\Forms\BootstrapUIForm $form)
-    {
-        $arr = array(
-            "sex" => $form->values->sex,
-            "newsletter" => $form->values->newsletter,
-            "state" => $form->values->state,
-        );
-
-        if ($this->template->member->username) {
-            $arr["users_roles_id"] = $form->values->role;
-        }
-
-        if ($this->template->settings['members:groups:enabled']) {
-            $arr["categories_id"] = $form->values->group;
-        }
-
-        $this->database->table("users")->where(array(
-            "id" => $form->values->id,
-        ))->update($arr);
-
-        $this->redirect(":Admin:Members:edit", array("" => $form->values->id));
-    }
 
     /**
      * Insert new user
