@@ -73,24 +73,14 @@ CREATE TABLE IF NOT EXISTS `contacts_communication` (
   KEY `contacts_id` (`contacts_id`)
 ) ENGINE=InnoDB;
 
-CREATE TABLE IF NOT EXISTS `contacts_docs` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `categories_id` int(11) DEFAULT NULL,
-  `contacts_id` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `contacts_id` (`contacts_id`),
-  KEY `categories_id` (`categories_id`)
-) ENGINE=InnoDB;
-
-
 CREATE TABLE IF NOT EXISTS `contacts_openinghours` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `day` smallint(6) NOT NULL,
-  `hourstext` varchar(80),
+  `hourstext` varchar(80) COLLATE utf8_czech_ci DEFAULT NULL,
   `contacts_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `contacts_id` (`contacts_id`)
-) ENGINE=InnoDB;
+) ENGINE=InnoDB
 
 CREATE TABLE IF NOT EXISTS `countries` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -359,10 +349,9 @@ ALTER TABLE `contacts`
   ADD CONSTRAINT `contacts_ibfk_4` FOREIGN KEY (`countries_id`) REFERENCES `countries` (`id`) ON DELETE SET NULL ON UPDATE SET NULL,
   ADD CONSTRAINT `contacts_ibfk_5` FOREIGN KEY (`categories_id`) REFERENCES `categories` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
+ALTER TABLE `contacts_openinghours`
+  ADD CONSTRAINT `contacts_openinghours_ibfk_1` FOREIGN KEY (`contacts_id`) REFERENCES `contacts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
-ALTER TABLE `contacts_docs`
-  ADD CONSTRAINT `contacts_docs_ibfk_1` FOREIGN KEY (`contacts_id`) REFERENCES `contacts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `contacts_docs_ibfk_3` FOREIGN KEY (`categories_id`) REFERENCES `categories` (`id`) ON DELETE SET NULL ON UPDATE SET NULL;
 
 ALTER TABLE `events`
   ADD CONSTRAINT `events_ibfk_2` FOREIGN KEY (`contacts_id`) REFERENCES `contacts` (`id`) ON DELETE SET NULL ON UPDATE SET NULL,

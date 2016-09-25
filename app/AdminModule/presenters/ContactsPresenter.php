@@ -33,6 +33,12 @@ class ContactsPresenter extends BasePresenter
         return $control;
     }
 
+    protected function createComponentInsertHour()
+    {
+        $control = new \Caloriscz\Contacts\ContactForms\InsertHourControl($this->database);
+        return $control;
+    }
+
 
     protected function createComponentLoadVat()
     {
@@ -113,76 +119,13 @@ class ContactsPresenter extends BasePresenter
     }
 
     /**
-     * Insert hour
-     */
-    function createComponentInsertHourForm()
-    {
-        $form = $this->baseFormFactory->createUI();
-        $form->addHidden('id');
-        $form->addSelect('day', 'dictionary.main.DayOfTheWeek', array(
-            1 => 'dictionary.days.Monday', 2 => 'dictionary.days.Tuesday', 3 => 'dictionary.days.Wednesday',
-            4 => 'dictionary.days.Thursday', 5 => 'dictionary.days.Friday', 6 => 'dictionary.days.Saturday', 7 => 'dictionary.days.Sunday'))
-            ->setAttribute("class", "form-control");
-        $form->addText('hourstext', 'Hodiny (např. 14.00-20.00) nebo zpráva (např. jen objednaní)')
-            ->setRequired('Vložte hodiny od-do nebo nějakou informaci');
-
-        $form->setDefaults(array(
-            "id" => $this->getParameter("id"),
-        ));
-
-        $form->addSubmit("submitm", "dictionary.main.Insert")
-            ->setAttribute("class", "btn btn-success");
-
-        $form->onSuccess[] = $this->insertHourFormSucceeded;
-        $form->onValidate[] = $this->validateHourFormSucceeded;
-        return $form;
-    }
-
-    function validateHourFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
-    {
-        if (strlen($form->values->hourstext) < 1) {
-            $this->flashMessage('Vložte hodiny od-do nebo nějakou informaci', 'error');
-            $this->redirect(':Admin:Contacts:detailOpeningHours', array("id" => $form->values->id));
-        }
-    }
-
-    function insertHourFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
-    {
-        $contact = $this->database->table("contacts_openinghours")->where(array(
-            "day" => $form->values->day,
-            "contacts_id" => $form->values->id,
-        ));
-
-        if ($contact->count() > 0) {
-            $this->database->table("contacts_openinghours")
-                ->where(array(
-                    "contacts_id" => $form->values->id,
-                    "day" => $form->values->day,
-                ))
-                ->update(array(
-                    "hourstext" => $form->values->hourstext,
-                ));
-        } else {
-            $this->database->table("contacts_openinghours")
-                ->insert(array(
-                    "day" => $form->values->day,
-                    "hourstext" => $form->values->hourstext,
-                    "contacts_id" => $form->values->id,
-                ));
-        }
-
-
-        $this->redirect(":Admin:Contacts:detailOpeningHours", array("id" => $form->values->id));
-    }
-
-    /**
      * Delete hour
      */
     function handleDeleteHour($id)
     {
         $this->database->table("contacts_openinghours")->get($id)->delete();
 
-        $this->redirect(":Admin:Contacts:detailOpeningHours", array("id" => $this->getParameter("contact")));
+        $this->redirect(":Admin:Contacts:detailOpeningHours", array("id" => $this->getParameter("page")));
     }
 
     public function createComponentCommunicationsGrid($name)

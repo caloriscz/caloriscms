@@ -15,12 +15,12 @@
 
 <p class="text-info">Pokud přidáte nový záznam k již zadanému dni, starší záznam bude přepsán.</p>
 <br />
-{control insertHourForm}
+{control insertHour}
 
 <table class="table">
     {foreach $contact->related('contacts_openinghours', 'contacts_id') as $open}
         <tr>
-            <td class="col-xs-1"><a n:href="deleteHour! id => $open->id, contact => $open->contacts_id"><i class="fa fa-times font-red"></i></a></td>
+            <td class="col-xs-1"><a n:href="deleteHour! id => $open->id, page => $presenter->getParameter('page')"><i class="fa fa-times font-red"></i></a></td>
             <td class="col-md-1">{$open->day|numericday}</td>
             <td>{$open->hourstext}</td>
         </tr>
