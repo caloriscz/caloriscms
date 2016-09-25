@@ -72,12 +72,13 @@ class EditContactControl extends Control
         $form->addText("banking_account", "Bankovní účet")
             ->setAttribute("placeholder", "Bankovní účet")
             ->setOption("description", 1);
+        $form->addText("dateofbirth", "Datum narození")
+            ->setAttribute("placeholder", "Datum narození");
         $form->addGroup('Ostatní');
         $form->addTextArea("notes", "dictionary.main.Notes")
             ->setAttribute("class", "form-control");
 
-
-        $form->setDefaults(array(
+        $arr = array(
             "contact_id" => $this->presenter->template->contact->id,
             "pages_id" => $this->presenter->template->contact->pages_id,
             "name" => $this->presenter->template->contact->name,
@@ -94,10 +95,13 @@ class EditContactControl extends Control
             "vatin" => $this->presenter->template->contact->vatin,
             "vatid" => $this->presenter->template->contact->vatid,
             "notes" => $this->presenter->template->contact->notes,
-        ));
+            "dateofbirth" => $this->presenter->template->contact->date_of_birth,
+        );
+
+        $form->setDefaults($arr);
 
         $form->addSubmit("submitm", "dictionary.main.Save")
-            ->setAttribute("class", "btn btn-primary");
+            ->setAttribute("class", "btn btn-success");
 
         $form->onSuccess[] = $this->editFormSucceeded;
         $form->onValidate[] = $this->editFormValidated;
@@ -132,6 +136,7 @@ class EditContactControl extends Control
                 "vatin" => $form->values->vatin,
                 "vatid" => $form->values->vatid,
                 "banking_account" => $form->values->banking_account,
+                "date_of_birth" => $form->values->dateofbirth,
                 "notes" => $form->values->notes,
             ));
 

@@ -16,7 +16,7 @@
             <td{if count($events) > 1} class="active"{/if}><div>
                     {if count($events) > 1}
                         <a href="{plink 'Events:default'}" class="tooltips">
-                            {$i} (d:{count($events)})
+                            {$i}
                             <span>
                                 {foreach $events as $ev}
                                     {$ev}{sep}<br />{/sep}

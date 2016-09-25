@@ -56,6 +56,7 @@ CREATE TABLE IF NOT EXISTS `contacts` (
   `vatin` varchar(10) DEFAULT NULL,
   `vatid` varchar(10) DEFAULT NULL,
   `banking_account` varchar(80) DEFAULT NULL,
+  `date_of_birth` date DEFAULT NULL,
   `order` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `users_id` (`users_id`),
