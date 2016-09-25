@@ -21,7 +21,7 @@ class MainMenuControl extends Control
         $template = $this->template;
 
         $template->member = $this->presenter->template->member;
-        $template->addons = $this->database->table("addons");
+        $template->database = $this->database;
 
         $template->setFile(__DIR__ . '/MainMenuControl.latte');
 
