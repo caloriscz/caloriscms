@@ -18,50 +18,11 @@ class MediaPresenter extends BasePresenter
         $this->template->pageId = $this->getParameter("type");
     }
 
-    function createComponentInsertForm()
+    protected function createComponentInsertMediaForm()
     {
-        $form = $this->baseFormFactory->createUI();
-        $form->addHidden('category');
-        $form->addHidden('type');
-        $form->addText('title', 'dictionary.main.Title');
-        $form->addTextarea("preview", "dictionary.main.Description")
-            ->setAttribute("class", "form-control");
-
-        if ($this->getParameter("type") == 6 && $this->getParameter('id') == false) {
-            $category = 4;
-        } elseif ($this->getParameter("type") == 8 && $this->getParameter('id') == false) {
-            $category = 5;
-        } else {
-            $category = $this->getParameter('id');
-        }
-
-        $form->setDefaults(array(
-            "category" => $category,
-            "type" => $this->getParameter("type")
-        ));
-
-        $form->addSubmit('submitm', 'dictionary.main.Insert');
-
-        $form->onSuccess[] = $this->insertFormSucceeded;
-        return $form;
+        $control = new \Caloriscz\Media\MediaForms\InsertMediaControl($this->database);
+        return $control;
     }
-
-    function insertFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
-    {
-        $doc = new Model\Document($this->database);
-        $doc->setType($form->values->type);
-        $doc->setTitle($form->values->title);
-        $doc->setPreview($form->values->preview);
-        $page = $doc->create($this->user->getId(), $form->values->category);
-
-        Model\IO::directoryMake(APP_DIR . '/media/' . $page);
-
-        $this->redirect(":Admin:Media:default", array(
-            "id" => $form->values->category,
-            "type" => $form->values->type,
-        ));
-    }
-
 
     /**
      * Image Upload
