@@ -27,14 +27,14 @@ class MediaPresenter extends BasePresenter
         $form->addTextarea("preview", "dictionary.main.Description")
             ->setAttribute("class", "form-control");
 
-	if ($this->getParameter("type") == 6 && $this->getParameter('id') == false) {
+        if ($this->getParameter("type") == 6 && $this->getParameter('id') == false) {
             $category = 4;
         } elseif ($this->getParameter("type") == 8 && $this->getParameter('id') == false) {
             $category = 5;
         } else {
             $category = $this->getParameter('id');
         }
-			
+
         $form->setDefaults(array(
             "category" => $category,
             "type" => $this->getParameter("type")
@@ -141,8 +141,8 @@ class MediaPresenter extends BasePresenter
 
             Model\IO::directoryMake(APP_DIR . $ds . $storeFolder, 0755);
 
-            $tempFile = $_FILES['file']['tmp_name'];          //3             
-            $realFile = $_FILES['file']['name'];          //3             
+            $tempFile = $_FILES['file']['tmp_name'];          //3
+            $realFile = $_FILES['file']['name'];          //3
             $targetPath = APP_DIR . $ds . $storeFolder . $ds;  //4
 
             $targetFile = $targetPath . $_FILES['file']['name'];  //5
@@ -233,7 +233,7 @@ class MediaPresenter extends BasePresenter
             "type" => $this->getParameter("type"),
         ));
     }
-	
+
     /**
      * Delete page
      */
@@ -346,7 +346,7 @@ class MediaPresenter extends BasePresenter
 
     public function renderDefault()
     {
-		$idMedia = $this->template->settings['categories:id:media'];
+        $idMedia = $this->template->settings['categories:id:media'];
 
         if ($this->template->pageId == 6 && $this->getParameter('id') == false) {
             $pageId = 4;
@@ -375,7 +375,7 @@ class MediaPresenter extends BasePresenter
             ->where(array(
                 'media.pages_id' => $idN,
                 'pages.pages_types_id' => $this->template->pageId,
-                ))
+            ))
             ->order("name");
 
         $paginator = new \Nette\Utils\Paginator;
@@ -399,7 +399,8 @@ class MediaPresenter extends BasePresenter
         $this->template->mediatype = $this->context->httpRequest->getCookie('mediatype');
     }
 
-    function renderDetail() {
+    function renderDetail()
+    {
         $this->template->page = $this->database->table("pages")->get($this->getParameter("id"));
     }
 
