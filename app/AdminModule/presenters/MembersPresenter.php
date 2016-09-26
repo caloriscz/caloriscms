@@ -29,6 +29,12 @@ class MembersPresenter extends BasePresenter
         return $control;
     }
 
+    protected function createComponentInsertContactForMember()
+    {
+        $control = new \Caloriscz\Members\InsertContactForMemberControl($this->database);
+        return $control;
+    }
+
     /**
      * User delete
      */
@@ -77,60 +83,6 @@ class MembersPresenter extends BasePresenter
         }
 
         $this->redirect(":Admin:Members:edit", array("id" => $this->getParameter("contact")));
-    }
-
-    /**
-     * Insert contact
-     */
-    function createComponentInsertContactForm()
-    {
-        $memberTable = $this->database->table("users")->get($this->getParameter("id"));
-
-        $form = $this->baseFormFactory->createPH();
-        $form->addHidden("user");
-        $form->addHidden("page");
-        $form->addSubmit("submitm", "dictionary.main.Create")
-            ->setAttribute("class", "btn btn-success");
-        $form->setDefaults(array(
-            "page" => $this->getParameter("id"),
-            "user" => $memberTable->username,
-        ));
-
-        $form->setDefaults(array("user" => $this->getParameter("id")));
-
-        $form->onSuccess[] = $this->insertContactFormSucceeded;
-        $form->onValidate[] = $this->insertContactFormSucceeded;
-        return $form;
-    }
-
-    function insertContactFormValidated(Nette\Forms\BootstrapUIForm $form)
-    {
-        if (!$this->template->member->users_roles->members_create) {
-            $this->flashMessage($this->translator->translate("messages.members.PermissionDenied"), 'error');
-            $this->redirect(":Admin:Members:default", array("id" => null));
-        }
-    }
-
-    function insertContactFormSucceeded(\Nette\Forms\BootstrapPHForm $form)
-    {
-        $doc = new Model\Document($this->database);
-        $doc->setType(5);
-        $doc->createSlug("contact-" . $form->values->user);
-        $doc->setTitle($form->values->title);
-        $page = $doc->create($this->user->getId());
-        Model\IO::directoryMake(substr(APP_DIR, 0, -4) . '/www/media/' . $page, 0755);
-
-        $arr = array(
-            "pages_id" => $page,
-            "type" => 1,
-            "name" => 'contact-' . $form->values->user,
-            "users_id" => $form->values->user,
-        );
-
-        $this->database->table("contacts")
-            ->insert($arr);
-
-        $this->redirect(":Admin:Members:edit", array("id" => $form->values->page));
     }
 
     protected function createComponentMembersGrid($name)
