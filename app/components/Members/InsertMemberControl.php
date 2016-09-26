@@ -83,16 +83,21 @@ class InsertMemberControl extends Control
 
         if ($form->values->sendmail) {
             $latte = new \Latte\Engine;
+            $latte->setLoader(new \Latte\Loaders\StringLoader());
             $params = array(
                 'username' => $form->values->username,
                 'password' => $pwd,
                 'settings' => $this->presenter->template->settings,
             );
 
+            $helpdesk = $this->database->table("helpdesk")->get(5);
+            $helpdesk_new = $helpdesk->related("helpdesk_emails", "helpdesk_id")->get(9);
+            $helpdesk_new_template = $latte->renderToString($helpdesk_new->body, $params);
+
             $mail = new \Nette\Mail\Message;
             $mail->setFrom($this->presenter->template->settings["site:title"] . ' <' . $this->presenter->template->settings["contacts:email:hq"] . '>')
                 ->addTo($form->values->email)
-                ->setHTMLBody($latte->renderToString(substr(APP_DIR, 0, -4) . '/app/AdminModule/templates/Members/components/member-new-email.latte', $params));
+                ->setHTMLBody($helpdesk_new_template);
 
             $this->presenter->mailer->send($mail);
         } else {
