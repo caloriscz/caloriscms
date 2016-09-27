@@ -17,47 +17,10 @@ class AppearancePresenter extends BasePresenter
         return $control;
     }
 
-    /**
-     * Settings save
-     */
-    function createComponentEditSettingsForm()
+    protected function createComponentSavePaths()
     {
-        $form = new \Nette\Forms\BootstrapUIForm;
-        $form->getElementPrototype()->class = "form-horizontal";
-        $form->getElementPrototype()->role = 'form';
-        $form->getElementPrototype()->autocomplete = 'off';
-
-        $form->addHidden('path_id');
-        $form->addUpload("path", "dictionary.main.Image");
-        $form->addSubmit('send', 'dictionary.main.Save');
-
-        $form->onSuccess[] = $this->editSettingsSucceeded;
-        return $form;
-    }
-
-    function editSettingsSucceeded(\Nette\Forms\BootstrapUIForm $form)
-    {
-        if (strlen($form->values->path->name) < 1) {
-            $this->redirect(":Admin:Appearance:default", array("id" => null));
-        }
-
-        if (file_exists($_FILES['path']['tmp_name']) || is_uploaded_file($_FILES['path']['tmp_name'])) {
-
-            copy($_FILES['path']['tmp_name'], APP_DIR . '/images/paths/' . $form->values->path->name);
-            chmod(APP_DIR . '/images/paths/' . $form->values->path->name, 0644);
-            chmod(APP_DIR . '/images/paths/' . $form->values->path->name, 0644);
-
-            if (file_exists(APP_DIR . '/www/images/paths/' . $form->values->path->name)) {
-                Model\IO::remove(APP_DIR . '/www/images/paths/' . $form->values->path->name);
-            }
-
-            $this->database->table("settings")->get($form->values->path_id)->update(array(
-                "setvalue" => $form->values->path->name,
-            ));
-
-        }
-
-        $this->redirect(":Admin:Appearance:default", array("id" => null));
+        $control = new \Caloriscz\Appearance\SavePathsControl($this->database);
+        return $control;
     }
 
     public function renderDefault()
