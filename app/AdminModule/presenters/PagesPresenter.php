@@ -15,66 +15,20 @@ class PagesPresenter extends BasePresenter
         $this->database = $database;
     }
 
-    /**
-     * Edit page content
-     */
-    function createComponentEditSnippetForm()
+    protected function createComponentEditSnippetForm()
     {
-        $form = $this->baseFormFactory->createPH();
-        $l = $this->presenter->getParameter("l");
-        $snippet = $this->database->table("snippets")->get($this->getParameter("snippet"));
-
-        $form->addHidden("page_id");
-        $form->addHidden("snippet_id");
-        $form->addHidden("pages_id");
-        $form->addHidden("l");
-        $form->addTextArea("content")
-            ->setAttribute("class", "form-control")
-            ->setAttribute("height", "250px")
-            ->setHtmlId('wysiwyg-sm');
-
-        if ($l == '') {
-            $arr["content"] = $snippet->content;
-        } else {
-            $arr["content"] = $snippet->{'content_' . $l};
-            $arr["l"] = $this->getParameter("l");
-        }
-
-        $arr["page_id"] = $this->getParameter("id");
-        $arr["snippet_id"] = $this->getParameter("snippet");
-
-
-        $form->setDefaults($arr);
-
-        $form->onSuccess[] = $this->editSnippetFormSucceeded;
-        $form->addSubmit("submitm", "dictionary.main.Save")
-            ->setAttribute("class", "btn btn-success")
-            ->setHtmlId('formxins');
-
-        return $form;
+        $control = new \Caloriscz\Snippets\EditFormControl($this->database);
+        return $control;
     }
 
-    function editSnippetFormSucceeded(\Nette\Forms\BootstrapPHForm $form)
+    protected function createComponentInsertSnippetForm()
     {
-        $content = $form->getHttpData($form::DATA_TEXT, 'content');
-
-        if ($form->values->l != '') {
-            $langSuffix = '_' . $form->values->l;
-        }
-
-        $this->database->table("snippets")->get($form->values->snippet_id)->update(array(
-            "content" . $langSuffix => $content,
-        ));
-
-        $this->redirect(":Admin:Pages:snippetsDetail", array(
-            "id" => $form->values->page_id,
-            "snippet" => $form->values->snippet_id,
-            "l" => $form->values->l
-        ));
+        $control = new \Caloriscz\Snippets\InsertFormControl($this->database);
+        return $control;
     }
 
     /**
-     * Edit page content
+     * Insert page content
      */
     function createComponentInsertForm()
     {
@@ -131,48 +85,6 @@ class PagesPresenter extends BasePresenter
             "src" => $form->values->src,
         ));
     }
-
-    /**
-     * Insert page content
-     */
-    function createComponentInsertSnippetForm()
-    {
-        $form = $this->baseFormFactory->createUI();
-        $form->addHidden("id")
-            ->setAttribute("class", "form-control");
-        $form->addText("title", "dictionary.main.Title");
-
-        $form->setDefaults(array(
-            "id" => $this->getParameter('id'),
-        ));
-
-        $form->addSubmit("submit", "dictionary.main.Create")
-            ->setHtmlId('formxins');
-
-        $form->onSuccess[] = $this->insertSnippetFormSucceeded;
-        $form->onValidate[] = $this->permissionValidated;
-
-        return $form;
-    }
-
-    function insertSnippetFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
-    {
-        $this->database->table("snippets")->insert(array(
-            "keyword" => $form->values->title,
-            "pages_id" => $form->values->id,
-        ));
-
-        $this->redirect(":Admin:Pages:snippets", array("id" => $form->values->id));
-    }
-
-    function permissionValidated(\Nette\Forms\BootstrapUIForm $form)
-    {
-        if ($this->template->member->users_roles->pages_edit == 0) {
-            $this->flashMessage("Nemáte oprávnění k této akci", "error");
-            $this->redirect(this);
-        }
-    }
-
 
     function handleChangeState($id, $public)
     {
