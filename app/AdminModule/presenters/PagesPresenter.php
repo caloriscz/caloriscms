@@ -33,37 +33,10 @@ class PagesPresenter extends BasePresenter
         return $control;
     }
 
-    /**
-     * Insert page content
-     */
-    function createComponentInsertForm()
+    protected function createComponentInsertPageForm()
     {
-        $form = $this->baseFormFactory->createUI();
-        $form->addHidden("id");
-        $form->addText("title", "dictionary.main.Title")
-            ->setRequired($this->translator->translate('messages.pages.NameThePage'));
-
-        $form->setDefaults(array(
-            "section" => $this->getParameter('id'),
-        ));
-
-        $form->addSubmit("submit", "dictionary.main.Create")
-            ->setHtmlId('formxins');
-
-        $form->onSuccess[] = $this->insertFormSucceeded;
-
-        return $form;
-    }
-
-    function insertFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
-    {
-        $doc = new Model\Document($this->database);
-        $doc->setType(1);
-        $doc->setTitle($form->values->title);
-        $page = $doc->create($this->user->getId());
-        Model\IO::directoryMake(substr(APP_DIR, 0, -4) . '/www/media/' . $page, 0755);
-
-        $this->redirect(":Admin:Pages:detail", array("id" => $page));
+        $control = new \Caloriscz\Page\PageForms\InsertFormControl($this->database);
+        return $control;
     }
 
     function handleChangeState($id, $public)
