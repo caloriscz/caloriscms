@@ -27,6 +27,12 @@ class PagesPresenter extends BasePresenter
         return $control;
     }
 
+    protected function createComponentPageFilterRelated()
+    {
+        $control = new \Caloriscz\Page\Related\FilterFormControl($this->database);
+        return $control;
+    }
+
     /**
      * Insert page content
      */
@@ -58,32 +64,6 @@ class PagesPresenter extends BasePresenter
         Model\IO::directoryMake(substr(APP_DIR, 0, -4) . '/www/media/' . $page, 0755);
 
         $this->redirect(":Admin:Pages:detail", array("id" => $page));
-    }
-
-    /**
-     * Search related
-     */
-    protected function createComponentSearchRelatedForm()
-    {
-        $form = $this->baseFormFactory->createUI();
-        $form->addHidden('id');
-        $form->addText('src', 'dictionary.main.Title');
-        $form->addSubmit('submitm', 'dictionary.main.Insert');
-
-        $form->setDefaults(array(
-            "id" => $this->getParameter("id"),
-        ));
-
-        $form->onSuccess[] = $this->searchRelatedFormSucceeded;
-        return $form;
-    }
-
-    public function searchRelatedFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
-    {
-        $this->redirect(":Admin:Pages:detailRelated", array(
-            "id" => $form->values->id,
-            "src" => $form->values->src,
-        ));
     }
 
     function handleChangeState($id, $public)

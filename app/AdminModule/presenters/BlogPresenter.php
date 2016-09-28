@@ -35,6 +35,12 @@ class BlogPresenter extends BasePresenter
         $control = new \Caloriscz\Blog\BlogForms\InsertFormControl($this->database);
         return $control;
     }
+    
+    protected function createComponentPageFilterRelated()
+    {
+        $control = new \Caloriscz\Page\Related\FilterFormControl($this->database);
+        return $control;
+    }
 
     /**
      * Delete post
@@ -45,33 +51,6 @@ class BlogPresenter extends BasePresenter
         $this->database->table("pages")->get($id)->delete();
 
         $this->redirect(":Admin:Blog:default", array("id" => null));
-    }
-
-
-    /**
-     * Search related
-     */
-    protected function createComponentSearchRelatedForm()
-    {
-        $form = $this->baseFormFactory->createUI();
-        $form->addHidden('id');
-        $form->addText('src', 'dictionary.main.Title');
-        $form->addSubmit('submitm', 'dictionary.main.Insert');
-
-        $form->setDefaults(array(
-            "id" => $this->getParameter("id"),
-        ));
-
-        $form->onSuccess[] = $this->searchRelatedFormSucceeded;
-        return $form;
-    }
-
-    public function searchRelatedFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
-    {
-        $this->redirect(":Admin:Blog:detailRelated", array(
-            "id" => $form->values->id,
-            "src" => $form->values->src,
-        ));
     }
     
     /**
