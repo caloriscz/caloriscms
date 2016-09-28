@@ -1,5 +1,5 @@
 <?php
-namespace Caloriscz\Snippets;
+namespace Caloriscz\Page\Snippets;
 
 use Nette\Application\UI\Control;
 

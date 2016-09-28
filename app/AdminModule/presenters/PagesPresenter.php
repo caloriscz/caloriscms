@@ -17,13 +17,13 @@ class PagesPresenter extends BasePresenter
 
     protected function createComponentEditSnippetForm()
     {
-        $control = new \Caloriscz\Snippets\EditFormControl($this->database);
+        $control = new \Caloriscz\Page\Snippets\EditFormControl($this->database);
         return $control;
     }
 
     protected function createComponentInsertSnippetForm()
     {
-        $control = new \Caloriscz\Snippets\InsertFormControl($this->database);
+        $control = new \Caloriscz\Page\Snippets\InsertFormControl($this->database);
         return $control;
     }
 
