@@ -29,6 +29,12 @@ class BlogPresenter extends BasePresenter
         $control = new \Caloriscz\Snippets\InsertFormControl($this->database);
         return $control;
     }
+    
+    protected function createComponentInsertBlogForm()
+    {
+        $control = new \Caloriscz\Blog\BlogForms\InsertFormControl($this->database);
+        return $control;
+    }
 
     /**
      * Delete post
@@ -67,41 +73,7 @@ class BlogPresenter extends BasePresenter
             "src" => $form->values->src,
         ));
     }
-
-    /**
-     * Edit page content
-     */
-    function createComponentInsertForm()
-    {
-        $form = $this->baseFormFactory->createUI();
-        $form->addHidden("id");
-        $form->addHidden("section")
-            ->setAttribute("class", "form-control");
-        $form->addText("title", "dictionary.main.Title");
-
-        $form->setDefaults(array(
-            "section" => $this->getParameter('id'),
-        ));
-
-        $form->addSubmit("submit", "dictionary.main.Create")
-            ->setHtmlId('formxins');
-
-        $form->onSuccess[] = $this->insertFormSucceeded;
-
-        return $form;
-    }
-
-    function insertFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
-    {
-        $doc = new Model\Document($this->database);
-        $doc->setType(2);
-        $doc->setTitle($form->values->title);
-        $page = $doc->create($this->user->getId());
-        Model\IO::directoryMake(substr(APP_DIR, 0, -4) . '/www/media/' . $page, 0755);
-
-        $this->redirect(":Admin:Blog:detail", array("id" => $page));
-    }
-
+    
     /**
      * Delete snippet
      */
