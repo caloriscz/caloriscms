@@ -17,57 +17,10 @@ class MenuPresenter extends BasePresenter
         return $control;
     }
 
-    /**
-     * Edit category
-     */
-    protected function createComponentUpdateCategoryForm()
+    protected function createComponentMenuEdit()
     {
-        $pages = new Model\Page($this->database);
-        $categoryAll = new Model\Menu($this->database);
-        $category = $this->database->table("menu")->get($this->getParameter("id"));
-        $categories = $categoryAll->getAll();
-        unset($categories[$category->id]);
-
-        $form = $this->baseFormFactory->createUI();
-        $form->addHidden('id');
-        $form->addText('title', 'dictionary.main.Title');
-        $form->addTextarea('description', 'dictionary.main.Description')
-            ->setAttribute("class", "form-control");
-        $form->addSelect('parent', 'Nadřazená kategorie', $categories)
-            ->setPrompt('admin.categories.NothingRelated')
-            ->setAttribute("class", "form-control");
-        $form->addSelect('page', 'admin.categories.SelectPage', $pages->getPageList())
-            ->setPrompt('admin.categories.PageSelectedManually')
-            ->setAttribute("class", "form-control");
-        $form->addText('url', 'dictionary.main.URL');
-        $form->addSubmit('submitm', 'dictionary.main.Save');
-
-        $arr = array(
-            "id" => $category->id,
-            "title" => $category->title,
-            "description" => $category->description,
-            "page" => $category->pages_id,
-            "parent" => $category->parent_id,
-            "url" => $category->url,
-        );
-
-        $form->setDefaults(array_filter($arr));
-
-        $form->onSuccess[] = $this->updateCategoryFormSucceeded;
-        return $form;
-    }
-
-    public function updateCategoryFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
-    {
-        $this->database->table("menu")->get($form->values->id)
-            ->update(array(
-                "title" => $form->values->title,
-                "pages_id" => $form->values->page,
-                "parent_id" => $form->values->parent,
-                "url" => $form->values->url,
-            ));
-
-        $this->redirect(":Admin:Menu:detail", array("id" => $form->values->id));
+        $control = new \Caloriscz\Menus\MenuForms\EditMenuControl($this->database);
+        return $control;
     }
 
     /**
