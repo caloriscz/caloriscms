@@ -69,6 +69,11 @@ class SlugRouter extends Nette\Object implements Nette\Application\IRouter
             $row = $this->slugManager->getDefault();
         }
 
+        if (!$row) {
+            //throw new Nette\Application\BadRequestException('Page does not exist');
+            return null;
+        }
+
         //id
         if (isset($parts[2])) {
             $id = $parts[2];
@@ -93,6 +98,7 @@ class SlugRouter extends Nette\Object implements Nette\Application\IRouter
             $presenter = $row->presenter;
         } else {
             if (!empty($row->presenter)) {
+                echo "test";
                 $presenter = $row->presenter;
             } else {
                 $presenter = $row->pages_types->presenter;
