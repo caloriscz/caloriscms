@@ -11,86 +11,10 @@ use Nette,
 class MenuPresenter extends BasePresenter
 {
 
-    /**
-     * Insert menu
-     */
-    protected function createComponentInsertMenuForm()
+    protected function createComponentMenuInsert()
     {
-        $form = $this->baseFormFactory->createUI();
-
-        $languages = $this->database->table("languages")->where("default", null);
-
-        if ($languages->count() > 0) {
-            $form->addGroup("čeština");
-        }
-
-        $form->addHidden("parent");
-        $form->addText('title', 'dictionary.main.Title')
-            ->setAttribute("class", "form-control");
-        $form->addText('url', 'dictionary.main.URL')
-            ->setAttribute("class", "form-control");
-
-        foreach ($languages as $item) {
-            $form->addGroup($item->title);
-
-            $form->addText("title_" . $item->code, 'dictionary.main.Title')
-                ->setAttribute("class", "form-control");
-            $form->addText("url_" . $item->code, 'dictionary.main.URL')
-                ->setAttribute("class", "form-control");
-        }
-
-        $form->addSubmit('submitm', 'dictionary.main.Insert')
-            ->setAttribute("class", "btn btn-primary");
-
-        $form->onSuccess[] = $this->insertMenuFormSucceeded;
-        $form->onValidate[] = $this->validateMenuFormSucceeded;
-        return $form;
-    }
-
-    public function validateMenuFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
-    {
-        $arr = array(
-            "parent_id" => $form->values->parent,
-            "url" => $form->values->url,
-            "title" => $form->values->title,
-        );
-
-        $category = $this->database->table("menu")->where($arr);
-
-        if ($category->count() > 0) {
-            $this->flashMessage($this->translator->translate('messages.sign.categoryAlreadyExists'), "error");
-            $this->redirect(":Admin:Menu:categories");
-        }
-
-        if ($form->values->title == "") {
-            $this->flashMessage($this->translator->translate('messages.sign.categoryMustHaveSomeName'), "error");
-            $this->redirect(":Admin:Menu:categories");
-        }
-    }
-
-    public function insertMenuFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
-    {
-        if (is_numeric($form->values->parent) == false) {
-            $arr["parent_id"] = null;
-        } else {
-            $arr["parent_id"] = $form->values->parent;
-        }
-
-        $arr['title'] = $form->values->title;
-        $arr['url'] = $form->values->url;
-
-        $languages = $this->database->table("languages")->where("default", null);
-
-        foreach ($languages as $item) {
-            $arr["url_" . $item->code] = $form->values->{'url_' . $item->code};
-            $arr["title_" . $item->code] = $form->values->{'title_' . $item->code};
-        }
-
-        $this->database->table("menu")->insert($arr);
-
-        $this->database->query("SET @i = 1;UPDATE `menu` SET `sorted` = @i:=@i+2 ORDER BY `sorted` ASC");
-
-        $this->redirect(":Admin:Menu:default", array("id" => null));
+        $control = new \Caloriscz\Menus\MenuForms\InsertMenuControl($this->database);
+        return $control;
     }
 
     /**
@@ -264,7 +188,6 @@ class MenuPresenter extends BasePresenter
         $this->template->database = $this->database;
         $this->template->menu = $this->database->table("menu")->where('parent_id', $categoryId)
             ->order("sorted DESC");
-        $this->template->languages = $this->database->table("languages")->where("default", null);
     }
 
     function renderDetail()
