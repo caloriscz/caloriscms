@@ -73,10 +73,9 @@ class EditMenuControl extends Control
         $this->presenter->redirect(this, array("id" => $form->values->id));
     }
 
-    public function render($menuId = null)
+    public function render()
     {
         $template = $this->template;
-        $template->menuId = $menuId;
         $template->languages = $this->database->table("languages")->where("default", null);
         $template->setFile(__DIR__ . '/EditMenuControl.latte');
 
