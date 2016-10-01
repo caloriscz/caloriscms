@@ -10,6 +10,11 @@ use Nette,
  */
 class CategoriesPresenter extends BasePresenter
 {
+    protected function createComponentCategoryEdit()
+    {
+        $control = new \Caloriscz\Categories\EditCategoryControl($this->database);
+        return $control;
+    }
 
     /**
      * Insert category
@@ -52,50 +57,6 @@ class CategoriesPresenter extends BasePresenter
         $category->setCategory($form->values->title, $form->values->parent);
 
         $this->redirect(":Admin:Categories:default", array("id" => null));
-    }
-
-    /**
-     * Edit category
-     */
-    protected function createComponentUpdateCategoryForm()
-    {
-        $pages = new Model\Page($this->database);
-        $categoryAll = new Model\Category($this->database);
-        $category = $this->database->table("categories")->get($this->getParameter("id"));
-        $categories = $categoryAll->getAll();
-        unset($categories[$category->id]);
-
-        $form = $this->baseFormFactory->createUI();
-        $form->addHidden('id');
-        $form->addText('title', 'dictionary.main.Title');
-        $form->addSelect('parent', 'Nadřazená kategorie', $categories)
-            ->setPrompt('admin.categories.NothingRelated')
-            ->setAttribute("class", "form-control");
-        $form->addText('url', 'dictionary.main.URL');
-        $form->addSubmit('submitm', 'dictionary.main.Save');
-
-
-        $arr = array(
-            "id" => $category->id,
-            "title" => $category->title,
-            "parent" => $category->parent_id,
-        );
-
-        $form->setDefaults(array_filter($arr));
-
-        $form->onSuccess[] = $this->updateCategoryFormSucceeded;
-        return $form;
-    }
-
-    public function updateCategoryFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
-    {
-        $this->database->table("categories")->get($form->values->id)
-            ->update(array(
-                "title" => $form->values->title,
-                "parent_id" => $form->values->parent,
-            ));
-
-        $this->redirect(":Admin:Categories:detail", array("id" => $form->values->id));
     }
 
     /**
