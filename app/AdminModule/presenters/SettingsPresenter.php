@@ -17,118 +17,24 @@ class SettingsPresenter extends BasePresenter
         return $control;
     }
 
-    /* Insert new language */
-    function createComponentInsertLanguage()
+    protected function createComponentInsertLanguage()
     {
-        $form = $this->baseFormFactory->createUI();
-
-        $form->addText("language", "Jazyk");
-        $form->addText("code", "Kód");
-
-        $form->addSubmit('send', 'dictionary.main.Save')
-            ->setAttribute("class", "btn btn-success");
-
-        $form->onSuccess[] = $this->insertLanguageSucceeded;
-        $form->onValidate[] = $this->permissionValidated;
-        return $form;
+        $control = new \Caloriscz\Settings\Languages\InsertLanguageControl($this->database);
+        return $control;
     }
 
-    function permissionValidated(\Nette\Forms\BootstrapUIForm $form)
+    protected function createComponentInsertCountry()
     {
-        if ($this->template->member->users_roles->settings_edit == 0) {
-            $this->flashMessage("Nemáte oprávnění k této akci", "error");
-            $this->redirect(this);
-        }
+        $control = new \Caloriscz\Settings\Countries\InsertCountryControl($this->database);
+        return $control;
     }
 
-    function insertLanguageSucceeded(\Nette\Forms\BootstrapUIForm $form)
+    protected function createComponentInsertCurrency()
     {
-        $langExists = $this->database->table("languages")->where("title = ? OR code = ?",
-            $form->values->language, $form->values->code);
-
-        if ($langExists->count() > 0) {
-            $this->flashMessage("Název jazyka nebo kód již existuje", "error");
-            $this->redirect(":Admin:Settings:languages");
-        } else {
-            $this->database->table("languages")->insert(array(
-                "title" => $form->values->language,
-                "code" => $form->values->code,
-            ));
-
-            $this->redirect(":Admin:Settings:languages");
-        }
+        $control = new \Caloriscz\Settings\Currency\InsertCurrencyControl($this->database);
+        return $control;
     }
-
-    /* Insert new country */
-    function createComponentInsertCountry()
-    {
-        $form = $this->baseFormFactory->createUI();
-
-        $form->addText("country_cs", "Země (česky)");
-        $form->addText("country_en", "Země (anglicky)");
-
-        $form->addSubmit('send', 'dictionary.main.Save')
-            ->setAttribute("class", "btn btn-success");
-
-        $form->onSuccess[] = $this->insertCountrySucceeded;
-        $form->onValidate[] = $this->permissionValidated;
-        return $form;
-    }
-
-    function insertCountrySucceeded(\Nette\Forms\BootstrapUIForm $form)
-    {
-        $exists = $this->database->table("countries")->where("title_cs = ? OR title_en = ?",
-            $form->values->country_cs, $form->values->country_en);
-
-        if ($exists->count() > 0) {
-            $this->flashMessage("Země už je v seznamu", "error");
-            $this->redirect(":Admin:Settings:countries");
-        } else {
-            $this->database->table("countries")->insert(array(
-                "title_cs" => $form->values->country_cs,
-                "title_en" => $form->values->country_en,
-            ));
-
-            $this->redirect(":Admin:Settings:countries");
-        }
-    }
-
-    /* Insert new currency */
-    function createComponentInsertCurrency()
-    {
-        $form = $this->baseFormFactory->createUI();
-
-        $form->addText("title", "dictionary.main.Title");
-        $form->addText("symbol", "Symbol");
-        $form->addText("code", "Köd");
-
-        $form->addSubmit('send', 'dictionary.main.Save')
-            ->setAttribute("class", "btn btn-success");
-
-        $form->onSuccess[] = $this->insertCurrencySucceeded;
-        $form->onValidate[] = $this->permissionValidated;
-        return $form;
-    }
-
-    function insertCurrencySucceeded(\Nette\Forms\BootstrapUIForm $form)
-    {
-        $exists = $this->database->table("countries")->where("title = ? OR code = ? OR symbol = ?",
-            $form->values->country_cs, $form->values->country_en);
-
-        if ($exists->count() > 0) {
-            $this->flashMessage("Měna, symbol nebo kód už je v seznamu", "error");
-            $this->redirect(":Admin:Settings:currency");
-        } else {
-            $this->database->table("countries")->insert(array(
-                "title" => $form->values->title,
-                "code" => $form->values->code,
-                "symbol" => $form->values->symbol,
-            ));
-
-            $this->redirect(":Admin:Settings:countries");
-        }
-    }
-
+    
     function handleInstall($id)
     {
         $default = $this->database->table("languages")->where("default = 1");
