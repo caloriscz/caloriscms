@@ -35,6 +35,12 @@ class EventsPresenter extends BasePresenter
         return $control;
     }
 
+    protected function createComponentImageEditEvent()
+    {
+        $control = new \Caloriscz\Events\ImageEditControl($this->database);
+        return $control;
+    }
+
     /**
      * Delete page with all content
      */
@@ -93,46 +99,6 @@ class EventsPresenter extends BasePresenter
     }
 
     /**
-     * Image Upload
-     */
-    function createComponentImageEditForm()
-    {
-        $form = $this->baseFormFactory->createUI();
-        $imageTypes = array('image/png', 'image/jpeg', 'image/jpg', 'image/gif');
-
-        $image = $this->database->table("media")->get($this->getParameter("name"));
-
-        $form->addHidden("id");
-        $form->addHidden("name");
-        $form->addTextarea("description", "dictionary.main.Description")
-            ->setAttribute("class", "form-control");
-        $form->addSubmit('send', 'dictionary.main.Insert');
-
-        $form->setDefaults(array(
-            "id" => $this->getParameter("id"),
-            "name" => $this->getParameter("name"),
-            "description" => $image->description,
-        ));
-
-        $form->onSuccess[] = $this->imageEditFormSucceeded;
-        return $form;
-    }
-
-    function imageEditFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
-    {
-        $this->database->table("media")->get($form->values->name)
-            ->update(array(
-                'description' => $form->values->description,
-            ));
-
-
-        $this->redirect(":Admin:Events:imagesDetail", array(
-            "id" => $form->values->id,
-            "name" => $form->values->name,
-        ));
-    }
-
-    /**
      * Delete one event
      */
     function handleDeleteDate($id)
@@ -162,7 +128,7 @@ class EventsPresenter extends BasePresenter
         \App\Model\IO::remove(APP_DIR . '/media/' . $id . '/' . $this->getParameter("name"));
         \App\Model\IO::remove(APP_DIR . '/media/' . $id . '/tn/' . $this->getParameter("name"));
 
-        $this->redirect(":Admin:Events:images", array("id" => $this->getParameter("name"),));
+        $this->redirect(":Admin:Events:images", array("id" => $this->getParameter("page")));
     }
 
     /**
@@ -324,7 +290,7 @@ class EventsPresenter extends BasePresenter
 
     public function renderImagesDetail()
     {
-        $this->template->page = $this->database->table("pages")->get($this->getParameter("name"));
+        $this->template->page = $this->database->table("pages")->get($this->getParameter("id"));
         $this->template->image = $this->database->table("media")->get($this->getParameter("name"));
     }
 

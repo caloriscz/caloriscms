@@ -5,7 +5,7 @@
 
 <h1 class="page-header">{$page->title}</h1>
 
-{control imageEditForm}
+{control imageEditEvent}
 
 <div class="row">
         <div class="col-sm-6 col-md-3">
@@ -20,9 +20,6 @@
                     </a>
                     </p>
                     <p>{$item->description}</p>
-                    <p><a n:href="deleteImage!, id => $item->id, name => $page->id" class="btn" role="button" onclick="return confirm('Opravdu smazat?')">
-                            {_dictionary.main.Delete}</a>
-                    </p>
                 </div>
             </div>
         </div>

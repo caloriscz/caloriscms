@@ -26,7 +26,7 @@
                     <p><a n:href="deleteImage!, id => $item->id, name => $page->id" class="btn" role="button"
                                                                                     onclick="return confirm('Opravdu smazat?')">
                             <i class="fa fa-times font-red"></i></a>
-                        <a n:href=":Admin:Events:imagesDetail, id => $image->id, name => $page->id" class="btn">
+                        <a n:href=":Admin:Events:imagesDetail, id => $page->id, name => $item->id" class="btn">
                             <i class="fa fa-edit"></i></a>
                     </p>
                 </div>
