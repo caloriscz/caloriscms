@@ -11,6 +11,12 @@ use Nette,
  */
 class ProfilePresenter extends BasePresenter
 {
+    protected function createComponentEditProfile()
+    {
+        $control = new \Caloriscz\Profile\Admin\EditControl($this->database);
+        return $control;
+    }
+    
     /**
      * Verification form for invitations
      */
@@ -22,48 +28,6 @@ class ProfilePresenter extends BasePresenter
 
         $form->onSuccess[] = array($this, 'exportFormSucceeded');
         return $form;
-    }
-
-    /**
-     * Edit by user
-     */
-    function createComponentEditForm()
-    {
-        $form = $this->baseFormFactory->createUI();
-
-        $members = $this->database->table("users")
-                ->get($this->user->getId());
-
-        $cols = array(
-            "username" => $members->username,
-            "email" => $members->email,
-            "name" => $members->name,
-        );
-
-        $form->addGroup("Základní nastavení");
-        $form->addText("name", "Name");
-
-        $form->setDefaults(array(
-            "name" => $cols["name"],
-        ));
-
-        $form->addSubmit("submit", "dictionary.main.Save");
-        $form->onSuccess[] = array($this, 'editFormSucceeded');
-        return $form;
-    }
-
-    /**
-     * Edit user settings by user
-     * @return array Redirect parameters
-     */
-    function editFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
-    {
-        $this->database->table("users")->get($this->user->getId())
-                ->update(array(
-                    "name" => $form->values->name,
-        ));
-
-        $this->redirect(this);
     }
 
     /**
