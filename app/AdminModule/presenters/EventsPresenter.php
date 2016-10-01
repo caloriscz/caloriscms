@@ -28,31 +28,11 @@ class EventsPresenter extends BasePresenter
         $control = new \Caloriscz\Members\InsertEventControl($this->database);
         return $control;
     }
-
-    function createComponentInsertForm()
+    
+    protected function createComponentInsertEventPage()
     {
-        $form = $this->baseFormFactory->createUI();
-        $form->addText('title', 'dictionary.main.Title');
-
-        $form->addSubmit('submitm', 'dictionary.main.Insert');
-
-        $form->onSuccess[] = $this->insertFormSucceeded;
-        return $form;
-    }
-
-    function insertFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
-    {
-        $doc = new Model\Document($this->database);
-        $doc->setType(3);
-        $doc->setTitle($form->values->title);
-        $doc->setSlug($form->values->title);
-        $id = $doc->create($this->user->getId());
-
-        Model\IO::directoryMake(APP_DIR . '/media/' . $id);
-
-        $this->redirect(":Admin:Events:detail", array(
-            "id" => $id,
-        ));
+        $control = new \Caloriscz\Events\InsertEventPageControl($this->database);
+        return $control;
     }
 
     /**

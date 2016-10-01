@@ -16,48 +16,11 @@ class CategoriesPresenter extends BasePresenter
         return $control;
     }
 
-    /**
-     * Insert category
-     */
-    protected function createComponentInsertCategoryForm()
-    {
-        $form = $this->baseFormFactory->createUI();
-        $form->addHidden("parent");
-        $form->addText('title', 'dictionary.main.Title')
-            ->setAttribute("class", "form-control");
-        $form->addSubmit('submitm', 'dictionary.main.Insert')
-            ->setAttribute("class", "btn btn-primary");
-
-        $form->onSuccess[] = $this->insertCategoryFormSucceeded;
-        $form->onValidate[] = $this->validateCategoryFormSucceeded;
-        return $form;
-    }
-
-    public function validateCategoryFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
-    {
-        $category = $this->database->table("categories")->where(array(
-            "parent_id" => $form->values->parent,
-            "title" => $form->values->title,
-        ));
-
-        if ($category->count() > 0) {
-            $this->flashMessage($this->translator->translate('messages.sign.categoryAlreadyExists'), "error");
-            $this->redirect(":Admin:Categories:categories");
-        }
-
-        if ($form->values->title == "") {
-            $this->flashMessage($this->translator->translate('messages.sign.categoryMustHaveSomeName'), "error");
-            $this->redirect(":Admin:Categories:categories");
-        }
-    }
-
-    public function insertCategoryFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
-    {
-        $category = new Model\Category($this->database);
-        $category->setCategory($form->values->title, $form->values->parent);
-
-        $this->redirect(":Admin:Categories:default", array("id" => null));
-    }
+   protected function createComponentCategoryInsert()
+   {
+       $control = new \Caloriscz\Categories\InsertCategoryControl($this->database);
+       return $control;
+   }
 
     /**
      * Delete categories
@@ -102,7 +65,7 @@ class CategoriesPresenter extends BasePresenter
             $this->database->table("categories")->where(array("id" => $sort->id))->update(array("sorted" => $sorted));
         }
 
-        $this->redirect(":Admin:Categories:default", array("id" => null));
+        $this->presenter->redirect(this, array("id" => null));
     }
 
     function renderDefault()
