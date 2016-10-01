@@ -23,6 +23,12 @@ class MediaPresenter extends BasePresenter
         $control = new \Caloriscz\Media\MediaForms\InsertMediaControl($this->database);
         return $control;
     }
+    
+    protected function createComponentEditFile()
+    {
+        $control = new \Caloriscz\Media\MediaForms\EditFileControl($this->database);
+        return $control;
+    }
 
     /**
      * Image Upload
@@ -153,30 +159,6 @@ class MediaPresenter extends BasePresenter
         $this->upload->singleFileToDir($fileUpload, $folder);
     }
 
-    function createComponentUploadImageJs()
-    {
-        $form = $this->baseFormFactory->createUI();
-        $form->onSuccess[] = $this->uploadImageJsFormSucceeded;
-        return $form;
-    }
-
-    function uploadImageJsFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
-    {
-
-        // todo peekay Finish ImageJsForm
-        $folder = '';
-
-        //$fileUpload = new \Nette\Http\FileUpload($_FILES['uploadfile']);
-        //$this->upload->singleFileToDir($fileUpload, $folder);
-
-        echo '{
-    "uploaded": 1,
-    "fileName": "foto.png",
-    "url": "http://demo.cz/foto.png"
-}';
-        exit();
-    }
-
     /**
      * Delete image
      */
@@ -263,45 +245,6 @@ class MediaPresenter extends BasePresenter
         $this->redirect(":Admin:Media:detail", array(
             "id" => $this->getParameter("album"),
             "category" => $this->getParameter("category"),
-        ));
-    }
-
-    /**
-     * Edit file information
-     */
-    function createComponentEditFileForm()
-    {
-        $image = $this->database->table("media")->get($this->getParameter("id"));
-
-        $form = $this->baseFormFactory->createUI();
-        $form->addHidden('id');
-        $form->addText('title', 'dictionary.main.Title');
-        $form->addTextarea('description', "dictionary.main.Description")
-            ->setAttribute("style", "height: 200px;")
-            ->setAttribute("class", "form-control");
-        $form->setDefaults(array(
-            "id" => $image->id,
-            "title" => $image->title,
-            "description" => $image->description,
-        ));
-
-        $form->addSubmit('send', 'Uložit');
-
-        $form->onSuccess[] = $this->editFileFormSucceeded;
-        return $form;
-    }
-
-    function editFileFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
-    {
-        $this->database->table("media")
-            ->get($form->values->id)->update(array(
-                'title' => $form->values->title,
-                'description' => $form->values->description,
-            ));
-
-
-        $this->redirect(":Admin:Media:image", array(
-            "id" => $form->values->id,
         ));
     }
 

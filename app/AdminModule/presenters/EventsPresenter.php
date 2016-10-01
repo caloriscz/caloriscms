@@ -40,6 +40,28 @@ class EventsPresenter extends BasePresenter
         $control = new \Caloriscz\Events\ImageEditControl($this->database);
         return $control;
     }
+    
+    protected function createComponentEventSign()
+    {
+        $control = new \Caloriscz\Events\SignEventControl($this->database);
+        return $control;
+    }
+
+    /**
+     * Toggle display
+     */
+    function handleToggle()
+    {
+        if ($this->getParameter('viewtype') == 'table') {
+            $this->context->httpResponse->setCookie('viewtype', 'table', '180 days');
+        } else {
+            $this->context->httpResponse->setCookie('viewtype', 'calendar', '180 days');
+        }
+
+
+        $this->redirect(":Admin:Events:default", array("type" => $this->getParameter("type")));
+    }
+
 
     /**
      * Delete page with all content
@@ -131,96 +153,6 @@ class EventsPresenter extends BasePresenter
         $this->redirect(":Admin:Events:images", array("id" => $this->getParameter("page")));
     }
 
-    /**
-     * Send request
-     */
-    function createComponentSignEventForm()
-    {
-        $form = $this->baseFormFactory->createPH();
-        $form->getElementPrototype()->class = "contact-form";
-        $form->addHidden("event");
-        $form->addHidden("pages_id");
-        $form->addRadioList("selection");
-        $form->addText("name")
-            ->setAttribute("placeholder", "messages.helpdesk.name");
-        $form->addText("email")
-            ->setAttribute("placeholder", "messages.helpdesk.email");
-        $form->addText("phone")
-            ->setAttribute("placeholder", "dictionary.main.Phone");
-        $form->addTextArea("message")->setAttribute("class", "form-control");
-
-        $form->setDefaults(array(
-            "page_id" => $this->getParameter("id"),
-            "event" => $this->getParameter("event")
-        ));
-
-        $form->addSubmit("submitm", "dictionary.main.Insert")
-            ->setAttribute("class", "btn btn-success");
-
-        $form->onValidate[] = $this->signEventFormValidated;
-        $form->onSuccess[] = $this->signEventFormSucceeded;
-        return $form;
-    }
-
-    function signEventFormValidated(\Nette\Forms\BootstrapPHForm $form)
-    {
-        $event = $this->database->table("events")->get($form->values->event);
-
-        if (strlen($form->values->name) < 2) {
-            $this->flashMessage('Vyplňte jméno', "error");
-            $this->redirect(":Admin:Events:signed", array("id" => $event->pages_id, "event" => $event->id));
-        }
-
-        if (\Nette\Utils\Validators::isEmail($form->values->email) == FALSE) {
-            $this->flashMessage('Vyplňte e-mail', "error");
-            $this->redirect(":Admin:Events:signed", array("id" => $event->pages_id, "event" => $event->id));
-        }
-
-        $eventSigned = $this->database->table("events_signed")->where(array(
-            "email" => $form->values->email,
-            "events_id" => $event->id,
-        ));
-
-        if ($eventSigned->count() > 0) {
-            $this->flashMessage('Tento e-mail už byl použit při registraci', "error");
-            $this->redirect(":Admin:Events:signed", array("id" => $event->pages_id, "event" => $event->id));
-        }
-
-    }
-
-    function signEventFormSucceeded(\Nette\Forms\BootstrapPHForm $form)
-    {
-        $event = $this->database->table("events")->get($form->values->event);
-
-        $arrData = array(
-            "name" => $form->values->name,
-            "email" => $form->values->email,
-            "phone" => $form->values->phone,
-            "note" => $form->values->message,
-            "ipaddress" => getenv('REMOTE_ADDR'),
-            'date_created' => date("Y-m-d H:i:s"),
-            'events_id' => $event->id,
-        );
-
-        $this->database->table("events_signed")->insert($arrData);
-
-        $this->redirect(":Admin:Events:signed", array("id" => $event->pages_id, "event" => $event->id));
-    }
-
-    /**
-     * Toggle display
-     */
-    function handleToggle()
-    {
-        if ($this->getParameter('viewtype') == 'table') {
-            $this->context->httpResponse->setCookie('viewtype', 'table', '180 days');
-        } else {
-            $this->context->httpResponse->setCookie('viewtype', 'calendar', '180 days');
-        }
-
-
-        $this->redirect(":Admin:Events:default", array("type" => $this->getParameter("type")));
-    }
 
     public function renderDefault()
     {
