@@ -10,69 +10,17 @@ use Nette,
  */
 class HelpdeskPresenter extends BasePresenter
 {
+    protected function createComponentSendTestMail()
+    {
+        $control = new \Caloriscz\Helpdesk\SendTestMailControl($this->database);
+        return $control;
+    }
 
     function handleDelete($id)
     {
         $this->database->table("helpdesk_messages")->get($id)->delete();
 
         $this->redirect(this, array("id" => $this->getParameter("helpdesk")));
-    }
-
-    /**
-     * Send teste-mail
-     */
-    function createComponentSendTestMailForm()
-    {
-        $form = $this->baseFormFactory->createUI();
-        $form->addHidden("id");
-        $form->addText("email", "E-mail");
-        $form->addSubmit('submitm', 'dictionary.main.Save');
-
-        $form->setDefaults(array(
-            "id" => $this->getParameter("id"),
-        ));
-
-        $form->onSuccess[] = $this->sendTestMailFormSucceeded;
-        return $form;
-    }
-
-    function sendTestMailFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
-    {
-        $emailDb = $this->database->table("helpdesk_emails")->get($form->values->id);
-
-        $latte = new \Latte\Engine;
-        $params = array(
-            'body' => "Body",
-        );
-
-        $paramsTemplate = array(
-            'name' => "John Doe",
-            'phone' => "+420 123 456 789",
-            'email' => $this->template->settings["contacts:email:hq"],
-            'address' => "42.42.42.256",
-            'time' => date("j. n. Y H:i:s"),
-            'message' => "Lorem ipsum dolor sit amet, consectetur adipiscing elit. "
-                . "Aliquam purus lacus, tempor sit amet tincidunt ut, finibus non quam. "
-                . "Quisque ac metus quis odio vestibulum consectetur congue id diam. "
-                . "Sed ligula ante, suscipit sed purus ac, dignissim hendrerit nisi.<br /> "
-                . "Praesent scelerisque nulla nec posuere accumsan. Etiam ac libero in "
-                . "ipsum volutpat accumsan. Sed pretium sodales fermentum. Quisque sed feugiat odio. ",
-        );
-
-        $latte->setLoader(new \Latte\Loaders\StringLoader);
-        $latte->renderToString(substr(APP_DIR, 0, -4) . '/app/AdminModule/templates/Emails/components/skeleton.latte', $params);
-        $renderedTemplate = $latte->renderToString($emailDb->body, $paramsTemplate);
-
-        $mail = new \Nette\Mail\Message;
-        $mail->setFrom($this->template->settings["site:title"] . ' <' . $this->template->settings["contacts:email:hq"] . '>')
-            ->addTo($form->values->email)
-            ->setSubject($emailDb->subject)
-            ->setHTMLBody($renderedTemplate);
-
-        $mailer = new \Nette\Mail\SendmailMailer;
-        $mailer->send($mail);
-
-        $this->redirect(':Admin:Helpdesk:emails', array("id" => $form->values->id));
     }
 
     /**
