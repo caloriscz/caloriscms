@@ -16,53 +16,18 @@ class HelpdeskPresenter extends BasePresenter
         return $control;
     }
 
+    protected function createComponentEditContactForm()
+    {
+        $control = new \Caloriscz\Helpdesk\EditContactFormControl($this->database);
+        return $control;
+    }
+
     function handleDelete($id)
     {
         $this->database->table("helpdesk_messages")->get($id)->delete();
 
         $this->redirect(this, array("id" => $this->getParameter("helpdesk")));
     }
-
-    /**
-     * Edit helpdesk
-     */
-    function createComponentEditHelpdeskForm()
-    {
-        $form = $this->baseFormFactory->createUI();
-        $form->addHidden("helpdesk_id");
-        $form->addText("title", "dictionary.main.Title");
-        $form->addTextarea("description", "dictionary.main.Description")
-            ->setAttribute("class", "form-control")
-            ->setAttribute("style", "height: 200px;");
-        $form->addCheckbox("fill_phone");
-
-        $helpdesk = $this->database->table("helpdesk")->get($this->getParameter("id"));
-
-        $form->setDefaults(array(
-            "helpdesk_id" => $helpdesk->id,
-            "title" => $helpdesk->title,
-            "description" => $helpdesk->description,
-            "fill_phone" => $helpdesk->fill_phone,
-        ));
-
-        $form->addSubmit("submitm", "dictionary.main.Save");
-
-        $form->onSuccess[] = $this->editHelpdeskFormSucceeded;
-        return $form;
-    }
-
-    function editHelpdeskFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
-    {
-        $id = $this->database->table("helpdesk")->get($form->values->helpdesk_id)
-            ->update(array(
-                "title" => $form->values->title,
-                "description" => $form->values->description,
-                "fill_phone" => $form->values->fill_phone,
-            ));
-
-        $this->redirect(this, array("id" => $form->values->helpdesk_id));
-    }
-
 
     /**
      * E-mail template edit
