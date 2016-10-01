@@ -51,6 +51,12 @@ class ContactsPresenter extends BasePresenter
         $control = new \Caloriscz\Contacts\ContactForms\LoadVatControl($this->database);
         return $control;
     }
+    
+    protected function createComponentContactGrid()
+    {
+        $control = new \Caloriscz\Contact\ContactGridControl($this->database);
+        return $control;
+    }
 
     /**
      * Delete contact for communication
@@ -61,28 +67,6 @@ class ContactsPresenter extends BasePresenter
         $contactsId = $contacts->contacts_id;
         $contacts->delete();
         $this->redirect(":Admin:Contacts:detailCommunications", array("id" => $contactsId));
-    }
-
-    /**
-     * Delete contact with all other tables and related page
-     */
-    function handleDelete($id)
-    {
-        for ($a = 0; $a < count($id); $a++) {
-            $contacts = $this->database->table("contacts")->get($id[$a]);
-
-            if ($contacts) {
-                $page = $this->database->table("pages")->get($contacts->pages_id);
-
-                if ($page) {
-                    $doc = new Model\Document($this->database);
-                    $doc->delete($page->id);
-                    Model\IO::removeDirectory(APP_DIR . '/media/' . $page->id);
-                }
-            }
-        }
-
-        $this->redirect(":Admin:Contacts:default", array("id" => NULL));
     }
 
     /**
@@ -113,61 +97,7 @@ class ContactsPresenter extends BasePresenter
         $grid->setTranslator($this->translator);
     }
 
-    protected function createComponentContactsGrid($name)
-    {
-
-        $grid = new \Ublaboo\DataGrid\DataGrid($this, $name);
-
-        if ($this->id == NULL) {
-            $contacts = $this->database->table("contacts");
-        } else {
-            $contacts = $this->database->table("contacts")->where("categories_id", $this->id);
-        }
-
-        $grid->setDataSource($contacts);
-        $grid->addGroupAction($this->translator->translate('dictionary.main.Delete'))->onSelect[] = [$this, 'handleDelete'];
-
-
-        $grid->addColumnLink('name', 'Název')
-            ->setRenderer(function ($item) {
-                if (strlen($item->name) == 0 && strlen($item->company) == 0) {
-                    $name = 'nemá název';
-                } elseif (strlen($item->name) == 0) {
-                    $name = $item->company;
-                } else {
-                    $name = $item->name;
-                }
-
-                $url = Nette\Utils\Html::el('a')->href($this->link('detail', array("id" => $item->pages_id)))
-                    ->setText($name);
-                return $url;
-            })
-            ->setSortable();
-        $grid->addFilterText('name', $this->translator->translate('dictionary.main.Name'));
-        $grid->addColumnText('email', $this->translator->translate('dictionary.main.Email'))
-            ->setSortable();
-        $grid->addFilterText('email', $this->translator->translate('dictionary.main.Email'));
-        $grid->addColumnText('phone', $this->translator->translate('dictionary.main.Phone'))
-            ->setSortable();
-        $grid->addFilterText('phone', $this->translator->translate('dictionary.main.Phone'));
-        $grid->addColumnText('vatin', $this->translator->translate('dictionary.main.VatIn'))
-            ->setSortable();
-        $grid->addFilterText('vatin', 'dictionary.main.VatIn');
-        $grid->addColumnText('street', $this->translator->translate('dictionary.main.Address'))
-            ->setRenderer(function ($item) {
-                $address = $item->street . ', ' . $item->zip . ' ' . $item->city;
-                if (strlen($address) > 2) {
-                    $addressText = $address;
-                } else {
-                    $addressText = NULL;
-                }
-                return $addressText;
-            })
-            ->setSortable();
-        $grid->addFilterText('street', 'dictionary.main.Street');
-
-        $grid->setTranslator($this->translator);
-    }
+    
 
     public function renderDefault()
     {
