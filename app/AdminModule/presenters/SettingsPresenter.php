@@ -148,20 +148,20 @@ class SettingsPresenter extends BasePresenter
 
     function insertCurrencySucceeded(\Nette\Forms\BootstrapUIForm $form)
     {
-        $exists = $this->database->table("countries")->where("title = ? OR code = ? OR symbol = ?",
-            $form->values->country_cs, $form->values->country_en);
+         $exists = $this->database->table("currencies")->where("title = ? OR code = ? OR symbol = ?",
+            $form->values->title, $form->values->code, $form->values->symbol);
 
         if ($exists->count() > 0) {
-            $this->flashMessage("Měna, symbol nebo kód už je v seznamu", "error");
-            $this->redirect(":Admin:Settings:currency");
+            $this->presenter->flashMessage("Měna, symbol nebo kód už je v seznamu", "error");
+            $this->presenter->redirect(this);
         } else {
-            $this->database->table("countries")->insert(array(
+            $this->database->table("currencies")->insert(array(
                 "title" => $form->values->title,
                 "code" => $form->values->code,
                 "symbol" => $form->values->symbol,
             ));
 
-            $this->redirect(":Admin:Settings:countries");
+            $this->presenter->redirect(this);
         }
     }
 
