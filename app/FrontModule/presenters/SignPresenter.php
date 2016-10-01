@@ -25,6 +25,12 @@ class SignPresenter extends BasePresenter
         $control = new \Caloriscz\Sign\ResetPassControl($this->database);
         return $control;
     }
+    
+    protected function createComponentVerify()
+    {
+        $control = new \Caloriscz\Sign\VerifyAccountControl($this->database);
+        return $control;
+    }
 
     /**
      * Sign-in form factory.
@@ -79,47 +85,6 @@ class SignPresenter extends BasePresenter
 
             $this->flashMessage("Nesprávné heslo", 'error');
             $this->redirect(':Front:Sign:in');
-        }
-    }
-
-    /**
-     * Verification form for invitations
-     */
-    function createComponentVerifyForm()
-    {
-        $form = $this->baseFormFactory->createUI();
-        $form->setMethod("GET");
-        $form->addText("code", "Kód");
-        $form->addText("email", "E-mail");
-        $form->addSubmit('submitm', 'Ověřit');
-        $form->onSuccess[] = $this->verifyFormSucceeded;
-
-        return $form;
-    }
-
-    /**
-     * Verify member's password
-     */
-    function verifyFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
-    {
-        $userLoggedDb = $this->database->table('users')->where(array(
-            'activation' => $this->getParameter("code"),
-            'username' => $this->getParameter("user")
-        ));
-
-        if ($userLoggedDb->count() == 0) {
-            $this->flashMessage('Aktivace není platná', 'error');
-            $this->redirect(":Front:Sign:verify");
-        } else {
-            $this->database->table("users")->where(array(
-                "activation" => $this->getParameter("code"),
-                'username' => $this->getParameter("user")
-            ))->update(array(
-                "state" => 1
-            ));
-
-            $this->flashMessage('Úspěšně ověřeno. Nyní se můžete přihlásit.', 'note');
-            $this->redirect(":Front:Sign:in");
         }
     }
 
