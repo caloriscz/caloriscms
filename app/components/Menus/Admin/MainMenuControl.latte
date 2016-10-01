@@ -111,7 +111,7 @@
                     </a>
                 </li>
             {/if}
-            {if $settings['categories/adminEnabled'] || $member->username == 'admin'}
+            {if $member->username == 'admin'}
                 <li>
                     <a href="/admin/categories">
                         <i class="fa fa-sitemap fa-fw"></i> {_dictionary.main.categories|firstUpper}
