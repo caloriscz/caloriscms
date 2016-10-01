@@ -22,77 +22,17 @@ class HelpdeskPresenter extends BasePresenter
         return $control;
     }
 
+    protected function createComponentEditMailTemplate()
+    {
+        $control = new \Caloriscz\Helpdesk\EditMailTemplateControl($this->database);
+        return $control;
+    }
+
     function handleDelete($id)
     {
         $this->database->table("helpdesk_messages")->get($id)->delete();
 
         $this->redirect(this, array("id" => $this->getParameter("helpdesk")));
-    }
-
-    /**
-     * E-mail template edit
-     */
-    function createComponentInsertTemplateForm()
-    {
-        $form = $this->baseFormFactory->createUI();
-        $form->addText("template", "dictionary.main.Template");
-        $form->addText("subject", "dictionary.main.Subject");
-        $form->addSubmit("submitm", "dictionary.main.Insert");
-
-        $form->onSuccess[] = $this->insertTemplateFormSucceeded;
-        return $form;
-    }
-
-    function insertTemplateFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
-    {
-        $id = $this->database->table("helpdesk_emails")
-            ->insert(array(
-                "template" => $form->values->template,
-                "subject" => $form->values->subject,
-            ));
-
-        $this->redirect(':Admin:Helpdesk:emails', array("id" => $id));
-    }
-
-    /**
-     * E-mail template edit
-     */
-    function createComponentEditMailForm()
-    {
-        $emailDb = $this->database->table("helpdesk_emails")->get($this->getParameter("id"));
-
-        $form = new \Nette\Forms\BootstrapUIForm;
-        $form->getElementPrototype()->class = "form-horizontal";
-        $form->getElementPrototype()->id = "search-form";
-        $form->getElementPrototype()->role = 'form';
-        $form->getElementPrototype()->autocomplete = 'off';
-
-        $form->addHidden("id");
-        $form->addText("subject");
-        $form->addTextArea("body")
-            ->setAttribute("style", "width: 500px;")
-            ->setHtmlId("wysiwyg");
-
-        $form->setDefaults(array(
-            "id" => $this->getParameter("id"),
-            "subject" => $emailDb->subject,
-            "body" => $emailDb->body,
-        ));
-
-
-        $form->onSuccess[] = $this->editCategoryFormSucceeded;
-        return $form;
-    }
-
-    function editCategoryFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
-    {
-        $this->database->table("helpdesk_emails")->get($form->values->id)
-            ->update(array(
-                "subject" => $form->values->subject,
-                "body" => $form->values->body,
-            ));
-
-        $this->redirect(':Admin:Helpdesk:emails', array("id" => $form->values->id));
     }
 
     /**
