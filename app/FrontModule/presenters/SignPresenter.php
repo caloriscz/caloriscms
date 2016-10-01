@@ -32,60 +32,10 @@ class SignPresenter extends BasePresenter
         return $control;
     }
 
-    /**
-     * Sign-in form factory.
-     * @return Nette\Application\UI\Form
-     */
-    protected function createComponentSignInForm()
+    protected function createComponentSignIn()
     {
-        $form = $this->baseFormFactory->createUI();
-        $form->addText('username', 'dictionary.main.User')
-            ->setRequired('Vložte uživatelské jméno.');
-
-        $form->addPassword('password', 'dictionary.main.Password')
-            ->setRequired('Vložte heslo.');
-
-        $form->addSubmit('send', 'dictionary.main.login')
-            ->setAttribute("class", "btn btn-success");
-
-        $form->onSuccess[] = $this->signInFormSucceeded;
-        return $form;
-    }
-
-    public function signInFormSucceeded($form, $values)
-    {
-        $oldid = session_id();
-        $member = new \App\Model\MemberModel($this->database);
-        $blocked = $member->getState($form->values->username);
-
-        if ($blocked == FALSE) {
-            $this->flashMessage("Musíte nejdříve ověřit váš účet", 'error');
-            $this->redirect(':Front:Sign:in');
-        }
-
-        try {
-            $this->getUser()->login($values->username, $values->password);
-            $newid = session_id();
-
-            if ($this->template->settings['store:enabled']) {
-                $this->database->table("orders")->where(array("uid" => $oldid))->update(array("uid" => $newid));
-            }
-
-
-            $this->database->table("users")->get($this->user->getId())->update(array(
-                "date_visited" => date("Y-m-d H:i:s"),
-                "login_success" => new \Nette\Database\SqlLiteral("login_success + 1")
-            ));
-
-            $this->redirect(':Front:Homepage:default');
-        } catch (Nette\Security\AuthenticationException $e) {
-            $this->database->table("users")->where(array("username" => $values->username))->update(array(
-                "login_error" => new \Nette\Database\SqlLiteral("login_error + 1")
-            ));
-
-            $this->flashMessage("Nesprávné heslo", 'error');
-            $this->redirect(':Front:Sign:in');
-        }
+        $control = new \Caloriscz\Sign\SignInControl($this->database);
+        return $control;
     }
 
     protected function createComponentSignUp()
@@ -113,7 +63,7 @@ class SignPresenter extends BasePresenter
     function renderIn()
     {
         if ($this->getParameter('msg') == 1) {
-            $this->template->msg = TRUE;
+            $this->template->msg = true;
         }
     }
 
@@ -125,9 +75,9 @@ class SignPresenter extends BasePresenter
         ));
 
         if ($activation->count() > 0) {
-            $this->template->activationValid = TRUE;
+            $this->template->activationValid = true;
         } else {
-            $this->template->activationValid = FALSE;
+            $this->template->activationValid = false;
         }
     }
 
