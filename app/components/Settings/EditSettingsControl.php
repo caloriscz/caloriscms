@@ -66,7 +66,7 @@ class EditSettingsControl extends Control
         $template = $this->template;
         $template->langSelected = $this->presenter->translator->getLocale();
 
-        if (!$this->getParameter("id")) {
+        if (!$this->presenter->getParameter("id")) {
             $arr = array(
                 "admin_editable" => 1,
                 "categories_id" => 10,
@@ -74,7 +74,7 @@ class EditSettingsControl extends Control
         } else {
             $arr = array(
                 "admin_editable" => 1,
-                "categories_id" => $this->getParameter("id"),
+                "categories_id" => $this->presenter->getParameter("id"),
             );
         }
 
