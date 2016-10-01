@@ -58,15 +58,10 @@ class ContactsPresenter extends BasePresenter
         return $control;
     }
 
-    /**
-     * Delete contact for communication
-     */
-    function handleDeleteCommunication($id)
+    protected function createComponentCommunicationGrid()
     {
-        $contacts = $this->database->table("contacts_communication")->get($id);
-        $contactsId = $contacts->contacts_id;
-        $contacts->delete();
-        $this->redirect(":Admin:Contacts:detailCommunications", array("id" => $contactsId));
+        $control = new \Caloriscz\Contact\CommunicationGridControl($this->database);
+        return $control;
     }
 
     /**
@@ -78,26 +73,6 @@ class ContactsPresenter extends BasePresenter
 
         $this->redirect(":Admin:Contacts:detailOpeningHours", array("id" => $this->getParameter("page")));
     }
-
-    public function createComponentCommunicationsGrid($name)
-    {
-        $grid = new \Ublaboo\DataGrid\DataGrid($this, $name);
-
-        $dbCommunications = $this->database->table("contacts_communication")
-            ->where(array("contacts_id" => $this->getParameter('id')));
-
-        $grid->setDataSource($dbCommunications);
-        $grid->setItemsPerPageList(array(20));
-
-        $grid->addGroupAction('Smazat')->onSelect[] = [$this, 'handleDeleteCommunication'];
-
-        $grid->addColumnText('communication_type', 'Typ');
-        $grid->addColumnText('communication_value', 'Hodnota');
-
-        $grid->setTranslator($this->translator);
-    }
-
-    
 
     public function renderDefault()
     {
