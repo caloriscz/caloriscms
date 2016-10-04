@@ -1,9 +1,9 @@
-{block #titles}{$catalogue->title} - {_dictionary.main.images|firstUpper}{/block}
+{block #titles}{$pages->title} - {_dictionary.main.images|firstUpper}{/block}
 {block content}
 
-{include 'components/top-navigation.latte'}
+{control pageTopMenu}
 
-<h1 class="page-header">{$catalogue->title} - {_dictionary.main.images|firstUpper}</h1>
+<h1 class="page-header">{$pages->title} - {_dictionary.main.images|firstUpper}</h1>
 
 {control dropZone, 1}
 

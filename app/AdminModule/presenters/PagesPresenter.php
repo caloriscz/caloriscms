@@ -15,6 +15,13 @@ class PagesPresenter extends BasePresenter
         $this->database = $database;
     }
 
+    public function startup()
+    {
+        parent::startup();
+
+        $this->template->type = $this->getParameter("type");
+    }
+
     protected function createComponentEditSnippetForm()
     {
         $control = new \Caloriscz\Page\Snippets\EditFormControl($this->database);
@@ -36,6 +43,18 @@ class PagesPresenter extends BasePresenter
     protected function createComponentInsertPageForm()
     {
         $control = new \Caloriscz\Page\PageForms\InsertFormControl($this->database);
+        return $control;
+    }
+
+    protected function createComponentInsertBlogForm()
+    {
+        $control = new \Caloriscz\Blog\BlogForms\InsertFormControl($this->database);
+        return $control;
+    }
+
+    protected function createComponentInsertEventPage()
+    {
+        $control = new \Caloriscz\Events\InsertEventPageControl($this->database);
         return $control;
     }
 
@@ -125,10 +144,21 @@ class PagesPresenter extends BasePresenter
 
     public function renderDefault()
     {
-        $this->template->pages = $this->database->table("pages")->where(array("pages_types_id" => array(0, 1)))->order("title");
+        if ($this->template->type < 2) {
+            $arr = array(0, 1);
+        } else {
+            $arr = $this->template->type;
+        }
+
+        $this->template->pages = $this->database->table("pages")->where(array("pages_types_id" => $arr))->order("title");
     }
 
     public function renderDetail()
+    {
+        $this->template->pages = $this->database->table("pages")->get($this->getParameter("id"));
+    }
+
+    public function renderDetailImages()
     {
         $this->template->pages = $this->database->table("pages")->get($this->getParameter("id"));
     }

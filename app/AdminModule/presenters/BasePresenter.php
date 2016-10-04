@@ -214,4 +214,10 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
         return $control;
     }
 
+    protected function createComponentPageTopMenu()
+    {
+        $control = new \Caloriscz\Menus\Admin\PageTopMenuControl($this->database);
+        return $control;
+    }
+
 }

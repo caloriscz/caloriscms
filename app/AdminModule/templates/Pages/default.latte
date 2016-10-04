@@ -1,12 +1,28 @@
 {block #titles}{_admin.navigation.pages|firstUpper}{/block}
 {block content}
 
-<h1 class="page-header">{_admin.navigation.pages}</h1>
+<h1 class="page-header">
+    {if $type == 2}
+        Blog
+    {elseif $type == 3}
+        {_dictionary.main.Events}
+    {else}
+        Stránky
+    {/if}
+</h1>
 
 <div class="row">
     <div class="col-md-3">
         <div class="panel panel-default">
-            <div class="panel-heading">{_dictionary.main.NewPage}</div>
+            <div class="panel-heading">
+                {if $type == 2}
+                    Nový příspěvek
+                {elseif $type == 3}
+                    Nová událost/akce
+                {else}
+                    {_dictionary.main.NewPage}
+                {/if}
+            </div>
             <div class="panel-body">
                 {foreach $flashes as $flash}
                     <br/>
@@ -14,7 +30,13 @@
                     <br/>
                 {/foreach}
 
-                {control insertPageForm}
+                {if $type == 2}
+                    {control insertBlogForm}
+                {elseif $type == 3}
+                    {control insertEventPage}
+                {else}
+                    {control insertPageForm}
+                {/if}
             </div>
         </div>
     </div>
@@ -24,13 +46,17 @@
                 <th></th>
                 <th>{_dictionary.main.Title}</th>
                 <th>{_dictionary.main.Slug}</th>
-                <th>{_dictionary.main.PagePreview}</th>
+                <th>{_dictionary.main.Preview}</th>
             </tr>
             {foreach $pages as $page}
                 <tr>
                     <td class="col-xs-1">
-                        <a n:href="delete!, id => $page->id" onclick="return confirm('Opravdu smazat?')"><i
-                                    class="fa fa-times font-red"></i></a>
+                        <a n:href="delete!, id => $page->id" onclick="return confirm('Opravdu smazat?')">
+                            <i class="fa fa-times font-red"></i>
+                        </a>
+                        <a href="/{$page->slug|webalize}/" target="_blank">
+                            <i class="fa fa-edit"></i>
+                        </a>
                     </td>
                     <td>
                         <a n:href=":Admin:Pages:detail, id => $page->id">{$page->title}</a>
@@ -38,8 +64,7 @@
                         {if $page->slug == ''} (homepage){/if}
                     </td>
                     <td>{$page->slug}</td>
-                    <td><a href="/{$page->slug|webalize}/" target="_blank"><i
-                                    class="fa fa-edit"></i></a></td>
+                    <td></td>
                 </tr>
             {/foreach}
         </table>

@@ -1,0 +1,30 @@
+{var $view = $presenter->getView()}
+{var $id = $presenter->getParameter('id')}
+<br>
+<ul class="nav nav-tabs">
+    <li><a href="/admin/pages?type={$page->pages_types_id}"><i class="fa fa-angle-left"></i> Všechny stránky</a></li>
+    <li role="presentation" {if $view == 'detail'}class="active"{/if}>
+        <a href="/admin/pages/detail/{$id}">{_dictionary.main.Page}</a>
+    </li>
+    {if $page->pages_types_id == 3}
+        <li role="presentation">
+            <a href="/admin/events/detail/{$id}"> <i class="fa fa-calendar fa-fw"></i> {_dictionary.main.Event}</a>
+        </li>
+    {/if}
+    <li role="presentation" {if $view == 'snippets'}class="active"{/if}>
+        <a href="/admin/pages/snippets/{$id}">{_dictionary.main.Snippets}</a>
+    </li>
+    <li role="presentation" {if $view == 'detailImages'}class="active"{/if}>
+        <a href="/admin/pages/detail-images/{$id}">{_dictionary.main.Images}</a>
+    </li>
+    <li role="presentation" {if $view == 'detailFiles'}class="active"{/if}>
+        <a href="/admin/pages/detail-files/{$id}">{_dictionary.main.Files}</a>
+    </li>
+    <li role="presentation" {if $view == 'detailRelated'}class="active"{/if}>
+        <a href="/admin/pages/detail-related/{$id}">Související příspěvky</a>
+    </li>
+    <li class="pull-right">
+        <a href="/{$pages->slug}" class="btn btn-primary" target="_blank">{_dictionary.main.Preview}</a>
+    </li>
+</ul>
+<br>

@@ -1,7 +1,7 @@
 {block #titles}{$page->title}{/block}
 {block content}
 
-{include 'components/top-navigation.latte'}
+{control pageTopMenu}
 
 <h1 class="page-header">{_dictionary.main.Snippets} - {$page->title} - {$snippet->keyword}</h1>
 <p><a n:href=":Admin:Pages:snippets, id => $page->id"><i class="fa fa-chevron-left"></i> zpět na všechny ústřižky</a>

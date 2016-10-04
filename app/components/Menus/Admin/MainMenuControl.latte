@@ -5,8 +5,11 @@
 <div class="navbar-default sidebar" role="navigation">
     <div class="sidebar-nav navbar-collapse">
         <ul class="nav" id="side-menu">
-            <li><a href="/admin"><i
-                            class="fa fa-home fa-fw"></i> {_admin.navigation.homepage}</a></li>
+            <li>
+                <a href="/admin">
+                    <i class="fa fa-home fa-fw"></i> {_admin.navigation.homepage}
+                </a>
+            </li>
 
             <li>
                 <a href="/admin/menu">
@@ -19,8 +22,13 @@
                 </a>
             </li>
             <li>
-                <a href="/admin/blog">
+                <a href="/admin/pages?type=2">
                     <i class="fa fa-newspaper-o fa-fw"></i> {_dictionary.main.blog|firstUpper}
+                </a>
+            </li>
+            <li>
+                <a href="/admin/events">
+                    <i class="fa fa-calendar fa-fw"></i> {_dictionary.main.Events}
                 </a>
             </li>
             <li>
@@ -39,28 +47,23 @@
                 </a>
             </li>
             {if $database->table('addons')->where('key AND active = 1', 'caloriscms-pricelist')->count() > 0}
-            <li>
-                <a href="/admin/pricelist">
-                    <i class="fa fa-list-ol fa-fw"></i> {_dictionary.main.Pricelist}
-                </a>
-            </li>
+                <li>
+                    <a href="/admin/pricelist">
+                        <i class="fa fa-list-ol fa-fw"></i> {_dictionary.main.Pricelist}
+                    </a>
+                </li>
             {/if}
             <li>
                 <a href="/admin/members">
                     <i class="fa fa-users fa-fw"></i> {_admin.navigation.members}
                 </a>
             </li>
-            <li>
-                <a href="/admin/events">
-                    <i class="fa fa-calendar fa-fw"></i> {_dictionary.main.Events}
-                </a>
-            </li>
             {if $database->table('addons')->where('key = ? AND active = 1', 'caloriscms-links')->count() > 1}
-            <li>
-                <a href="/admin/links">
-                    <i class="fa fa-link fa-fw"></i> {_dictionary.main.Links}
-                </a>
-            </li>
+                <li>
+                    <a href="/admin/links">
+                        <i class="fa fa-link fa-fw"></i> {_dictionary.main.Links}
+                    </a>
+                </li>
             {/if}
             {if $database->table('addons')->where('key AND active = 1', 'caloriscms-board')->count() > 0}
                 <li>
