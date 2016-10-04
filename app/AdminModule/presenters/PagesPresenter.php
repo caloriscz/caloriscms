@@ -39,6 +39,12 @@ class PagesPresenter extends BasePresenter
         return $control;
     }
 
+    protected function createComponentImageEditForm()
+    {
+        $control = new \Caloriscz\Media\MediaForms\ImageEditFormControl($this->database);
+        return $control;
+    }
+
     function handleChangeState($id, $public)
     {
         if ($public == 0) {
@@ -132,11 +138,9 @@ class PagesPresenter extends BasePresenter
         $this->template->pages = $this->database->table("pages")->get($this->getParameter("id"));
     }
 
-    public function renderDetailImages()
+    public function renderImagesDetail()
     {
-        $this->template->catalogue = $this->database->table("pages")->get($this->getParameter("id"));
-        $this->template->images = $this->database->table("media")
-            ->where(array("pages_id" => $this->getParameter("id"), "file_type" => 1));
+        $this->template->page = $this->database->table("pages")->get($this->getParameter("id"));
     }
 
     public function renderDetailFiles()
