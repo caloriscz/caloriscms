@@ -57,7 +57,11 @@ class SearchControl extends Control
         unset($values["do"], $values["action"], $values["idr"]);
         $values["id"] = $form->values->idr;
 
-        $this->redirect(":Front:Catalogue:default", $values);
+
+        $pageDb = new \App\Model\Page($this->database);
+        $page = $pageDb->getPageById($form->values->idr);
+
+        $this->presenter->redirect(":Front:Catalogue:default" . http_build_query($values));
     }
 
     public function render()
