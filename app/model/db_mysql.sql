@@ -463,7 +463,7 @@ INSERT INTO `pages_types` (`id`, `content_type`, `presenter`, `action`, `prefix`
 (4, 'Product', 'FrontStore:Product', 'default', ''),
 (5, 'Contacts', 'Front:Contacts', 'detail', ''),
 (6, 'Galerie', 'Front:Gallery', 'album', ''),
-(7, 'Product Category', 'FrontStore:Catalogue', 'default', ''),
+(7, 'Product Category', 'Front:Catalogue', 'default', ''),
 (8, 'Dokumenty', 'Front:Documents', 'default', ''),
 (9, 'Template', '', 'default', '');
 
