@@ -302,6 +302,12 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
         $control = new \Caloriscz\Page\Filters\SearchControl($this->database);
         return $control;
     }
+	
+    protected function createComponentAdvancedSearch()
+    {
+        $control = new \Caloriscz\Page\Filters\AdvancedSearchControl($this->database);
+        return $control;
+    }
 
     protected function createComponentAlbum()
     {

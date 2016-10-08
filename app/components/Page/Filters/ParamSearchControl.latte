@@ -1,0 +1,15 @@
+{form searchForm}
+    <div class="row">
+        {foreach $params as $item}
+            <div class="col-md-4">
+                <label for="inputEmail3" class="control-label">{$item->{'param'.$langSuffix}}</label>
+                <div>
+                    {foreach $database->table('params')->where('param_id = ?', $item->id)->group('paramvalue')->order('paramvalue') as $value}
+                        <input type="checkbox" name="param[{$value->param_id}][]" value="{$value->paramvalue}">
+                        {$value->paramvalue}{sep}<br>{/sep}
+                    {/foreach}
+                </div>
+            </div>
+        {/foreach}
+    </div>
+{/form}
