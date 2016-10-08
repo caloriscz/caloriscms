@@ -460,7 +460,7 @@ INSERT INTO `pages_types` (`id`, `content_type`, `presenter`, `action`, `prefix`
 (1, 'Page', 'Front:Services', 'default', ''),
 (2, 'Blog', 'Front:Blog', 'detail', 'blog'),
 (3, 'Event', 'Front:Events', 'detail', ''),
-(4, 'Product', 'FrontStore:Product', 'default', ''),
+(4, 'Product', 'Front:Product', 'default', ''),
 (5, 'Contacts', 'Front:Contacts', 'detail', ''),
 (6, 'Galerie', 'Front:Gallery', 'album', ''),
 (7, 'Product Category', 'Front:Catalogue', 'default', ''),

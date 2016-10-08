@@ -72,13 +72,6 @@ class RouterFactory
 
         $router[] = new SlugRouter($this->SlugManager);
 
-        $router[] = new Route('[<locale=cs cs|en>/]<presenter cart|order|orders|ordersuccess|product>/<action>/<id>', array(
-            'module' => 'FrontStore',
-            'presenter' => 'Homepage',
-            'action' => 'default',
-            'id' => NULL,
-        ));
-
         $router[] = new Route('[<locale=cs cs|en>/]<presenter>/<action>/<id>', array(
             'module' => 'Front',
             'presenter' => 'Homepage',
