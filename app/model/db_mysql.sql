@@ -187,6 +187,7 @@ CREATE TABLE IF NOT EXISTS `media` (
   `date_created` datetime NOT NULL,
   `detail_view` tinyint(1) NOT NULL DEFAULT '1',
   `sorted` int(11) NOT NULL,
+  `main_file` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `albums_id` (`pages_id`)
 ) ENGINE=InnoDB;

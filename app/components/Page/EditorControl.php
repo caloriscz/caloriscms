@@ -9,7 +9,7 @@ class EditorControl extends Control
 
     private $htmlPurifier;
 
-    /** @var Nette\Database\Context */
+    /** @var \Nette\Database\Context */
     public $database;
 
     public function __construct(\Nette\Database\Context $database)
@@ -111,7 +111,7 @@ class EditorControl extends Control
     function permissionValidated(\Nette\Forms\BootstrapPHForm $form)
     {
         if ($this->presenter->template->member->users_roles->pages_edit == 0) {
-            $this->flashMessage("Nemáte oprávnění k této akci", "error");
+            $this->presenter->flashMessage("Nemáte oprávnění k této akci", "error");
             $this->presenter->redirect(this);
         }
     }
@@ -177,12 +177,11 @@ class EditorControl extends Control
                 ));
 
                 if ($checkImage->count() == 0) {
-                    // thumbnails
                     $image = \Nette\Utils\Image::fromFile($destination);
                     $image->resize(400, 250, \Nette\Utils\Image::SHRINK_ONLY);
                     $image->sharpen();
                     $image->save(APP_DIR . '/media/' . $values["page_id"] . '/tn/' . $fileName);
-                    chmod(APP_DIR . '/media/' . $values["page_id"] . '/tn/' . $fileName, 0644);
+                    chmod(APP_DIR . '/media/' . $values["page_id"] . '/tn/' . $fileName);
 
                     $this->database->table("media")->insert(array(
                         'name' => $fileName,
@@ -218,7 +217,6 @@ class EditorControl extends Control
 
         $this->presenter->redirect(this, array("id" => $this->presenter->getParameter("id"), "l" => $this->presenter->getParameter("l")));
     }
-
     /************************************/
 
     public function purify($dirtyHtml)
