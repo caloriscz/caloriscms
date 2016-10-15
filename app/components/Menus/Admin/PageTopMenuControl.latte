@@ -1,8 +1,13 @@
 {var $view = $presenter->getView()}
 {var $id = $presenter->getParameter('id')}
 <br>
+{if $page->pages_types_id == 6 || $page->pages_types_id == 8}
+    {var $pageRoot = 'media?type=' . $page->pages_types_id}
+    {else}
+    {var $pageRoot = 'page?type=' . $page->pages_types_id}
+{/if}
 <ul class="nav nav-tabs">
-    <li><a href="/admin/pages?type={$page->pages_types_id}"><i class="fa fa-angle-left"></i> Všechny stránky</a></li>
+    <li><a href="/admin/{$pageRoot}"><i class="fa fa-angle-left"></i> Všechny stránky</a></li>
     <li role="presentation" {if $view == 'detail'}class="active"{/if}>
         <a href="/admin/pages/detail/{$id}">{_dictionary.main.Page}</a>
     </li>

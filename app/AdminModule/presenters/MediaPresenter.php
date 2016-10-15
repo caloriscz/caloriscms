@@ -193,11 +193,6 @@ class MediaPresenter extends BasePresenter
         $this->template->mediatype = $this->context->httpRequest->getCookie('mediatype');
     }
 
-    function renderDetail()
-    {
-        $this->template->page = $this->database->table("pages")->get($this->getParameter("id"));
-    }
-
     public function renderImage()
     {
         $this->template->file = $this->database->table("media")
