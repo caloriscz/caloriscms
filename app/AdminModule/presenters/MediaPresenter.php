@@ -23,7 +23,7 @@ class MediaPresenter extends BasePresenter
         $control = new \Caloriscz\Media\MediaForms\InsertMediaControl($this->database);
         return $control;
     }
-    
+
     protected function createComponentEditFile()
     {
         $control = new \Caloriscz\Media\MediaForms\EditFileControl($this->database);
@@ -65,11 +65,18 @@ class MediaPresenter extends BasePresenter
      */
     function handleDeletePage($id)
     {
-        $doc = new Model\Document($this->database);
-        $doc->delete($id);
-        Model\IO::removeDirectory(APP_DIR . '/media/' . $id);
+        $page = new Model\Page($this->database);
+        $pages = $page->getChildren($id);
+        $pages[] = $id;
 
-        $this->redirect(":Admin:Media:default", array("id" => null, "type" => $this->getParameter("type")));
+        foreach ($pages as $item) {
+            echo 1;
+            $doc = new Model\Document($this->database);
+            $doc->delete($item);
+            Model\IO::removeDirectory(APP_DIR . '/media/' . $item);
+        }
+
+        $this->redirect(this, array("id" => null, "type" => $this->getParameter("type")));
     }
 
     /**

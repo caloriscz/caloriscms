@@ -3,6 +3,7 @@
 namespace Caloriscz\Sign;
 
 use Nette\Application\UI\Control;
+use Nette\Utils\Random;
 
 class LostPassControl extends Control
 {
@@ -48,7 +49,7 @@ class LostPassControl extends Control
             $this->presenter->redirect(":Front:Sign:lostpass");
         }
 
-        $passwordGenerate = \Nette\Utils\Strings::random(12, "987654321zyxwvutsrqponmlkjihgfedcba");
+        $passwordGenerate = \Nette\Utils\Random::generate(12, "987654321zyxwvutsrqponmlkjihgfedcba");
 
         if ($this->database->table('users')->where(array('email' => $email,))->count() == 0) {
             $this->flashMessage("E-mail nenalezen");
