@@ -16,9 +16,6 @@ class ContactsPresenter extends BasePresenter
         parent::startup();
 
         $this->template->page = $this->database->table("pages")->get($this->getParameter("id"));
-        $this->template->contact = $this->database->table("contacts")
-            ->where(array("pages_id" => $this->template->page->id))->fetch();
-        $this->template->user = $this->database->table("users")->get($this->template->contact->users_id);
     }
 
     protected function createComponentEditContact()
@@ -51,7 +48,7 @@ class ContactsPresenter extends BasePresenter
         $control = new \Caloriscz\Contacts\ContactForms\LoadVatControl($this->database);
         return $control;
     }
-    
+
     protected function createComponentContactGrid()
     {
         $control = new \Caloriscz\Contact\ContactGridControl($this->database);
@@ -91,19 +88,10 @@ class ContactsPresenter extends BasePresenter
         $this->template->menu = $this->database->table("categories")->where('parent_id', $this->template->settings['categories:id:contact']);
     }
 
-    public function renderDetail()
+    public function renderOpeningHours()
     {
-        $this->template->page = $this->database->table("pages")->get($this->getParameter("id"));
-    }
-
-    public function renderImages()
-    {
-        $this->template->page = $this->database->table("pages")->get($this->getParameter("id"));
-    }
-
-    public function renderMember()
-    {
-        $this->template->page = $this->database->table("pages")->get($this->getParameter("id"));
+        $contact = $this->database->table("contacts")->get($this->template->page->id);
+        $this->template->hours = $this->database->table("contacts_openinghours")->where("contacts_id", $contact->id);
     }
 
     public function renderCommunications()

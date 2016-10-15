@@ -1,14 +1,36 @@
 {var $view = $presenter->getView()}
+{var $name = $presenter->getName()}
 {var $id = $presenter->getParameter('id')}
 <br>
 {if $page->pages_types_id == 6 || $page->pages_types_id == 8}
     {var $pageRoot = 'media?type=' . $page->pages_types_id}
-    {else}
+{elseif $page->pages_types_id == 5}
+    {var $pageRoot = 'contacts'}
+{else}
     {var $pageRoot = 'page?type=' . $page->pages_types_id}
 {/if}
 <ul class="nav nav-tabs">
     <li><a href="/admin/{$pageRoot}"><i class="fa fa-angle-left"></i> Všechny stránky</a></li>
-    <li role="presentation" {if $view == 'detail'}class="active"{/if}>
+
+    {if $page->pages_types_id == 5}
+        <li role="presentation" {if $view == 'detail' && $name == 'Admin:Contacts'}class="active"{/if}>
+            <a href="/admin/contacts/detail/{$id}">Kontakt</a>
+        </li>
+        <li role="presentation" {if $view == 'detailCommunications'}class="active"{/if}>
+            <a href="/admin/contacts/detail-communications/{$id}">Komunikace</a>
+        </li>
+        <li role="presentation" {if $view == 'detailOpeningHours'}class="active"{/if}>
+            <a href="/admin/contacts/detail-opening-hours/{$id}">{_dictionary.main.OpeningHours}</a>
+        </li>
+        {if $user}
+            <li role="presentation">
+                <a href="/admin/members/edit/{$id}">{_dictionary.main.Member}</a>
+            </li>
+        {/if}
+    {/if}
+
+
+    <li role="presentation" {if $view == 'detail' && $name == 'Admin:Pages'}class="active"{/if}>
         <a href="/admin/pages/detail/{$id}">{_dictionary.main.Page}</a>
     </li>
     {if $page->pages_types_id == 3}

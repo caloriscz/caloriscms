@@ -1,7 +1,7 @@
 {block #titles}{_dictionary.main.Contacts}{/block}
 {block content}
 
-{include 'components/top-navigation.latte'}
+{control pageTopMenu}
 
 <h1 class="page-header">{_dictionary.main.Contacts} - {$page->title}</h1>
 
@@ -18,7 +18,7 @@
 {control insertHour}
 
 <table class="table">
-    {foreach $contact->related('contacts_openinghours', 'contacts_id') as $open}
+    {foreach $hours as $open}
         <tr>
             <td class="col-xs-1"><a n:href="deleteHour! id => $open->id, page => $presenter->getParameter('page')"><i class="fa fa-times font-red"></i></a></td>
             <td class="col-md-1">{$open->day|numericday}</td>
