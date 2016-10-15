@@ -22,7 +22,7 @@ class ContactGridControl extends Control
         if ($this->presenter->id == null) {
             $contacts = $this->database->table("contacts");
         } else {
-            $contacts = $this->database->table("contacts")->where("categories_id", $this->id);
+            $contacts = $this->database->table("contacts")->where("categories_id", $this->presenter->id);
         }
 
         $grid->setDataSource($contacts);
