@@ -4,6 +4,8 @@
 <br>
 {if $page->pages_types_id == 6 || $page->pages_types_id == 8}
     {var $pageRoot = 'media?type=' . $page->pages_types_id}
+{elseif $page->pages_types_id == 3}
+    {var $pageRoot = 'events'}
 {elseif $page->pages_types_id == 5}
     {var $pageRoot = 'contacts'}
 {else}
@@ -11,6 +13,14 @@
 {/if}
 <ul class="nav nav-tabs">
     <li><a href="/admin/{$pageRoot}"><i class="fa fa-angle-left"></i> Všechny stránky</a></li>
+
+    {if $page->pages_types_id == 3}
+        <li role="presentation" {if $view == 'detail' && $name == 'Admin:Events'}class="active"{/if}>
+            <a href="/admin/events/detail/{$id}">
+                <i class="fa fa-calendar fa-fw"></i> {_dictionary.main.Event}
+            </a>
+        </li>
+    {/if}
 
     {if $page->pages_types_id == 5}
         <li role="presentation" {if $view == 'detail' && $name == 'Admin:Contacts'}class="active"{/if}>
@@ -33,11 +43,6 @@
     <li role="presentation" {if $view == 'detail' && $name == 'Admin:Pages'}class="active"{/if}>
         <a href="/admin/pages/detail/{$id}">{_dictionary.main.Page}</a>
     </li>
-    {if $page->pages_types_id == 3}
-        <li role="presentation">
-            <a href="/admin/events/detail/{$id}"> <i class="fa fa-calendar fa-fw"></i> {_dictionary.main.Event}</a>
-        </li>
-    {/if}
     <li role="presentation" {if $view == 'snippets'}class="active"{/if}>
         <a href="/admin/pages/snippets/{$id}">{_dictionary.main.Snippets}</a>
     </li>
