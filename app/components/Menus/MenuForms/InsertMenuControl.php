@@ -22,9 +22,12 @@ class InsertMenuControl extends Control
         $form->getElementPrototype()->role = 'form';
         $form->getElementPrototype()->autocomplete = 'off';
 
-        $languages = $this->database->table("languages")->where("default", null);
+        $languages = $this->database->table("languages")->where(array(
+            "default" => null,
+            "used" => 1,
+        ));
 
-        if ($languages->count() > 0) {
+        if ($languages->count() > 1) {
             $form->addGroup("čeština");
         }
 
@@ -83,7 +86,10 @@ class InsertMenuControl extends Control
         $arr['title'] = $form->values->title;
         $arr['url'] = $form->values->url;
 
-        $languages = $this->database->table("languages")->where("default", null);
+        $languages = $this->database->table("languages")->where(array(
+            "default" => null,
+            "used" => 1,
+        ));
 
         foreach ($languages as $item) {
             $arr["url_" . $item->code] = $form->values->{'url_' . $item->code};
@@ -101,7 +107,11 @@ class InsertMenuControl extends Control
     {
         $template = $this->template;
         $template->menuId = $menuId;
-        $template->languages = $this->database->table("languages")->where("default", null);
+        $template->languages = $this->database->table("languages")->where(array(
+            "default" => null,
+            "used" => 1,
+        ));
+
         $template->setFile(__DIR__ . '/InsertMenuControl.latte');
 
         $template->render();
