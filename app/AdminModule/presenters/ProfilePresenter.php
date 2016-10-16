@@ -22,4 +22,10 @@ class ProfilePresenter extends BasePresenter
         $control = new \Caloriscz\Profile\ChangePasswordControl($this->database);
         return $control;
     }
+
+    protected function createComponentLanguageSelectorForAdmin()
+    {
+        $control = new \Caloriscz\Settings\Language\LanguageSelectorForAdminControl($this->database);
+        return $control;
+    }
 }
