@@ -11,7 +11,7 @@ use Nette,
 class Authenticator extends Nette\Object implements Security\IAuthenticator
 {
 
-    /** @var Nette\Database\Context */
+    /** @var \Nette\Database\Context */
     private $database;
 
     public function __construct(Nette\Database\Context $database)

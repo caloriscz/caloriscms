@@ -15,7 +15,7 @@ namespace App\Model;
 class Menu
 {
 
-    /** @var Nette\Database\Context */
+    /** @var \Nette\Database\Context */
     private $database;
 
     public function __construct(\Nette\Database\Context $database)
