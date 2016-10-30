@@ -29,6 +29,7 @@
         "h4kuna/ares": "dev-master",
         "ublaboo/datagrid": "dev-master",
         "ezyang/htmlpurifier": "v4.7.0",
-        "studio-42/elfinder": "2.1.16"
+        "studio-42/elfinder": "2.1.16",
+        "nette/tester": "dev-master"
     }
 }
