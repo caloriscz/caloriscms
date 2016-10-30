@@ -8,6 +8,7 @@ class EditControl extends Control
 
     /** @var \Nette\Database\Context */
     public $database;
+    public $onSave;
 
     public function __construct(\Nette\Database\Context $database)
     {
@@ -56,8 +57,6 @@ class EditControl extends Control
             ->update(array(
                 "name" => $form->values->name,
             ));
-
-        $this->redirect(this);
     }
 
     public function render()
@@ -67,5 +66,10 @@ class EditControl extends Control
 
         $template->render();
     }
+}
 
+interface IEditControlFactory
+{
+    /** @return \Caloriscz\Profile\Admin\EditControl */
+    function create();
 }

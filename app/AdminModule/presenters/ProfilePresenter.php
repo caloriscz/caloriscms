@@ -11,9 +11,16 @@ use Nette,
  */
 class ProfilePresenter extends BasePresenter
 {
+    /** @var \Caloriscz\Profile\Admin\IEditControlFactory @inject */
+    public $editControlFactory;
+
     protected function createComponentEditProfile()
     {
-        $control = new \Caloriscz\Profile\Admin\EditControl($this->database);
+        $control = $this->editControlFactory->create();
+        $control->onSave[] = function (EditControl $control, $category) {
+            $this->redirect('this');
+        };
+
         return $control;
     }
 
