@@ -9,7 +9,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{block #titles}{/block} | Caloris Admin</title>
-    <link href="{$baseUri}/css/back.css" rel="stylesheet"/>
+    <link href="{$baseUri}/css/back.css" rel="stylesheet">
+	<link rel="stylesheet" href="{$baseUri}/css/jquery-ui.min.css">
+    <link rel="stylesheet" href="{$baseUri}/css/elfinder.min.css">
     <script src="/js/Chart.min.js"></script>
 </head>
 <body>
@@ -73,10 +75,49 @@
 {/if}
 
 <script src="{$baseUri}/js/kea-back.js"></script>
+<script src="{$baseUri}/js/elfinder.min.js"></script>
+<script src="{$baseUri}/js/summernote-ext-elfinder.js"></script>
+<script src="http://code.jquery.com/ui/1.12.0/jquery-ui.min.js" integrity="sha256-eGE6blurk5sHj+rmkfsGYeKyZx3M4bG+ZlFyA7Kns7E=" crossorigin="anonymous"></script>
 <script>
     $('#myModal').on('shown.bs.modal', function () {
         $('#frm-insertForm-title').focus();
     })
+	
+	
+    function elfinderDialog() {
+        var fm = $('<div/>').dialogelfinder({
+            url: '/vendor/studio-42/elfinder/php/connector.php?path=33',
+            lang: 'en',
+            startPath: '/images',
+            width: 840,
+            height: 450,
+            destroyOnClose: true,
+            getFileCallback: function (files, fm) {
+                console.log(files);
+                $('.summernote').summernote('editor.insertImage', files.url);
+            },
+            commandsOptions: {
+                getfile: {
+                    oncomplete: 'close',
+                    folders: false
+                }
+            }
+
+        }).dialogelfinder('instance');
+    }
+    $(function () {
+        $('.summernote').summernote({
+            height: 200,
+            tabsize: 2,
+            toolbar: [
+                ['style', ['bold', 'italic', 'underline', 'clear', 'codeview']],
+                ['insert', ['elfinder']]
+            ],
+            onImageUpload: function (files, editor, welEditable) {
+                sendFile(files[0], editor, welEditable);
+            }
+        });
+    });
 </script>
 </body>
 </html>

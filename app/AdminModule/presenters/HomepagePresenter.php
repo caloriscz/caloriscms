@@ -45,4 +45,10 @@ class HomepagePresenter extends BasePresenter
         }
     }
 
+    protected function createComponentElfinder()
+    {
+        $control = new \Caloriscz\Page\Editor\ElfinderControl;
+        return $control;
+    }
+
 }
