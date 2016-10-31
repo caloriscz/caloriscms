@@ -20,8 +20,6 @@ session:
 	expiration: 14 days
 	autostart: true
 	savePath: "%tempDir%/sessions"
-mailer:
-	smtp: true
 routing:
 	debugger: true
 container:
