@@ -7,7 +7,7 @@ use Nette\Application\UI\Control;
 class SignUpControl extends Control
 {
 
-    /** @var Nette\Database\Context */
+    /** @var \Nette\Database\Context */
     public $database;
 
     public function __construct(\Nette\Database\Context $database)
@@ -228,14 +228,14 @@ class SignUpControl extends Control
                     ->addTo($form->values->email)
                     ->setHTMLBody($email_signup_confirmbyamin);
 
-                $this->mailer->send($mail);
+                $this->presenter->mailer->send($mail);
 
                 $mailA = new \Nette\Mail\Message;
                 $mailA->setFrom($this->presenter->template->settings['contacts:email:hq'])
                     ->addTo($this->presenter->template->settings['contacts:email:hq'])
                     ->setHTMLBody($email_signup_adminconfirm);
 
-                $this->mailer->send($mailA);
+                $this->presenter->mailer->send($mailA);
                 $this->flashMessage('Registrace byla dokončena. Po ověření Vám bude zaslán e-mail, po kterém se můžete přihlásit', 'note');
             } else {
                 $email_signup_member = $latte->renderToString($helpdesk_signup_member->body, $params);
