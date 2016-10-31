@@ -1,6 +1,6 @@
 <?php
 
-namespace Caloriscz\Page;
+namespace Caloriscz\Page\Editor;
 
 use Nette\Application\UI\Control;
 
@@ -44,7 +44,6 @@ class EditorControl extends Control
         $form->addHidden("docs_id");
         $form->addTextArea("document")
             ->setAttribute("class", "form-control")
-            ->setHtmlId('wysiwyg-page')
             ->setDisabled($enabled);
 
         if ($l == '') {

@@ -77,21 +77,28 @@
 <script src="{$baseUri}/js/kea-back.js"></script>
 <script src="{$baseUri}/js/elfinder.min.js"></script>
 <script src="{$baseUri}/js/summernote-ext-elfinder.js"></script>
-<script src="http://code.jquery.com/ui/1.12.0/jquery-ui.min.js" integrity="sha256-eGE6blurk5sHj+rmkfsGYeKyZx3M4bG+ZlFyA7Kns7E=" crossorigin="anonymous"></script>
+<script src="{$baseUri}/js/elfinder.cs.js"></script>
+<script src="http://code.jquery.com/ui/1.12.0/jquery-ui.min.js"
+        integrity="sha256-eGE6blurk5sHj+rmkfsGYeKyZx3M4bG+ZlFyA7Kns7E=" crossorigin="anonymous"></script>
+<script src="{$baseUri}/js/caloris-admin.js"></script>
 <script>
-    $('#myModal').on('shown.bs.modal', function () {
-        $('#frm-insertForm-title').focus();
-    })
-	
-	
     function elfinderDialog() {
         var fm = $('<div/>').dialogelfinder({
-            url: '/vendor/studio-42/elfinder/php/connector.php?path=33',
-            lang: 'en',
+            url: '/admin?do=elfinder-options&path=' + {$presenter->getParameter('id')},
+            lang: 'cs',
+            uiOptions: {
+                toolbar: [
+                    ['view']
+                ],
+            },
+            contextmenu: {
+                navbar: ['info']
+            },
             startPath: '/images',
             width: 840,
             height: 450,
             destroyOnClose: true,
+            dragUploadAllow: false,
             getFileCallback: function (files, fm) {
                 console.log(files);
                 $('.summernote').summernote('editor.insertImage', files.url);
@@ -101,17 +108,30 @@
                     oncomplete: 'close',
                     folders: false
                 }
+            },
+            handlers: {
+                upload: function (e, instance) {
+                    console.log("this is here");
+                }
             }
 
         }).dialogelfinder('instance');
     }
+
     $(function () {
         $('.summernote').summernote({
-            height: 200,
+            width: "99%",
+            height: 500,
             tabsize: 2,
             toolbar: [
-                ['style', ['bold', 'italic', 'underline', 'clear', 'codeview']],
-                ['insert', ['elfinder']]
+                ['style', ['bold', 'italic', 'underline', 'clear']],
+                ['font', ['strikethrough', 'superscript', 'subscript']],
+                ['fontsize', ['fontsize']],
+                ['color', ['color']],
+                ['para', ['ul', 'ol', 'paragraph']],
+                ['height', ['height']],
+                ['code', ['codeview']],
+                ['insert', ['picture', 'link', 'elfinder']]
             ],
             onImageUpload: function (files, editor, welEditable) {
                 sendFile(files[0], editor, welEditable);
