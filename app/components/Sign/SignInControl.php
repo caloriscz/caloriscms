@@ -66,6 +66,13 @@ class SignInControl extends Control
                     $this->database->table("users")->get($this->presenter->user->getId())->update(array("date_visited" => date("Y-m-d H:i:s")));
                 }
 
+            if ($form->values->type == 'admin') {
+                $typeUrl = 'Admin';
+            } else {
+                $typeUrl = 'Front';
+            }
+
+
                 $typeUrl = 'Admin';
             } else {
                 $typeUrl = 'Front';
