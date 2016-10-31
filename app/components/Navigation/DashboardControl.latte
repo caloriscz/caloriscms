@@ -1,0 +1,99 @@
+<div class="col-lg-3 col-md-6">
+    {if $settings['store:enabled'] && $settings['store_admin_dashboard']}
+        <div class="panel panel-success">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-xs-3">
+                        <i class="fa fa-gift fa-5x"></i>
+                    </div>
+                    <div class="col-xs-9 text-right">
+                        <div class="huge">{$orders}</div>
+                        <div>{_dictionary.main.Orders}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-footer">
+                <span class="pull-left"><a href="/admin/store/orders">{_dictionary.main.View}</a></span>
+                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-xs-3">
+                        <i class="fa fa-shopping-cart fa-5x"></i>
+                    </div>
+                    <div class="col-xs-9 text-right">
+                        <div class="huge">{$carts}</div>
+                        <div>Zboží v košíku</div>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-footer">
+                <span class="pull-left"><a href="/admin/store/orders"></a></span>
+                <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    {/if}
+</div>
+<div class="col-lg-9 col-md-6">
+    {if $settings['store:enabled'] && $settings['store_admin_dashboard']}
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <i class="fa fa-bar-chart-o fa-fw"></i> {_dictionary.main.OrderStatistics}: {$statsLabel}
+                <div class="pull-right">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
+                            {_dictionary.main.ChangeStatistics}
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu pull-right" role="menu">
+                            <li><a href="{plink this, stats => 'td'}">{_dictionary.main.Turnovers}
+                                    - {_dictionary.main.daily}</a></li>
+                            <li><a href="{plink this, stats => 'tm'}">{_dictionary.main.Turnovers}
+                                    - {_dictionary.main.monthly}</a></li>
+                            <li><a href="{plink this, stats => 'ad'}">{_dictionary.main.Sales}
+                                    - {_dictionary.main.daily}</a></li>
+                            <li><a href="{plink this, stats => 'am'}">{_dictionary.main.Sales}
+                                    - {_dictionary.main.monthly}</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel-body">
+                <div>
+                    <canvas id="myChart" height="70">1</canvas>
+                </div>
+            </div>
+        </div>
+    {/if}
+</div>
+</div>
+
+<script>
+    var options = {
+        maintainAspectRatio: true,
+        responsive: true
+    };
+
+    var arrayTitles = [{$turnoverDays|noescape}];
+
+    var riceData = {
+        labels: arrayTitles,
+        datasets: [
+            {
+                fillColor: "rgba(66,202,139,0.5)",
+                strokeColor: "rgba(66,202,139,1)",
+                pointColor: "#fff",
+                pointStrokeColor: "#9DB86D",
+                data: [{$turnoverValues|noescape}]
+            }
+        ]
+    }
+
+    var rice = document.getElementById('myChart').getContext('2d');
+    new Chart(rice).Line(riceData, options);
+</script>

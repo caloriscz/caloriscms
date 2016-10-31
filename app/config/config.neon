@@ -35,6 +35,7 @@ services:
 	- App\RouterFactory
 	- Model\SlugManager
 	- Caloriscz\Profile\Admin\IEditControlFactory
+	dashboard: Caloriscz\Navigation\IDashboardControlFactory
 	router: @App\RouterFactory::createRouter
 
 extensions:
