@@ -14,12 +14,6 @@ matrix:
     - php: hhvm
 
   exclude:
-    - php: 5.3.3
-      env: TESTER_PHP_BIN="hhvm"
-
-    - php: 5.4
-      env: TESTER_PHP_BIN="hhvm"
-
     - php: 5.5
       env: TESTER_PHP_BIN="hhvm"
 
@@ -38,3 +32,9 @@ install:
 before_script:
   - mysql -u root -e 'CREATE DATABASE testbase;'
   - mysql -u root testbase < tests/testbase.sql
+script:
+  - ./vendor/bin/tester -p $TESTER_PHP_BIN -c ./tests/php.ini -s ./tests/
+
+after_failure:
+  # Vytiskne obsah souborů *.actual
+  - for i in $(find ./tests -name \*.actual); do echo "--- $i"; cat $i; echo; echo; done
