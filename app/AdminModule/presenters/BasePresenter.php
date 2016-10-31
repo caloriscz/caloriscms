@@ -181,7 +181,7 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
 
     protected function createComponentEditor()
     {
-        $control = new \Caloriscz\Page\EditorControl($this->database);
+        $control = new \Caloriscz\Page\Editor\EditorControl($this->database);
         return $control;
     }
 
