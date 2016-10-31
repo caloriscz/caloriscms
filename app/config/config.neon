@@ -22,11 +22,6 @@ session:
 	savePath: "%tempDir%/sessions"
 mailer:
 	smtp: true
-	host: ''
-	username: ''
-	password: ''
-	secure: 'tls'
-	port: 587
 routing:
 	debugger: true
 container:
