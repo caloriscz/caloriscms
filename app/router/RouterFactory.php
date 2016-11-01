@@ -49,13 +49,6 @@ class RouterFactory
             'id' => NULL,
         ));
 
-        $router[] = new Route('admin/store/[<locale=cs cs|en>/]<presenter>/<action>/<id>', array(
-            'module' => 'AdminStore',
-            'presenter' => 'Homepage',
-            'action' => 'default',
-            'id' => NULL,
-        ));
-
         $router[] = new Route('admin/[<locale=cs cs|en>/]<presenter>/<action>/<id>', array(
             'module' => 'Admin',
             'presenter' => 'Homepage',
