@@ -20,35 +20,8 @@ class MediaPresenter extends BasePresenter
 
     protected function createComponentInsertMediaForm()
     {
-<<<<<<< HEAD
         $control = new \Caloriscz\Media\MediaForms\InsertMediaControl($this->database);
         return $control;
-=======
-        $form = $this->baseFormFactory->createUI();
-        $form->addHidden('category');
-        $form->addHidden('type');
-        $form->addText('title', 'dictionary.main.Title');
-        $form->addTextarea("preview", "dictionary.main.Description")
-            ->setAttribute("class", "form-control");
-
-        if ($this->getParameter("type") == 6 && $this->getParameter('id') == false) {
-            $category = 4;
-        } elseif ($this->getParameter("type") == 8 && $this->getParameter('id') == false) {
-            $category = 5;
-        } else {
-            $category = $this->getParameter('id');
-        }
-
-        $form->setDefaults(array(
-            "category" => $category,
-            "type" => $this->getParameter("type")
-        ));
-
-        $form->addSubmit('submitm', 'dictionary.main.Insert');
-
-        $form->onSuccess[] = $this->insertFormSucceeded;
-        return $form;
->>>>>>> master
     }
 
     protected function createComponentEditFile()
@@ -85,18 +58,6 @@ class MediaPresenter extends BasePresenter
             "id" => $imageDb->pages_id,
             "type" => $this->getParameter("type"),
         ));
-    }
-    
-/**
-     * Delete page
-     */
-    function handleDeletePage($id)
-    {
-        $doc = new Model\Document($this->database);
-        $doc->delete($id);
-        Model\IO::removeDirectory(APP_DIR . '/media/' . $id);
-
-        $this->redirect(":Admin:Media:default", array("id" => null, "type" => $this->getParameter("type")));
     }
 
     /**

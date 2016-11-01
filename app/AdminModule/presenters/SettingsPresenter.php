@@ -34,30 +34,7 @@ class SettingsPresenter extends BasePresenter
         $control = new \Caloriscz\Settings\Currency\InsertCurrencyControl($this->database);
         return $control;
     }
-<<<<<<< HEAD
     
-=======
-
-    function insertCurrencySucceeded(\Nette\Forms\BootstrapUIForm $form)
-    {
-         $exists = $this->database->table("currencies")->where("title = ? OR code = ? OR symbol = ?",
-            $form->values->title, $form->values->code, $form->values->symbol);
-
-        if ($exists->count() > 0) {
-            $this->presenter->flashMessage("Měna, symbol nebo kód už je v seznamu", "error");
-            $this->presenter->redirect(this);
-        } else {
-            $this->database->table("currencies")->insert(array(
-                "title" => $form->values->title,
-                "code" => $form->values->code,
-                "symbol" => $form->values->symbol,
-            ));
-
-            $this->presenter->redirect(this);
-        }
-    }
-
->>>>>>> master
     function handleInstall($id)
     {
         $default = $this->database->table("languages")->where("default = 1");
