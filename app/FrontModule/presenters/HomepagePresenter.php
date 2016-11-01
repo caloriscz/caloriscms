@@ -11,6 +11,12 @@ use Nette,
 class HomepagePresenter extends BasePresenter
 {
 
+    protected function createComponentProduct()
+    {
+        $control = new \Caloriscz\Store\Product\ProductControl($this->database);
+        return $control;
+    }
+
     public function renderDefault()
     {
         $filter = new \App\Model\Store\Filter($this->database);

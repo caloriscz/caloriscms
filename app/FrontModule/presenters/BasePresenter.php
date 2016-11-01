@@ -338,12 +338,6 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
         $control = new \Caloriscz\Menus\MenuControl($this->database);
         return $control;
     }
-	
-    protected function createComponentProduct()
-    {
-        $control = new \ProductControl($this->database);
-        return $control;
-    }
 
     /* Store components  ----------------------------------------------------------------------------------------------- */
     /* enable by uncomment this part
