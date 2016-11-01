@@ -18,7 +18,11 @@ class GalleryPresenter extends BasePresenter
 
     public function renderDefault()
     {
+<<<<<<< HEAD
 		$cols = array(
+=======
+        $cols = array(
+>>>>>>> master
             "pages_types_id" => 6,
             "pages_id" => $this->getParameter("page_id"),
         );
