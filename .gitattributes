@@ -1,0 +1,2 @@
+$ cat .gitattributes
+*.latte linguist-language=PHP
