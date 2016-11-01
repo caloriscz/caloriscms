@@ -20,106 +20,36 @@ class ProfilePresenter extends \App\FrontModule\Presenters\BasePresenter
         }
     }
 
-    /**
-     * Form: User fills in e-mail address to send e-mail with a password generator link
-     */
-    function createComponentChangePortraitForm()
+    protected function createComponentProfileChangePortrait()
     {
-        $form = $this->baseFormFactory->createUI();
-        $form->addUpload("the_file", "Vyberte obrázek (nepovinné)");
-        $form->addSubmit('submitm', 'dictionary.main.Insert');
-        $form->onSuccess[] = $this->changePortraitFormSucceeded;
-
-        return $form;
+        $control = new \Caloriscz\Profile\ChangePortraitControl($this->database);
+        return $control;
     }
 
-    function changePortraitFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
+    protected function createComponentProfileChangePassword()
     {
-        $membersDb = $this->database->table("users")->where(array("id" => $this->user->getId()));
-
-        if ($membersDb->count() > 0) {
-            $uid = $membersDb->fetch()->id;
-
-            \App\Model\IO::directoryMake(substr(__DIR__, 0, -27) . '/www/portraits/', 0755);
-
-            if (file_exists(substr(__DIR__, 0, -27) . '/www/images/profiles/portrait-' . $uid . '.jpg')) {
-                \App\Model\IO::remove(substr(__DIR__, 0, -27) . '/www/images/profiles/portrait-' . $uid . '.jpg');
-                \App\Model\IO::upload(substr(__DIR__, 0, -27) . '/www/images/profiles', 'portrait-' . $uid . '.jpg', 0644);
-            } else {
-                \App\Model\IO::upload(substr(__DIR__, 0, -27) . '/www/images/profiles', 'portrait-' . $uid . '.jpg', 0644);
-            }
-        }
-
-        $this->redirect(":Front:Profile:image");
+        $control = new \Caloriscz\Profile\ChangePasswordControl($this->database);
+        return $control;
     }
 
-    /**
-     * Form: User fills in e-mail address to send e-mail with a password generator link
-     * @return string
-     */
-    function createComponentChangePasswordForm()
+    protected function createComponentProfileEdit()
     {
-        $form = $this->baseFormFactory->createUI();
-        $form->addPassword("password1", "dicitionary.main.Password");
-        $form->addPassword("password2", "Znovu napište heslo");
-        $form->addSubmit('name', 'dictionary.main.Change');
-
-        $form->onSuccess[] = $this->changePasswordFormSucceeded;
-        return $form;
+        $control = new \Caloriscz\Profile\EditControl($this->database);
+        return $control;
     }
 
-    function changePasswordFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
+    protected function createComponentProfileInsertAddress()
     {
-        $ppwd = $form->values->password1;
-        $ppwd2 = $form->values->password2;
-
-        $passwordEncrypted = \Nette\Security\Passwords::hash($ppwd);
-
-        if (strcasecmp($ppwd, $ppwd2) != 0) {
-            $this->flashMessage('Hesla se neshodují');
-        }
-
-        $this->database->table("users")->where(array(
-            "id" => $this->user->getId(),
-        ))->update(array(
-            "password" => $passwordEncrypted,
-        ));
-
-        setcookie("calpwd", $passwordEncrypted, time() + time() + 60 * 60 * 24 * 30, "/");
-
-        $this->redirect(':Front:Profile:heslo');
+        $control = new \Caloriscz\Profile\InsertAddressControl($this->database);
+        return $control;
     }
 
-    /**
-     * Edit your profile
-     */
-    function createComponentEditForm()
+    protected function createComponentProfileEditAddress()
     {
-        $form = $this->baseFormFactory->createUI();
-        $form->addGroup("Osobní údaje");
-        $form->addText("username", "Uživatel")
-            ->setAttribute("style", "border: 0; font-size: 1.5em;")
-            ->setDisabled();
-        $form->addRadioList('sex', 'Pohlaví', array(
-            1 => "\xC2\xA0" . 'žena',
-            2 => "\xC2\xA0" . 'muž',
-        ))->setAttribute("class", "checkboxlistChoose");
-        $form->addGroup("Firemní údaje");
-        $form->addText("ic", "dictionary.main.VatId");
-        $form->addText("company", "dictionary.main.Company");
-
-        $form->setDefaults(array(
-            "name" => $this->template->member->name,
-            "username" => $this->template->member->username,
-        ));
-
-        $form->addSubmit("submit", "dictionary.main.Save");
-        $form->onSuccess[] = $this->editFormSucceeded;
-        return $form;
-    }
-
-    function editFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
-    {
+<<<<<<< HEAD
+        $control = new \Caloriscz\Profile\EditAddressControl($this->database);
+        return $control;
+=======
         $this->database->table("users")->where(array(
             "id" => $this->user->getId()
         ))
@@ -223,6 +153,7 @@ class ProfilePresenter extends \App\FrontModule\Presenters\BasePresenter
         ));
 
         $this->redirect(":Front:Profile:address", array("id" => $form->values->id));
+>>>>>>> master
     }
 
     function handleDeletePortrait()

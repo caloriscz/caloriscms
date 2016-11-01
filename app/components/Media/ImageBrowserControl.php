@@ -7,7 +7,7 @@ use Nette\Application\UI\Control;
 class ImageBrowserControl extends Control
 {
 
-    /** @var Nette\Database\Context */
+    /** @var \Nette\Database\Context */
     public $database;
 
     public function __construct(\Nette\Database\Context $database)
@@ -28,6 +28,22 @@ class ImageBrowserControl extends Control
         \App\Model\IO::remove(APP_DIR . '/media/' . $id . '/tn/' . $imageDb->name);
 
         $this->redirect(this, array("id" => $this->presenter->getParameter("name"),));
+    }
+
+    /**
+     * Set image as main  image
+     */
+    function handleSetMain()
+    {
+        // Set all other media images in this folder as 0
+        $this->database->table("media")->where(array("pages_id" => $this->getParameter("id"), "file_type" => 1))
+            ->update(array("main_file" => 0));
+
+        // Set chosen one as the main one
+        $this->database->table("media")->get($this->getParameter("image"))->update(array("main_file" => 1));
+
+
+        $this->presenter->redirect(this, array("id" => $this->getParameter("id"), "image" => $this->getParameter("image")));
     }
 
     public function render()

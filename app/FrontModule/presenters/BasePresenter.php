@@ -249,6 +249,12 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
         return $control;
     }
 
+    protected function createComponentNavigation()
+    {
+        $control = new \Caloriscz\Navigation\NavigationControl($this->database);
+        return $control;
+    }
+
     protected function createComponentLinkList()
     {
         $control = new \Caloriscz\Links\LinkListControl($this->database);
@@ -279,12 +285,6 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
         return $control;
     }
 
-    protected function createComponentNavbarMenu()
-    {
-        $control = new \Caloriscz\Menus\NavbarMenuControl($this->database);
-        return $control;
-    }
-
     protected function createComponentBlogPreview()
     {
         $control = new \BlogPreviewControl($this->database);
@@ -297,9 +297,9 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
         return $control;
     }
 
-    protected function createComponentSearch()
+    protected function createComponentAdvancedSearch()
     {
-        $control = new \Caloriscz\Product\SearchControl($this->database);
+        $control = new \Caloriscz\Page\Filters\AdvancedSearchControl($this->database);
         return $control;
     }
 
@@ -338,6 +338,12 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
         $control = new \Caloriscz\Menus\MenuControl($this->database);
         return $control;
     }
+	
+    protected function createComponentProduct()
+    {
+        $control = new \ProductControl($this->database);
+        return $control;
+    }
 
     /* Store components  ----------------------------------------------------------------------------------------------- */
     /* enable by uncomment this part
@@ -350,12 +356,6 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
     protected function createComponentCartList()
     {
         $control = new \Caloriscz\Cart\ListControl($this->database);
-        return $control;
-    }
-
-    protected function createComponentCartBox()
-    {
-        $control = new \Caloriscz\Cart\BoxControl($this->database);
         return $control;
     }
 */

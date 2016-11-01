@@ -1,6 +1,6 @@
 {foreach $images as $item}
     <div class="col-sm-6 col-md-3 col-lg-2">
-        <div class="thumbnail" style="height: 250px;">
+        <div class="thumbnail" style="height: 250px;{if $item->main_file} border: 1px solid green;{/if}">
             <a href="/media/{$item->pages_id}/{$item->name}">
                 <img src="/media/{$item->pages_id}/tn/{$item->name}" alt="{$item->name}" style="max-height: 160px;">
             </a>
@@ -9,10 +9,28 @@
                     <small>{$item->name|truncate:28}</small>
                 </p>
                 <p>{$item->description}</p>
-				<p><a href="{plink ':AdminStore:Product:imagesDetail', id => $item->pages_id, image => $item->id}">{_dictionary.main.Edit}</a></p>
-                <p><a href="{link delete, id => $catalogue->id, name => $item->id}" class="btn" role="button"
-                      onclick="return confirm('Opravdu smazat?')">
-                        <i class="fa fa-times font-red"></i></a>
+                <div class="row">
+                    <div class="col-md-2">
+                        <a href="{link delete, id => $catalogue->id, name => $item->id}" class="btn btn-danger btn-xs"
+                           onclick="return confirm('Opravdu smazat?')">
+                            <i class="fa fa-times"></i>
+                        </a>
+                    </div>
+                    <div class="col-md-3">
+                        <a href="{plink ':Admin:Media:image', id => $item->id}" class="btn btn-default btn-xs">
+                            {_dictionary.main.Edit}
+                        </a>
+                    </div>
+                    <div class="col-md-7">
+                        {if $item->main_file}
+                            <span style="color: #008800;">titulní obrázek</span>
+                            {else}
+                        <a href="{link 'setMain!', id => $item->pages_id, image => $item->id}" class="btn btn-default btn-xs" title="nastavit jako titulní obrázek">
+                            <i class="fa fa-thumb-tack"></i> titulní
+                        </a>
+                        {/if}
+                    </div>
+                </div>
             </div>
         </div>
     </div>

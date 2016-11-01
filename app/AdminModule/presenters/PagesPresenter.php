@@ -15,164 +15,54 @@ class PagesPresenter extends BasePresenter
         $this->database = $database;
     }
 
-    /**
-     * Edit page content
-     */
-    function createComponentEditSnippetForm()
+    public function startup()
     {
-        $form = $this->baseFormFactory->createPH();
-        $l = $this->presenter->getParameter("l");
-        $snippet = $this->database->table("snippets")->get($this->getParameter("snippet"));
+        parent::startup();
 
-        $form->addHidden("page_id");
-        $form->addHidden("snippet_id");
-        $form->addHidden("pages_id");
-        $form->addHidden("l");
-        $form->addTextArea("content")
-            ->setAttribute("class", "form-control")
-            ->setAttribute("height", "250px")
-            ->setHtmlId('wysiwyg-sm');
-
-        if ($l == '') {
-            $arr["content"] = $snippet->content;
-        } else {
-            $arr["content"] = $snippet->{'content_' . $l};
-            $arr["l"] = $this->getParameter("l");
-        }
-
-        $arr["page_id"] = $this->getParameter("id");
-        $arr["snippet_id"] = $this->getParameter("snippet");
-
-
-        $form->setDefaults($arr);
-
-        $form->onSuccess[] = $this->editSnippetFormSucceeded;
-        $form->addSubmit("submitm", "dictionary.main.Save")
-            ->setAttribute("class", "btn btn-success")
-            ->setHtmlId('formxins');
-
-        return $form;
+        $this->template->type = $this->getParameter("type");
     }
 
-    function editSnippetFormSucceeded(\Nette\Forms\BootstrapPHForm $form)
+    protected function createComponentEditSnippetForm()
     {
-        $content = $form->getHttpData($form::DATA_TEXT, 'content');
-
-        if ($form->values->l != '') {
-            $langSuffix = '_' . $form->values->l;
-        }
-
-        $this->database->table("snippets")->get($form->values->snippet_id)->update(array(
-            "content" . $langSuffix => $content,
-        ));
-
-        $this->redirect(":Admin:Pages:snippetsDetail", array(
-            "id" => $form->values->page_id,
-            "snippet" => $form->values->snippet_id,
-            "l" => $form->values->l
-        ));
+        $control = new \Caloriscz\Page\Snippets\EditFormControl($this->database);
+        return $control;
     }
 
-    /**
-     * Edit page content
-     */
-    function createComponentInsertForm()
+    protected function createComponentInsertSnippetForm()
     {
-        $form = $this->baseFormFactory->createUI();
-        $form->addHidden("id");
-        $form->addText("title", "dictionary.main.Title")
-            ->setRequired($this->translator->translate('messages.pages.NameThePage'));
-
-        $form->setDefaults(array(
-            "section" => $this->getParameter('id'),
-        ));
-
-        $form->addSubmit("submit", "dictionary.main.Create")
-            ->setHtmlId('formxins');
-
-        $form->onSuccess[] = $this->insertFormSucceeded;
-
-        return $form;
+        $control = new \Caloriscz\Page\Snippets\InsertFormControl($this->database);
+        return $control;
     }
 
-    function insertFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
+    protected function createComponentPageFilterRelated()
     {
-        $doc = new Model\Document($this->database);
-        $doc->setType(1);
-        $doc->setTitle($form->values->title);
-        $page = $doc->create($this->user->getId());
-        Model\IO::directoryMake(substr(APP_DIR, 0, -4) . '/www/media/' . $page, 0755);
-
-        $this->redirect(":Admin:Pages:detail", array("id" => $page));
+        $control = new \Caloriscz\Page\Related\FilterFormControl($this->database);
+        return $control;
     }
 
-    /**
-     * Search related
-     */
-    protected function createComponentSearchRelatedForm()
+    protected function createComponentInsertPageForm()
     {
-        $form = $this->baseFormFactory->createUI();
-        $form->addHidden('id');
-        $form->addText('src', 'dictionary.main.Title');
-        $form->addSubmit('submitm', 'dictionary.main.Insert');
-
-        $form->setDefaults(array(
-            "id" => $this->getParameter("id"),
-        ));
-
-        $form->onSuccess[] = $this->searchRelatedFormSucceeded;
-        return $form;
+        $control = new \Caloriscz\Page\PageForms\InsertFormControl($this->database);
+        return $control;
     }
 
-    public function searchRelatedFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
+    protected function createComponentInsertBlogForm()
     {
-        $this->redirect(":Admin:Pages:detailRelated", array(
-            "id" => $form->values->id,
-            "src" => $form->values->src,
-        ));
+        $control = new \Caloriscz\Blog\BlogForms\InsertFormControl($this->database);
+        return $control;
     }
 
-    /**
-     * Insert page content
-     */
-    function createComponentInsertSnippetForm()
+    protected function createComponentInsertEventPage()
     {
-        $form = $this->baseFormFactory->createUI();
-        $form->addHidden("id")
-            ->setAttribute("class", "form-control");
-        $form->addText("title", "dictionary.main.Title");
-
-        $form->setDefaults(array(
-            "id" => $this->getParameter('id'),
-        ));
-
-        $form->addSubmit("submit", "dictionary.main.Create")
-            ->setHtmlId('formxins');
-
-        $form->onSuccess[] = $this->insertSnippetFormSucceeded;
-        $form->onValidate[] = $this->permissionValidated;
-
-        return $form;
+        $control = new \Caloriscz\Events\InsertEventPageControl($this->database);
+        return $control;
     }
 
-    function insertSnippetFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
+    protected function createComponentImageEditForm()
     {
-        $this->database->table("snippets")->insert(array(
-            "keyword" => $form->values->title,
-            "pages_id" => $form->values->id,
-        ));
-
-        $this->redirect(":Admin:Pages:snippets", array("id" => $form->values->id));
+        $control = new \Caloriscz\Media\MediaForms\ImageEditFormControl($this->database);
+        return $control;
     }
-
-    function permissionValidated(\Nette\Forms\BootstrapUIForm $form)
-    {
-        if ($this->template->member->users_roles->pages_edit == 0) {
-            $this->flashMessage("Nemáte oprávnění k této akci", "error");
-            $this->redirect(this);
-        }
-    }
-
 
     function handleChangeState($id, $public)
     {
@@ -254,10 +144,21 @@ class PagesPresenter extends BasePresenter
 
     public function renderDefault()
     {
-        $this->template->pages = $this->database->table("pages")->where(array("pages_types_id" => array(0, 1)))->order("title");
+        if ($this->template->type < 2) {
+            $arr = array(0, 1);
+        } else {
+            $arr = $this->template->type;
+        }
+
+        $this->template->pages = $this->database->table("pages")->where(array("pages_types_id" => $arr))->order("title");
     }
 
     public function renderDetail()
+    {
+        $this->template->pages = $this->database->table("pages")->get($this->getParameter("id"));
+    }
+
+    public function renderDetailImages()
     {
         $this->template->pages = $this->database->table("pages")->get($this->getParameter("id"));
     }
@@ -267,11 +168,9 @@ class PagesPresenter extends BasePresenter
         $this->template->pages = $this->database->table("pages")->get($this->getParameter("id"));
     }
 
-    public function renderDetailImages()
+    public function renderImagesDetail()
     {
-        $this->template->catalogue = $this->database->table("pages")->get($this->getParameter("id"));
-        $this->template->images = $this->database->table("media")
-            ->where(array("pages_id" => $this->getParameter("id"), "file_type" => 1));
+        $this->template->page = $this->database->table("pages")->get($this->getParameter("id"));
     }
 
     public function renderDetailFiles()

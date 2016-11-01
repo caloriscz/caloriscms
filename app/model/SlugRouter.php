@@ -98,6 +98,7 @@ class SlugRouter extends Nette\Object implements Nette\Application\IRouter
             $presenter = $row->presenter;
         } else {
             if (!empty($row->presenter)) {
+                echo "test";
                 $presenter = $row->presenter;
             } else {
                 $presenter = $row->pages_types->presenter;

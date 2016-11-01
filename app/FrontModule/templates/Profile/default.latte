@@ -14,7 +14,9 @@
                     <li><a n:href=":Front:Profile:image">{_store.profile.ProfileImage}</a></li>
                     <li><a n:href=":Front:Profile:password">{_store.profile.PasswordChange}</a></li>
                     <li><a n:href=":Front:Profile:addresses">{_dictionary.main.addresses|firstUpper}</a></li>
-                    <li><a n:href=":Front:Orders:default">{_dictionary.main.orders|firstUpper}</a></li>
+                    {if $settings['store:enabled']}
+                        <li><a href="/orders">{_dictionary.main.orders|firstUpper}</a></li>
+                    {/if}
                 </ul>
             </div>
         </div>
@@ -24,7 +26,7 @@
                 <br />
             {/foreach}
 
-            {control editForm}
+            {control profileEdit}
             <br />
             <p><span style="color: red;">*</span> {_store.forms.TheseItemsAreRequired}</p>
         </div>

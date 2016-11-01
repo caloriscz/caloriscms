@@ -18,8 +18,12 @@ class MediaPresenter extends BasePresenter
         $this->template->pageId = $this->getParameter("type");
     }
 
-    function createComponentInsertForm()
+    protected function createComponentInsertMediaForm()
     {
+<<<<<<< HEAD
+        $control = new \Caloriscz\Media\MediaForms\InsertMediaControl($this->database);
+        return $control;
+=======
         $form = $this->baseFormFactory->createUI();
         $form->addHidden('category');
         $form->addHidden('type');
@@ -44,176 +48,25 @@ class MediaPresenter extends BasePresenter
 
         $form->onSuccess[] = $this->insertFormSucceeded;
         return $form;
+>>>>>>> master
     }
 
-    function insertFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
+    protected function createComponentEditFile()
     {
-        $doc = new Model\Document($this->database);
-        $doc->setType($form->values->type);
-        $doc->setTitle($form->values->title);
-        $doc->setPreview($form->values->preview);
-        $page = $doc->create($this->user->getId(), $form->values->category);
-
-        Model\IO::directoryMake(APP_DIR . '/media/' . $page);
-
-        $this->redirect(":Admin:Media:default", array(
-            "id" => $form->values->category,
-            "type" => $form->values->type,
-        ));
+        $control = new \Caloriscz\Media\MediaForms\EditFileControl($this->database);
+        return $control;
     }
 
-
-    /**
-     * Image Upload
-     */
-    function createComponentUploadForm()
+    protected function createComponentUploadForm()
     {
-        $form = $this->baseFormFactory->createUI();
-        $form->addHidden('category');
-        $form->addUpload('the_file', 'Vložit obrázek:');
-        $form->addTextarea("description", "dictionary.main.Description")
-            ->setAttribute("class", "form-control");
-        $form->setDefaults(array(
-            "album" => $this->getParameter('id'),
-        ));
-        $form->addSubmit('send', 'dictionary.main.Send');
-
-        $form->onSuccess[] = $this->uploadFormSucceeded;
-        return $form;
-    }
-
-    function uploadFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
-    {
-        $album = $form->values->album;
-
-        $fileDirectory = APP_DIR . '/media/' . $album . '/';
-
-        if (strlen($_FILES["the_file"]["tmp_name"]) > 1) {
-            $imageExists = $this->database->table("media")->where(array(
-                'name' => $_FILES["the_file"]["name"],
-                'categories_id' => $form->values->album,
-            ));
-
-            if ($imageExists->count() == 0) {
-                $fileName = $fileDirectory . $_FILES["the_file"]["name"];
-                \App\Model\IO::remove($fileName);
-
-                copy($_FILES["the_file"]["tmp_name"], $fileName);
-                chmod($fileName, 0644);
-
-                $this->database->table("media")->insert(array(
-                    'name' => $_FILES["the_file"]["name"],
-                    'description' => $form->values->description,
-                    'date_created' => date("Y-m-d H:i:s"),
-                    'filesize' => filesize($fileName),
-                ));
-            }
-        }
-
-        $this->redirect(":Admin:Media:detail", array(
-            "id" => $form->values->album,
-        ));
-    }
-
-    /**
-     * Dropzone upload
-     */
-    function createComponentDropUploadForm()
-    {
-        $form = $this->baseFormFactory->createUI();
-        $form->getElementPrototype()->class = "form-horizontal dropzone";
-        $form->addHidden("pages_id");
-        $form->addUpload("file_upload")
-            ->setHtmlId('file_upload');
-        $form->setDefaults(array(
-            "pages_id" => $this->getParameter('id'),
-        ));
-
-        $form->onSuccess[] = $this->dropUploadFormSucceeded;
-        return $form;
-    }
-
-    function dropUploadFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
-    {
-        if (!empty($_FILES)) {
-            $ds = DIRECTORY_SEPARATOR;
-            $storeFolder = 'media/' . $form->values->pages_id;
-
-            Model\IO::directoryMake(APP_DIR . $ds . $storeFolder, 0755);
-
-            $tempFile = $_FILES['file']['tmp_name'];          //3             
-            $realFile = $_FILES['file']['name'];          //3             
-            $targetPath = APP_DIR . $ds . $storeFolder . $ds;  //4
-
-            $targetFile = $targetPath . $_FILES['file']['name'];  //5
-
-            move_uploaded_file($tempFile, $targetFile); //6
-            chmod($targetFile, 0644);
-            $fileSize = filesize($targetFile);
-            //$fileType = pathinfo($realFile, PATHINFO_EXTENSION);
-            //$fileTypeC = str_replace(array("doc", "docx", "xlsx", "xls"), array("word", "word", "excel", "excel"), $fileType);
-
-            $checkImage = $this->database->table("media")->where(array(
-                'name' => $realFile,
-                'pages_id' => $form->values->id,
-            ));
-
-            // Thumbnail for images
-            if (Model\IO::isImage($targetFile)) {
-                Model\IO::directoryMake(APP_DIR . $ds . $storeFolder . $ds . 'tn', 0755);
-
-                // thumbnails
-                $image = \Nette\Utils\Image::fromFile($targetFile);
-                $image->resize(400, 250, \Nette\Utils\Image::SHRINK_ONLY);
-                $image->sharpen();
-                $image->save(APP_DIR . '/media/' . $form->values->pages_id . '/tn/' . $realFile);
-                chmod(APP_DIR . '/media/' . $form->values->pages_id . '/tn/' . $realFile, 0644);
-            }
-
-            if ($checkImage->count() == 0) {
-                $this->database->table("media")->insert(array(
-                    'name' => $realFile,
-                    'pages_id' => $form->values->pages_id,
-                    'filesize' => $fileSize,
-                    'file_type' => 1,
-                    'date_created' => date("Y-m-d H:i:s"),
-                ));
-            } else {
-                echo "Nejsem reálný soubor";
-            }
-        }
-
-        exit();
+        $control = new \Caloriscz\Media\MediaForms\UploadFormControl($this->database);
+        return $control;
     }
 
     public function handleUpload($folder)
     {
         $fileUpload = new \Nette\Http\FileUpload($_FILES['uploadfile']);
         $this->upload->singleFileToDir($fileUpload, $folder);
-    }
-
-    function createComponentUploadImageJs()
-    {
-        $form = $this->baseFormFactory->createUI();
-        $form->onSuccess[] = $this->uploadImageJsFormSucceeded;
-        return $form;
-    }
-
-    function uploadImageJsFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
-    {
-
-        // todo peekay Finish ImageJsForm
-        $folder = '';
-
-        //$fileUpload = new \Nette\Http\FileUpload($_FILES['uploadfile']);
-        //$this->upload->singleFileToDir($fileUpload, $folder);
-
-        echo '{
-    "uploaded": 1,
-    "fileName": "foto.png",
-    "url": "http://demo.cz/foto.png"
-}';
-        exit();
     }
 
     /**
@@ -244,6 +97,25 @@ class MediaPresenter extends BasePresenter
         Model\IO::removeDirectory(APP_DIR . '/media/' . $id);
 
         $this->redirect(":Admin:Media:default", array("id" => null, "type" => $this->getParameter("type")));
+    }
+
+    /**
+     * Delete page
+     */
+    function handleDeletePage($id)
+    {
+        $page = new Model\Page($this->database);
+        $pages = $page->getChildren($id);
+        $pages[] = $id;
+
+        foreach ($pages as $item) {
+            echo 1;
+            $doc = new Model\Document($this->database);
+            $doc->delete($item);
+            Model\IO::removeDirectory(APP_DIR . '/media/' . $item);
+        }
+
+        $this->redirect(this, array("id" => null, "type" => $this->getParameter("type")));
     }
 
     /**
@@ -305,45 +177,6 @@ class MediaPresenter extends BasePresenter
         ));
     }
 
-    /**
-     * Edit file information
-     */
-    function createComponentEditFileForm()
-    {
-        $image = $this->database->table("media")->get($this->getParameter("id"));
-
-        $form = $this->baseFormFactory->createUI();
-        $form->addHidden('id');
-        $form->addText('title', 'dictionary.main.Title');
-        $form->addTextarea('description', "dictionary.main.Description")
-            ->setAttribute("style", "height: 200px;")
-            ->setAttribute("class", "form-control");
-        $form->setDefaults(array(
-            "id" => $image->id,
-            "title" => $image->title,
-            "description" => $image->description,
-        ));
-
-        $form->addSubmit('send', 'Uložit');
-
-        $form->onSuccess[] = $this->editFileFormSucceeded;
-        return $form;
-    }
-
-    function editFileFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
-    {
-        $this->database->table("media")
-            ->get($form->values->id)->update(array(
-                'title' => $form->values->title,
-                'description' => $form->values->description,
-            ));
-
-
-        $this->redirect(":Admin:Media:image", array(
-            "id" => $form->values->id,
-        ));
-    }
-
     public function renderDefault()
     {
         $idMedia = $this->template->settings['categories:id:media'];
@@ -375,7 +208,7 @@ class MediaPresenter extends BasePresenter
             ->where(array(
                 'media.pages_id' => $idN,
                 'pages.pages_types_id' => $this->template->pageId,
-                ))
+            ))
             ->order("name");
 
         $paginator = new \Nette\Utils\Paginator;
@@ -397,10 +230,6 @@ class MediaPresenter extends BasePresenter
         }
 
         $this->template->mediatype = $this->context->httpRequest->getCookie('mediatype');
-    }
-
-    function renderDetail() {
-        $this->template->page = $this->database->table("pages")->get($this->getParameter("id"));
     }
 
     public function renderImage()

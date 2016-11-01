@@ -3,6 +3,7 @@
 namespace Caloriscz\Sign;
 
 use Nette\Application\UI\Control;
+use Nette\Utils\Random;
 
 class LostPassControl extends Control
 {
@@ -38,9 +39,9 @@ class LostPassControl extends Control
         $email = $form->getValues()->email;
 
         if ($form->values->layer == 'admin') {
-            $templateLP = 'message-lostpass-admin.latte';
+            $lostPass = $this->database->table("helpdesk_emails")->where("template", "lostpass-admin")->fetch();
         } else {
-            $templateLP = 'message-lostpass.latte';
+            $lostPass = $this->database->table("helpdesk_emails")->where("template", "lostpass-member")->fetch();
         }
 
         if (!\Nette\Utils\Validators::isEmail($email)) {
@@ -48,7 +49,7 @@ class LostPassControl extends Control
             $this->presenter->redirect(":Front:Sign:lostpass");
         }
 
-        $passwordGenerate = \Nette\Utils\Strings::random(12, "987654321zyxwvutsrqponmlkjihgfedcba");
+        $passwordGenerate = \Nette\Utils\Random::generate(12, "987654321zyxwvutsrqponmlkjihgfedcba");
 
         if ($this->database->table('users')->where(array('email' => $email,))->count() == 0) {
             $this->flashMessage("E-mail nenalezen");
@@ -59,6 +60,8 @@ class LostPassControl extends Control
         $member->setActivation($email, $passwordGenerate);
 
         $latte = new \Latte\Engine;
+        $latte->setLoader(new \Latte\Loaders\StringLoader());
+
         $params = array(
             'code' => $passwordGenerate,
             'email' => $email,
@@ -69,7 +72,7 @@ class LostPassControl extends Control
         $mail->setFrom($this->presenter->template->settings['contacts:email:hq'])
             ->addTo($email)
             ->setSubject("Informace o novém hesle")
-            ->setHTMLBody($latte->renderToString(__DIR__ . '/' . $templateLP, $params));
+            ->setHTMLBody($latte->renderToString($lostPass->body, $params));
 
         $mailer = new \Nette\Mail\SendmailMailer;
         $mailer->send($mail);

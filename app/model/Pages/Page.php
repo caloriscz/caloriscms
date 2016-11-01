@@ -15,25 +15,13 @@ namespace App\Model;
 class Page
 {
 
-    /** @var Nette\Database\Context */
+    /** @var \Nette\Database\Context */
     public $database;
     public $user;
 
     public function __construct(\Nette\Database\Context $database)
     {
         $this->database = $database;
-    }
-
-    /**
-     * Get list of categories
-     */
-    function getCategoryList($id)
-    {
-        $pagesCategories = $this->database->table("categories")
-                ->where("parent_id", $id)
-                ->order("title")->fetchPairs('id', 'title');
-
-        return $pagesCategories;
     }
 
     /**
@@ -47,7 +35,7 @@ class Page
     }
 
     /**
-     * Get list of categories
+     * Get list of pages
      */
     function getPageList()
     {
@@ -58,6 +46,29 @@ class Page
         }
 
         return $pages;
+    }
+
+    /**
+     * Get child pages of given page
+     */
+    function getChildren($id, $arr = NULL)
+    {
+        if ($id == NULL) {
+            return array_reverse($arr, TRUE);
+        } else {
+            $cat = $this->database->table("pages")->where("pages_id", $id);
+
+            if ($cat->count() > 0) {
+                foreach ($cat as $item) {
+                    $arr[] = $item->id;
+                    $arrs[] = $item->id;
+                }
+
+                return $this->getChildren($arrs, $arr);
+            } else {
+                return $arr;
+            }
+        }
     }
 
 }

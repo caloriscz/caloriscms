@@ -1,7 +1,7 @@
 {block #titles}{$catalogue->title}{/block}
 {block content}
 
-{include 'components/top-navigation.latte'}
+{control pageTopMenu}
 
 <h1>Související produkty</h1>
 
@@ -22,7 +22,7 @@
 
 <h2>Vyberte související produkt</h2>
 
-{control searchRelatedForm}
+{control pageFilterRelated}
 
 <table class="table">
     {foreach $relatedSearch as $item}

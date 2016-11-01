@@ -11,140 +11,32 @@ use Nette,
 class SettingsPresenter extends BasePresenter
 {
 
-    /**
-     * Settings save
-     */
-    function createComponentEditSettingsForm()
+    protected function createComponentEditSettings()
     {
-        $form = new \Nette\Forms\BootstrapUIForm;
-        $form->getElementPrototype()->class = "form-horizontal";
-        $form->getElementPrototype()->role = 'form';
-        $form->getElementPrototype()->autocomplete = 'off';
-
-        $form->addHidden('category_id');
-        $form->addHidden('setkey');
-        $form->addText("setvalue", "dictionary.main.Description");
-
-        $arr = array_filter(array("category_id" => $this->getParameter("id")));
-
-        $form->setDefaults($arr);
-
-        $form->addSubmit('send', 'dictionary.main.Save')
-            ->setAttribute("class", "btn btn-success");
-
-        $form->onSuccess[] = $this->editSettingsSucceeded;
-        $form->onValidate[] = $this->permissionValidated;
-        return $form;
+        $control = new \Caloriscz\Settings\EditSettingsControl($this->database);
+        return $control;
     }
 
-    function editSettingsSucceeded(\Nette\Forms\BootstrapUIForm $form)
+    protected function createComponentInsertLanguage()
     {
-        $values = $form->getHttpData($form::DATA_TEXT); // get value from html input
-
-        foreach ($values["set"] as $key => $value) {
-            $this->database->table("settings")->where(array(
-                "setkey" => $key,
-            ))
-                ->update(array(
-                    "setvalue" => $value,
-                ));
-        }
-
-        $this->redirect(":Admin:Settings:default", array("id" => $form->values->category_id));
+        $control = new \Caloriscz\Settings\Languages\InsertLanguageControl($this->database);
+        return $control;
     }
 
-    /* Insert new language */
-    function createComponentInsertLanguage()
+    protected function createComponentInsertCountry()
     {
-        $form = $this->baseFormFactory->createUI();
-
-        $form->addText("language", "Jazyk");
-        $form->addText("code", "Kód");
-
-        $form->addSubmit('send', 'dictionary.main.Save')
-            ->setAttribute("class", "btn btn-success");
-
-        $form->onSuccess[] = $this->insertLanguageSucceeded;
-        $form->onValidate[] = $this->permissionValidated;
-        return $form;
+        $control = new \Caloriscz\Settings\Countries\InsertCountryControl($this->database);
+        return $control;
     }
 
-    function permissionValidated(\Nette\Forms\BootstrapUIForm $form)
+    protected function createComponentInsertCurrency()
     {
-        if ($this->template->member->users_roles->settings_edit == 0) {
-            $this->flashMessage("Nemáte oprávnění k této akci", "error");
-            $this->redirect(this);
-        }
+        $control = new \Caloriscz\Settings\Currency\InsertCurrencyControl($this->database);
+        return $control;
     }
-
-    function insertLanguageSucceeded(\Nette\Forms\BootstrapUIForm $form)
-    {
-        $langExists = $this->database->table("languages")->where("title = ? OR code = ?",
-            $form->values->language, $form->values->code);
-
-        if ($langExists->count() > 0) {
-            $this->flashMessage("Název jazyka nebo kód již existuje", "error");
-            $this->redirect(":Admin:Settings:languages");
-        } else {
-            $this->database->table("languages")->insert(array(
-                "title" => $form->values->language,
-                "code" => $form->values->code,
-            ));
-
-            $this->redirect(":Admin:Settings:languages");
-        }
-    }
-
-    /* Insert new country */
-    function createComponentInsertCountry()
-    {
-        $form = $this->baseFormFactory->createUI();
-
-        $form->addText("country_cs", "Země (česky)");
-        $form->addText("country_en", "Země (anglicky)");
-
-        $form->addSubmit('send', 'dictionary.main.Save')
-            ->setAttribute("class", "btn btn-success");
-
-        $form->onSuccess[] = $this->insertCountrySucceeded;
-        $form->onValidate[] = $this->permissionValidated;
-        return $form;
-    }
-
-    function insertCountrySucceeded(\Nette\Forms\BootstrapUIForm $form)
-    {
-        $exists = $this->database->table("countries")->where("title_cs = ? OR title_en = ?",
-            $form->values->country_cs, $form->values->country_en);
-
-        if ($exists->count() > 0) {
-            $this->flashMessage("Země už je v seznamu", "error");
-            $this->redirect(":Admin:Settings:countries");
-        } else {
-            $this->database->table("countries")->insert(array(
-                "title_cs" => $form->values->country_cs,
-                "title_en" => $form->values->country_en,
-            ));
-
-            $this->redirect(":Admin:Settings:countries");
-        }
-    }
-
-    /* Insert new currency */
-    function createComponentInsertCurrency()
-    {
-        $form = $this->baseFormFactory->createUI();
-
-        $form->addText("title", "dictionary.main.Title");
-        $form->addText("symbol", "Symbol");
-        $form->addText("code", "Köd");
-
-        $form->addSubmit('send', 'dictionary.main.Save')
-            ->setAttribute("class", "btn btn-success");
-
-        $form->onSuccess[] = $this->insertCurrencySucceeded;
-        $form->onValidate[] = $this->permissionValidated;
-        return $form;
-    }
+<<<<<<< HEAD
+    
+=======
 
     function insertCurrencySucceeded(\Nette\Forms\BootstrapUIForm $form)
     {
@@ -165,6 +57,7 @@ class SettingsPresenter extends BasePresenter
         }
     }
 
+>>>>>>> master
     function handleInstall($id)
     {
         $default = $this->database->table("languages")->where("default = 1");
@@ -182,7 +75,7 @@ class SettingsPresenter extends BasePresenter
         $this->checkColumn("pages", "metadesc", "varchar(200)", $id);
         $this->checkColumn("menu", "title", "varchar(80)", $id);
         $this->checkColumn("menu", "description", "text", $id);
-		$this->checkColumn("snippets", "content", "text", $id);
+        $this->checkColumn("snippets", "content", "text", $id);
 
         $this->redirect(":Admin:Settings:languages");
     }
@@ -259,23 +152,6 @@ class SettingsPresenter extends BasePresenter
     public function renderDefault()
     {
         $this->template->categoryId = $this->template->settings['categories:id:settings'];
-
-        if (!$this->getParameter("id")) {
-            $arr = array(
-                "admin_editable" => 1,
-                "categories_id" => 10,
-            );
-        } else {
-            $arr = array(
-                "admin_editable" => 1,
-                "categories_id" => $this->getParameter("id"),
-            );
-        }
-
-        $this->template->database = $this->database;
-
-        $this->template->settingsDb = $this->database->table("settings")
-            ->where($arr);
     }
 
     public function renderLanguages()

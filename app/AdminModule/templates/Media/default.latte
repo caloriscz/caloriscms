@@ -17,13 +17,13 @@
             <div class="thumbnail" style="height: 260px;">
                 <div style="height: 180px; padding-top: 60px;" class="text-center">
                     <a href="" type="button" data-toggle="modal" data-target="#myModal">
-                        <i class="fa fa-envelope-square fa-5x"></i>
+                        <i class="fa fa-folder-open-o fa-5x"></i>
                     </a>
                 </div>
                 <div class="caption text-center">
                     <div>
-                        <a href="" type="button" data-toggle="modal" data-target="#myModal"><span
-                                    style="font-weight: bold; font-size: 1.25em;">+Přidat nové album</span></a>
+                        <a href="" type="button" data-toggle="modal" data-target="#myModal">
+                            <span style="font-weight: bold; font-size: 1.25em;">+Přidat nové album</span></a>
                     </div>
                     <div>
 
@@ -36,10 +36,7 @@
                 <div class="thumbnail" style="height: 260px;">
                     <div style="height: 180px; padding-top: 60px;" class="text-center">
                         <a n:href=":Admin:Media:default, id => $item->id, type => $pageId">
-                            <i class="fa fa-envelope fa-5x"></i>
-                            <img src="" alt="{$item->title}"
-                                 class="hidden img-responsive"
-                                 style="max-height: 150px;"/>
+                            <i class="fa fa-folder-o fa-5x"></i>
                         </a>
                     </div>
                     <div class="caption text-center">
@@ -50,10 +47,14 @@
                         </div>
                         <div style="margin-top: 5px;">
                             <a n:href="deletePage!, id => $item->id, type => $pageId"
+<<<<<<< HEAD
+                                    onclick="return confirm('Opravdu chcete smazat tuto stránku a všechny její podstránky s celým obsahem?')">
+=======
                                     onclick="return confirm('Opravdu smazat?')">
+>>>>>>> master
                                 <i class="fa fa-times font-red"></i>
                             </a>
-                            <a n:href=":Admin:Media:detail id => $item->id, type => $pageId"
+                            <a n:href=":Admin:Pages:detail id => $item->id"
                                     class="btn btn-default btn-xs"
                                     role="button">{_dictionary.main.Edit}</a>
                         </div>
@@ -66,7 +67,7 @@
 
 
 <div class="row">
-    {control dropUploadForm}
+    {control uploadForm}
     <div class="container">
         <div class="btn-group pull-right" role="group">
             <a n:href="toggle! mediatype => 'image', type => $presenter->getParameter('type')"><i
@@ -149,7 +150,7 @@
                 <h4 class="modal-title">Vložit album</h4>
             </div>
             <div class="modal-body">
-                {control insertForm}
+                {control insertMediaForm}
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

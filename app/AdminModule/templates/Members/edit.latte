@@ -3,15 +3,23 @@
 
 <h1 class="page-header">{_dictionary.main.members|firstUpper}: {$members->username}</h1>
 
-{foreach $flashes as $flash}
-    <br/>
-    <div class="alert alert-warning alert-dismissable">
-        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-        <div class="flash {$flash->type}">{$flash->message}</div>
+{if $presenter->getParameter('pdd') != ''}
+    <div class="col-md-12">
+        <div class="alert alert-warning alert-dismissable">
+            {_dictionary.main.Address}: {$settings['site:url:base']}/sign/in<br/>
+            {_dictionary.main.Member}: {$members->username}<br/>
+            {_dictionary.main.Password}: {$presenter->getParameter('pdd')}
+        </div>
     </div>
-{/foreach}
-
-
+{else}
+    {foreach $flashes as $flash}
+        <br/>
+        <div class="alert alert-warning alert-dismissable">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            <div class="flash {$flash->type}">{$flash->message}</div>
+        </div>
+    {/foreach}
+{/if}
 
 {if $member->users_roles->members_display}
     <div class="row">
@@ -19,14 +27,14 @@
             <div class="panel panel-primary">
                 <div class="panel-heading">Upravit informace o uživateli</div>
                 <div class="panel-body">
-                    {control editForm}
+                    {control editMember}
                 </div>
             </div>
 
             <div class="panel panel-success">
                 <div class="panel-heading">Zaslat uživateli znovu heslo</div>
                 <div class="panel-body">
-                    {control sendLoginForm}
+                    {control sendLogin}
                 </div>
             </div>
 
@@ -49,7 +57,7 @@
             </table>
 
 
-            <h2>Přiřazené kontakty <span class="pull-right">{control insertContactForm}</span></h2>
+            <h2>Přiřazené kontakty <span class="pull-right">{control insertContactForMember}</span></h2>
 
             <table class="table">
                 {var $membersRelated = $members->related('contacts', 'users_id')}

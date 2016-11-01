@@ -1,0 +1,49 @@
+<div class="modal-body">
+{form insertEventForm}
+    <div class="form-group">
+        <div class="col-md-offset-3 col-sm-9">{input allday}</div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">od</label>
+        <div class="col-sm-9">{input date_event, style => 'width: 110px; display: inline;'}
+            {input hour_event, style => 'width: 80px; display: inline;'}
+            {input minute_event, style => 'width: 80px; display: inline;'}
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">do</label>
+        <div class="col-sm-9">
+            {input date_event_end, style => 'width: 110px; display: inline;'}
+            {input hour_event_end, style => 'width: 80px; display: inline;'}
+            {input minute_event_end, style => 'width: 80px; display: inline;'}
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">{label price /}</label>
+        <div class="col-sm-9">{input price}</div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">{label time_range /}</label>
+        <div class="col-sm-9">{input time_range}</div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">{label capacity /}</label>
+        <div class="col-sm-9">{input capacity}</div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">{label capacity_start /}</label>
+        <div class="col-sm-9">{input capacity_start}</div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">{label contact /}</label>
+        <div class="col-sm-9">{input contact}</div>
+    </div>
+
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-default" data-dismiss="modal">
+        {_dictionary.main.close|firstUpper}
+    </button>
+    {input submitm}
+    {/form}
+</div>

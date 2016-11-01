@@ -1,12 +1,15 @@
 {block #titles}{_dictionary.main.File} - {$file->name}{/block}
 {block content}
 
+<br>
+<a href="/admin/pages/detail-images/{$file->pages_id}" class="btn btn-default"><i class="fa fa-chevron-left"></i> zpět na všechny obrázky</a>
+
 <h1 class="page-header">{_dictionary.main.File} - {$file->name}</h1>
 
 
 <div class="row">
     <div class="col-lg-6">
-        {control editFileForm}
+        {control editFile}
     </div>
     <div class="col-lg-6">
         <table class="table">

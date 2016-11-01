@@ -15,7 +15,7 @@ namespace App\Model\Store;
 class Filter
 {
 
-    /** @var Nette\Database\Context */
+    /** @var \Nette\Database\Context */
     private $database;
 
     public function __construct(\Nette\Database\Context $database)

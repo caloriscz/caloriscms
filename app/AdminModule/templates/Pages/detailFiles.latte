@@ -1,7 +1,7 @@
 {block #titles}{$catalogue->title}{/block}
 {block content}
 
-{include 'components/top-navigation.latte'}
+{control pageTopMenu}
 
 <h1 class="page-header">{$catalogue->title} - {_dictionary.main.Files}</h1>
 

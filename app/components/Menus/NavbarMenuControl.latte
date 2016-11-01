@@ -1,6 +1,6 @@
 <ul class="nav navbar-nav">
     {foreach $categories as $rowCategories} 
-        {var $dbSubs = $rowCategories->related('categories', 'parent_id')}
+        {var $dbSubs = $rowCategories->related('menu', 'parent_id')}
         {if $rowCategories->id == $presenter->getParameter('page_id')}
             {var $linkActive = 'active '}
             {var $dropdown = 'dropdown '}
@@ -23,27 +23,27 @@
                     <a href="{$baseUri}{$rowCategories->url}" data-category="{$rowCategories->id}" 
                        {if $dbSubs->count() > 0} class="dropdown-toggle{if $iterator->counter == 5} fifth{/if} disabled" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"{/if}>
                     {/if}
-                    {if file_exists($appDir . '/images/categories/icons/' . $rowCategories->id . '.png')}
+                    {if file_exists($appDir . '/images/menu/icons/' . $rowCategories->id . '.png')}
                         <span class="image-thumb">
-                            <img src="{$baseUri}/images/categories/icons/{$rowCategories->id}.png" /><br class="hidden-tn" />
+                            <img src="{$baseUri}/images/menu/icons/{$rowCategories->id}.png"><br class="hidden-tn" />
                         </span>
                     {/if}
                     {var $title = str_replace(' ', '<br />', $rowCategories->title)}
                     <span class="title">{$title|noescape}</span>
                 </a>
                 {foreach $dbSubs as $rowCategoriesSub}
-                    {var $dbSubs2 = $rowCategoriesSub->related('categories', 'parent_id')}
+                    {var $dbSubs2 = $rowCategoriesSub->related('menu', 'pages_id')}
                     {if $iterator->isFirst()}
                         <ul {if $dbSubs->count() > 0} class="dropdown-menu"{/if}>
                         {/if}
 
-                        {if $rowCategoriesSub->pages->slug == $presenter->getParameter('id')}
-                            {var $sublinkActive = 'active '}
-                        {else}
-                            {var $sublinkActive = ' '}
-                        {/if} 
+                    {if $rowCategoriesSub->pages->slug == $presenter->getParameter('id')}
+                        {var $sublinkActive = 'active '}
+                    {else}
+                        {var $sublinkActive = ' '}
+                    {/if}
 
-                        {if $dbSubs2->count() > 0}
+                    {if $dbSubs2->count() > 0}
                             {var $subLinkDrop = 'dropdown-submenu '}
                         {else}
                             {var $subLinkDrop = ' '}

@@ -33,52 +33,11 @@ class SignPresenter extends BasePresenter
         return $control;
     }
 
-    /**
-     * Sign-in form factory.
-     * @return Nette\Application\UI\Form
-     */
-    protected function createComponentSignInForm()
+    protected function createComponentSignIn()
     {
-        $form = new \Nette\Forms\BootstrapUIForm;
-        $form->addText('username')
-                ->setAttribute("placeholder", 'Uživatel')
-                ->setRequired('Vložte uživatelské jméno');
-
-        $form->addPassword('password')
-                ->setAttribute("placeholder", 'Heslo')
-                ->setRequired('Vlože heslo.');
-
-        $form->addSubmit('send', 'Přihlásit')
-                ->setAttribute("class", "btn btn-lg btn-success btn-block");
-
-        $form->onSuccess[] = $this->signInFormSucceeded;
-        return $form;
+        $control = new \Caloriscz\Sign\SignInControl($this->database);
+        return $control;
     }
-
-    public function signInFormSucceeded($form, $values)
-    {
-        try {
-            $this->getUser()->login($values->username, $values->password);
-        } catch (Nette\Security\AuthenticationException $e) {
-            $form->addError($e->getMessage());
-            return;
-        }
-
-        $role = $this->user->getRoles();
-        $roleCheck = $this->database->table("users_roles")->get($role[0]);
-
-        if ($roleCheck->admin_access == 0) {
-            $this->flashMessage($this->translator->translate('messages.sign.no-access'), "error");
-            $this->redirect(':Admin:Sign:in');
-        } else {
-            $this->database->table("users")->get($this->user->getId())->update(array("date_visited" => date("Y-m-d H:i:s")));
-        }
-
-        $this->restoreRequest($this->backlink);
-        $this->redirect(':Admin:Homepage:default', array("id" => null));
-    }
-
-
 
     public function actionOut()
     {

@@ -13,18 +13,17 @@
     {block #metadesc}{/block}
     {block #metakeys}{/block}
     {block #ogtitle}{/block}
+	{block #ogdescription}{/block}
     <!--[if IE 8]>
     <link rel="stylesheet" href="{$baseUri}/css/emulation-ie8.css" type="text/css" media="screen,projection"/><![endif]-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.js"></script>
-
-
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.2/html5shiv.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
 
-    {if $settings['site:ga_code']}
+    {if $settings['social:ga_code']}
         <script n:syntax="off">
             (function (i, s, o, g, r, a, m) {
                         i['GoogleAnalyticsObject'] = r;
@@ -39,7 +38,7 @@
                     })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
         </script>
         <script>
-            ga('create', {$settings['site:ga_code']}, 'auto');
+            ga('create', {$settings['social:ga_code']}, 'auto');
             ga('send', 'pageview');
         </script>
     {/if}
@@ -57,75 +56,7 @@
 {control adminBar}
 
 <header>
-    <div class="container">
-        <div class="col-md-6">
-            <a n:href=":Front:Homepage:default">{$settings['site:title']}</a>
-        </div>
-        <div class="col-md-2">
-            <div class="lang-box">
-                <ul class="nav nav-pills navbar-right">
-                    <li{if $langSelected == 'cs'} class="active"{/if}>
-                        <a n:href="this, locale => cs, (expand) $args">cs</a></li>
-                    <li{if $langSelected == 'en'} class="active"{/if}>
-                        <a n:href="this, locale => en, (expand) $args">en</a></li>
-                </ul>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="row">
-                <ul class="nav navbar-nav navbar-right">
-                    {if $user->loggedIn}
-                        <li><a n:href=":Front:Profile:default"><strong>{$member->username}</strong></a></li>
-                        <li><a n:href=":Front:Sign:out"><i class="fa fa-sign-out"></i></a></li>
-                    {else}
-                        <li><a n:href=":Front:Profile:default"><strong>{_dictionary.main.LoggingIn}</strong></a></li>
-                        <li><a n:href=":Front:Sign:up">{_dictionary.main.SignUp}</a></li>
-                    {/if}
-                </ul>
-            </div>
-        </div>
-    </div>
-    <div class="container">
-        <div class="navbar yamm">
-            <div class="col-md-6 text-left">
-                {control search}
-            </div>
-            <div class="col-md-6" style="padding-left: 0;">
-
-
-			{if $settings['store:enabled']}
-			<ul class="nav navbar-nav navbar-right" style="padding: 0;">
-                    <li class="dropdown">
-                        {control cartBox}
-                        <ul class="dropdown-menu" style="padding: 0;">
-                            <li style="padding: 0;">
-                                <div class="yamm-content">
-                                    <i class="fa fa-cart"></i>
-                                    {control cartList 'mini'}
-                                </div>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-				{/if}
-            </div>
-        </div>
-    </div>
-
-    <div class="container">
-        <nav class="navbar navbar-default top-nav navbar-0-space">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
-                        data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                    menu <i class="fa fa-bars"></i>
-                </button>
-            </div>
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                {control navbarMenu, 1}
-
-            </div>
-        </nav>
-    </div>
+    {control navigation}
 </header>
 
 {include content}
