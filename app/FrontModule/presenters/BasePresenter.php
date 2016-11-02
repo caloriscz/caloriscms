@@ -260,7 +260,7 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
         $control = new \Caloriscz\Links\LinkListControl($this->database);
         return $control;
     }
-	
+
     protected function createComponentSocialFacebook()
     {
         $control = new \Caloriscz\Social\FacebookControl;
@@ -290,7 +290,7 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
         $control = new \EventsCalendarControl($this->database);
         return $control;
     }
-
+	
     protected function createComponentAdvancedSearch()
     {
         $control = new \Caloriscz\Page\Filters\AdvancedSearchControl($this->database);
@@ -332,20 +332,4 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
         $control = new \Caloriscz\Menus\MenuControl($this->database);
         return $control;
     }
-
-    /* Store components  ----------------------------------------------------------------------------------------------- */
-    /* enable by uncomment this part
-    protected function createComponentCartUpdater()
-    {
-        $control = new \Caloriscz\Cart\CartUpdaterControl($this->database);
-        return $control;
-    }
-
-    protected function createComponentCartList()
-    {
-        $control = new \Caloriscz\Cart\ListControl($this->database);
-        return $control;
-    }
-*/
-
 }
