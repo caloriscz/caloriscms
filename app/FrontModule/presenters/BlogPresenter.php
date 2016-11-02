@@ -16,45 +16,23 @@ class BlogPresenter extends BasePresenter
         parent::startup();
 
         $this->template->categories = $this->database->table("categories");
-		
-		        $this->template->snippets = $this->database->table("snippets")->where("pages_id", 3)->fetchPairs('id', 'content');
+    }
+    
+    protected function createComponentBlogList()
+    {
+        $control = new \Caloriscz\Blog\BlogListControl($this->database);
+        return $control;
     }
 
     public function renderDefault()
     {
-        if ($this->getParameter("id")) {
-            $blog = $this->database->table("pages")
-                ->where(array(
-                    "categories_id = ?" => $this->getParameter("id"),
-                    "date_published <= ?" => date('Y-m-d H:i:s'),
-                    "pages_types_id" => 2,
-                ))
-                ->order("date_created DESC");
-        } else {
-            $blog = $this->database->table("pages")
-                ->where(array(
-                    "public" => 1,
-                    "date_published <= ?" => date('Y-m-d H:i:s'),
-                    "pages_types_id" => 2,
-                ))
-                ->order("date_created DESC");
-        }
-
-        $paginator = new \Nette\Utils\Paginator;
-        $paginator->setItemCount($blog->count("*"));
-        $paginator->setItemsPerPage(20);
-        $paginator->setPage($this->getParameter("page"));
-        $this->template->blog = $blog->limit($paginator->getLength(), $paginator->getOffset());
-
-        $this->template->paginator = $paginator;
-
-        $this->template->args = $this->getParameters();
+        $this->template->page = $this->database->table("pages")->get(3);
+        $this->template->snippets = $this->database->table("snippets")->where("pages_id", 3)->fetchPairs('id', 'content');
     }
 
     public function renderDetail()
     {
-        $blog = $this->database->table("pages")->get($this->getParameter("page_id"));
-        $this->template->blog = $blog;
+        $this->template->page = $this->database->table("pages")->get($this->getParameter("page_id"));
     }
 
 }

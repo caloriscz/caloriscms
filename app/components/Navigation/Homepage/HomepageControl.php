@@ -16,7 +16,7 @@ class HomepageControl extends Control
 
     protected function createComponentBlogPreview()
     {
-        $control = new \BlogPreviewControl($this->database);
+        $control = new \Caloriscz\Blog\BlogPreviewControl($this->database);
         return $control;
     }
 

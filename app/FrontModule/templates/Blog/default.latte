@@ -1,6 +1,9 @@
-{block #titles}{_dictionary.main.Blog}{/block}
+{block #titles}{$page->title}{/block}
+{block #ogtitle}<meta property="og:title" content="{$page->title}">{/block}
+{block #ogdescription}{if $page->metadesc}<meta property="og:description" content="{$page->metadesc}">{/if}{/block}
+{block #metadesc}{if $page->metadesc}<meta name="description" content="{$page->metadesc}">{/if}{/block}
+{block #metakeys}{if $page->metakeys}<meta name="keywords" content="{$page->metakeys}">{/if}{/block}
 {block content}
-{var $id = $presenter->getParameter('id')}
 
 <div class="container heading">
     <h1>Blog</h1>
@@ -8,29 +11,6 @@
 
 <div class="container content content-blog">
     <div class="col-sm-8">
-        {foreach $blog as $item}
-            <h2>
-                <a href="/{$item->slug}">
-                    {if $item->title == FALSE}
-                    {$item->date_published|date:'j. n. Y H:i'}{else}{$item->title}
-                    {/if}
-                </a> 
-                <span class="pull-right"><small>{$item->date_created|date:'j. n. Y H:i'}</small></span>
-            </h2>
-            {if $settings['blog:preview:length'] > 0}
-                {$item->document|striptags|truncate:$settings['blog:preview:length']}
-            {else}
-                {$item->document|noescape}
-            {/if}
-            <br />
-        {/foreach}
-
-        <div class="text-center">
-            {control paging, $args, $paginator}
-        </div>
-    </div>
-
-    <div class="col-sm-4">
-
+        {control blogList}
     </div>
 </div>
