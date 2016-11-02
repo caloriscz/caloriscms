@@ -1,25 +1,15 @@
-{block #titles}{$catalogue->title}{/block}
+{block #titles}{$page->title}{/block}
 {block content}
 
 {control pageTopMenu}
 
-<h1 class="page-header">{$catalogue->title} - {_dictionary.main.Files}</h1>
+<h1 class="page-header">{$page->title} - {_dictionary.main.Files}</h1>
 
 {control imageUpload, 0}
 
 <h2>Seznam souborů</h2>
 
 <table class="table">
-    {foreach $files as $item}
-        <tr>
-            <td class="col-xs-1">
-                <a n:href="deleteFile!, id => $item->id, name => $catalogue->id" class="btn" role="button" onclick="return confirm('{_admin.catalogue.deletereallymessage}')">
-                    <i class="fa fa-times font-red"></i>
-                </a>
-            </td>
-            <td><a href="/media/{$catalogue->id}/{$item->name}">{$item->name}</a></td>
-            <td>{$item->description}</td>
-        </tr>
-    {/foreach}
+    {control productFileList $page, 'FileListAdminControl'}
 </table>
 

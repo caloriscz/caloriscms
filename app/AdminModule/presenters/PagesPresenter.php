@@ -86,6 +86,15 @@ class PagesPresenter extends BasePresenter
         $this->redirect(":Admin:Pages:detailRelated", array("id" => $this->getParameter("item")));
     }
 
+    protected function createComponentProductFileList()
+    {
+        $control = new \Caloriscz\Page\File\FileListControl($this->database);
+        $control->onSave[] = function ($pages_id) {
+            $this->redirect(this, array("id" => $pages_id));
+        };
+        return $control;
+    }
+
     /**
      * Delete image
      */
@@ -97,18 +106,6 @@ class PagesPresenter extends BasePresenter
         \App\Model\IO::remove(APP_DIR . '/media/' . $id . '/tn/' . $this->getParameter("name"));
 
         $this->redirect(":Admin:Pages:detailImages", array("id" => $this->getParameter("name"),));
-    }
-
-    /**
-     * Delete file
-     */
-    function handleDeleteFile($id)
-    {
-        $this->database->table("media")->get($id)->delete();
-
-        \App\Model\IO::remove(APP_DIR . '/media/' . $id . '/' . $this->getParameter("name"));
-
-        $this->redirect(":Admin:Pages:detailFiles", array("id" => $this->getParameter("name"),));
     }
 
     function handleInsertRelated($id)
@@ -175,7 +172,7 @@ class PagesPresenter extends BasePresenter
 
     public function renderDetailFiles()
     {
-        $this->template->catalogue = $this->database->table("pages")->get($this->getParameter("id"));
+        $this->template->page = $this->database->table("pages")->get($this->getParameter("id"));
         $this->template->files = $this->database->table("media")
             ->where(array("pages_id" => $this->getParameter("id"), "file_type" => 0));
     }

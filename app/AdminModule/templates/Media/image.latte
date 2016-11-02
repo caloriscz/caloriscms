@@ -2,7 +2,14 @@
 {block content}
 
 <br>
-<a href="/admin/pages/detail-images/{$file->pages_id}" class="btn btn-default"><i class="fa fa-chevron-left"></i> zpět na všechny obrázky</a>
+{if $file_type == 1}
+    {var $detailType = 'detail-images'}
+{else}
+    {var $detailType = 'detail-files'}
+{/if}
+
+<a href="/admin/pages/{$detailType}/{$file->pages_id}" class="btn btn-default"><i class="fa fa-chevron-left"></i>
+    zpět na všechny soubory</a>
 
 <h1 class="page-header">{_dictionary.main.File} - {$file->name}</h1>
 
