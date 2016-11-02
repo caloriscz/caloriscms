@@ -6,6 +6,8 @@
     {var $pageRoot = 'media?type=' . $page->pages_types_id}
 {elseif $page->pages_types_id == 3}
     {var $pageRoot = 'events'}
+{elseif $page->pages_types_id == 4}
+    {var $pageRoot = 'catalogue'}
 {elseif $page->pages_types_id == 5}
     {var $pageRoot = 'contacts'}
 {else}
@@ -19,6 +21,18 @@
             <a href="/admin/events/detail/{$id}">
                 <i class="fa fa-calendar fa-fw"></i> {_dictionary.main.Event}
             </a>
+        </li>
+    {/if}
+
+    {if $page->pages_types_id == 4}
+        <li role="presentation" {if $view == 'product' && $name == 'Admin:Product'}class="active"{/if}>
+            <a href="/admin/product/product/{$id}">Produkt</a>
+        </li>
+        <li role="presentation" {if $view == 'params' && $name == 'Admin:Product'}class="active"{/if}>
+            <a href="/admin/product/params/{$id}">{_dictionary.main.Parametres}</a>
+        </li>
+        <li role="presentation" {if $view == 'stock' && $name == 'Admin:Product'}class="active"{/if}>
+            <a href="/admin/product/stock/{$id}">{_dictionary.main.stock|firstUpper}</a>
         </li>
     {/if}
 

@@ -1,0 +1,14 @@
+<table class="table">
+    {foreach $page as $item}
+        <tr>
+            <td>
+                {if $item->description == ''}
+                    {$item->name}
+                {else}
+                    {$item->description}
+                {/if}
+            </td>
+            <td><a href="{$baseUri}/media/{$item->pages_id}/{$item->name}">Stáhnout</a></td>
+        </tr>
+    {/foreach}
+</table>
