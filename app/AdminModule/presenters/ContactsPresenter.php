@@ -18,9 +18,20 @@ class ContactsPresenter extends BasePresenter
         $this->template->page = $this->database->table("pages")->get($this->getParameter("id"));
     }
 
+    /** @var \Caloriscz\Contacts\ContactForms\IEditContactControlFactory @inject */
+    public $editContactControlFactory;
+
     protected function createComponentEditContact()
     {
-        $control = new \Caloriscz\Contacts\ContactForms\EditContactControl($this->database);
+        $control = $this->editContactControlFactory->create();
+        $control->onSave[] = function ($pages_id, $error) {
+            if ($error == 1) {
+                $this->flashMessage($this->translator->translate('messages.sign.fillInEmail'), "error");
+            }
+
+            $this->redirect(this, array("id" => $pages_id));
+        };
+
         return $control;
     }
 
