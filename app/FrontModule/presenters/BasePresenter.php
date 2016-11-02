@@ -279,12 +279,6 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
         return $control;
     }
 
-    protected function createComponentSideCat()
-    {
-        $control = new \Caloriscz\Menus\SideCatControl($this->database);
-        return $control;
-    }
-
     protected function createComponentBlogPreview()
     {
         $control = new \BlogPreviewControl($this->database);
