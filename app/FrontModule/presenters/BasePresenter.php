@@ -266,18 +266,6 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
         $control = new \Caloriscz\Menus\SideMenuControl($this->database);
         return $control;
     }
-
-    protected function createComponentBlogPreview()
-    {
-        $control = new \BlogPreviewControl($this->database);
-        return $control;
-    }
-
-    protected function createComponentEventsCalendar()
-    {
-        $control = new \EventsCalendarControl($this->database);
-        return $control;
-    }
 	
     protected function createComponentAdvancedSearch()
     {
@@ -297,18 +285,6 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
         return $control;
     }
 
-    protected function createComponentCarouselBox()
-    {
-        $control = new \CarouselBoxControl($this->database);
-        return $control;
-    }
-
-    protected function createComponentNewsletterForm()
-    {
-        $control = new \NewsletterFormControl($this->database);
-        return $control;
-    }
-
     protected function createComponentAdminBar()
     {
         $control = new \Caloriscz\Menus\Admin\AdminBarControl($this->database);
@@ -318,6 +294,12 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
     protected function createComponentMenu()
     {
         $control = new \Caloriscz\Menus\MenuControl($this->database);
+        return $control;
+    }
+
+    protected function createComponentFooter()
+    {
+        $control = new \Caloriscz\Navigation\Footer\FooterControl($this->database);
         return $control;
     }
 }

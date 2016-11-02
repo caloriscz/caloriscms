@@ -20,6 +20,12 @@ class FooterControl extends Control
         return $control;
     }
 
+    protected function createComponentNewsletterForm()
+    {
+        $control = new \NewsletterFormControl($this->database);
+        return $control;
+    }
+
     public function render()
     {
         $template = $this->template;

@@ -1,6 +1,11 @@
-{block #titles}Homepage{/block}
+{block #titles}{$page->title}{/block}
+{block #ogtitle}<meta property="og:title" content="{$page->title}">{/block}
+{block #ogdescription}{if $page->metadesc}<meta property="og:description" content="{$page->metadesc}">{/if}{/block}
+{block #metadesc}{if $page->metadesc}<meta name="description" content="{$page->metadesc}">{/if}{/block}
+{block #metakeys}{if $page->metakeys}<meta name="keywords" content="{$page->metakeys}">{/if}{/block}
+
 {block content}
 
 <div class="container">
-    <h1>Vítejte/Welcome/Willkommen/Hola</h1>
+    {control homepage}
 </div>
