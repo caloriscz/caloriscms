@@ -156,23 +156,6 @@ class EditContactControl extends Control
 
 }
 
-/*
-class EditContactControlFactory
-{
-    private $emailValidator;
-
-    public function __construct(EmailValidator $emailValidator)
-    {
-        $this->emailValidator = $emailValidator;
-    }
-
-    public function create()
-    {
-        return new RegistrationControl($this->emailValidator);
-    }
-}
-*/
-
 interface IEditContactControlFactory
 {
     /** @return \Caloriscz\Contacts\ContactForms\EditContactControl */

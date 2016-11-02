@@ -32,16 +32,16 @@
                             <li><a href="{plink ':Admin:Events:detail', id => $page->id}">uprav</a></li>
                         {elseif $page->pages_types_id == 4}
                             {if $settings['store:enabled']}
-                                <li class="navbar-text">Blog:</li>
-                                <li><a href="{plink ':AdminStore:Product:default', id => $page->id}">uprav</a></li>
-                                <li><a href="{plink ':AdminStore:Product:images', id => $page->id}">obrázek</a></li>
-                                <li><a href="{plink ':AdminStore:Product:stock', id => $page->id}">zásoby</a></li>
+                                <li class="navbar-text">Položka katalogu:</li>
+                                <li><a href="{plink ':Admin:Product:default', id => $page->id}">uprav</a></li>
+                                <li><a href="{plink ':Admin:Product:images', id => $page->id}">obrázek</a></li>
+                                <li><a href="{plink ':Admin:Product:stock', id => $page->id}">zásoby</a></li>
                             {/if}
                         {elseif $page->pages_types_id == 6}
                             <li><a href="{plink ':Admin:Media:default', id => 6}">uprav</a></li>
                         {elseif $page->pages_types_id == 7}
                             {if $settings['store:enabled']}
-                                <li><a href="{plink ':AdminStore:Categories:detail', id => $page->id}">uprav</a></li>
+                                <li><a href="{plink ':Admin:Categories:detail', id => $page->id}">uprav</a></li>
                             {/if}
                         {/if}
                     {/if}
