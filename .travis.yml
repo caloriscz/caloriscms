@@ -2,7 +2,7 @@ language: php
 
 php:
   - 5.6
-  - hhvm
+  - 7.0
 
 env:
   - TESTER_PHP_BIN="php-cgi"
@@ -16,7 +16,7 @@ matrix:
     - php: 5.6
       env: TESTER_PHP_BIN="hhvm"
 
-    - php: hhvm
+    - php: 7.0
       env: TESTER_PHP_BIN="php-cgi"
 
 before_install:
