@@ -99,9 +99,9 @@ class ContactsPresenter extends BasePresenter
         $this->template->menu = $this->database->table("categories")->where('parent_id', $this->template->settings['categories:id:contact']);
     }
 
-    public function renderOpeningHours()
+    public function renderDetailOpeningHours()
     {
-        $contact = $this->database->table("contacts")->get($this->template->page->id);
+        $contact = $this->database->table("contacts")->where("pages_id", $this->template->page->id)->fetch();
         $this->template->hours = $this->database->table("contacts_openinghours")->where("contacts_id", $contact->id);
     }
 
