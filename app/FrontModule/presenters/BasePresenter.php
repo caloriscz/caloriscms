@@ -2,6 +2,7 @@
 
 namespace App\FrontModule\Presenters;
 
+use Kdyby\Translation\Translator;
 use Nette,
     App\Model;
 
@@ -144,97 +145,7 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
     protected function createTemplate($class = NULL)
     {
         $template = parent::createTemplate($class);
-        $template->addFilter('ago', function ($s, $add = 0) {
-            $date = new \DateTime();
-            $date->setDate(date('Y', strtotime($s)), date('m', strtotime($s)), date('d', strtotime($s)));
-            $interval = $date->diff(new \DateTime('now'));
-            $daysAgo = $interval->format('%a days');
-
-            return $daysAgo;
-        });
-
-        $x = $this->translator->getLocale();
-        $template->addFilter('numericday', function ($s) {
-            $nazvy = array(
-                1 => $this->translator->translate('dictionary.days.Sunday'),
-                2 => $this->translator->translate('dictionary.days.Monday'),
-                3 => $this->translator->translate('dictionary.days.Tuesday'),
-                4 => $this->translator->translate('dictionary.days.Wednesday'),
-                5 => $this->translator->translate('dictionary.days.Thursday'),
-                6 => $this->translator->translate('dictionary.days.Friday'),
-                7 => $this->translator->translate('dictionary.days.Saturday'));
-
-            return $nazvy[$s];
-        });
-
-        $template->addFilter('numericmonth', function ($s) {
-            $nazvy = array(
-                1 => $this->translator->translate('dictionary.months.January'),
-                2 => $this->translator->translate('dictionary.months.February'),
-                3 => $this->translator->translate('dictionary.months.March'),
-                4 => $this->translator->translate('dictionary.months.April'),
-                5 => $this->translator->translate('dictionary.months.May'),
-                6 => $this->translator->translate('dictionary.months.June'),
-                7 => $this->translator->translate('dictionary.months.July'),
-                8 => $this->translator->translate('dictionary.months.August'),
-                9 => $this->translator->translate('dictionary.months.September'),
-                10 => $this->translator->translate('dictionary.months.October'),
-                11 => $this->translator->translate('dictionary.months.November'),
-                12 => $this->translator->translate('dictionary.months.December'),
-
-            );
-
-            return $nazvy[$s];
-        });
-
-        $template->addFilter('f', function ($s) {
-            preg_match_all("/\[snippet\=\"([0-9]{1,10})\"\]/s", $s, $valsimp, PREG_SET_ORDER);
-
-            if (count($valsimp) > 0) {
-                for ($n = 0; $n < count($valsimp); $n++) {
-                    $snippet = $this->database->table("snippets")->get($valsimp[$n][1]);
-
-                    if ($snippet) {
-                        $results = $snippet->content;
-                    } else {
-                        $results = null;
-                    }
-
-                    $s = str_replace($valsimp[$n][0], "$results", $s);
-                }
-            }
-
-            preg_match_all("/\[file\=([0-9]{1,10})\]/s", $s, $valsimp, PREG_SET_ORDER);
-
-            if (count($valsimp) > 0) {
-                for ($n = 0; $n < count($valsimp); $n++) {
-                    $snippet = $this->database->table("media")->get($valsimp[$n][1]);
-
-                    if ($snippet) {
-                        $results = '/media/' . $snippet->pages_id . '/' . $snippet->name;
-                    } else {
-                        $results = null;
-                    }
-
-                    $s = str_replace($valsimp[$n][0], "$results", $s);
-                }
-            }
-
-            return $s;
-        });
-
-
-        $template->addFilter('toMins', function ($s) {
-            if ($s < 60 && $s > 0) {
-                $duration = '0:' . $s . '.';
-            } elseif ($s >= 60) {
-                $duration = ceil($s / 60) . ':' . ($s % 60) . '.';
-            } else {
-                $duration = '-';
-            }
-
-            return $duration;
-        });
+        $template->addFilter(NULL, '\Filters::common');
 
         // Add mobile detect and its helper to template
         $template->_mobileDetect = $this->mobileDetect;

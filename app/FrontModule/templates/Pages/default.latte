@@ -5,12 +5,14 @@
 {block #metakeys}{if $page->metakeys}<meta name="keywords" content="{$page->metakeys}">{/if}{/block}
 {block content}
 
-<div class="container heading">
-    <h1>{$page->title}</h1>
+<div class="heading">
+    <div class="container">
+        <h1>{$page->title}</h1>
+    </div>
 </div>
 
-<div class="container content content-blog">
-    <div class="col-sm-8">
-        {control blogList}
+<div class="container white content">
+    <div class="col-md-9">
+        {$page->document|noescape|f}
     </div>
 </div>

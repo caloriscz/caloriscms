@@ -475,7 +475,7 @@ INSERT INTO `helpdesk_emails` (`id`, `template`, `subject`, `body`, `helpdesk_id
 (16, 'lostpass-admin', 'Informace o novém hesle', 'Na základě Vaší žádosti Vám posíláme odkaz na obnovení hesla.\r\n<br /><br />\r\nK vytvoření nového hesla klikněte na odkaz níže:\r\n<br />\r\n<a href="{$settings[''site:url:base'']}/admin/sign/resetpass/?code={$code}&email={$email}">\r\n    {$settings[''site:url:base'']}/admin/sign/resetpass/?code={$code}&email={$email}\r\n</a>\r\n<br /><br />\r\n<strong><a href="{$settings[''site:url:base'']}">{$settings[''site:title'']}</a></strong>\r\n', 11);;
 
 INSERT INTO `pages_types` (`id`, `content_type`, `presenter`, `action`, `prefix`) VALUES
-(1, 'Page', 'Front:Services', 'default', ''),
+(1, 'Page', 'Front:Pages', 'default', ''),
 (2, 'Blog', 'Front:Blog', 'detail', 'blog'),
 (3, 'Event', 'Front:Events', 'detail', ''),
 (4, 'Product', 'Front:Product', 'default', ''),

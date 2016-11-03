@@ -12,10 +12,11 @@
             <div class="col-sm-8">
                 {foreach $blog as $item}
                     {if date('mY', strtotime($item->date_event)) != $thisMonth}
-                        <p class="event-month">{var $eventMonthNr = date('n', strtotime($item->date_event))}{$eventMonthNr|numericmonth}</p>
+                        {var $evmonth = Filters::numericmonth(date('n', strtotime($item->date_event)))}
+                        <p class="event-month">{var $eventMonthNr = date('n', strtotime($item->date_event))}{_ $evmonth}</p>
                     {/if}
                     <h2>
-                        <a n:href=":Front:Events:detail, id => $item->slug">
+                        <a n:href=":Front:Events:detail, id => $item->pages->slug" style="font-size: 0.85em;">
                             {if $item->pages->title == FALSE}
                                 {$item->date_event|date:'j. n. Y'}{else}{$item->pages->title}
                             {/if}

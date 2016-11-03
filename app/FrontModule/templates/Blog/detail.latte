@@ -1,4 +1,8 @@
-{block #titles}{_dictionary.main.Blog}{/block}
+{block #titles}{$page->title}{/block}
+{block #ogtitle}<meta property="og:title" content="{$page->title}">{/block}
+{block #ogdescription}{if $page->metadesc}<meta property="og:description" content="{$page->metadesc}">{/if}{/block}
+{block #metadesc}{if $page->metadesc}<meta name="description" content="{$page->metadesc}">{/if}{/block}
+{block #metakeys}{if $page->metakeys}<meta name="keywords" content="{$page->metakeys}">{/if}{/block}
 {block content}
 {var $id = $presenter->getParameter('id')}
 
@@ -9,13 +13,13 @@
 <div class="container padded-top white">
     <div class="row">
         <div class="col-sm-8">
-            <h2>{$blog->title}</h2>
+            <h2>{$page->title}</h2>
 
-            <p><small>{$blog->date_published|date:'j. n. Y'}</small></span></p>
+            <p><small>{$page->date_published|date:'j. n. Y'}</small></span></p>
 
-            <p>{$blog->document|noescape}</p>
+            <p>{$page->document|noescape}</p>
 
-            {var $blogImages = $blog->related('media', 'pages_id')}
+            {var $blogImages = $page->related('media', 'pages_id')}
 
             {if $blogImages->count() > 0}
                 <hr />
@@ -26,14 +30,14 @@
             <div class="row">
                 {foreach $blogImages->where('file_type = 1') as $image}
                     <div class="col-xs-6 col-md-4" style="max-height: 150px;">
-                        <a href="{$baseUri}/media/{$blog->id}/{$image->name}" class="thumbnail gallery">
-                            <img src="/media/{$blog->id}/tn/{$image->name}" class="img-responsive" style="max-height: 120px;" />
+                        <a href="{$baseUri}/media/{$page->id}/{$image->name}" class="thumbnail gallery">
+                            <img src="/media/{$page->id}/tn/{$image->name}" class="img-responsive" style="max-height: 120px;" />
                         </a>
                     </div>
                 {/foreach}
             </div>
 
-            {var $blogImages = $blog->related('media', 'pages_id')}
+            {var $blogImages = $page->related('media', 'pages_id')}
 
             {if $blogImages->count() > 0}
                 <hr />

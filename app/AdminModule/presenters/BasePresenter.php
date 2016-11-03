@@ -65,59 +65,7 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
     protected function createTemplate($class = NULL)
     {
         $template = parent::createTemplate($class);
-        $template->addFilter('ago', function ($s, $add = 0) {
-            $date = new \DateTime();
-            $date->setDate(date('Y', strtotime($s)), date('m', strtotime($s)), date('d', strtotime($s)));
-            $interval = $date->diff(new \DateTime('now'));
-            $daysAgo = $interval->format('%a days');
-
-            return $daysAgo;
-        });
-
-        $template->addFilter('round', function ($s, $nr = 2) {
-            $rounding = round($s, $nr);
-
-            return $rounding;
-        });
-
-        $template->addFilter('toMins', function ($s) {
-            if ($s < 60 && $s > 0) {
-                $duration = '0:' . $s . '.';
-            } elseif ($s >= 60) {
-                $duration = ceil($s / 60) . ':' . ($s % 60) . '.';
-            } else {
-                $duration = '-';
-            }
-
-            return $duration;
-        });
-
-        $template->addFilter('numericday', function ($s) {
-            $nazvy = array(
-                $this->translator->translate('dictionary.days.Sunday'),
-                $this->translator->translate('dictionary.days.Monday'),
-                $this->translator->translate('dictionary.days.Tuesday'),
-                $this->translator->translate('dictionary.days.Wednesday'),
-                $this->translator->translate('dictionary.days.Thursday'),
-                $this->translator->translate('dictionary.days.Friday'),
-                $this->translator->translate('dictionary.days.Saturday'));
-
-            return $nazvy[$s];
-        });
-
-        $template->addFilter('toBaseName', function ($s) {
-            $basename = basename($s);
-
-            return $basename;
-        });
-
-        $template->addFilter('dateDiff', function ($s, $t) {
-            $datetime1 = date_create($s);
-            $datetime2 = date_create($t);
-            $interval = date_diff($datetime1, $datetime2);
-
-            return $interval->format('%R%a days');
-        });
+        $template->addFilter(NULL, '\Filters::common');
 
         return $template;
     }
@@ -158,7 +106,7 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
         $this->template->appDir = APP_DIR;
         $this->template->signed = TRUE;
         $this->template->langSelected = $this->translator->getLocale();
-		
+
         // Set language from cookie
         if ($this->context->httpRequest->getCookie('language_admin') == '') {
             $this->translator->setLocale($this->translator->getDefaultLocale());
@@ -185,15 +133,15 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
         return $control;
     }
 
-    protected function createComponentImageBrowser()
-    {
-        $control = new \Caloriscz\Media\ImageBrowserControl($this->database);
-        return $control;
-    }
-
     protected function createComponentDropZone()
     {
         $control = new \DropZoneControl($this->database);
+        return $control;
+    }
+
+    protected function createComponentImageBrowser()
+    {
+        $control = new \Caloriscz\Media\ImageBrowserControl($this->database);
         return $control;
     }
 
@@ -214,7 +162,7 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
         $control = new \Caloriscz\Menus\Admin\MainMenuControl($this->database);
         return $control;
     }
-	
+
     protected function createComponentLangSelector()
     {
         $control = new \LangSelectorControl($this->database);
