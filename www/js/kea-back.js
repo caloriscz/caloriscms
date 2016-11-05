@@ -15064,13 +15064,6 @@ $(document).ready(function () {
         return false;
     });
 
-    $('.datepicker').datepicker({
-        language: 'cs',
-        format: 'd. m. yyyy',
-        startDate: '0d',
-        endDate: '+2m'
-    });
-
     $(function () {
         $('.datetimepicker').datetimepicker({
             format: 'YYYY-MM-DD HH:mm:ss'
@@ -15109,16 +15102,6 @@ $(document).ready(function () {
         });
     });
 
-    $('#event_start').datepicker({
-        language: 'cs',
-        format: 'd. m. yyyy',
-        startDate: '0d',
-        endDate: '+2m'
-    }).on('changeDate', function (ev) {
-        $('input[name="date_event_end"]').val($('#event_start').val());
-        console.log($('#event_start').val());
-    });
-
     $(document).ready(function () {
         if ($('input[name="allday"]').attr('checked')) {
             $('#event_hour, #event_minute, #event_end_hour, #event_end_minute').hide();
@@ -15141,18 +15124,8 @@ $(document).ready(function () {
             ],
             height: 500
         });
-        $('.wysiwyg-disabled').summernote('disabled');
 
-        for (a = 0; a < 20; a++) {
-            $('#wysiwyg-sm-' + a).summernote({
-                toolbar: [
-                    // [groupName, [list of button]]
-                    ['style', ['bold', 'italic', 'underline', 'clear']],
-                    ['view', ['fullscreen', 'codeview']],
-                ],
-                height: 200
-            });
-        }
+        $('.wysiwyg-disabled').summernote('disabled');
 
         $('#wysiwyg-page').summernote({
             width: "99%",

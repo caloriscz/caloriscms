@@ -66,6 +66,7 @@ class EditorControl extends Control
             ->setAttribute("class", "datetimepicker");
         $form->addText("title", "dictionary.main.Title");
         $form->addText("slug", "dictionary.main.Slug");
+        $form->addText("document2");
         $form->addSelect("parent");
         $form->addSelect("template");
         $form->addGroup("dictionary.main.MetaTags");
@@ -216,6 +217,18 @@ class EditorControl extends Control
 
         $this->presenter->redirect(this, array("id" => $this->presenter->getParameter("id"), "l" => $this->presenter->getParameter("l")));
     }
+
+    /**
+     * Toggle display
+     */
+    function handleToggle()
+    {
+        setcookie("editortype", $this->getParameter("editortype"), time() + 15552000);
+
+        $this->presenter->redirect(this, array("id" => $this->getParameter("id")));
+    }
+
+
     /************************************/
 
     public function purify($dirtyHtml)
@@ -227,6 +240,7 @@ class EditorControl extends Control
     {
         $template = $this->template;
         $template->settings = $this->presenter->template->settings;
+        $template->editortype = $_COOKIE["editortype"];
 
         $template->pages = $this->database->table("pages")->where("NOT id", $this->presenter->getParameter("id"));
         $template->page = $this->database->table("pages")->get($this->presenter->getParameter("id"));

@@ -3,18 +3,23 @@
     {var $admin = true}
 {/if}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{$langSelected}">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{block #titles}{/block} | Caloris Admin</title>
     <link href="{$baseUri}/css/back.css" rel="stylesheet">
-	<link rel="stylesheet" href="{$baseUri}/css/jquery-ui.min.css">
-    <link rel="stylesheet" href="{$baseUri}/css/elfinder.min.css">
-    <script src="/js/Chart.min.js"></script>
+    <link rel="stylesheet" href="/css/jquery-ui.min.css">
+    <link rel="stylesheet" href="/css/summernote.css">
+    <link rel="stylesheet" href="/css/elfinder.min.css">
 </head>
 <body>
+<style>
+    .ace-plugin-code {
+        height: 440px;
+    }
+</style>
 {if $signed}
     <div id="wrapper">
         <nav class="navbar navbar-default" role="navigation" style="margin-bottom: 0">
@@ -27,7 +32,8 @@
                 </button>
                 <a class="navbar-brand" n:href=":Admin:Homepage:default, id => NULL">
                     <img src="{$baseUri}/images/admin/logo_caloris.png" alt="logo" class="img-responsive"
-                         style="max-height: 25px; display: inline; padding-right: 20px;"> <span style="font-size: 0.75em;">1.0</span>
+                         style="max-height: 25px; display: inline; padding-right: 20px;"> <span
+                            style="font-size: 0.75em;">1.1</span>
                 </a>
             </div>
 
@@ -38,12 +44,12 @@
                         <i class="fa fa-user fa-fw"></i> {$member->username} <i class="fa fa-caret-down"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-user">
-                        <li><a n:href=":Admin:Profile:default, id => NULL"><i
-                                        class="fa fa-gear fa-fw"></i> {_admin.navigation.myprofile}</a>
+                        <li><a n:href=":Admin:Profile:default, id => NULL">
+                                <i class="fa fa-gear fa-fw"></i> {_admin.navigation.myprofile}</a>
                         </li>
                         <li class="divider"></li>
-                        <li><a n:href=":Admin:Sign:out, id => NULL"><i
-                                        class="fa fa-sign-out fa-fw"></i> {_dictionary.main.logout}</a>
+                        <li><a n:href=":Admin:Sign:out, id => NULL">
+                                <i class="fa fa-sign-out fa-fw"></i> {_dictionary.main.logout}</a>
                         </li>
                     </ul>
                 </li>
@@ -60,6 +66,7 @@
                     </div>
                 </div>
             </div>
+
         </div>
     </div>
 {else}
@@ -75,12 +82,17 @@
 {/if}
 
 <script src="{$baseUri}/js/kea-back.js"></script>
+<script src="{$baseUri}/js/summernote.min.js"></script>
 <script src="{$baseUri}/js/elfinder.min.js"></script>
+
 <script src="{$baseUri}/js/summernote-ext-elfinder.js"></script>
 <script src="{$baseUri}/js/elfinder.cs.js"></script>
-<script src="http://code.jquery.com/ui/1.12.0/jquery-ui.min.js"
-        integrity="sha256-eGE6blurk5sHj+rmkfsGYeKyZx3M4bG+ZlFyA7Kns7E=" crossorigin="anonymous"></script>
+<script src="{$baseUri}/js/jquery-ui.min.js"></script>
 <script src="{$baseUri}/js/caloris-admin.js"></script>
+
+<script src="https://cloud9ide.github.io/emmet-core/emmet.js"></script>
+<script src="{$baseUri}/js/ace/src-min-noconflict/ace.js"></script>
+<script src="{$baseUri}/js/ace/src-min-noconflict/ext-emmet.js"></script>
 <script>
     function elfinderDialog() {
         var fm = $('<div/>').dialogelfinder({
@@ -131,12 +143,27 @@
                 ['para', ['ul', 'ol', 'paragraph']],
                 ['height', ['height']],
                 ['code', ['codeview']],
-                ['insert', ['picture', 'link', 'elfinder']]
+                ['insert', ['picture', 'link', 'elfinder']],
+                ['myplugin', ['aceCodeEditor']]
             ],
             onImageUpload: function (files, editor, welEditable) {
                 sendFile(files[0], editor, welEditable);
             }
         });
+    });
+
+    /* Ace plugin with Emmett support*/
+    var editor = ace.edit("document");
+    var textarea = $('textarea[name="document"]').hide();
+
+    editor.maxLines = 10;
+    editor.session.setMode("ace/mode/html");
+    editor.setTheme("ace/theme/terminal");
+    // enable emmet on the current editor
+    editor.setOption("enableEmmet", true);
+    editor.on('change', function(){
+        console.log('rt');
+        textarea.val(editor.getSession().getValue());
     });
 </script>
 </body>
