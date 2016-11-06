@@ -11,7 +11,7 @@
 {elseif $page->pages_types_id == 5}
     {var $pageRoot = 'contacts'}
 {else}
-    {var $pageRoot = 'page?type=' . $page->pages_types_id}
+    {var $pageRoot = 'pages?type=' . $page->pages_types_id}
 {/if}
 <ul class="nav nav-tabs">
     <li><a href="/admin/{$pageRoot}"><i class="fa fa-angle-left"></i> Všechny stránky</a></li>
