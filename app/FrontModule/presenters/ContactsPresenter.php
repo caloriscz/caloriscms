@@ -10,16 +10,8 @@ use Nette,
  */
 class ContactsPresenter extends BasePresenter
 {
-
     function renderDefault()
     {
-        $this->template->contacts = $this->database->table("contacts")->order("order ASC");
+        $this->template->contacts = $this->database->table("contacts")->where("categories_id", 9)->order("order ASC");
     }
-
-    function renderDetail()
-    {
-        $page = $this->database->table("pages")->get($this->getParameter("page_id"));
-        $this->template->page = $page;
-    }
-
 }

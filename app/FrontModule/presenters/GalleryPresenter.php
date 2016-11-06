@@ -10,12 +10,6 @@ use Nette,
  */
 class GalleryPresenter extends BasePresenter
 {
-
-    protected function startup()
-    {
-        parent::startup();
-    }
-
     public function renderDefault()
     {
         $cols = array(
@@ -52,7 +46,7 @@ class GalleryPresenter extends BasePresenter
 
     public function renderAlbumWithDescription()
     {
-        $this->template->page = $this->database->table("pages")
+        $this->template->album = $this->database->table("pages")
             ->get($this->getParameter("page_id"));
 
         $cols = array(

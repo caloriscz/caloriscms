@@ -1,18 +1,13 @@
-{block #titles}{$page->title}{/block}
-{block #ogtitle}<meta property="og:title" content="{$page->title}">{/block}
-{block #ogdescription}{if $page->metadesc}<meta property="og:description" content="{$page->metadesc}">{/if}{/block}
-{block #metadesc}{if $page->metadesc}<meta name="description" content="{$page->metadesc}">{/if}{/block}
-{block #metakeys}{if $page->metakeys}<meta name="keywords" content="{$page->metakeys}">{/if}{/block}
 {block content}
 
 <div class="heading">
     <div class="container">
-        <h1>{$page->title}</h1>
+        <h1>{control pageTitle $page}</h1>
     </div>
 </div>
 
 <div class="container white content">
     <div class="col-md-9">
-        {$page->document|noescape|f}
+        {control pageDocument $page}
     </div>
 </div>

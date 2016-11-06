@@ -11,7 +11,6 @@ use Nette,
  */
 abstract class BasePresenter extends Nette\Application\UI\Presenter
 {
-
     use \IPub\MobileDetect\TMobileDetect;
 
     /** @var Nette\Database\Context */
@@ -35,6 +34,18 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
         $this->mailer = $mailer;
     }
 
+    protected function createTemplate($class = NULL)
+    {
+        $template = parent::createTemplate($class);
+        $template->addFilter(NULL, '\Filters::common');
+
+        // Add mobile detect and its helper to template
+        $template->_mobileDetect = $this->mobileDetect;
+        $template->_deviceView = $this->deviceView;
+
+        return $template;
+    }
+
     protected function startup()
     {
         parent::startup();
@@ -42,6 +53,8 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
         if (session_status() == PHP_SESSION_NONE) {
             session_start();
         }
+
+        $this->template->page = $this->database->table("pages")->get($this->getParameter("page_id"));
 
         $this->template->settings = $this->database->table("settings")->fetchPairs("setkey", "setvalue");
 
@@ -96,6 +109,11 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
         $this->template->args = $parametres;
 
         $this->template->langSelected = $this->translator->getLocale();
+        $this->template->langDefault = $this->translator->getDefaultLocale();
+
+        if ($this->translator->getLocale() != $this->translator->getDefaultLocale()) {
+            $this->template->langSuffix = '_' . $this->translator->getLocale();
+        }
 
         try {
             if ($this->user->isLoggedIn()) {
@@ -142,18 +160,6 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
         }
     }
 
-    protected function createTemplate($class = NULL)
-    {
-        $template = parent::createTemplate($class);
-        $template->addFilter(NULL, '\Filters::common');
-
-        // Add mobile detect and its helper to template
-        $template->_mobileDetect = $this->mobileDetect;
-        $template->_deviceView = $this->deviceView;
-
-        return $template;
-    }
-
     protected function createComponentPaging()
     {
         $control = new \PagingControl;
@@ -177,7 +183,7 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
         $control = new \Caloriscz\Menus\SideMenuControl($this->database);
         return $control;
     }
-	
+
     protected function createComponentAdvancedSearch()
     {
         $control = new \Caloriscz\Page\Filters\AdvancedSearchControl($this->database);
@@ -187,6 +193,18 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
     protected function createComponentAlbum()
     {
         $control = new \AlbumControl($this->database);
+        return $control;
+    }
+
+    protected function createComponentHead()
+    {
+        $control = new \Caloriscz\Navigation\Head\HeadControl($this->database);
+        return $control;
+    }
+
+    protected function createComponentPageDocument()
+    {
+        $control = new \Caloriscz\Page\PageDocumentControl($this->database);
         return $control;
     }
 
@@ -205,6 +223,12 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
     protected function createComponentFooter()
     {
         $control = new \Caloriscz\Navigation\Footer\FooterControl($this->database);
+        return $control;
+    }
+
+    protected function createComponentMetaTags()
+    {
+        $control = new \Caloriscz\Navigation\Head\MetaTagsControl($this->database);
         return $control;
     }
 }

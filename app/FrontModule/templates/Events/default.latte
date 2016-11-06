@@ -1,22 +1,20 @@
-{block #titles}{_dictionary.main.Events}{/block}
 {block content}
-{var $id = $presenter->getParameter('id')}
 
 <div class="container heading">
-    <h1>{_dictionary.main.Events}</h1>
+    <h1>{control pageTitle $page}</h1>
 </div>
 
 <section id="events">
     <div class="container padded-top white">
         <div class="row">
             <div class="col-sm-8">
-                {foreach $blog as $item}
+                {foreach $events as $item}
                     {if date('mY', strtotime($item->date_event)) != $thisMonth}
                         {var $evmonth = Filters::numericmonth(date('n', strtotime($item->date_event)))}
                         <p class="event-month">{var $eventMonthNr = date('n', strtotime($item->date_event))}{_ $evmonth}</p>
                     {/if}
                     <h2>
-                        <a n:href=":Front:Events:detail, id => $item->pages->slug" style="font-size: 0.85em;">
+                        <a href="/{$item->pages->slug}" style="font-size: 0.85em;">
                             {if $item->pages->title == FALSE}
                                 {$item->date_event|date:'j. n. Y'}{else}{$item->pages->title}
                             {/if}
@@ -31,8 +29,6 @@
                 <div class="text-center">
                     {control paging, $args, $paginator}
                 </div>
-            </div>
-            <div class="col-sm-4">
             </div>
         </div>
     </div>

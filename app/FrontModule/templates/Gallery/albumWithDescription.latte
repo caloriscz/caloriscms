@@ -2,12 +2,12 @@
 {block content}
 {var $id = $presenter->getParameter('id')}
 <div class="container heading">
-    <h1>{$page->title}</h1>
+    <h1>{control pageTitle $page}</h1>
 </div>
 
 <div class="container">
     <div class="description">
-        {$page->document|f|noescape}
+        {control pageDocument $page}
     </div>
 </div>
 

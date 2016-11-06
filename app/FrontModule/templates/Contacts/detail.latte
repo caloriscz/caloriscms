@@ -1,15 +1,14 @@
-{block #titles}{$page->title}{/block}
 {block content}
 
 <div class="heading-color">
     <div class="container heading">
-        <h1>{$page->title}</h1>
+        <h1>{control pageDocument $title}</h1>
     </div>
 </div>
 
 <div class="container white content padded-top padded-btm nase-stranky">
     <div class="col-md-9">
-        {$page->document|noescape|f}
+        {control pageDocument $page}
     </div>
     <div class="col-md-3"></div>
 </div>
@@ -22,17 +21,15 @@
 
         {if $contactImage->count() > 0}
             {var $contactPortrait = $contactImage->fetch()}
-            <a n:href=":Front:Contacts:detail id => $contact->id . '-'. $template->webalize($contact->name)">
-                <img src="{$baseUri}/images/contacts/contact/{$contact->id|padLeft:6:'0'}/{$contactPortrait->filename}" 
+                <img src="{$baseUri}/media/{$contact->id|padLeft:6:'0'}/{$contactPortrait->name}"
                      class="img-responsive" style="max-height: 300px;" /><br />
-            </a>
         {/if}
     </div>
     <div class="col-md-8">
         <p id="post">{$contact->post|noescape}</p>
 
         <p class="tym-kontakt-detail">
-            <abbr title="Telefon">T</abbr>: {$contact->phone}
+            <abbr title="{_dictionary.main.Phone}">T</abbr>: {$contact->phone}
             <br />
             <abbr title="E-mail">E</abbr>: <a href="mailto:{$contact->email}">{$contact->email}</a>
         </p>

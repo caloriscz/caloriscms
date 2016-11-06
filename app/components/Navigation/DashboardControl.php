@@ -55,6 +55,7 @@ class DashboardControl extends Control
 
 }
 
+
 interface IDashboardControlFactory
 {
     /** @return \Caloriscz\Navigation\DashboardControl */

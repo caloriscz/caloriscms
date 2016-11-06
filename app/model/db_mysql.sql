@@ -495,7 +495,9 @@ INSERT INTO `pages` (`slug`, `title`, `document`, `preview`, `pages_id`, `users_
 ('kontakt', 'Kontakty', NULL, NULL, NULL, NULL, 1, '', '', NULL, NULL, 0, NULL, 43, 0, 'Front:Contact'),
 ('blog', 'Blog', NULL, NULL, NULL, NULL, 1, '', '', NULL, NULL, 0, NULL, 45, 0, 'Front:Blog'),
 ('galerie', 'Galerie', NULL, NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL, 0, NULL, 47, 0, 'Front:Gallery'),
+('udalosti', NULL, 'Události', NULL, NULL, 1, NULL, 1, NULL, NULL, NULL, NULL, 0, NULL, 48, 0, 'Front:Events'),
 ('dokumenty', NULL, 'Dokumenty', NULL, NULL, 1, NULL, 1, NULL, NULL, NULL, NULL, 0, NULL, 48, 0, 'Front:Documents');
+('kontakty', NULL, 'Náš tým', NULL, NULL, 1, NULL, 1, NULL, NULL, NULL, NULL, 0, NULL, 48, 0, 'Front:Contacts');
 
 INSERT INTO `settings` (`categories_id`, `setkey`, `setvalue`, `description_cs`, `description_en`, `type`, `admin_editable`) VALUES 
 (15, 'blog:short:showPreview', '1', 'Zobrazovat zkrácenou verzi článku v krátké verzi blogu.', 'Show preview of an article.', 'boolean', 1),
