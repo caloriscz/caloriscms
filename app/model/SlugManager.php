@@ -29,7 +29,6 @@ class SlugManager extends Nette\Object
             $arr['slug'] = $slug;
         }
 
-
         if ($prefix != null) {
             $arr['pages_types.prefix'] = $prefix;
         }

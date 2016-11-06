@@ -98,7 +98,6 @@ class SlugRouter extends Nette\Object implements Nette\Application\IRouter
             $presenter = $row->presenter;
         } else {
             if (!empty($row->presenter)) {
-                echo "test";
                 $presenter = $row->presenter;
             } else {
                 $presenter = $row->pages_types->presenter;
@@ -136,7 +135,7 @@ class SlugRouter extends Nette\Object implements Nette\Application\IRouter
 
                 // todo peekay Change cs for selected language
 
-				if (isset($params['locale'])) {
+				if (isset($query['locale'])) {
                     unset($params['locale']);
                 }
 
@@ -146,6 +145,7 @@ class SlugRouter extends Nette\Object implements Nette\Application\IRouter
                     } else {
                         $slug = $row->{'slug'};
                     }
+
                 } else {
                     return NULL;
                 }

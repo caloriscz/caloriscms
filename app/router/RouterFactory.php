@@ -56,6 +56,14 @@ class RouterFactory
             'id' => NULL,
         ));
 
+        /** Homepage won't work without this router */
+        $router[] = new Route('[<locale=cs cs|en>/]', array(
+            'module' => 'Front',
+            'presenter' => 'Homepage',
+            'action' => 'default',
+            'id' => NULL,
+        ));
+
         $router[] = new SlugRouter($this->SlugManager);
 
         $router[] = new Route('[<locale=cs cs|en>/]<presenter>/<action>/<id>', array(
