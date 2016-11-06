@@ -42,11 +42,19 @@
                 </div>
             {/if}
 
+            {if $presenter->getParameter('l')}
+                {var $pr = 'document_' . $presenter->getParameter('l')}
+                {var $document = $page->$pr}
+            {else}
+                {var $document = $page->document}
+            {/if}
+
             {if $editortype == 'ace'}
                 <textarea n:name="document"></textarea>
-                <pre id="document">{$page->document}</pre>
+                <pre id="document">{$document}</pre>
 
-                <a href="{link toggle! editortype => 'summernote', id => $presenter->getParameter('id')}">přepnout na Summernote</a>
+                <a href="{link toggle! editortype => 'summernote', id => $presenter->getParameter('id')}">přepnout na
+                    Summernote</a>
             {elseif $editortype == 'ace'}
                 <textarea n:name="document" class="summernote form-control" cols="3"></textarea>
 
@@ -57,9 +65,10 @@
                 <a href="{link toggle! editortype => 'ace', id => $presenter->getParameter('id')}">přepnout na Ace</a>
             {else}
                 <textarea n:name="document"></textarea>
-                <pre id="document">{$page->document}</pre>
+                <pre id="document">{$document}</pre>
 
-                <a href="{link toggle! editortype => 'summernote', id => $presenter->getParameter('id')}">přepnout na Summernote</a>
+                <a href="{link toggle! editortype => 'summernote', id => $presenter->getParameter('id')}">přepnout na
+                    Summernote</a>
             {/if}
         </div>
         <div class="col-md-4">

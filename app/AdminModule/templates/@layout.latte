@@ -153,18 +153,20 @@
     });
 
     /* Ace plugin with Emmett support*/
-    var editor = ace.edit("document");
-    var textarea = $('textarea[name="document"]').hide();
+    if ($('pre#document').length > 0) {
+        var editor = ace.edit("document");
+        var textarea = $('textarea[name="document"]').hide();
 
-    editor.maxLines = 10;
-    editor.session.setMode("ace/mode/html");
-    editor.setTheme("ace/theme/terminal");
-    // enable emmet on the current editor
-    editor.setOption("enableEmmet", true);
-    editor.on('change', function(){
-        console.log('rt');
-        textarea.val(editor.getSession().getValue());
-    });
+        editor.maxLines = 10;
+        editor.session.setMode("ace/mode/html");
+        editor.setTheme("ace/theme/terminal");
+        // enable emmet on the current editor
+        editor.setOption("enableEmmet", true);
+        editor.on('change', function(){
+            console.log('rt');
+            textarea.val(editor.getSession().getValue());
+        });
+    }
 </script>
 </body>
 </html>
