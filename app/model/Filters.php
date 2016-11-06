@@ -28,45 +28,6 @@ class Filters extends \Nette\Object
         return $rounding;
     }
 
-
-    function f($s)
-    {
-        preg_match_all("/\[snippet\=\"([0-9]{1,10})\"\]/s", $s, $valsimp, PREG_SET_ORDER);
-
-        if (count($valsimp) > 0) {
-            for ($n = 0; $n < count($valsimp); $n++) {
-                $snippet = $this->database->table("snippets")->get($valsimp[$n][1]);
-
-                if ($snippet) {
-                    $results = $snippet->content;
-                } else {
-                    $results = null;
-                }
-
-                $s = str_replace($valsimp[$n][0], "$results", $s);
-            }
-        }
-
-        preg_match_all("/\[file\=([0-9]{1,10})\]/s", $s, $valsimp, PREG_SET_ORDER);
-
-        if (count($valsimp) > 0) {
-            for ($n = 0; $n < count($valsimp); $n++) {
-                $snippet = $this->database->table("media")->get($valsimp[$n][1]);
-
-                if ($snippet) {
-                    $results = '/media/' . $snippet->pages_id . '/' . $snippet->name;
-                } else {
-                    $results = null;
-                }
-
-                $s = str_replace($valsimp[$n][0], "$results", $s);
-            }
-        }
-
-        return $s;
-    }
-
-
     function toMins($s)
     {
         if ($s < 60 && $s > 0) {
