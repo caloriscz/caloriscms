@@ -35,25 +35,7 @@
             <div class="modal fade" tabindex="-1" id="myModal-{$item->id}" role="dialog">
                 <div class="modal-dialog">
                     <div class="modal-content">
-                        {form editSnippetForm}
-                            {input page_id value => $item->id}
-                            <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal"
-                                        aria-label="Close"><span
-                                            aria-hidden="true">&times;</span></button>
-                                <h4 class="modal-title">{$item->keyword}</h4>
-                            </div>
-                            <div class="modal-body">
-                                <textarea name="content" class="form-control" id="wysiwyg-sm-{$c}">
-                                    {$item->content}
-                                </textarea>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-default"
-                                        data-dismiss="modal">{_dictionary.main.Close}</button>
-                                {input submitm}
-                            </div>
-                        {/form}
+                        {control editSnippetForm}
                     </div>
                 </div>
             </div>

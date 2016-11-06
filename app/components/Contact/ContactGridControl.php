@@ -29,7 +29,7 @@ class ContactGridControl extends Control
         $grid->addGroupAction($this->presenter->translator->translate('dictionary.main.Delete'))->onSelect[] = [$this, 'handleDelete'];
 
 
-        $grid->addColumnLink('name', 'Název')
+        $grid->addColumnLink('name', 'dictionary.main.Title')
             ->setRenderer(function ($item) {
                 if (strlen($item->name) == 0 && strlen($item->company) == 0) {
                     $name = 'nemá název';
