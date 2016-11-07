@@ -1,18 +1,17 @@
-{block #titles}{_dictionary.main.signup|firstUpper}{/block}
 {block content}
+
+<div class="container heading">
+    <h1>{control pageTitle $page}</h1>
+</div>
 
 <section class="container">
     {foreach $flashes as $flash}
         <div class="flash {$flash->type}">{$flash->message}</div>
     {/foreach}
 
-    <h1>{_dictionary.main.signup|firstUpper}</h1>
-    
     <p>Všechna pole jsou povinná</p>
 
-    <div class="row">
-        <div class="col-lg-offset-1 col-md-8">
-            {control signUp}
-        </div>
+    <div class="col-lg-offset-1 col-md-8">
+        {control signUp}
     </div>
 </section>

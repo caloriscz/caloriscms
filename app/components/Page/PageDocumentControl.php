@@ -20,7 +20,6 @@ class PageDocumentControl extends Control
             for ($n = 0; $n < count($valsimp); $n++) {
                 $snippet = $this->database->table("snippets")->get($valsimp[$n][1]);
                 if ($snippet) {
-
                     if ($this->presenter->translator->getLocale() == $this->presenter->translator->getDefaultLocale()) {
                         $results = $snippet->content;
                     } else {

@@ -202,9 +202,21 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
         return $control;
     }
 
+    protected function createComponentPageTitle()
+    {
+        $control = new \Caloriscz\Page\PageTitleControl($this->database);
+        return $control;
+    }
+
     protected function createComponentPageDocument()
     {
         $control = new \Caloriscz\Page\PageDocumentControl($this->database);
+        return $control;
+    }
+
+    protected function createComponentPageSlug()
+    {
+        $control = new \Caloriscz\Page\PageSlugControl($this->database);
         return $control;
     }
 
