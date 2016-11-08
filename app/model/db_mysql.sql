@@ -515,7 +515,13 @@ INSERT INTO `pages` (`slug`, `title`, `document`, `preview`, `pages_id`, `users_
 ('bonus', NULL, 'Bonus', NULL, 1, 1, NULL, 1, NULL, NULL, NULL, NULL, 0, NULL, 21, 0, 'Front:Order:bonus'),
 ('delivery', NULL, 'Poštovné a platební metoda', NULL, 1, 1, NULL, 1, NULL, NULL, NULL, NULL, 0, NULL, 22, 0, 'Front:Order:delivery'),
 ('summary', NULL, 'Shrnutí objednávky', NULL, 1, 1, NULL, 1, NULL, NULL, NULL, NULL, 0, NULL, 23, 0, 'Front:Order:summary'),
-('adresa-objednavky', NULL, 'Adresa objednávky', NULL, 1, 1, NULL, 1, NULL, NULL, NULL, NULL, 0, NULL, 24, 0, 'Front:Order:address');
+('adresa-objednavky', NULL, 'Adresa objednávky', NULL, 1, 1, NULL, 1, NULL, NULL, NULL, NULL, 0, NULL, 24, 0, 'Front:Order:address'),
+('order-success', NULL, 'Objednávka úspěšně zadána', NULL, 1, 1, NULL, 1, NULL, NULL, NULL, NULL, 0, NULL, 25, 0, 'Front:Order:success');
+('objednavky', NULL, 'Objednávky', NULL, 1, 1, NULL, 1, NULL, NULL, NULL, NULL, 0, NULL, 26, 0, 'Front:Orders:default'),
+('objednavky-detail', NULL, 'Detail objednávky', NULL, 1, 1, NULL, 1, NULL, NULL, NULL, NULL, 0, NULL, 27, 0, 'Front:Orders:detail');
+
+-- reserved for page templates (0)
+ALTER TABLE `pages` AUTO_INCREMENT=100;
 
 INSERT INTO `settings` (`categories_id`, `setkey`, `setvalue`, `description_cs`, `description_en`, `type`, `admin_editable`) VALUES 
 (15, 'blog:short:showPreview', '1', 'Zobrazovat zkrácenou verzi článku v krátké verzi blogu.', 'Show preview of an article.', 'boolean', 1),
