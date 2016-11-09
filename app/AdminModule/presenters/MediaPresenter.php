@@ -142,18 +142,23 @@ class MediaPresenter extends BasePresenter
     {
         $idMedia = $this->template->settings['categories:id:media'];
 
-        if ($this->template->pageId == 6 && $this->getParameter('id') == false) {
-            $pageId = 4;
-        } elseif ($this->template->pageId == 8 && $this->getParameter('id') == false) {
-            $pageId = 5;
+        if ($this->getParameter('id')) {
+            $arr = array(
+                "pages_types_id" => $this->template->pageId,
+                "pages_id" => $this->getParameter('id'),
+            );
         } else {
-            $pageId = $this->getParameter('id');
-        }
+            if ($this->getParameter("type") == 8) {
+                $pageId = 4;
+            } else {
+                $pageId = 6;
+            }
 
-        $arr = array(
-            "pages_types_id" => $this->template->pageId,
-            "pages_id" => $pageId,
-        );
+            $arr = array(
+                "pages_types_id" => $this->template->pageId,
+                "pages_id" => $pageId,
+            );
+        }
 
         $this->template->media = $this->database->table("pages")->where($arr);
 
