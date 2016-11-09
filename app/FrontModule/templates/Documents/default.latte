@@ -10,7 +10,7 @@
             {foreach $folders as $item}
                 <tr>
                     <td>
-                        <a href="/{$item->slug}">{$item->title}</a>
+                        <a href="{control pageSlug $item->id}">{$item->title}</a>
                     </td>
                 </tr>
             {/foreach}

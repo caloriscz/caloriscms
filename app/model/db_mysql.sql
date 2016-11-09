@@ -482,7 +482,7 @@ INSERT INTO `pages_types` (`id`, `content_type`, `presenter`, `action`, `prefix`
 (5, 'Contacts', 'Front:Contacts', 'detail', ''),
 (6, 'Galerie', 'Front:Gallery', 'album', ''),
 (7, 'Product Category', 'Front:Catalogue', 'default', ''),
-(8, 'Dokumenty', 'Front:Documents', 'default', ''),
+(8, 'Dokumenty', 'Front:Documents', 'folder', ''),
 (9, 'Template', '', 'default', '');
 
 INSERT INTO `pages_templates` (`id`, `pages_types_id`, `template`) VALUES
