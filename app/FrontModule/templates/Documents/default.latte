@@ -1,34 +1,19 @@
-{block #titles}Dokumenty{/block}
 {block content}
-{var $id = $presenter->getParameter('id')}
+
 <div class="container heading">
-    <h1>Dokumenty</h1>
+    <h1>{control pageTitle $page}</h1>
 </div>
 
 <div class="container white padded-top padded-btm">
     <div class="col-md-8">
         <table class="table">
-            {foreach $documents as $item}
+            {foreach $folders as $item}
                 <tr>
-                    <td style="border: 0;">
-                        <a href="{$baseUri}/media/{$item->id}/{$item->name}">
-                            {if $item->title}
-                                {$item->title}
-                            {else}
-                                {$item->name}
-                            {/if}
-                        </a>
+                    <td>
+                        <a href="{control pageSlug $item->id}">{$item->title}</a>
                     </td>
-                    <td style="border: 0;" class="col-md-2 text-right">{round($item->filesize/1024,2)} kB</td>
                 </tr>
             {/foreach}
         </table>
-    </div>
-    <div class="col-md-4">
-        <ul class="nav nav-pills nav-stacked nav-skola">
-            {foreach $documentsCat as $itemCat}
-                <li{if $id == $itemCat->id} class="active"{/if}><a href="/{$itemCat->slug}">{$itemCat->title}</a></li>
-                {/foreach}
-        </ul>
     </div>
 </div>

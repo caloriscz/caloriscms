@@ -1,22 +1,42 @@
-{block #titles}{$events->pages->title}{/block}
 {block content}
-{var $id = $presenter->getParameter('id')}
-
 <div class="container heading">
-    <h1>{_dictionary.main.Events}</h1>
+    <h1>{control pageTitle $page}</h1>
 </div>
 
 <div class="container padded-top white">
     <div class="row">
         <div class="col-sm-8">
-            <h2>{$events->pages->title}</h2>
+            {control pageDocument $page}
 
-            <p><small>{$events->date_event|date:'j. n. Y H:i'}</small></span></p>
+            {var $images = $page->related('media', 'pages_id')->order('main_file DESC')}
 
-            <p>{$events->pages->document|noescape}</p>
+            {if $images->count() > 0}
+                {var $image = $images->fetch()}
+                <img src="/media/{$image->pages_id}/tn/{$image->name}" alt="{$image->description}"
+                     class="img-responsive pull-right"
+                     style="max-width: 450px; padding-left: 20px;padding-bottom: 60px;">
+            {/if}
+
+            {var $filesGallery = $page->related('media', 'pages_id')->where('file_type = 0 AND main_file = 0')->order('main_file DESC')}
+
+            {if $filesGallery->count() > 0}
+                <h2>Soubory</h2>
+
+                {foreach $filesGallery as $item}
+                    <p>
+                        <a href="{$baseUri}/media/{$item->pages_id}/{$item->name}">
+                            {if $item->description == ''}
+                                {$item->name}
+                            {else}
+                                {$item->description}
+                            {/if}
+                        </a>
+                    </p>
+                {/foreach}
+            {/if}
+
+            {control signEvent}
+
         </div>
-        <div class="col-sm-4">
-        </div>
-
     </div>
 </div>

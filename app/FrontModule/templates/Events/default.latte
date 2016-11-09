@@ -1,38 +1,77 @@
-{block #titles}{_dictionary.main.Events}{/block}
 {block content}
-{var $id = $presenter->getParameter('id')}
 
 <div class="container heading">
-    <h1>{_dictionary.main.Events}</h1>
+    <h1>{control pageTitle $page}</h1>
 </div>
 
-<section id="events">
-    <div class="container padded-top white">
-        <div class="row">
-            <div class="col-sm-8">
-                {foreach $blog as $item}
-                    {if date('mY', strtotime($item->date_event)) != $thisMonth}
-                        <p class="event-month">{var $eventMonthNr = date('n', strtotime($item->date_event))}{$eventMonthNr|numericmonth}</p>
-                    {/if}
-                    <h2>
-                        <a n:href=":Front:Events:detail, id => $item->slug">
-                            {if $item->pages->title == FALSE}
-                                {$item->date_event|date:'j. n. Y'}{else}{$item->pages->title}
-                            {/if}
-                        </a>
-                        <span class="pull-right"><small>{$item->date_event|date:'j. n. Y'}</small></span>
-                    </h2>
-                    <p>{html_entity_decode($item->pages->document)|striptags|truncate:400:'...'}</p>
-                    <br/>
-                    {var $thisMonth = date('mY', strtotime($item->date_event))}
-                {/foreach}
+<div class="container padded-top white">
+    <div class="col-sm-8">
+        <table class="table table-striped">
+            <tr>
+                <th>{_dictionary.main.Title}</th>
+                {if $viewType == 1}
+                    <th class="text-right">{_dictionary.main.DateEventStarted}</th>
+                    <th class="text-right">{_dictionary.main.DateEventEnded}</th>
+                {/if}
+            </tr>
+            {var $viewType = 1}
+            {foreach $events as $item}
+                {if $viewType == 0}
+                    <tr>
+                        <td colspan="{if $viewType == 0}5{else}3{/if}" class="text-center">
+                            <strong>
+                                {if $item->diffDate > 0}
+                                    {var $ev = 'Historie'}
+                                {elseif $item->diffDate == 0}
+                                    {var $ev = 'Dnes'}
+                                {elseif $item->diffDate == 1}
+                                    {var $ev = 'Zítra'}
+                                {else}
+                                    {var $ev = 'Později'}
+                                {/if}
 
-                <div class="text-center">
-                    {control paging, $args, $paginator}
-                </div>
-            </div>
-            <div class="col-sm-4">
-            </div>
+                                {if $ev !== $ev_after}
+                                    {$ev}
+                                {/if}
+                            </strong>
+                        </td>
+                    </tr>
+                {/if}
+                <tr>
+                    <td>
+                        <a href="{control pageSlug $item->id}">{if $item->title}{$item->title}{else}
+                            <em>{_dictionary.main.NoName}{/if}</em></a></td>
+                    {if $viewType != 1}
+                        <td class="text-right">
+                            {if $item->date_event == null}
+                                {_messages.events.DateWasNotSet}
+                            {else}
+                                {$item->date_event|date:'j. n. H:i'}
+                            {/if}
+                        </td>
+                        <td class="text-right">
+                            {if $item->date_event_end == null}
+                                {_messages.events.DateWasNotSet}
+                            {else}
+                                {$item->date_event_end|date:'j. n. H:i'}
+                            {/if}
+                        </td>
+                        <td class="text-right">
+                            {if $item->date_event == null && $item->date_event_end == null}
+
+                            {else}
+                                {$item->date_event|dateDiff:$item->date_event_end}
+                            {/if}
+                        </td>
+                    {/if}
+                </tr>
+                {if $viewType == 0}
+                    {var $ev_after = $ev}
+                {/if}
+            {/foreach}
+        </table>
+        <div class="text-center">
+            {control paging, $args, $paginator}
         </div>
     </div>
-</section>
+</div>

@@ -1,15 +1,11 @@
-{block #titles}{_dictionary.main.contact|firstUpper}{/block}
 {block content}
 
 <div class="container heading">
-    <h1>{_dictionary.main.contact|firstUpper}</h1>
+    <h1>{control pageTitle $page}</h1>
 </div>
 
 <div class="container">
     <div class="col-sm-6">
-        {foreach $contacts as $contact}
-            {control contact $contact->id}
-        {/foreach}
 
     </div>
     <div class="col-sm-6">

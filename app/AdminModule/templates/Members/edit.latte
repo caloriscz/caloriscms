@@ -88,7 +88,7 @@
                 <p>
                     {var $ordersRelated = $members->related('orders', 'users_id')}
                     {foreach $ordersRelated as $item}
-                        <a n:href=":AdminStore:Orders:default, id => $item->id">{$item->oid}</a>{sep}, {/sep}
+                        <a n:href=":Admin:Orders:default, id => $item->id">{$item->oid}</a>{sep}, {/sep}
                     {/foreach}
 
                     {if $ordersRelated->count() == 0}

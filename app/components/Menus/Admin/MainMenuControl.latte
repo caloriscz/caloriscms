@@ -17,8 +17,13 @@
                 </a>
             </li>
             <li>
-                <a href="/admin/pages">
+                <a href="/admin/pages?type=1">
                     <i class="fa fa-files-o fa-fw"></i> {_admin.navigation.pages}
+                </a>
+            </li>
+            <li>
+                <a href="/admin/pages?type=0">
+                    <i class="fa fa-leaf fa-fw"></i> Šablony
                 </a>
             </li>
             <li>
@@ -84,25 +89,25 @@
                     </a>
                     <ul class="nav nav-second-level collapse" aria-expanded="false">
                         <li>
-                            <a href="/admin/store/catalogue"> {_admin.navigation.catalogue|firstUpper}</a>
+                            <a href="/admin/catalogue"> {_admin.navigation.catalogue|firstUpper}</a>
                         </li>
                         <li>
-                            <a href="/admin/store/orders"> {_dictionary.main.orders|firstUpper}</a>
+                            <a href="/admin/orders"> {_dictionary.main.orders|firstUpper}</a>
                         </li>
                         <li>
-                            <a href="/admin/store/categories"> {_dictionary.main.Categories}</a>
+                            <a href="/admin/store-categories"> {_dictionary.main.Categories}</a>
                         </li>
                         {if $admin}
                             <li>
-                                <a href="/admin/store/settings"> {_dictionary.main.settings|firstUpper}</a>
+                                <a href="/admin/store-settings"> {_dictionary.main.settings|firstUpper}</a>
                             </li>
                             <li>
-                                <a href="/admin/store/catalogue/brands">{_dictionary.main.brands|firstUpper}</a>
+                                <a href="/admin/catalogue/brands">{_dictionary.main.brands|firstUpper}</a>
                             </li>
                             <li>
-                                <a href="/admin/store/params">{_dictionary.main.parametres|firstUpper}</a>
+                                <a href="/admin/params">{_dictionary.main.parametres|firstUpper}</a>
                             </li>
-                            <li><a href="/admin/store/bonus">Bonusy</a></li>
+                            <li><a href="/admin/bonus">Bonusy</a></li>
                         {/if}
                     </ul>
                 </li>

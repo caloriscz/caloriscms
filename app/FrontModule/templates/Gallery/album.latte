@@ -1,8 +1,7 @@
-{block #titles}{$album->title}{/block}
 {block content}
 {var $id = $presenter->getParameter('id')}
 <div class="container heading">
-    <h1>{$album->title}</h1>
+    <h1>{control pageTitle $page}</h1>
 </div>
 
 <div class="container white padded-top padded-btm">

@@ -11,29 +11,44 @@ use Nette,
 class EventsPresenter extends BasePresenter
 {
 
+    protected function createComponentSignEvent()
+    {
+        $control = new \Caloriscz\Events\SignEventControl($this->database);
+        return $control;
+    }
+
     public function renderDefault()
     {
-        $blog = $this->database->table("events")
-            ->where("pages.public = 1 AND pages.pages_types_id = 3 AND date_event >= NOW()")
-            ->order("date_event");
+        $type = 1;
+
+        if ($type == 1) {
+            $events = $this->database->table("pages")
+                ->where("pages_types_id = 3");
+        } else {
+            $events = $this->database->table("pages")
+                ->select(":events.id, pages.id, pages.title, pages.pages_types_id, :events.date_event, :events.date_event_end, 
+            :events.all_day, :events.contact, public, DATEDIFF(NOW(), 
+            :events.date_event) AS diffDate")
+                ->where("pages_types_id = 3");
+        }
 
         $paginator = new \Nette\Utils\Paginator;
-        $paginator->setItemCount($blog->count("*"));
+        $paginator->setItemCount($events->count("*"));
         $paginator->setItemsPerPage(20);
         $paginator->setPage($this->getParameter("page"));
-        $this->template->board = $blog->limit($paginator->getLength(), $paginator->getOffset());
+
+        $type = 1;
+        if ($type == 0) {
+            $order = "diffDate DESC";
+        } else {
+            $order = "title";
+        }
+
+        $this->template->events = $events->order($order)->limit($paginator->getLength(), $paginator->getOffset());
 
         $this->template->paginator = $paginator;
-
-        $this->template->blog = $blog;
         $this->template->args = $this->getParameters();
+
+        $this->template->viewtype = $this->context->httpRequest->getCookie('viewtype');
     }
-
-    public function renderDetail()
-    {
-        $events = $this->database->table("events")->where(array("pages.slug" => $this->getParameter("slug")))->fetch();
-
-        $this->template->events = $events;
-    }
-
 }

@@ -24,7 +24,7 @@ class CommunicationGridControl extends Control
         $grid->setDataSource($dbCommunications);
         $grid->setItemsPerPageList(array(20));
 
-        $grid->addGroupAction('Smazat')->onSelect[] = [$this, 'handleDeleteCommunication'];
+        $grid->addGroupAction('dictionary.main.Delete')->onSelect[] = [$this, 'handleDeleteCommunication'];
 
         $grid->addColumnText('communication_type', 'Typ');
         $grid->addColumnText('communication_value', 'Hodnota');
@@ -34,10 +34,12 @@ class CommunicationGridControl extends Control
 
     function handleDeleteCommunication($id)
     {
-        $contacts = $this->database->table("contacts_communication")->get($id);
-        $contactsId = $contacts->contacts_id;
-        $contacts->delete();
-        $this->presenter->redirect(this, array("id" => $contactsId));
+        for ($a = 0; $a < count($id); $a++) {
+            $contacts = $this->database->table("contacts_communication")->get($id);
+            $contactsId = $contacts->contacts_id;
+            $contacts->delete();
+            $this->presenter->redirect(this, array("id" => $contactsId));
+        }
     }
 
     public function render()

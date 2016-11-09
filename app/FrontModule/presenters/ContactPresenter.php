@@ -10,13 +10,15 @@ use Nette,
  */
 class ContactPresenter extends BasePresenter
 {
-
-    function renderDefault()
+    protected function createComponentHelpdesk()
     {
-        $this->template->contacts = $this->database->table("contacts")
-            ->where(array("categories_id" => 45))->order("id");
-			
-			        $this->template->snippets = $this->database->table("snippets")->where("pages_id", 2)->fetchPairs('id', 'content');
+        $control = new \HelpdeskControl($this->database);
+        return $control;
+    }
+
+    public function renderDefault()
+    {
+        $this->template->page = $this->database->table("pages")->get(2);
     }
 
 }

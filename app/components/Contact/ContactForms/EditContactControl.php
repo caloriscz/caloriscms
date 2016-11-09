@@ -6,8 +6,9 @@ use Nette\Application\UI\Control;
 class EditContactControl extends Control
 {
 
-    /** @var Nette\Database\Context */
+    /** @var \Nette\Database\Context */
     public $database;
+    public $onSave;
 
     public function __construct(\Nette\Database\Context $database)
     {
@@ -22,7 +23,7 @@ class EditContactControl extends Control
         $this->template->id = $this->presenter->getParameter('id');
 
         $categories = new \App\Model\Category($this->database);
-        $cats = $categories->getSubIds($this->template->settings['categories:id:contact']);
+        $cats = $categories->getSubIds(2);
         $groups = $this->database->table("categories")
             ->where("id", $cats)->fetchPairs("id", "title");
 
@@ -78,24 +79,27 @@ class EditContactControl extends Control
         $form->addTextArea("notes", "dictionary.main.Notes")
             ->setAttribute("class", "form-control");
 
+        $page = $this->database->table("pages")->get($this->presenter->getParameter("id"));
+        $contact = $this->database->table("contacts")->where("pages_id", $this->presenter->getParameter("id"))->fetch();
+
         $arr = array(
-            "contact_id" => $this->presenter->template->contact->id,
-            "pages_id" => $this->presenter->template->contact->pages_id,
-            "name" => $this->presenter->template->contact->name,
-            "company" => $this->presenter->template->contact->company,
-            "post" => $this->presenter->template->contact->post,
-            "type" => $this->presenter->template->contact->type,
-            "email" => $this->presenter->template->contact->email,
-            "phone" => $this->presenter->template->contact->phone,
-            "categories_id" => $this->presenter->template->contact->categories_id,
-            "street" => $this->presenter->template->contact->street,
-            "zip" => $this->presenter->template->contact->zip,
-            "city" => $this->presenter->template->contact->city,
-            "banking_account" => $this->presenter->template->contact->banking_account,
-            "vatin" => $this->presenter->template->contact->vatin,
-            "vatid" => $this->presenter->template->contact->vatid,
-            "notes" => $this->presenter->template->contact->notes,
-            "dateofbirth" => $this->presenter->template->contact->date_of_birth,
+            "contact_id" => $contact->id,
+            "pages_id" => $page->id,
+            "name" => $contact->name,
+            "company" => $contact->company,
+            "post" => $contact->post,
+            "type" => $contact->type,
+            "email" => $contact->email,
+            "phone" => $contact->phone,
+            "categories_id" => $contact->categories_id,
+            "street" => $contact->street,
+            "zip" => $contact->zip,
+            "city" => $contact->city,
+            "banking_account" => $contact->banking_account,
+            "vatin" => $contact->vatin,
+            "vatid" => $contact->vatid,
+            "notes" => $contact->notes,
+            "dateofbirth" => $contact->date_of_birth,
         );
 
         $form->setDefaults($arr);
@@ -111,8 +115,7 @@ class EditContactControl extends Control
     function editFormValidated(\Nette\Forms\BootstrapUIForm $form)
     {
         if (\Nette\Utils\Validators::isEmail($form->values->email) == FALSE && strlen($form->values->email) > 0) {
-            $this->presenter->flashMessage($this->translator->translate('messages.sign.fillInEmail'), "error");
-            $this->presenter->redirect(":Admin:Contacts:detail", array("id" => NULL));
+            $this->onSave($form->values->pages_id, $error = 1);
         }
     }
 
@@ -140,7 +143,7 @@ class EditContactControl extends Control
                 "notes" => $form->values->notes,
             ));
 
-        $this->presenter->redirect(this, array("id" => $form->values->pages_id));
+        $this->onSave($form->values->pages_id);
     }
 
     public function render()
@@ -151,4 +154,10 @@ class EditContactControl extends Control
         $template->render();
     }
 
+}
+
+interface IEditContactControlFactory
+{
+    /** @return \Caloriscz\Contacts\ContactForms\EditContactControl */
+    function create();
 }

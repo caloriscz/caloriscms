@@ -95,10 +95,11 @@ class SlugRouter extends Nette\Object implements Nette\Application\IRouter
 
         // Presenter preset
         if ($row->pages_types_id == 0) {
-            $presenter = $row->presenter;
+            $presenterArr = implode(":", array_slice(explode(':', $row->presenter), 0, -1));
+            $presenter = $presenterArr;
+
         } else {
             if (!empty($row->presenter)) {
-                echo "test";
                 $presenter = $row->presenter;
             } else {
                 $presenter = $row->pages_types->presenter;
@@ -109,8 +110,15 @@ class SlugRouter extends Nette\Object implements Nette\Application\IRouter
         if ($row->pages_templates_id != null) {
             $params['action'] = $row->pages_templates->template;
         } else {
-            $params['action'] = $row->pages_types->action;
+            if ($row->pages_types_id == 0) {
+                $params['action'] = substr($row->presenter, strrpos($row->presenter, ":")+1);
+            } else {
+                $params['action'] = $row->pages_types->action;
+            }
         }
+
+
+
 
         return new App\Request($presenter, $httpRequest->getMethod(), $params, $httpRequest->getPost(), $httpRequest->getFiles(), array(App\Request::SECURED => $httpRequest->isSecured()));
 
@@ -136,7 +144,7 @@ class SlugRouter extends Nette\Object implements Nette\Application\IRouter
 
                 // todo peekay Change cs for selected language
 
-				if (isset($params['locale'])) {
+                if (isset($query['locale'])) {
                     unset($params['locale']);
                 }
 
@@ -146,6 +154,7 @@ class SlugRouter extends Nette\Object implements Nette\Application\IRouter
                     } else {
                         $slug = $row->{'slug'};
                     }
+
                 } else {
                     return NULL;
                 }

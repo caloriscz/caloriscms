@@ -1,13 +1,14 @@
-{block #titles}{_dictionary.main.ForgottenPassword}{/block}
 {block content}
+
+<div class="container heading">
+    <h1>{control pageTitle $page}</h1>
+</div>
 
 <section class="container">
 
     {foreach $flashes as $flash}
         <div class="flash {$flash->type}">{$flash->message}</div>
     {/foreach}
-
-    <h1>{_dictionary.main.ForgottenPassword}</h1>
 
     <div class="contentBox">
         <p>Zadejte své uživatelské jméno nebo e-mailovou adresu. Zašleme Vám e-mail s odkazem pro vytvoření Vašeho nového hesla.</p>

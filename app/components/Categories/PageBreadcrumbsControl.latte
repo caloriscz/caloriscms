@@ -1,0 +1,7 @@
+{if count($breadcrumbs) > 0}
+    <ol class="breadcrumb breadcrumb-categories">
+        {foreach $breadcrumbs as $crumbId => $crumbValue}
+            <li><a href="/{$crumbId}">{$crumbValue}</a></li>
+        {/foreach}
+    </ol>
+{/if}

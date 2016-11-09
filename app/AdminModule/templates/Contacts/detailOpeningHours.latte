@@ -21,7 +21,8 @@
     {foreach $hours as $open}
         <tr>
             <td class="col-xs-1"><a n:href="deleteHour! id => $open->id, page => $presenter->getParameter('page')"><i class="fa fa-times font-red"></i></a></td>
-            <td class="col-md-1">{$open->day|numericday}</td>
+            {var $oh = Filters::numericday($open->day)}
+            <td class="col-md-1">{_ $oh}</td>
             <td>{$open->hourstext}</td>
         </tr>
     {/foreach}

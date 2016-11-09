@@ -4,12 +4,16 @@
 <br>
 {if $page->pages_types_id == 6 || $page->pages_types_id == 8}
     {var $pageRoot = 'media?type=' . $page->pages_types_id}
+{elseif $page->pages_types_id == 0}
+    {var $pageRoot = 'pages?type=0'}
 {elseif $page->pages_types_id == 3}
     {var $pageRoot = 'events'}
+{elseif $page->pages_types_id == 4}
+    {var $pageRoot = 'catalogue'}
 {elseif $page->pages_types_id == 5}
     {var $pageRoot = 'contacts'}
 {else}
-    {var $pageRoot = 'page?type=' . $page->pages_types_id}
+    {var $pageRoot = 'pages?type=' . $page->pages_types_id}
 {/if}
 <ul class="nav nav-tabs">
     <li><a href="/admin/{$pageRoot}"><i class="fa fa-angle-left"></i> Všechny stránky</a></li>
@@ -19,6 +23,18 @@
             <a href="/admin/events/detail/{$id}">
                 <i class="fa fa-calendar fa-fw"></i> {_dictionary.main.Event}
             </a>
+        </li>
+    {/if}
+
+    {if $page->pages_types_id == 4}
+        <li role="presentation" {if $view == 'product' && $name == 'Admin:Product'}class="active"{/if}>
+            <a href="/admin/product/product/{$id}">Produkt</a>
+        </li>
+        <li role="presentation" {if $view == 'params' && $name == 'Admin:Product'}class="active"{/if}>
+            <a href="/admin/product/params/{$id}">{_dictionary.main.Parametres}</a>
+        </li>
+        <li role="presentation" {if $view == 'stock' && $name == 'Admin:Product'}class="active"{/if}>
+            <a href="/admin/product/stock/{$id}">{_dictionary.main.stock|firstUpper}</a>
         </li>
     {/if}
 
@@ -56,7 +72,7 @@
         <a href="/admin/pages/detail-related/{$id}">Související příspěvky</a>
     </li>
     <li class="pull-right">
-        <a href="/{$pages->slug}" class="btn btn-primary" target="_blank">{_dictionary.main.Preview}</a>
+        <a href="/{$page->slug}" class="btn btn-primary" target="_blank">{_dictionary.main.Preview}</a>
     </li>
 </ul>
 <br>

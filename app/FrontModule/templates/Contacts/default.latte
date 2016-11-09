@@ -3,7 +3,7 @@
 
 <div class="heading-color">
     <div class="container heading">
-        <h1>{_dictionary.main.Contacts}</h1>
+        <h1>{control pageTitle $page}</h1>
     </div>
 </div>
 
@@ -14,22 +14,22 @@
             <div class="col-xs-6 col-md-3" style="height: 270px; margin-bottom: 40px;">
                 <div class="thumbnail">
                     <div class="text-center" style="height: 150px">
-                        {var $contactImage = $contact->related('contacts_images', 'contacts_id')}
+                        {var $contactImage = $contact->related('media', 'pages_id')}
 
                         {if $contactImage->count() > 0}
                             {var $contactPortrait = $contactImage->fetch()}
-                            <a n:href=":Front:Contacts:detail id => $contact->id . '-'. $template->webalize($contact->name)">
-                                <img src="{$baseUri}/images/contacts/contact/{$contact->id|padLeft:6:'0'}/{$contactPortrait->filename}" 
+                            <a href="/{$contact->pages->slug}">
+                                <img src="{$baseUri}/media/{$contact->id}/{$contactPortrait->name}"
                                      class="img-responsive" style="max-height: 150px;" /><br />
                             </a>
                         {/if}
                     </div>
                     <div class="caption" style="height: 120px">
-                        <a n:href=":Front:Contacts:detail id => $contact->id . '-'. $template->webalize($contact->name)" class="name">
+                        <a href="/{$contact->pages->slug}" class="name">
                             <span style="letter-spacing: -0.05em;">{$contact->name}</span>
                         </a>
                         <br />
-                        <a n:href=":Front:Contacts:detail id => $contact->id . '-'. $template->webalize($contact->name)" class="post" style="text-decoration: none;">
+                        <a href="/{$contact->pages->slug}" class="post" style="text-decoration: none;">
                             {$contact->post}
                         </a>
                         {if $contact->phone}Telefon: {/if}{$contact->phone}<br />

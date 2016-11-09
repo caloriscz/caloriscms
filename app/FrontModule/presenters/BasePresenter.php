@@ -2,6 +2,7 @@
 
 namespace App\FrontModule\Presenters;
 
+use Kdyby\Translation\Translator;
 use Nette,
     App\Model;
 
@@ -10,7 +11,6 @@ use Nette,
  */
 abstract class BasePresenter extends Nette\Application\UI\Presenter
 {
-
     use \IPub\MobileDetect\TMobileDetect;
 
     /** @var Nette\Database\Context */
@@ -34,6 +34,18 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
         $this->mailer = $mailer;
     }
 
+    protected function createTemplate($class = NULL)
+    {
+        $template = parent::createTemplate($class);
+        $template->addFilter(NULL, '\Filters::common');
+
+        // Add mobile detect and its helper to template
+        $template->_mobileDetect = $this->mobileDetect;
+        $template->_deviceView = $this->deviceView;
+
+        return $template;
+    }
+
     protected function startup()
     {
         parent::startup();
@@ -41,6 +53,8 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
         if (session_status() == PHP_SESSION_NONE) {
             session_start();
         }
+
+        $this->template->page = $this->database->table("pages")->get($this->getParameter("page_id"));
 
         $this->template->settings = $this->database->table("settings")->fetchPairs("setkey", "setvalue");
 
@@ -95,6 +109,11 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
         $this->template->args = $parametres;
 
         $this->template->langSelected = $this->translator->getLocale();
+        $this->template->langDefault = $this->translator->getDefaultLocale();
+
+        if ($this->translator->getLocale() != $this->translator->getDefaultLocale()) {
+            $this->template->langSuffix = '_' . $this->translator->getLocale();
+        }
 
         try {
             if ($this->user->isLoggedIn()) {
@@ -141,108 +160,6 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
         }
     }
 
-    protected function createTemplate($class = NULL)
-    {
-        $template = parent::createTemplate($class);
-        $template->addFilter('ago', function ($s, $add = 0) {
-            $date = new \DateTime();
-            $date->setDate(date('Y', strtotime($s)), date('m', strtotime($s)), date('d', strtotime($s)));
-            $interval = $date->diff(new \DateTime('now'));
-            $daysAgo = $interval->format('%a days');
-
-            return $daysAgo;
-        });
-
-        $x = $this->translator->getLocale();
-        $template->addFilter('numericday', function ($s) {
-            $nazvy = array(
-                1 => $this->translator->translate('dictionary.days.Sunday'),
-                2 => $this->translator->translate('dictionary.days.Monday'),
-                3 => $this->translator->translate('dictionary.days.Tuesday'),
-                4 => $this->translator->translate('dictionary.days.Wednesday'),
-                5 => $this->translator->translate('dictionary.days.Thursday'),
-                6 => $this->translator->translate('dictionary.days.Friday'),
-                7 => $this->translator->translate('dictionary.days.Saturday'));
-
-            return $nazvy[$s];
-        });
-
-        $template->addFilter('numericmonth', function ($s) {
-            $nazvy = array(
-                1 => $this->translator->translate('dictionary.months.January'),
-                2 => $this->translator->translate('dictionary.months.February'),
-                3 => $this->translator->translate('dictionary.months.March'),
-                4 => $this->translator->translate('dictionary.months.April'),
-                5 => $this->translator->translate('dictionary.months.May'),
-                6 => $this->translator->translate('dictionary.months.June'),
-                7 => $this->translator->translate('dictionary.months.July'),
-                8 => $this->translator->translate('dictionary.months.August'),
-                9 => $this->translator->translate('dictionary.months.September'),
-                10 => $this->translator->translate('dictionary.months.October'),
-                11 => $this->translator->translate('dictionary.months.November'),
-                12 => $this->translator->translate('dictionary.months.December'),
-
-            );
-
-            return $nazvy[$s];
-        });
-
-        $template->addFilter('f', function ($s) {
-            preg_match_all("/\[snippet\=\"([0-9]{1,10})\"\]/s", $s, $valsimp, PREG_SET_ORDER);
-
-            if (count($valsimp) > 0) {
-                for ($n = 0; $n < count($valsimp); $n++) {
-                    $snippet = $this->database->table("snippets")->get($valsimp[$n][1]);
-
-                    if ($snippet) {
-                        $results = $snippet->content;
-                    } else {
-                        $results = null;
-                    }
-
-                    $s = str_replace($valsimp[$n][0], "$results", $s);
-                }
-            }
-
-            preg_match_all("/\[file\=([0-9]{1,10})\]/s", $s, $valsimp, PREG_SET_ORDER);
-
-            if (count($valsimp) > 0) {
-                for ($n = 0; $n < count($valsimp); $n++) {
-                    $snippet = $this->database->table("media")->get($valsimp[$n][1]);
-
-                    if ($snippet) {
-                        $results = '/media/' . $snippet->pages_id . '/' . $snippet->name;
-                    } else {
-                        $results = null;
-                    }
-
-                    $s = str_replace($valsimp[$n][0], "$results", $s);
-                }
-            }
-
-            return $s;
-        });
-
-
-        $template->addFilter('toMins', function ($s) {
-            if ($s < 60 && $s > 0) {
-                $duration = '0:' . $s . '.';
-            } elseif ($s >= 60) {
-                $duration = ceil($s / 60) . ':' . ($s % 60) . '.';
-            } else {
-                $duration = '-';
-            }
-
-            return $duration;
-        });
-
-        // Add mobile detect and its helper to template
-        $template->_mobileDetect = $this->mobileDetect;
-        $template->_deviceView = $this->deviceView;
-
-        return $template;
-    }
-
     protected function createComponentPaging()
     {
         $control = new \PagingControl;
@@ -252,18 +169,6 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
     protected function createComponentNavigation()
     {
         $control = new \Caloriscz\Navigation\NavigationControl($this->database);
-        return $control;
-    }
-
-    protected function createComponentLinkList()
-    {
-        $control = new \Caloriscz\Links\LinkListControl($this->database);
-        return $control;
-    }
-	
-    protected function createComponentSocialFacebook()
-    {
-        $control = new \Caloriscz\Social\FacebookControl;
         return $control;
     }
 
@@ -279,24 +184,6 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
         return $control;
     }
 
-    protected function createComponentSideCat()
-    {
-        $control = new \Caloriscz\Menus\SideCatControl($this->database);
-        return $control;
-    }
-
-    protected function createComponentBlogPreview()
-    {
-        $control = new \BlogPreviewControl($this->database);
-        return $control;
-    }
-
-    protected function createComponentEventsCalendar()
-    {
-        $control = new \EventsCalendarControl($this->database);
-        return $control;
-    }
-
     protected function createComponentAdvancedSearch()
     {
         $control = new \Caloriscz\Page\Filters\AdvancedSearchControl($this->database);
@@ -309,21 +196,27 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
         return $control;
     }
 
-    protected function createComponentHelpdesk()
+    protected function createComponentHead()
     {
-        $control = new \HelpdeskControl($this->database);
+        $control = new \Caloriscz\Navigation\Head\HeadControl($this->database);
         return $control;
     }
 
-    protected function createComponentCarouselBox()
+    protected function createComponentPageTitle()
     {
-        $control = new \CarouselBoxControl($this->database);
+        $control = new \Caloriscz\Page\PageTitleControl($this->database);
         return $control;
     }
 
-    protected function createComponentNewsletterForm()
+    protected function createComponentPageDocument()
     {
-        $control = new \NewsletterFormControl($this->database);
+        $control = new \Caloriscz\Page\PageDocumentControl($this->database);
+        return $control;
+    }
+
+    protected function createComponentPageSlug()
+    {
+        $control = new \Caloriscz\Page\PageSlugControl($this->database);
         return $control;
     }
 
@@ -338,26 +231,16 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
         $control = new \Caloriscz\Menus\MenuControl($this->database);
         return $control;
     }
-	
-    protected function createComponentProduct()
+
+    protected function createComponentFooter()
     {
-        $control = new \ProductControl($this->database);
+        $control = new \Caloriscz\Navigation\Footer\FooterControl($this->database);
         return $control;
     }
 
-    /* Store components  ----------------------------------------------------------------------------------------------- */
-    /* enable by uncomment this part
-    protected function createComponentCartUpdater()
+    protected function createComponentMetaTags()
     {
-        $control = new \Caloriscz\Cart\CartUpdaterControl($this->database);
+        $control = new \Caloriscz\Navigation\Head\MetaTagsControl($this->database);
         return $control;
     }
-
-    protected function createComponentCartList()
-    {
-        $control = new \Caloriscz\Cart\ListControl($this->database);
-        return $control;
-    }
-*/
-
 }

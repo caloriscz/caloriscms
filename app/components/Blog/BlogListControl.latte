@@ -1,0 +1,20 @@
+{foreach $blog as $item}
+    <h2>
+        <a href="/{$item->slug}">
+            {if $item->title == FALSE}
+                {$item->date_published|date:'j. n. Y H:i'}{else}{$item->title}
+            {/if}
+        </a>
+        <span class="pull-right"><small>{$item->date_created|date:'j. n. Y H:i'}</small></span>
+    </h2>
+    {if $settings['blog:preview:length'] > 0}
+        {$item->document|striptags|truncate:$settings['blog:preview:length']}
+    {else}
+        {$item->document|noescape}
+    {/if}
+    <br />
+{/foreach}
+
+<div class="text-center">
+    {control paging, $args, $paginator}
+</div>

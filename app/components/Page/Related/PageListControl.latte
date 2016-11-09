@@ -1,0 +1,24 @@
+<table class="table">
+    {foreach $storeRelated as $item}
+        {var $storeRelatedImagesDb = $database->table('media')->where('pages_id', $item->related_pages_id)}
+        {var $storeRelatedImagesCount = $storeRelatedImagesDb->count()}
+
+        <tr>
+            <td class="col-xs-4">
+                {if $storeRelatedImagesCount > 0}
+                    {var $itemImage = $storeRelatedImagesDb->fetch()}
+                    <a href="/{$item->ref('store', 'related_pages_id')->pages->title}"
+                       class="related-image">
+                        <img src="{$baseUri}/media/{$item->related_pages_id}/{$itemImage->name}"
+                             class="img-responsive"/>
+                    </a>
+                {/if}
+            </td>
+            <td class="col-xs-8">
+                <p><a href="/{$item->ref('store', 'related_pages_id')->pages->title}">
+                        {$item->ref('store', 'related_pages_id')->title}
+                    </a></p>
+            </td>
+        </tr>
+    {/foreach}
+</table>

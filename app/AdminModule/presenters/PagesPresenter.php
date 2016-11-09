@@ -86,6 +86,15 @@ class PagesPresenter extends BasePresenter
         $this->redirect(":Admin:Pages:detailRelated", array("id" => $this->getParameter("item")));
     }
 
+    protected function createComponentProductFileList()
+    {
+        $control = new \Caloriscz\Page\File\FileListControl($this->database);
+        $control->onSave[] = function ($pages_id) {
+            $this->redirect(this, array("id" => $pages_id));
+        };
+        return $control;
+    }
+
     /**
      * Delete image
      */
@@ -97,18 +106,6 @@ class PagesPresenter extends BasePresenter
         \App\Model\IO::remove(APP_DIR . '/media/' . $id . '/tn/' . $this->getParameter("name"));
 
         $this->redirect(":Admin:Pages:detailImages", array("id" => $this->getParameter("name"),));
-    }
-
-    /**
-     * Delete file
-     */
-    function handleDeleteFile($id)
-    {
-        $this->database->table("media")->get($id)->delete();
-
-        \App\Model\IO::remove(APP_DIR . '/media/' . $id . '/' . $this->getParameter("name"));
-
-        $this->redirect(":Admin:Pages:detailFiles", array("id" => $this->getParameter("name"),));
     }
 
     function handleInsertRelated($id)
@@ -142,12 +139,26 @@ class PagesPresenter extends BasePresenter
         $this->redirect(":Admin:Pages:snippets", array("id" => $this->getParameter("page")));
     }
 
+    function handlePublic()
+    {
+        $page = $this->database->table("pages")->get($this->getParameter("id"));
+
+        if ($page->public == 1) {
+            $show = 0;
+        } else {
+            $show = 1;
+        }
+        $this->database->table("pages")->get($this->getParameter("id"))->update(array("public" => $show));
+
+        $this->redirect(this, array("id" => $this->getParameter("id"), "l" => $this->getParameter("l")));
+    }
+
     public function renderDefault()
     {
-        if ($this->template->type < 2) {
-            $arr = array(0, 1);
-        } else {
+        if ($this->template->type) {
             $arr = $this->template->type;
+        } else {
+            $arr = 0;
         }
 
         $this->template->pages = $this->database->table("pages")->where(array("pages_types_id" => $arr))->order("title");
@@ -175,7 +186,7 @@ class PagesPresenter extends BasePresenter
 
     public function renderDetailFiles()
     {
-        $this->template->catalogue = $this->database->table("pages")->get($this->getParameter("id"));
+        $this->template->page = $this->database->table("pages")->get($this->getParameter("id"));
         $this->template->files = $this->database->table("media")
             ->where(array("pages_id" => $this->getParameter("id"), "file_type" => 0));
     }

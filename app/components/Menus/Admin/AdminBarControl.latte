@@ -1,5 +1,5 @@
 {if $enabled}
-    <nav class="navbar navbar-inverse">
+    <nav class="navbar navbar-inverse" style="border-radius: 0;">
         <div class="container-fluid">
             <div class="navbar-header">
                 <div class="navbar-header">
@@ -19,29 +19,22 @@
             </div>
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
-                    <li class="active">
-                        {if $settings['store:enabled']}
-                        <a href="{plink ':AdminStore:Catalogue:default'}">{_dictionary.main.Catalogue}</a></li>
-                    {/if}
+                    <li><a href="{plink ':Admin:Settings:default'}">{_dictionary.main.Settings}</a></li>
+                    <li><a href="{plink ':Admin:Menu:default'}">Menu</a></li>
                     {if $page != false}
-                        {if $page->pages_types_id == 1}
+                        <li class="navbar-text" style="color: #fff;">Upravit:</li>
+                        <li><a href="{plink ':Admin:Pages:detail', id => $page->id}">stránku</a></li>
+                        <li><a href="{plink ':Admin:Pages:detailImages', id => $page->id}">obrázky</a></li>
+                        <li><a href="{plink ':Admin:Pages:detailFiles', id => $page->id}">soubory</a></li>
+                        <li><a href="{plink ':Admin:Pages:detailRelated', id => $page->id}">související</a></li>
+
+                        {if $page->pages_types_id == 3}
                             <li><a href="{plink ':Admin:Pages:detail', id => $page->id}">uprav</a></li>
-                        {elseif $page->pages_types_id == 2}
-                            <li><a href="{plink ':Admin:Blog:detail', id => $page->id}">uprav</a></li>
-                        {elseif $page->pages_types_id == 3}
-                            <li><a href="{plink ':Admin:Events:detail', id => $page->id}">uprav</a></li>
                         {elseif $page->pages_types_id == 4}
-                            {if $settings['store:enabled']}
-                                <li class="navbar-text">Blog:</li>
-                                <li><a href="{plink ':AdminStore:Product:default', id => $page->id}">uprav</a></li>
-                                <li><a href="{plink ':AdminStore:Product:images', id => $page->id}">obrázek</a></li>
-                                <li><a href="{plink ':AdminStore:Product:stock', id => $page->id}">zásoby</a></li>
-                            {/if}
-                        {elseif $page->pages_types_id == 6}
-                            <li><a href="{plink ':Admin:Media:default', id => 6}">uprav</a></li>
+                            <li><a href="{plink ':Admin:Product:stock', id => $page->id}">zásoby</a></li>
                         {elseif $page->pages_types_id == 7}
                             {if $settings['store:enabled']}
-                                <li><a href="{plink ':AdminStore:Categories:detail', id => $page->id}">uprav</a></li>
+                                <li><a href="{plink ':Admin:Categories:detail', id => $page->id}">uprav</a></li>
                             {/if}
                         {/if}
                     {/if}

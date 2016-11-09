@@ -150,7 +150,7 @@ class SignUpControl extends Control
 
     function signUpFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
     {
-        $activationCode = \Nette\Utils\Strings::random(12, "987654321zyxwvutsrqponmlkjihgfedcba");
+        $activationCode = \Nette\Utils\Random::generate(12, "987654321zyxwvutsrqponmlkjihgfedcba");
         $password = \Nette\Security\Passwords::hash($form->values->pwd);
 
         $arr = array(

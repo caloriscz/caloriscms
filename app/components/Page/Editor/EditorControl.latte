@@ -1,7 +1,11 @@
 {foreach $flashes as $flash}
     <div class="flash {$flash->type}">{$flash->message}</div>
 {/foreach}
-
+<style>
+    .ace_editor {
+        height: 250px;
+    }
+</style>
 <form n:name="editForm" class="form-horizontal" role="form">
     <div class="row">
         <div class="col-xs-12 col-sm-9">
@@ -32,13 +36,40 @@
             {if $page->pages_types->id == 0}
                 <div class="alert alert-warning">
                     <p><i class="fa fa-exclamation-triangle"> </i><strong>Tato stránka je šablona</strong></p>
-                    <p>Text této stránky se upravuje přímo ve zdrojovém kódu. Obsah, který napíšete do políčka dole se
+                    <p>Text šablony se upravuje přímo ve zdrojovém kódu. Obsah, který napíšete do políčka dole se
                         nemusí objevit přímo na stránce. Pokud chcete, aby se tento text objevil na stránce, konzultujte
                         to s administrátorem stránky.</p>
                 </div>
             {/if}
 
-            <textarea n:name="document" class="summernote form-control" cols="3"></textarea>
+            {if $presenter->getParameter('l')}
+                {var $pr = 'document_' . $presenter->getParameter('l')}
+                {var $document = $page->$pr}
+            {else}
+                {var $document = $page->document}
+            {/if}
+
+            {if $editortype == 'ace'}
+                <textarea n:name="document"></textarea>
+                <pre id="document">{$document}</pre>
+
+                <a href="{link toggle! editortype => 'summernote', id => $presenter->getParameter('id')}">přepnout na
+                    Summernote</a>
+            {elseif $editortype == 'ace'}
+                <textarea n:name="document" class="summernote form-control" cols="3"></textarea>
+
+                <a href="{link toggle! editortype => 'ace', id => $presenter->getParameter('id')}">přepnout na Ace</a>
+            {elseif $settings['site:editor:type'] == 'summernote'}
+                <textarea n:name="document" class="summernote form-control" cols="3"></textarea>
+
+                <a href="{link toggle! editortype => 'ace', id => $presenter->getParameter('id')}">přepnout na Ace</a>
+            {else}
+                <textarea n:name="document"></textarea>
+                <pre id="document">{$document}</pre>
+
+                <a href="{link toggle! editortype => 'summernote', id => $presenter->getParameter('id')}">přepnout na
+                    Summernote</a>
+            {/if}
         </div>
         <div class="col-md-4">
             <div class="form-group">

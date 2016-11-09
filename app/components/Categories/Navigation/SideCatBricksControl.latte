@@ -1,0 +1,27 @@
+<div class="nav {$style}">
+    {foreach $categories as $rowCategories}
+        {if $rowCategories->id == $presenter->getParameter('page_id')}
+            {var $linkActive = 'active '}
+        {else}
+            {var $dropdown = ' '}
+        {/if}
+
+        {var $isCat = $database->table('pages')->get($presenter->getParameter('page_id'))}
+
+        {if $isCat->id == $rowCategories->id or $isCat->pages_id == $rowCategories->id}
+            {var $active = true}
+        {else}
+            {var $active = false}
+        {/if}
+
+        <div class="col-md-3 {$linkActive}">
+            <a href="/{$rowCategories->slug}" class="btn btn-primary btn-block" data-category="{$rowCategories->id}">
+                {if file_exists($basePath . '/www/media/' . $rowCategories->id)}
+                    <img src="{$baseUri}/media/{$rowCategories->id}"/>
+                {/if}
+                <span>{$rowCategories->title}</span>
+            </a>
+            <br>
+        </div>
+    {/foreach}
+</div>

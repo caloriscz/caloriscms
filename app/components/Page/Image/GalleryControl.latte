@@ -1,0 +1,40 @@
+{var $imagesDb = $page->related('media', 'pages_id')->where('file_type = 1 AND detail_view = 1')}
+{var $imagesDbCount = $imagesDb->count()}
+{var $limit = 5}
+{var $today = date('Y-m-d H:i:s')}
+{foreach $imagesDb->limit($limit) as $image}
+    {if $iterator->first}
+        {if $file}
+            {var $filename = $fileget}
+        {else}
+            {var $filename = $image->name}
+        {/if}
+        <div class="gallery-area">
+            {var $new = (strtotime($today) - strtotime($item->date_created))/60/60/24}
+            {if intval($new) <= $settings['store:new:days']}
+                <span class="badge-new">novinka</span>
+            {/if}
+            <a href="{$baseUri}/media/{$page->id}/{$filename}" class="detail-image gallery">
+                <img src="{$baseUri}/media/{$page->id}/tn/{$filename}" class="img-responsive"/>
+            </a>
+        </div>
+        <br/>
+        <div class="row">
+    {/if}
+
+    {if $filename != $image->name}
+        <div class="col-xs-6 col-md-4" style="max-height: 70px;">
+            <a href="{$baseUri}/media/{$page->id}/{$image->name}" class="thumbnail gallery">
+                <img src="/media/{$page->id}/tn/{$image->name}" class="img-responsive"
+                     style="max-height: 70px;">
+            </a>
+        </div>
+    {/if}
+    {if $iterator->last}
+        </div>
+    {/if}
+{/foreach}
+
+{if $imagesDbCount >= $limit}
+    <p class="text-center"><a href="#gallery">{_dictionary.main.MoreImages}</a></p>
+{/if}
