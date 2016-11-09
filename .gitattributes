@@ -1,2 +1,6 @@
 $ cat .gitattributes
+<<<<<<< HEAD
 *.latte linguist-language=PHP
+=======
+*.latte linguist-language=PHP
+>>>>>>> master
