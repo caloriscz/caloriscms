@@ -1,15 +1,21 @@
 {block #titles}{_admin.navigation.pages|firstUpper}{/block}
 {block content}
 
-<h1 class="page-header">
-    {if $type == 2}
-        Blog
-    {elseif $type == 3}
-        {_dictionary.main.Events}
-    {else}
-        Stránky
-    {/if}
-</h1>
+{if $type == 0}
+    <h1 class="page-header">Šablony</h1>
+
+    <div class="alert alert-info">
+        <p>Text šablony se upravuje přímo ve zdrojovém kódu. Obsah, který napíšete do políčka editoru se
+            nemusí objevit přímo na stránce. Pokud chcete, aby se tento text objevil na stránce, konzultujte
+            to s administrátorem stránky.</p>
+    </div>
+{elseif $type == 2}
+    <h1 class="page-header">Blog</h1>
+{elseif $type == 3}
+    <h1 class="page-header">{_dictionary.main.Events}</h1>
+{else}
+    <h1 class="page-header">Stránky</h1>
+{/if}
 
 <div class="row">
     <div class="col-md-3">
@@ -45,26 +51,37 @@
             <tr>
                 <th></th>
                 <th>{_dictionary.main.Title}</th>
-                <th>{_dictionary.main.Slug}</th>
-                <th>{_dictionary.main.Preview}</th>
+                <th></th>
             </tr>
             {foreach $pages as $page}
                 <tr>
                     <td class="col-xs-1">
-                        <a n:href="delete!, id => $page->id" onclick="return confirm('Opravdu smazat?')">
-                            <i class="fa fa-times font-red"></i>
-                        </a>
-                        <a href="/{$page->slug|webalize}/" target="_blank">
-                            <i class="fa fa-edit"></i>
-                        </a>
+                        {if $type != 0}
+                            <a n:href="delete!, id => $page->id" onclick="return confirm('Opravdu smazat?')">
+                                <i class="fa fa-times font-red"></i>
+                            </a>
+                        {/if}
                     </td>
                     <td>
                         <a n:href=":Admin:Pages:detail, id => $page->id">{$page->title}</a>
-                        {if $page->pages_types->id == 0} (přednastavená stránka){/if}
                         {if $page->slug == ''} (homepage){/if}
                     </td>
-                    <td>{$page->slug}</td>
-                    <td></td>
+                    <td>
+                        {if $page->public == 0}
+                            <a n:href="public! 'id' => $page->id" class="btn btn-default btn-xs">
+                                <i class="fa fa-toggle-off"></i> Povolit
+                            </a>
+                        {else}
+                            <a n:href="public! 'id' => $page->id" class="btn btn-default btn-xs">
+                                <i class="fa fa-toggle-off"></i> Zakázat
+                            </a>
+                        {/if}
+                        &nbsp;
+                        <a href="/{$page->slug}" class="btn btn-default btn-xs" target="_blank"
+                           title="{_dictionary.main.Slug}: {$settings['site:url:base']}/{$page->slug}">
+                            {_dictionary.main.Preview}
+                        </a>
+                    </td>
                 </tr>
             {/foreach}
         </table>

@@ -31,7 +31,7 @@ class InsertMediaControl extends Control
         if ($this->presenter->getParameter("type") == 6 && $this->presenter->getParameter('id') == false) {
             $category = 4;
         } elseif ($this->presenter->getParameter("type") == 8 && $this->presenter->getParameter('id') == false) {
-            $category = 5;
+            $category = 6;
         } else {
             $category = $this->presenter->getParameter('id');
         }

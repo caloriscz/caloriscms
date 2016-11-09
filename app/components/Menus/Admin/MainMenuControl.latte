@@ -17,8 +17,13 @@
                 </a>
             </li>
             <li>
-                <a href="/admin/pages">
+                <a href="/admin/pages?type=1">
                     <i class="fa fa-files-o fa-fw"></i> {_admin.navigation.pages}
+                </a>
+            </li>
+            <li>
+                <a href="/admin/pages?type=0">
+                    <i class="fa fa-leaf fa-fw"></i> Šablony
                 </a>
             </li>
             <li>
@@ -90,11 +95,11 @@
                             <a href="/admin/orders"> {_dictionary.main.orders|firstUpper}</a>
                         </li>
                         <li>
-                            <a href="/admin/categories"> {_dictionary.main.Categories}</a>
+                            <a href="/admin/store-categories"> {_dictionary.main.Categories}</a>
                         </li>
                         {if $admin}
                             <li>
-                                <a href="/admin/settings"> {_dictionary.main.settings|firstUpper}</a>
+                                <a href="/admin/store-settings"> {_dictionary.main.settings|firstUpper}</a>
                             </li>
                             <li>
                                 <a href="/admin/catalogue/brands">{_dictionary.main.brands|firstUpper}</a>

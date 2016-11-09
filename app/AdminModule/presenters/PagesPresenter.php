@@ -139,12 +139,26 @@ class PagesPresenter extends BasePresenter
         $this->redirect(":Admin:Pages:snippets", array("id" => $this->getParameter("page")));
     }
 
+    function handlePublic()
+    {
+        $page = $this->database->table("pages")->get($this->getParameter("id"));
+
+        if ($page->public == 1) {
+            $show = 0;
+        } else {
+            $show = 1;
+        }
+        $this->database->table("pages")->get($this->getParameter("id"))->update(array("public" => $show));
+
+        $this->redirect(this, array("id" => $this->getParameter("id"), "l" => $this->getParameter("l")));
+    }
+
     public function renderDefault()
     {
-        if ($this->template->type < 2) {
-            $arr = array(0, 1);
-        } else {
+        if ($this->template->type) {
             $arr = $this->template->type;
+        } else {
+            $arr = 0;
         }
 
         $this->template->pages = $this->database->table("pages")->where(array("pages_types_id" => $arr))->order("title");
