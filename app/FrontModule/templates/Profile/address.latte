@@ -6,12 +6,12 @@
 <div class="container">
     <div class="col-md-3">
         <ul class="nav nav-pills nav-stacked">
-            <li><a n:href=":Front:Profile:default">{_store.order.ContactInformation}</a></li>
-            <li><a n:href=":Front:Profile:foto">{_store.profile.ProfileImage}</a></li>
-            <li><a n:href=":Front:Profile:password">{_store.profile.PasswordChange}</a></li>
-            <li class="active"><a n:href=":Front:Profile:addresses">{_dictionary.main.addresses|firstUpper}</a></li>
+            <li><a href="{control pageSlug 8}">{_store.order.ContactInformation}</a></li>
+            <li><a href="{control pageSlug 9}">{_store.profile.ProfileImage}</a></li>
+            <li><a href="{control pageSlug 10}">{_store.profile.PasswordChange}</a></li>
+            <li class="active"><a n:href="{control pageSlug 11}">{_dictionary.main.addresses|firstUpper}</a></li>
             {if $settings['store:enabled']}
-                <li><a href="/orders">{_dictionary.main.orders|firstUpper}</a></li>
+                <li><a href="{control pageSlug 26}">{_dictionary.main.orders|firstUpper}</a></li>
             {/if}
         </ul>
     </div>
