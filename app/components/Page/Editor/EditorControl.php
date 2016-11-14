@@ -67,6 +67,7 @@ class EditorControl extends Control
         $form->addText("title", "dictionary.main.Title");
         $form->addText("slug", "dictionary.main.Slug");
         $form->addText("document2");
+        $form->addCheckbox("recommended");
         $form->addSelect("parent");
         $form->addSelect("template");
         $form->addGroup("dictionary.main.MetaTags");
@@ -84,6 +85,7 @@ class EditorControl extends Control
                 "metakeys" => $pages->metakeys,
                 "title" => $pages->title,
                 "public" => $pages->public,
+                "recommended" => $pages->recommended,
                 "date_published" => $pages->date_published,
             ));
         } else {
@@ -96,6 +98,7 @@ class EditorControl extends Control
                 "metakeys" => $pages->{'metakeys_' . $l},
                 "title" => $pages->{'title_' . $l},
                 "public" => $pages->public,
+                "recommended" => $pages->recommended,
                 "date_published" => $pages->date_published,
             ));
         }
@@ -133,6 +136,7 @@ class EditorControl extends Control
         $doc->setMetaKey($form->values->metakeys);
         $doc->setMetaDescription($form->values->metadesc);
         $doc->setParent($values["parent"]);
+        $doc->setRecommended($form->values->recommended);
         $doc->save($form->values->id, $this->presenter->user->getId());
 
         $this->presenter->redirect(this, array("id" => $form->values->id, "l" => $form->values->l));

@@ -187,6 +187,26 @@ class Document
         }
     }
 
+    function setRecommended($recommended = false)
+    {
+        if ($recommended == false) {
+            $this->recommended = 0;
+        } else {
+            $this->recommended = 1;
+        }
+
+        return $this->recommended;
+    }
+
+    function getRecommended()
+    {
+        if ($this->recommended) {
+            return $this->recommended;
+        } else {
+            return false;
+        }
+    }
+
     function setPreview($preview = false)
     {
         $this->preview = $preview;
@@ -249,6 +269,10 @@ class Document
 
         if ($this->getParent()) {
             $arr["pages_id"] = $this->getParent();
+        }
+
+        if ($this->getRecommmended()) {
+            $arr["pages_id"] = $this->getRecommended();
         }
 
         if ($this->getSlug()) {
@@ -322,6 +346,12 @@ class Document
             $arr["pages_id"] = $this->getParent();
         } elseif ($this->getParent() == 0) {
             $arr["pages_id"] = null;
+        }
+
+        if ($this->getRecommended()) {
+            $arr["recommended"] = $this->getRecommended();
+        } elseif ($this->getRecommended() == 0) {
+            $arr["recommended"] = null;
         }
 
         if ($this->getDatePublished()) {
