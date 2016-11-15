@@ -81,7 +81,7 @@ CREATE TABLE IF NOT EXISTS `contacts_openinghours` (
   `contacts_id` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `contacts_id` (`contacts_id`)
-) ENGINE=InnoDB
+) ENGINE=InnoDB;
 
 CREATE TABLE IF NOT EXISTS `countries` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -495,30 +495,30 @@ INSERT INTO `pages` (`slug`, `title`, `document`, `preview`, `pages_id`, `users_
 ('kontakt', 'Kontakty', NULL, NULL, NULL, NULL, 1, '', '', NULL, NULL, 0, NULL, 2, 0, 'Front:Contact:default'),
 ('blog', 'Blog', NULL, NULL, NULL, NULL, 1, '', '', NULL, NULL, 0, NULL, 3, 0, 'Front:Blog:default'),
 ('galerie', 'Galerie', NULL, NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL, 0, NULL, 4, 0, 'Front:Gallery:default'),
-('udalosti', NULL, 'Události', NULL, NULL, 1, NULL, 1, NULL, NULL, NULL, NULL, 0, NULL, 5, 0, 'Front:Events:default'),
-('dokumenty', NULL, 'Dokumenty', NULL, NULL, 1, NULL, 1, NULL, NULL, NULL, NULL, 0, NULL, 6, 0, 'Front:Documents:default');
-('kontakty', NULL, 'Náš tým', NULL, NULL, 1, NULL, 1, NULL, NULL, NULL, NULL, 0, NULL, 7, 0, 'Front:Contacts:default'),
-('profil', NULL, 'Profil', NULL, NULL, 1, NULL, 1, NULL, NULL, NULL, NULL, 0, NULL, 8, 0, 'Front:Profile:default'),
-('profil-obrazek', NULL, 'Profil: Obrázek', NULL, 8, 1, NULL, 1, NULL, NULL, NULL, NULL, 0, NULL, 9, 0, 'Front:Profile:image'),
-('profil-heslo', NULL, 'Profil: Změna hesla', NULL, 8, 1, NULL, 1, NULL, NULL, NULL, NULL, 0, NULL, 10, 0, 'Front:Profile:password'),
-('profil-adresy', NULL, 'Profil: Adresy', NULL, 1, 1, NULL, 1, NULL, NULL, NULL, NULL, 0, NULL, 11, 0, 'Front:Profile:addresses'),
-('profil-adresa', NULL, 'Profil: Addresa', NULL, 1, 1, NULL, 1, NULL, NULL, NULL, NULL, 0, NULL, 12, 0, 'Front:Profile:address'),
-('uspesne-prihlaseni', NULL, 'Profil: Addresa', NULL, 1, 1, NULL, 1, NULL, NULL, NULL, NULL, 0, NULL, 13, 0, 'Front:Sign:ed'),
-('prihlaseni', NULL, 'Přihlášení', NULL, 1, 1, NULL, 1, NULL, NULL, NULL, NULL, 0, NULL, 14, 0, 'Front:Sign:in'),
-('zapomenute-heslo', NULL, 'Zapomenuté heslo', NULL, 1, 1, NULL, 1, NULL, NULL, NULL, NULL, 0, NULL, 15, 0, 'Front:Sign:lostpass'),
-('reset', NULL, 'Znovunastavení hesla', NULL, 1, 1, NULL, 1, NULL, NULL, NULL, NULL, 0, NULL, 16, 0, 'Front:Sign:resetpass'),
-('registrace', NULL, 'Registrace uživatele', NULL, 1, 1, NULL, 1, NULL, NULL, NULL, NULL, 0, NULL, 17, 0, 'Front:Sign:up'),
-('verifikace', NULL, 'Ověření účtu', NULL, 1, 1, NULL, 1, NULL, NULL, NULL, NULL, 0, NULL, 18, 0, 'Front:Sign:verify'),
+('udalosti', 'Události', NULL, NULL, 1, NULL, 1, NULL, NULL, NULL, NULL, 0, NULL, 5, 0, 'Front:Events:default'),
+('dokumenty', 'Dokumenty', NULL, NULL, 1, NULL, 1, NULL, NULL, NULL, NULL, 0, NULL, 6, 0, 'Front:Documents:default'),
+('kontakty', 'Náš tým', NULL, NULL, 1, NULL, 1, NULL, NULL, NULL, NULL, 0, NULL, 7, 0, 'Front:Contacts:default'),
+('profil', 'Profil', NULL, NULL, 1, NULL, 1, NULL, NULL, NULL, NULL, 0, NULL, 8, 0, 'Front:Profile:default'),
+('profil-obrazek', 'Profil: Obrázek', NULL, 8, 1, NULL, 1, NULL, NULL, NULL, NULL, 0, NULL, 9, 0, 'Front:Profile:image'),
+('profil-heslo', 'Profil: Změna hesla', NULL, 8, 1, NULL, 1, NULL, NULL, NULL, NULL, 0, NULL, 10, 0, 'Front:Profile:password'),
+('profil-adresy', 'Profil: Adresy', NULL, 1, 1, NULL, 1, NULL, NULL, NULL, NULL, 0, NULL, 11, 0, 'Front:Profile:addresses'),
+('profil-adresa', 'Profil: Addresa', NULL, 1, 1, NULL, 1, NULL, NULL, NULL, NULL, 0, NULL, 12, 0, 'Front:Profile:address'),
+('uspesne-prihlaseni', 'Profil: Addresa', NULL, 1, 1, NULL, 1, NULL, NULL, NULL, NULL, 0, NULL, 13, 0, 'Front:Sign:ed'),
+('prihlaseni', 'Přihlášení', NULL, 1, 1, NULL, 1, NULL, NULL, NULL, NULL, 0, NULL, 14, 0, 'Front:Sign:in'),
+('zapomenute-heslo', 'Zapomenuté heslo', NULL, 1, 1, NULL, 1, NULL, NULL, NULL, NULL, 0, NULL, 15, 0, 'Front:Sign:lostpass'),
+('reset', 'Znovunastavení hesla', NULL, 1, 1, NULL, 1, NULL, NULL, NULL, NULL, 0, NULL, 16, 0, 'Front:Sign:resetpass'),
+('registrace', 'Registrace uživatele', NULL, 1, 1, NULL, 1, NULL, NULL, NULL, NULL, 0, NULL, 17, 0, 'Front:Sign:up'),
+('verifikace', 'Ověření účtu', NULL, 1, 1, NULL, 1, NULL, NULL, NULL, NULL, 0, NULL, 18, 0, 'Front:Sign:verify'),
 -- Shop pages
-('kosik', NULL, 'Košík', NULL, 1, 1, NULL, 1, NULL, NULL, NULL, NULL, 0, NULL, 19, 0, 'Front:Cart:default'),
-('katalog', NULL, 'Katalog', NULL, 1, 1, NULL, 1, NULL, NULL, NULL, NULL, 0, NULL, 20, 0, 'Front:Catalogue:default'),
-('bonus', NULL, 'Bonus', NULL, 1, 1, NULL, 1, NULL, NULL, NULL, NULL, 0, NULL, 21, 0, 'Front:Order:bonus'),
-('delivery', NULL, 'Poštovné a platební metoda', NULL, 1, 1, NULL, 1, NULL, NULL, NULL, NULL, 0, NULL, 22, 0, 'Front:Order:delivery'),
-('summary', NULL, 'Shrnutí objednávky', NULL, 1, 1, NULL, 1, NULL, NULL, NULL, NULL, 0, NULL, 23, 0, 'Front:Order:summary'),
-('adresa-objednavky', NULL, 'Adresa objednávky', NULL, 1, 1, NULL, 1, NULL, NULL, NULL, NULL, 0, NULL, 24, 0, 'Front:Order:address'),
-('order-success', NULL, 'Objednávka úspěšně zadána', NULL, 1, 1, NULL, 1, NULL, NULL, NULL, NULL, 0, NULL, 25, 0, 'Front:Order:success');
-('objednavky', NULL, 'Objednávky', NULL, 1, 1, NULL, 1, NULL, NULL, NULL, NULL, 0, NULL, 26, 0, 'Front:Orders:default'),
-('objednavky-detail', NULL, 'Detail objednávky', NULL, 1, 1, NULL, 1, NULL, NULL, NULL, NULL, 0, NULL, 27, 0, 'Front:Orders:detail');
+('kosik', 'Košík', NULL, 1, 1, NULL, 1, NULL, NULL, NULL, NULL, 0, NULL, 19, 0, 'Front:Cart:default'),
+('katalog', 'Katalog', NULL, 1, 1, NULL, 1, NULL, NULL, NULL, NULL, 0, NULL, 20, 0, 'Front:Catalogue:default'),
+('bonus', 'Bonus', NULL, 1, 1, NULL, 1, NULL, NULL, NULL, NULL, 0, NULL, 21, 0, 'Front:Order:bonus'),
+('delivery', 'Poštovné a platební metoda', NULL, 1, 1, NULL, 1, NULL, NULL, NULL, NULL, 0, NULL, 22, 0, 'Front:Order:delivery'),
+('summary', 'Shrnutí objednávky', NULL, 1, 1, NULL, 1, NULL, NULL, NULL, NULL, 0, NULL, 23, 0, 'Front:Order:summary'),
+('adresa-objednavky', 'Adresa objednávky', NULL, 1, 1, NULL, 1, NULL, NULL, NULL, NULL, 0, NULL, 24, 0, 'Front:Order:address'),
+('order-success', 'Objednávka úspěšně zadána', NULL, 1, 1, NULL, 1, NULL, NULL, NULL, NULL, 0, NULL, 25, 0, 'Front:Order:success'),
+('objednavky', 'Objednávky', NULL, 1, 1, NULL, 1, NULL, NULL, NULL, NULL, 0, NULL, 26, 0, 'Front:Orders:default'),
+('objednavky-detail', 'Detail objednávky', NULL, 1, 1, NULL, 1, NULL, NULL, NULL, NULL, 0, NULL, 27, 0, 'Front:Orders:detail');
 
 -- reserved for page templates (0)
 ALTER TABLE `pages` AUTO_INCREMENT=100;
