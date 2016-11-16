@@ -529,6 +529,7 @@ INSERT INTO `settings` (`categories_id`, `setkey`, `setvalue`, `description_cs`,
 (15, 'blog:short:showImage', '0', 'Zobrazovat náhled obrázku', 'Show image thumbnail', 'boolean', 1),
 (15, 'blog:short:showDate', '0', 'Zobrazovat datum vydání', 'Show date published.', 'boolean', 1),
 (15, 'blog:preview:length', '350', 'Délka náhledového textu (0 znamená nezkrácený text)', 'Length of preview text (0 means complete text)', 'numeric', 1),
+(15, 'blog_fblike', '1', 'Přidá sdílecí tlačítko na Facebook, pokud je zadán FB účet', 'Adds sharing button for Facebook, if FB account specified', 'boolean', '1')
 (14, 'bonus:enabled', '0', 'Je aktivována odměna za výši nákupu', 'Is the reward for the amount of the purchase activated?', 'boolean', 1),
 (14, 'bonus:registeredUsersOnly', '1', 'Bonus pouze pro registrované uživatele', 'Bonus for registered users only', 'boolean', 1),
 (11, 'categories:adminEnabled', '0', 'Pokud není nastaveno, jen admn uvidí Categories', 'Only admin can see Categories if not set', 'boolean', 1),

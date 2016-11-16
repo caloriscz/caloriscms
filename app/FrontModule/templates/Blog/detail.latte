@@ -7,23 +7,34 @@
 <div class="container padded-top white">
     <div class="row">
         <div class="col-sm-8">
-            <p><small>{$page->date_published|date:'j. n. Y'}</small></span></p>
+            <p>
+                <small>{$page->date_published|date:'j. n. Y'}</small>
+                </span></p>
 
             <p>{control pageDocument $page}</p>
 
             {var $blogImages = $page->related('media', 'pages_id')}
 
             {if $blogImages->count() > 0}
-                <hr />
+                <hr/>
                 <h3>{_dictionary.main.Images}</h3>
-                <br />
+                <br/>
+            {/if}
+
+            {if $settings['social:fb:enabled'] && $settings['social:fb:type'] == 'page' && $settings['blog_fblike']}
+                <div class="fb-like" data-href="{$settings['social:fb:url']}" data-layout="standard"
+                     data-action="like" data-size="large" data-show-faces="false" data-share="true">
+                </div>
+                {else}
+                test
             {/if}
 
             <div class="row">
                 {foreach $blogImages->where('file_type = 1') as $image}
                     <div class="col-xs-6 col-md-4" style="max-height: 150px;">
                         <a href="{$baseUri}/media/{$page->id}/{$image->name}" class="thumbnail gallery">
-                            <img src="/media/{$page->id}/tn/{$image->name}" class="img-responsive" style="max-height: 120px;" />
+                            <img src="/media/{$page->id}/tn/{$image->name}" class="img-responsive"
+                                 style="max-height: 120px;"/>
                         </a>
                     </div>
                 {/foreach}
@@ -32,7 +43,7 @@
             {var $blogImages = $page->related('media', 'pages_id')}
 
             {if $blogImages->count() > 0}
-                <hr />
+                <hr/>
                 <h3>Dokumenty ke stažení</h3>
             {/if}
 
@@ -40,7 +51,9 @@
                 {foreach $blogImages->where('file_type = 0') as $item}
                     <tr>
                         <td>{$item->name}</td>
-                        <td><a href="{$baseUri}/media/{$item->pages_id}/{$item->name}" class="btn btn-default">Stáhnout</a></td>
+                        <td><a href="{$baseUri}/media/{$item->pages_id}/{$item->name}"
+                               class="btn btn-default">Stáhnout</a>
+                        </td>
                     </tr>
                 {/foreach}
             </table>
