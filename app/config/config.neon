@@ -20,10 +20,6 @@ session:
 	expiration: 14 days
 	autostart: true
 	savePath: "%tempDir%/sessions"
-routing:
-	debugger: true
-container:
-	accessors: true
 
 
 services:

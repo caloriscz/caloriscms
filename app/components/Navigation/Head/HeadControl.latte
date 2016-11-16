@@ -7,6 +7,10 @@
 {if $page->metadesc}<meta name="description" content="{$metadesc}">{/if}
 {if $page->metakeys}<meta name="keywords" content="{$metakeys}">{/if}
 
+{if $settings['appearance:paths:favicon:ico']}
+    <link rel="shortcut icon" href="/images/paths/{$settings['appearance:paths:favicon:ico']}" type="image/x-icon"/>
+{/if}
+
 <!--[if IE 8]>
 <link rel="stylesheet" href="{$baseUri}/css/emulation-ie8.css" type="text/css" media="screen,projection"/>
 <![endif]-->
