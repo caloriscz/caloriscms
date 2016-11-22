@@ -148,7 +148,7 @@ class MediaPresenter extends BasePresenter
                 "pages_id" => $this->getParameter('id'),
             );
         } else {
-            if ($this->getParameter("type") == 8) {
+            if ($this->getParameter("type") == 6) {
                 $pageId = 4;
             } else {
                 $pageId = 6;

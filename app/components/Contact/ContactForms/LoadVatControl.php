@@ -6,7 +6,7 @@ use Nette\Application\UI\Control;
 class LoadVatControl extends Control
 {
 
-    /** @var Nette\Database\Context */
+    /** @var \Nette\Database\Context */
     public $database;
 
     public function __construct(\Nette\Database\Context $database)
@@ -21,15 +21,13 @@ class LoadVatControl extends Control
     {
         $this->template->id = $this->presenter->getParameter('id');
 
-        $categories = new \App\Model\Category($this->database);
-        $cats = $categories->getSubIds($this->template->settings['categories:id:contact']);
+        $contact = $this->database->table("contacts")->where("pages_id", $this->presenter->getParameter("id"));
 
         $form = new \Nette\Forms\BootstrapUIForm();
         $form->setTranslator($this->presenter->translator);
         $form->getElementPrototype()->class = "form-horizontal";
         $form->getElementPrototype()->role = 'form';
         $form->getElementPrototype()->autocomplete = 'off';
-        $form->addGroup('');
         $form->addHidden('contact_id');
         $form->addHidden('pages_id');
 
@@ -38,9 +36,8 @@ class LoadVatControl extends Control
             ->setOption("description", 1);
 
         $form->setDefaults(array(
-            "contact_id" => $this->presenter->template->contact->id,
-            "pages_id" => $this->presenter->template->contact->pages_id,
-            "vatin" => $this->presenter->template->contact->vatin,
+            "contact_id" => $contact->fetch()->id,
+            "pages_id" => $this->presenter->getParameter("id"),
         ));
 
         $form->addSubmit("submitm", "Načíst")
