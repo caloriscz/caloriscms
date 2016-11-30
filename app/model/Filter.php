@@ -68,6 +68,7 @@ class Filter
                 break;
             case 'dd':
                 $order = "`date_published` DESC";
+                break;
             case 'sa':
                 $order = "`stock`.`amount_sold` ASC";
                 break;
@@ -95,7 +96,7 @@ class Filter
         if (strlen($listManufacturers) > 1) {
             $this->manufacturers = $listManufacturers;
         } else {
-            $this->manufacturers = FALSE;
+            $this->manufacturers = false;
         }
     }
 
@@ -107,7 +108,7 @@ class Filter
         if (strlen($size) > 0) {
             $this->size = $size;
         } else {
-            $this->size = FALSE;
+            $this->size = false;
         }
     }
 
@@ -120,7 +121,7 @@ class Filter
             $keys = array_keys($category);
             $this->category = implode(",", $keys);
         } elseif ($category == '') {
-            $this->category = FALSE;
+            $this->category = false;
         } else {
             $this->category = $category;
         }
@@ -140,13 +141,13 @@ class Filter
                 if ($userDb->count() > 0) {
                     $this->userf = $userDb->fetch()->id;
                 } else {
-                    $this->userf = FALSE;
+                    $this->userf = false;
                 }
             } else {
                 $this->userf = $user;
             }
         } else {
-            $this->userf = FALSE;
+            $this->userf = false;
         }
     }
 
@@ -164,18 +165,18 @@ class Filter
     /**
      * Set price
      */
-    function setPrice($priceFrom = NULL, $priceTo = NULL)
+    function setPrice($priceFrom = null, $priceTo = null)
     {
         if ($priceFrom == '' && $priceTo == '') {
-            $this->price = FALSE;
-        } elseif ($priceFrom == NULL && $priceTo !== NULL) {
-            $this->price = TRUE;
+            $this->price = false;
+        } elseif ($priceFrom == null && $priceTo !== null) {
+            $this->price = true;
             $columns["pricefinal <= ?"] = $priceTo;
-        } elseif ($priceFrom !== NULL && $priceTo == NULL) {
-            $this->price = TRUE;
+        } elseif ($priceFrom !== null && $priceTo == null) {
+            $this->price = true;
             $columns["pricefinal >= ?"] = $priceFrom;
         } else {
-            $this->price = TRUE;
+            $this->price = true;
             $columns["pricefinal >= ?"] = $priceFrom;
             $columns["pricefinal <= ?"] = $priceTo;
         }
@@ -191,7 +192,7 @@ class Filter
      */
     function setColumns($arr)
     {
-        $columns = NULL;
+        $columns = null;
 
         foreach ($arr as $key => $value) {
             $columns[$key] = $value;
@@ -216,7 +217,7 @@ class Filter
                     $paramArr["str"][] = ":store_params.param_id = ? AND :params.paramvalue = ?";
                     $paramArr["key"][] = $key;
                     $paramArr["value"][] = $value;
-                    // how to create array if it couldn't be repeated                
+                    // how to create array if it couldn't be repeated
                     //$paramArr[""] = $value;
                 }
             }
@@ -234,52 +235,60 @@ class Filter
     {
         $columns["pages.pages_types_id"] = 4;
 
-        if ($this->category != FALSE) {
+        if ($this->category != false) {
             $columns[":store_category.category_pages_id"] = $this->category;
+        } else {
         }
 
-        if ($this->manufacturers != FALSE) {
+        if ($this->manufacturers != false) {
             $columns["contacts.company LIKE ?"] = "%" . $this->manufacturers . "%";
             $columns["contacts.categories_id"] = $this->template->settings['categories:id:contactsBrands'];
         }
 
-        if ($this->size != FALSE) {
+        if ($this->size != false) {
             $columns["size LIKE ?"] = "%" . $this->size . "%";
         }
 
-        if ($this->userf != FALSE) {
+        if ($this->userf != false) {
             $columns["users_id"] = $this->userf;
         }
 
-        if ($this->price == TRUE) {
+        if ($this->price == true) {
             $columns = array_merge((array)$columns, (array)$this->getPrice);
         }
 
         $connect = $this->database->table("pages")
             ->select(":store.id, pages.id, pages.slug, pages.title AS title, pages.slug AS slugtitle, pages.preview, 
-            pages.date_created, pages.document, pages.date_published, :stock.amount, "
-                . "SUM(:stock.amount) AS sumstock, price, "
-                . ":params.param_id, :params.paramvalue, pages.sorted, pages.pages_types_id");
+            pages.date_created, pages.document, pages.date_published, pages.recommended, :stock.amount, "
+                . "SUM(:stock.amount) AS sumstock, :store.price, "
+                . ":params.param_id, :params.paramvalue, "
+                . ":store_prices.store_price_id, :store_prices.price AS storeprice, "
+                . "pages.sorted, pages.pages_types_id");
 
         /* if not added, store_category may be referenced with category_pages_id; only when category is used */
-        if ($this->category != FALSE) {
+        if ($this->category != false) {
             $connect->where(':store_category.pages_id = pages.id');
         }
 
         $connect->group("pages.title, pages.document");
 
-        if ($this->search != FALSE) {
+        if ($this->search != false) {
             $connect->where("pages.title LIKE ? OR pages.document LIKE ?", "%" . $this->search . "%", "%" . $this->search . "%");
+        }
+
+        if (count($columns) > 0) {
+            $connect->where((array)$this->getColumns);
         }
 
         if (count($columns) > 0) {
             $connect->where($columns);
         }
-/*
-        if ($this->settings["store:stock:hideEmpty"] == 1) {
-            $connect->having("SUM(stock.amount) > 0");
-        }
-*/
+
+        /*
+                if ($this->settings["store:stock:hideEmpty"] == 1) {
+                    $connect->having("SUM(stock.amount) > 0");
+                }
+        */
         $paramArr = $this->getParametres;
         if (count($paramArr["str"]) > 0) {
             for ($a = 0; $a < count($paramArr["str"]); $a++) {
@@ -288,7 +297,7 @@ class Filter
             }
         }
 
-        if ($this->order == NULL) {
+        if ($this->order == null) {
         } else {
             $connect->order($this->order);
         }
