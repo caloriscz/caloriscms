@@ -171,14 +171,14 @@ class Filter
             $this->price = false;
         } elseif ($priceFrom == null && $priceTo !== null) {
             $this->price = true;
-            $columns["pricefinal <= ?"] = $priceTo;
+            $columns[":store.price <= ?"] = $priceTo;
         } elseif ($priceFrom !== null && $priceTo == null) {
             $this->price = true;
-            $columns["pricefinal >= ?"] = $priceFrom;
+            $columns[":store.price >= ?"] = $priceFrom;
         } else {
             $this->price = true;
-            $columns["pricefinal >= ?"] = $priceFrom;
-            $columns["pricefinal <= ?"] = $priceTo;
+            $columns[":store.price >= ?"] = $priceFrom;
+            $columns[":store.price <= ?"] = $priceTo;
         }
 
         $this->getPrice = $columns;
@@ -208,24 +208,49 @@ class Filter
      */
     function setParametres($param)
     {
-        $params = $param["param"];
+        if (count($param) > 0) {
+            foreach ($param as $pmKey => $pmValue) {
+                if (substr($pmKey, 0, 3) == 'pm_') {
+                    $pmKeyPart = explode("_", $pmKey);
 
-        if (count($params) > 0) {
-            foreach ($params as $key => $values) {
-                foreach ($values as $value) {
-                    // WHERE store_params.store_params_id = KEY and store_params.paramvalue = VALUE AND
-                    $paramArr["str"][] = ":store_params.param_id = ? AND :params.paramvalue = ?";
-                    $paramArr["key"][] = $key;
-                    $paramArr["value"][] = $value;
-                    // how to create array if it couldn't be repeated
-                    //$paramArr[""] = $value;
+                    if ($pmKeyPart[2] == 'range') {
+                        $rangeArr = explode("*", urldecode($pmValue));
+
+                        $sqlKey = ":params.param_id = " . $pmKeyPart[1] . " AND :params.paramvalue BETWEEN ?";
+                        $sqlValue = $rangeArr[0] . " AND " . $rangeArr[1];
+
+                        unset($rangeArr);
+                    } elseif ($pmKeyPart[2] == 'text') {
+                        $rangeArr = explode("*", urldecode($pmValue));
+
+                        $sqlKey = ":params.param_id = " . $pmKeyPart[1] . " AND :params.paramvalue = ?";
+                        $sqlValue = "'" . $rangeArr[0] . "'";
+
+                        unset($rangeArr);
+                    } else {
+                        $subParams = explode("*", urldecode($pmValue));
+
+                        foreach ($subParams as $s) {
+                            $paramsIn = "'" . $s . "', ";
+                        }
+
+                        $sqlKey = ":params.param_id = " . $pmKeyPart[1] . " AND :params.paramvalue IN (?)";
+                        $sqlValue = substr($paramsIn, 0, -2);
+                    }
+
+                    $arr[$sqlKey] = new SqlLiteral($sqlValue);
                 }
             }
         }
 
-        $this->getParametres = $paramArr;
+        if (count($arr) > 0) {
+            $paramQuery = $this->connect->whereOr($arr)->having("COUNT(:params.pages_id) = ?", count($arr));
+        }
 
-        return $this->getParametres;
+        $this->getParametres = true;
+        $this->paramQuery = $paramQuery;
+
+        return $this->paramQuery;
     }
 
     /**
@@ -257,52 +282,46 @@ class Filter
             $columns = array_merge((array)$columns, (array)$this->getPrice);
         }
 
-        $connect = $this->database->table("pages")
-            ->select(":store.id, pages.id, pages.slug, pages.title AS title, pages.slug AS slugtitle, pages.preview, 
-            pages.date_created, pages.document, pages.date_published, pages.recommended, :stock.amount, "
-                . "SUM(:stock.amount) AS sumstock, :store.price, "
-                . ":params.param_id, :params.paramvalue, "
-                . ":store_prices.store_price_id, :store_prices.price AS storeprice, "
-                . "pages.sorted, pages.pages_types_id");
+        $this->connect->select(":store.id, pages.id, pages.slug, pages.title AS title, pages.slug AS slugtitle, pages.preview, 
+            pages.date_created, pages.document, pages.date_published, pages.recommended, pages.public "
+            /*. ", :stock.amount, SUM(:stock.amount) AS sumstock "*/
+            . ", :store.price, :params.param_id, :params.paramvalue, "
+            . ":store_prices.store_price_id, :store_prices.price AS storeprice, "
+            . "pages.sorted, pages.pages_types_id");
 
         /* if not added, store_category may be referenced with category_pages_id; only when category is used */
         if ($this->category != false) {
-            $connect->where(':store_category.pages_id = pages.id');
+            $this->connect->where(':store_category.pages_id = pages.id');
         }
 
-        $connect->group("pages.title, pages.document");
+        $this->connect->group("pages.title, pages.document");
 
         if ($this->search != false) {
-            $connect->where("pages.title LIKE ? OR pages.document LIKE ?", "%" . $this->search . "%", "%" . $this->search . "%");
+            $this->connect->where("pages.title LIKE ? OR pages.document LIKE ?", "%" . $this->search . "%", "%" . $this->search . "%");
         }
 
         if (count($columns) > 0) {
-            $connect->where((array)$this->getColumns);
+            $this->connect->where((array)$this->getColumns);
         }
 
         if (count($columns) > 0) {
-            $connect->where($columns);
+            $this->connect->where($columns);
         }
 
         /*
-                if ($this->settings["store:stock:hideEmpty"] == 1) {
-                    $connect->having("SUM(stock.amount) > 0");
-                }
-        */
-        $paramArr = $this->getParametres;
-        if (count($paramArr["str"]) > 0) {
-            for ($a = 0; $a < count($paramArr["str"]); $a++) {
-                $connect->where($paramArr["str"][$a], $paramArr["key"][$a], $paramArr["value"][$a]);
-                //echo $paramArr["str"][$a] .' - ' . $paramArr["key"][$a] .' - ' . $paramArr["value"][$a] . '<br />';
-            }
+        if ($this->settings["store:stock:hideEmpty"] == 1) {
+            $connect->having("SUM(stock.amount) > 0");
         }
+        */
+
+        $this->getParametres;
 
         if ($this->order == null) {
         } else {
-            $connect->order($this->order);
+            $this->connect->order($this->order);
         }
 
-        return $connect;
+        return $this->connect;
     }
 
 }

@@ -268,7 +268,8 @@ CREATE TABLE IF NOT EXISTS `param` (
   `preset` varchar(80) DEFAULT NULL COMMENT 'Value in preset will be autofilled',
   `ignore_front` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'Hide in parametres in presentations',
   `ignore_admin` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'Hide in admin params view',
-  `type_front` varchar(40) COLLATE utf8_czech_ci NOT NULL DEFAULT 'radio' COMMENT 'Display type of parametre form: select, radio, text, switch, range etc.'
+  `type_front` varchar(40) COLLATE utf8_czech_ci NOT NULL DEFAULT 'radio' COMMENT 'Display type of parametre form: select, radio, text, switch, range etc.',
+  `sorted` int(11) DEFAULT '0' COMMENT 'You can sort params'
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
