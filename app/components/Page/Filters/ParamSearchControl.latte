@@ -1,15 +1,213 @@
-{form searchForm}
-    <div class="row">
-        {foreach $params as $item}
-            <div class="col-md-4">
-                <label for="inputEmail3" class="control-label">{$item->{'param'.$langSuffix}}</label>
-                <div>
-                    {foreach $database->table('params')->where('param_id = ?', $item->id)->group('paramvalue')->order('paramvalue') as $value}
-                        <input type="checkbox" name="param[{$value->param_id}][]" value="{$value->paramvalue}">
-                        {$value->paramvalue}{sep}<br>{/sep}
-                    {/foreach}
+<div class="container">
+    <div class="col-xs-12">
+        <h1>{control pageTitle $page}
+            <span class="pull-right small">
+                <a href="{control pageSlug $page}" class="small text-danger">
+                    <i class="fa fa-eraser"></i> smazat filtr
+                </a>
+            </span>
+        </h1>
+    </div>
+</div>
+<div class="container">
+    {form searchForm}
+    {foreach $params as $item}
+        {var $n = $n + 1}
+
+        <div class="{$item->block_class}">
+
+            <div>
+                {if $item->type_front == 'radio'}
+                    <fieldset class="param_radio">
+                        <legend>{$item->{'param'.$langSuffix}}</legend>
+
+                        {var $replaceParam = json_decode($item->replace_param, true)}
+
+                        {foreach $database->table('params')->where('param_id = ?', $item->id)->group('paramvalue')->order('paramvalue') as $value}
+                            {if $value->paramvalue != ''}
+                                <input type="radio" name="pm_{$value->param_id}"
+                                       id="pm_{$value->param_id}}"
+                                       value="{$replaceParam[$value->paramvalue]}"
+                                       {if $iterator->first}select{/if}>
+                                {if $replaceParam[$value->paramvalue] == ''}
+                                    {$value->paramvalue}{$replaceParam[$value->paramvalue]}
+                                {else}
+                                    {$replaceParam[$value->paramvalue]}
+                                {/if}
+                            {/if}
+                        {/foreach}
+                    </fieldset>
+
+                {elseif $item->type_front == 'checkbox'}
+                    <fieldset class="param_checkboxes">
+                        <legend>{$item->{'param'.$langSuffix}}</legend>
+                        <div class="columns-md-6">
+                            {foreach $database->table('params')->where('param_id = ?', $item->id)->group('paramvalue')->order('paramvalue') as $valueC}
+                                {if $valueC->paramvalue != ''}
+                                    {var $selArr = explode('*', $selected['pm_' . $valueC->param_id])}
+
+                                    {if in_array($valueC->paramvalue, $selArr)}
+                                        {var $selC = ' checked'}
+                                    {else}
+                                        {var $selC = ''}
+                                    {/if}
+
+                                    <label>
+                                        <input type="checkbox" name="pm_{$valueC->param_id}_{$iterator->getCounter()}"
+                                               value="{$valueC->paramvalue}"
+                                               style="background-color: yellow; border: 1px solid red;" {$selC|noescape}>
+                                        <span>{$valueC->paramvalue}</span>
+                                    </label><br>
+                                {/if}
+                            {/foreach}
+                        </div>
+                    </fieldset>
+
+                {elseif $item->type_front == 'switch'}
+
+                    <fieldset class="param_switch">
+                        <legend>{$item->{'param'.$langSuffix}}</legend>
+
+                        {foreach $database->table('params')->where('param_id = ?', $item->id)->group('paramvalue')->order('paramvalue DESC') as $valueW}
+                            {if $valueW->paramvalue != ''}
+                                <input type="radio" name="pm_{$valueW->param_id}_{$iterator->getCounter()}"
+                                       value="{$valueW->paramvalue}">
+                                {if $valueW->paramvalue}
+                                    ano
+                                {else}
+                                    ne
+                                {/if}
+                            {/if}
+                        {/foreach}
+                    </fieldset>
+
+                {elseif $item->type_front == 'select'}
+
+                    <fieldset class="param_select">
+                        <legend>{$item->{'param'.$langSuffix}}</legend>
+
+                        {foreach $database->table('params')->where('param_id = ?', $item->id)->group('paramvalue')->order('paramvalue') as $valueS}
+                            {if $iterator->first}
+                                <select name="pm_{$valueS->param_id}_{$iterator->getCounter()}" class="form-control">
+                                <option value="">vyberte</option>
+                            {/if}
+                            {if $valueS->paramvalue != ''}
+                                <option value="{$valueS->paramvalue}" {if $selected['pm_' . $valueS->param_id] == $valueS->paramvalue} selected{else}{/if}>{$valueS->paramvalue}</option>
+                            {/if}
+
+                            {if $iterator->last}
+                                </select>
+                            {/if}
+                        {/foreach}
+                    </fieldset>
+
+                {elseif $item->type_front == 'range'}
+                    <fieldset class="param_range">
+                        <legend>{$item->{'param'.$langSuffix}}</legend>
+
+                        {var $rangeMin = $database->table('params')->where('param_id = ?', $item->id)->group('paramvalue')->order('CAST(paramvalue AS SIGNED INTEGER) ASC')->limit(1)->fetch()}
+                        {var $rangeMax = $database->table('params')->where('param_id = ?', $item->id)->group('paramvalue')->order('CAST(paramvalue AS SIGNED INTEGER) DESC')->limit(1)->fetch()}
+                        {var $rangeArr = explode('*', $selected['pm_' . $item->id])}
+
+                        {if $presenter->getParameter("priceFrom") > $priceMin}
+                            {var $rangeMinValue = $presenter->getParameter("priceFrom")}
+                        {else}
+                            {var $rangeMinValue = $priceMin}
+                        {/if}
+
+                        {if $presenter->getParameter("priceTo") > $priceMax}
+                            {var $rangeMinValue = $presenter->getParameter("priceTo")}
+                        {else}
+                            {var $rangeMaxValue = $priceMax}
+                        {/if}
+
+                        <div id="slider-range" style="visibility: hidden">
+                            <input type="hidden" name="minsNow" id="minsNow" value="{$rangeMin->paramvalue}">
+                            <input type="hidden" name="maxNow" id="maxsNow" value="{$rangeMax->paramvalue}">
+                        </div>
+
+
+                        <div class="form-group">
+                            <div class="col-xs-6">
+                                <input type="text" name="pm_{$item->id}_0_range" value="{$rangeArr[0]}"
+                                       id="mins"
+                                       class="span1 text-right form-control">
+                            </div>
+                            <div class="col-sm-6">
+                                <input type="text" name="pm_{$item->id}_1_range" value="{$rangeArr[1]}"
+                                       id="maxs"
+                                       class="span1 text-right form-control">
+                            </div>
+                        </div>
+                    </fieldset>
+
+                {elseif $item->type_front == 'text'}
+                    <fieldset class="param_text">
+                        <legend>{$item->{'param'.$langSuffix}}</legend>
+
+                        <input type="text" name="pm_{$item->id}_0_text" class="form-control" value="{$selected['pm_' . $item->id]}">
+                    </fieldset>
+
+                {/if}
+            </div>
+        </div>
+    {/foreach}
+</div>
+<div class="container">
+    <hr class="param-line">
+
+    <div class="col-xs-4">
+        <fieldset>
+            <legend>{_dictionary.main.Price}
+                {var $qsPrice = $qs}
+                {var $qsPrice["priceFrom"] = null}
+                {var $qsPrice["priceTo"] = null}
+                {var $qsPrice = http_build_query(array_filter($qsPrice))}
+
+                <small class="pull-right"><a href="/byty?{$qsPrice}"><i class="fa fa-times"></i></a>&nbsp;</small>
+                <i class="fa fa-question-circle" data-toggle="tooltip" data-placement="top"
+                   title="Nastavte si rozsah ceny"></i>
+            </legend>
+
+            {var $priceMin = $database->table('store')->min('price')}
+            {var $priceMax = $database->table('store')->max('price')}
+
+            {if $presenter->getParameter("priceFrom") > $priceMin}
+                {var $priceMinValue = $presenter->getParameter("priceFrom")}
+            {else}
+                {var $priceMinValue = $priceMin}
+            {/if}
+
+            {if $presenter->getParameter("priceTo") > $priceMax}
+                {var $priceMinValue = $presenter->getParameter("priceTo")}
+            {else}
+                {var $priceMaxValue = $priceMax}
+            {/if}
+
+            <div id="slider-rangeA" style="visibility: hidden">
+                <input type="hidden" name="minsANow" id="minsANow" value="{$priceMin}">
+                <input type="hidden" name="maxANow" id="maxsANow" value="{$priceMax}">
+            </div>
+
+            <div class="form-group" style="margin-top: 10px;">
+                <div class="col-xs-6">
+                    <input type="text" n:name="priceFrom" value="{$priceMinValue}" id="minsA"
+                           class="text-right form-control" placeholder="od">
+                </div>
+                <div class="col-sm-6">
+                    <input type="text" n:name="priceTo" value="{$priceMax}" id="maxsA"
+                           class="text-right form-control" placeholder="do">
                 </div>
             </div>
-        {/foreach}
+        </fieldset>
     </div>
-{/form}
+</div>
+</div>
+<div class="container">
+    <hr class="param-line">
+
+    <div class="col-xs-12">
+        <p><input type="submit" n:name="submitm" value="{_dictionary.main.Search}" class="btn btn-green"></p>
+    </div>
+    {/form}
+</div>
