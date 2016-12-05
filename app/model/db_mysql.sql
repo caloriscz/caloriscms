@@ -263,6 +263,7 @@ CREATE TABLE IF NOT EXISTS `param` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `param` varchar(80) NOT NULL,
   `param_en` varchar(80) NOT NULL,
+  `description` text,
   `prefix` varchar(40) DEFAULT NULL COMMENT 'Will be automatically filled before value',
   `suffix` varchar(40) DEFAULT NULL COMMENT 'Will be automatically filled after value',
   `preset` varchar(80) DEFAULT NULL COMMENT 'Value in preset will be autofilled',
