@@ -8,6 +8,8 @@
 
 namespace App\Model\Store;
 
+use \Nette\Database\SqlLiteral;
+
 /**
  * Get list of filtered products
  * @author Petr Karásek
@@ -21,6 +23,7 @@ class Filter
     public function __construct(\Nette\Database\Context $database)
     {
         $this->database = $database;
+        $this->connect = $this->database->table("pages");
     }
 
     /**
@@ -50,42 +53,24 @@ class Filter
      */
     function order($order)
     {
-        switch ($order) {
-            case 'pa':
-                $order = "`price` ASC";
-                break;
-            case 'pd':
-                $order = "`price` DESC";
-                break;
-            case 'na':
-                $order = "`title` ASC";
-                break;
-            case 'nd':
-                $order = "`title` DESC";
-                break;
-            case 'da':
-                $order = "`date_published` ASC";
-                break;
-            case 'dd':
-                $order = "`date_published` DESC";
-                break;
-            case 'sa':
-                $order = "`stock`.`amount_sold` ASC";
-                break;
-            case 'sd':
-                $order = "`stock`.`amount_sold` DESC";
-                break;
-            case 'oa':
-                $order = "`sorted` ASC";
-                break;
-            case 'od':
-                $order = "`sorted` DESC";
-                break;
-            default :
-                $order = false;
+        if ($order == '') {
+            $order = "na";
         }
 
-        $this->order = $order;
+        $arr = array(
+            "pa" => "`price` ASC",
+            "pd" => "`price` DESC",
+            "na" => "`title` ASC",
+            "nd" => "`title` DESC",
+            "da" => "`date_published` ASC",
+            "dd" => "`date_published` DESC",
+            "sa" => "`stock`.`amount_sold` ASC",
+            "sd" => "`stock`.`amount_sold` DESC",
+            "oa" => "`sorted` ASC",
+            "od" => "`sorted` DESC"
+        );
+
+        $this->order = $arr[$order];
     }
 
     /**
