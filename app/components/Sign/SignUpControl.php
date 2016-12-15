@@ -177,9 +177,18 @@ class SignUpControl extends Control
                 "uid" => \Nette\Utils\Strings::padLeft($userId->id, 6, '0'),
             ));
 
-        if ($this->template->settings['members:signup:contactEnabled']) {
+        if ($this->presenter->template->settings['members:signup:contactEnabled']) {
+			            /* Associate page with contact */
+            $doc = new \App\Model\Document($this->database);
+            $doc->setType(5);
+            $doc->setPublic(0);
+            $doc->setTitle("contact-" . $form->values->title);
+            $page = $doc->create($this->user->getId());
+            \App\Model\IO::directoryMake(substr(APP_DIR, 0, -4) . '/www/media/' . $page, 0755);
+			
             $arrContacts = array(
-                "categories_id" => 44,
+                "categories_id" => 8,
+                "pages_id" => $page,
                 "users_id" => $userId,
                 "name" => $form->values->name,
                 "street" => $form->values->street,
@@ -200,7 +209,7 @@ class SignUpControl extends Control
 
         if ($form->values->vatin) {
             $ares = new \h4kuna\Ares\Ares();
-            $aresArr = $ares->loadData('')->toArray();
+            $aresArr = $ares->loadData($form->values->vatin)->toArray();
         }
 
         $latte = new \Latte\Engine;
@@ -225,14 +234,16 @@ class SignUpControl extends Control
 
                 $mail = new \Nette\Mail\Message;
                 $mail->setFrom($this->presenter->template->settings['contacts:email:hq'])
-                    ->addTo($form->values->email)
+                    /*->addTo($form->values->email)*/
+                    ->addTo("caloris@caloris.cz")
                     ->setHTMLBody($email_signup_confirmbyamin);
 
                 $this->presenter->mailer->send($mail);
 
                 $mailA = new \Nette\Mail\Message;
                 $mailA->setFrom($this->presenter->template->settings['contacts:email:hq'])
-                    ->addTo($this->presenter->template->settings['contacts:email:hq'])
+                    /*->addTo($this->presenter->template->settings['contacts:email:hq'])*/
+                    ->addTo("caloris@caloris.cz")
                     ->setHTMLBody($email_signup_adminconfirm);
 
                 $this->presenter->mailer->send($mailA);
@@ -242,7 +253,7 @@ class SignUpControl extends Control
 
                 $mail = new \Nette\Mail\Message;
                 $mail->setFrom($this->presenter->template->settings['contacts:email:hq'])
-                    ->addTo($form->values->email)
+           /*         ->addTo($form->values->email)*/
                     ->setHTMLBody($email_signup_member);
 
                 $this->presenter->mailer->send($mail);

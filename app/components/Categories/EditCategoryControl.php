@@ -16,9 +16,9 @@ class EditCategoryControl extends Control
 
     protected function createComponentEditForm()
     {
-        $categoryAll = new \App\Model\Category($this->database);
-        $category = $this->database->table("categories")->get($this->presenter->getParameter("id"));
-        $categories = $categoryAll->getAll();
+        $category = $this->database->table("pages")->get($this->presenter->getParameter("id"));
+
+        $categories = $this->database->table("pages")->where("pages_types_id", 7)->fetchPairs("id", "title");
         unset($categories[$category->id]);
 
         $form = new \Nette\Forms\BootstrapUIForm();
@@ -39,7 +39,7 @@ class EditCategoryControl extends Control
         $arr = array(
             "id" => $category->id,
             "title" => $category->title,
-            "parent" => $category->parent_id,
+            "parent" => $category->pages_id,
         );
 
         $form->setDefaults(array_filter($arr));

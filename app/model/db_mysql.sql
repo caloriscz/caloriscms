@@ -592,7 +592,10 @@ INSERT INTO `settings` (`categories_id`, `setkey`, `setvalue`, `description_cs`,
 (20, 'appearance:paths:logo', 'logo.png', 'Obrázek loga ve vysokém rozlišení a barvě', 'Image of logo in high resolution and color', 'local_path', 0),
 (20, 'appearance:paths:favicon:ico', 'favicon.ico', 'Favicon s příponou ico', 'Favicon with ico suffix', 'local_path', 0),
 (21, 'appearance:carousel:directions', '0', 'Zobrazit indikátory (levá a pravá šipka)', 'Show indicators (left and right arrow)', 'boolean', 1),
-(21, 'appearance:carousel:indicators', '0', 'Zobrazit menu', 'Show menu', 'boolean', 1);
+(21, 'appearance:carousel:indicators', '0', 'Zobrazit menu', 'Show menu', 'boolean', 1),
+(12, 'members_username_sa_email', '0', 'Použít e-mail jako uživatelské jméno', 'Use e-mail as username', 'boolean', '1'),
+(12, 'members_signup_message', '0', 'Možnost napsat zprávu při registraci', 'Option to write message in signup', 'boolean', '1');
+(12, 'members_signup_conditions_agree', '0', 'Souhlasit s podmínkami zaškrtávací tlačítko', 'Agree with conditions box', 'boolean', '1');
 
 INSERT INTO `languages` (`id`, `code`, `title`, `used`, `default`) VALUES
 (1, 'cs', 'čeština', 1, 1);
