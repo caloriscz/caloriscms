@@ -176,6 +176,20 @@ CREATE TABLE IF NOT EXISTS `languages` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
+CREATE TABLE IF NOT EXISTS `logger` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `event` varchar(200) NOT NULL,
+  `description` text,
+  `users_id` int(11) DEFAULT NULL,
+  `pages_id` int(11) DEFAULT NULL,
+  `date_created` datetime DEFAULT NULL,
+  `event_types_id` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  KEY `user` (`users_id`),
+  KEY `pages_id` (`pages_id`),
+  KEY `users_id` (`users_id`)
+) ENGINE=InnoDB;
+
 CREATE TABLE IF NOT EXISTS `media` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(80) NOT NULL,
