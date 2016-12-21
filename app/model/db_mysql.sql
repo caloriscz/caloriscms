@@ -223,7 +223,7 @@ CREATE TABLE IF NOT EXISTS `pages` (
   `sorted` int(11) NOT NULL DEFAULT '0',
   `editable` int(11) NOT NULL DEFAULT '1',
   `presenter` varchar(80) DEFAULT NULL,
-  `recommended` tinyint(4) DEFAULT '0'
+  `recommended` tinyint(4) DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `users_id` (`users_id`),
   KEY `pages_id` (`pages_id`),
@@ -272,7 +272,7 @@ CREATE TABLE IF NOT EXISTS `param` (
   `type_front` varchar(40) COLLATE utf8_czech_ci NOT NULL DEFAULT 'radio' COMMENT 'Display type of parametre form: select, radio etc.',
   `sorted` int(11) DEFAULT '0' COMMENT 'You can sort params',
   `block_class` varchar(60) COLLATE utf8_czech_ci DEFAULT '0' COMMENT 'Add classes for the parameter block',
-  `replace_param` varchar(250) COLLATE utf8_czech_ci DEFAULT NULL
+  `replace_param` varchar(250) COLLATE utf8_czech_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
@@ -594,7 +594,7 @@ INSERT INTO `settings` (`categories_id`, `setkey`, `setvalue`, `description_cs`,
 (21, 'appearance:carousel:directions', '0', 'Zobrazit indikátory (levá a pravá šipka)', 'Show indicators (left and right arrow)', 'boolean', 1),
 (21, 'appearance:carousel:indicators', '0', 'Zobrazit menu', 'Show menu', 'boolean', 1),
 (12, 'members_username_sa_email', '0', 'Použít e-mail jako uživatelské jméno', 'Use e-mail as username', 'boolean', '1'),
-(12, 'members_signup_message', '0', 'Možnost napsat zprávu při registraci', 'Option to write message in signup', 'boolean', '1');
+(12, 'members_signup_message', '0', 'Možnost napsat zprávu při registraci', 'Option to write message in signup', 'boolean', '1'),
 (12, 'members_signup_conditions_agree', '0', 'Souhlasit s podmínkami zaškrtávací tlačítko', 'Agree with conditions box', 'boolean', '1');
 
 INSERT INTO `languages` (`id`, `code`, `title`, `used`, `default`) VALUES
