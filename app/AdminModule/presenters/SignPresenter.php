@@ -36,12 +36,26 @@ class SignPresenter extends BasePresenter
     protected function createComponentSignIn()
     {
         $control = new \Caloriscz\Sign\SignInControl($this->database);
+
+        $logger = new \App\Model\Logger($this->database);
+        $logger->setEvent("Uživatel přihlášen");
+        $logger->setDescription("");
+        $logger->setUser($this->user->getId());
+        $logger->save();
+
         return $control;
     }
 
     public function actionOut()
     {
         $this->getUser()->logout();
+
+        $logger = new \App\Model\Logger($this->database);
+        $logger->setEvent("Uživatel odhlášen");
+        $logger->setDescription("");
+        $logger->setUser($this->user->getId());
+        $logger->save();
+
         $this->flashMessage($this->translator->translate('messages.sign.logged-out'), 'note');
         $this->redirect('in');
 
