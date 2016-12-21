@@ -63,7 +63,7 @@
                     <i class="fa fa-users fa-fw"></i> {_admin.navigation.members}
                 </a>
             </li>
-            {if $database->table('addons')->where('key = ? AND active = 1', 'caloriscms-links')->count() > 1}
+            {if $database->table('addons')->where('key = ? AND active = 1', 'caloriscms-links')->count() > 0}
                 <li>
                     <a href="/admin/links">
                         <i class="fa fa-link fa-fw"></i> {_dictionary.main.Links}
