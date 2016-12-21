@@ -17,7 +17,7 @@ use Nette\Utils\Strings;
 class Document
 {
 
-    /** @var Nette\Database\Context */
+    /** @var \Nette\Database\Context */
     public $database;
     public $user;
 
@@ -211,11 +211,7 @@ class Document
 
     function getDocument()
     {
-        if ($this->doc) {
-            return $this->doc;
-        } else {
-            return false;
-        }
+        return $this->doc;
     }
 
     /**
@@ -290,7 +286,7 @@ class Document
 
         if ($this->getDocument() && $this->getLanguage()) {
             $arr["document" . '_' . $this->getLanguage()] = $this->getDocument();
-        } elseif ($this->getDocument()) {
+        } else {
             $arr["document"] = $this->getDocument();
         }
 
