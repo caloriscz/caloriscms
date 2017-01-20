@@ -68,7 +68,6 @@ class EditorControl extends Control
         $form->addText("slug", "dictionary.main.Slug");
         $form->addText("document2");
         $form->addSelect("parent");
-        $form->addSelect("template");
         $form->addGroup("dictionary.main.MetaTags");
         $form->addTextArea("metadesc", "dictionary.main.MetaDesc")
             ->setAttribute("class", "form-control");
@@ -129,6 +128,7 @@ class EditorControl extends Control
         $doc->setLanguage($form->values->l);
         $doc->setDatePublished($form->values->date_published);
         $doc->setTitle($form->values->title);
+        $doc->setTemplate($values["template"]);
         $doc->setSlug($form->values->slug_old, $form->values->slug);
         $doc->setMetaKey($form->values->metakeys);
         $doc->setMetaDescription($form->values->metadesc);
@@ -245,7 +245,7 @@ class EditorControl extends Control
         $template->pages = $this->database->table("pages")->where("NOT id", $this->presenter->getParameter("id"));
         $template->page = $this->database->table("pages")->get($this->presenter->getParameter("id"));
 
-        $template->templates = $this->database->table("pages_templates")->where("pages_types_id", $template->page->pages_types_id);
+        $template->templates = $this->database->table("pages_templates")->where("pages_types_id IS NULL")->order("title");
 
         if ($this->presenter->template->member->users_roles->pages_document) {
             $template->enabled = true;

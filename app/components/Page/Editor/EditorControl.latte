@@ -103,7 +103,7 @@
                     <select name="template" class="form-control" id="inputTemplate">
                         <option value="" selected="selected">Základní šablona --</option>
                         {foreach $templates as $item}
-                            <option value="{$item->id}" {if $item->id == $page->pages_templates_id} selected{/if}>{$item->template}</option>
+                            <option value="{$item->id}" {if $item->id == $page->pages_templates_id} selected{/if}>{$item->title}</option>
                         {/foreach}
                     </select>
                 </div>

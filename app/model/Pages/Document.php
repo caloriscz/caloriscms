@@ -41,6 +41,22 @@ class Document
         }
     }
 
+    function setTemplate($pageTemplate = false)
+    {
+        $this->pageTemplate = $pageTemplate;
+        return $this->pageTemplate;
+    }
+
+    function getTemplate()
+    {
+        if ($this->pageTemplate) {
+            return $this->pageTemplate;
+        } else {
+            return null;
+        }
+    }
+
+
     function setMetaKey($metakey = false)
     {
         $this->metakey = $metakey;
@@ -231,6 +247,9 @@ class Document
             $arr["title"] = $this->getTitle();
         }
 
+            $arr["pages_templates_id"] = $this->getTemplate();
+
+
         if ($this->getPreview()) {
             $arr["preview"] = $this->getPreview();
         }
@@ -283,6 +302,8 @@ class Document
         } elseif ($this->getTitle()) {
             $arr["title"] = $this->getTitle();
         }
+
+            $arr["pages_templates_id"] = $this->getTemplate();
 
         if ($this->getDocument() && $this->getLanguage()) {
             $arr["document" . '_' . $this->getLanguage()] = $this->getDocument();
