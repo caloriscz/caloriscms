@@ -10,6 +10,11 @@ use Nette,
  */
 class PagesPresenter extends BasePresenter
 {
+    protected function createComponentBlogList()
+    {
+        $control = new \Caloriscz\Blog\BlogListControl($this->database);
+        return $control;
+    }
 
     protected function startup()
     {
