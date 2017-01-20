@@ -521,7 +521,6 @@ INSERT INTO `pages` (`slug`, `title`, `document`, `preview`, `pages_id`, `users_
 ('galerie', 'Galerie', NULL, NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL, 0, NULL, 4, 0, 'Front:Gallery:default', 0),
 ('udalosti', 'Události', NULL, NULL, 1, NULL, 1, NULL, NULL, NULL, NULL, 0, NULL, 5, 0, 'Front:Events:default', 0),
 ('dokumenty', 'Dokumenty', NULL, NULL, 1, NULL, 1, NULL, NULL, NULL, NULL, 0, NULL, 6, 0, 'Front:Documents:default', 0),
-('kontakty', 'Náš tým', NULL, NULL, 1, NULL, 1, NULL, NULL, NULL, NULL, 0, NULL, 7, 0, 'Front:Contacts:default', 0),
 ('profil', 'Profil', NULL, NULL, 1, NULL, 1, NULL, NULL, NULL, NULL, 0, NULL, 8, 0, 'Front:Profile:default', 0),
 ('profil-obrazek', 'Profil: Obrázek', NULL, 8, 1, NULL, 1, NULL, NULL, NULL, NULL, 0, NULL, 9, 0, 'Front:Profile:image', 0),
 ('profil-heslo', 'Profil: Změna hesla', NULL, 8, 1, NULL, 1, NULL, NULL, NULL, NULL, 0, NULL, 10, 0, 'Front:Profile:password', 0),
