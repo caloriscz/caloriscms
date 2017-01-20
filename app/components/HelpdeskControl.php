@@ -54,18 +54,18 @@ class HelpdeskControl extends Nette\Application\UI\Control
     function sendFormValidated(\Nette\Forms\BootstrapUIForm $form)
     {
         if (strlen($form->values->name) < 2) {
-            $this->flashMessage($this->translator->translate('messages.sign.fillInName'), "error");
-            $this->redirect(":Front:Contact:default");
+            $this->presenter->flashMessage($this->presenter->translator->translate('messages.sign.fillInName'), "error");
+            $this->presenter->redirect(":Front:Contact:default");
         }
 
         if (\Nette\Utils\Validators::isEmail($form->values->email) == FALSE) {
-            $this->flashMessage($this->translator->translate('messages.sign.fillInEmail'), "error");
-            $this->redirect(":Front:Contact:default");
+            $this->presenter->flashMessage($this->presenter->translator->translate('messages.sign.fillInEmail'), "error");
+            $this->presenter->redirect(":Front:Contact:default");
         }
 
         if (strlen($form->values->message) < 2) {
-            $this->flashMessage($this->translator->translate('messages.sign.fillInMessage'), "error");
-            $this->redirect(":Front:Contact:default");
+            $this->presenter->flashMessage($this->presenter->translator->translate('messages.sign.fillInMessage'), "error");
+            $this->presenter->redirect(":Front:Contact:default");
         }
     }
 

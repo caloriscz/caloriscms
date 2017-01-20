@@ -256,12 +256,11 @@ CREATE TABLE IF NOT EXISTS `pages_related` (
   KEY `related_blog_id` (`related_pages_id`)
 ) ENGINE=InnoDB;
 
-CREATE TABLE IF NOT EXISTS `pages_templates` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `pages_templates` (
+  `id` int(11) NOT NULL,
   `pages_types_id` int(11) DEFAULT NULL,
   `template` varchar(250) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `pages_types_id` (`pages_types_id`)
+  `title` varchar(80) DEFAULT NULL
 ) ENGINE=InnoDB;
 
 CREATE TABLE IF NOT EXISTS `pages_types` (
@@ -505,8 +504,13 @@ INSERT INTO `pages_types` (`id`, `content_type`, `presenter`, `action`, `prefix`
 (8, 'Dokumenty', 'Front:Documents', 'folder', ''),
 (9, 'Template', '', 'default', '');
 
-INSERT INTO `pages_templates` (`id`, `pages_types_id`, `template`) VALUES
-(1, 6, 'albumWithDescription');
+INSERT INTO `pages_templates` (`id`, `pages_types_id`, `template`, `title`) VALUES
+(1, NULL, 'Front:Gallery:albumWithDescription', 'Album with description'),
+(2, NULL, 'Front:Pages:blogList', 'Blog list'),
+(3, NULL, 'Front:Pages:default', 'Simple page'),
+(4, NULL, 'Front:Homepage:default', 'Homepage'),
+(5, NULL, 'Front:Contact:default', 'Contact page'),
+(6, NULL, 'Front:Pages:blogDetail', 'Blog detail');
 
 UPDATE `pages_types` SET `id` = 0 WHERE `id` = 9;
 

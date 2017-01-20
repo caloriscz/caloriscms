@@ -108,7 +108,10 @@ class SlugRouter extends Nette\Object implements Nette\Application\IRouter
 
         // Action
         if ($row->pages_templates_id != null) {
-            $params['action'] = $row->pages_templates->template;
+            $templateInfo = explode(":", $row->pages_templates->template);
+
+            $presenter = $templateInfo[0] . ':' . $templateInfo[1];
+            $params['action'] = $templateInfo[2];
         } else {
             if ($row->pages_types_id == 0) {
                 $params['action'] = substr($row->presenter, strrpos($row->presenter, ":")+1);
@@ -116,9 +119,6 @@ class SlugRouter extends Nette\Object implements Nette\Application\IRouter
                 $params['action'] = $row->pages_types->action;
             }
         }
-
-
-
 
         return new App\Request($presenter, $httpRequest->getMethod(), $params, $httpRequest->getPost(), $httpRequest->getFiles(), array(App\Request::SECURED => $httpRequest->isSecured()));
 

@@ -43,11 +43,12 @@ class InsertFormControl extends Control
     {
         $doc = new \App\Model\Document($this->database);
         $doc->setType(2);
+        $doc->setTemplate(6);
         $doc->setTitle($form->values->title);
         $page = $doc->create($this->presenter->user->getId());
         \App\Model\IO::directoryMake(substr(APP_DIR, 0, -4) . '/www/media/' . $page);
 
-        $this->presenter->redirect(":Admin:Blog:detail", array("id" => $page));
+        $this->presenter->redirect(":Admin:Pages:detail", array("id" => $page));
     }
 
 
