@@ -190,12 +190,6 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
         return $control;
     }
 
-    protected function createComponentAlbum()
-    {
-        $control = new \AlbumControl($this->database);
-        return $control;
-    }
-
     protected function createComponentHead()
     {
         $control = new \Caloriscz\Navigation\Head\HeadControl($this->database);

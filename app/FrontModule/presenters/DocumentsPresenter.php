@@ -10,11 +10,6 @@ use Nette,
  */
 class DocumentsPresenter extends BasePresenter
 {
-    public function renderDefault()
-    {
-        $this->template->folders = $this->database->table("pages")->where(array("pages_id" => 6));
-    }
-
     public function renderFolder()
     {
         $this->template->album = $this->database->table("pages")

@@ -192,7 +192,7 @@ CREATE TABLE IF NOT EXISTS `logger` (
 
 CREATE TABLE IF NOT EXISTS `media` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(80) NOT NULL,
+  `name` varchar(140) NOT NULL,
   `file_type` tinyint(1) NOT NULL DEFAULT '0',
   `filesize` int(11) NOT NULL DEFAULT '0',
   `pages_id` int(11) DEFAULT NULL,
