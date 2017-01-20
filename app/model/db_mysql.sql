@@ -499,9 +499,9 @@ INSERT INTO `pages_types` (`id`, `content_type`, `presenter`, `action`, `prefix`
 (3, 'Event', 'Front:Events', 'detail', ''),
 (4, 'Product', 'Front:Product', 'default', ''),
 (5, 'Contacts', 'Front:Contacts', 'detail', ''),
-(6, 'Galerie', 'Front:Gallery', 'album', ''),
+(6, 'Galerie', 'Front:Media', 'album', ''),
 (7, 'Product Category', 'Front:Catalogue', 'default', ''),
-(8, 'Dokumenty', 'Front:Documents', 'folder', ''),
+(8, 'Dokumenty', 'Front:Media', 'folder', ''),
 (9, 'Template', '', 'default', '');
 
 INSERT INTO `pages_templates` (`id`, `pages_types_id`, `template`, `title`) VALUES
@@ -518,9 +518,7 @@ INSERT INTO `pages` (`slug`, `title`, `document`, `preview`, `pages_id`, `users_
 ('', 'Homepage', NULL, NULL, NULL, NULL, 1, '', '', NULL, NULL, 0, NULL, 1, 0, 'Front:Homepage:default', 0),
 ('kontakt', 'Kontakty', NULL, NULL, NULL, NULL, 1, '', '', NULL, NULL, 0, NULL, 2, 0, 'Front:Contact:default', 0),
 ('blog', 'Blog', NULL, NULL, NULL, NULL, 1, '', '', NULL, NULL, 0, NULL, 3, 0, 'Front:Blog:default', 0),
-('galerie', 'Galerie', NULL, NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL, 0, NULL, 4, 0, 'Front:Gallery:default', 0),
 ('udalosti', 'Události', NULL, NULL, 1, NULL, 1, NULL, NULL, NULL, NULL, 0, NULL, 5, 0, 'Front:Events:default', 0),
-('dokumenty', 'Dokumenty', NULL, NULL, 1, NULL, 1, NULL, NULL, NULL, NULL, 0, NULL, 6, 0, 'Front:Documents:default', 0),
 ('profil', 'Profil', NULL, NULL, 1, NULL, 1, NULL, NULL, NULL, NULL, 0, NULL, 8, 0, 'Front:Profile:default', 0),
 ('profil-obrazek', 'Profil: Obrázek', NULL, 8, 1, NULL, 1, NULL, NULL, NULL, NULL, 0, NULL, 9, 0, 'Front:Profile:image', 0),
 ('profil-heslo', 'Profil: Změna hesla', NULL, 8, 1, NULL, 1, NULL, NULL, NULL, NULL, 0, NULL, 10, 0, 'Front:Profile:password', 0),
