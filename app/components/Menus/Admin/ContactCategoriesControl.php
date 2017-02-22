@@ -4,10 +4,10 @@ namespace Caloriscz\Menus\Admin;
 
 use Nette\Application\UI\Control;
 
-class AdminPanelControl extends Control
+class ContactCategoriesControl extends Control
 {
 
-    /** @var Nette\Database\Context */
+    /** @var \Nette\Database\Context */
     public $database;
 
     public function __construct(\Nette\Database\Context $database)
@@ -42,7 +42,7 @@ class AdminPanelControl extends Control
     {
         $redirectTo = $this->presenter->getName();
 
-        $category = $this->database->table("categories")->where(array(
+        $category = $this->database->table("contacts_categories")->where(array(
             "parent_id" => $form->values->parent_id,
             "title" => $form->values->title,
         ));
@@ -87,11 +87,11 @@ class AdminPanelControl extends Control
         unset($getParams["page"]);
         $template->args = $getParams;
 
-        $template->setFile(__DIR__ . '/AdminPanelControl.latte');
+        $template->setFile(__DIR__ . '/ContactCategoriesControl.latte');
 
         $template->id = $id;
         $template->idActive = $this->presenter->getParameter("id");
-        $template->menu = $this->database->table('categories')->where('parent_id', $id);
+        $template->menu = $this->database->table('contacts_categories')->where('parent_id', $id);
         $template->render();
     }
 

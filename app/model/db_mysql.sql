@@ -27,7 +27,17 @@ CREATE TABLE IF NOT EXISTS `carousel` (
 	PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
-CREATE TABLE IF NOT EXISTS `categories` (
+CREATE TABLE IF NOT EXISTS `contacts_categories` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `parent_id` int(11) DEFAULT NULL,
+  `description` text,
+  `title` varchar(80) NOT NULL,
+  `sorted` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  KEY `parent_id` (`parent_id`)
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS `settings_categories` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `parent_id` int(11) DEFAULT NULL,
   `description` text,
@@ -321,27 +331,29 @@ CREATE TABLE IF NOT EXISTS `snippets` (
   KEY `pages_id` (`pages_id`)
 ) ENGINE=InnoDB;
 
-CREATE TABLE IF NOT EXISTS `users` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `username` char(40) NOT NULL,
-  `categories_id` int(11) DEFAULT NULL,
-  `uid` varchar(10) DEFAULT NULL,
-  `email` char(80) NOT NULL,
+CREATE TABLE `users` (
+  `id` int(11) NOT NULL,
+  `username` char(40) CHARACTER SET latin1 NOT NULL,
+  `users_categories_id` int(11) DEFAULT NULL,
+  `uid` varchar(10) CHARACTER SET latin1 DEFAULT NULL,
+  `email` char(80) CHARACTER SET latin1 NOT NULL,
   `sex` int(11) NOT NULL DEFAULT '0',
-  `name` varchar(80) DEFAULT NULL,
-  `password` char(60) NOT NULL,
+  `name` varchar(80) CHARACTER SET latin1 DEFAULT NULL,
+  `password` char(60) CHARACTER SET latin1 NOT NULL,
   `date_created` datetime DEFAULT NULL,
   `date_visited` datetime DEFAULT NULL,
   `state` int(11) NOT NULL DEFAULT '0',
-  `activation` char(40) DEFAULT NULL,
+  `activation` char(40) CHARACTER SET latin1 DEFAULT NULL,
   `newsletter` int(11) DEFAULT '0',
   `type` int(11) NOT NULL DEFAULT '1',
   `users_roles_id` int(11) DEFAULT '0',
   `login_error` int(11) NOT NULL DEFAULT '0',
-  `login_success` int(11) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`),
-  KEY `categories_id` (`categories_id`),
-  KEY `users_roles_id` (`users_roles_id`)
+  `login_success` int(11) NOT NULL DEFAULT '0'
+) ENGINE=InnoDB;
+
+CREATE TABLE `users_categories` (
+  `id` int(11) NOT NULL,
+  `title` varchar(250) NOT NULL
 ) ENGINE=InnoDB;
 
 CREATE TABLE IF NOT EXISTS `users_roles` (
@@ -361,14 +373,11 @@ CREATE TABLE IF NOT EXISTS `users_roles` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
-ALTER TABLE `categories`
-  ADD CONSTRAINT `categories_ibfk_3` FOREIGN KEY (`parent_id`) REFERENCES `categories` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
 ALTER TABLE `contacts`
   ADD CONSTRAINT `contacts_ibfk_6` FOREIGN KEY (`pages_id`) REFERENCES `pages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `contacts_ibfk_2` FOREIGN KEY (`users_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `contacts_ibfk_4` FOREIGN KEY (`countries_id`) REFERENCES `countries` (`id`) ON DELETE SET NULL ON UPDATE SET NULL,
-  ADD CONSTRAINT `contacts_ibfk_5` FOREIGN KEY (`categories_id`) REFERENCES `categories` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `contacts_ibfk_5` FOREIGN KEY (`contacts_categories_id`) REFERENCES `contacts_categories` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 ALTER TABLE `contacts_openinghours`
   ADD CONSTRAINT `contacts_openinghours_ibfk_1` FOREIGN KEY (`contacts_id`) REFERENCES `contacts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
@@ -414,18 +423,22 @@ ALTER TABLE `params`
   ADD CONSTRAINT `params_ibfk_4` FOREIGN KEY (`param_id`) REFERENCES `param` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 ALTER TABLE `settings`
-  ADD CONSTRAINT `settings_ibfk_1` FOREIGN KEY (`categories_id`) REFERENCES `categories` (`id`) ON DELETE SET NULL ON UPDATE SET NULL;
+  ADD CONSTRAINT `settings_ibfk_1` FOREIGN KEY (`settings_categories_id`) REFERENCES `settings_categories` (`id`) ON DELETE SET NULL ON UPDATE SET NULL;
 
 ALTER TABLE `snippets`
   ADD CONSTRAINT `snippets_ibfk_1` FOREIGN KEY (`pages_id`) REFERENCES `pages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
-ALTER TABLE `users`
-  ADD CONSTRAINT `users_ibfk_2` FOREIGN KEY (`users_roles_id`) REFERENCES `users_roles` (`id`) ON DELETE SET NULL ON UPDATE SET NULL,
-  ADD CONSTRAINT `users_ibfk_1` FOREIGN KEY (`categories_id`) REFERENCES `categories` (`id`) ON DELETE SET NULL ON UPDATE SET NULL;
   
-  -- Data
+ALTER TABLE `users_categories` ADD PRIMARY KEY (`id`);
+ALTER TABLE `users_categories` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
-INSERT INTO `categories` (`id`, `parent_id`, `description`, `title`, `sorted`) VALUES
+ALTER TABLE `users` ADD PRIMARY KEY (`id`), ADD KEY `categories_id` (`users_categories_id`), ADD KEY `users_roles_id` (`users_roles_id`);
+ALTER TABLE `users` MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+ALTER TABLE `users` ADD CONSTRAINT `users_ibfk_1` FOREIGN KEY (`users_roles_id`) REFERENCES `users_roles` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `users_ibfk_2` FOREIGN KEY (`users_categories_id`) REFERENCES `users_categories` (`id`);
+  
+-- Data
+
+INSERT INTO `contacts_categories` (`id`, `parent_id`, `description`, `title`, `sorted`) VALUES
 (1, NULL, NULL, 'Nastavení', 145),
 (2, NULL, '', 'Kontakty', 43),
 (4, NULL, '', 'Links', 57),
@@ -434,6 +447,15 @@ INSERT INTO `categories` (`id`, `parent_id`, `description`, `title`, `sorted`) V
 (7, 2, NULL, 'Úloženka', 177),
 (8, 2, NULL, 'Zákazníci', 44),
 (9, 2, NULL, 'Kontakty na stránce', 45),
+(10, 1, NULL, 'Služby', 176),
+(11, 2, NULL, 'Místa k vyzvednutí', 46),
+(12, 2, NULL, 'Newsletter', 153);
+
+INSERT INTO `settings_categories` (`id`, `parent_id`, `description`, `title`, `sorted`) VALUES
+(1, NULL, NULL, 'Nastavení', 145),
+(2, NULL, '', 'Kontakty', 43),
+(4, NULL, '', 'Links', 57),
+(5, NULL, '', 'Členové', 60),
 (10, 1, NULL, 'Základní nastavení', 146),
 (11, 1, NULL, 'Kategorie', 149),
 (12, 1, NULL, 'Kontakty členů', 148),
@@ -442,8 +464,6 @@ INSERT INTO `categories` (`id`, `parent_id`, `description`, `title`, `sorted`) V
 (15, 1, NULL, 'Blog', 154),
 (16, 1, NULL, 'Kontakty', 166),
 (17, 1, NULL, 'Služby', 176),
-(18, 2, NULL, 'Místa k vyzvednutí', 46),
-(19, 2, NULL, 'Newsletter', 153),
 (20, 1, NULL, 'Vzhled', 154),
 (21, 20, NULL, 'Carousel', 155),
 (22, 20, NULL, 'Události', 157);
@@ -502,7 +522,8 @@ INSERT INTO `pages_types` (`id`, `content_type`, `presenter`, `action`, `prefix`
 (6, 'Galerie', 'Front:Media', 'album', ''),
 (7, 'Product Category', 'Front:Catalogue', 'default', ''),
 (8, 'Dokumenty', 'Front:Media', 'folder', ''),
-(9, 'Template', '', 'default', '');
+(9, 'Template', '', 'default', ''),
+(10, 'Blog categories', '', 'default', '');
 
 INSERT INTO `pages_templates` (`id`, `pages_types_id`, `template`, `title`) VALUES
 (1, NULL, 'Front:Gallery:albumWithDescription', 'Album with description'),
@@ -515,31 +536,31 @@ INSERT INTO `pages_templates` (`id`, `pages_types_id`, `template`, `title`) VALU
 UPDATE `pages_types` SET `id` = 0 WHERE `id` = 9;
 
 INSERT INTO `pages` (`slug`, `title`, `document`, `preview`, `pages_id`, `users_id`, `public`, `metadesc`, `metakeys`, `date_created`, `date_published`, `pages_types_id`, `pages_templates_id`, `sorted`, `editable`, `presenter`, `recommended`) VALUES
-('', 'Homepage', NULL, NULL, NULL, NULL, 1, '', '', NULL, NULL, 0, NULL, 1, 0, 'Front:Homepage:default', 0),
-('kontakt', 'Kontakty', NULL, NULL, NULL, NULL, 1, '', '', NULL, NULL, 0, NULL, 2, 0, 'Front:Contact:default', 0),
-('blog', 'Blog', NULL, NULL, NULL, NULL, 1, '', '', NULL, NULL, 0, NULL, 3, 0, 'Front:Blog:default', 0),
-('udalosti', 'Události', NULL, NULL, 1, NULL, 1, NULL, NULL, NULL, NULL, 0, NULL, 5, 0, 'Front:Events:default', 0),
-('profil', 'Profil', NULL, NULL, 1, NULL, 1, NULL, NULL, NULL, NULL, 0, NULL, 8, 0, 'Front:Profile:default', 0),
-('profil-obrazek', 'Profil: Obrázek', NULL, 8, 1, NULL, 1, NULL, NULL, NULL, NULL, 0, NULL, 9, 0, 'Front:Profile:image', 0),
-('profil-heslo', 'Profil: Změna hesla', NULL, 8, 1, NULL, 1, NULL, NULL, NULL, NULL, 0, NULL, 10, 0, 'Front:Profile:password', 0),
-('profil-adresy', 'Profil: Adresy', NULL, 1, 1, NULL, 1, NULL, NULL, NULL, NULL, 0, NULL, 11, 0, 'Front:Profile:addresses', 0),
-('profil-adresa', 'Profil: Addresa', NULL, 1, 1, NULL, 1, NULL, NULL, NULL, NULL, 0, NULL, 12, 0, 'Front:Profile:address', 0),
-('uspesne-prihlaseni', 'Profil: Addresa', NULL, 1, 1, NULL, 1, NULL, NULL, NULL, NULL, 0, NULL, 13, 0, 'Front:Sign:ed', 0),
-('prihlaseni', 'Přihlášení', NULL, 1, 1, NULL, 1, NULL, NULL, NULL, NULL, 0, NULL, 14, 0, 'Front:Sign:in', 0),
-('zapomenute-heslo', 'Zapomenuté heslo', NULL, 1, 1, NULL, 1, NULL, NULL, NULL, NULL, 0, NULL, 15, 0, 'Front:Sign:lostpass', 0),
-('reset', 'Znovunastavení hesla', NULL, 1, 1, NULL, 1, NULL, NULL, NULL, NULL, 0, NULL, 16, 0, 'Front:Sign:resetpass', 0),
-('registrace', 'Registrace uživatele', NULL, 1, 1, NULL, 1, NULL, NULL, NULL, NULL, 0, NULL, 17, 0, 'Front:Sign:up', 0),
-('verifikace', 'Ověření účtu', NULL, 1, 1, NULL, 1, NULL, NULL, NULL, NULL, 0, NULL, 18, 0, 'Front:Sign:verify', 0),
+('', 'Homepage', NULL, NULL, NULL, NULL, 1, '', '', NULL, NULL, 9, NULL, 1, 0, 'Front:Homepage:default', 0),
+('kontakt', 'Kontakty', NULL, NULL, NULL, NULL, 1, '', '', NULL, NULL, 9, NULL, 2, 0, 'Front:Contact:default', 0),
+('blog', 'Blog', NULL, NULL, NULL, NULL, 1, '', '', NULL, NULL, 9, NULL, 3, 0, 'Front:Blog:default', 0),
+('udalosti', 'Události', NULL, NULL, 1, NULL, 1, NULL, NULL, NULL, NULL, 9, NULL, 5, 0, 'Front:Events:default', 0),
+('profil', 'Profil', NULL, NULL, 1, NULL, 1, NULL, NULL, NULL, NULL, 9, NULL, 8, 0, 'Front:Profile:default', 0),
+('profil-obrazek', 'Profil: Obrázek', NULL, 8, 1, NULL, 1, NULL, NULL, NULL, NULL, 9, NULL, 9, 0, 'Front:Profile:image', 0),
+('profil-heslo', 'Profil: Změna hesla', NULL, 8, 1, NULL, 1, NULL, NULL, NULL, NULL, 9, NULL, 10, 0, 'Front:Profile:password', 0),
+('profil-adresy', 'Profil: Adresy', NULL, 1, 1, NULL, 1, NULL, NULL, NULL, NULL, 9, NULL, 11, 0, 'Front:Profile:addresses', 0),
+('profil-adresa', 'Profil: Addresa', NULL, 1, 1, NULL, 1, NULL, NULL, NULL, NULL, 9, NULL, 12, 0, 'Front:Profile:address', 0),
+('uspesne-prihlaseni', 'Profil: Addresa', NULL, 1, 1, NULL, 1, NULL, NULL, NULL, NULL, 9, NULL, 13, 0, 'Front:Sign:ed', 0),
+('prihlaseni', 'Přihlášení', NULL, 1, 1, NULL, 1, NULL, NULL, NULL, NULL, 9, NULL, 14, 0, 'Front:Sign:in', 0),
+('zapomenute-heslo', 'Zapomenuté heslo', NULL, 1, 1, NULL, 1, NULL, NULL, NULL, NULL, 9, NULL, 15, 0, 'Front:Sign:lostpass', 0),
+('reset', 'Znovunastavení hesla', NULL, 1, 1, NULL, 1, NULL, NULL, NULL, NULL, 9, NULL, 16, 0, 'Front:Sign:resetpass', 0),
+('registrace', 'Registrace uživatele', NULL, 1, 1, NULL, 1, NULL, NULL, NULL, NULL, 9, NULL, 17, 0, 'Front:Sign:up', 0),
+('verifikace', 'Ověření účtu', NULL, 1, 1, NULL, 1, NULL, NULL, NULL, NULL, 9, NULL, 18, 0, 'Front:Sign:verify', 0),
 -- Shop pages
-('kosik', 'Košík', NULL, 1, 1, NULL, 1, NULL, NULL, NULL, NULL, 0, NULL, 19, 0, 'Front:Cart:default', 0),
-('katalog', 'Katalog', NULL, 1, 1, NULL, 1, NULL, NULL, NULL, NULL, 0, NULL, 20, 0, 'Front:Catalogue:default', 0),
-('bonus', 'Bonus', NULL, 1, 1, NULL, 1, NULL, NULL, NULL, NULL, 0, NULL, 21, 0, 'Front:Order:bonus', 0),
-('delivery', 'Poštovné a platební metoda', NULL, 1, 1, NULL, 1, NULL, NULL, NULL, NULL, 0, NULL, 22, 0, 'Front:Order:delivery', 0),
-('summary', 'Shrnutí objednávky', NULL, 1, 1, NULL, 1, NULL, NULL, NULL, NULL, 0, NULL, 23, 0, 'Front:Order:summary', 0),
-('adresa-objednavky', 'Adresa objednávky', NULL, 1, 1, NULL, 1, NULL, NULL, NULL, NULL, 0, NULL, 24, 0, 'Front:Order:address', 0),
-('order-success', 'Objednávka úspěšně zadána', NULL, 1, 1, NULL, 1, NULL, NULL, NULL, NULL, 0, NULL, 25, 0, 'Front:Order:success', 0),
-('objednavky', 'Objednávky', NULL, 1, 1, NULL, 1, NULL, NULL, NULL, NULL, 0, NULL, 26, 0, 'Front:Orders:default', 0),
-('objednavky-detail', 'Detail objednávky', NULL, 1, 1, NULL, 1, NULL, NULL, NULL, NULL, 0, NULL, 27, 0, 'Front:Orders:detail', 0);
+('kosik', 'Košík', NULL, 1, 1, NULL, 1, NULL, NULL, NULL, NULL, 9, NULL, 19, 0, 'Front:Cart:default', 0),
+('katalog', 'Katalog', NULL, 1, 1, NULL, 1, NULL, NULL, NULL, NULL, 9, NULL, 20, 0, 'Front:Catalogue:default', 0),
+('bonus', 'Bonus', NULL, 1, 1, NULL, 1, NULL, NULL, NULL, NULL, 9, NULL, 21, 0, 'Front:Order:bonus', 0),
+('delivery', 'Poštovné a platební metoda', NULL, 1, 1, NULL, 1, NULL, NULL, NULL, NULL, 9, NULL, 22, 0, 'Front:Order:delivery', 0),
+('summary', 'Shrnutí objednávky', NULL, 1, 1, NULL, 1, NULL, NULL, NULL, NULL, 9, NULL, 23, 0, 'Front:Order:summary', 0),
+('adresa-objednavky', 'Adresa objednávky', NULL, 1, 1, NULL, 1, NULL, NULL, NULL, NULL, 9, NULL, 24, 0, 'Front:Order:address', 0),
+('order-success', 'Objednávka úspěšně zadána', NULL, 1, 1, NULL, 1, NULL, NULL, NULL, NULL, 9, NULL, 25, 0, 'Front:Order:success', 0),
+('objednavky', 'Objednávky', NULL, 1, 1, NULL, 1, NULL, NULL, NULL, NULL, 9, NULL, 26, 0, 'Front:Orders:default', 0),
+('objednavky-detail', 'Detail objednávky', NULL, 1, 1, NULL, 1, NULL, NULL, NULL, NULL, 9, NULL, 27, 0, 'Front:Orders:detail', 0);
 
 -- reserved for page templates (0)
 ALTER TABLE `pages` AUTO_INCREMENT=100;

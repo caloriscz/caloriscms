@@ -24,8 +24,16 @@
 
     <div class="row">
         <div class="col-lg-3">
-            {control adminPanel $categoryId}
-
+            {var $name = $presenter->getView()}
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Kategorie
+                    <a n:href=":Admin:Settings:default, id => null" class="btn btn-default btn-xs pull-right">Všechny kategorie</a>
+                </div>
+                <div class="panel-body">
+                    {control settingsCategories $categoryId}
+                </div>
+            </div>
             <br/>
 
             <pre>

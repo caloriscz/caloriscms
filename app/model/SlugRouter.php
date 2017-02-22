@@ -94,7 +94,7 @@ class SlugRouter extends Nette\Object implements Nette\Application\IRouter
         }
 
         // Presenter preset
-        if ($row->pages_types_id == 0) {
+        if ($row->pages_types_id == 9) {
             $presenterArr = implode(":", array_slice(explode(':', $row->presenter), 0, -1));
             $presenter = $presenterArr;
 
@@ -113,7 +113,7 @@ class SlugRouter extends Nette\Object implements Nette\Application\IRouter
             $presenter = $templateInfo[0] . ':' . $templateInfo[1];
             $params['action'] = $templateInfo[2];
         } else {
-            if ($row->pages_types_id == 0) {
+            if ($row->pages_types_id == 9) {
                 $params['action'] = substr($row->presenter, strrpos($row->presenter, ":")+1);
             } else {
                 $params['action'] = $row->pages_types->action;

@@ -3,15 +3,26 @@
 
 <h1 class="page-header">Kontakty</h1>
 
+<a n:href=":Admin:Contacts:categories" class="btn btn-success">Kategorie</a>
+
 {foreach $flashes as $flash}
-    <br />
+    <br/>
     <div class="flash {$flash->type}">{$flash->message}</div>
-    <br />
+    <br/>
 {/foreach}
 
 <div class="row">
     <div class="col-lg-3">
-        {control adminPanel $categoryId}
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                Kategorie
+                <a n:href=":Admin:Contacts:default, id => null" class="btn btn-default btn-xs pull-right">Všechny
+                    kategorie</a>
+            </div>
+            <div class="panel-body">
+                {control contactCategories}
+            </div>
+        </div>
 
         <div class="panel panel-default">
             <div class="panel-heading">{_dictionary.main.NewContact}</div>
@@ -28,7 +39,6 @@
     </div>
     <div class="col-lg-9">
         {control contactGrid}
-
 
     </div>
 </div>
