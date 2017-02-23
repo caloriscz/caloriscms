@@ -1,0 +1,38 @@
+@import "variables.less";
+
+/* Default font */
+* {
+  font-family: @kea-font;
+}
+
+/* Navbar 0 space */
+.navbar-0-space {
+  margin: 0;
+  padding: 0;
+}
+
+/* Fixes centering img-responsive in Bootstrap */
+.img-responsive-centered {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Breadcrumbs */
+ol.breadcrumb.breadcrumb-categories {
+  background-color: white;
+
+  li {
+    &:before {
+      content: ' > ';
+    }
+
+    &:first-child:before {
+      content: '';
+    }
+
+    a {
+      font-size: 1.20em;
+      text-decoration: none;
+    }
+  }
+}

@@ -2,6 +2,7 @@
 
 namespace App\AdminModule\Presenters;
 
+use Caloriscz\Members\MemberCategoriesControl;
 use Nette,
     App\Model;
 
@@ -35,9 +36,15 @@ class MembersPresenter extends BasePresenter
         return $control;
     }
     
-    protected function createComponentMembersGrid()
+    protected function createComponentMemberGrid()
     {
         $control = new \Caloriscz\Members\MemberGridControl($this->database);
+        return $control;
+    }
+    
+    protected function createComponentMemberCategories()
+    {
+        $control = new MemberCategoriesControl($this->database);
         return $control;
     }
 

@@ -1,0 +1,38 @@
+/* Underlined heading with line hidden behind the text */
+@import "variables";
+
+.heading-decorated {
+  position: relative;
+
+  h1, h2, h3, h4, h5, h6 {
+    border-color: red;
+    color: @heading-decorated-color;
+    font-size: 2em;
+
+    span {
+      background-color: #fff;
+      padding: 0 10px 0 0;
+    }
+
+    &.text-center {
+      span {
+        padding: 0 10px 0 10px;
+      }
+    }
+  }
+
+  hr {
+    position: relative;
+    bottom: 16px;
+    -moz-border-bottom-colors: none;
+    -moz-border-image: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    border-color: @heading-decorated-color -moz-use-text-color #FFFFFF;
+    border-style: solid none;
+    border-width: 2px 0;
+    z-index: -1;
+    margin: 0;
+  }
+}
