@@ -22,6 +22,16 @@ class PagesPresenter extends BasePresenter
         $this->template->type = $this->getParameter("type");
     }
 
+    protected function createComponentPageList()
+    {
+        $control = new \Caloriscz\Page\Pages\PageListControl($this->database);
+        $control->onSave[] = function ($type) {
+            $this->redirect(this, array("type" => $type));
+        };
+
+        return $control;
+    }
+
     protected function createComponentEditSnippetForm()
     {
         $control = new \Caloriscz\Page\Snippets\EditFormControl($this->database);
@@ -118,50 +128,12 @@ class PagesPresenter extends BasePresenter
     }
 
     /**
-     * Delete page
-     */
-    function handleDelete($id)
-    {
-        $doc = new Model\Document($this->database);
-        $doc->delete($id);
-        Model\IO::removeDirectory(APP_DIR . '/media/' . $id);
-
-        $this->redirect(":Admin:Pages:default", array("id" => null));
-    }
-
-    /**
      * Delete snippet
      */
     function handleDeleteSnippet($id)
     {
         $this->database->table("snippets")->get($id)->delete();
-
         $this->redirect(":Admin:Pages:snippets", array("id" => $this->getParameter("page")));
-    }
-
-    function handlePublic()
-    {
-        $page = $this->database->table("pages")->get($this->getParameter("id"));
-
-        if ($page->public == 1) {
-            $show = 0;
-        } else {
-            $show = 1;
-        }
-        $this->database->table("pages")->get($this->getParameter("id"))->update(array("public" => $show));
-
-        $this->redirect(this, array("id" => $this->getParameter("id"), "l" => $this->getParameter("l")));
-    }
-
-    public function renderDefault()
-    {
-        if ($this->template->type) {
-            $arr = $this->template->type;
-        } else {
-            $arr = 0;
-        }
-
-        $this->template->pages = $this->database->table("pages")->where(array("pages_types_id" => $arr))->order("title");
     }
 
     public function renderDetail()
