@@ -3,7 +3,7 @@
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
-SET NAMES utf8;
+SET NAMES 'utf8';
 
 CREATE TABLE `addons` (
   `id` int(11) NOT NULL,
@@ -11,12 +11,12 @@ CREATE TABLE `addons` (
   `key` varchar(40) NOT NULL,
   `active` tinyint(1) NOT NULL DEFAULT '0',
   `description` text NOT NULL
-) ENGINE=InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
 
 CREATE TABLE `blacklist` (
   `id` int(11) NOT NULL,
   `title` varchar(100) DEFAULT NULL
-) ENGINE=InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
 
 INSERT INTO `blacklist` (`id`, `title`) VALUES
 (1, 'viagra'),
@@ -57,7 +57,7 @@ CREATE TABLE `carousel` (
   `image` varchar(120) NOT NULL,
   `visible` tinyint(1) NOT NULL DEFAULT '1',
   `sorted` int(11) NOT NULL
-) ENGINE=InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
 
 CREATE TABLE `contacts` (
   `id` int(11) NOT NULL,
@@ -80,7 +80,7 @@ CREATE TABLE `contacts` (
   `banking_account` varchar(80) DEFAULT NULL,
   `date_of_birth` date DEFAULT NULL,
   `order` int(11) NOT NULL
-) ENGINE=InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
 
 CREATE TABLE `contacts_categories` (
   `id` int(11) NOT NULL,
@@ -88,7 +88,7 @@ CREATE TABLE `contacts_categories` (
   `description` text,
   `title` varchar(80) NOT NULL,
   `sorted` int(11) NOT NULL DEFAULT '0'
-) ENGINE=InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
 
 INSERT INTO `contacts_categories` (`id`, `parent_id`, `description`, `title`, `sorted`) VALUES
 (5, NULL, '', 'Členové', 60),
@@ -104,21 +104,21 @@ CREATE TABLE `contacts_communication` (
   `contacts_id` int(11) NOT NULL,
   `communication_type` varchar(80) NOT NULL,
   `communication_value` varchar(250) NOT NULL
-) ENGINE=InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
 
 CREATE TABLE `contacts_openinghours` (
   `id` int(11) NOT NULL,
   `day` smallint(6) NOT NULL,
   `hourstext` varchar(80) DEFAULT NULL,
   `contacts_id` int(11) NOT NULL
-) ENGINE=InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
 
 CREATE TABLE `countries` (
   `id` int(11) NOT NULL,
   `title_cs` varchar(120) DEFAULT NULL,
   `title_en` varchar(120) DEFAULT NULL,
   `show` tinyint(1) NOT NULL
-) ENGINE=InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
 
 INSERT INTO `countries` (`id`, `title_cs`, `title_en`, `show`) VALUES
 (1, 'Česká Republika', 'Czech Republic', 1),
@@ -130,7 +130,7 @@ CREATE TABLE `currencies` (
   `code` varchar(8) DEFAULT NULL,
   `symbol` varchar(20) DEFAULT NULL,
   `used` tinyint(1) DEFAULT NULL
-) ENGINE=InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
 
 INSERT INTO `currencies` (`id`, `title`, `code`, `symbol`, `used`) VALUES
 (1, 'Česká koruna', 'CZK', 'Kč', 1),
@@ -150,7 +150,7 @@ CREATE TABLE `events` (
   `capacity_filled` int(11) NOT NULL DEFAULT '0',
   `price` int(11) DEFAULT NULL,
   `time_range` int(11) DEFAULT '0'
-) ENGINE=InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
 
 CREATE TABLE `events_signed` (
   `id` int(11) NOT NULL,
@@ -161,14 +161,14 @@ CREATE TABLE `events_signed` (
   `events_id` int(11) NOT NULL,
   `ipaddress` varchar(15) NOT NULL,
   `date_created` datetime NOT NULL
-) ENGINE=InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
 
 CREATE TABLE `helpdesk` (
   `id` int(11) NOT NULL,
   `title` varchar(100) NOT NULL,
   `description` text CHARACTER SET utf8 COLLATE utf8_czech_ci,
   `fill_phone` smallint(6) NOT NULL DEFAULT '0'
-) ENGINE=InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
 
 INSERT INTO `helpdesk` (`id`, `title`, `description`, `fill_phone`) VALUES
 (1, 'Kontaktní formulář', 'Tento formulář slouží Vašim zákazníkům, aby vás mohli kontaktovat ohledně jejich otázek nebo potávek.', 1),
@@ -189,7 +189,7 @@ CREATE TABLE `helpdesk_emails` (
   `subject` varchar(250) NOT NULL,
   `body` text NOT NULL,
   `helpdesk_id` int(11) DEFAULT NULL
-) ENGINE=InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
 
 INSERT INTO `helpdesk_emails` (`id`, `template`, `subject`, `body`, `helpdesk_id`) VALUES
 (1, 'request-admin-email', 'Poptávka', '<meta http-equiv="Content-Type" content="text/html; charset=utf-8">        <title>{$settings[''site:title'']}</title>        <style>        </style>                <table style="width: 800px; margin: 0 auto 0 auto;">            <tbody><tr>                <td colspan="2" style="color: white; vertical-align: middle; background-color: #8e8e8e;                     font-size: 1.82em; height: 80px; border-bottom: 4px solid #ac3535; font-weight: bold; padding-left: 20px;">{$settings[''site:title'']}</td>            </tr>            <tr>                <td style="text-align: left;">                    <br>                    {$name}<br>                    {$phone}<br>                    {$email}<br>                    <br><br>                    {$message}<br>                    {$time}<br>                    {$address}                </td>            </tr>        </tbody></table>', 1),
@@ -221,7 +221,7 @@ CREATE TABLE `helpdesk_messages` (
   `users_id` int(11) DEFAULT NULL,
   `ipaddress` varchar(80) NOT NULL,
   `date_created` datetime DEFAULT NULL
-) ENGINE=InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
 
 CREATE TABLE `languages` (
   `id` int(11) NOT NULL,
@@ -229,7 +229,7 @@ CREATE TABLE `languages` (
   `title` varchar(40) NOT NULL,
   `used` tinyint(1) NOT NULL DEFAULT '1',
   `default` tinyint(1) DEFAULT NULL
-) ENGINE=InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
 
 INSERT INTO `languages` (`id`, `code`, `title`, `used`, `default`) VALUES
 (1, 'cs', 'čeština', 1, 1);
@@ -242,7 +242,7 @@ CREATE TABLE `logger` (
   `pages_id` int(11) DEFAULT NULL,
   `date_created` datetime DEFAULT NULL,
   `event_types_id` int(11) NOT NULL DEFAULT '0'
-) ENGINE=InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
 
 CREATE TABLE `media` (
   `id` int(11) NOT NULL,
@@ -256,7 +256,7 @@ CREATE TABLE `media` (
   `detail_view` tinyint(1) NOT NULL DEFAULT '1',
   `sorted` int(11) NOT NULL,
   `main_file` tinyint(1) NOT NULL DEFAULT '0'
-) ENGINE=InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
 
 CREATE TABLE `menu` (
   `id` int(11) NOT NULL,
@@ -266,7 +266,7 @@ CREATE TABLE `menu` (
   `pages_id` int(11) DEFAULT NULL,
   `url` varchar(200) DEFAULT NULL,
   `sorted` int(11) NOT NULL DEFAULT '0'
-) ENGINE=InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
 
 INSERT INTO `menu` (`id`, `parent_id`, `description`, `title`, `pages_id`, `url`, `sorted`) VALUES
 (1, NULL, 'Hlavní menu/Main menu', 'Top', NULL, '', 5),
@@ -327,14 +327,14 @@ CREATE TABLE `pages_related` (
   `pages_id` int(11) NOT NULL,
   `related_pages_id` int(11) DEFAULT NULL,
   `description` varchar(120) DEFAULT NULL
-) ENGINE=InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
 
 CREATE TABLE `pages_templates` (
   `id` int(11) NOT NULL,
   `pages_types_id` int(11) DEFAULT NULL,
   `template` varchar(250) NOT NULL,
   `title` varchar(80) DEFAULT NULL
-) ENGINE=InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
 
 INSERT INTO `pages_templates` (`id`, `pages_types_id`, `template`, `title`) VALUES
 (1, NULL, 'Front:Gallery:albumWithDescription', 'Album with description'),
@@ -371,7 +371,7 @@ CREATE TABLE `pages_types` (
   `presenter` varchar(40) NOT NULL,
   `action` varchar(40) NOT NULL,
   `prefix` varchar(60) DEFAULT NULL
-) ENGINE=InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
 
 INSERT INTO `pages_types` (`id`, `content_type`, `presenter`, `action`, `prefix`) VALUES
 (1, 'Page', 'Front:Pages', 'default', ''),
@@ -399,14 +399,14 @@ CREATE TABLE `param` (
   `sorted` int(11) DEFAULT '0' COMMENT 'You can sort params',
   `block_class` varchar(60) DEFAULT '0' COMMENT 'Add classes for the parameter block',
   `replace_param` varchar(250) DEFAULT NULL
-) ENGINE=InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
 
 CREATE TABLE `params` (
   `id` int(11) NOT NULL,
   `pages_id` int(11) NOT NULL,
   `param_id` int(11) NOT NULL,
   `paramvalue` varchar(120) NOT NULL
-) ENGINE=InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
 
 CREATE TABLE `settings` (
   `id` int(11) NOT NULL,
@@ -497,7 +497,7 @@ CREATE TABLE `settings_categories` (
   `description` text,
   `title` varchar(80) NOT NULL,
   `sorted` int(11) NOT NULL DEFAULT '0'
-) ENGINE=InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
 
 INSERT INTO `settings_categories` (`id`, `parent_id`, `description`, `title`, `sorted`) VALUES
 (10, 1, NULL, 'Základní nastavení', 146),
@@ -517,7 +517,7 @@ CREATE TABLE `snippets` (
   `keyword` varchar(80) NOT NULL,
   `content` text,
   `pages_id` int(11) DEFAULT NULL
-) ENGINE=InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
 
 INSERT INTO `snippets` (`id`, `keyword`, `content`, `pages_id`) VALUES
 (1, 'Zkouška inline editace', 'Toto je zkouška inlineghjghjghjeditace <strong>panoramatu a dalších informací<br></strong>', 1);
@@ -540,7 +540,7 @@ CREATE TABLE `users` (
   `users_roles_id` int(11) DEFAULT '0',
   `login_error` int(11) NOT NULL DEFAULT '0',
   `login_success` int(11) NOT NULL DEFAULT '0'
-) ENGINE=InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
 
 INSERT INTO `users` (`id`, `username`, `users_categories_id`, `uid`, `email`, `sex`, `name`, `password`, `date_created`, `date_visited`, `state`, `activation`, `newsletter`, `type`, `users_roles_id`, `login_error`, `login_success`) VALUES
 (1, 'admin', NULL, '000001', '', 2, '', '$2y$10$DLhMCsYpbB.xHJ501e.xMOvhneiT1U6YypGAcOna/V2kzIGZOwxla', NULL, '2017-02-16 15:44:13', 1, NULL, 1, 1, 1, 0, 3);
@@ -548,7 +548,7 @@ INSERT INTO `users` (`id`, `username`, `users_categories_id`, `uid`, `email`, `s
 CREATE TABLE `users_categories` (
   `id` int(11) NOT NULL,
   `title` varchar(250) NOT NULL
-) ENGINE=InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
 
 INSERT INTO `users_categories` (`id`, `title`) VALUES
 (1, 'Hlavní skupina');
@@ -567,7 +567,7 @@ CREATE TABLE `users_roles` (
   `members_delete` tinyint(1) NOT NULL DEFAULT '0',
   `pages_edit` tinyint(1) NOT NULL DEFAULT '0',
   `pages_document` tinyint(1) NOT NULL DEFAULT '0'
-) ENGINE=InnoDB;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
 
 INSERT INTO `users_roles` (`id`, `title`, `admin_access`, `appearance_images`, `helpdesk_edit`, `settings_display`, `settings_edit`, `members_display`, `members_edit`, `members_create`, `members_delete`, `pages_edit`, `pages_document`) VALUES
 (1, 'Admin', 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1),
