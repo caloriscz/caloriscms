@@ -14,11 +14,11 @@ class SnippetControl extends Control
         $this->database = $database;
     }
 
-    public function render($snippet)
+    public function render($snippetId)
     {
         $template = $this->template;
 
-        $template->page = $this->database->table("snippets")->get($snippet);
+        $template->page = $this->database->table("snippets")->get($snippetId);
 
         if ($this->presenter->translator->getLocale() == $this->presenter->translator->getDefaultLocale()) {
             $snippet = $template->page->content;
@@ -27,6 +27,7 @@ class SnippetControl extends Control
         }
 
         $template->snippet = $snippet;
+        $template->snippetId = $snippetId;
 
         $template->setFile(__DIR__ . '/SnippetControl.latte');
 
