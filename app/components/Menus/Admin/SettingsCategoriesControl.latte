@@ -2,8 +2,11 @@
     <ul>
         {foreach $menu as $item}
             <li><span>
-                        <a href="{plink $name, (expand) $args, id => $item->id}">{if $idActive == $item->id}
-                            <strong>{/if}{$item->title}{if $idActive == $item->id}</strong>{/if}</a>
+                        <a href="{plink ':Admin:Settings:default', (expand) $args, id => $item->id}">
+                            {if $idActive == $item->id}
+                            <strong>{/if}{$item->title}{if $idActive == $item->id}</strong>
+                            {/if}
+                        </a>
                     {? $selection = $item->related('settings_categories','parent_id')}
                     {if $selection->count() > 0}
                         {include #menu, menu => $selection}
