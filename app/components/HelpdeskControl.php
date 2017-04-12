@@ -71,63 +71,23 @@ class HelpdeskControl extends Nette\Application\UI\Control
 
     function sendFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
     {
-        $helpdesk = $this->database->table("helpdesk")->get(1);
-        $helpdesk_admin = $helpdesk->related("helpdesk_emails", "helpdesk_id")->get(1);
-        $helpdesk_customer = $helpdesk->related("helpdesk_emails", "helpdesk_id")->get(2);
-
-        $arr = array(
-            "subject" => $form->values->name,
-            "email" => $form->values->email,
-            "message" => $form->values->message,
-            "ipaddress" => getenv('REMOTE_ADDR'),
-            "helpdesk_id" => 1,
-            'date_created' => date("Y-m-d H:i"),
-            'session_id' => session_id(),
-        );
-
         if ($this->presenter->user->isLoggedIn()) {
             $arr["users_id"] = $this->presenter->template->member->id;
         }
 
-        if ($helpdesk->fill_phone > 0) {
-            $arr["phone"] = $form->values->phone;
-        }
-
-        $this->database->table("helpdesk_messages")
-            ->insert($arr);
-
         $params = array(
             'name' => $form->values->name,
-            'email' => $form->values->email,
             'phone' => $form->values->phone,
             'message' => $form->values->message,
-            'ipaddress' => getenv('REMOTE_ADDR'),
-            'time' => date("Y-m-d H:i"),
-            'settings' => $this->presenter->template->settings,
         );
 
-        $latte = new \Latte\Engine;
-        $latte->setLoader(new Latte\Loaders\StringLoader());
-        //$latte->setTempDirectory(__DIR__ . '/../temp');
-
-        $email_admin = $latte->renderToString($helpdesk_admin->body, $params);
-        $email_customer = (string)$latte->renderToString($helpdesk_customer->body, $params);
-
-        $mail = new \Nette\Mail\Message;
-        $mail->setFrom($this->presenter->template->settings["contacts:email:hq"]);
-        $mail->addTo($this->presenter->template->settings["contacts:email:hq"]);
-        $mail->setHTMLBody($email_customer);
-
-        $mailA = new \Nette\Mail\Message;
-        $mailA->setFrom($this->presenter->template->settings["contacts:email:hq"]);
-        $mailA->addTo($form->values->email);
-        $mailA->setHTMLBody($email_admin);
-
-
-        $mailer = new \Nette\Mail\SendmailMailer;
-        $mailer->send($mail);
-        $mailer->send($mailA);
-
+        $helpdesk = new \App\Model\Helpdesk($this->database, $this->presenter->mailer);
+        $helpdesk->setId(1);
+        $helpdesk->setEmail($form->values->email);
+        $helpdesk->setSettings($this->presenter->template->settings);
+        $helpdesk->setParams($params);
+        $helpdesk->send();
+        exit();
 
         $this->presenter->flashMessage($this->presenter->translator->translate('messages.sign.thanksForMessage'), "error");
         $this->presenter->redirect(":Front:Contact:default");
