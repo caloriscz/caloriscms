@@ -79,7 +79,7 @@ class Helpdesk
         $params["settings"] = $this->getSettings();
         $params["email"] = $this->getEmail();
 
-        return $this->params;
+        return $params;
     }
 
 
@@ -109,16 +109,22 @@ class Helpdesk
                 $email = $item->email;
             }
 
-            $this->fillEmail($email, $item->body, $this->getParams());
+            if ($this->helpdesk_templates_id) {
+                $templateId = $this->helpdesk_templates_id;
+            } else {
+                $templateId = 1;
+            }
+
+            $this->fillEmail($email, $item->subject, $item->body, $templateId, $this->getParams(), $item->log);
         }
     }
 
-    function fillEmail($email, $body, $params)
+    function fillEmail($email, $subject, $body, $templateId, $params, $log)
     {
         $latte = new \Latte\Engine;
         $latte->setLoader(new \Latte\Loaders\StringLoader());
 
-        $emailMessage = $latte->renderToString($this->renderBody($body), $params);
+        $emailMessage = $latte->renderToString($this->renderBody($subject, $body, $templateId), $params);
 
         $mail = new \Nette\Mail\Message;
         $mail->setFrom($this->getSettings()["contacts:email:hq"]);
@@ -126,14 +132,32 @@ class Helpdesk
         $mail->setHTMLBody($emailMessage);
 
         $this->mailer->send($mail);
+
+        if ($log) {
+            $this->log($email, $emailMessage);
+        }
     }
 
-    function renderBody($bodyContent) {
-        $templateBody = $this->database->table("helpdesk_templates")->get(3)->document;
+    function renderBody($subjectContent, $bodyContent, $templateId)
+    {
+        $templateBody = $this->database->table("helpdesk_templates")->get($templateId)->document;
 
-        $body = str_replace("%CONTENT%", $bodyContent, $templateBody);
+        $headParse = str_replace("%TITLE%", $subjectContent, $templateBody);
+        $bodyParse = str_replace("%CONTENT%", $bodyContent, $headParse);
 
-        return $body;
+        return $bodyParse;
+    }
+
+    function log($email, $emailMessage)
+    {
+
+        $this->database->table("helpdesk_messages")->insert(array(
+            "message" => $emailMessage,
+            "helpdesk_id" => $this->getId(),
+            "email" => $email,
+            "ipaddress" => $this->getParams()["ipaddress"],
+            "date_created" => $this->getParams()["time"],
+        ));
     }
 
 }

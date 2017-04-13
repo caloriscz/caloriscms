@@ -57,7 +57,7 @@ class HelpdeskPresenter extends BasePresenter
         }
 
         $messages = $this->database->table("helpdesk_messages")->where(array("helpdesk_id" => $helpdeskId))
-            ->order("subject");
+            ->order("date_created DESC");
 
         $paginator = new \Nette\Utils\Paginator;
         $paginator->setItemCount($messages->count("*"));

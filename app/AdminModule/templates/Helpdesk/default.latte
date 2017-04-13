@@ -48,23 +48,21 @@
         <table class="table table-striped">
             <tr>
                 <th class="col-xs-1"></th>
-                <th class="col-xs-3">{_dictionary.main.Subject}</th>
-                <th class="col-xs-2">{_dictionary.main.date|firstUpper}</th>
-                <th>{_dictionary.main.Phone}</th>
-                <th>{_dictionary.main.Email}</th>
+                <th class="col-xs-3">{_dictionary.main.Email}</th>
+                <th class="col-xs-8">{_dictionary.main.date|firstUpper}</th>
             </tr>
             {foreach $messages as $item}
                 <tr>
-                    <td class="col-xs-1">
+                    <td>
                         <a n:href="delete!, id => $item->id, helpdesk => $item->helpdesk_id"
                                 onclick="return confirm('Opravdu smazat?')">
                             <i class="fa fa-times font-red"></i></a>
                         <a n:href=":Admin:Helpdesk:detail, id => $item->id"><i class="fa fa-plus"></i></a>
                     </td>
-                    <td><a n:href=":Admin:Helpdesk:detail, id => $item->id">{$item->subject}</a></td>
+                    <td>
+                        <a n:href=":Admin:Helpdesk:detail, id => $item->id">{$item->email}</a>
+                    </td>
                     <td>{$item->date_created|date:'j. n. H:i'}</td>
-                    <td>{$item->phone}</td>
-                    <td>{$item->email}</td>
                 </tr>
             {/foreach}
         </table>

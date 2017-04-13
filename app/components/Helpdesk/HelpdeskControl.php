@@ -1,9 +1,12 @@
 <?php
+namespace Caloriscz\Helpdesk;
 
-class HelpdeskControl extends Nette\Application\UI\Control
+use Nette\Application\UI\Control;
+
+class HelpdeskControl extends Control
 {
 
-    /** @var Nette\Database\Context */
+    /** @var \Nette\Database\Context */
     public $database;
 
     public function __construct(\Nette\Database\Context $database)
@@ -20,22 +23,15 @@ class HelpdeskControl extends Nette\Application\UI\Control
         $form->getElementPrototype()->class = "form-horizontal";
         $form->getElementPrototype()->role = 'form';
         $form->getElementPrototype()->autocomplete = 'off';
-        $form->addText("name", "messages.helpdesk.name")
-            ->setAttribute("placeholder", "messages.helpdesk.name");
-        $form->addText("email", "messages.helpdesk.email")
-            ->setAttribute("placeholder", "messages.helpdesk.email")
-            ->setOption("description", 1);
+        $form->addText("name");
+        $form->addText("email");
 
         if ($helpdesk->fill_phone > 0) {
-            $form->addText("phone", "messages.helpdesk.phone")
-                ->setAttribute("placeholder", "messages.helpdesk.phone")
-                ->setOption("description", 1);
+            $form->addText("phone");
         }
 
 
-        $form->addTextArea("message", "messages.helpdesk.message")
-            ->setAttribute("placeholder", "messages.helpdesk.message")
-            ->setAttribute("class", "form-control");
+        $form->addTextArea("message");
 
         $form->setDefaults(array(
             "name" => $this->getParameter("name"),
@@ -43,8 +39,7 @@ class HelpdeskControl extends Nette\Application\UI\Control
             "phone" => $this->getParameter("phone"),
             "message" => $this->getParameter("message"),
         ));
-        $form->addSubmit("submitm", "messages.helpdesk.send")
-            ->setAttribute("class", "btn btn-primary");
+        $form->addSubmit("submitm");
 
         $form->onValidate[] = $this->sendFormValidated;
         $form->onSuccess[] = $this->sendFormSucceeded;
@@ -87,10 +82,9 @@ class HelpdeskControl extends Nette\Application\UI\Control
         $helpdesk->setSettings($this->presenter->template->settings);
         $helpdesk->setParams($params);
         $helpdesk->send();
-        exit();
 
         $this->presenter->flashMessage($this->presenter->translator->translate('messages.sign.thanksForMessage'), "error");
-        $this->presenter->redirect(":Front:Contact:default");
+        $this->presenter->redirect(this);
     }
 
     public function render()

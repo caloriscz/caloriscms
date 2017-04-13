@@ -33,7 +33,7 @@
                 <a class="navbar-brand" n:href=":Admin:Homepage:default, id => NULL">
                     <img src="{$baseUri}/images/admin/logo_caloris.png" alt="logo" class="img-responsive"
                          style="max-height: 25px; display: inline; padding-right: 20px;"> <span
-                            style="font-size: 0.75em;">1.1</span>
+                            style="font-size: 0.75em;">1.2</span>
                 </a>
             </div>
 
@@ -162,11 +162,14 @@
         editor.setTheme("ace/theme/terminal");
         // enable emmet on the current editor
         editor.setOption("enableEmmet", true);
-        editor.on('change', function(){
+        editor.on('change', function () {
             console.log('rt');
             textarea.val(editor.getSession().getValue());
         });
     }
+
+    /* Set focus to login field */
+    $(".login-panel input[type='text']").focus();
 </script>
 </body>
 </html>

@@ -240,8 +240,6 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
 
     public function handleSnippet()
     {
-        // todo peekay Add multilanguage support and check for user permissions
-
         $this->database->table("snippets")->get($this->getParameter("snippetId"))->update(array(
             "content" => $this->getParameter("text")
         ));
@@ -251,8 +249,6 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
 
     public function handlePagetitle()
     {
-        // todo peekay Add multilanguage support and check for user permissions
-
         $this->database->table("pages")->where("id", $this->getParameter("editorId"))->update(array(
             "title" => $this->getParameter("text")
         ));
