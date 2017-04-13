@@ -16,6 +16,16 @@ class HelpdeskPresenter extends BasePresenter
         return $control;
     }
 
+    protected function createComponentEditHelpdeskEmailSettings()
+    {
+        $control = new \Caloriscz\Helpdesk\EditHelpdeskEmailSettingsControl($this->database);
+        $control->onSave[] = function ($helpdeskId) {
+            $this->redirect(this, array("id" => $helpdeskId));
+        };
+
+        return $control;
+    }
+
     protected function createComponentEditContactForm()
     {
         $control = new \Caloriscz\Helpdesk\EditContactFormControl($this->database);

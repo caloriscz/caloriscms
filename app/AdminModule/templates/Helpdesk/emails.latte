@@ -8,7 +8,18 @@
         {control editMailTemplate}
     </div>
     <div class="col-lg-3">
-        <h2>Kontrolní e-mail</h2>
-        {control sendTestMail}
+        <div class="panel panel-default">
+            <div class="panel-heading">{_dictionary.main.Settings}</div>
+            <div class="panel-body">
+                {control editHelpdeskEmailSettings}
+            </div>
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading">Kontrolní e-mail</div>
+            <div class="panel-body">
+                {control sendTestMail}
+            </div>
+        </div>
     </div>
 </div>
