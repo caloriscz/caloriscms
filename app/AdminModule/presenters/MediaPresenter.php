@@ -140,8 +140,6 @@ class MediaPresenter extends BasePresenter
 
     public function renderDefault()
     {
-        $idMedia = $this->template->settings['categories:id:media'];
-
         if ($this->getParameter('id')) {
             $arr = array(
                 "pages_types_id" => $this->template->pageId,

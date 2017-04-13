@@ -71,11 +71,6 @@ class MembersPresenter extends BasePresenter
         $this->redirect(":Admin:Members:edit", array("id" => $this->getParameter("contact")));
     }
 
-    public function renderDefault()
-    {
-        $this->template->categoryId = $this->template->settings['categories:id:members'];
-    }
-
     public function renderEdit()
     {
         $this->template->members = $this->database->table("users")->get($this->getParameter("id"));

@@ -33,7 +33,7 @@ class SettingsCategoriesControl extends Control
 
         $template->id = $id;
         $template->idActive = $this->presenter->getParameter("id");
-        $template->menu = $this->database->table('settings_categories')->where('parent_id', $id);
+        $template->menu = $this->database->table('settings_categories')->where('parent_id', null);
         $template->render();
     }
 

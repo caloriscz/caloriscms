@@ -44,7 +44,7 @@ class SendTestMailControl extends Control
         $latte = new \Latte\Engine;
         $latte->setLoader(new \Latte\Loaders\StringLoader);
 
-        $renderedTemplate = $latte->renderToString(str_replace('{$', '{ $', $emailDb->body));
+        $renderedTemplate = $latte->renderToString(str_replace('{$', '{ $ ', $emailDb->body));
 
         $mail = new \Nette\Mail\Message;
         $mail->setFrom($this->presenter->template->settings["contacts:email:hq"])

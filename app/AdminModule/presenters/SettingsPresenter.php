@@ -134,11 +134,6 @@ class SettingsPresenter extends BasePresenter
         return $message . "<br>";
     }
 
-    public function renderDefault()
-    {
-        $this->template->categoryId = $this->template->settings['categories:id:settings'];
-    }
-
     public function renderLanguages()
     {
         $this->template->languages = $this->database->table("languages");

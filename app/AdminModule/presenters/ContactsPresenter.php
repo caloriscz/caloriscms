@@ -149,7 +149,6 @@ class ContactsPresenter extends BasePresenter
 
     public function renderDefault()
     {
-        $this->template->categoryId = $this->template->settings['categories:id:contact'];
         $contactsDb = $this->database->table("contacts")->order("name");
 
         $paginator = new \Nette\Utils\Paginator;
@@ -161,7 +160,7 @@ class ContactsPresenter extends BasePresenter
         $this->template->paginator = $paginator;
         $this->template->contacts = $contactsDb->limit($paginator->getLength(), $paginator->getOffset());
 
-        $this->template->menu = $this->database->table("contacts_categories")->where('parent_id', $this->template->settings['categories:id:contact']);
+        $this->template->menu = $this->database->table("contacts_categories")->where('parent_id', null);
     }
 
     public function renderDetailOpeningHours()
