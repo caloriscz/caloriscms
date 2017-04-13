@@ -8,7 +8,12 @@
     <div class="col-md-12">
         <div class="flash success" style="line-height: 1.5em;">
             <p>Vaše registrace proběhla úspěšně.</p>
+
+            {if $settings['members:signup:confirmByAdmin']}
+            <p>Vaše registrace vude ověřena, po jejímž úspěšném ověření se můžete přihlásit.</p>
+            {else}
             <p>Pro první přihlášení použijte odkaz, který byl právě odeslán na Váš e-mail.</p>
+            {/if}
         </div>
     </div>
 </div>

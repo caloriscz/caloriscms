@@ -10,6 +10,8 @@ class SignUpControl extends Control
     /** @var \Nette\Database\Context */
     public $database;
 
+    public $onSave;
+
     public function __construct(\Nette\Database\Context $database)
     {
         $this->database = $database;
@@ -19,75 +21,58 @@ class SignUpControl extends Control
     {
         $form = new \Nette\Forms\BootstrapUIForm();
         $form->setTranslator($this->presenter->translator);
-        $form->getElementPrototype()->class = "form-horizontal";
-        $form->getElementPrototype()->role = 'form';
-        $form->getElementPrototype()->autocomplete = 'off';
 
-        $form->addGroup("Uživatelské informace");
-        $form->addText("email", "E-mail")
-            ->addRule(\Nette\Forms\Form::EMAIL, 'Zadejte platný email.')
-            ->setRequired('Vložte e-mail.');
-        $form->addText("username", "Uživatelské jméno")
-            ->setOption('description', (string)"Povoleny jsou pouze znaky a-z, 0-9 (pouze malá písmena)")
-            ->setRequired('Zvolte si uživatelské jméno')
-            ->addRule(\Nette\Forms\Form::PATTERN, 'Uživatelské jméno může obsahovat pouze znaky a-z, 0-9 (pouze malá písmena)', '[a-z0-9-]+')
-            ->addRule(\Nette\Forms\Form::MIN_LENGTH, 'Zvolte uživatelské jméno s alespoň %d znaky', 5)
-            ->addRule(\Nette\Forms\Form::MAX_LENGTH, 'Zvolte uživatelské jméno s nejvýše %d znaky', 40);
+        $form->addText("email")
+            ->addRule(\Nette\Forms\Form::EMAIL, "messages.sign.enterValidEmail")
+            ->setRequired('messages.sign.enterValidEmail');
+        $form->addText("username")
+            ->setOption('description', (string)"messages.sign.descriptionSymbolsEnabled")
+            ->setRequired('messages.sign.enterValidUserName')
+            ->addRule(\Nette\Forms\Form::PATTERN, "messages.sign.descriptionSymbolsEnabled", '[a-z0-9-]+')
+            ->addRule(\Nette\Forms\Form::MIN_LENGTH, 'messages.sign.enterUserNameMinimum', 5)
+            ->addRule(\Nette\Forms\Form::MAX_LENGTH, 'messages.sign.enterUserNameMaximum', 40);
 
-        if ($this->presenter->template->settings['members:groups:enabled']) {
-            $groups = $this->database->table("categories")->where(
-                "parent_id", $this->presenter->template->settings['members:group:categoryId']
-            )->fetchPairs("id", "title");
+        $groups = $this->database->table("users_categories")->fetchPairs("id", "title");
 
-            $form->addSelect("group", "Skupina", $groups)
-                ->setAttribute("class", "form-control");
-        }
+        $form->addSelect("group", "", $groups);
 
-        $form->addPassword("pwd", "dictionary.main.Password")
-            ->setOption('description', (string)"6 - 40 znaků")
-            ->setRequired('Zvolte si heslo')
-            ->addRule(\Nette\Forms\Form::MIN_LENGTH, 'Zvolte heslo s alespoň %d znaky', 6)
-            ->addRule(\Nette\Forms\Form::MAX_LENGTH, 'Zvolte heslo s nejvýše %d znaky', 40);
+        $form->addPassword("pwd")
+            ->setRequired('messages.sign.enterValidPassword')
+            ->addRule(\Nette\Forms\Form::MIN_LENGTH, 'messages.sign.enterPasswordMinimum', 6)
+            ->addRule(\Nette\Forms\Form::MAX_LENGTH, 'messages.sign.enterPasswordMaximum', 40);
 
-        $form->addPassword("pwd2", "Zopakovat heslo")
-            ->setRequired('Zadejte prosím heslo ještě jednou pro kontrolu')
-            ->addRule(\Nette\Forms\Form::EQUAL, 'Hesla se neshodují', $form['pwd']);
+        $form->addPassword("pwd2")
+            ->setRequired('messages.sign.enterEmailForCheck')
+            ->addRule(\Nette\Forms\Form::EQUAL, 'messages.sign.passwords-not-same', $form['pwd']);
 
-        if ($this->presenter->template->settings['members:signup:contactEnabled']) {
-            $form->addGroup("Kontaktní údaje");
-            $form->addText("name", "Jméno a příjmení")
-                ->setRequired('Zadejte jméno')
-                ->addRule(\Nette\Forms\Form::MIN_LENGTH, 'Zadejte jméno', 3)
-                ->addRule(\Nette\Forms\Form::MAX_LENGTH, 'Zadejte jméno', 200);
-            $form->addText("street", "dictionary.main.Street")
-                ->setRequired('Zadejte ulici')
-                ->addRule(\Nette\Forms\Form::MIN_LENGTH, 'Zadejte ulici', 3)
-                ->addRule(\Nette\Forms\Form::MAX_LENGTH, 'Zadejte ulici', 200)
-                ->setAttribute("class", "smartform-street-and-number");
-            $form->addText("zip", "PSČ")
-                ->setRequired('Zadejte PSČ')
-                ->addRule(\Nette\Forms\Form::MIN_LENGTH, 'Zadejte PSČ', 3)
-                ->addRule(\Nette\Forms\Form::MAX_LENGTH, 'Zadejte PSČ', 20)
-                ->setAttribute("class", "smartform-city");
-            $form->addText("city", "Město")
-                ->setRequired('Zadejte město')
-                ->addRule(\Nette\Forms\Form::MIN_LENGTH, 'Zadejte město', 1)
-                ->addRule(\Nette\Forms\Form::MAX_LENGTH, 'Zadejte město', 80)
-                ->setAttribute("class", "smartform-zip");
-        }
+        $form->addText("name")
+            ->setRequired('messages.sign.enterValidName')
+            ->addRule(\Nette\Forms\Form::MIN_LENGTH, 'messages.sign.EnterValidName', 3)
+            ->addRule(\Nette\Forms\Form::MAX_LENGTH, 'messages.sign.EnterValidName', 200);
+        $form->addText("street")
+            ->setRequired('messages.sign.enterValidStreet')
+            ->addRule(\Nette\Forms\Form::MIN_LENGTH, 'messages.sign.EnterValidStreet', 3)
+            ->addRule(\Nette\Forms\Form::MAX_LENGTH, 'messages.sign.EnterValidStreet', 200);
+        $form->addText("zip")
+            ->setRequired('messages.sign.enterValidZip')
+            ->addRule(\Nette\Forms\Form::MIN_LENGTH, 'messages.sign.EnterValidZip', 3)
+            ->addRule(\Nette\Forms\Form::MAX_LENGTH, 'messages.sign.EnterValidZip', 20);
+        $form->addText("city")
+            ->setRequired('messages.sign.enterValidCity')
+            ->addRule(\Nette\Forms\Form::MIN_LENGTH, 'messages.sign.EnterValidCity', 1)
+            ->addRule(\Nette\Forms\Form::MAX_LENGTH, 'messages.sign.EnterValidCity', 80);
 
-        if ($this->presenter->template->settings['members:signup:contactEnabled']) {
-            $form->addGroup("Firemní informace");
-            $form->addText("company", "dictionary.main.Company");
-            $form->addText("vatin", "dictionary.main.VatIn");
-            $form->addText("vatid", "dictionary.main.VatId");
-        }
+        $form->addText("company");
+        $form->addText("vatin");
+        $form->addText("vatid");
+        $form->addText("message");
 
 
-        $form->addCheckbox("newsletter", "\xC2\xA0" . "Chci odebírat zprávy?")
+        $form->addCheckbox("newsletter", "\xC2\xA0" . "messages.sign.newsletterCheck")
             ->setDefaultValue(TRUE);
-        $form->addCheckbox("confirmation", "\xC2\xA0" . "Souhlasím s podmínkami")
-            ->setRequired('Pro pokračování zaškrtněte Souhlasím s podmínkami');
+        $form->addCheckbox("confirmation", "\xC2\xA0" . "messages.sign.agreeWithConditions")
+            ->setRequired('messages.sign.mustAgreeConditions');
+
         $form->setDefaults(array(
             "username" => $this->presenter->getParameter("user"),
             "email" => $this->presenter->getParameter("email"),
@@ -98,14 +83,8 @@ class SignUpControl extends Control
             "zip" => $this->presenter->getParameter("zip"),
         ));
 
-        $form->addSubmit("submit", "Registrovat se")
+        $form->addSubmit("submit", "dictionary.main.Signup")
             ->setAttribute("class", "btn-lg btn-cart-in");
-
-        $form->setDefaults(array(
-            "email" => $this->getParameter("email"),
-            "username" => $this->getParameter("username"),
-            "newsletter" => $this->getParameter("newsletter"),
-        ));
 
         $form->onSuccess[] = $this->signUpFormSucceeded;
         $form->onValidate[] = $this->signUpFormValidated;
@@ -123,20 +102,20 @@ class SignUpControl extends Control
 
         $formVal = $form->getValues(TRUE);
 
-        if ($userExists > 0) {
+        if ($userExists > 0 && $this->presenter->template->settings['members_username_as_email'] == 0) {
             unset($formVal["username"]);
-            $this->presenter->flashMessage('Uživatelské jméno již existuje', 'error');
-        } elseif (\Nette\Utils\Validators::isEmail($form->values->email) == FALSE) {
+            $this->presenter->flashMessage('messages.sign.userNameAlreadyExists', 'error');
+        } elseif (\Nette\Utils\Validators::isEmail($form->values->email) == false) {
             unset($formVal["email"]);
-            $this->presenter->flashMessage('Neplatná e-mailová adresa', 'error');
+            $this->presenter->flashMessage('messages.sign.enterValidEmail', 'error');
         } elseif ($emailExists > 0) {
             unset($formVal["email"]);
-            $this->presenter->flashMessage('E-mail již existuje', 'error');
+            $this->presenter->flashMessage('messages.sign.emailAlreadyExists', 'error');
         } elseif ($userTest == 0) {
             unset($formVal["username"]);
-            $this->presenter->flashMessage('Uživatelské jméno obsahuje nepovolené znaky', 'error');
+            $this->presenter->flashMessage('messages.sign.enterValidUserName', 'error');
         } elseif (strlen($form->values->name) < 2) {
-            $this->presenter->flashMessage('Příliš krátké jméno', 'error');
+            $this->presenter->flashMessage('messages.sign.enterValidName', 'error');
         } else {
             $msg = 1;
         }
@@ -144,7 +123,7 @@ class SignUpControl extends Control
         if ($msg != 1) {
             unset($formVal["pwd"], $formVal["pwd2"], $formVal["confirmation"]);
 
-            $this->presenter->redirect(":Front:Sign:up", $formVal);
+            $this->presenter->redirect(this, $formVal);
         }
     }
 
@@ -153,9 +132,15 @@ class SignUpControl extends Control
         $activationCode = \Nette\Utils\Random::generate(12, "987654321zyxwvutsrqponmlkjihgfedcba");
         $password = \Nette\Security\Passwords::hash($form->values->pwd);
 
+        if ($this->presenter->template->settings['members_username_as_email']) {
+            $username = $form->values->email;
+        } else {
+            $username = $form->values->username;
+        }
+
         $arr = array(
             "email" => $form->values->email,
-            "username" => $form->values->username,
+            "username" => $username,
             "password" => $password,
             "activation" => $activationCode,
             "newsletter" => (bool)$form->values->newsletter,
@@ -165,29 +150,22 @@ class SignUpControl extends Control
         );
 
         if ($this->presenter->template->settings['members:groups:enabled']) {
-            $arr["categories_id"] = $form->values->group;
+            $arr["users_categories_id"] = $form->values->group;
         }
 
-        $userId = $this->database->table("users")
-            ->insert($arr);
-
-        $this->database->table("users")
-            ->where(array("id" => $userId->id
-            ))->update(array(
-                "uid" => \Nette\Utils\Strings::padLeft($userId->id, 6, '0'),
-            ));
+        $userId = $this->database->table("users")->insert($arr);
 
         if ($this->presenter->template->settings['members:signup:contactEnabled']) {
-			            /* Associate page with contact */
+            /* Associate page with contact */
             $doc = new \App\Model\Document($this->database);
             $doc->setType(5);
             $doc->setPublic(0);
             $doc->setTitle("contact-" . $form->values->title);
-            $page = $doc->create($this->user->getId());
+            $page = $doc->create($this->presenter->user->getId());
             \App\Model\IO::directoryMake(substr(APP_DIR, 0, -4) . '/www/media/' . $page, 0755);
-			
+
             $arrContacts = array(
-                "categories_id" => 8,
+                "contacts_categories_id" => 8,
                 "pages_id" => $page,
                 "users_id" => $userId,
                 "name" => $form->values->name,
@@ -212,65 +190,42 @@ class SignUpControl extends Control
             $aresArr = $ares->loadData($form->values->vatin)->toArray();
         }
 
-        $latte = new \Latte\Engine;
-        $latte->setLoader(new \Latte\Loaders\StringLoader());
         $params = array(
-            'username' => $form->values->username,
-            'activationCode' => $activationCode,
-            'settings' => $this->presenter->template->settings,
-            'form' => $form,
-            'aresArr' => $aresArr,
+            "username" => $form->values->username,
+            "activationCode" => $activationCode,
+            "settings" => $this->presenter->template->settings,
+            "form" => $form,
+            "aresArr" => $aresArr,
         );
 
-        $helpdesk = $this->database->table("helpdesk")->get(3);
-        $helpdesk_signup_member = $helpdesk->related("helpdesk_emails", "helpdesk_id")->get(5);
-        $helpdesk_signup_confirmbyadmin = $helpdesk->related("helpdesk_emails", "helpdesk_id")->get(6);
-        $helpdesk_signup_adminconfirm = $helpdesk->related("helpdesk_emails", "helpdesk_id")->get(7);
-
         try {
-            if ($this->presenter->template->settings['members:signup:confirmByAdmin']) {
-                $email_signup_confirmbyamin = $latte->renderToString($helpdesk_signup_confirmbyadmin->body, $params);
-                $email_signup_adminconfirm = $latte->renderToString($helpdesk_signup_adminconfirm->body, $params);
+            $helpdesk = new \App\Model\Helpdesk($this->database, $this->presenter->mailer);
 
-                $mail = new \Nette\Mail\Message;
-                $mail->setFrom($this->presenter->template->settings['contacts:email:hq'])
-                    /*->addTo($form->values->email)*/
-                    ->addTo("caloris@caloris.cz")
-                    ->setHTMLBody($email_signup_confirmbyamin);
-
-                $this->presenter->mailer->send($mail);
-
-                $mailA = new \Nette\Mail\Message;
-                $mailA->setFrom($this->presenter->template->settings['contacts:email:hq'])
-                    /*->addTo($this->presenter->template->settings['contacts:email:hq'])*/
-                    ->addTo("caloris@caloris.cz")
-                    ->setHTMLBody($email_signup_adminconfirm);
-
-                $this->presenter->mailer->send($mailA);
-                $this->flashMessage('Registrace byla dokončena. Po ověření Vám bude zaslán e-mail, po kterém se můžete přihlásit', 'note');
+            if ($this->presenter->template->settings["members:signup:confirmByAdmin"]) {
+                $helpdesk->setId(12);
+                $message = "messages.sign.signupSuccessfulLoginWhenVerified";
             } else {
-                $email_signup_member = $latte->renderToString($helpdesk_signup_member->body, $params);
-
-                $mail = new \Nette\Mail\Message;
-                $mail->setFrom($this->presenter->template->settings['contacts:email:hq'])
-           /*         ->addTo($form->values->email)*/
-                    ->setHTMLBody($email_signup_member);
-
-                $this->presenter->mailer->send($mail);
-                $this->presenter->flashMessage('Vaše registrace proběhla úspěšně. Po ověření se můžete přihlásit.', 'note');
+                $helpdesk->setId(3);
+                $message = "messages.sign.SignupSuccessfulCanLogin";
             }
 
-            $this->presenter->redirect(":Front:Sign:ed");
+            $helpdesk->setEmail($form->values->email);
+            $helpdesk->setSettings($this->presenter->template->settings);
+            $helpdesk->setParams($params);
+            $helpdesk->send(true);
+
+            $this->onSave("/uspesna-registrace", $message, "note");
+
         } catch (\Nette\Mail\SmtpException $e) {
-            $this->presenter->flashMessage('E-mail nebyl odeslán' . $e->getMessage(), 'error');
-            $this->presenter->redirect(":Front:Sign:up");
+            $this->onSave("/registrace", "messages.sign.EmailNotSent" . $e->getMessage(), "error");
         }
     }
 
     public function render()
     {
         $template = $this->template;
-        $template->setFile(__DIR__ . '/SignUpControl.latte');
+        $template->setFile(__DIR__ . "/SignUpControl.latte");
+        $template->settings = $this->presenter->template->settings;
         $template->addon = $this->database->table("addons");
 
         $template->render();
