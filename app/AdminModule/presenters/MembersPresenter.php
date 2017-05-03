@@ -15,6 +15,14 @@ class MembersPresenter extends BasePresenter
     protected function createComponentSendLogin()
     {
         $control = new \Caloriscz\Contacts\ContactForms\SendLoginControl($this->database);
+        $control->onSave[] = function ($contactId, $pwd) {
+            if ($pwd) {
+                $this->flashMessage($pwd, 'success');
+            }
+
+            $this->redirect(this, array("id" => $contactId, "pdd" => $pwd));
+        };
+
         return $control;
     }
 
@@ -27,6 +35,17 @@ class MembersPresenter extends BasePresenter
     protected function createComponentInsertMember()
     {
         $control = new \Caloriscz\Members\InsertMemberControl($this->database);
+        $control->onSave[] = function ($message, $userId) {
+            if ($message) {
+                $this->flashMessage($this->translator->translate($message), 'error');
+                $code = ":Admin:Members:default";
+            } else {
+                $code = ":Admin:Members:edit";
+            }
+
+            $this->redirect($code, array("id" => $userId));
+        };
+
         return $control;
     }
 

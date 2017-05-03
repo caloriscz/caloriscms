@@ -29,7 +29,6 @@ services:
 	- Model\SlugManager
 	- Caloriscz\Profile\Admin\IEditControlFactory
 	- Caloriscz\Contacts\ContactForms\IEditContactControlFactory
-	dashboard: Caloriscz\Navigation\IDashboardControlFactory
 	router: @App\RouterFactory::createRouter
 
 extensions:

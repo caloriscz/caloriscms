@@ -1,6 +1,7 @@
 <?php
 namespace Caloriscz\Page\Pages\Homepage;
 
+use Caloriscz\Appearance\CarouselBoxControl;
 use Caloriscz\Page\PageTitleControl;
 use Caloriscz\Snippets\SnippetControl;
 use Nette\Application\UI\Control;
@@ -30,7 +31,7 @@ class HomepageControl extends Control
 
     protected function createComponentCarouselBox()
     {
-        $control = new \CarouselBoxControl($this->database);
+        $control = new CarouselBoxControl($this->database);
         return $control;
     }
 

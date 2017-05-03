@@ -32,10 +32,6 @@
                             <li><a href="{plink ':Admin:Pages:detail', id => $page->id}">uprav</a></li>
                         {elseif $page->pages_types_id == 4}
                             <li><a href="{plink ':Admin:Product:stock', id => $page->id}">zásoby</a></li>
-                        {elseif $page->pages_types_id == 7}
-                            {if $settings['store:enabled']}
-                                <li><a href="{plink ':Admin:Categories:detail', id => $page->id}">uprav</a></li>
-                            {/if}
                         {/if}
                     {/if}
                 </ul>

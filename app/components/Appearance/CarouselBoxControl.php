@@ -1,4 +1,5 @@
 <?php
+namespace Caloriscz\Appearance;
 
 use Nette\Application\UI\Control;
 
