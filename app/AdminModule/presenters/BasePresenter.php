@@ -20,9 +20,6 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
     /** @var \Kdyby\Translation\Translator @inject */
     public $translator;
 
-    /** @var \BaseForm @inject */
-    public $baseFormFactory;
-
     /** @persistent */
     public $id;
 
