@@ -87,6 +87,16 @@ class Document
         }
     }
 
+    function setSitemap($sitemap)
+    {
+        $this->sitemap = $sitemap;
+    }
+
+    function getSitemap()
+    {
+        return $this->sitemap;
+    }
+
     function setDatePublished($date = false)
     {
         $this->date_published = $date;
@@ -247,15 +257,11 @@ class Document
             $arr["title"] = $this->getTitle();
         }
 
-            $arr["pages_templates_id"] = $this->getTemplate();
+        $arr["pages_templates_id"] = $this->getTemplate();
 
 
         if ($this->getPreview()) {
             $arr["preview"] = $this->getPreview();
-        }
-
-        if ($this->getMetaKey()) {
-            $arr["metakeys"] = $this->getMetaKey();
         }
 
         if ($this->getPublic()) {
@@ -275,6 +281,18 @@ class Document
             } else {
                 $slug = $arr["title"];
             }
+        }
+
+        if ($this->getMetaKey()) {
+            $arr["metakeys"] = $this->getMetaKey();
+        }
+
+        if ($this->getMetaDescription()) {
+            $arr["metadesc"] = $this->getMetaDescription();
+        }
+
+        if ($this->getSitemap()) {
+            $arr["sitemap"] = $this->getSitemap();
         }
 
         $slugNew = $this->generate($slug);
@@ -303,7 +321,7 @@ class Document
             $arr["title"] = $this->getTitle();
         }
 
-            $arr["pages_templates_id"] = $this->getTemplate();
+        $arr["pages_templates_id"] = $this->getTemplate();
 
         if ($this->getDocument() && $this->getLanguage()) {
             $arr["document" . '_' . $this->getLanguage()] = $this->getDocument();
@@ -327,6 +345,10 @@ class Document
             $arr["metadesc" . '_' . $this->getLanguage()] = $this->getMetaDescription();
         } elseif ($this->getMetaDescription()) {
             $arr["metadesc"] = $this->getMetaDescription();
+        }
+
+        if ($this->getSitemap()) {
+            $arr["sitemap"] = $this->getSitemap();
         }
 
         if ($this->getSlug() && $this->getLanguage()) {

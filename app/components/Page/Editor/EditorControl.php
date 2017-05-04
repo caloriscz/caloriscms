@@ -61,18 +61,15 @@ class EditorControl extends Control
 
         $form->addHidden("slug_old");
         $form->addGroup("");
-        $form->addCheckbox("public", "dictionary.main.PublishedForm");
-        $form->addText("date_published", "Datum zveřejnění")
-            ->setAttribute("class", "datetimepicker");
-        $form->addText("title", "dictionary.main.Title");
-        $form->addText("slug", "dictionary.main.Slug");
+        $form->addCheckbox("public");
+        $form->addText("date_published");
+        $form->addText("title");
+        $form->addText("slug");
         $form->addText("document2");
         $form->addSelect("parent");
-        $form->addGroup("dictionary.main.MetaTags");
-        $form->addTextArea("metadesc", "dictionary.main.MetaDesc")
-            ->setAttribute("class", "form-control");
-        $form->addTextArea("metakeys", "dictionary.main.MetaKeys")
-            ->setAttribute("class", "form-control");
+        $form->addTextArea("metadesc");
+        $form->addTextArea("metakeys");
+        $form->addCheckbox("sitemap");
 
         if ($l == '') {
             $form->setDefaults(array(
@@ -84,6 +81,7 @@ class EditorControl extends Control
                 "title" => $pages->title,
                 "public" => $pages->public,
                 "date_published" => $pages->date_published,
+                "sitemap" => $pages->sitemap,
             ));
         } else {
             $form->setDefaults(array(
@@ -96,6 +94,7 @@ class EditorControl extends Control
                 "title" => $pages->{'title_' . $l},
                 "public" => $pages->public,
                 "date_published" => $pages->date_published,
+                "sitemap" => $pages->sitemap,
             ));
         }
 
@@ -132,6 +131,7 @@ class EditorControl extends Control
         $doc->setSlug($form->values->slug_old, $form->values->slug);
         $doc->setMetaKey($form->values->metakeys);
         $doc->setMetaDescription($form->values->metadesc);
+        $doc->setSitemap(1);
         $doc->setParent($values["parent"]);
         $doc->save($form->values->id, $this->presenter->user->getId());
 

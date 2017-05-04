@@ -289,38 +289,39 @@ CREATE TABLE `pages` (
   `pages_templates_id` int(11) DEFAULT NULL,
   `sorted` int(11) NOT NULL DEFAULT '0',
   `editable` int(11) NOT NULL DEFAULT '1',
-  `recommended` tinyint(4) DEFAULT '0'
+  `recommended` tinyint(4) DEFAULT '0',
+  `sitemap` tinyint(4) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
 
 --
 -- Vypisuji data pro tabulku `pages`
 --
 
-INSERT INTO `pages` (`id`, `slug`, `title`, `document`, `preview`, `pages_id`, `users_id`, `public`, `metadesc`, `metakeys`, `date_created`, `date_published`, `pages_types_id`, `pages_templates_id`, `sorted`, `editable`, `recommended`) VALUES
-(1, '', 'Úvodní stránka', '', NULL, NULL, 1, 1, '', '', NULL, NULL, 9, 4, 17, 1, 0),
-(2, 'kontakt', 'Kontakt', NULL, NULL, NULL, NULL, 1, '', '', NULL, NULL, 9, 5, 19, 0, 0),
-(3, 'blog', 'Blog', '', NULL, NULL, 1, 1, '', '', NULL, NULL, 9, 2, 21, 0, 0),
-(5, 'udalosti', 'Události', NULL, NULL, 1, NULL, 1, NULL, NULL, NULL, NULL, 9, 9, 23, 0, 0),
-(8, 'profil', 'Profil', NULL, NULL, 1, NULL, 1, NULL, NULL, NULL, NULL, 9, 19, 25, 0, 0),
-(9, 'profil-obrazek', 'Profil: Obrázek', NULL, '8', 1, NULL, 1, NULL, NULL, NULL, NULL, 9, 20, 27, 0, 0),
-(10, 'profil-heslo', 'Profil: Změna hesla', NULL, '8', 1, NULL, 1, NULL, NULL, NULL, NULL, 9, 21, 29, 0, 0),
-(11, 'profil-adresy', 'Profil: Adresy', NULL, '1', 1, NULL, 1, NULL, NULL, NULL, NULL, 9, 18, 31, 0, 0),
-(12, 'profil-adresa', 'Profil: Adresa', NULL, '1', 1, NULL, 1, NULL, NULL, NULL, NULL, 9, 17, 33, 0, 0),
-(13, 'uspesna-registrace', 'Úspěšná registrace', NULL, '1', 1, NULL, 1, NULL, NULL, NULL, NULL, 9, 22, 35, 0, 0),
-(14, 'prihlaseni', 'Přihlášení', NULL, '1', 1, NULL, 1, NULL, NULL, NULL, NULL, 9, 23, 37, 0, 0),
-(15, 'zapomenute-heslo', 'Zapomenuté heslo', NULL, '1', 1, NULL, 1, NULL, NULL, NULL, NULL, 9, 24, 39, 0, 0),
-(16, 'reset', 'Znovunastavení hesla', NULL, '1', 1, NULL, 1, NULL, NULL, NULL, NULL, 9, 25, 41, 0, 0),
-(17, 'registrace', 'Registrace uživatele', NULL, '1', 1, NULL, 1, NULL, NULL, NULL, NULL, 9, 26, 43, 0, 0),
-(18, 'verifikace', 'Ověření účtu', NULL, '1', 1, NULL, 1, NULL, NULL, NULL, NULL, 9, 27, 45, 0, 0),
-(19, 'kosik', 'Košík', NULL, '1', 1, NULL, 1, NULL, NULL, NULL, NULL, 9, 7, 47, 0, 0),
-(20, 'katalog', 'Katalog', NULL, '1', 1, NULL, 1, NULL, NULL, NULL, NULL, 9, 8, 49, 0, 0),
-(21, 'bonus', 'Bonus', NULL, '1', 1, NULL, 1, NULL, NULL, NULL, NULL, 9, 11, 51, 0, 0),
-(22, 'delivery', 'Poštovní a platební metoda', NULL, '1', 1, NULL, 1, NULL, NULL, NULL, NULL, 9, 12, 53, 0, 0),
-(23, 'summary', 'Shrnutí objednávky', NULL, '1', 1, NULL, 1, NULL, NULL, NULL, NULL, 9, 14, 55, 0, 0),
-(24, 'adresa-objednavky', 'Adresa objednávky', '', '1', 1, 1, 1, NULL, NULL, NULL, NULL, 9, 10, 57, 0, 0),
-(25, 'order-success', 'Objednávka úspěšně zadána', '', '1', 1, 1, 1, NULL, NULL, NULL, NULL, 9, 13, 59, 0, 0),
-(26, 'objednavky', 'Objednávky', NULL, '1', 1, NULL, 1, NULL, NULL, NULL, NULL, 9, 15, 61, 0, 0),
-(27, 'objednavky-detail', 'Detail objednávky', NULL, '1', 1, NULL, 1, NULL, NULL, NULL, NULL, 9, 16, 63, 0, 0);
+INSERT INTO `pages` (`id`, `slug`, `title`, `document`, `preview`, `pages_id`, `users_id`, `public`, `metadesc`, `metakeys`, `date_created`, `date_published`, `pages_types_id`, `pages_templates_id`, `sorted`, `editable`, `recommended`, `sitemap`) VALUES
+(1, '', 'Úvodní stránka', '', NULL, NULL, 1, 1, '', '', NULL, NULL, 9, 4, 17, 1, 0, 1),
+(2, 'kontakt', 'Kontakt', NULL, NULL, NULL, NULL, 1, '', '', NULL, NULL, 9, 5, 19, 0, 0, 1),
+(3, 'blog', 'Blog', '', NULL, NULL, 1, 1, '', '', NULL, NULL, 9, 2, 21, 0, 0, 1),
+(5, 'udalosti', 'Události', NULL, NULL, 1, NULL, 1, NULL, NULL, NULL, NULL, 9, 9, 23, 0, 0, 1),
+(8, 'profil', 'Profil', NULL, NULL, 1, NULL, 1, NULL, NULL, NULL, NULL, 9, 19, 25, 0, 0, 0),
+(9, 'profil-obrazek', 'Profil: Obrázek', NULL, '8', 1, NULL, 1, NULL, NULL, NULL, NULL, 9, 20, 27, 0, 0, 0),
+(10, 'profil-heslo', 'Profil: Změna hesla', NULL, '8', 1, NULL, 1, NULL, NULL, NULL, NULL, 9, 21, 29, 0, 0, 0),
+(11, 'profil-adresy', 'Profil: Adresy', NULL, '1', 1, NULL, 1, NULL, NULL, NULL, NULL, 9, 18, 31, 0, 0, 0),
+(12, 'profil-adresa', 'Profil: Adresa', NULL, '1', 1, NULL, 1, NULL, NULL, NULL, NULL, 9, 17, 33, 0, 0, 0),
+(13, 'uspesna-registrace', 'Úspěšná registrace', NULL, '1', 1, NULL, 1, NULL, NULL, NULL, NULL, 9, 22, 35, 0, 0, 0),
+(14, 'prihlaseni', 'Přihlášení', NULL, '1', 1, NULL, 1, NULL, NULL, NULL, NULL, 9, 23, 37, 0, 0, 0),
+(15, 'zapomenute-heslo', 'Zapomenuté heslo', NULL, '1', 1, NULL, 1, NULL, NULL, NULL, NULL, 9, 24, 39, 0, 0, 0),
+(16, 'reset', 'Znovunastavení hesla', NULL, '1', 1, NULL, 1, NULL, NULL, NULL, NULL, 9, 25, 41, 0, 0, 0),
+(17, 'registrace', 'Registrace uživatele', NULL, '1', 1, NULL, 1, NULL, NULL, NULL, NULL, 9, 26, 43, 0, 0, 0),
+(18, 'verifikace', 'Ověření účtu', NULL, '1', 1, NULL, 1, NULL, NULL, NULL, NULL, 9, 27, 45, 0, 0, 0),
+(19, 'kosik', 'Košík', NULL, '1', 1, NULL, 1, NULL, NULL, NULL, NULL, 9, 7, 47, 0, 0, 0),
+(20, 'katalog', 'Katalog', NULL, '1', 1, NULL, 1, NULL, NULL, NULL, NULL, 9, 8, 49, 0, 0, 1),
+(21, 'bonus', 'Bonus', NULL, '1', 1, NULL, 1, NULL, NULL, NULL, NULL, 9, 11, 51, 0, 0, 0),
+(22, 'delivery', 'Poštovní a platební metoda', NULL, '1', 1, NULL, 1, NULL, NULL, NULL, NULL, 9, 12, 53, 0, 0, 0),
+(23, 'summary', 'Shrnutí objednávky', NULL, '1', 1, NULL, 1, NULL, NULL, NULL, NULL, 9, 14, 55, 0, 0, 0),
+(24, 'adresa-objednavky', 'Adresa objednávky', '', '1', 1, 1, 1, NULL, NULL, NULL, NULL, 9, 10, 57, 0, 0, 0),
+(25, 'order-success', 'Objednávka úspěšně zadána', '', '1', 1, 1, 1, NULL, NULL, NULL, NULL, 9, 13, 59, 0, 0, 0),
+(26, 'objednavky', 'Objednávky', NULL, '1', 1, NULL, 1, NULL, NULL, NULL, NULL, 9, 15, 61, 0, 0, 0),
+(27, 'objednavky-detail', 'Detail objednávky', NULL, '1', 1, NULL, 1, NULL, NULL, NULL, NULL, 9, 16, 63, 0, 0, 0);
 
 CREATE TABLE `pages_related` (
   `id` int(11) NOT NULL,
