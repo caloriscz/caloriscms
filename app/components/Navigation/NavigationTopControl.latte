@@ -28,28 +28,7 @@
     </div>
 </div>
 <div class="container">
-    <div class="navbar yamm">
-        <div class="col-md-6 text-left">
-            {control search}
-        </div>
-        <div class="col-md-6" style="padding-left: 0;">
-            {if $settings['store:enabled']}
-                <ul class="nav navbar-nav navbar-right" style="padding: 0;">
-                    <li class="dropdown">
-                        {control cartBox}
-                        <ul class="dropdown-menu" style="padding: 0;">
-                            <li style="padding: 0;">
-                                <div class="yamm-content">
-                                    <i class="fa fa-cart"></i>
-                                    {control cartList 'mini'}
-                                </div>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-            {/if}
-        </div>
-    </div>
+    {control search}
 </div>
 <div class="container">
     <nav class="navbar navbar-default top-nav navbar-0-space">
