@@ -14,7 +14,8 @@ class SitemapPresenter extends BasePresenter
     function renderDefault()
     {
         $this->template->pages = $this->database->table("pages")->where(array(
-            "public" => 1
+            "public" => 1,
+            "sitemap" => 1,
         ));
     }
 
