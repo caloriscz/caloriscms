@@ -6,7 +6,6 @@ use Nette\Application\UI\Control;
 
 class EditorControl extends Control
 {
-
     private $htmlPurifier;
 
     /** @var \Nette\Database\Context */
@@ -18,6 +17,12 @@ class EditorControl extends Control
 
         $config = \HTMLPurifier_Config::createDefault();
         $this->htmlPurifier = new \HtmlPurifier($config);
+    }
+
+    protected function createComponentLangSelector()
+    {
+        $control = new \LangSelectorControl($this->database);
+        return $control;
     }
 
     /**
@@ -136,72 +141,6 @@ class EditorControl extends Control
         $doc->save($form->values->id, $this->presenter->user->getId());
 
         $this->presenter->redirect(this, array("id" => $form->values->id, "l" => $form->values->l));
-    }
-
-    /**************************************
-     * Image add editor
-     */
-    function createComponentImageAddForm()
-    {
-        $form = new \Nette\Forms\BootstrapPHForm();
-        $form->setTranslator($this->presenter->translator);
-        $form->getElementPrototype()->class = "form-horizontal";
-        $form->getElementPrototype()->role = 'form';
-        $form->getElementPrototype()->autocomplete = 'off';
-
-        $form->onSuccess[] = $this->imageAddFormSucceeded;
-        $form->addSubmit("submitm", "dictionary.main.Save")
-            ->setAttribute("class", "btn btn-success");
-
-        return $form;
-    }
-
-    function imageAddFormSucceeded(\Nette\Forms\BootstrapPHForm $form)
-    {
-        $values = $form->getHttpData($form::DATA_TEXT); // get value from html input
-        $fileName = $_FILES['file']['name'];
-
-        if ($_FILES['file']['name']) {
-            if (!$_FILES['file']['error']) {
-                $destination = APP_DIR . '/media/' . $values["page_id"] . '/' . $fileName; //change this directory
-                $location = $_FILES["file"]["tmp_name"];
-
-                move_uploaded_file($location, $destination);
-                chmod($destination, 0644);
-
-                $fileSize = filesize($destination);
-
-                $checkImage = $this->database->table("media")->where(array(
-                    'name' => $fileName,
-                    'pages_id' => $values["page_id"],
-                ));
-
-                if ($checkImage->count() == 0) {
-                    $image = \Nette\Utils\Image::fromFile($destination);
-                    $image->resize(400, 250, \Nette\Utils\Image::SHRINK_ONLY);
-                    $image->sharpen();
-                    $image->save(APP_DIR . '/media/' . $values["page_id"] . '/tn/' . $fileName);
-                    chmod(APP_DIR . '/media/' . $values["page_id"] . '/tn/' . $fileName);
-
-                    $this->database->table("media")->insert(array(
-                        'name' => $fileName,
-                        'pages_id' => $values["page_id"],
-                        'filesize' => $fileSize,
-                        'file_type' => 1,
-                        'date_created' => date("Y-m-d H:i:s"),
-                    ));
-                }
-
-            }
-        }
-
-        exit();
-    }
-
-    protected function createComponentLangSelector()
-    {
-        $control = new \LangSelectorControl($this->database);
-        return $control;
     }
 
     function handlePublic()

@@ -31,48 +31,25 @@
                 </div>
             </div>
         </div>
-        {foreach $media as $item}
-            <div class="col-xs-6 col-md-3 col-lg-2">
-                <div class="thumbnail" style="height: 260px;">
-                    <div style="height: 180px; padding-top: 60px;" class="text-center">
-                        <a n:href=":Admin:Media:default, id => $item->id, type => $pageId">
-                            <i class="fa fa-folder-o fa-5x"></i>
-                        </a>
-                    </div>
-                    <div class="caption text-center">
-                        <div>
-                            <a n:href=":Admin:Media:default, id => $item->id, type => $pageId">
-                                <span style="font-weight: bold; font-size: 1.25em;">{$item->title}</span>
-                            </a>
-                        </div>
-                        <div style="margin-top: 5px;">
-                            <a n:href="deletePage!, id => $item->id, type => $pageId"
-                                    onclick="return confirm('Opravdu chcete smazat tuto stránku a všechny její podstránky s celým obsahem?')">
-                                <i class="fa fa-times font-red"></i>
-                            </a>
-                            <a n:href=":Admin:Pages:detail id => $item->id"
-                                    class="btn btn-default btn-xs"
-                                    role="button">{_dictionary.main.Edit}</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        {/foreach}
+
+        {control pageThumb, $presenter->getParameter('type'), $presenter->getParameter('id')}
     </div>
 </div>
 
-
 <div class="row">
-    {control uploadForm}
+    {control dropZone}
+
     <div class="container">
         <div class="btn-group pull-right" role="group">
-            <a n:href="toggle! mediatype => 'image', type => $presenter->getParameter('type')"><i
-                        class="fa fa-picture-o fa-2x"></i></a>
-            <a n:href="toggle! mediatype => 'list', type => $presenter->getParameter('type')"><i
-                        class="fa fa-list-ol fa-2x"></i></a>
+            <a n:href="toggle! mediatype => 'image', type => $presenter->getParameter('type')">
+                <i class="fa fa-picture-o fa-2x"></i>
+            </a>
+            <a n:href="toggle! mediatype => 'list', type => $presenter->getParameter('type')">
+                <i class="fa fa-list-ol fa-2x"></i>
+            </a>
         </div>
     </div>
-    <br/>
+    <br>
 
     {if $mediatype == 'image'}
         <div class="row">

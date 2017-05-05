@@ -1,11 +1,16 @@
 <?php
 
+namespace Caloriscz\Media;
+
+use App\Model\File;
+use App\Model\Thumbnail;
 use Nette\Application\UI\Control;
+use Tracy\Debugger;
 
 class DropZoneControl extends Control
 {
 
-    /** @var Nette\Database\Context */
+    /** @var \Nette\Database\Context */
     public $database;
 
     public function __construct(\Nette\Database\Context $database)
@@ -38,48 +43,32 @@ class DropZoneControl extends Control
     function dropUploadFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
     {
         if (!empty($_FILES)) {
-            $ds = DIRECTORY_SEPARATOR;
             $storeFolder = 'media/' . $form->values->pages_id;
+            $fileName = $_FILES['file']['name'];
+            $targetFile = APP_DIR . "/" . $storeFolder . "/" . $fileName;
 
-            \App\Model\IO::directoryMake(APP_DIR . $ds . $storeFolder, 0755);
+            \App\Model\IO::directoryMake(APP_DIR . "/" . $storeFolder, 0755);
 
-            $tempFile = $_FILES['file']['tmp_name'];
-            $realFile = $_FILES['file']['name'];
-            $targetPath = APP_DIR . $ds . $storeFolder . $ds;
-
-            $targetFile = $targetPath . $_FILES['file']['name'];
-
-            move_uploaded_file($tempFile, $targetFile);
+            move_uploaded_file($_FILES['file']['tmp_name'], $targetFile);
             chmod($targetFile, 0644);
-            $fileSize = filesize($targetFile);
 
             $checkImage = $this->database->table("media")->where(array(
-                'name' => $realFile,
+                'name' => $fileName,
                 'pages_id' => $form->values->id,
             ));
 
-            // Thumbnail for images
-            if (\App\Model\IO::isImage($targetFile)) {
-                \App\Model\IO::directoryMake(APP_DIR . $ds . $storeFolder . $ds . 'tn', 0755);
-
-                // thumbnails
-                $image = \Nette\Utils\Image::fromFile($targetFile);
-                $image->resize(400, 250, \Nette\Utils\Image::SHRINK_ONLY);
-                $image->sharpen();
-                $image->save(APP_DIR . '/media/' . $form->values->pages_id . '/tn/' . $realFile);
-                chmod(APP_DIR . '/media/' . $form->values->pages_id . '/tn/' . $realFile, 0644);
-            }
-
             if ($checkImage->count() == 0) {
-                $this->database->table("media")->insert(array(
-                    'name' => $realFile,
-                    'pages_id' => $form->values->pages_id,
-                    'filesize' => $fileSize,
-                    'file_type' => 1,
-                    'date_created' => date("Y-m-d H:i:s"),
-                ));
-            } else {
-                echo "Nejsem reálný soubor";
+                $file = new File($this->database);
+                $file->setPageId($form->values->pages_id);
+                $file->setType(1);
+                $file->setFile($fileName);
+                $file->create();
+
+                $thumb = new Thumbnail;
+                $thumb->setFile("/media/" . $form->values->pages_id, $fileName);
+                $thumb->setDimensions($this->presenter->template->settings["media_thumb_width"],
+                    $this->presenter->template->settings["media_thumb_height"]);
+                $thumb->save($this->presenter->template->settings["media_thumb_dir"]);
             }
         }
 

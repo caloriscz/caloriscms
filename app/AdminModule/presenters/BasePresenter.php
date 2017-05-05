@@ -2,6 +2,8 @@
 
 namespace App\AdminModule\Presenters;
 
+use Caloriscz\Media\DropZoneControl;
+use Caloriscz\Utilities\PagingControl;
 use Nette,
     App\Model;
 
@@ -114,7 +116,7 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
 
     protected function createComponentPaging()
     {
-        $control = new \PagingControl;
+        $control = new PagingControl;
         return $control;
     }
 
@@ -126,19 +128,13 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
 
     protected function createComponentDropZone()
     {
-        $control = new \DropZoneControl($this->database);
+        $control = new DropZoneControl($this->database);
         return $control;
     }
 
     protected function createComponentImageBrowser()
     {
         $control = new \Caloriscz\Media\ImageBrowserControl($this->database);
-        return $control;
-    }
-
-    protected function createComponentImageUpload()
-    {
-        $control = new \ImageUploadControl($this->database);
         return $control;
     }
 
@@ -154,11 +150,7 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
         return $control;
     }
 
-    protected function createComponentLangSelector()
-    {
-        $control = new \LangSelectorControl($this->database);
-        return $control;
-    }
+
 
     protected function createComponentPageTopMenu()
     {

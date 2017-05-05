@@ -30,9 +30,9 @@ class MediaPresenter extends BasePresenter
         return $control;
     }
 
-    protected function createComponentUploadForm()
+    protected function createComponentPageThumb()
     {
-        $control = new \Caloriscz\Media\MediaForms\UploadFormControl($this->database);
+        $control = new \Caloriscz\Page\Pages\PageThumbControl($this->database);
         return $control;
     }
 
@@ -140,25 +140,6 @@ class MediaPresenter extends BasePresenter
 
     public function renderDefault()
     {
-        if ($this->getParameter('id')) {
-            $arr = array(
-                "pages_types_id" => $this->template->pageId,
-                "pages_id" => $this->getParameter('id'),
-            );
-        } else {
-            if ($this->getParameter("type") == 6) {
-                $pageId = 4;
-            } else {
-                $pageId = 6;
-            }
-
-            $arr = array(
-                "pages_types_id" => $this->template->pageId,
-                "pages_id" => $pageId,
-            );
-        }
-
-        $this->template->media = $this->database->table("pages")->where($arr);
 
         if ($this->getParameter("id")) {
             $idN = $this->getParameter('id');

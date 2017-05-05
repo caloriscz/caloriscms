@@ -5,15 +5,7 @@
 
 <div class="container">
     <div class="col-md-3">
-        <ul class="nav nav-pills nav-stacked">
-            <li><a href="{control pageSlug 8}">{_store.order.ContactInformation}</a></li>
-            <li><a href="{control pageSlug 9}">{_store.profile.ProfileImage}</a></li>
-            <li><a href="{control pageSlug 10}">{_store.profile.PasswordChange}</a></li>
-            <li class="active"><a href="{control pageSlug 11}">{_dictionary.main.addresses|firstUpper}</a></li>
-            {if $settings['store:enabled']}
-                <li><a href="{control pageSlug 26}">{_dictionary.main.orders|firstUpper}</a></li>
-            {/if}
-        </ul>
+        {control profileMenu}
     </div>
     <div class="col-md-9">
         {foreach $flashes as $flash}
@@ -23,7 +15,7 @@
         <table class="table">
             {foreach $addresses as $address}
                 <tr>
-                    <td><a n:href="{control pageSlug 27}?orderid={$address->id}">{$address->name}</a></td>
+                    <td><a href="{control pageSlug 27}?orderid={$address->id}">{$address->name}</a></td>
                     <td>{$address->street}, {$address->zip} {$address->city}</td>
                 </tr>
             {/foreach}

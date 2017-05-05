@@ -1,11 +1,12 @@
 <?php
+namespace Caloriscz\Page\Image;
 
 use Nette\Application\UI\Control;
 
 class ImageUploadControl extends Control
 {
 
-    /** @var Nette\Database\Context */
+    /** @var \Nette\Database\Context */
     public $database;
 
     public function __construct(\Nette\Database\Context $database)

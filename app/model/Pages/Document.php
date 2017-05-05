@@ -11,7 +11,7 @@ namespace App\Model;
 use Nette\Utils\Strings;
 
 /**
- * Cart model
+ * Document model
  * @author Petr Karásek <caloris@caloris.cz>
  */
 class Document

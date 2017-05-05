@@ -479,7 +479,10 @@ INSERT INTO `settings` (`id`, `settings_categories_id`, `setkey`, `setvalue`, `d
 (64, 12, 'members_username_as_email', '0', 'Použít e-mail jako uživatelské jméno', 'Use e-mail as username', 'boolean', 1),
 (65, 12, 'members_signup_message', '0', 'Možnost napsat zprávu při registraci', 'Option to write message in signup', 'boolean', 1),
 (66, 12, 'members_signup_conditions_agree', '0', 'Souhlasit s podmínkami zaškrtávací tlačítko', 'Agree with conditions box', 'boolean', 1),
-(67, 12, 'members_signup_conditions_link', '', 'Odkaz na soubor nebo stránku s podmínkami', 'Link to a file or page with terms and conditions', NULL, 1);
+(67, 12, 'members_signup_conditions_link', '', 'Odkaz na soubor nebo stránku s podmínkami', 'Link to a file or page with terms and conditions', NULL, 1),
+(68, 13, 'media_thumb_dir', 'tn', 'Adresář pro náhledy', 'Directory for thumbnails', NULL, 1),
+(69, 13, 'media_thumb_width', '300', 'Šířka náhledu', 'Width of thumbnail', NULL, 1),
+(70, 13, 'media_thumb_height', '200', 'Výška náhledu', 'Height of thumbnail', NULL, 1);
 
 CREATE TABLE `settings_categories` (
   `id` int(11) NOT NULL,
@@ -500,7 +503,8 @@ INSERT INTO `settings_categories` (`id`, `parent_id`, `description`, `title`, `s
 (17, 1, NULL, 'Služby', 176),
 (20, 1, NULL, 'Vzhled', 154),
 (21, 20, NULL, 'Carousel', 155),
-(22, 20, NULL, 'Události', 157);
+(22, 20, NULL, 'Události', 157),
+(23, NULL, '', 'Media', 0);
 
 CREATE TABLE `snippets` (
   `id` int(11) NOT NULL,

@@ -1,4 +1,6 @@
 <?php
+namespace Caloriscz\Utilities;
+
 use Nette\Application\UI\Control;
 
 class PagingControl extends Control

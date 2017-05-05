@@ -2,7 +2,12 @@
 
 namespace App\FrontModule\Presenters;
 
-use App\Model\Document;
+use Caloriscz\Profile\ChangePasswordControl;
+use Caloriscz\Profile\ChangePortraitControl;
+use Caloriscz\Profile\EditAddressControl;
+use Caloriscz\Profile\EditControl;
+use Caloriscz\Profile\InsertAddressControl;
+use Caloriscz\Profile\ProfileMenuControl;
 
 class ProfilePresenter extends \App\FrontModule\Presenters\BasePresenter
 {
@@ -22,31 +27,37 @@ class ProfilePresenter extends \App\FrontModule\Presenters\BasePresenter
 
     protected function createComponentProfileChangePortrait()
     {
-        $control = new \Caloriscz\Profile\ChangePortraitControl($this->database);
+        $control = new ChangePortraitControl($this->database);
+        return $control;
+    }
+
+    protected function createComponentProfileMenu()
+    {
+        $control = new ProfileMenuControl($this->database);
         return $control;
     }
 
     protected function createComponentProfileChangePassword()
     {
-        $control = new \Caloriscz\Profile\ChangePasswordControl($this->database);
+        $control = new ChangePasswordControl($this->database);
         return $control;
     }
 
     protected function createComponentProfileEdit()
     {
-        $control = new \Caloriscz\Profile\EditControl($this->database);
+        $control = new EditControl($this->database);
         return $control;
     }
 
     protected function createComponentProfileInsertAddress()
     {
-        $control = new \Caloriscz\Profile\InsertAddressControl($this->database);
+        $control = new InsertAddressControl($this->database);
         return $control;
     }
 
     protected function createComponentProfileEditAddress()
     {
-        $control = new \Caloriscz\Profile\EditAddressControl($this->database);
+        $control = new EditAddressControl($this->database);
         return $control;
     }
 

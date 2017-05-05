@@ -7,7 +7,7 @@ use Nette\Application\UI\Control;
 class ChangePortraitControl extends Control
 {
 
-    /** @var Nette\Database\Context */
+    /** @var \Nette\Database\Context */
     public $database;
 
     public function __construct(\Nette\Database\Context $database)

@@ -1,9 +1,10 @@
 <?php
+
 namespace Caloriscz\Page\Pages;
 
 use Nette\Application\UI\Control;
 
-class PageListControl extends Control
+class PageThumbControl extends Control
 {
 
     /** @var \Nette\Database\Context */
@@ -42,19 +43,29 @@ class PageListControl extends Control
         $this->onSave($this->getParameter("type"));
     }
 
-    public function render($fileTemplate = "PageListControl")
+    public function render($type, $id = "")
     {
         $template = $this->template;
-        $template->setFile(__DIR__ . '/' . $fileTemplate . '.latte');
+        $template->setFile(__DIR__ . '/PageThumbControl.latte');
 
-        if ($this->presenter->template->type) {
-            $type = $this->presenter->template->type;
+        if ($type == 6) {
+            $type = 4;
         } else {
-            $type = 9;
+            $type = 6;
         }
 
-        $template->type = $type;
-        $template->pages = $this->database->table("pages")->where(array("pages_types_id" => $type))->order("title");
+        if ($id == "") {
+            $arr = array(
+                "pages_id" => $type,
+            );
+        } else {
+            $arr = array(
+                "pages_types_id" => $id,
+                "pages_id" => $type,
+            );
+        }
+
+        $template->pages = $this->database->table("pages")->where($arr);
 
         $template->render();
     }

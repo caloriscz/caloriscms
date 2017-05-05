@@ -1,6 +1,7 @@
 <?php
 namespace Caloriscz\Blog;
 
+use Caloriscz\Utilities\PagingControl;
 use Nette\Application\UI\Control;
 
 class BlogListControl extends Control
@@ -16,7 +17,7 @@ class BlogListControl extends Control
 
     protected function createComponentPaging()
     {
-        $control = new \PagingControl;
+        $control = new PagingControl();
         return $control;
     }
 
