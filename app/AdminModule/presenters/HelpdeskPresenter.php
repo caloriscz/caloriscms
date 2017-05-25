@@ -16,6 +16,16 @@ class HelpdeskPresenter extends BasePresenter
         return $control;
     }
 
+    protected function createComponentEditHelpdeskEmailSettings()
+    {
+        $control = new \Caloriscz\Helpdesk\EditHelpdeskEmailSettingsControl($this->database);
+        $control->onSave[] = function ($helpdeskId) {
+            $this->redirect(this, array("id" => $helpdeskId));
+        };
+
+        return $control;
+    }
+
     protected function createComponentEditContactForm()
     {
         $control = new \Caloriscz\Helpdesk\EditContactFormControl($this->database);
@@ -57,7 +67,7 @@ class HelpdeskPresenter extends BasePresenter
         }
 
         $messages = $this->database->table("helpdesk_messages")->where(array("helpdesk_id" => $helpdeskId))
-            ->order("subject");
+            ->order("date_created DESC");
 
         $paginator = new \Nette\Utils\Paginator;
         $paginator->setItemCount($messages->count("*"));

@@ -1,0 +1,5 @@
+<ul>
+    {foreach $categories as $item}
+        <li><a href="{plink this, id => $item->id}">{$item->title}</a></li>
+    {/foreach}
+</ul>

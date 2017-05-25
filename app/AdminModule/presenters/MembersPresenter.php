@@ -2,6 +2,7 @@
 
 namespace App\AdminModule\Presenters;
 
+use Caloriscz\Members\MemberCategoriesControl;
 use Nette,
     App\Model;
 
@@ -14,6 +15,14 @@ class MembersPresenter extends BasePresenter
     protected function createComponentSendLogin()
     {
         $control = new \Caloriscz\Contacts\ContactForms\SendLoginControl($this->database);
+        $control->onSave[] = function ($contactId, $pwd) {
+            if ($pwd) {
+                $this->flashMessage($pwd, 'success');
+            }
+
+            $this->redirect(this, array("id" => $contactId, "pdd" => $pwd));
+        };
+
         return $control;
     }
 
@@ -26,6 +35,17 @@ class MembersPresenter extends BasePresenter
     protected function createComponentInsertMember()
     {
         $control = new \Caloriscz\Members\InsertMemberControl($this->database);
+        $control->onSave[] = function ($message, $userId) {
+            if ($message) {
+                $this->flashMessage($this->translator->translate($message), 'error');
+                $code = ":Admin:Members:default";
+            } else {
+                $code = ":Admin:Members:edit";
+            }
+
+            $this->redirect($code, array("id" => $userId));
+        };
+
         return $control;
     }
 
@@ -35,9 +55,15 @@ class MembersPresenter extends BasePresenter
         return $control;
     }
     
-    protected function createComponentMembersGrid()
+    protected function createComponentMemberGrid()
     {
         $control = new \Caloriscz\Members\MemberGridControl($this->database);
+        return $control;
+    }
+    
+    protected function createComponentMemberCategories()
+    {
+        $control = new MemberCategoriesControl($this->database);
         return $control;
     }
 
@@ -62,11 +88,6 @@ class MembersPresenter extends BasePresenter
         }
 
         $this->redirect(":Admin:Members:edit", array("id" => $this->getParameter("contact")));
-    }
-
-    public function renderDefault()
-    {
-        $this->template->categoryId = $this->template->settings['categories:id:members'];
     }
 
     public function renderEdit()

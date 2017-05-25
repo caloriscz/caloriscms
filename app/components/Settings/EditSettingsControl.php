@@ -69,12 +69,12 @@ class EditSettingsControl extends Control
         if (!$this->presenter->getParameter("id")) {
             $arr = array(
                 "admin_editable" => 1,
-                "categories_id" => 10,
+                "settings_categories_id" => 10,
             );
         } else {
             $arr = array(
                 "admin_editable" => 1,
-                "categories_id" => $this->presenter->getParameter("id"),
+                "settings_categories_id" => $this->presenter->getParameter("id"),
             );
         }
 

@@ -11,7 +11,7 @@ namespace App\Model;
 use Nette\Utils\Strings;
 
 /**
- * Cart model
+ * Document model
  * @author Petr Karásek <caloris@caloris.cz>
  */
 class Document
@@ -41,6 +41,22 @@ class Document
         }
     }
 
+    function setTemplate($pageTemplate = false)
+    {
+        $this->pageTemplate = $pageTemplate;
+        return $this->pageTemplate;
+    }
+
+    function getTemplate()
+    {
+        if ($this->pageTemplate) {
+            return $this->pageTemplate;
+        } else {
+            return null;
+        }
+    }
+
+
     function setMetaKey($metakey = false)
     {
         $this->metakey = $metakey;
@@ -69,6 +85,16 @@ class Document
         } else {
             return false;
         }
+    }
+
+    function setSitemap($sitemap)
+    {
+        $this->sitemap = $sitemap;
+    }
+
+    function getSitemap()
+    {
+        return $this->sitemap;
     }
 
     function setDatePublished($date = false)
@@ -231,12 +257,11 @@ class Document
             $arr["title"] = $this->getTitle();
         }
 
+        $arr["pages_templates_id"] = $this->getTemplate();
+
+
         if ($this->getPreview()) {
             $arr["preview"] = $this->getPreview();
-        }
-
-        if ($this->getMetaKey()) {
-            $arr["metakeys"] = $this->getMetaKey();
         }
 
         if ($this->getPublic()) {
@@ -256,6 +281,18 @@ class Document
             } else {
                 $slug = $arr["title"];
             }
+        }
+
+        if ($this->getMetaKey()) {
+            $arr["metakeys"] = $this->getMetaKey();
+        }
+
+        if ($this->getMetaDescription()) {
+            $arr["metadesc"] = $this->getMetaDescription();
+        }
+
+        if ($this->getSitemap()) {
+            $arr["sitemap"] = $this->getSitemap();
         }
 
         $slugNew = $this->generate($slug);
@@ -284,6 +321,8 @@ class Document
             $arr["title"] = $this->getTitle();
         }
 
+        $arr["pages_templates_id"] = $this->getTemplate();
+
         if ($this->getDocument() && $this->getLanguage()) {
             $arr["document" . '_' . $this->getLanguage()] = $this->getDocument();
         } else {
@@ -306,6 +345,10 @@ class Document
             $arr["metadesc" . '_' . $this->getLanguage()] = $this->getMetaDescription();
         } elseif ($this->getMetaDescription()) {
             $arr["metadesc"] = $this->getMetaDescription();
+        }
+
+        if ($this->getSitemap()) {
+            $arr["sitemap"] = $this->getSitemap();
         }
 
         if ($this->getSlug() && $this->getLanguage()) {

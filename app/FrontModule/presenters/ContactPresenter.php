@@ -12,7 +12,7 @@ class ContactPresenter extends BasePresenter
 {
     protected function createComponentHelpdesk()
     {
-        $control = new \HelpdeskControl($this->database);
+        $control = new \Caloriscz\Helpdesk\HelpdeskControl($this->database);
         return $control;
     }
 

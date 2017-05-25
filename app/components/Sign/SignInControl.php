@@ -47,6 +47,12 @@ class SignInControl extends Control
             $this->presenter->redirect(':Front:Sign:in');
         }
 
+        if ($form->values->type == 'admin') {
+            $typeUrl = 'Admin';
+        } else {
+            $typeUrl = 'Front';
+        }
+
         try {
             $this->presenter->getUser()->login($values->username, $values->password);
             $newid = session_id();
@@ -65,17 +71,6 @@ class SignInControl extends Control
                 } else {
                     $this->database->table("users")->get($this->presenter->user->getId())->update(array("date_visited" => date("Y-m-d H:i:s")));
                 }
-
-            if ($form->values->type == 'admin') {
-                $typeUrl = 'Admin';
-            } else {
-                $typeUrl = 'Front';
-            }
-
-
-                $typeUrl = 'Admin';
-            } else {
-                $typeUrl = 'Front';
             }
 
 

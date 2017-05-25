@@ -6,7 +6,7 @@ use Nette\Application\UI\Control;
 class EditMemberControl extends Control
 {
 
-    /** @var Nette\Database\Context */
+    /** @var \Nette\Database\Context */
     public $database;
 
     public function __construct(\Nette\Database\Context $database)
@@ -39,9 +39,7 @@ class EditMemberControl extends Control
         }
 
         if ($this->presenter->template->settings['members:groups:enabled']) {
-            $groups = $this->database->table("categories")->where(
-                "parent_id", $this->presenter->template->settings['members:group:categoryId']
-            )->fetchPairs("id", "title");
+            $groups = $this->database->table("users_categories")->fetchPairs("id", "title");
 
             $form->addSelect("group", "Skupina", $groups)
                 ->setAttribute("class", "form-control");

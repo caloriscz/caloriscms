@@ -61,7 +61,6 @@ class ElfinderControl extends Control
     public function render()
     {
         $template = $this->template;
-        //$template->setFile(__DIR__ . '/ElfinderControl.latte');
 
         $template->render();
     }

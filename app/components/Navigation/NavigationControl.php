@@ -20,18 +20,6 @@ class NavigationControl extends Control
         return $control;
     }
 
-    protected function createComponentCartList()
-    {
-        $control = new \Caloriscz\Cart\ListControl($this->database);
-        return $control;
-    }
-
-    protected function createComponentCartBox()
-    {
-        $control = new \Caloriscz\Cart\BoxControl($this->database);
-        return $control;
-    }
-
     protected function createComponentNavbarMenu()
     {
         $control = new \Caloriscz\Menus\NavbarMenuControl($this->database);
@@ -47,7 +35,7 @@ class NavigationControl extends Control
         $template->member = $this->presenter->template->member;
         $template->args = $this->presenter->getParameters(TRUE);
 
-        $template->setFile(__DIR__ . '/NavigationTopControl.latte');
+        $template->setFile(__DIR__ . '/NavigationTopDoubleMenuControl.latte');
 
         $template->render();
     }

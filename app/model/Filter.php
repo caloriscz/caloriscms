@@ -252,7 +252,7 @@ class Filter
 
         if ($this->manufacturers != false) {
             $columns["contacts.company LIKE ?"] = "%" . $this->manufacturers . "%";
-            $columns["contacts.categories_id"] = $this->template->settings['categories:id:contactsBrands'];
+            $columns["contacts.contacts_categories_id"] = 6;
         }
 
         if ($this->size != false) {

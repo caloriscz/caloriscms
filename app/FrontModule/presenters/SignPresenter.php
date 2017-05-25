@@ -17,6 +17,16 @@ class SignPresenter extends BasePresenter
     protected function createComponentLostPass()
     {
         $control = new \Caloriscz\Sign\LostPassControl($this->database);
+        $control->onSave[] = function($message) {
+            if ($message) {
+                $this->flashMessage($message, "error");
+            } else {
+                $this->flashMessage("Informace o zapomenutém hesle odeslány", "success");
+            }
+
+            $this->redirect(this);
+        };
+
         return $control;
     }
 
@@ -29,32 +39,32 @@ class SignPresenter extends BasePresenter
     protected function createComponentVerify()
     {
         $control = new \Caloriscz\Sign\VerifyAccountControl($this->database);
+
         return $control;
     }
 
     protected function createComponentSignIn()
     {
         $control = new \Caloriscz\Sign\SignInControl($this->database);
+
         return $control;
     }
 
     protected function createComponentSignUp()
     {
         $control = new \Caloriscz\Sign\SignUpControl($this->database);
+        $control->onSave[] = function ($redir, $message, $messageType) {
+
+            $this->flashMessage($this->translator->translate($message), $messageType);
+            $this->redirectUrl($redir);
+        };
+
         return $control;
     }
 
     public function actionOut()
     {
-        $oldid = session_id();
-
         $this->getUser()->logout();
-
-        $newid = session_id();
-
-        if ($this->template->settings['store:enabled']) {
-            $this->database->table("orders")->where(array("uid" => $oldid))->update(array("uid" => $newid));
-        }
 
         $this->flashMessage('Byli jste odhlášeni.');
         $this->redirect('in');

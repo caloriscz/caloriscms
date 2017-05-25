@@ -1,7 +1,7 @@
 {foreach $blog as $item}
     <div class="item">
         <h3>
-            <a href="{plink ':Front:Blog:detail', id => $item->id}">
+            <a href="{$item->slug}">
                 {if $item->title == FALSE}
                     {$item->date_published|date:'j. n. Y'}{else}{$item->title}
                 {/if}
@@ -32,6 +32,6 @@
                 {/if}
             </p>
         {/if}
-        <span class="more"><a href="{plink ':Front:Blog:detail', id => $item->id}"></a></span>
+        <span class="more"><a href="{$item->slug}"></a></span>
     </div>
 {/foreach}

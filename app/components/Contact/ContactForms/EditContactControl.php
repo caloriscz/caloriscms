@@ -22,10 +22,7 @@ class EditContactControl extends Control
     {
         $this->template->id = $this->presenter->getParameter('id');
 
-        $categories = new \App\Model\Category($this->database);
-        $cats = $categories->getSubIds(2);
-        $groups = $this->database->table("categories")
-            ->where("id", $cats)->fetchPairs("id", "title");
+        $groups = $this->database->table("contacts_categories")->fetchPairs("id", "title");
 
         $form = new \Nette\Forms\BootstrapUIForm();
         $form->setTranslator($this->presenter->translator);
@@ -132,7 +129,7 @@ class EditContactControl extends Control
                 "type" => $form->values->type,
                 "email" => $form->values->email,
                 "phone" => $form->values->phone,
-                "categories_id" => $form->values->categories_id,
+                "contacts_categories_id" => $form->values->categories_id,
                 "street" => $form->values->street,
                 "zip" => $form->values->zip,
                 "city" => $form->values->city,

@@ -2,6 +2,7 @@
 
 namespace App\AdminModule\Presenters;
 
+use Caloriscz\Menus\Admin\ContactCategoriesControl;
 use Nette,
     App\Model;
 
@@ -72,6 +73,24 @@ class ContactsPresenter extends BasePresenter
         return $control;
     }
 
+    protected function createComponentCategoryEdit()
+    {
+        $control = new \Caloriscz\Categories\EditCategoryControl($this->database);
+        return $control;
+    }
+
+    protected function createComponentCategoryInsert()
+    {
+        $control = new \Caloriscz\Categories\InsertCategoryControl($this->database);
+        return $control;
+    }
+
+    protected function createComponentContactCategories()
+    {
+        $control = new ContactCategoriesControl($this->database);
+        return $control;
+    }
+
     /**
      * Delete hour
      */
@@ -82,9 +101,54 @@ class ContactsPresenter extends BasePresenter
         $this->redirect(":Admin:Contacts:detailOpeningHours", array("id" => $this->getParameter("page")));
     }
 
+    /**
+     * Delete categories
+     */
+    function handleDeleteCategory($id)
+    {
+        $category = new Model\Category($this->database);
+
+        $this->database->table("categories")->where("id", $category->getSubIds($id))
+            ->delete();
+
+        $this->redirect(":Admin:Categories:default");
+    }
+
+    function handleUpCategory($id, $sorted)
+    {
+        $sortDb = $this->database->table("categories")->where(array(
+            "sorted > ?" => $sorted,
+            "parent_id" => $this->getParameter("category"),
+        ))->order("sorted")->limit(1);
+        $sort = $sortDb->fetch();
+
+        if ($sortDb->count() > 0) {
+            $this->database->table("categories")->where(array("id" => $id))->update(array("sorted" => $sort->sorted));
+            $this->database->table("categories")->where(array("id" => $sort->id))
+                ->update(array("sorted" => $sorted));
+        }
+
+        $this->redirect(":Admin:Categories:default", array("id" => null));
+    }
+
+    function handleDownCategory($id, $sorted, $category)
+    {
+        $sortDb = $this->database->table("contacts_categories")->where(array(
+            "sorted < ?" => $sorted,
+            "parent_id" => $category,
+        ))->order("sorted DESC")->limit(1);
+        $sort = $sortDb->fetch();
+
+        if ($sortDb->count() > 0) {
+            $this->database->table("contacts_categories")->where(array("id" => $id))->update(array("sorted" => $sort->sorted));
+            $this->database->table("contacts_categories")->where(array("id" => $sort->id))->update(array("sorted" => $sorted));
+        }
+
+        $this->presenter->redirect(this, array("id" => null));
+    }
+
     public function renderDefault()
     {
-        $this->template->categoryId = $this->template->settings['categories:id:contact'];
         $contactsDb = $this->database->table("contacts")->order("name");
 
         $paginator = new \Nette\Utils\Paginator;
@@ -96,7 +160,7 @@ class ContactsPresenter extends BasePresenter
         $this->template->paginator = $paginator;
         $this->template->contacts = $contactsDb->limit($paginator->getLength(), $paginator->getOffset());
 
-        $this->template->menu = $this->database->table("categories")->where('parent_id', $this->template->settings['categories:id:contact']);
+        $this->template->menu = $this->database->table("contacts_categories")->where('parent_id', null);
     }
 
     public function renderDetailOpeningHours()
@@ -111,6 +175,24 @@ class ContactsPresenter extends BasePresenter
         $this->template->communications = $this->database->table("contacts_communications")->where(array(
             "contacts_id" => $this->getParameter('id'),
         ));
+    }
+
+    function renderCategories()
+    {
+        if ($this->getParameter('id')) {
+            $categoryId = $this->getParameter('id');
+        } else {
+            $categoryId = null;
+        }
+
+        $this->template->database = $this->database;
+        $this->template->menu = $this->database->table("contacts_categories")->where('parent_id', $categoryId)
+            ->order("sorted DESC");
+    }
+
+    function renderCategoriesDetail()
+    {
+        $this->template->menu = $this->database->table("contacts_categories")->get($this->getParameter("id"));
     }
 
 }

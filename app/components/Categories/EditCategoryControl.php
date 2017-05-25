@@ -50,7 +50,7 @@ class EditCategoryControl extends Control
 
     public function editFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
     {
-        $this->database->table("categories")->get($form->values->id)
+        $this->database->table("contacts_categories")->get($form->values->id)
             ->update(array(
                 "title" => $form->values->title,
                 "parent_id" => $form->values->parent,

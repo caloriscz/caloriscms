@@ -22,7 +22,7 @@ class MemberGridControl extends Control
         if ($this->presenter->id == null) {
             $contacts = $this->database->table("users");
         } else {
-            $contacts = $this->database->table("users")->where("categories_id", $this->id);
+            $contacts = $this->database->table("users")->where("users_categories_id", $this->getParameter("id"));
         }
         $grid->setTranslator($this->presenter->translator);
         $grid->setDataSource($contacts);

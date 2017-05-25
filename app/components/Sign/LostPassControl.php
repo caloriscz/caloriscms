@@ -3,13 +3,15 @@
 namespace Caloriscz\Sign;
 
 use Nette\Application\UI\Control;
-use Nette\Utils\Random;
+use Nette\Forms\BootstrapUIForm;
 
 class LostPassControl extends Control
 {
 
-    /** @var Nette\Database\Context */
+    /** @var \Nette\Database\Context */
     public $database;
+
+    public $onSave;
 
     public function __construct(\Nette\Database\Context $database)
     {
@@ -22,7 +24,7 @@ class LostPassControl extends Control
      */
     function createComponentSendForm()
     {
-        $form = new \Nette\Forms\BootstrapUIForm();
+        $form = new BootstrapUIForm();
         $form->setTranslator($this->presenter->translator);
         $form->getElementPrototype()->autocomplete = 'off';
 
@@ -31,56 +33,42 @@ class LostPassControl extends Control
         $form->addSubmit('submitm', 'dictionary.main.Send');
 
         $form->onSuccess[] = $this->sendFormSucceeded;
+        $form->onValidate[] = $this->sendFormValidated;
         return $form;
     }
 
-    function sendFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
+    function sendFormValidated(BootstrapUIForm $form)
     {
-        $email = $form->getValues()->email;
-
-        if ($form->values->layer == 'admin') {
-            $lostPass = $this->database->table("helpdesk_emails")->where("template", "lostpass-admin")->fetch();
-        } else {
-            $lostPass = $this->database->table("helpdesk_emails")->where("template", "lostpass-member")->fetch();
+        if (!\Nette\Utils\Validators::isEmail($form->values->email)) {
+            $this->onSave("Adresa je neplatná");
         }
 
-        if (!\Nette\Utils\Validators::isEmail($email)) {
-            $this->presenter->flashMessage("Adresa je neplatná");
-            $this->presenter->redirect(":Front:Sign:lostpass");
+        if ($this->database->table('users')->where(array('email' => $form->values->email))->count() == 0) {
+            $this->onSave("E-mail nenalezen");
         }
-
-        $passwordGenerate = \Nette\Utils\Random::generate(12, "987654321zyxwvutsrqponmlkjihgfedcba");
-
-        if ($this->database->table('users')->where(array('email' => $email,))->count() == 0) {
-            $this->flashMessage("E-mail nenalezen");
-            $this->presenter->redirect(":Front:Sign:lostpass");
-        }
-
-        $member = new \App\Model\MemberModel($this->database);
-        $member->setActivation($email, $passwordGenerate);
-
-        $latte = new \Latte\Engine;
-        $latte->setLoader(new \Latte\Loaders\StringLoader());
-
-        $params = array(
-            'code' => $passwordGenerate,
-            'email' => $email,
-            'settings' => $this->presenter->template->settings
-        );
-
-        $mail = new \Nette\Mail\Message;
-        $mail->setFrom($this->presenter->template->settings['contacts:email:hq'])
-            ->addTo($email)
-            ->setSubject("Informace o novém hesle")
-            ->setHTMLBody($latte->renderToString($lostPass->body, $params));
-
-        $mailer = new \Nette\Mail\SendmailMailer;
-        $mailer->send($mail);
-
-        $this->presenter->flashMessage('Informace o zapomenutém hesle odeslány', 'success');
-        $this->presenter->redirect(this);
     }
 
+    function sendFormSucceeded(BootstrapUIForm $form)
+    {
+        $passwordGenerate = \Nette\Utils\Random::generate(12, "987654321zyxwvutsrqponmlkjihgfedcba");
+
+        $member = new \App\Model\MemberModel($this->database);
+        $member->setActivation($form->values->email, $passwordGenerate);
+
+        $params = array(
+            "code" => $passwordGenerate,
+            "email" => $form->values->email,
+        );
+
+        $helpdesk = new \App\Model\Helpdesk($this->database, $this->presenter->mailer);
+        $helpdesk->setId(11);
+        $helpdesk->setEmail($form->values->email);
+        $helpdesk->setSettings($this->presenter->template->settings);
+        $helpdesk->setParams($params);
+        $helpdesk->send();
+
+        $this->onSave(false);
+    }
 
     public function render($layer = 'front')
     {

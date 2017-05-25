@@ -24,6 +24,22 @@ class SignPresenter extends BasePresenter
     protected function createComponentLostPass()
     {
         $control = new \Caloriscz\Sign\LostPassControl($this->database);
+        $control->onSave[] = function($message) {
+            if ($message) {
+                $this->flashMessage($message, "error");
+            } else {
+                $this->flashMessage("Informace o zapomenutém hesle odeslány", "success");
+            }
+
+            $this->redirect(this);
+        };
+
+        $logger = new \App\Model\Logger($this->database);
+        $logger->setEvent("Uživatel v administraci si nechal zaslat heslo");
+        $logger->setDescription("");
+        $logger->setUser($this->user->getId());
+        $logger->save();
+
         return $control;
     }
 
@@ -36,6 +52,13 @@ class SignPresenter extends BasePresenter
     protected function createComponentSignIn()
     {
         $control = new \Caloriscz\Sign\SignInControl($this->database);
+
+        $logger = new \App\Model\Logger($this->database);
+        $logger->setEvent("Uživatel přihlášen");
+        $logger->setDescription("");
+        $logger->setUser($this->user->getId());
+        $logger->save();
+
         return $control;
     }
 

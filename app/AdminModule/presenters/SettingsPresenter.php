@@ -2,6 +2,8 @@
 
 namespace App\AdminModule\Presenters;
 
+use Caloriscz\Menus\Admin\AdminPanelControl;
+use Caloriscz\Menus\Admin\SettingsCategoriesControl;
 use Nette,
     App\Model;
 
@@ -32,6 +34,12 @@ class SettingsPresenter extends BasePresenter
     protected function createComponentInsertCurrency()
     {
         $control = new \Caloriscz\Settings\Currency\InsertCurrencyControl($this->database);
+        return $control;
+    }
+
+    protected function createComponentSettingsCategories()
+    {
+        $control = new SettingsCategoriesControl($this->database);
         return $control;
     }
     
@@ -124,11 +132,6 @@ class SettingsPresenter extends BasePresenter
         }
 
         return $message . "<br>";
-    }
-
-    public function renderDefault()
-    {
-        $this->template->categoryId = $this->template->settings['categories:id:settings'];
     }
 
     public function renderLanguages()

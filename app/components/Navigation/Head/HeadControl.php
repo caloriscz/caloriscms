@@ -21,7 +21,7 @@ class HeadControl extends Control
 
         $page = $this->presenter->template->page;
 
-        /* Choose correct language columns*/
+        /* Choose correct language columns */
         if ($this->presenter->translator->getLocale() == $this->presenter->translator->getDefaultLocale()) {
             $template->title = $page->title;
             $template->metadesc = $page->metadesc;

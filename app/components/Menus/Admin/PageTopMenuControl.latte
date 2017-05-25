@@ -4,8 +4,8 @@
 <br>
 {if $page->pages_types_id == 6 || $page->pages_types_id == 8}
     {var $pageRoot = 'media?type=' . $page->pages_types_id}
-{elseif $page->pages_types_id == 0}
-    {var $pageRoot = 'pages?type=0'}
+{elseif $page->pages_types_id == 9}
+    {var $pageRoot = 'pages?type=9'}
 {elseif $page->pages_types_id == 3}
     {var $pageRoot = 'events'}
 {elseif $page->pages_types_id == 4}

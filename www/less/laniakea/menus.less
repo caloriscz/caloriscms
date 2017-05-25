@@ -1,0 +1,60 @@
+/* Menus: image cubes */
+.services-image-cubes {
+  .item {
+    position: relative;
+    width: 100%;
+    margin-bottom: 30px;
+
+    p {
+      position: absolute;
+      bottom: 15px;
+      width: 100%;
+      padding-bottom: 0;
+      margin-bottom: 0;
+
+      a {
+        font-size: 1.25em;
+        color: white;
+        text-transform: uppercase;
+      }
+    }
+  }
+}
+
+/* Menus: Badges */
+.services-badges {
+  .item {
+    width: 100%;
+    margin-bottom: 30px;
+
+    img {
+      margin-left: auto;
+      margin-right: auto;
+
+      transform: rotateZ(-5deg);
+
+      &:hover {
+        -webkit-transform: scale(1.01);
+        -ms-transform: scale(1.01);
+        transform: scale(1.01);
+        transition:all 1.0s ease;
+
+        transform: rotateZ(+0deg);
+      }
+    }
+
+    p {
+      text-align: center;
+      width: 100%;
+      padding-bottom: 0;
+      margin-bottom: 0;
+
+      a {
+        font-size: 1.25em;
+        color: inherit;
+        text-transform: uppercase;
+        font-weight: bold;
+      }
+    }
+  }
+}

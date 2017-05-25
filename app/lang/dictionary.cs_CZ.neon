@@ -61,6 +61,7 @@ main:
     close: "zavřít"
     Close: "Zavřít"
     Company: "Společnost"
+    CompanyInformation: "Informace o společnosti"
     Confirm: "Potvrdit"
     concept: "koncept"
     contact: "kontakt"

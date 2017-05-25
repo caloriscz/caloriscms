@@ -27,6 +27,7 @@ class PageTitleControl extends Control
         }
 
         $template->title = $title;
+        $template->pageId = $page->id;
 
         $template->setFile(__DIR__ . '/PageTitleControl.latte');
 

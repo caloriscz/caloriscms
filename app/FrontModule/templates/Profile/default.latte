@@ -7,24 +7,16 @@
 <div class="container">
     <div class="row">
         <div class="col-md-3">
-                <ul class="nav nav-pills nav-stacked">
-                    <li class="active"><a href="{control pageSlug 8}">{_store.order.ContactInformation}</a></li>
-                    <li><a href="{control pageSlug 9}">{_store.profile.ProfileImage}</a></li>
-                    <li><a href="{control pageSlug 10}">{_store.profile.PasswordChange}</a></li>
-                    <li><a href="{control pageSlug 11}">{_dictionary.main.addresses|firstUpper}</a></li>
-                    {if $settings['store:enabled']}
-                        <li><a href="{control pageSlug 26}">{_dictionary.main.orders|firstUpper}</a></li>
-                    {/if}
-                </ul>
+            {control profileMenu}
         </div>
         <div class="col-md-9">
             {foreach $flashes as $flash}
                 <div class="flash {$flash->type}">{$flash->message}</div>
-                <br />
+                <br/>
             {/foreach}
 
             {control profileEdit}
-            <br />
+            <br/>
             <p><span style="color: red;">*</span> {_store.forms.TheseItemsAreRequired}</p>
         </div>
     </div>

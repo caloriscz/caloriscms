@@ -2,6 +2,7 @@
 
 namespace App\FrontModule\Presenters;
 
+use Caloriscz\Utilities\PagingControl;
 use Kdyby\Translation\Translator;
 use Nette,
     App\Model;
@@ -21,9 +22,6 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
 
     /** @var \Kdyby\Translation\Translator @inject */
     public $translator;
-
-    /** @var \BaseForm @inject */
-    public $baseFormFactory;
 
     /** @var \Nette\Mail\IMailer @inject */
     public $mailer;
@@ -98,8 +96,6 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
                     }
                     exit();
                 }
-            } else {
-                $message = "5";
             }
         }
 
@@ -131,38 +127,12 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
         $this->template->appDir = APP_DIR;
         $this->template->languageSelected = $this->translator->getLocale();
 
-        if ($this->template->settings['store:enabled']) {
-            $cart = new Model\Store\Cart($this->database, $this->user->getId(), $this->template->isLoggedIn);
-            $cart->cleanCarts();
 
-            $this->template->cartObject = $cart;
-            $this->template->cartId = $cart->getCartId();
-            $this->template->cartItems = $cart->getCartItems();
-            $this->template->cartItemsArr = $cart->getItems();
-            $this->template->cartTotal = $cart->getCartTotal($this->template->settings);
-            $this->template->cartInfo = $cart->getCart();
-
-            if ($cart->getItems()) {
-                $this->template->cart = $cart->getItems()->order("id");
-            }
-
-            $bonus = new Model\Store\Bonus($this->database);
-            $bonus->setUser($this->user->getId());
-            $bonus->setCartTotal($this->template->cartTotal);
-            $amountBonus = $bonus->getAmount($cart->getCartTotal($this->template->settings));
-            $this->template->amountBonus = abs($amountBonus);
-
-            if ($amountBonus <= 0) {
-                $this->template->bonusEnabled = true;
-            } else {
-                $this->template->bonusEnabled = false;
-            }
-        }
     }
 
     protected function createComponentPaging()
     {
-        $control = new \PagingControl;
+        $control = new PagingControl;
         return $control;
     }
 
@@ -187,12 +157,6 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
     protected function createComponentAdvancedSearch()
     {
         $control = new \Caloriscz\Page\Filters\AdvancedSearchControl($this->database);
-        return $control;
-    }
-
-    protected function createComponentAlbum()
-    {
-        $control = new \AlbumControl($this->database);
         return $control;
     }
 
@@ -242,5 +206,23 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
     {
         $control = new \Caloriscz\Navigation\Head\MetaTagsControl($this->database);
         return $control;
+    }
+
+    public function handleSnippet()
+    {
+        $this->database->table("snippets")->get($this->getParameter("snippetId"))->update(array(
+            "content" => $this->getParameter("text")
+        ));
+        exit();
+
+    }
+
+    public function handlePagetitle()
+    {
+        $this->database->table("pages")->where("id", $this->getParameter("editorId"))->update(array(
+            "title" => $this->getParameter("text")
+        ));
+        exit();
+
     }
 }

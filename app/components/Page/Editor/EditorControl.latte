@@ -103,7 +103,7 @@
                     <select name="template" class="form-control" id="inputTemplate">
                         <option value="" selected="selected">Základní šablona --</option>
                         {foreach $templates as $item}
-                            <option value="{$item->id}" {if $item->id == $page->pages_templates_id} selected{/if}>{$item->template}</option>
+                            <option value="{$item->id}" {if $item->id == $page->pages_templates_id} selected{/if}>{$item->title}</option>
                         {/foreach}
                     </select>
                 </div>
@@ -130,6 +130,16 @@
                     <div class="col-sm-9">
                         <textarea type="text" n:name="metakeys" class="form-control" id="inputMetaKeys"
                                   placeholder="{_dictionary.main.MetaKeys}"></textarea>
+                    </div>
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <legend>{_dictionary.main.Settings}</legend>
+
+                <div class="form-group">
+                    <div class="col-sm-offset-3 col-sm-9">
+                        <input type="checkbox" n:name="sitemap" id="inputSitemap"> umístit v sitemap.xml
                     </div>
                 </div>
             </fieldset>

@@ -1,4 +1,5 @@
 <?php
+
 namespace Caloriscz\Members;
 
 use Nette\Application\UI\Control;
@@ -6,8 +7,10 @@ use Nette\Application\UI\Control;
 class InsertMemberControl extends Control
 {
 
-    /** @var Nette\Database\Context */
+    /** @var \Nette\Database\Context */
     public $database;
+
+    public $onSave;
 
     public function __construct(\Nette\Database\Context $database)
     {
@@ -50,19 +53,15 @@ class InsertMemberControl extends Control
         $emailExists = $member->getEmail($form->values->email);
 
         if (!$this->presenter->template->member->users_roles->members_create) {
-            $this->presenter->flashMessage($this->translator->translate("messages.members.PermissionDenied"), 'error');
-            $this->presenter->redirect(":Admin:Members:default", array("id" => null));
+            $this->onSave("messages.members.PermissionDenied");
         }
 
         if (\Nette\Utils\Validators::isEmail($form->values->email) == false) {
-            $this->presenter->flashMessage($this->translator->translate("messages.members.invalidEmailFormat"), 'error');
-            $this->presenter->redirect(":Admin:Members:default", array("id" => null));
+            $this->onSave("messages.members.invalidEmailFormat");
         } elseif ($emailExists > 0) {
-            $this->presenter->flashMessage($this->translator->translate("messages.members.emailAlreadyExists"), 'error');
-            $this->presenter->redirect(":Admin:Members:default", array("id" => null));
+            $this->onSave("messages.members.emailAlreadyExists");
         } elseif ($userExists > 0) {
-            $this->presenter->flashMessage($this->translator->translate("messages.members.memberAlreadyExists"), 'error');
-            $this->presenter->redirect(":Admin:Members:default", array("id" => null));
+            $this->onSave("messages.members.memberAlreadyExists");
         }
     }
 
@@ -82,29 +81,20 @@ class InsertMemberControl extends Control
             ));
 
         if ($form->values->sendmail) {
-            $latte = new \Latte\Engine;
-            $latte->setLoader(new \Latte\Loaders\StringLoader());
             $params = array(
                 'username' => $form->values->username,
-                'password' => $pwd,
-                'settings' => $this->presenter->template->settings,
+                'password' => $pwd
             );
 
-            $helpdesk = $this->database->table("helpdesk")->get(5);
-            $helpdesk_new = $helpdesk->related("helpdesk_emails", "helpdesk_id")->get(9);
-            $helpdesk_new_template = $latte->renderToString($helpdesk_new->body, $params);
-
-            $mail = new \Nette\Mail\Message;
-            $mail->setFrom($this->presenter->template->settings["site:title"] . ' <' . $this->presenter->template->settings["contacts:email:hq"] . '>')
-                ->addTo($form->values->email)
-                ->setHTMLBody($helpdesk_new_template);
-
-            $this->presenter->mailer->send($mail);
-        } else {
-            $this->presenter->flashMessage("Heslo uživatele je $pwd", 'note');
+            $helpdesk = new \App\Model\Helpdesk($this->database, $this->presenter->mailer);
+            $helpdesk->setId(5);
+            $helpdesk->setEmail($form->values->email);
+            $helpdesk->setSettings($this->presenter->template->settings);
+            $helpdesk->setParams($params);
+            $helpdesk->send();
         }
 
-        $this->presenter->redirect(":Admin:Members:edit", array("id" => $userId));
+        $this->onSave(false, $userId);
     }
 
     public function render()

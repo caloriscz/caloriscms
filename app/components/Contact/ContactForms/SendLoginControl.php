@@ -1,4 +1,5 @@
 <?php
+
 namespace Caloriscz\Contacts\ContactForms;
 
 use Nette\Application\UI\Control;
@@ -6,8 +7,10 @@ use Nette\Application\UI\Control;
 class SendLoginControl extends Control
 {
 
-    /** @var Nette\Database\Context */
+    /** @var \Nette\Database\Context */
     public $database;
+
+    public $onSave;
 
     public function __construct(\Nette\Database\Context $database)
     {
@@ -42,41 +45,30 @@ class SendLoginControl extends Control
     {
         $pwd = \Nette\Utils\Random::generate(10);
         $pwdEncrypted = \Nette\Security\Passwords::hash($pwd);
-
-
         $user = $this->database->table('users')->get($form->values->contact_id);
 
-        $this->database->table("users")->get($user->id)
-            ->update(array(
-                "password" => $pwdEncrypted,
-            ));
+        $this->database->table("users")->get($user->id)->update(array(
+            "password" => $pwdEncrypted,
+        ));
 
         if ($form->values->sendmail) {
-            $latte = new \Latte\Engine;
-            $latte->setLoader(new \Latte\Loaders\StringLoader());
             $params = array(
                 'username' => $user->username,
                 'email' => $user->email,
                 'password' => $pwd,
-                'settings' => $this->presenter->template->settings,
             );
 
-            $helpdesk = $this->database->table("helpdesk")->get(4);
-            $helpdesk_resend_login = $helpdesk->related("helpdesk_emails", "helpdesk_id")->get(8);
-            $helpdesk_resend = $latte->renderToString($helpdesk_resend_login->body, $params);
+            $helpdesk = new \App\Model\Helpdesk($this->database, $this->presenter->mailer);
+            $helpdesk->setId(4);
+            $helpdesk->setEmail($user->email);
+            $helpdesk->setSettings($this->presenter->template->settings);
+            $helpdesk->setParams($params);
+            $helpdesk->send();
 
-            $mail = new \Nette\Mail\Message;
-            $mail->setFrom($this->presenter->template->settings["site:title"] . ' <' . $this->presenter->template->settings["contacts:email:hq"] . '>')
-                ->addTo($user->email)
-                ->setHTMLBody($helpdesk_resend);
-
-            $mailer = new \Nette\Mail\SendmailMailer;
-            $mailer->send($mail);
-        } else {
-            $this->presenter->flashMessage("pass", "success");
+            $pwd = null;
         }
 
-        $this->presenter->redirect(this, array("id" => $form->values->contact_id,"pdd" => $pwd));
+        $this->onSave($form->values->contact_id, $pwd);
     }
 
     public function render()

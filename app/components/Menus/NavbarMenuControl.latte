@@ -1,4 +1,4 @@
-<ul class="nav navbar-nav">
+<ul class="{$style}">
     {foreach $categories as $rowCategories} 
         {var $dbSubs = $rowCategories->related('menu', 'parent_id')}
         {if $rowCategories->id == $presenter->getParameter('page_id')}
@@ -28,8 +28,8 @@
                             <img src="{$baseUri}/images/menu/icons/{$rowCategories->id}.png"><br class="hidden-tn" />
                         </span>
                     {/if}
-                    {var $title = str_replace(' ', '<br />', $rowCategories->title)}
-                    <span class="title">{$title|noescape}</span>
+                    {var $title = $rowCategories->title}
+                    <span class="title">{$title|noescape}</span> {if $dbSubs->count()}<i class="fa fa-caret-down"></i>{/if}
                 </a>
                 {foreach $dbSubs as $rowCategoriesSub}
                     {var $dbSubs2 = $rowCategoriesSub->related('menu', 'pages_id')}

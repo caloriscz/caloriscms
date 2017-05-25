@@ -60,6 +60,7 @@ main:
     close: "close"
     Close: "Close"
     Company: "Company"
+    CompanyInformation: "Company information"
     concept: "concept"
     Confirm: "Confirm"
     contact: "contact"

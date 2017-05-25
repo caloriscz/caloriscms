@@ -6,7 +6,6 @@ use Nette\Application\UI\Control;
 
 class EditorControl extends Control
 {
-
     private $htmlPurifier;
 
     /** @var \Nette\Database\Context */
@@ -18,6 +17,12 @@ class EditorControl extends Control
 
         $config = \HTMLPurifier_Config::createDefault();
         $this->htmlPurifier = new \HtmlPurifier($config);
+    }
+
+    protected function createComponentLangSelector()
+    {
+        $control = new \LangSelectorControl($this->database);
+        return $control;
     }
 
     /**
@@ -61,19 +66,15 @@ class EditorControl extends Control
 
         $form->addHidden("slug_old");
         $form->addGroup("");
-        $form->addCheckbox("public", "dictionary.main.PublishedForm");
-        $form->addText("date_published", "Datum zveřejnění")
-            ->setAttribute("class", "datetimepicker");
-        $form->addText("title", "dictionary.main.Title");
-        $form->addText("slug", "dictionary.main.Slug");
+        $form->addCheckbox("public");
+        $form->addText("date_published");
+        $form->addText("title");
+        $form->addText("slug");
         $form->addText("document2");
         $form->addSelect("parent");
-        $form->addSelect("template");
-        $form->addGroup("dictionary.main.MetaTags");
-        $form->addTextArea("metadesc", "dictionary.main.MetaDesc")
-            ->setAttribute("class", "form-control");
-        $form->addTextArea("metakeys", "dictionary.main.MetaKeys")
-            ->setAttribute("class", "form-control");
+        $form->addTextArea("metadesc");
+        $form->addTextArea("metakeys");
+        $form->addCheckbox("sitemap");
 
         if ($l == '') {
             $form->setDefaults(array(
@@ -85,6 +86,7 @@ class EditorControl extends Control
                 "title" => $pages->title,
                 "public" => $pages->public,
                 "date_published" => $pages->date_published,
+                "sitemap" => $pages->sitemap,
             ));
         } else {
             $form->setDefaults(array(
@@ -97,6 +99,7 @@ class EditorControl extends Control
                 "title" => $pages->{'title_' . $l},
                 "public" => $pages->public,
                 "date_published" => $pages->date_published,
+                "sitemap" => $pages->sitemap,
             ));
         }
 
@@ -129,79 +132,15 @@ class EditorControl extends Control
         $doc->setLanguage($form->values->l);
         $doc->setDatePublished($form->values->date_published);
         $doc->setTitle($form->values->title);
+        $doc->setTemplate($values["template"]);
         $doc->setSlug($form->values->slug_old, $form->values->slug);
         $doc->setMetaKey($form->values->metakeys);
         $doc->setMetaDescription($form->values->metadesc);
+        $doc->setSitemap(1);
         $doc->setParent($values["parent"]);
         $doc->save($form->values->id, $this->presenter->user->getId());
 
         $this->presenter->redirect(this, array("id" => $form->values->id, "l" => $form->values->l));
-    }
-
-    /**************************************
-     * Image add editor
-     */
-    function createComponentImageAddForm()
-    {
-        $form = new \Nette\Forms\BootstrapPHForm();
-        $form->setTranslator($this->presenter->translator);
-        $form->getElementPrototype()->class = "form-horizontal";
-        $form->getElementPrototype()->role = 'form';
-        $form->getElementPrototype()->autocomplete = 'off';
-
-        $form->onSuccess[] = $this->imageAddFormSucceeded;
-        $form->addSubmit("submitm", "dictionary.main.Save")
-            ->setAttribute("class", "btn btn-success");
-
-        return $form;
-    }
-
-    function imageAddFormSucceeded(\Nette\Forms\BootstrapPHForm $form)
-    {
-        $values = $form->getHttpData($form::DATA_TEXT); // get value from html input
-        $fileName = $_FILES['file']['name'];
-
-        if ($_FILES['file']['name']) {
-            if (!$_FILES['file']['error']) {
-                $destination = APP_DIR . '/media/' . $values["page_id"] . '/' . $fileName; //change this directory
-                $location = $_FILES["file"]["tmp_name"];
-
-                move_uploaded_file($location, $destination);
-                chmod($destination, 0644);
-
-                $fileSize = filesize($destination);
-
-                $checkImage = $this->database->table("media")->where(array(
-                    'name' => $fileName,
-                    'pages_id' => $values["page_id"],
-                ));
-
-                if ($checkImage->count() == 0) {
-                    $image = \Nette\Utils\Image::fromFile($destination);
-                    $image->resize(400, 250, \Nette\Utils\Image::SHRINK_ONLY);
-                    $image->sharpen();
-                    $image->save(APP_DIR . '/media/' . $values["page_id"] . '/tn/' . $fileName);
-                    chmod(APP_DIR . '/media/' . $values["page_id"] . '/tn/' . $fileName);
-
-                    $this->database->table("media")->insert(array(
-                        'name' => $fileName,
-                        'pages_id' => $values["page_id"],
-                        'filesize' => $fileSize,
-                        'file_type' => 1,
-                        'date_created' => date("Y-m-d H:i:s"),
-                    ));
-                }
-
-            }
-        }
-
-        exit();
-    }
-
-    protected function createComponentLangSelector()
-    {
-        $control = new \LangSelectorControl($this->database);
-        return $control;
     }
 
     function handlePublic()
@@ -245,7 +184,7 @@ class EditorControl extends Control
         $template->pages = $this->database->table("pages")->where("NOT id", $this->presenter->getParameter("id"));
         $template->page = $this->database->table("pages")->get($this->presenter->getParameter("id"));
 
-        $template->templates = $this->database->table("pages_templates")->where("pages_types_id", $template->page->pages_types_id);
+        $template->templates = $this->database->table("pages_templates")->where("pages_types_id IS NULL")->order("title");
 
         if ($this->presenter->template->member->users_roles->pages_document) {
             $template->enabled = true;

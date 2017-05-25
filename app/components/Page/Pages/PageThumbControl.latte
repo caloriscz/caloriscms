@@ -1,0 +1,27 @@
+{foreach $pages as $item}
+    <div class="col-xs-6 col-md-3 col-lg-2">
+        <div class="thumbnail" style="height: 260px;">
+            <div style="height: 180px; padding-top: 60px;" class="text-center">
+                <a href="{plink ':Admin:Media:default', id => $item->id, type => $item->pages_types_id}">
+                    <i class="fa fa-folder-o fa-5x"></i>
+                </a>
+            </div>
+            <div class="caption text-center">
+                <div>
+                    <a href="{plink ':Admin:Media:default', id => $item->id, type => $item->pages_types_id}">
+                        <span style="font-weight: bold; font-size: 1.25em;">{$item->title}</span>
+                    </a>
+                </div>
+                <div style="margin-top: 5px;">
+                    <a href="{link deletePage!, id => $item->id, type => $item->pages_types_id}"
+                            onclick="return confirm('Opravdu chcete smazat tuto stránku a všechny její podstránky s celým obsahem?')">
+                        <i class="fa fa-times font-red"></i>
+                    </a>
+                    <a href="{plink ':Admin:Media:default', id => $item->id}"
+                            class="btn btn-default btn-xs"
+                            role="button">{_dictionary.main.Edit}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+{/foreach}
