@@ -56,6 +56,12 @@ class PagesPresenter extends BasePresenter
         return $control;
     }
 
+    protected function createComponentLangSelector()
+    {
+        $control = new \LangSelectorControl($this->database);
+        return $control;
+    }
+
     protected function createComponentInsertBlogForm()
     {
         $control = new \Caloriscz\Blog\BlogForms\InsertFormControl($this->database);
