@@ -215,7 +215,7 @@ CREATE TABLE `helpdesk_messages` (
 
 CREATE TABLE `helpdesk_templates` (
   `id` int(11) NOT NULL,
-  `title` varchar(200) COLLATE NOT NULL,
+  `title` varchar(200) NOT NULL,
   `document` text
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
 
@@ -274,15 +274,15 @@ INSERT INTO `menu` (`id`, `parent_id`, `description`, `title`, `pages_id`, `url`
 
 CREATE TABLE `pages` (
   `id` int(11) NOT NULL,
-  `slug` varchar(250) CHARACTER SET latin1 DEFAULT NULL,
-  `title` varchar(250) COLLATE utf8_czech_ci DEFAULT NULL,
-  `document` text COLLATE utf8_czech_ci,
-  `preview` text CHARACTER SET latin1,
+  `slug` varchar(250) DEFAULT NULL,
+  `title` varchar(250) DEFAULT NULL,
+  `document` text,
+  `preview` text,
   `pages_id` int(11) DEFAULT NULL,
   `users_id` int(11) DEFAULT NULL,
   `public` int(11) DEFAULT '0',
-  `metadesc` varchar(200) CHARACTER SET latin1 DEFAULT NULL,
-  `metakeys` varchar(150) CHARACTER SET latin1 DEFAULT NULL,
+  `metadesc` varchar(200) DEFAULT NULL,
+  `metakeys` varchar(150) DEFAULT NULL,
   `date_created` datetime DEFAULT NULL,
   `date_published` datetime DEFAULT NULL,
   `pages_types_id` int(11) DEFAULT '1',
@@ -301,6 +301,7 @@ INSERT INTO `pages` (`id`, `slug`, `title`, `document`, `preview`, `pages_id`, `
 (1, '', 'Úvodní stránka', '', NULL, NULL, 1, 1, '', '', NULL, NULL, 9, 4, 17, 1, 0, 1),
 (2, 'kontakt', 'Kontakt', NULL, NULL, NULL, NULL, 1, '', '', NULL, NULL, 9, 5, 19, 0, 0, 1),
 (3, 'blog', 'Blog', '', NULL, NULL, 1, 1, '', '', NULL, NULL, 9, 2, 21, 0, 0, 1),
+(3, 'galerie', 'Galerie', '', NULL, NULL, 1, 1, '', '', NULL, NULL, 9, 2, 1, 0, 0, 1),
 (5, 'udalosti', 'Události', NULL, NULL, 1, NULL, 1, NULL, NULL, NULL, NULL, 9, 9, 23, 0, 0, 1),
 (8, 'profil', 'Profil', NULL, NULL, 1, NULL, 1, NULL, NULL, NULL, NULL, 9, 19, 25, 0, 0, 0),
 (9, 'profil-obrazek', 'Profil: Obrázek', NULL, '8', 1, NULL, 1, NULL, NULL, NULL, NULL, 9, 20, 27, 0, 0, 0),
@@ -338,7 +339,7 @@ CREATE TABLE `pages_templates` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
 
 INSERT INTO `pages_templates` (`id`, `pages_types_id`, `template`, `title`) VALUES
-(1, NULL, 'Front:Gallery:albumWithDescription', 'Album with description'),
+(1, NULL, 'Front:Media:albumWithDescription', 'Album with description'),
 (2, NULL, 'Front:Pages:blogList', 'Blog list'),
 (3, NULL, 'Front:Pages:default', 'Simple page'),
 (4, NULL, 'Front:Homepage:default', 'Homepage'),
@@ -416,7 +417,7 @@ CREATE TABLE `settings` (
   `setvalue` varchar(120) NOT NULL,
   `description_cs` varchar(150) DEFAULT NULL,
   `description_en` varchar(150) DEFAULT NULL,
-  `type` varchar(40) CHARACTER SET latin1 DEFAULT NULL,
+  `type` varchar(40) DEFAULT NULL,
   `admin_editable` tinyint(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
 
@@ -493,15 +494,14 @@ CREATE TABLE `settings_categories` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
 
 INSERT INTO `settings_categories` (`id`, `parent_id`, `description`, `title`, `sorted`) VALUES
-(10, 1, NULL, 'Základní nastavení', 146),
-(11, 1, NULL, 'Kategorie', 149),
-(12, 1, NULL, 'Členové', 148),
-(13, 1, NULL, 'Obchod', 147),
+(10, NULL, NULL, 'Základní nastavení', 146),
+(12, NULL, NULL, 'Členové', 148),
+(13, NULL, NULL, 'Obchod', 147),
 (14, 13, NULL, 'Bonus', 167),
-(15, 1, NULL, 'Blog', 154),
-(16, 1, NULL, 'Kontakty', 166),
-(17, 1, NULL, 'Služby', 176),
-(20, 1, NULL, 'Vzhled', 154),
+(15, NULL, NULL, 'Blog', 154),
+(16, NULL, NULL, 'Kontakty', 166),
+(17, NULL, NULL, 'Služby', 176),
+(20, NULL, NULL, 'Vzhled', 154),
 (21, 20, NULL, 'Carousel', 155),
 (22, 20, NULL, 'Události', 157),
 (23, NULL, '', 'Media', 0);
@@ -535,8 +535,8 @@ CREATE TABLE `users` (
   `login_success` int(11) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
 
-INSERT INTO `users` (`id`, `username`, `users_categories_id`, `uid`, `email`, `sex`, `name`, `password`, `date_created`, `date_visited`, `state`, `activation`, `newsletter`, `type`, `users_roles_id`, `login_error`, `login_success`) VALUES
-(1, 'admin', NULL, '000001', '', 2, '', '$2y$10$DLhMCsYpbB.xHJ501e.xMOvhneiT1U6YypGAcOna/V2kzIGZOwxla', NULL, '2017-02-16 15:44:13', 1, NULL, 1, 1, 1, 0, 3);
+INSERT INTO `users` (`id`, `username`, `users_categories_id`, `email`, `sex`, `name`, `password`, `date_created`, `date_visited`, `state`, `activation`, `newsletter`, `type`, `users_roles_id`, `login_error`, `login_success`) VALUES
+(1, 'admin', NULL, '', 2, '', '$2y$10$DLhMCsYpbB.xHJ501e.xMOvhneiT1U6YypGAcOna/V2kzIGZOwxla', NULL, '2017-02-16 15:44:13', 1, NULL, 1, 1, 1, 0, 3);
 
 CREATE TABLE `users_categories` (
   `id` int(11) NOT NULL,
@@ -621,9 +621,7 @@ ALTER TABLE `helpdesk_emails`
 
 ALTER TABLE `helpdesk_messages`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `contacts_id` (`contacts_id`),
-  ADD KEY `helpdesk_id` (`helpdesk_id`),
-  ADD KEY `users_id` (`users_id`);
+  ADD KEY `helpdesk_id` (`helpdesk_id`);
   
 ALTER TABLE `helpdesk_templates`
   ADD PRIMARY KEY (`id`);
@@ -800,9 +798,7 @@ ALTER TABLE `helpdesk_emails`
   ADD CONSTRAINT `helpdesk_emails_ibfk_2` FOREIGN KEY (`helpdesk_templates_id`) REFERENCES `helpdesk_templates` (`id`);
 
 ALTER TABLE `helpdesk_messages`
-  ADD CONSTRAINT `helpdesk_messages_ibfk_1` FOREIGN KEY (`contacts_id`) REFERENCES `contacts` (`id`) ON DELETE SET NULL ON UPDATE SET NULL,
-  ADD CONSTRAINT `helpdesk_messages_ibfk_3` FOREIGN KEY (`helpdesk_id`) REFERENCES `helpdesk` (`id`) ON DELETE SET NULL ON UPDATE SET NULL,
-  ADD CONSTRAINT `helpdesk_messages_ibfk_4` FOREIGN KEY (`users_id`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE SET NULL;
+  ADD CONSTRAINT `helpdesk_messages_ibfk_3` FOREIGN KEY (`helpdesk_id`) REFERENCES `helpdesk` (`id`) ON DELETE SET NULL ON UPDATE SET NULL;
 
 ALTER TABLE `media`
   ADD CONSTRAINT `media_ibfk_4` FOREIGN KEY (`pages_id`) REFERENCES `pages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
