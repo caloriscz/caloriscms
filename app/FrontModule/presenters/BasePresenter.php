@@ -202,12 +202,6 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
         return $control;
     }
 
-    protected function createComponentMetaTags()
-    {
-        $control = new \Caloriscz\Navigation\Head\MetaTagsControl($this->database);
-        return $control;
-    }
-
     public function handleSnippet()
     {
         $this->database->table("snippets")->get($this->getParameter("snippetId"))->update(array(
