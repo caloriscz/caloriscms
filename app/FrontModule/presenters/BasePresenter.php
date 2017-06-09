@@ -3,9 +3,7 @@
 namespace App\FrontModule\Presenters;
 
 use Caloriscz\Utilities\PagingControl;
-use Kdyby\Translation\Translator;
-use Nette,
-    App\Model;
+use Nette;
 
 /**
  * Base presenter for all application presenters.
@@ -202,6 +200,9 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
         return $control;
     }
 
+    /**
+     * Content editable snippets
+     */
     public function handleSnippet()
     {
         $this->database->table("snippets")->get($this->getParameter("snippetId"))->update(array(
@@ -211,6 +212,9 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
 
     }
 
+    /**
+     * Content editable page title
+     */
     public function handlePagetitle()
     {
         $this->database->table("pages")->where("id", $this->getParameter("editorId"))->update(array(
