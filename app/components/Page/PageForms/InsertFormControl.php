@@ -33,7 +33,7 @@ class InsertFormControl extends Control
         $form->addSubmit("submit", "dictionary.main.Create")
             ->setHtmlId('formxins');
 
-        $form->onSuccess[] = $this->insertFormSucceeded;
+        $form->onSuccess[] = [$this, 'insertFormSucceeded'];
 
         return $form;
     }
@@ -44,7 +44,8 @@ class InsertFormControl extends Control
         $doc->setType(1);
         $doc->setTitle($form->values->title);
         $page = $doc->create($this->presenter->user->getId());
-        \App\Model\IO::directoryMake(substr(APP_DIR, 0, -4) . '/www/media/' . $page, 0755);
+        \App\Model\IO::directoryMake(APP_DIR . '/media/' . $page, 0755);
+        \App\Model\IO::directoryMake(APP_DIR . '/media/' . $page . "/tn", 0755);
 
         $this->presenter->redirect(":Admin:Pages:detail", array("id" => $page));
     }

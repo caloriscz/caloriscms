@@ -38,7 +38,7 @@ class MenuPresenter extends BasePresenter
 
         $this->database->table("menu")->where("id", $menu->getSubIds($id))->delete();
 
-        $this->redirect(":Admin:Menu:default", array("id" => null));
+        $this->redirect(this, array("id" => null));
     }
 
     /**
@@ -83,7 +83,7 @@ class MenuPresenter extends BasePresenter
             $this->database->table("menu")->where(array("id" => $sort->id))->update(array("sorted" => $sorted));
         }
 
-        $this->redirect(":Admin:Menu:default", array("id" => null));
+        $this->redirect(this, array("id" => null));
     }
 
     function renderDefault()

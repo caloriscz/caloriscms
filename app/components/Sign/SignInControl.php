@@ -32,7 +32,7 @@ class SignInControl extends Control
         $form->addSubmit("send", 'dictionary.main.login')
             ->setAttribute("class", "btn btn-success");
 
-        $form->onSuccess[] = $this->signInFormSucceeded;
+        $form->onSuccess[] = [$this, 'signInFormSucceeded'];
         return $form;
     }
 

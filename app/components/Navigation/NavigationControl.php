@@ -1,11 +1,11 @@
 <?php
+
 namespace Caloriscz\Navigation;
 
 use Nette\Application\UI\Control;
 
 class NavigationControl extends Control
 {
-
     /** @var \Nette\Database\Context */
     public $database;
 
@@ -32,7 +32,11 @@ class NavigationControl extends Control
         $template->settings = $this->presenter->template->settings;
         $template->langSelected = $this->presenter->translator->getLocale();
         $template->user = $this->presenter->user;
-        $template->member = $this->presenter->template->member;
+
+        if (isset($this->presenter->template->member)) {
+            $template->member = $this->presenter->template->member;
+        }
+
         $template->args = $this->presenter->getParameters(TRUE);
 
         $template->setFile(__DIR__ . '/NavigationTopDoubleMenuControl.latte');

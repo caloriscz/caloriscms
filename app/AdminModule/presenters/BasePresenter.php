@@ -128,6 +128,12 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
         $control = new \Caloriscz\Page\Editor\EditorControl($this->database);
         return $control;
     }
+	
+    protected function createComponentEditorSettings()
+    {
+        $control = new \Caloriscz\Page\Editor\EditorSettingsControl($this->database);
+        return $control;
+    }
 
     protected function createComponentDropZone()
     {

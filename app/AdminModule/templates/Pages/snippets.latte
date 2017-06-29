@@ -1,44 +1,61 @@
 {block #titles}{$catalogue->title}{/block}
 {block content}
 
-{control pageTopMenu}
+<ol class="breadcrumb">
+    <li class="breadcrumb-item">Home</li>
+    <li class="breadcrumb-item"><a href="#">Admin</a></li>
+    <li class="breadcrumb-item active">{$catalogue->title}</li>
+    <li class="breadcrumb-item active">{_dictionary.main.Snippets}</li>
 
-<h1 class="page-header">{$catalogue->title} - {_dictionary.main.Snippets}</h1>
+    {control pageTopMenu}
+</ol>
 
-<div class="row">
-    <div class="col-lg-3">
-        <div class="panel panel-default">
-            <div class="panel-heading">Snippety</div>
-            <div class="panel-body">
-                <div class="alert alert-info">
-                    Části kódu slouží k vkládání malých částí textů do stránky za pomocí kódu [snippet="25"].
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-3">
+            <div class="card">
+                <div class="card-header">
+                    <strong>Přidat nový</strong>
                 </div>
+                <div class="card-block">
 
-                {control insertSnippetForm}
-            </div>
-        </div>
-    </div>
-    <div class="col-lg-9">
-        {var $c = 0}
-        {foreach $snippets as $item}
-            <div class="row" data-rows="{$c++}">
-                <div class="col-xs-12">
-                    <a n:href="deleteSnippet!, id => $item->id, page => $catalogue->id" class="btn"
-                                                                                        role="button"
-                                                                                        onclick="return confirm('{_admin.catalogue.deletereallymessage}')">
-                        <i class="fa fa-times font-red"></i></a>
-                    <a n:href=":Admin:Pages:snippetsDetail, id => $item->pages_id, snippet => $item->id">{$item->keyword}</a>
-                    <a href="#" class="hidden" data-toggle="modal" data-target="#myModal-{$item->id}">inline úprava</a>
-                    - [snippet="{$item->id}"]
-                </div>
-            </div>
-            <div class="modal fade" tabindex="-1" id="myModal-{$item->id}" role="dialog">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        {control editSnippetForm}
+                    <div class="panel-body">
+                        <div class="alert alert-info">
+                            Části kódu slouží k vkládání malých částí textů do stránky za pomocí kódu [snippet="25"].
+                        </div>
+
+                        {control insertSnippetForm}
                     </div>
                 </div>
             </div>
-        {/foreach}
+        </div>
+        <div class="col-lg-9">
+            <div class="card">
+                <div class="card-header">
+                    <strong>Seznam snippetů</strong>
+                </div>
+                <div class="card-block">
+                    <table class="table table-responsive">
+                        {foreach $snippets as $item}
+                            <tr>
+                                <td class="col-1">
+                                    <a n:href="deleteSnippet!, id => $item->id, page => $catalogue->id"
+                                            class="btn btn-default btn-xs" role="button"
+                                            onclick="return confirm('{_admin.catalogue.deletereallymessage}')">
+                                        <i class="fa fa-times font-red"></i>
+                                    </a>
+                                </td>
+                                <td class="col-8">
+                                    <a n:href=":Admin:Pages:snippetsDetail, id => $item->pages_id, snippet => $item->id">
+                                        {$item->keyword}
+                                    </a>
+                                </td>
+                                <td class="col-3">[snippet="{$item->id}"]</td>
+                            </tr>
+                        {/foreach}
+                    </table>
+                </div>
+            </div>
+        </div>
     </div>
 </div>

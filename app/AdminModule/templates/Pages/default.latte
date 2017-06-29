@@ -1,52 +1,63 @@
 {block #titles}{_admin.navigation.pages|firstUpper}{/block}
 {block content}
 
-{if $type == 0}
-    <h1 class="page-header">Šablony</h1>
+<ol class="breadcrumb">
+    <li class="breadcrumb-item">Home</li>
+    <li class="breadcrumb-item"><a href="/admin/">Admin</a></li>
+    <li class="breadcrumb-item active"><a href="/admin/pages/">Seznam stránek</a></li>
+</ol>
 
-    <div class="alert alert-info">
-        <p>Text šablony se upravuje přímo ve zdrojovém kódu. Obsah, který napíšete do políčka editoru se
-            nemusí objevit přímo na stránce. Pokud chcete, aby se tento text objevil na stránce, konzultujte
-            to s administrátorem stránky.</p>
-    </div>
-{elseif $type == 2}
-    <h1 class="page-header">Blog</h1>
-{elseif $type == 3}
-    <h1 class="page-header">{_dictionary.main.Events}</h1>
-{else}
-    <h1 class="page-header">Stránky</h1>
-{/if}
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-block">
+            {if $type == 0}
+                <div class="alert alert-info">
+                    <p>Text šablony se upravuje přímo ve zdrojovém kódu. Obsah, který napíšete do políčka editoru se
+                        nemusí objevit přímo na stránce. Pokud chcete, aby se tento text objevil na stránce, konzultujte
+                        to s administrátorem stránky.</p>
+                </div>
+            {elseif $type == 2}
+                <h1 class="page-header">Blog</h1>
+            {elseif $type == 3}
+                <h1 class="page-header">{_dictionary.main.Events}</h1>
+            {else}
+                <h1 class="page-header">Stránky</h1>
+            {/if}
 
-<div class="row">
-    <div class="col-md-3">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                {if $type == 2}
-                    Nový příspěvek
-                {elseif $type == 3}
-                    Nová událost/akce
-                {else}
-                    {_dictionary.main.NewPage}
-                {/if}
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            {if $type == 2}
+                                Nový příspěvek
+                            {elseif $type == 3}
+                                Nová událost/akce
+                            {else}
+                                {_dictionary.main.NewPage}
+                            {/if}
+                        </div>
+                        <div class="panel-body">
+                            {foreach $flashes as $flash}
+                                <br/>
+                                <div class="flash {$flash->type}">{$flash->message}</div>
+                                <br/>
+                            {/foreach}
+
+                            {if $type == 2}
+                                {control insertBlogForm}
+                            {elseif $type == 3}
+                                {control insertEventPage}
+                            {else}
+                                {control insertPageForm}
+                            {/if}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-9">
+                    {control pageList}
+                </div>
             </div>
-            <div class="panel-body">
-                {foreach $flashes as $flash}
-                    <br/>
-                    <div class="flash {$flash->type}">{$flash->message}</div>
-                    <br/>
-                {/foreach}
 
-                {if $type == 2}
-                    {control insertBlogForm}
-                {elseif $type == 3}
-                    {control insertEventPage}
-                {else}
-                    {control insertPageForm}
-                {/if}
-            </div>
         </div>
-    </div>
-    <div class="col-md-9">
-            {control pageList}
     </div>
 </div>

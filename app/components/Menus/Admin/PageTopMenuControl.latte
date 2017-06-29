@@ -15,64 +15,61 @@
 {else}
     {var $pageRoot = 'pages?type=' . $page->pages_types_id}
 {/if}
-<ul class="nav nav-tabs">
-    <li><a href="/admin/{$pageRoot}"><i class="fa fa-angle-left"></i> Všechny stránky</a></li>
+<li class="breadcrumb-menu d-md-down-none">
+    <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
 
-    {if $page->pages_types_id == 3}
-        <li role="presentation" {if $view == 'detail' && $name == 'Admin:Events'}class="active"{/if}>
-            <a href="/admin/events/detail/{$id}">
-                <i class="fa fa-calendar fa-fw"></i> {_dictionary.main.Event}
-            </a>
-        </li>
-    {/if}
-
-    {if $page->pages_types_id == 4}
-        <li role="presentation" {if $view == 'product' && $name == 'Admin:Product'}class="active"{/if}>
-            <a href="/admin/product/product/{$id}">Produkt</a>
-        </li>
-        <li role="presentation" {if $view == 'params' && $name == 'Admin:Product'}class="active"{/if}>
-            <a href="/admin/product/params/{$id}">{_dictionary.main.Parametres}</a>
-        </li>
-        <li role="presentation" {if $view == 'stock' && $name == 'Admin:Product'}class="active"{/if}>
-            <a href="/admin/product/stock/{$id}">{_dictionary.main.stock|firstUpper}</a>
-        </li>
-    {/if}
-
-    {if $page->pages_types_id == 5}
-        <li role="presentation" {if $view == 'detail' && $name == 'Admin:Contacts'}class="active"{/if}>
-            <a href="/admin/contacts/detail/{$id}">Kontakt</a>
-        </li>
-        <li role="presentation" {if $view == 'detailCommunications'}class="active"{/if}>
-            <a href="/admin/contacts/detail-communications/{$id}">Komunikace</a>
-        </li>
-        <li role="presentation" {if $view == 'detailOpeningHours'}class="active"{/if}>
-            <a href="/admin/contacts/detail-opening-hours/{$id}">{_dictionary.main.OpeningHours}</a>
-        </li>
-        {if $user}
-            <li role="presentation">
-                <a href="/admin/members/edit/{$id}">{_dictionary.main.Member}</a>
-            </li>
+        {if $page->pages_types_id == 3}
+            {if $view != 'detail' && $name != 'Admin:Events'}
+                <a href="/admin/events/detail/{$id}" class="btn btn-secondary">
+                    <i class="fa fa-calendar fa-fw"></i> {_dictionary.main.Event}
+                </a>
+            {/if}
         {/if}
-    {/if}
 
+        {if $page->pages_types_id == 4}
+            {if $view != 'product' && $name != 'Admin:Product'}
+                <a href="/admin/product/product/{$id}" class="btn btn-secondary">Produkt</a>
+            {/if}>
 
-    <li role="presentation" {if $view == 'detail' && $name == 'Admin:Pages'}class="active"{/if}>
-        <a href="/admin/pages/detail/{$id}">{_dictionary.main.Page}</a>
-    </li>
-    <li role="presentation" {if $view == 'snippets'}class="active"{/if}>
-        <a href="/admin/pages/snippets/{$id}">{_dictionary.main.Snippets}</a>
-    </li>
-    <li role="presentation" {if $view == 'detailImages'}class="active"{/if}>
-        <a href="/admin/pages/detail-images/{$id}">{_dictionary.main.Images}</a>
-    </li>
-    <li role="presentation" {if $view == 'detailFiles'}class="active"{/if}>
-        <a href="/admin/pages/detail-files/{$id}">{_dictionary.main.Files}</a>
-    </li>
-    <li role="presentation" {if $view == 'detailRelated'}class="active"{/if}>
-        <a href="/admin/pages/detail-related/{$id}">Související příspěvky</a>
-    </li>
-    <li class="pull-right">
-        <a href="/{$page->slug}" class="btn btn-primary" target="_blank">{_dictionary.main.Preview}</a>
-    </li>
-</ul>
-<br>
+            {if $view != 'params' && $name != 'Admin:Product'}
+                <a href="/admin/product/params/{$id}" class="btn btn-secondary">{_dictionary.main.Parametres}</a>
+            {/if}>
+            {if $view != 'stock' && $name != 'Admin:Product'}
+                <a href="/admin/product/stock/{$id}" class="btn btn-secondary">{_dictionary.main.stock|firstUpper}</a>
+            {/if}>
+        {/if}
+
+        {if $page->pages_types_id == 5}
+            {if $view != 'detail' && $name != 'Admin:Contacts'}
+                <a href="/admin/contacts/detail/{$id}" class="btn btn-secondary">Kontakt</a>
+            {/if}
+            {if $view != 'detailCommunications'}
+                <a href="/admin/contacts/detail-communications/{$id}" class="btn btn-secondary">Komunikace</a>
+            {/if}
+            {if $view != 'detailOpeningHours'}
+                <a href="/admin/contacts/detail-opening-hours/{$id}" class="btn btn-secondary">{_dictionary.main.OpeningHours}</a>
+            {/if}
+            {if $user}
+                <a href="/admin/members/edit/{$id}" class="btn btn-secondary">{_dictionary.main.Member}</a>
+            {/if}
+        {/if}
+
+        {if $view != 'detail' && $name != 'Admin:Pages'}
+            <a href="/admin/pages/detail/{$id}" class="btn btn-secondary">{_dictionary.main.Page}</a>
+        {/if}
+        {if $view != 'snippets'}
+            <a href="/admin/pages/snippets/{$id}" class="btn btn-secondary">{_dictionary.main.Snippets}</a>
+        {/if}
+        {if $view != 'detailImages'}
+            <a href="/admin/pages/detail-images/{$id}" class="btn btn-secondary">{_dictionary.main.Images}</a>
+        {/if}
+        {if $view != 'detailFiles'}
+            <a href="/admin/pages/detail-files/{$id}" class="btn btn-secondary">{_dictionary.main.Files}</a>
+        {/if}
+        {if $view != 'detailRelated'}
+            <a href="/admin/pages/detail-related/{$id}" class="btn btn-secondary">Související příspěvky</a>
+        {/if}
+
+        <a href="/{$page->slug}" class="btn btn-secondary" target="_blank">{_dictionary.main.Preview}</a>
+    </div>
+</li>

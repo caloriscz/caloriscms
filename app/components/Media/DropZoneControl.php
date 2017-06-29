@@ -5,7 +5,6 @@ namespace Caloriscz\Media;
 use App\Model\File;
 use App\Model\Thumbnail;
 use Nette\Application\UI\Control;
-use Tracy\Debugger;
 
 class DropZoneControl extends Control
 {
@@ -27,7 +26,7 @@ class DropZoneControl extends Control
         $form->setTranslator($this->presenter->translator);
         $form->getElementPrototype()->class = "form-horizontal";
         $form->getElementPrototype()->role = 'form';
-        $form->getElementPrototype()->autocomplete = 'off';
+
         $form->getElementPrototype()->class = "form-horizontal dropzone";
         $form->addHidden("pages_id");
         $form->addUpload("file_upload")
@@ -36,7 +35,7 @@ class DropZoneControl extends Control
             "pages_id" => $this->presenter->getParameter('id'),
         ));
 
-        $form->onSuccess[] = $this->dropUploadFormSucceeded;
+        $form->onSuccess[] = [$this, 'dropUploadFormSucceeded'];
         return $form;
     }
 
@@ -93,7 +92,8 @@ class DropZoneControl extends Control
             "pages_id" => $this->presenter->getParameter('id'),
         ));
 
-        $form->onSuccess[] = $this->dropFileUploadFormSucceeded;
+        $form->onSuccess[] = [$this, "dropFileUploadFormSucceeded"];
+
         return $form;
     }
 

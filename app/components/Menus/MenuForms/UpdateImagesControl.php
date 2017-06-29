@@ -32,7 +32,7 @@ class UpdateImagesControl extends Control
 
         $form->addSubmit('submitm', 'dictionary.main.Save');
 
-        $form->onSuccess[] = $this->updateImagesFormSucceeded;
+        $form->onSuccess[] = [$this, 'updateImagesFormSucceeded'];
         return $form;
     }
 

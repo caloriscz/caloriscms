@@ -2,108 +2,98 @@
     {var $admin = true}
 {/if}
 
-<li>
-    <a href="/admin">
-        <i class="fa fa-home fa-fw"></i> {_admin.navigation.homepage}
-    </a>
+<li class="nav-item">
+    <a class="nav-link" href="/"><i class="icon-speedometer"></i> {_admin.navigation.homepage}</a>
 </li>
-<li>
-    <a href="/admin/menu">
-        <i class="fa fa-sort-amount-desc fa-fw"></i> Menu
-    </a>
+<li class="nav-item" class="nav-item">
+    <a class="nav-link" href="/admin/menu"><i class="icon-menu"></i> Menu</a>
 </li>
-<li>
-    <a href="/admin/pages?type=1">
+<li class="nav-item">
+    <a class="nav-link" href="/admin/pages?type=1">
         <i class="fa fa-files-o fa-fw"></i> {_admin.navigation.pages}
     </a>
 </li>
-<li>
-    <a href="/admin/pages?type=9">
+<li class="nav-item">
+    <a class="nav-link" href="/admin/pages?type=9">
         <i class="fa fa-leaf fa-fw"></i> Šablony
     </a>
 </li>
-<li>
-    <a href="/admin/pages?type=2">
+<li class="nav-item">
+    <a class="nav-link" href="/admin/pages?type=2">
         <i class="fa fa-newspaper-o fa-fw"></i> {_dictionary.main.blog|firstUpper}
     </a>
 </li>
-<li>
-    <a href="/admin/events">
+<li class="nav-item">
+    <a class="nav-link" href="/admin/events">
         <i class="fa fa-calendar fa-fw"></i> {_dictionary.main.Events}
     </a>
 </li>
-<li>
-    <a href="/admin/contacts">
+<li class="nav-item">
+    <a class="nav-link" href="/admin/contacts">
         <i class="fa fa-database fa-fw"></i> {_dictionary.main.contacts|firstUpper}
     </a>
 </li>
-<li>
-    <a href="/admin/media?type=6">
+<li class="nav-item">
+    <a class="nav-link" href="/admin/media?type=6">
         <i class="fa fa-file-archive-o fa-fw"></i> {_dictionary.main.Galleries}
     </a>
 </li>
-<li>
-    <a href="/admin/media?type=8">
+<li class="nav-item">
+    <a class="nav-link" href="/admin/media?type=8">
         <i class="fa fa-file-image-o fa-fw"></i> {_dictionary.main.Documents}
     </a>
 </li>
 {if $database->table('addons')->where('key AND active = 1', 'caloriscms-pricelist')->count() > 0}
-    <li>
-        <a href="/admin/pricelist">
+    <li class="nav-item">
+        <a class="nav-link" href="/admin/pricelist">
             <i class="fa fa-list-ol fa-fw"></i> {_dictionary.main.Pricelist}
         </a>
     </li>
 {/if}
-<li>
-    <a href="/admin/members">
+<li class="nav-item">
+    <a class="nav-link" href="/admin/members">
         <i class="fa fa-users fa-fw"></i> {_admin.navigation.members}
     </a>
 </li>
 {if $database->table('addons')->where('key = ? AND active = 1', 'caloriscms-links')->count() > 0}
-    <li>
-        <a href="/admin/links">
+    <li class="nav-item">
+        <a class="nav-link" href="/admin/links">
             <i class="fa fa-link fa-fw"></i> {_dictionary.main.Links}
         </a>
     </li>
 {/if}
 {if $database->table('addons')->where('key AND active = 1', 'caloriscms-board')->count() > 0}
-    <li>
-        <a href="/admin/links">
+    <li class="nav-item">
+        <a class="nav-link" href="/admin/links">
             <i class="fa fa-smile-o fa-fw"></i> Board
         </a>
     </li>
 {/if}
-<li>
-    <a href="/admin/helpdesk">
+<li class="nav-item">
+    <a class="nav-link" href="/admin/helpdesk">
         <i class="fa fa-life-ring fa-fw"></i> {_dictionary.main.Helpdesk}
     </a>
 </li>
 {if $admin}
-    <li>
-        <a href="/admin/settings">
+    <li class="nav-item">
+        <a class="nav-link" href="/admin/settings">
             <i class="fa fa-gear fa-fw"></i> {_dictionary.main.settings|firstUpper}
         </a>
     </li>
 {/if}
-<li>
-    <a href="#">
-        <i class="fa fa-pencil fa-fw"></i> {_dictionary.main.Appearance}
+<li class="nav-item">
+<li class="nav-item">
+    <a class="nav-link" href="/admin/files">
+        <i class="fa fa-image fa-fw"></i> {_dictionary.main.PageGraphics}
     </a>
-    <ul class="nav nav-second-level collapse" aria-expanded="false">
-        <li>
-            <a href="/admin/files">
-                <i class="fa fa-image fa-fw"></i> {_dictionary.main.PageGraphics}
-            </a>
-        </li>
-        <li>
-            <a href="/admin/appearance">
-                <i class="fa fa-image fa-fw"></i> Cesty k obrázkům
-            </a>
-        </li>
-        <li>
-            <a href="/admin/appearance/carousel">
-                <i class="fa fa-image fa-fw"></i> Carousel
-            </a>
-        </li>
-    </ul>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="/admin/appearance">
+        <i class="fa fa-image fa-fw"></i> Cesty k obrázkům
+    </a>
+</li>
+<li class="nav-item">
+    <a class="nav-link" href="/admin/appearance/carousel">
+        <i class="fa fa-image fa-fw"></i> Carousel
+    </a>
 </li>

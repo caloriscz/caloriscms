@@ -20,7 +20,10 @@ class MainMenuControl extends Control
     {
         $template = $this->template;
 
-        $template->member = $this->presenter->template->member;
+        if (isset($this->presenter->template->member)) {
+            $template->member = $this->presenter->template->member;
+        }
+
         $template->settings = $this->presenter->template->settings;
         $template->database = $this->database;
 
