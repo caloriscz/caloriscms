@@ -29,6 +29,7 @@ class InsertMemberControl extends Control
         $form->getElementPrototype()->role = 'form';
         $form->getElementPrototype()->autocomplete = 'off';
         $form->addText("username", "dictionary.main.Member")
+            ->setRequired(false)
             ->addRule(\Nette\Forms\Form::MIN_LENGTH, 'Uživatelské jméno musí mít aspoň %d znaků', 3);
         $form->addText("email", "dictionary.main.Email");
 
@@ -40,8 +41,8 @@ class InsertMemberControl extends Control
             ->setValue(1);
 
         $form->addSubmit('submitm', 'dictionary.main.Create')->setAttribute("class", "btn btn-success");
-        $form->onSuccess[] = $this->insertFormSucceeded;
-        $form->onValidate[] = $this->insertFormValidated;
+        $form->onSuccess[] = [$this, 'insertFormSucceeded'];
+        $form->onValidate[] = [$this, 'insertFormValidated'];
 
         return $form;
     }

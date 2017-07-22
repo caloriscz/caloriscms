@@ -26,7 +26,7 @@ class DropUploadControl extends Control
         $form->addUpload("file_upload")
             ->setHtmlId('file_upload');
 
-        $form->onSuccess[] = $this->dropUploadFormSucceeded;
+        $form->onSuccess[] = [$this, "dropUploadFormSucceeded"];
         return $form;
     }
 
