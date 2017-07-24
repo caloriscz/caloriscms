@@ -37,7 +37,7 @@ class InsertAddressControl extends Control
         ));
 
         $form->addSubmit('submitm', 'dictionary.main.Save');
-        $form->onSuccess[] = $this->insertFormSucceeded;
+        $form->onSuccess[] = [$this, "insertFormSucceeded"];
 
         return $form;
     }

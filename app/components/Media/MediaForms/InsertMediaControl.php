@@ -43,7 +43,7 @@ class InsertMediaControl extends Control
 
         $form->addSubmit('submitm', 'dictionary.main.Insert');
 
-        $form->onSuccess[] = $this->insertFormSucceeded;
+        $form->onSuccess[] = [$this, "insertFormSucceeded"];
         return $form;
     }
 

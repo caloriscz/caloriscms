@@ -45,8 +45,8 @@ class SignEventControl extends Control
         $form->addSubmit("submitm", "dictionary.main.Insert")
             ->setAttribute("class", "btn btn-success");
 
-        $form->onValidate[] = $this->signFormValidated;
-        $form->onSuccess[] = $this->signFormSucceeded;
+        $form->onValidate[] = [$this, "signFormValidated"];
+        $form->onSuccess[] = [$this, "signFormSucceeded"];
         return $form;
     }
 

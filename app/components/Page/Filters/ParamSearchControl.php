@@ -50,7 +50,7 @@ class ParamSearchControl extends Control
             ->setAttribute("class", "btn btn-info btn-lg");
 
 
-        $form->onSuccess[] = $this->searchFormSucceeded;
+        $form->onSuccess[] = [$this, "searchFormSucceeded"];
         return $form;
     }
 

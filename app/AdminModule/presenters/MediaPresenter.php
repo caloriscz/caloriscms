@@ -85,9 +85,9 @@ class MediaPresenter extends BasePresenter
     function handleToggle()
     {
         if ($this->getParameter('mediatype') == 'image') {
-            $this->context->httpResponse->setCookie('mediatype', 'image', '180 days');
+            $this->response->setCookie('mediatype', 'image', '180 days');
         } else {
-            $this->context->httpResponse->setCookie('mediatype', 'list', '180 days');
+            $this->response->setCookie('mediatype', 'list', '180 days');
         }
 
 
@@ -174,7 +174,7 @@ class MediaPresenter extends BasePresenter
             $this->template->breadcrumbs = $category->getPageBreadcrumb($this->getParameter("id"));
         }
 
-        $this->template->mediatype = $this->context->httpRequest->getCookie('mediatype');
+        $this->template->mediatype = $this->request->getCookie('mediatype');
     }
 
     public function renderImage()

@@ -30,13 +30,13 @@ class LanguageSelectorForAdminControl extends Control
         $form->addSubmit('submitm', 'dictionary.main.Change')
             ->setAttribute("class", "btn btn-success");
 
-        $form->onSuccess[] = $this->changeFormSucceeded;
+        $form->onSuccess[] = [$this, "changeFormSucceeded"];
         return $form;
     }
 
     function changeFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
     {
-        $this->presenter->context->httpResponse->setCookie('language_admin', $form->values->language, '180 days');
+        $this->presenter->response->setCookie('language_admin', $form->values->language, '180 days');
 
         $this->presenter->redirect(this);
     }

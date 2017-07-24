@@ -36,7 +36,7 @@ class SendLoginControl extends Control
         ));
 
         $form->addSubmit('submitm', 'Zaslat uživateli')->setAttribute("class", "btn btn-success");
-        $form->onSuccess[] = $this->sendLoginFormSucceeded;
+        $form->onSuccess[] = [$this, "sendLoginFormSucceeded"];
 
         return $form;
     }

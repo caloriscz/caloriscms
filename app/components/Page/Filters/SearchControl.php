@@ -46,7 +46,7 @@ class SearchControl extends Control
             ->setAttribute("placeholder", "dictionary.main.Search");
 
 
-        $form->onSuccess[] = $this->searchTopFormSucceeded;
+        $form->onSuccess[] = [$this, "searchTopFormSucceeded"];
         return $form;
     }
 

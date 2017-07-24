@@ -30,7 +30,7 @@ class FilterFormControl extends Control
             "id" => $this->getParameter("id"),
         ));
 
-        $form->onSuccess[] = $this->filterFormSucceeded;
+        $form->onSuccess[] = [$this, "filterFormSucceeded"];
         return $form;
     }
 

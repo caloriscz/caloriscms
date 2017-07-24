@@ -104,8 +104,8 @@ class EditContactControl extends Control
         $form->addSubmit("submitm", "dictionary.main.Save")
             ->setAttribute("class", "btn btn-success");
 
-        $form->onSuccess[] = $this->editFormSucceeded;
-        $form->onValidate[] = $this->editFormValidated;
+        $form->onSuccess[] = [$this, "editFormSucceeded"];
+        $form->onValidate[] = [$this, "editFormValidated"];
         return $form;
     }
 

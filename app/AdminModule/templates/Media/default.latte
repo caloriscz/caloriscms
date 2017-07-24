@@ -37,7 +37,9 @@
 </div>
 
 <div class="row">
+    {if null !== $presenter->getParameter('id')}
     {control dropZone}
+    {/if}
 
     <div class="container">
         <div class="btn-group pull-right" role="group">

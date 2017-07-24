@@ -29,8 +29,8 @@ class InsertCurrencyControl extends Control
         $form->addSubmit('send', 'dictionary.main.Save')
             ->setAttribute("class", "btn btn-success");
 
-        $form->onSuccess[] = $this->insertFormSucceeded;
-        $form->onValidate[] = $this->permissionValidated;
+        $form->onSuccess[] = [$this, "insertFormSucceeded"];
+        $form->onValidate[] = [$this, "permissionValidated"];
         return $form;
     }
 

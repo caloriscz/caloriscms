@@ -47,7 +47,7 @@ class EditCarouselControl extends Control
 
         $form->setDefaults(array_filter($arr));
 
-        $form->onSuccess[] = $this->editFormSucceeded;
+        $form->onSuccess[] = [$this, "editFormSucceeded"];
         return $form;
     }
 

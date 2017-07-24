@@ -33,7 +33,7 @@ class SendTestMailControl extends Control
             "id" => $this->presenter->getParameter("id"),
         ));
 
-        $form->onSuccess[] = $this->sendFormSucceeded;
+        $form->onSuccess[] = [$this, "sendFormSucceeded"];
         return $form;
     }
 

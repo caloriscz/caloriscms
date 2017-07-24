@@ -29,12 +29,12 @@ class ContactCategoriesControl extends Control
         $form->addHidden("parent_id");
         $form->addHidden("type");
         $form->addText('title', 'dictionary.main.title')
-                ->setAttribute("class", "form-control");
+            ->setAttribute("class", "form-control");
         $form->addSubmit('submitm', 'dictionary.main.insert')
-                ->setAttribute("class", "btn btn-primary");
+            ->setAttribute("class", "btn btn-primary");
 
-        $form->onSuccess[] = $this->insertCategoryFormSucceeded;
-        $form->onValidate[] = $this->validateCategoryFormSucceeded;
+        $form->onSuccess[] = [$this, "insertCategoryFormSucceeded"];
+        $form->onValidate[] = [$this, "validateCategoryFormSucceeded"];
         return $form;
     }
 
@@ -74,11 +74,11 @@ class ContactCategoriesControl extends Control
     }
 
     /**
-     * 
+     *
      * @param type $id
      * @param type $type Specifies type of category: store, media, blog, menu etc. Some categories have special needs
      */
-    public function render($id, $type = null)
+    public function render($id = null, $type = null)
     {
         $template = $this->template;
         $template->type = $type;
@@ -91,7 +91,13 @@ class ContactCategoriesControl extends Control
 
         $template->id = $id;
         $template->idActive = $this->presenter->getParameter("id");
-        $template->menu = $this->database->table('contacts_categories')->where('parent_id', $id);
+
+        if ($id == null) {
+            $template->menu = $this->database->table('contacts_categories');
+        } else {
+            $template->menu = $this->database->table('contacts_categories')->where('parent_id', $id);
+        }
+
         $template->render();
     }
 

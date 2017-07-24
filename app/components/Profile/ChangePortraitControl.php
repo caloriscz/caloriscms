@@ -25,7 +25,8 @@ class ChangePortraitControl extends Control
         $form->getElementPrototype()->autocomplete = 'off';
         $form->addUpload("the_file", "Vyberte obrázek (nepovinné)");
         $form->addSubmit('submitm', 'dictionary.main.Insert');
-        $form->onSuccess[] = $this->changePortraitFormSucceeded;
+
+        $form->onSuccess[] = [$this, "changePortraitFormSucceeded"];
 
         return $form;
     }

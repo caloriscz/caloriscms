@@ -33,8 +33,8 @@ class AdminCategoryPanelControl extends Control
         $form->addSubmit('submitm', 'dictionary.main.insert')
             ->setAttribute("class", "btn btn-primary");
 
-        $form->onSuccess[] = $this->insertCategoryFormSucceeded;
-        $form->onValidate[] = $this->validateCategoryFormSucceeded;
+        $form->onSuccess[] = [$this, "insertCategoryFormSucceeded"];
+        $form->onValidate[] = [$this, "validateCategoryFormSucceeded"];
         return $form;
     }
 

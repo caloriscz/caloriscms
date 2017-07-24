@@ -69,7 +69,7 @@ class SortingFormControl extends Control
             "user" => $this->presenter->getParameter("user"),
         ));
 
-        $form->onSuccess[] = $this->sortingFormSucceeded;
+        $form->onSuccess[] = [$this, "sortingFormSucceeded"];
         return $form;
     }
 

@@ -40,7 +40,7 @@ class EditControl extends Control
         ));
 
         $form->addSubmit("submit", "dictionary.main.Save");
-        $form->onSuccess[] = $this->editFormSucceeded;
+        $form->onSuccess[] = [$this, "editFormSucceeded"];
         return $form;
     }
 

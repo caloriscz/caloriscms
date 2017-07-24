@@ -40,7 +40,7 @@ class EditFileControl extends Control
 
         $form->addSubmit('send', 'dictionary.main.Save');
 
-        $form->onSuccess[] = $this->editFormSucceeded;
+        $form->onSuccess[] = [$this, "editFormSucceeded"];
         return $form;
     }
 

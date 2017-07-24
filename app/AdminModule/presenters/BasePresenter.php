@@ -27,9 +27,12 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
 
     /** @var \Nette\Mail\IMailer @inject */
     public $mailer;
-	
+
     /** @var Nette\Http\IRequest @inject */
     public $request;
+
+    /** @var Nette\Http\IResponse @inject */
+    public $response;
 
     public function __construct(\Nette\Database\Context $database, \Nette\Mail\IMailer $mailer)
     {
@@ -128,7 +131,7 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
         $control = new \Caloriscz\Page\Editor\EditorControl($this->database);
         return $control;
     }
-	
+
     protected function createComponentEditorSettings()
     {
         $control = new \Caloriscz\Page\Editor\EditorSettingsControl($this->database);
@@ -158,7 +161,6 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
         $control = new \Caloriscz\Menus\Admin\MainMenuControl($this->database);
         return $control;
     }
-
 
 
     protected function createComponentPageTopMenu()

@@ -1,10 +1,10 @@
-{var $template = $presenter->getView()}
+{var $templater = $presenter->getView()}
 {if $paginator->getPageCount() > 1}
     <div class="row">
         <ul class="pagination">
             {if $paginator->getPage() > 1}
                 <li class="prev-page">
-                    <a href="{plink $template, (expand) $args, 'page' => 1}" data-paging="1">
+                    <a href="{plink $templater, (expand) $args, 'page' => 1}" data-paging="1">
                         <i class="fa fa-angle-double-left"></i>
                     </a>
                 </li>
@@ -12,7 +12,7 @@
             {var $interval = 10}
             {if ($paginator->getPage()- $interval) >= 1}
                 <li class="next-page">
-                    <a href="{plink $template, (expand) $args, 'page' => ($paginator->getPage()-10)}" data-paging="{$paginator->getPage()-10}">
+                    <a href="{plink $templater, (expand) $args, 'page' => ($paginator->getPage()-10)}" data-paging="{$paginator->getPage()-10}">
                         <i class="fa fa-angle-left"></i>
                     </a>
                 </li>
@@ -41,13 +41,13 @@
                     {else}
                     <li>                                    
                     {/if}
-                    <a href="{plink $template, (expand) $args, 'page' => $i+1}" data-paging="{$i+1}">{$i+1}</a>
+                    <a href="{plink $templater, (expand) $args, 'page' => $i+1}" data-paging="{$i+1}">{$i+1}</a>
                 </li>
             {/for}
 
             {if ($paginator->getPageCount() - $paginator->getPage()) >= $interval}
                 <li class="next-page">
-                    <a href="{plink $template, (expand) $args, 'page' => $paginator->getPage()+$interval}" data-paging="{$paginator->getPage()+$interval}"  title="+ {$iterator} stránek">
+                    <a href="{plink $templater, (expand) $args, 'page' => $paginator->getPage()+$interval}" data-paging="{$paginator->getPage()+$interval}"  title="+ {$iterator} stránek">
                         <i class="fa fa-angle-right"></i>
                     </a>
                 </li>
@@ -55,7 +55,7 @@
 
             {if $paginator->getPage() < $paginator->getPageCount()}
                 <li class="next-page">
-                    <a href="{plink $template, (expand) $args, 'page' => $paginator->lastPage}" data-paging="{$paginator->last}">
+                    <a href="{plink $templater, (expand) $args, 'page' => $paginator->lastPage}" data-paging="{$paginator->last}">
                         <i class="fa fa-angle-double-right"></i>
                     </a>
                 </li>

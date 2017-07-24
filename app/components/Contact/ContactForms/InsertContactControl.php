@@ -36,7 +36,7 @@ class InsertContactControl extends Control
         $form->addSubmit("submitm", "dictionary.main.CreateNewContact")
             ->setAttribute("class", "btn btn-success");
 
-        $form->onSuccess[] = $this->insertFormSucceeded;
+        $form->onSuccess[] = [$this, "insertFormSucceeded"];
         return $form;
     }
 
