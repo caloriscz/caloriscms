@@ -1,21 +1,39 @@
 {block #titles}Vytvoření nového hesla{/block}
 {block content}
 
-<section class="container">
-    {foreach $flashes as $flash}
-        <div class="flash {$flash->type}">{$flash->message}</div>
-    {/foreach}
+<div class="app flex-row align-items-center">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                {foreach $flashes as $flash}
+                    <br/>
+                    <div class="flash {$flash->type} text-center">{$flash->message}</div>
+                    <br/>
+                {/foreach}
 
-    <div class="col-md-9">
-        <h1>Vytvoření nového hesla</h1>
-        {if $activationValid}
-            <p>Hesla rozeznávají malá a velká písmena a mohou obsahovat písmena a číslice od 6 až 40 znaků</p>
-            <br /><br />
-        {control resetPass}
-        {else}
-            Aktivace není platná nebo je prošlá.<br />
-            Zkuste to znovu.
-        {/if}
-        <br /><br />
+                <div class="card-group mb-0">
+                    <div class="card p-2">
+                        <div class="card-block">
+                            <h1 n:block="title">Vytvoření nového hesla</h1>
+
+                            <p class="text-muted">>Hesla rozeznávají malá a velká písmena a mohou obsahovat písmena a
+                                číslice od 6 až 40 znaků</p>
+
+                            {if $activationValid}
+                                <p>Hesla rozeznávají malá a velká písmena a mohou obsahovat písmena a číslice od 6 až 40
+                                    znaků</p>
+                                <br/><br/>
+                            {control resetPass}
+                            {else}
+                                Aktivace není platná nebo je prošlá.<br/>
+                                Zkuste to znovu.
+                            {/if}
+
+                            {control lostPass, 'admin'}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-</section>
+</div>

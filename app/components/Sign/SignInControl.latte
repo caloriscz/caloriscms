@@ -1,32 +1,26 @@
 <form n:name="signInForm" class="form-horizontal" role="form" autocomplete="off">
     <input n:name="type" value="{$type}">
-    <div class="form-group required">
-        <label class="col-sm-3 control-label">
-            <label class="required">Uživatel</label>
-        </label>
-        <div class="col-sm-8">
-            <input type="text" n:name="username" class="form-control">
+
+    <div class="input-group mb-3">
+       <span class="input-group-addon">
+           <i class="icon-user"></i>
+       </span>
+        <input type="text" n:name="username" class="form-control">
+    </div>
+    <div class="input-group mb-4">
+        <span class="input-group-addon">
+            <i class="icon-lock"></i>
+        </span>
+        <input type="password" n:name="password" class="form-control">
+    </div>
+    <div class="row">
+        <div class="col-6">
+            <input type="submit" class="btn btn-primary px-4" value="Login">
+        </div>
+        <div class="col-6 text-right">
+                <a href="/admin/sign/lost-pass" class="btn btn-link px-0">
+                    {_dictionary.main.ForgottenPassword}
+                </a>
         </div>
     </div>
-
-    <div class="form-group required">
-        <label class="col-sm-3 control-label">
-            <label class="required">Heslo</label>
-        </label>
-
-        <div class="col-sm-8">
-            <input type="password" n:name="password" class="form-control">
-        </div>
-    </div>
-
-    <div class="form-group">
-        <label class="col-sm-3 control-label"></label>
-
-        <div class="col-sm-8">
-            <input type="submit" n:name="send" class="btn btn-success btn btn-default" value="přihlásit">
-        </div>
-    </div>
-
-
-    <div><input type="hidden" name="do" value="signIn-signInForm-submit"></div>
 </form>

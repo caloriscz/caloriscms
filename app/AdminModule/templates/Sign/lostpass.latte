@@ -1,22 +1,29 @@
 {block #titles}{_dictionary.main.ForgottenPassword}{/block}
 {block content}
 
-<div class="panel-heading">
-    <h3 class="panel-title">{_dictionary.main.ForgottenPassword}</h3>
-</div>
-<div class="panel-body">
-    {foreach $flashes as $flash}
-        <br/>
-        <div class="flash {$flash->type}">{$flash->message}</div>
-        <br/>
-    {/foreach}
+<div class="app flex-row align-items-center">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                {foreach $flashes as $flash}
+                    <br/>
+                    <div class="flash {$flash->type} text-center">{$flash->message}</div>
+                    <br/>
+                {/foreach}
 
-    <h2 class="form-signin-heading text-center">
-        <img src="{$baseUri}/images/admin/logo_caloris.png" style="width: 180px; margin-bottom: 20px;" alt="logo"/></h2>
+                <div class="card-group mb-0">
+                    <div class="card p-2">
+                        <div class="card-block">
+                            <h1 n:block="title">{_dictionary.main.ForgottenPassword}</h1>
 
-    {control lostPass, 'admin'}
-    <br>
-    <div>
-        <a n:href=":Front:Sign:in" class="btn btn-default">{_dictionary.main.Login}</a>
+                            <p class="text-muted">Nechte si zaslat zapomenuté heslo</p>
+
+                            {control lostPass, 'admin'}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
+
