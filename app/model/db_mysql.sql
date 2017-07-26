@@ -303,6 +303,7 @@ INSERT INTO `pages` (`id`, `slug`, `title`, `document`, `preview`, `pages_id`, `
 (3, 'blog', 'Blog', '', NULL, NULL, 1, 1, '', '', NULL, NULL, 9, 2, 21, 0, 0, 1),
 (3, 'galerie', 'Galerie', '', NULL, NULL, 1, 1, '', '', NULL, NULL, 9, 2, 1, 0, 0, 1),
 (5, 'udalosti', 'Události', NULL, NULL, 1, NULL, 1, NULL, NULL, NULL, NULL, 9, 9, 23, 0, 0, 1),
+(6, 'dokumenty', 'Dokumenty', '', NULL, NULL, 1, 1, '', '', NULL, NULL, 9, 1, 13, 0, 0, 1),
 (8, 'profil', 'Profil', NULL, NULL, 1, NULL, 1, NULL, NULL, NULL, NULL, 9, 19, 25, 0, 0, 0),
 (9, 'profil-obrazek', 'Profil: Obrázek', NULL, '8', 1, NULL, 1, NULL, NULL, NULL, NULL, 9, 20, 27, 0, 0, 0),
 (10, 'profil-heslo', 'Profil: Změna hesla', NULL, '8', 1, NULL, 1, NULL, NULL, NULL, NULL, 9, 21, 29, 0, 0, 0),
