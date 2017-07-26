@@ -23,6 +23,21 @@
         <i class="fa fa-newspaper-o fa-fw"></i> {_dictionary.main.blog|firstUpper}
     </a>
 </li>
+<li class="nav-item nav-dropdown">
+    <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-picture"></i> Media</a>
+    <ul class="nav-dropdown-items">
+        <li class="nav-item">
+            <a class="nav-link" href="/admin/media/albums">
+                {_dictionary.main.Galleries}
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/admin/media">
+                {_dictionary.main.Documents}
+            </a>
+        </li>
+    </ul>
+</li>
 <li class="nav-item">
     <a class="nav-link" href="/admin/events">
         <i class="fa fa-calendar fa-fw"></i> {_dictionary.main.Events}
@@ -33,16 +48,7 @@
         <i class="fa fa-database fa-fw"></i> {_dictionary.main.contacts|firstUpper}
     </a>
 </li>
-<li class="nav-item">
-    <a class="nav-link" href="/admin/media?type=6">
-        <i class="fa fa-file-archive-o fa-fw"></i> {_dictionary.main.Galleries}
-    </a>
-</li>
-<li class="nav-item">
-    <a class="nav-link" href="/admin/media?type=8">
-        <i class="fa fa-file-image-o fa-fw"></i> {_dictionary.main.Documents}
-    </a>
-</li>
+
 {if $database->table('addons')->where('key AND active = 1', 'caloriscms-pricelist')->count() > 0}
     <li class="nav-item">
         <a class="nav-link" href="/admin/pricelist">
@@ -97,3 +103,4 @@
         <i class="fa fa-image fa-fw"></i> Carousel
     </a>
 </li>
+

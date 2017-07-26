@@ -140,21 +140,58 @@ class MediaPresenter extends BasePresenter
 
     public function renderDefault()
     {
-
         if ($this->getParameter("id")) {
-            $idN = $this->getParameter('id');
+            $arr = array(
+                'media.pages_id' => $this->getParameter('id'),
+                'file_type' => 0,
+            );
+
+            $this->template->idN = $this->getParameter('id');
         } else {
-            $idN = $idMedia;
+            $arr = array(
+                'file_type' => 0,
+            );
         }
 
-        $this->template->idN = $idN;
+        $mediaDb = $this->database->table("media")->where($arr)->order("name");
 
-        $mediaDb = $this->database->table("media")
-            ->where(array(
-                'media.pages_id' => $idN,
-                'pages.pages_types_id' => $this->template->pageId,
-            ))
-            ->order("name");
+        $paginator = new \Nette\Utils\Paginator;
+        $paginator->setItemCount($mediaDb->count("*"));
+        $paginator->setItemsPerPage(10);
+        $paginator->setPage($this->getParameter("page"));
+
+        $this->template->args = $this->getParameters();
+
+        $this->template->documents = $mediaDb;
+        $this->template->mediaType = $this->getParameter('cat');
+
+        $this->template->paginator = $paginator;
+        $this->template->productsArr = $mediaDb->limit($paginator->getLength(), $paginator->getOffset());
+
+        if ($this->getParameter("id")) {
+            $category = new Model\Category($this->database);
+            $this->template->breadcrumbs = $category->getPageBreadcrumb($this->getParameter("id"));
+        }
+
+        $this->template->mediatype = $this->request->getCookie('mediatype');
+    }
+
+    public function renderAlbums()
+    {
+        if ($this->getParameter("id")) {
+            $arr = array(
+                'media.pages_id' => $this->getParameter('id'),
+                'file_type' => 1,
+            );
+
+            $this->template->idN = $this->getParameter('id');
+        } else {
+            $arr = array(
+                'file_type' => 1,
+            );
+        }
+
+        $mediaDb = $this->database->table("media")->where($arr)->order("name");
 
         $paginator = new \Nette\Utils\Paginator;
         $paginator->setItemCount($mediaDb->count("*"));

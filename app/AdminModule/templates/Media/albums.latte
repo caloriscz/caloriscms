@@ -5,7 +5,7 @@
     <li class="breadcrumb-item">Home</li>
     <li class="breadcrumb-item"><a href="/admin/">Admin</a></li>
     <li class="breadcrumb-item">{_dictionary.main.Media}</li>
-    <li class="breadcrumb-item active"><a href="/admin/media">Dokumenty</a></li>
+    <li class="breadcrumb-item active"><a href="/admin/media/albums">Galerie</a></li>
     {if count($breadcrumbs) > 0}
         {foreach $breadcrumbs as $crumbId => $crumbValue}
             <li class="breadcrumb-item active">
@@ -14,6 +14,7 @@
         {/foreach}
     {/if}
 </ol>
+
 
 <div class="container-fluid">
     <div class="animated fadeIn">
@@ -26,10 +27,10 @@
                     <div class="card-block">
                         <p>
                             <a href="" type="button" data-toggle="modal" data-target="#myModal">
-                                <span style="font-weight: bold; font-size: 1.25em;">+Přidat nové složku</span></a>
+                                <span style="font-weight: bold; font-size: 1.25em;">+Přidat nové album</span></a>
                         </p>
 
-                        {control pageThumb, 8, $presenter->getParameter('id')}
+                        {control pageThumb, 6, $presenter->getParameter('id')}
                     </div>
                 </div>
             </div>
@@ -44,35 +45,36 @@
                             {control dropZone, $presenter->getParameter('id')}
                         {/if}
 
-                        <div class="table-responsive">
-                            <table class="table">
-                                {foreach $documents as $item}
-                                    <tr>
-                                        <td>
+                        <br>
 
-                                            <a href="{$baseUri}/media/{$idN}/{$item->name}">{$item->name}</a>
-                                            {if file_exists($appDir.'/media/'.$idN.'/tn/'.$item->name)}
-                                                (<a href="{$baseUri}/media/{$idN}/tn/{$item->name}">náhled</a>)
-                                            {/if}
-                                        </td>
-                                        <td class="w-25">
-                                            <a n:href="delete!, id => $item->id, type => $pageId"
-                                                    onclick="return confirm('Opravdu smazat?')">
-                                                <i class="fa fa-times font-red"></i>
-                                            </a>
-                                            <a n:href=":Admin:Media:image id => $item->id, type => $pageId"
-                                                    class="btn btn-default btn-xs"
-                                                    role="button">{_dictionary.main.Edit}</a>
-                                        </td>
-                                    </tr>
-                                    {var $id = $item->id}
-                                {/foreach}
-                            </table>
-                        </div>
+                        <div class="row">
+                        {foreach $documents as $item}
+                            <div class="col-lg-3">
+                                <div class="card">
+                                    <div class="card-img text-center" style="max-height: 150px;">
+                                        <a href="{$baseUri}/media/{$idN}/{$item->name}" class="gallery-lightbox">
+                                            <img src="{$baseUri}/media/{$idN}/{$item->name}" alt="{$item->name}"
+                                                 class="img-responsive-centered" style="max-height: 150px;">
+                                        </a>
+                                    </div>
+                                    <div class="card-block">
+                                        <small>{$item->name}</small>
+                                        <a n:href="delete!, id => $item->id, type => $pageId"
+                                                onclick="return confirm('Opravdu smazat?')">
+                                            <i class="fa fa-times font-red"></i>
+                                        </a>
+                                        <p class="card-text"><a n:href=":Admin:Media:image id => $item->id"
+                                                class="btn btn-default btn-xs"
+                                                role="button">{_dictionary.main.Edit}</a></p>
+                                    </div>
+                                </div>
+                            </div>
+                        {/foreach}
+                    </div>
+                    </div>
 
-                        <div class="text-center">
-                            {control paging, $args, $paginator}
-                        </div>
+                    <div class="text-center">
+                        {control paging, $args, $paginator}
                     </div>
                 </div>
             </div>
@@ -96,4 +98,3 @@
         </div>
     </div>
 </div>
-
