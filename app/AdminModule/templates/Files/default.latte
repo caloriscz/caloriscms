@@ -1,35 +1,54 @@
-{block #titles}Grafika na stránce{/block}
+{block #titles}Seznam souborů{/block}
 {block content}
 
 {foreach $flashes as $flash}
     <div class="flash {$flash->type}">{$flash->message}</div>
 {/foreach}
 
-<h1>Grafika na stránce</h1>
 
-{control dropUploadFiles}
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="/admin">Home</a></li>
+    <li class="breadcrumb-item">Vzhled</li>
+    <li class="breadcrumb-item active">Seznam souborů</li>
+</ol>
 
-<h2>Seznam souborů</h2>
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-block">
+            <div class="col-lg-9">
+                {control dropUploadFiles}
+                <br><br>
 
-<table class="table table-striped table-responsive">
-    <tr>
-        <th class="col-xs-1"></th>
-        <th>Náhled</th>
-        <th>{_dictionary.main.Title}</th>
-        <th>Velikost (v KB)</th>
-    </tr>
-    {foreach $files as $key => $file}
-        <tr>
-            <td><a n:href="delete!, path => basename($key)"><i class="fa fa-close font-red"></i></a></td>
-            <td>
-                {if exif_imagetype($key)}
-                    <a href="/images/{$key|toBaseName}">
-                        <img src="/images/{$key|toBaseName}" style="max-width: 80px;" >
-                    </a>
-                {/if}
-            </td>
-            <td>{$key|toBaseName}</td>
-            <td></td>
-        </tr>
-    {/foreach}
-</table>
+
+                <div class="row">
+                    {foreach $files as $key => $file}
+                        <div class="col-lg-3">
+                            <div class="card">
+                                <div class="card-img text-center" style="max-height: 280px;">
+                                    <a href="{$baseUri}/media/{$idN}/{$item->name}" class="gallery-lightbox">
+                                        {if exif_imagetype($key)}
+                                            <a href="/images/{$key|toBaseName}">
+                                                <img src="/images/{$key|toBaseName}"
+                                                     style="max-width: 275px; max-height: 140px;">
+                                            </a>
+                                        {else}
+                                            <a href="/images/{$key|toBaseName}">
+                                                <i class="fa fa-file fa-5x" style="margin-top: 35px; margin-bottom: 30px;"></i>
+                                            </a>
+                                        {/if}
+                                    </a>
+                                </div>
+                                <div class="card-block text-center"
+                                     style="overflow: hidden; height: 30px; text-overflow: ellipsis; padding-bottom: 30px;">
+                                    <a n:href="delete!, path => basename($key)"><i class="fa fa-close font-red"></i></a>
+                                    <small>{$key|toBaseName}</small>
+                                </div>
+                            </div>
+                        </div>
+                    {/foreach}
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
