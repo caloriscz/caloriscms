@@ -27,14 +27,10 @@
     <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-picture"></i> Media</a>
     <ul class="nav-dropdown-items">
         <li class="nav-item">
-            <a class="nav-link" href="/admin/media/albums">
-                {_dictionary.main.Galleries}
-            </a>
+            <a class="nav-link" href="/admin/media/albums">{_dictionary.main.Galleries}</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="/admin/media">
-                {_dictionary.main.Documents}
-            </a>
+            <a class="nav-link" href="/admin/media">{_dictionary.main.Documents}</a>
         </li>
     </ul>
 </li>
@@ -87,20 +83,18 @@
         </a>
     </li>
 {/if}
-<li class="nav-item">
-<li class="nav-item">
-    <a class="nav-link" href="/admin/files">
-        <i class="fa fa-image fa-fw"></i> {_dictionary.main.PageGraphics}
-    </a>
-</li>
-<li class="nav-item">
-    <a class="nav-link" href="/admin/appearance">
-        <i class="fa fa-image fa-fw"></i> Cesty k obrázkům
-    </a>
-</li>
-<li class="nav-item">
-    <a class="nav-link" href="/admin/appearance/carousel">
-        <i class="fa fa-image fa-fw"></i> Carousel
-    </a>
-</li>
 
+<li class="nav-item nav-dropdown">
+    <a class="nav-link nav-dropdown-toggle" href="#"><i class="fa fa-image fa-fw"></i> Vzhled</a>
+    <ul class="nav-dropdown-items">
+        <li class="nav-item">
+            <a class="nav-link" href="/admin/files">{_dictionary.main.PageGraphics}</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/admin/appearance">Cesty k obrázkům</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/admin/appearance/carousel">Carousel</a>
+        </li>
+    </ul>
+</li>
