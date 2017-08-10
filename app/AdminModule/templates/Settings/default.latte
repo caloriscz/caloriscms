@@ -1,24 +1,18 @@
 {block #titles}{_dictionary.main.Settings}{/block}
 {block content}
 
-<br>
-
-<ul class="nav nav-tabs">
-    <li role="presentation" class="active">
-        <a n:href=":Admin:Settings:default, id => null">{_dictionary.main.Settings}</a>
+<ol class="breadcrumb">
+    <li class="breadcrumb-item">Home</li>
+    <li class="breadcrumb-item"><a href="/admin/">Admin</a></li>
+    <li class="breadcrumb-item active"><a href="/admin/settings/">{_dictionary.main.Settings}</a></li>
+    <li class="breadcrumb-menu d-md-down-none">
+        <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
+            <a href="/admin/settings/languages" class="btn btn-secondary">Jazykové mutace</a>
+            <a href="/admin/settings/countries" class="btn btn-secondary">Země</a>
+            <a href="/admin/settings/currencies" class="btn btn-secondary">Měny</a>
+        </div>
     </li>
-    <li role="presentation">
-        <a n:href=":Admin:Settings:languages, id => null">Jazykové mutace</a>
-    </li>
-    <li role="presentation">
-        <a n:href=":Admin:Settings:countries, id => null">Země</a>
-    </li>
-    <li role="presentation">
-        <a n:href=":Admin:Settings:currencies, id => null">Měny</a>
-    </li>
-</ul>
-
-<h1 class="page-header">{_dictionary.main.Settings}</h1>
+</ol>
 
 {if $member->users_roles->settings_display}
 
