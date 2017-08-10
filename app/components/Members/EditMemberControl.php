@@ -33,7 +33,7 @@ class EditMemberControl extends Control
 
         $roles = $this->database->table("users_roles")->fetchPairs("id", "title");
 
-        if ($this->template->member->username == 'admin') {
+        if ($this->presenter->template->member->username == 'admin') {
             $form->addSelect("role", "Role", $roles)
                 ->setAttribute("class", "form-control");
         }
@@ -59,8 +59,8 @@ class EditMemberControl extends Control
         $form->addSubmit('submitm', 'dictionary.main.Save')
             ->setAttribute("class", "btn btn-primary");
 
-        $form->onSuccess[] = $this->editFormSucceeded;
-        $form->onValidate[] = $this->editFormValidated;
+        $form->onSuccess[] = [$this, "editFormSucceeded"];
+        $form->onValidate[] = [$this, "editFormValidated"];
 
         return $form;
     }

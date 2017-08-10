@@ -32,8 +32,8 @@ class LostPassControl extends Control
         $form->addText("email", "dictionary.main.Email");
         $form->addSubmit('submitm', 'dictionary.main.Send');
 
-        $form->onSuccess[] = $this->sendFormSucceeded;
-        $form->onValidate[] = $this->sendFormValidated;
+        $form->onSuccess[] = [$this, "sendFormSucceeded"];
+        $form->onValidate[] = [$this, "sendFormValidated"];
         return $form;
     }
 
@@ -76,7 +76,6 @@ class LostPassControl extends Control
         $template->setFile(__DIR__ . '/LostPassControl.latte');
         $template->addon = $this->database->table("addons");
         $template->layer = $layer;
-        $template->member = $this->presenter->template->member;
 
         $template->render();
     }

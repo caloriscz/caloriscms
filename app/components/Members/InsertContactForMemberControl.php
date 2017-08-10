@@ -1,4 +1,5 @@
 <?php
+
 namespace Caloriscz\Members;
 
 use Nette\Application\UI\Control;
@@ -35,8 +36,8 @@ class InsertContactForMemberControl extends Control
             "user" => $memberTable->id,
         ));
 
-        $form->onSuccess[] = $this->insertFormSucceeded;
-        $form->onValidate[] = $this->insertFormValidated;
+        $form->onSuccess[] = [$this, "insertFormSucceeded"];
+        $form->onValidate[] = [$this, "insertFormValidated"];
         return $form;
     }
 

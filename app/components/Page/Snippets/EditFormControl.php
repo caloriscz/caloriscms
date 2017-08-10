@@ -50,7 +50,8 @@ class EditFormControl extends Control
 
         $form->setDefaults($arr);
 
-        $form->onSuccess[] = $this->editSnippetFormSucceeded;
+        $form->onSuccess[] = [$this, "editSnippetFormSucceeded"];
+
         $form->addSubmit("submitm", "dictionary.main.Save")
             ->setAttribute("class", "btn btn-success")
             ->setHtmlId('formxins');

@@ -20,6 +20,7 @@ class File
     /** @var \Nette\Database\Context */
     public $database;
     public $user;
+    private $path = "/media";
 
     public function __construct(\Nette\Database\Context $database)
     {
@@ -69,7 +70,7 @@ class File
         $this->database->table("media")->insert(array(
             'name' => $this->getFile(),
             'pages_id' => $this->getPageId(),
-            'filesize' => filesize($this->getFile()),
+            'filesize' => filesize(APP_DIR . "/". $this->path . "/" . $this->getPageId() . "/" . $this->getFile()),
             'file_type' => $this->getType(),
             'date_created' => date("Y-m-d H:i:s"),
         ));

@@ -86,8 +86,8 @@ class SignUpControl extends Control
         $form->addSubmit("submit", "dictionary.main.Signup")
             ->setAttribute("class", "btn-lg btn-cart-in");
 
-        $form->onSuccess[] = $this->signUpFormSucceeded;
-        $form->onValidate[] = $this->signUpFormValidated;
+        $form->onSuccess[] = [$this, "signUpFormSucceeded"];
+        $form->onValidate[] = [$this, "signUpFormValidated"];
 
         return $form;
     }

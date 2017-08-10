@@ -41,9 +41,9 @@ class EditAddressControl extends Control
             "zip" => $address->zip,
             "city" => $address->city,
         ));
-
         $form->addSubmit('submitm', 'dictionary.main.Save');
-        $form->onSuccess[] = $this->editAddressFormSucceeded;
+
+        $form->onSuccess[] = [$this, "editAddressFormSucceeded"];
 
         return $form;
     }

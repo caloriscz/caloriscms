@@ -5,100 +5,97 @@
 <!DOCTYPE html>
 <html lang="{$langSelected}">
 <head>
+
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
     <title>{block #titles}{/block} | Caloris Admin</title>
-    <link href="{$baseUri}/css/back.css" rel="stylesheet">
-    <link rel="stylesheet" href="/css/jquery-ui.min.css">
-    <link rel="stylesheet" href="/css/summernote.css">
-    <link rel="stylesheet" href="/css/elfinder.min.css">
+
+    <link rel="stylesheet" href="/css/back.css">
 </head>
-<body>
-<style>
-    .ace-plugin-code {
-        height: 440px;
-    }
-</style>
-{if $signed}
-    <div id="wrapper">
-        <nav class="navbar navbar-default" role="navigation" style="margin-bottom: 0">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="sr-only">Toggle</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" n:href=":Admin:Homepage:default, id => NULL">
-                    <img src="{$baseUri}/images/admin/logo_caloris.png" alt="logo" class="img-responsive"
-                         style="max-height: 25px; display: inline; padding-right: 20px;"> <span
-                            style="font-size: 0.75em;">1.2</span>
+<body class="app header-fixed sidebar-fixed aside-menu-fixed aside-menu-hidden">
+{if $signed != false}
+    <header class="app-header navbar">
+        <button class="navbar-toggler mobile-sidebar-toggler d-lg-none" type="button">☰</button>
+        <a class="navbar-brand" href="#"></a>
+        <ul class="nav navbar-nav d-md-down-none">
+            <li class="nav-item">
+                <a class="nav-link navbar-toggler sidebar-toggler" href="#">☰</a>
+            </li>
+            <li class="nav-item px-3">
+                <a class="nav-link" href="#">Dashboard</a>
+            </li>
+            <li class="nav-item px-3">
+                <a class="nav-link" href="#">Settings</a>
+            </li>
+        </ul>
+        <ul class="nav navbar-nav ml-auto">
+            <li class="nav-item dropdown d-md-down-none">
+                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
+                   aria-expanded="false">
+                    <span class="d-md-down-none">{$member->username}</span>
                 </a>
-            </div>
+                <div class="dropdown-menu dropdown-menu-right">
 
-            <ul class="nav navbar-top-links navbar-right">
-                <li><a href="/">{_dictionary.main.VisitTheWeb}</a></li>
-                <li class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                        <i class="fa fa-user fa-fw"></i> {$member->username} <i class="fa fa-caret-down"></i>
-                    </a>
-                    <ul class="dropdown-menu dropdown-user">
-                        <li><a n:href=":Admin:Profile:default, id => NULL">
-                                <i class="fa fa-gear fa-fw"></i> {_admin.navigation.myprofile}</a>
-                        </li>
-                        <li class="divider"></li>
-                        <li><a n:href=":Admin:Sign:out, id => NULL">
-                                <i class="fa fa-sign-out fa-fw"></i> {_dictionary.main.logout}</a>
-                        </li>
-                    </ul>
-                </li>
-            </ul>
-
-            <div class="navbar-default sidebar" role="navigation">
-                <div class="sidebar-nav navbar-collapse">
-                    <ul class="nav" id="side-menu">
-                        {control mainMenu}
-                    </ul>
-                </div>
-            </div>
-        </nav>
-        <div id="page-wrapper">
-
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-lg-12">
-                        {include content}
+                    <div class="dropdown-header text-center">
+                        <strong>Nastavení</strong>
                     </div>
-                </div>
-            </div>
 
-        </div>
-    </div>
-{else}
-    <div class="container">
-        <div class="row">
-            <div class="col-md-4 col-md-offset-4">
-                <div class="login-panel panel panel-default">
-                    {include content}
+                    <a class="dropdown-item" n:href=":Admin:Sign:out, id => NULL">{_dictionary.main.logout}</a>
+                    <a class="dropdown-item" n:href=":Admin:Profile:default, id => NULL">{_admin.navigation.myprofile}</a>
+                    <a class="dropdown-item" n:href=":Admin:Profile:default, id => NULL">{_dictionary.main.VisitTheWeb}</a>
                 </div>
-            </div>
-        </div>
-    </div>
+            </li>
+        </ul>
+    </header>
 {/if}
 
-<script src="{$baseUri}/js/kea-back.js"></script>
-<script src="{$baseUri}/js/summernote.min.js"></script>
-<script src="{$baseUri}/js/elfinder.min.js"></script>
+{if $signed != false}
+    <div class="app-body">
 
-<script src="{$baseUri}/js/summernote-ext-elfinder.js"></script>
-<script src="{$baseUri}/js/elfinder.cs.js"></script>
-<script src="{$baseUri}/js/jquery-ui.min.js"></script>
-<script src="{$baseUri}/js/caloris-admin.js"></script>
+        <div class="sidebar">
+            <nav class="sidebar-nav">
+                <ul class="nav">
+                    {control mainMenu}
+                </ul>
+            </nav>
+        </div>
+        <main class="main">
+            {include content}
+        </main>
+    </div>
+{else}
+<body class="app flex-row align-items-center">
+<div class="container">
+    <div class="row justify-content-center">
+        {include content}
+    </div>
+</div>
+</div>
+{/if}
 
+{if $signed != false}
+    <footer class="app-footer">
+        <a href="http://caloris.cz">Caloris</a> © 2017 Caloris.
+        <span class="float-right">Powered by <a href="http://coreui.io">CoreUI</a>
+        </span>
+    </footer>
+{/if}
+
+<!-- Bootstrap and necessary plugins -->
+<script src="/js/all-back.js"></script>
+<script src="/js/summernote-ext-elfinder.js"></script>
 <script src="https://cloud9ide.github.io/emmet-core/emmet.js"></script>
-<script src="{$baseUri}/js/ace/src-min-noconflict/ace.js"></script>
-<script src="{$baseUri}/js/ace/src-min-noconflict/ext-emmet.js"></script>
+<script src="/js/ace/src-min-noconflict/ace.js"></script>
+<script src="/js/ace/src-min-noconflict/ext-emmet.js"></script>
+
+<script src="/js/app.js"></script>
+
+<script src="/js/views/main.js"></script>
+<script src="/js/caloris-admin.js"></script>
+
+
 <script>
     function elfinderDialog() {
         var fm = $('<div/>').dialogelfinder({
@@ -114,7 +111,7 @@
             },
             startPath: '/images',
             width: 840,
-            height: 450,
+            height: 850,
             destroyOnClose: true,
             dragUploadAllow: false,
             getFileCallback: function (files, fm) {
@@ -139,7 +136,7 @@
     $(function () {
         $('.summernote').summernote({
             width: "99%",
-            height: 500,
+            height: 600,
             tabsize: 2,
             toolbar: [
                 ['style', ['bold', 'italic', 'underline', 'clear']],
@@ -163,13 +160,12 @@
         var editor = ace.edit("document");
         var textarea = $('textarea[name="document"]').hide();
 
-        editor.maxLines = 10;
+        editor.maxLines = Infinity;
         editor.session.setMode("ace/mode/html");
         editor.setTheme("ace/theme/terminal");
         // enable emmet on the current editor
         editor.setOption("enableEmmet", true);
         editor.on('change', function () {
-            console.log('rt');
             textarea.val(editor.getSession().getValue());
         });
     }
@@ -177,5 +173,6 @@
     /* Set focus to login field */
     $(".login-panel input[type='text']").focus();
 </script>
+
 </body>
 </html>

@@ -2,6 +2,7 @@
 namespace Caloriscz\Media\MediaForms;
 
 use Nette\Application\UI\Control;
+use Nette\Diagnostics\Debugger;
 
 class InsertMediaControl extends Control
 {
@@ -28,27 +29,29 @@ class InsertMediaControl extends Control
         $form->addTextarea("preview", "dictionary.main.Description")
             ->setAttribute("class", "form-control");
 
-        if ($this->presenter->getParameter("type") == 6 && $this->presenter->getParameter('id') == false) {
+        if ($this->presenter->getView() == 'albums') {
             $category = 4;
-        } elseif ($this->presenter->getParameter("type") == 8 && $this->presenter->getParameter('id') == false) {
-            $category = 6;
+            $type = 8;
         } else {
-            $category = $this->presenter->getParameter('id');
+            $category = 6;
+            $type = 6;
         }
 
         $form->setDefaults(array(
             "category" => $category,
-            "type" => $this->presenter->getParameter("type")
+            "type" => $type
         ));
 
         $form->addSubmit('submitm', 'dictionary.main.Insert');
 
-        $form->onSuccess[] = $this->insertFormSucceeded;
+        $form->onSuccess[] = [$this, "insertFormSucceeded"];
         return $form;
     }
 
     function insertFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
     {
+        echo $form->values->category;
+
         $doc = new \App\Model\Document($this->database);
         $doc->setType($form->values->type);
         $doc->setTitle($form->values->title);
@@ -59,7 +62,6 @@ class InsertMediaControl extends Control
 
         $this->presenter->redirect(this, array(
             "id" => $form->values->category,
-            "type" => $form->values->type,
         ));
     }
 

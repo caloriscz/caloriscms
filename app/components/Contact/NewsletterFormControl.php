@@ -29,8 +29,8 @@ class NewsletterFormControl extends Control
         $form->addSubmit("submitm", "messages.helpdesk.send")
             ->setAttribute("class", "btn btn-yellow");
 
-        $form->onValidate[] = $this->addValidated;
-        $form->onSuccess[] = $this->addSucceeded;
+        $form->onValidate[] = [$this, "addValidated"];
+        $form->onSuccess[] = [$this, "addSucceeded"];
         return $form;
     }
 

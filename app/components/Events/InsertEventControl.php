@@ -75,7 +75,7 @@ class InsertEventControl extends Control
         $form->addSubmit('submitm', 'dictionary.main.Save')
             ->setAttribute("class", "btn btn-success btn");
 
-        $form->onSuccess[] = $this->insertEventFormSucceeded;
+        $form->onSuccess[] = [$this, "insertEventFormSucceeded"];
         return $form;
     }
 

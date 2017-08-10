@@ -1,122 +1,87 @@
 {block #titles}{_dictionary.main.Media}{/block}
 {block content}
 
-<h1 class="page-header">{_dictionary.main.Media}</h1>
-
-{if count($breadcrumbs) > 0}
-    <ol class="breadcrumb">
+<ol class="breadcrumb">
+    <li class="breadcrumb-item">Home</li>
+    <li class="breadcrumb-item"><a href="/admin/">Admin</a></li>
+    <li class="breadcrumb-item">{_dictionary.main.Media}</li>
+    <li class="breadcrumb-item active"><a href="/admin/media">Dokumenty</a></li>
+    {if count($breadcrumbs) > 0}
         {foreach $breadcrumbs as $crumbId => $crumbValue}
-            <li><a n:href=":Admin:Media:default, id => $crumbId, type => $pageId">{$crumbValue}</a></li>
+            <li class="breadcrumb-item active">
+                <a n:href=":Admin:Media:default, id => $crumbId, type => $pageId">{$crumbValue}</a>
+            </li>
         {/foreach}
-    </ol>
-{/if}
+    {/if}
+</ol>
 
-<div class="row">
-    <div class="col-lg-12">
-        <div class="col-xs-6 col-md-3 col-lg-2">
-            <div class="thumbnail" style="height: 260px;">
-                <div style="height: 180px; padding-top: 60px;" class="text-center">
-                    <a href="" type="button" data-toggle="modal" data-target="#myModal">
-                        <i class="fa fa-folder-open-o fa-5x"></i>
-                    </a>
-                </div>
-                <div class="caption text-center">
-                    <div>
-                        <a href="" type="button" data-toggle="modal" data-target="#myModal">
-                            <span style="font-weight: bold; font-size: 1.25em;">+Přidat nové album</span></a>
+<div class="container-fluid">
+    <div class="animated fadeIn">
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fa fa-align-justify"></i> Kategorie
                     </div>
-                    <div>
+                    <div class="card-block">
+                        <p>
+                            <a href="" type="button" data-toggle="modal" data-target="#myModal">
+                                <span style="font-weight: bold; font-size: 1.25em;">+Přidat nové složku</span></a>
+                        </p>
 
+                        {control pageThumb, 8, $presenter->getParameter('id')}
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-9">
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fa fa-align-justify"></i> Seznam souborů
+                    </div>
+                    <div class="card-block">
+                        {if null !== $presenter->getParameter('id')}
+                            {control dropZone, $presenter->getParameter('id')}
+                        {/if}
+
+                        <div class="table-responsive">
+                            <table class="table">
+                                {foreach $documents as $item}
+                                    <tr>
+                                        <td>
+
+                                            <a href="{$baseUri}/media/{$idN}/{$item->name}">{$item->name}</a>
+                                            {if file_exists($appDir.'/media/'.$idN.'/tn/'.$item->name)}
+                                                (<a href="{$baseUri}/media/{$idN}/tn/{$item->name}">náhled</a>)
+                                            {/if}
+                                        </td>
+                                        <td class="w-25">
+                                            <a n:href="delete!, id => $item->id, type => $pageId"
+                                                    onclick="return confirm('Opravdu smazat?')">
+                                                <i class="fa fa-times font-red"></i>
+                                            </a>
+                                            <a n:href=":Admin:Media:image id => $item->id, type => $pageId"
+                                                    class="btn btn-default btn-xs"
+                                                    role="button">{_dictionary.main.Edit}</a>
+                                        </td>
+                                    </tr>
+                                    {var $id = $item->id}
+                                {/foreach}
+                            </table>
+                        </div>
+
+                        <div class="text-center">
+                            {control paging, $args, $paginator}
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-
-        {control pageThumb, $presenter->getParameter('type'), $presenter->getParameter('id')}
     </div>
 </div>
 
-<div class="row">
-    {control dropZone}
-
-    <div class="container">
-        <div class="btn-group pull-right" role="group">
-            <a n:href="toggle! mediatype => 'image', type => $presenter->getParameter('type')">
-                <i class="fa fa-picture-o fa-2x"></i>
-            </a>
-            <a n:href="toggle! mediatype => 'list', type => $presenter->getParameter('type')">
-                <i class="fa fa-list-ol fa-2x"></i>
-            </a>
-        </div>
-    </div>
-    <br>
-
-    {if $mediatype == 'image'}
-        <div class="row">
-            {foreach $documents as $item}
-                <div class="col-xs-6 col-md-3">
-                    <div class="thumbnail" style="height: 260px;">
-                        <div style="height: 180px;">
-                            <a href="{$baseUri}/media/{$idN}/{$item->name}" class="gallery-lightbox">
-                                <img src="{$baseUri}/media/{$idN}/{$item->name}" alt="{$item->name}"
-                                     class="img-responsive" style="max-height: 150px;"/>
-                            </a>
-                        </div>
-                        <div class="caption text-center">
-                            <div>
-                                <small>{$item->name}</small>
-                            </div>
-                            <div>
-                                <a n:href="delete!, id => $item->id, type => $pageId"
-                                        onclick="return confirm('Opravdu smazat?')">
-                                    <i class="fa fa-times font-red"></i>
-                                </a>
-                                <a n:href=":Admin:Media:image id => $item->id" class="btn btn-default btn-xs"
-                                                                               role="button">{_dictionary.main.Edit}</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            {/foreach}
-        </div>
-    {else}
-        <div class="table-responsive">
-            <table class="table">
-                {foreach $documents as $item}
-                    <tr>
-                        <td class="col-xs-1">
-                            <a n:href="delete!, id => $item->id, type => $pageId"
-                                    onclick="return confirm('Opravdu smazat?')">
-                                <i class="fa fa-times font-red"></i>
-                            </a>
-                            <a n:href=":Admin:Media:image id => $item->id, type => $pageId"
-                                    class="btn btn-default btn-xs"
-                                    role="button">{_dictionary.main.Edit}</a>
-                        </td>
-                        <td>
-
-                            <a href="{$baseUri}/media/{$idN}/{$item->name}">{$item->name}</a>
-                            {if file_exists($appDir.'/media/'.$idN.'/tn/'.$item->name)}
-                                (<a href="{$baseUri}/media/{$idN}/tn/{$item->name}">náhled</a>)
-                            {/if}
-                        </td>
-                    </tr>
-                    {var $id = $item->id}
-                {/foreach}
-            </table>
-        </div>
-    {/if}
-
-    <div class="text-center">
-        {control paging, $args, $paginator}
-    </div>
-</div>
-
-<!-- Modal -->
 <div id="myModal" class="modal fade" role="dialog">
     <div class="modal-dialog">
-
-        <!-- Modal content-->
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -126,9 +91,9 @@
                 {control insertMediaForm}
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Zavřít</button>
             </div>
         </div>
-
     </div>
 </div>
+

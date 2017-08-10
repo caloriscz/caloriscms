@@ -12,7 +12,7 @@ class PagingControl extends Control
         $template->setFile(__DIR__ . '/PagingControl.latte');
         $template->args = $args;
         $template->paginator = $paginator;
-        
+
         $template->render();
     }
 

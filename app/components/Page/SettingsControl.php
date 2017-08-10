@@ -67,8 +67,8 @@ class SettingsControl extends Control
             ));
         }
 
-        $form->onSuccess[] = $this->setFormSucceeded;
-        $form->onValidate[] = $this->permissionValidated;
+        $form->onSuccess[] = [$this, "setFormSucceeded"];
+        $form->onValidate[] = [$this, "permissionValidated"];
         $form->addSubmit("submit", "dictionary.main.Save")
             ->setHtmlId('formxins');
 

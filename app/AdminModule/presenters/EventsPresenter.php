@@ -53,9 +53,9 @@ class EventsPresenter extends BasePresenter
     function handleToggle()
     {
         if ($this->getParameter('viewtype') == 'table') {
-            $this->context->httpResponse->setCookie('viewtype', 'table', '180 days');
+            $this->response->setCookie('viewtype', 'table', '180 days');
         } else {
-            $this->context->httpResponse->setCookie('viewtype', 'calendar', '180 days');
+            $this->response->setCookie('viewtype', 'calendar', '180 days');
         }
 
 
@@ -186,7 +186,7 @@ class EventsPresenter extends BasePresenter
         $this->template->paginator = $paginator;
         $this->template->args = $this->getParameters();
 
-        $this->template->viewtype = $this->context->httpRequest->getCookie('viewtype');
+        $this->template->viewtype = $this->request->getCookie('viewtype');
     }
 
     public function renderDetail()

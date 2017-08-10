@@ -31,8 +31,8 @@ class InsertCategoryControl extends Control
         $form->addSubmit('submitm', 'dictionary.main.Insert')
             ->setAttribute("class", "btn btn-primary");
 
-        $form->onSuccess[] = $this->insertFormSucceeded;
-        $form->onValidate[] = $this->validateFormSucceeded;
+        $form->onSuccess[] = [$this, "insertFormSucceeded"];
+        $form->onValidate[] = [$this, "validateFormSucceeded"];
         return $form;
     }
 

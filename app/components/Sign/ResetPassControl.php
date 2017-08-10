@@ -33,7 +33,7 @@ class ResetPassControl extends Control
             "code" => $this->presenter->getParameter("code"),
         ));
 
-        $form->onSuccess[] = $this->resetFormSucceeded;
+        $form->onSuccess[] = [$this, "resetFormSucceeded"];
         return $form;
     }
 

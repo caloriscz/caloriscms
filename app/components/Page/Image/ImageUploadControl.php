@@ -34,7 +34,7 @@ class ImageUploadControl extends Control
             "id" => $this->presenter->getParameter("id"),
         ));
 
-        $form->onSuccess[] = $this->uploadFilesFormSucceeded;
+        $form->onSuccess[] = [$this, "uploadFilesFormSucceeded"];
         return $form;
     }
 
@@ -95,7 +95,7 @@ class ImageUploadControl extends Control
             "id" => $this->presenter->getParameter("id"),
         ));
 
-        $form->onSuccess[] = $this->uploadFormSucceeded;
+        $form->onSuccess[] = [$this, "uploadFormSucceeded"];
         return $form;
     }
 

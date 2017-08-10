@@ -43,7 +43,7 @@ class EditContactFormControl extends Control
 
         $form->addSubmit("submitm", "dictionary.main.Save");
 
-        $form->onSuccess[] = $this->editFormSucceeded;
+        $form->onSuccess[] = [$this, "editFormSucceeded"];
         return $form;
     }
 

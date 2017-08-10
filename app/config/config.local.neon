@@ -12,5 +12,5 @@ services:
 	nette.latteFactory:
 		setup:
 			- setAutoRefresh(true)
-	cache.journal:
-		factory: Nette\Caching\Storages\FileJournal(%tempDir%)
+	cache.storage:
+		factory: Nette\Caching\Storages\FileStorage(%tempDir%)

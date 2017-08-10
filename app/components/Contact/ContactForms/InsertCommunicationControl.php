@@ -41,7 +41,7 @@ class InsertCommunicationControl extends Control
             "id" => $this->presenter->getParameter('id'),
         ));
 
-        $form->onSuccess[] = $this->insertFormSucceeded;
+        $form->onSuccess[] = [$this, "insertFormSucceeded"];
         return $form;
     }
 

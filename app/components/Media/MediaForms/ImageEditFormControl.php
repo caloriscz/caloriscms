@@ -42,7 +42,7 @@ class ImageEditFormControl extends Control
             "description" => $image->description,
         ));
 
-        $form->onSuccess[] = $this->editFormSucceeded;
+        $form->onSuccess[] = [$this, "editFormSucceeded"];
         return $form;
     }
 

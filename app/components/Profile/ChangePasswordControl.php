@@ -30,7 +30,7 @@ class ChangePasswordControl extends Control
         $form->addPassword("password2", "Znovu napište heslo");
         $form->addSubmit('name', 'dictionary.main.Change');
 
-        $form->onSuccess[] = $this->changePasswordFormSucceeded;
+        $form->onSuccess[] = [$this, "changePasswordFormSucceeded"];
         return $form;
     }
 

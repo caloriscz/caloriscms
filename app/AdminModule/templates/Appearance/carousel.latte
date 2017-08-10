@@ -1,12 +1,18 @@
 {block #titles}Carousel{/block}
 {block content}
 
-<h1 class="page-header">Carousel</h1>
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="/admin">Home</a></li>
+    <li class="breadcrumb-item"><a href="/admin/appearance">Vzhled</a></li>
+    <li class="breadcrumb-item active">Carousel</li>
+</ol>
 
-<p><a n:href="insert!" class="btn btn-success">{_dictionary.main.Create}</a></p>
-
-<div class="row">
-    <div class="col-lg-9">
-        {control carouselGrid}
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-block">
+            <div class="col-lg-9">
+                {control carouselGrid}
+            </div>
+        </div>
     </div>
 </div>

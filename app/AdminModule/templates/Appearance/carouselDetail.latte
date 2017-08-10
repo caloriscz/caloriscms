@@ -1,10 +1,19 @@
 {block #titles}Carousel{/block}
 {block content}
 
-<h1 class="page-header">Carousel</h1>
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="/admin">Home</a></li>
+    <li class="breadcrumb-item"><a href="/admin/">Vzhled</a></li>
+    <li class="breadcrumb-item"><a href="/admin/appearance/">Carousel</a></li>
+    <li class="breadcrumb-item active">Detail infomation</li>
+</ol>
 
-<div class="row">
-    <div class="col-lg-9">
-        {control editCarousel}
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-block">
+            <div class="col-lg-9">
+                {control editCarousel}
+            </div>
+        </div>
     </div>
 </div>

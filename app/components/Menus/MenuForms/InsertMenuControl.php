@@ -1,4 +1,5 @@
 <?php
+
 namespace Caloriscz\Menus\MenuForms;
 
 use Nette\Application\UI\Control;
@@ -49,8 +50,9 @@ class InsertMenuControl extends Control
         $form->addSubmit('submitm', 'dictionary.main.Insert')
             ->setAttribute("class", "btn btn-primary");
 
-        $form->onSuccess[] = $this->insertFormSucceeded;
-        $form->onValidate[] = $this->validateFormSucceeded;
+        $form->onSuccess[] = [$this, 'insertFormSucceeded'];
+        $form->onSuccess[] = [$this, 'validateFormSucceeded'];
+
         return $form;
     }
 

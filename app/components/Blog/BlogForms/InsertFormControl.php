@@ -34,7 +34,7 @@ class InsertFormControl extends Control
         $form->addSubmit("submit", "dictionary.main.Create")
             ->setHtmlId('formxins');
 
-        $form->onSuccess[] = $this->insertFormSucceeded;
+        $form->onSuccess[] = [$this, 'insertFormSucceeded'];
 
         return $form;
     }

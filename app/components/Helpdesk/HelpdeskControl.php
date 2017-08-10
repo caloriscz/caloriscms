@@ -41,8 +41,8 @@ class HelpdeskControl extends Control
         ));
         $form->addSubmit("submitm");
 
-        $form->onValidate[] = $this->sendFormValidated;
-        $form->onSuccess[] = $this->sendFormSucceeded;
+        $form->onValidate[] = [$this, "sendFormValidated"];
+        $form->onSuccess[] = [$this, "sendFormSucceeded"];
         return $form;
     }
 

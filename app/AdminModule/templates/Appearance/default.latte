@@ -1,12 +1,20 @@
 {block #titles}{_dictionary.main.Settings}{/block}
 {block content}
 
-<h1 class="page-header">Cesty k obrázkům</h1>
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="/admin">Home</a></li>
+    <li class="breadcrumb-item"><a href="/admin/">Vzhled</a></li>
+    <li class="breadcrumb-item active"><a href="/admin/appearance">Cesty k obrázkům</a></li>
+</ol>
 
-<div class="row">
-    <div class="col-lg-9">
-        {foreach $settingsDb as $item}
-            {control savePaths, $item}
-        {/foreach}
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-block">
+            <div class="col-lg-9">
+                {foreach $settingsDb as $item}
+                    {control savePaths, $item}
+                {/foreach}
+            </div>
+        </div>
     </div>
 </div>

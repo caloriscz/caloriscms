@@ -11,7 +11,7 @@ class Filters extends \Nette\Object
         }
     }
 
-    public function ago($s)
+    public static function ago($s)
     {
         $date = new \DateTime();
         $date->setDate(date('Y', strtotime($s)), date('m', strtotime($s)), date('d', strtotime($s)));
@@ -21,14 +21,14 @@ class Filters extends \Nette\Object
         return $daysAgo;
     }
 
-    function round($s, $nr = 2)
+    public static function round($s, $nr = 2)
     {
         $rounding = round($s, $nr);
 
         return $rounding;
     }
 
-    function toMins($s)
+    public static function toMins($s)
     {
         if ($s < 60 && $s > 0) {
             $duration = '0:' . $s . '.';
@@ -41,14 +41,14 @@ class Filters extends \Nette\Object
         return $duration;
     }
 
-    function toBaseName($s)
+    public static function toBaseName($s)
     {
         $basename = basename($s);
 
         return $basename;
     }
 
-    function dateDiff($s, $t)
+    public static function dateDiff($s, $t)
     {
         $datetime1 = date_create($s);
         $datetime2 = date_create($t);
@@ -57,7 +57,7 @@ class Filters extends \Nette\Object
         return $interval->format('%R%a days');
     }
 
-    function numericday($s)
+    public static function numericday($s)
     {
         $nazvy = array(
             1 => 'dictionary.days.Sunday',
@@ -71,7 +71,7 @@ class Filters extends \Nette\Object
         return $nazvy[$s];
     }
 
-    function numericmonth($s)
+    public static function numericmonth($s)
     {
         $nazvy = array(
             1 => 'dictionary.months.January',

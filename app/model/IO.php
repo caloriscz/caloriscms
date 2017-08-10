@@ -10,6 +10,7 @@ namespace App\Model;
 
 use RecursiveDirectoryIterator,
     RecursiveIteratorIterator;
+use Tracy\Debugger;
 
 /**
  * File and directory handler
@@ -77,7 +78,7 @@ class IO
 
     /**
      *  Reads files. When 1 is set to highlight parameter, Caloris extensions syntax is highlighted
-     *  @param string $path Path to file
+     * @param string $path Path to file
      */
     public static function get($path)
     {
@@ -97,10 +98,12 @@ class IO
      */
     public static function directoryMake($path, $chmod = 0755)
     {
-        if (!file_exists($path)) {
+        $pathConv = str_replace("\\", "/", $path);
+
+        if (!file_exists($pathConv)) {
             $oldUmask = umask(0);
-            mkdir($path, $chmod);
-            chmod($path, $chmod);
+            Debugger::barDump($pathConv);
+            mkdir($pathConv, $chmod);
             umask($oldUmask);
         }
     }

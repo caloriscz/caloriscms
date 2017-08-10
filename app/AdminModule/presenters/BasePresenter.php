@@ -28,6 +28,12 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
     /** @var \Nette\Mail\IMailer @inject */
     public $mailer;
 
+    /** @var Nette\Http\IRequest @inject */
+    public $request;
+
+    /** @var Nette\Http\IResponse @inject */
+    public $response;
+
     public function __construct(\Nette\Database\Context $database, \Nette\Mail\IMailer $mailer)
     {
         $this->database = $database;
@@ -107,10 +113,10 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
         $this->template->langSelected = $this->translator->getLocale();
 
         // Set language from cookie
-        if ($this->context->httpRequest->getCookie('language_admin') == '') {
+        if ($this->request->getCookie("langugage_admin") == '') {
             $this->translator->setLocale($this->translator->getDefaultLocale());
         } else {
-            $this->translator->setLocale($this->context->httpRequest->getCookie('language_admin'));
+            $this->translator->setLocale($this->request->getCookie('language_admin'));
         }
     }
 
@@ -123,6 +129,12 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
     protected function createComponentEditor()
     {
         $control = new \Caloriscz\Page\Editor\EditorControl($this->database);
+        return $control;
+    }
+
+    protected function createComponentEditorSettings()
+    {
+        $control = new \Caloriscz\Page\Editor\EditorSettingsControl($this->database);
         return $control;
     }
 
@@ -149,7 +161,6 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
         $control = new \Caloriscz\Menus\Admin\MainMenuControl($this->database);
         return $control;
     }
-
 
 
     protected function createComponentPageTopMenu()
