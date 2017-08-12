@@ -24,13 +24,11 @@ class InsertContactForMemberControl extends Control
 
         $form = new \Nette\Forms\BootstrapPHForm();
         $form->setTranslator($this->presenter->translator);
-        $form->getElementPrototype()->class = "form-horizontal";
         $form->getElementPrototype()->role = 'form';
-        $form->getElementPrototype()->autocomplete = 'off';
         $form->addHidden("user");
         $form->addHidden("page");
         $form->addSubmit("submitm", "dictionary.main.Create")
-            ->setAttribute("class", "btn btn-success");
+            ->setAttribute("class", "btn btn-success btn-sm");
         $form->setDefaults(array(
             "page" => $this->presenter->getParameter("id"),
             "user" => $memberTable->id,

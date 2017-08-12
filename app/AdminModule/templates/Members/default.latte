@@ -1,6 +1,12 @@
 {block #titles}{_dictionary.main.Members}{/block}
 {block content}
 
+<ol class="breadcrumb">
+    <li class="breadcrumb-item">Home</li>
+    <li class="breadcrumb-item"><a href="/admin/">Admin</a></li>
+    <li class="breadcrumb-item"><a href="/admin/members/">{_dictionary.main.Members}</a></li>
+</ol>
+
 {foreach $flashes as $flash}
     <br/>
     <div class="alert alert-warning alert-dismissable">
@@ -9,35 +15,43 @@
     </div>
 {/foreach}
 
-<h1 class="page-header">{_dictionary.main.Members}</h1>
+<div class="container-fluid">
+    <div class="animated fadeIn">
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="card">
+                    <div class="card-header">Kategorie</div>
+                    <div class="card-block">
+                        {control memberCategories}
+                    </div>
+                </div>
 
-
-
-{if $member->users_roles->members_display}
-    <div class="row">
-        <div class="col-lg-3">
-            <div class="panel panel-default">
-                <div class="panel-heading">Kategorie členů</div>
-                <div class="panel-body">
-                    {control memberCategories}
+                <div class="card">
+                    <div class="card-header">Kategorie</div>
+                    <div class="card-block">
+                        {if $member->users_roles->members_create}
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    {_dictionary.main.CreateNewAccount}
+                                </div>
+                                <div class="panel-body">
+                                    {control insertMember}
+                                </div>
+                            </div>
+                        {/if}
+                    </div>
                 </div>
             </div>
-
-            {if $member->users_roles->members_create}
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        {_dictionary.main.CreateNewAccount}
-                    </div>
-                    <div class="panel-body">
-                        {control insertMember}
+            <div class="col-lg-9">
+                <div class="card">
+                    <div class="card-header"></div>
+                    <div class="card-block">
+                        {if $member->users_roles->members_display}
+                            {control memberGrid}
+                        {/if}
                     </div>
                 </div>
-            {/if}
-        </div>
-        <div class="col-lg-9">
-            {control memberGrid}
+            </div>
         </div>
     </div>
-{else}
-    <p>Nemáte oprávnění k zobrazení této stránky</p>
-{/if}
+</div>
