@@ -1,24 +1,18 @@
 {block #titles}Jazykové mutace{/block}
 {block content}
 
-<br>
-
-<ul class="nav nav-tabs">
-    <li role="presentation">
-        <a n:href=":Admin:Settings:default, id => null">{_dictionary.main.Settings}</a>
+<ol class="breadcrumb">
+    <li class="breadcrumb-item">Home</li>
+    <li class="breadcrumb-item"><a href="/admin/">Admin</a></li>
+    <li class="breadcrumb-item active"><a href="/admin/settings/">{_dictionary.main.Settings}</a></li>
+    <li class="breadcrumb-item active"><a href="/admin/settings/languages">Jazykové mutace</a></li>
+    <li class="breadcrumb-menu d-md-down-none">
+        <div class="btn-group" role="group">
+            <a href="/admin/settings/currencies" class="btn btn-secondary">Měny</a>
+            <a href="/admin/settings/countries" class="btn btn-secondary">Země</a>
+        </div>
     </li>
-    <li role="presentation" class="active">
-        <a n:href=":Admin:Settings:languages, id => null">Jazykové mutace</a>
-    </li>
-    <li role="presentation">
-        <a n:href=":Admin:Settings:countries, id => null">Země</a>
-    </li>
-    <li role="presentation">
-        <a n:href=":Admin:Settings:currencies, id => null">Měny</a>
-    </li>
-</ul>
-
-<h1 class="page-header">Jazykové mutace</h1>
+</ol>
 
 {foreach $flashes as $flash}
     <br/>
@@ -26,35 +20,47 @@
     <br/>
 {/foreach}
 
-{if $member->users_roles->settings_display}
-    <div class="row">
-        <div class="col-lg-3">
-            {control insertLanguage}
-        </div>
-        <div class="col-lg-9">
-
-
-            <table class="table table-striped">
-                {foreach $languages as $item}
-                    <tr>
-                        <td class="col-xs-1">{$item->code}</td>
-                        <td>{$item->title}</td>
-                        <td>
-                            <a n:href="install! id => $item->code" class="btn btn-default btn-xs"
-                                                                   onclick="return confirm('Opravdu nainstalovat?')">
-                                Instalovat
-                            </a>
-                            <a n:href="toggle! id => $item->id" class="btn btn-default btn-xs">
-                                {if $item->used}povoleno{else}zakázáno{/if}
-                            </a>
-                            {if $item->default == null}<a n:href="makeDefault! id => $item->id"
-                                class="btn btn-default btn-xs">Make default</a>{/if}
-                        </td>
-                    </tr>
-                {/foreach}
-            </table>
+<div class="container-fluid">
+    <div class="animated fadeIn">
+        <div class="row">
+            {if $member->users_roles->settings_display}
+                <div class="col-lg-3">
+                    <div class="card">
+                        <div class="card-header">Vložit jazyk</div>
+                        <div class="card-block">
+                            {control insertLanguage}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-9">
+                    <div class="card">
+                        <div class="card-header">Seznam jazyků</div>
+                        <div class="card-block">
+                            <table class="table table-striped">
+                                {foreach $languages as $item}
+                                    <tr>
+                                        <td class="col-xs-1">{$item->code}</td>
+                                        <td>{$item->title}</td>
+                                        <td>
+                                            <a n:href="install! id => $item->code" class="btn btn-default btn-xs"
+                                                                                   onclick="return confirm('Opravdu nainstalovat?')">
+                                                Instalovat
+                                            </a>
+                                            <a n:href="toggle! id => $item->id" class="btn btn-default btn-xs">
+                                                {if $item->used}povoleno{else}zakázáno{/if}
+                                            </a>
+                                            {if $item->default == null}<a n:href="makeDefault! id => $item->id"
+                                                class="btn btn-default btn-xs">Make default</a>{/if}
+                                        </td>
+                                    </tr>
+                                {/foreach}
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            {else}
+                <p>Nemáte oprávnění k zobrazení této stránky</p>
+            {/if}
         </div>
     </div>
-{else}
-    <p>Nemáte oprávnění k zobrazení této stránky</p>
-{/if}
+</div>
