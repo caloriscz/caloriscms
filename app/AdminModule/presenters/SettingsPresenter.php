@@ -4,8 +4,6 @@ namespace App\AdminModule\Presenters;
 
 use Caloriscz\Menus\Admin\AdminPanelControl;
 use Caloriscz\Menus\Admin\SettingsCategoriesControl;
-use Nette,
-    App\Model;
 
 /**
  * Settings presenter.

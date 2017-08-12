@@ -48,29 +48,29 @@
                         <br>
 
                         <div class="row">
-                        {foreach $documents as $item}
-                            <div class="col-lg-3">
-                                <div class="card">
-                                    <div class="card-img text-center" style="max-height: 150px;">
-                                        <a href="{$baseUri}/media/{$idN}/{$item->name}" class="gallery-lightbox">
-                                            <img src="{$baseUri}/media/{$idN}/{$item->name}" alt="{$item->name}"
-                                                 class="img-responsive-centered" style="max-height: 150px;">
-                                        </a>
-                                    </div>
-                                    <div class="card-block">
-                                        <small>{$item->name}</small>
-                                        <a n:href="delete!, id => $item->id, type => $pageId"
-                                                onclick="return confirm('Opravdu smazat?')">
-                                            <i class="fa fa-times font-red"></i>
-                                        </a>
-                                        <p class="card-text"><a n:href=":Admin:Media:image id => $item->id"
-                                                class="btn btn-default btn-xs"
-                                                role="button">{_dictionary.main.Edit}</a></p>
+                            {foreach $documents as $item}
+                                <div class="col-lg-3">
+                                    <div class="card">
+                                        <div class="card-img text-center" style="max-height: 150px;">
+                                            <a href="{$baseUri}/media/{$idN}/{$item->name}" class="gallery-lightbox">
+                                                <img src="{$baseUri}/media/{$idN}/{$item->name}" alt="{$item->name}"
+                                                     class="img-responsive-centered" style="max-height: 150px;">
+                                            </a>
+                                        </div>
+                                        <div class="card-block">
+                                            <small>{$item->name}</small>
+                                            <a n:href="delete!, id => $item->id, type => $pageId"
+                                                    onclick="return confirm('Opravdu smazat?')">
+                                                <i class="fa fa-times font-red"></i>
+                                            </a>
+                                            <p class="card-text"><a n:href=":Admin:Media:image id => $item->id"
+                                                        class="btn btn-default btn-xs"
+                                                        role="button">{_dictionary.main.Edit}</a></p>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        {/foreach}
-                    </div>
+                            {/foreach}
+                        </div>
                     </div>
 
                     <div class="text-center">

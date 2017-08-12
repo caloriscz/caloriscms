@@ -14,35 +14,46 @@
     </li>
 </ol>
 
-{if $member->users_roles->settings_display}
-
-    <div class="row">
-        <div class="col-lg-3">
-            {var $name = $presenter->getView()}
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    Kategorie
-                    <a n:href=":Admin:Settings:default, id => null" class="btn btn-default btn-xs pull-right">Všechny kategorie</a>
+<div class="container-fluid">
+    <div class="animated fadeIn">
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fa fa-align-justify"></i> Kategorie
+                        <a n:href=":Admin:Settings:default, id => null"
+                                class="btn btn-default btn-xs pull-right">Všechny kategorie</a>
+                    </div>
+                    <div class="card-block">
+                        {control settingsCategories $categoryId}
+                    </div>
                 </div>
-                <div class="panel-body">
-                    {control settingsCategories $categoryId}
+
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fa fa-align-justify"></i> {_admin.settings.whenUsedInTemplate}</div>
+                    <div class="card-block text-left">
+                        <pre>
+                            <span n:syntax="off">{$settings['site:currency:code']}</span>
+                        </pre>
+                    </div>
                 </div>
             </div>
-            <br/>
+            <div class="col-lg-9">
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fa fa-align-justify"></i> Seznam souborů
+                    </div>
+                    <div class="card-block">
 
-            <pre>
-            {_admin.settings.whenUsedInTemplate}: <br/>
-<span n:syntax="off">{$settings['site:currency:code']}</span>
-        </pre>
-        </div>
-        <div class="col-lg-9">
-
-            <div>
-                {control editSettings}
+                        {if $member->users_roles->settings_display}
+                            {control editSettings}
+                        {else}
+                            <p>Nemáte oprávnění k zobrazení této stránky</p>
+                        {/if}
+                    </div>
+                </div>
             </div>
-
         </div>
     </div>
-{else}
-    <p>Nemáte oprávnění k zobrazení této stránky</p>
-{/if}
+</div>
