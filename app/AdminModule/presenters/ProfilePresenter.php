@@ -2,9 +2,6 @@
 
 namespace App\AdminModule\Presenters;
 
-use Nette,
-    App\Model;
-
 /**
  * Import from files
  * @author Petr Karásek <caloris@caloris.cz>

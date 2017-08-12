@@ -1,35 +1,61 @@
 {block #titles}{_dictionary.main.profile|firstUpper}{/block}
 {block content}
 
-{if $isLoggedIn}
+<ol class="breadcrumb">
+    <li class="breadcrumb-item">Home</li>
+    <li class="breadcrumb-item"><a href="/admin/">Admin</a></li>
+    <li class="breadcrumb-item"><a href="/admin/settings/">{_dictionary.main.Settings}</a></li>
+    <li class="breadcrumb-item" class="active"><a href="/admin/profile/">{_dictionary.main.profile|firstUpper}</a></li>
+</ol>
 
-    <h1 class="page-header">Profil</h1>
+<div class="container-fluid">
+    <div class="animated fadeIn">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-header">Profil</div>
+                    <div class="card-block">
+                        {if $isLoggedIn}
+                            <table class="table">
+                                <tbody>
+                                <tr>
+                                    <td>{_dictionary.main.member|firstUpper}</td>
+                                    <td>{$member->username}</td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td>{_dictionary.main.email|firstUpper}</td>
+                                    <td>{$member->email}</td>
+                                    <td></td>
+                                </tr>
+                                </tbody>
+                            </table>
 
-    <div class="row">
-        <div class="col-sm-8 col-xs-12">
-            <table class="table">
-                <tr>
-                    <td class="col-xs-2">{_dictionary.main.member|firstUpper}</td>
-                    <td>{$member->username}</td>
-                    <td class="col-xs-4"></td>
-                </tr>
-                <tr>
-                    <td>{_dictionary.main.email|firstUpper}</td>
-                    <td>{$member->email}</td>
-                    <td></td>
-                </tr>
-            </table>
+                            {control editProfile}
 
-            {control editProfile}
+                        {/if}
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-header">{_store.profile.PasswordChange}</div>
+                    <div class="card-block">
+                        {if $isLoggedIn}
+                            {control profileChangePassword}
+                        {/if}
+                    </div>
+                </div>
 
-            <h2>{_store.profile.PasswordChange}</h2>
-
-            {control profileChangePassword}
-
-            <h2>Změnit jazyk</h2>
-
-            {control languageSelectorForAdmin}
+                <div class="card">
+                    <div class="card-header">Změnit jazyk</div>
+                    <div class="card-block">
+                        {if $isLoggedIn}
+                            {control languageSelectorForAdmin}
+                        {/if}
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-
-{/if}
+</div>
