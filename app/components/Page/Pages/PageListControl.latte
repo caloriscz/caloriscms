@@ -1,14 +1,28 @@
 <table class="table table-striped">
+    <thead>
     <tr>
-        <th class="col-xs-1"></th>
         <th>{_dictionary.main.Title}</th>
         <th></th>
+        <th></th>
     </tr>
+    </thead>
+    <tbody>
     {foreach $pages as $page}
         <tr>
-            <td class="col-xs-1">
+            <td>
+                <a href="{plink ':Admin:Pages:detail', id => $page->id}">{$page->title}</a>
+                {if $page->slug == ''} (homepage){/if}
+            </td>
+            <td> &nbsp;
+                <a href="/{$page->slug}" class="btn btn-default btn-xs" target="_blank"
+                   title="{_dictionary.main.Slug}: {$settings['site:url:base']}/{$page->slug}">
+                    {_dictionary.main.Preview}
+                </a>
+            </td>
+            <td>
                 {if $page->pages_templates_id != 9}
-                    <a href="{link delete!, id => $page->id, type => $type}" onclick="return confirm('Opravdu smazat?')">
+                    <a href="{link delete!, id => $page->id, type => $type}"
+                       onclick="return confirm('Opravdu smazat?')">
                         <i class="fa fa-times font-red"></i>
                     </a>
                 {/if}
@@ -25,16 +39,7 @@
                     {/if}
                 </a>
             </td>
-            <td>
-                <a href="{plink ':Admin:Pages:detail', id => $page->id}">{$page->title}</a>
-                {if $page->slug == ''} (homepage){/if}
-            </td>
-            <td>                &nbsp;
-                <a href="/{$page->slug}" class="btn btn-default btn-xs" target="_blank"
-                   title="{_dictionary.main.Slug}: {$settings['site:url:base']}/{$page->slug}">
-                    {_dictionary.main.Preview}
-                </a>
-            </td>
         </tr>
     {/foreach}
+    </tbody>
 </table>

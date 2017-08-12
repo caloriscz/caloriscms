@@ -7,57 +7,56 @@
     <li class="breadcrumb-item active"><a href="/admin/pages/">Seznam stránek</a></li>
 </ol>
 
+{foreach $flashes as $flash}
+    <br/>
+    <div class="flash {$flash->type}">{$flash->message}</div>
+    <br/>
+{/foreach}
+
 <div class="container-fluid">
-    <div class="card">
-        <div class="card-block">
-            {if $type == 0}
-                <div class="alert alert-info">
-                    <p>Text šablony se upravuje přímo ve zdrojovém kódu. Obsah, který napíšete do políčka editoru se
-                        nemusí objevit přímo na stránce. Pokud chcete, aby se tento text objevil na stránce, konzultujte
-                        to s administrátorem stránky.</p>
-                </div>
-            {elseif $type == 2}
-                <h1 class="page-header">Blog</h1>
-            {elseif $type == 3}
-                <h1 class="page-header">{_dictionary.main.Events}</h1>
-            {else}
-                <h1 class="page-header">Stránky</h1>
-            {/if}
-
-            <div class="row">
-                <div class="col-md-3">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            {if $type == 2}
-                                Nový příspěvek
-                            {elseif $type == 3}
-                                Nová událost/akce
-                            {else}
-                                {_dictionary.main.NewPage}
-                            {/if}
-                        </div>
-                        <div class="panel-body">
-                            {foreach $flashes as $flash}
-                                <br/>
-                                <div class="flash {$flash->type}">{$flash->message}</div>
-                                <br/>
-                            {/foreach}
-
-                            {if $type == 2}
-                                {control insertBlogForm}
-                            {elseif $type == 3}
-                                {control insertEventPage}
-                            {else}
-                                {control insertPageForm}
-                            {/if}
-                        </div>
+    <div class="animated fadeIn">
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="card">
+                    <div class="card-header">
+                        {if $type == 2}
+                            Nový příspěvek
+                        {elseif $type == 3}
+                            Nová událost/akce
+                        {else}
+                            {_dictionary.main.NewPage}
+                        {/if}
+                    </div>
+                    <div class="card-block">
+                        {if $type == 2}
+                            {control insertBlogForm}
+                        {elseif $type == 3}
+                            {control insertEventPage}
+                        {else}
+                            {control insertPageForm}
+                        {/if}
                     </div>
                 </div>
-                <div class="col-md-9">
-                    {control pageList}
+
+            </div>
+            <div class="col-lg-9">
+                <div class="card">
+                    <div class="card-header">Stránky</div>
+                    <div class="card-block">
+                        {if $type == 0}
+                            <div class="alert alert-info">
+                                <p>Text šablony se upravuje přímo ve zdrojovém kódu. Obsah, který napíšete do políčka
+                                    editoru se
+                                    nemusí objevit přímo na stránce. Pokud chcete, aby se tento text objevil na stránce,
+                                    konzultujte
+                                    to s administrátorem stránky.</p>
+                            </div>
+                        {/if}
+
+                        {control pageList}
+                    </div>
                 </div>
             </div>
-
         </div>
     </div>
 </div>
