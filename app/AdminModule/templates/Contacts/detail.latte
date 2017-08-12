@@ -1,13 +1,18 @@
 {block #titles}{_dictionary.main.Contacts}{/block}
 {block content}
 
-{control pageTopMenu}
-
 <ol class="breadcrumb">
     <li class="breadcrumb-item">Home</li>
     <li class="breadcrumb-item"><a href="/admin/">Admin</a></li>
     <li class="breadcrumb-item"><a href="/admin/contacts">Kontakty</a></li>
     <li class="breadcrumb-item active">Detail</li>
+
+    <li class="breadcrumb-menu d-md-down-none">
+        <div class="btn-group" role="group">
+            <a href="/admin/contacts/detail-communications/{$presenter->getParameter('id')}" class="btn btn-secondary">Komunikace</a>
+            <a href="/admin/contacts/detail-opening-hours/{$presenter->getParameter('id')}" class="btn btn-secondary">Otvírací hodiny</a>
+        </div>
+    </li>
 </ol>
 
 

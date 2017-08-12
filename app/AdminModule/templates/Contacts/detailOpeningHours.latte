@@ -1,29 +1,69 @@
-{block #titles}{_dictionary.main.Contacts}{/block}
+{block #titles}{_dictionary.main.Contacts} - {_dictionary.main.OpeningHours}{/block}
 {block content}
 
-{control pageTopMenu}
 
-<h1 class="page-header">{_dictionary.main.Contacts} - {$page->title}</h1>
+<ol class="breadcrumb">
+    <li class="breadcrumb-item">Home</li>
+    <li class="breadcrumb-item"><a href="/admin/">Admin</a></li>
+    <li class="breadcrumb-item"><a href="/admin/contacts">Kontakty</a></li>
+    <li class="breadcrumb-item">Detail</li>
+    <li class="breadcrumb-item active"><a
+                href="/admin/contacts/detail-opening-hours/{$presenter->getParameter('id')}">{_dictionary.main.OpeningHours}</a>
+    </li>
+
+    <li class="breadcrumb-menu d-md-down-none">
+        <div class="btn-group" role="group">
+            <a href="/admin/contacts/detail/{$presenter->getParameter('id')}" class="btn btn-secondary">Detail</a>
+            <a href="/admin/contacts/detail-communications/{$presenter->getParameter('id')}" class="btn btn-secondary">Komunikace</a>
+        </div>
+    </li>
+</ol>
 
 {foreach $flashes as $flash}
-    <br />
+    <br/>
     <div class="flash {$flash->type}">{$flash->message}</div>
-    <br />
+    <br/>
 {/foreach}
 
-<h2>{_dictionary.main.OpeningHours}</h2>
+<div class="container-fluid">
+    <div class="animated fadeIn">
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="card">
+                    <div class="card-header">Vložit hodiny</div>
+                    <div class="card-block">
+                        {control insertHour}
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-9">
+                <div class="card">
+                    <div class="card-header">{_dictionary.main.OpeningHours}</div>
+                    <div class="card-block">
 
-<p class="text-info">Pokud přidáte nový záznam k již zadanému dni, starší záznam bude přepsán.</p>
-<br />
-{control insertHour}
+                        <p class="text-info">Pokud přidáte nový záznam k již zadanému dni, starší záznam bude
+                            přepsán.</p>
+                        <br/>
 
-<table class="table">
-    {foreach $hours as $open}
-        <tr>
-            <td class="col-xs-1"><a n:href="deleteHour! id => $open->id, page => $presenter->getParameter('page')"><i class="fa fa-times font-red"></i></a></td>
-            {var $oh = Filters::numericday($open->day)}
-            <td class="col-md-1">{_ $oh}</td>
-            <td>{$open->hourstext}</td>
-        </tr>
-    {/foreach}
-</table>
+
+                        <table class="table">
+                            <tbody>
+                            {foreach $hours as $open}
+                                <tr>
+                                    {var $oh = Filters::numericday($open->day)}
+                                    <td class="col-md-1">{_ $oh}</td>
+                                    <td>{$open->hourstext}</td>
+                                    <td class="text-right">
+                                        <a n:href="deleteHour! id => $open->id, page => $presenter->getParameter('page')">
+                                            <i class="fa fa-times font-red"></i></a>
+                                    </td>
+                                </tr>
+                            {/foreach}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

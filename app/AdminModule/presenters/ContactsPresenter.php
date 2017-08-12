@@ -25,7 +25,7 @@ class ContactsPresenter extends BasePresenter
     protected function createComponentEditContact()
     {
         $control = $this->editContactControlFactory->create();
-        $control->onSave[] = function ($pages_id, $error) {
+        $control->onSave[] = function ($pages_id, $error = null) {
             if ($error == 1) {
                 $this->flashMessage($this->translator->translate('messages.sign.fillInEmail'), "error");
             }

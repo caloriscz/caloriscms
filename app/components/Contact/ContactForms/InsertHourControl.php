@@ -21,7 +21,6 @@ class InsertHourControl extends Control
     {
         $form = new \Nette\Forms\BootstrapUIForm();
         $form->setTranslator($this->presenter->translator);
-        $form->getElementPrototype()->class = "form-horizontal";
         $form->getElementPrototype()->role = 'form';
         $form->getElementPrototype()->autocomplete = 'off';
         $form->addHidden('contact_id');
@@ -30,7 +29,7 @@ class InsertHourControl extends Control
             1 => 'dictionary.days.Monday', 2 => 'dictionary.days.Tuesday', 3 => 'dictionary.days.Wednesday',
             4 => 'dictionary.days.Thursday', 5 => 'dictionary.days.Friday', 6 => 'dictionary.days.Saturday', 7 => 'dictionary.days.Sunday'))
             ->setAttribute("class", "form-control");
-        $form->addText('hourstext', 'Hodiny (např. 14.00-20.00) nebo zpráva (např. jen objednaní)')
+        $form->addText('hourstext', 'Hodiny (např. 14.00-20.00, jen objednaní)')
             ->setRequired('Vložte hodiny od-do nebo nějakou informaci');
 
         $contact = $this->database->table("contacts")->where("pages_id", $this->presenter->getParameter("id"))->fetch();

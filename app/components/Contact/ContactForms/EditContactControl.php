@@ -27,43 +27,23 @@ class EditContactControl extends Control
 
         $form = new \Nette\Forms\BootstrapUIForm();
         $form->setTranslator($this->presenter->translator);
-        $form->getElementPrototype()->class = "form-horizontal";
-        $form->getElementPrototype()->role = 'form';
-        $form->getElementPrototype()->autocomplete = 'off';
-        $form->addGroup('');
         $form->addHidden('contact_id');
         $form->addHidden('pages_id');
-        $form->addText("name", "dictionary.main.Name")
-            ->setAttribute("placeholder", "dictionary.main.Name");
-        $form->addText("company", "dictionary.main.Company")
-            ->setAttribute("placeholder", "dictionary.main.Company");
-        $form->addRadioList("type", "Osoba nebo organizace", array(0 => " osoby", 1 => " organizace"));
-        $form->addText("tpost", "dictionary.main.Post")
-            ->setAttribute("placeholder", "dictionary.main.Post");
-        $form->addText("email", "E-mail")
-            ->setAttribute("placeholder", "dictionary.main.Email")
-            ->setAttribute("class", "form-control");
-        $form->addText("phone", "dictionary.main.Phone")
-            ->setAttribute("placeholder", "dictionary.main.Phone")
-            ->setAttribute("class", "form-control");
-        $form->addSelect("categories_id", "dictionary.main.Category", $groups)
-            ->setAttribute("class", "form-control");
-
-        $form->addGroup('dictionary.main.Address');
-        $form->addText("street", "Ulice")
-            ->setAttribute("placeholder", "dictionary.main.Street");
-        $form->addText("zip", "dictionary.main.ZIP")
-            ->setAttribute("placeholder", "dictionary.main.ZIP");
-        $form->addText("city", "Město")->setAttribute("placeholder", "Město");
-        $form->addGroup('Firemní údaje');
-        $form->addText("vatin", "IČ")->setAttribute("placeholder", "dictionary.main.VatIn");
-        $form->addText("vatid", "DIČ")->setAttribute("placeholder", "dictionary.main.VatId")->setHtmlId("kurzy_ico");
-        $form->addText("banking_account", "Bankovní účet")->setAttribute("placeholder", "Bankovní účet");
-        $form->addText("dateofbirth", "Datum narození")
-            ->setAttribute("placeholder", "Datum narození");
-        $form->addGroup('Ostatní');
-        $form->addTextArea("notes", "dictionary.main.Notes")
-            ->setAttribute("class", "form-control");
+        $form->addText("name");
+        $form->addText("company");
+        $form->addRadioList("type", "", array(0 => " osoby", 1 => " organizace"));
+        $form->addText("tpost");
+        $form->addText("email");
+        $form->addText("phone");
+        $form->addSelect("categories_id", "", $groups);
+        $form->addText("street");
+        $form->addText("zip");
+        $form->addText("city");
+        $form->addText("vatin");
+        $form->addText("vatid");
+        $form->addText("banking_account");
+        $form->addText("dateofbirth");
+        $form->addTextArea("notes");
 
         $page = $this->database->table("pages")->get($this->presenter->getParameter("id"));
         $contact = $this->database->table("contacts")->where("pages_id", $this->presenter->getParameter("id"))->fetch();
@@ -90,8 +70,7 @@ class EditContactControl extends Control
 
         $form->setDefaults($arr);
 
-        $form->addSubmit("submitm", "dictionary.main.Save")
-            ->setAttribute("class", "btn btn-success");
+        $form->addSubmit("submitm");
 
         $form->onSuccess[] = [$this, "editFormSucceeded"];
         $form->onValidate[] = [$this, "editFormValidated"];
