@@ -1,24 +1,38 @@
 {block #titles}E-mail{/block}
 {block content}
 
-<h1 class="page-header"><i class="fa fa-life-ring"></i> E-mail</h1>
+<ol class="breadcrumb">
+    <li class="breadcrumb-item">Home</li>
+    <li class="breadcrumb-item"><a href="/admin/">Admin</a></li>
+    <li class="breadcrumb-item"><a href="/admin/settings/">Helpdesk</a></li>
+    <li class="breadcrumb-item" class="active">Nastavení e-mailů</li>
+</ol>
 
-<div class="row">
-    <div class="col-lg-9">
-        {control editMailTemplate}
-    </div>
-    <div class="col-lg-3">
-        <div class="panel panel-default">
-            <div class="panel-heading">{_dictionary.main.Settings}</div>
-            <div class="panel-body">
-                {control editHelpdeskEmailSettings}
+<div class="container-fluid">
+    <div class="animated fadeIn">
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="card">
+                    <div class="card-header">{_dictionary.main.Settings}</div>
+                    <div class="card-block">
+                        {control editHelpdeskEmailSettings}
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">Kontrolní e-mail</div>
+                    <div class="card-block">
+                        {control sendTestMail}
+                    </div>
+                </div>
             </div>
-        </div>
-
-        <div class="panel panel-default">
-            <div class="panel-heading">Kontrolní e-mail</div>
-            <div class="panel-body">
-                {control sendTestMail}
+            <div class="col-lg-9">
+                <div class="card">
+                    <div class="card-header">Testovací e-mail</div>
+                    <div class="card-block">
+                        {control editMailTemplate}
+                    </div>
+                </div>
             </div>
         </div>
     </div>

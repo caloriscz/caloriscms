@@ -82,7 +82,6 @@ class HelpdeskPresenter extends BasePresenter
 
     }
 
-
     public function renderDetail()
     {
         $this->template->helpdesk = $this->database->table("helpdesk")->get($this->getParameter("id"));

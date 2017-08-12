@@ -1,74 +1,106 @@
 {block #titles}Helpdesk{/block}
 {block content}
 
-<h1 class="page-header"><i class="fa fa-life-ring"></i> Helpdesk</h1>
+<ol class="breadcrumb">
+    <li class="breadcrumb-item">Home</li>
+    <li class="breadcrumb-item"><a href="/admin/">Admin</a></li>
+    <li class="breadcrumb-item"><a href="/admin/settings/">Helpdesk</a></li>
+</ol>
 
-<div class="row">
-    <div class="col-lg-3">
-        <ul class="nav nav-pills nav-stacked">
-            {foreach $helpdesk as $items}
-                <li{if $items->id == $presenter->getParameter('id')} class="active" {/if}>
-                    <a n:href=":Admin:Helpdesk:default, id => $items->id">{$items->title}</a></li>
-            {/foreach}
-        </ul>
-        <br><br>
-        {if $templates->count() > 0}
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    Šablony
+<div class="container-fluid">
+    <div class="animated fadeIn">
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="card">
+                    <div class="card-header">E-mailové šablony</div>
+                    <div class="card-block">
+                        <nav class="nav flex-column">
+                            {foreach $helpdesk as $items}
+                                <a n:href=":Admin:Helpdesk:default, id => $items->id"
+                                        class="nav-link {if $items->id == $presenter->getParameter('id')}active{/if}">
+                                    {$items->title}
+                                </a>
+                            {/foreach}
+                        </nav>
+                    </div>
                 </div>
-                <div class="panel-body">
-                    <table class="table">
-                        {foreach $templates as $itemd}
+
+                <div class="card">
+                    <div class="card-header">Šablony</div>
+                    <div class="card-block">
+                        <nav class="nav flex-column">
+                            {if $templates->count() > 0}
+                                {control editContactForm}
+                            {/if}
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-9">
+                <div class="card">
+                    <div class="card-header">Šablony</div>
+                    <div class="card-block">
+                        {if $templates->count() > 0}
+                            <table class="table">
+                                {foreach $templates as $itemd}
+                                    <tr>
+                                        <td>
+                                            <a n:href=":Admin:Helpdesk:emails, id => $itemd->id">{$itemd->template}</a>
+                                        </td>
+                                        <td class="text-right">
+                                            <a n:href="deleteTemplate!, id => $itemd->id"
+                                                    onclick="return confirm('Opravdu smazat?')">
+                                                <i class="fa fa-times font-red"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                {/foreach}
+                            </table>
+                        {/if}
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">E-maily</div>
+                    <div class="card-block">
+                        <table class="table">
+                            <thead>
                             <tr>
-                                <td class="col-xs-1">
-                                    <a n:href="deleteTemplate!, id => $itemd->id"
-                                            onclick="return confirm('Opravdu smazat?')">
-                                        <i class="fa fa-times font-red"></i>
-                                    </a>
-                                </td>
-                                <td><a n:href=":Admin:Helpdesk:emails, id => $itemd->id">{$itemd->template}</a></td>
+                                <th>{_dictionary.main.Email}</th>
+                                <th>{_dictionary.main.date|firstUpper}</th>
+                                <th></th>
                             </tr>
-                        {/foreach}
-                    </table>
+                            </thead>
+                            <tbody>
+                            {foreach $messages as $item}
+                                <tr>
+                                    <td class="w-25">
+                                        <a n:href=":Admin:Helpdesk:detail, id => $item->id">{$item->email}</a>
+                                    </td>
+                                    <td>{$item->date_created|date:'j. n. Y H:i'}</td>
+                                    <td class="text-right">
+                                        <a n:href="delete!, id => $item->id, helpdesk => $item->helpdesk_id"
+                                                onclick="return confirm('Opravdu smazat?')">
+                                            <i class="fa fa-times font-red"></i></a>
+                                        <a n:href=":Admin:Helpdesk:detail, id => $item->id"><i
+                                                    class="fa fa-plus"></i></a>
+                                    </td>
+                                </tr>
+                            {/foreach}
+                            </tbody>
+                        </table>
+
+                        <div class="text-center">
+                            {control paging, $args, $paginator}
+                        </div>
+                    </div>
                 </div>
             </div>
-
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    Šablony
-                </div>
-                <div class="panel-body">
-                    {control editContactForm}
-                </div>
-            </div>
-        {/if}
-    </div>
-    <div class="col-lg-9">
-        <table class="table table-striped">
-            <tr>
-                <th class="col-xs-1"></th>
-                <th class="col-xs-3">{_dictionary.main.Email}</th>
-                <th class="col-xs-8">{_dictionary.main.date|firstUpper}</th>
-            </tr>
-            {foreach $messages as $item}
-                <tr>
-                    <td>
-                        <a n:href="delete!, id => $item->id, helpdesk => $item->helpdesk_id"
-                                onclick="return confirm('Opravdu smazat?')">
-                            <i class="fa fa-times font-red"></i></a>
-                        <a n:href=":Admin:Helpdesk:detail, id => $item->id"><i class="fa fa-plus"></i></a>
-                    </td>
-                    <td>
-                        <a n:href=":Admin:Helpdesk:detail, id => $item->id">{$item->email}</a>
-                    </td>
-                    <td>{$item->date_created|date:'j. n. H:i'}</td>
-                </tr>
-            {/foreach}
-        </table>
-
-        <div class="text-center">
-            {control paging, $args, $paginator}
         </div>
     </div>
 </div>
+
+
+
+
+
