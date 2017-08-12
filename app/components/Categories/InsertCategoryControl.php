@@ -62,7 +62,7 @@ class InsertCategoryControl extends Control
         $this->presenter->redirect(this, array("id" => null));
     }
 
-    public function render($id)
+    public function render($id = null)
     {
         $template = $this->template;
         $template->categoryId = $id;

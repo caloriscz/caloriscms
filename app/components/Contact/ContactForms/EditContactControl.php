@@ -1,4 +1,5 @@
 <?php
+
 namespace Caloriscz\Contacts\ContactForms;
 
 use Nette\Application\UI\Control;
@@ -37,9 +38,8 @@ class EditContactControl extends Control
         $form->addText("company", "dictionary.main.Company")
             ->setAttribute("placeholder", "dictionary.main.Company");
         $form->addRadioList("type", "Osoba nebo organizace", array(0 => " osoby", 1 => " organizace"));
-        $form->addText("post", "dictionary.main.Post")
-            ->setAttribute("placeholder", "dictionary.main.Post")
-            ->setOption("description", 1);
+        $form->addText("tpost", "dictionary.main.Post")
+            ->setAttribute("placeholder", "dictionary.main.Post");
         $form->addText("email", "E-mail")
             ->setAttribute("placeholder", "dictionary.main.Email")
             ->setAttribute("class", "form-control");
@@ -51,25 +51,14 @@ class EditContactControl extends Control
 
         $form->addGroup('dictionary.main.Address');
         $form->addText("street", "Ulice")
-            ->setAttribute("placeholder", "dictionary.main.Street")
-            ->setOption("description", 1);
+            ->setAttribute("placeholder", "dictionary.main.Street");
         $form->addText("zip", "dictionary.main.ZIP")
-            ->setAttribute("placeholder", "dictionary.main.ZIP")
-            ->setOption("description", 1);
-        $form->addText("city", "Město")
-            ->setAttribute("placeholder", "Město")
-            ->setOption("description", 1);
+            ->setAttribute("placeholder", "dictionary.main.ZIP");
+        $form->addText("city", "Město")->setAttribute("placeholder", "Město");
         $form->addGroup('Firemní údaje');
-        $form->addText("vatin", "IČ")
-            ->setAttribute("placeholder", "dictionary.main.VatIn")
-            ->setOption("description", 1);
-        $form->addText("vatid", "DIČ")
-            ->setAttribute("placeholder", "dictionary.main.VatId")
-            ->setHtmlId("kurzy_ico")
-            ->setOption("description", 1);
-        $form->addText("banking_account", "Bankovní účet")
-            ->setAttribute("placeholder", "Bankovní účet")
-            ->setOption("description", 1);
+        $form->addText("vatin", "IČ")->setAttribute("placeholder", "dictionary.main.VatIn");
+        $form->addText("vatid", "DIČ")->setAttribute("placeholder", "dictionary.main.VatId")->setHtmlId("kurzy_ico");
+        $form->addText("banking_account", "Bankovní účet")->setAttribute("placeholder", "Bankovní účet");
         $form->addText("dateofbirth", "Datum narození")
             ->setAttribute("placeholder", "Datum narození");
         $form->addGroup('Ostatní');

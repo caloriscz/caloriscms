@@ -1,9 +1,8 @@
 {var $name = $presenter->getView()}
 
-<ul class="nav">
+<nav class="nav flex-column">
     {foreach $menu as $item}
-        <li>
-            <a href="{plink $name, (expand) $args, id => $item->id}">
+            <a class="nav-link active" href="{plink $name, (expand) $args, id => $item->id}">
                 {if $idActive == $item->id}
                 <strong>{/if}{$item->title}{if $idActive == $item->id}</strong>
                 {/if}
@@ -12,6 +11,5 @@
             {if $selection->count() > 0}
                 {include #menu, menu => $selection}
             {/if}
-        </li>
     {/foreach}
-</ul>
+</nav>

@@ -2,96 +2,111 @@
 {block content}
 {var $category = 0}
 {var $counter = 2}
-<h1 class="page-header">{_dictionary.main.categories|firstUpper}</h1>
-<div class="row">
 
-    <div class="col-lg-9">
-        {foreach $flashes as $flash}
-            <br/>
-            <div class="flash {$flash->type}">{$flash->message}</div>
-            <br/>
-        {/foreach}
+<ol class="breadcrumb">
+    <li class="breadcrumb-item">Home</li>
+    <li class="breadcrumb-item"><a href="/admin/">Admin</a></li>
+    <li class="breadcrumb-item active"><a href="/admin/contacts">{_dictionary.main.Contacts}</a></li>
+    <li class="breadcrumb-item active"><a href="/admin/contacts/categories">{_dictionary.main.categories|firstUpper}</a>
+    </li>
+</ol>
 
-        {if $presenter->getParameter('id')}
-            <a n:href=":Admin:Contacts:categories, id => null" class="btn btn-default">Všechny kategorie</a>
-        {/if}
+{foreach $flashes as $flash}
+    <br/>
+    <div class="flash {$flash->type}">{$flash->message}</div>
+    <br/>
+{/foreach}
 
-        <div class="tree">
-            {block #menu}
-                <ul>
-                    {foreach $menu as $item}
-                        <li><span><i class="fa fa-folder"></i></span>
-                            <a n:href=":Admin:Contacts:categoriesDetail, id => $item->id">{$item->title}</a>
-                            <button type="button" class="btn btn-default btn-xs"
-                                    class="btn btn-default btn-sm tool-tip" data-toggle="modal"
-                                    data-target="#catModal{$item->id}" title="Přidat podkategorii">
-                                <i class="fa fa-plus"></i>
-                            </button>
-                            <a n:href="delete!, $item->id" class="btn btn-danger btn-xs"><i class="fa fa-times"></i></a>
-                            {var $categoryCount = $database->table('contacts_categories')->where('parent_id', $item->parent_id)->count()}
-                            {if $category != $item->parent_id}
-                                {var $firstArrow = 1}
-                                {var $counter = 1}
-                            {else}
-                                {var $firstArrow = 0}
-                            {/if}
-                            &nbsp;
-                            {if $iterator->first}
-                                <i class="fa fa-arrow-up font-grey"></i>
-                            {elseif  $firstArrow == 1}
-                                <i class="fa fa-arrow-up font-grey"></i>2
-                            {else}
-                                <a n:href="up!, id => $item->id, sorted => $item->sorted, category => $item->parent_id"><i
-                                            class="fa fa-arrow-up"></i></a>
-                            {/if}
-                            &nbsp;
-                            {if $iterator->last}
-                                <i class="fa fa-arrow-down font-grey"></i>
-                            {elseif  $counter - $categoryCount == 0}
-                                <i class="fa fa-arrow-down font-grey"></i>
-                            {else}
-                                <a n:href="down!, id => $item->id, sorted => $item->sorted, category => $item->parent_id"><i
-                                            class="fa fa-arrow-down"></i></a>
-                            {/if}
-                            &nbsp;
-                            <a n:href=":Admin:Categories:default, id => $item->id"><i class="fa fa-level-down"></i></a>
-                            <div class="modal fade" id="catModal{$item->id}" tabindex="-1" role="dialog"
-                                 aria-labelledby="myModalLabel">
-                                <div class="modal-dialog" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <button type="button" class="close" data-dismiss="modal"
-                                                    aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                            <h4 class="modal-title" id="myModalLabel">Insert category</h4>
-                                        </div>
-                                        <div class="modal-body">
-                                            {control categoryInsert, $item->id}
-                                            <button type="button" class="btn btn-default"
-                                                    data-dismiss="modal">{_dictionary.main.close|firstUpper}</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            {? $selection = $item->related('contacts_categories','parent_id')->order('sorted DESC')}
-                            {if $selection->count() > 0}
-                                {include #menu, menu => $selection}
-                            {/if}
-                            {var $category = $item->parent_id}
-                        </li>
-                    {/foreach}
-                </ul>
-            {/block}
-        </div>
-    </div>
-    <div class="col-lg-3">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                {_dictionary.main.InsertCategory}
+
+<div class="container-fluid">
+    <div class="animated fadeIn">
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="card">
+                    <div class="card-header">Přidat kategorii</div>
+                    <div class="card-block">
+                        {control categoryInsert}
+                    </div>
+                </div>
             </div>
-            <div class="panel-body">
-                {control categoryInsert}
+            <div class="col-lg-9">
+                <div class="card">
+                    <div class="card-header">Kategorie</div>
+                    <div class="card-block">
+                        {if $presenter->getParameter('id')}
+                            <a n:href=":Admin:Contacts:categories, id => null" class="btn btn-default">Všechny kategorie</a>
+                        {/if}
+
+                        <div class="tree">
+                            {block #menu}
+                                <ul>
+                                    {foreach $menu as $item}
+                                        <li><span><i class="fa fa-folder"></i></span>
+                                            <a n:href=":Admin:Contacts:categoriesDetail, id => $item->id">{$item->title}</a>
+                                            <button type="button" class="btn btn-default btn-xs"
+                                                    class="btn btn-default btn-sm tool-tip" data-toggle="modal"
+                                                    data-target="#catModal{$item->id}" title="Přidat podkategorii">
+                                                <i class="fa fa-plus"></i>
+                                            </button>
+                                            <a n:href="delete!, $item->id" class="btn btn-danger btn-xs"><i class="fa fa-times"></i></a>
+                                            {var $categoryCount = $database->table('contacts_categories')->where('parent_id', $item->parent_id)->count()}
+                                            {if $category != $item->parent_id}
+                                                {var $firstArrow = 1}
+                                                {var $counter = 1}
+                                            {else}
+                                                {var $firstArrow = 0}
+                                            {/if}
+                                            &nbsp;
+                                            {if $iterator->first}
+                                                <i class="fa fa-arrow-up font-grey"></i>
+                                            {elseif  $firstArrow == 1}
+                                                <i class="fa fa-arrow-up font-grey"></i>2
+                                            {else}
+                                                <a n:href="up!, id => $item->id, sorted => $item->sorted, category => $item->parent_id"><i
+                                                            class="fa fa-arrow-up"></i></a>
+                                            {/if}
+                                            &nbsp;
+                                            {if $iterator->last}
+                                                <i class="fa fa-arrow-down font-grey"></i>
+                                            {elseif  $counter - $categoryCount == 0}
+                                                <i class="fa fa-arrow-down font-grey"></i>
+                                            {else}
+                                                <a n:href="down!, id => $item->id, sorted => $item->sorted, category => $item->parent_id"><i
+                                                            class="fa fa-arrow-down"></i></a>
+                                            {/if}
+                                            &nbsp;
+                                            <a n:href=":Admin:Categories:default, id => $item->id"><i class="fa fa-level-down"></i></a>
+                                            <div class="modal fade" id="catModal{$item->id}" tabindex="-1" role="dialog"
+                                                 aria-labelledby="myModalLabel">
+                                                <div class="modal-dialog" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <button type="button" class="close" data-dismiss="modal"
+                                                                    aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                            <h4 class="modal-title" id="myModalLabel">Insert category</h4>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            {control categoryInsert, $item->id}
+                                                            <button type="button" class="btn btn-default"
+                                                                    data-dismiss="modal">{_dictionary.main.close|firstUpper}</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            {? $selection = $item->related('contacts_categories','parent_id')->order('sorted DESC')}
+                                            {if $selection->count() > 0}
+                                                {include #menu, menu => $selection}
+                                            {/if}
+                                            {var $category = $item->parent_id}
+                                        </li>
+                                    {/foreach}
+                                </ul>
+                            {/block}
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

@@ -1,9 +1,11 @@
 {block #titles}{_dictionary.main.Contacts}{/block}
 {block content}
 
-<h1 class="page-header">{_dictionary.main.Contacts}</h1>
-
-<a n:href=":Admin:Contacts:categories" class="btn btn-success">{_dictionary.main.Categories}</a>
+<ol class="breadcrumb">
+    <li class="breadcrumb-item">Home</li>
+    <li class="breadcrumb-item"><a href="/admin/">Admin</a></li>
+    <li class="breadcrumb-item active"><a href="/admin/contacts">Kontakty</a></li>
+</ol>
 
 {foreach $flashes as $flash}
     <br/>
@@ -11,34 +13,38 @@
     <br/>
 {/foreach}
 
-<div class="row">
-    <div class="col-lg-3">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                Kategorie
-                <a n:href=":Admin:Contacts:default, id => null" class="btn btn-default btn-xs pull-right">Všechny
-                    kategorie</a>
+<div class="container-fluid">
+    <div class="animated fadeIn">
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="card">
+                    <div class="card-header">
+                        {_dictionary.main.Categories}
+                        <a n:href=":Admin:Contacts:default, id => null" class="btn btn-default btn-xs pull-right">Všechny
+                            kategorie</a>
+                    </div>
+                    <div class="card-block">
+                        {control contactCategories}
+                        <br>
+                        <div><a href="/admin/contacts/categories" class="btn btn-primary">Upravit kategorie</a></div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">{_dictionary.main.NewContact}</div>
+                    <div class="card-block">
+                        {control insertContact}
+                    </div>
+                </div>
             </div>
-            <div class="panel-body">
-                {control contactCategories}
+            <div class="col-lg-9">
+                <div class="card">
+                    <div class="card-header"></div>
+                    <div class="card-block">
+                        {control contactGrid}
+                    </div>
+                </div>
             </div>
         </div>
-
-        <div class="panel panel-default">
-            <div class="panel-heading">{_dictionary.main.NewContact}</div>
-            <div class="panel-body">
-                {foreach $flashes as $flash}
-                    <br/>
-                    <div class="flash {$flash->type}">{$flash->message}</div>
-                    <br/>
-                {/foreach}
-
-                {control insertContact}
-            </div>
-        </div>
-    </div>
-    <div class="col-lg-9">
-        {control contactGrid}
-
     </div>
 </div>

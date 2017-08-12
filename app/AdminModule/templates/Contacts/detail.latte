@@ -3,7 +3,13 @@
 
 {control pageTopMenu}
 
-<h1 class="page-header">{_dictionary.main.Contacts} - {$page->title}</h1>
+<ol class="breadcrumb">
+    <li class="breadcrumb-item">Home</li>
+    <li class="breadcrumb-item"><a href="/admin/">Admin</a></li>
+    <li class="breadcrumb-item"><a href="/admin/contacts">Kontakty</a></li>
+    <li class="breadcrumb-item active">Detail</li>
+</ol>
+
 
 {foreach $flashes as $flash}
     <br />
@@ -11,6 +17,25 @@
     <br />
 {/foreach}
 
-{control loadVat}
-
-{control editContact}
+<div class="container-fluid">
+    <div class="animated fadeIn">
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="card">
+                    <div class="card-header">Načti z IČO</div>
+                    <div class="card-block">
+                        {control loadVat}
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-9">
+                <div class="card">
+                    <div class="card-header">Kontakt</div>
+                    <div class="card-block">
+                        {control editContact}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

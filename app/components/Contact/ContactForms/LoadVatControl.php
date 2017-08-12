@@ -31,9 +31,8 @@ class LoadVatControl extends Control
         $form->addHidden('contact_id');
         $form->addHidden('pages_id');
 
-        $form->addText("vatin", "Načíst IČ")
-            ->setAttribute("placeholder", "dictionary.main.VatIn")
-            ->setOption("description", 1);
+        $form->addText("vatin", "")
+            ->setAttribute("placeholder", "dictionary.main.VatIn");
 
         $form->setDefaults(array(
             "contact_id" => $contact->fetch()->id,
