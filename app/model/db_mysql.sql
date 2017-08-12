@@ -137,32 +137,6 @@ INSERT INTO `currencies` (`id`, `title`, `code`, `symbol`, `used`) VALUES
   (2, 'Euro', 'EUR', '€', NULL),
   (3, 'Americký dolar', 'USD', '$', 0);
 
-CREATE TABLE `events` (
-  `id` int(11) NOT NULL,
-  `date_event` datetime DEFAULT NULL,
-  `date_event_end` datetime DEFAULT NULL,
-  `all_day` tinyint(1) NOT NULL DEFAULT '1',
-  `show` tinyint(1) NOT NULL DEFAULT '0',
-  `pages_id` int(11) DEFAULT NULL,
-  `contacts_id` int(11) DEFAULT NULL,
-  `capacity` int(11) NOT NULL DEFAULT '0',
-  `capacity_start` int(11) NOT NULL DEFAULT '0',
-  `capacity_filled` int(11) NOT NULL DEFAULT '0',
-  `price` int(11) DEFAULT NULL,
-  `time_range` int(11) DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
-
-CREATE TABLE `events_signed` (
-  `id` int(11) NOT NULL,
-  `name` varchar(150) NOT NULL,
-  `email` varchar(150) NOT NULL,
-  `phone` varchar(30) DEFAULT NULL,
-  `note` text,
-  `events_id` int(11) NOT NULL,
-  `ipaddress` varchar(15) NOT NULL,
-  `date_created` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
-
 CREATE TABLE `helpdesk` (
   `id` int(11) NOT NULL,
   `title` varchar(100) NOT NULL,
@@ -603,15 +577,6 @@ ALTER TABLE `countries`
 ALTER TABLE `currencies`
   ADD PRIMARY KEY (`id`);
 
-ALTER TABLE `events`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `pages_id` (`pages_id`),
-  ADD KEY `contacts_id` (`contacts_id`);
-
-ALTER TABLE `events_signed`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `events_id` (`events_id`);
-
 ALTER TABLE `helpdesk`
   ADD PRIMARY KEY (`id`);
 
@@ -718,12 +683,6 @@ ALTER TABLE `countries`
 ALTER TABLE `currencies`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
-ALTER TABLE `events`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
-ALTER TABLE `events_signed`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
 ALTER TABLE `helpdesk`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
@@ -786,13 +745,6 @@ ALTER TABLE `contacts`
 
 ALTER TABLE `contacts_openinghours`
   ADD CONSTRAINT `contacts_openinghours_ibfk_1` FOREIGN KEY (`contacts_id`) REFERENCES `contacts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
-ALTER TABLE `events`
-  ADD CONSTRAINT `events_ibfk_1` FOREIGN KEY (`pages_id`) REFERENCES `pages` (`id`) ON DELETE SET NULL ON UPDATE SET NULL,
-  ADD CONSTRAINT `events_ibfk_2` FOREIGN KEY (`contacts_id`) REFERENCES `contacts` (`id`) ON DELETE SET NULL ON UPDATE SET NULL;
-
-ALTER TABLE `events_signed`
-  ADD CONSTRAINT `events_signed_ibfk_1` FOREIGN KEY (`events_id`) REFERENCES `events` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 ALTER TABLE `helpdesk_emails`
   ADD CONSTRAINT `helpdesk_emails_ibfk_1` FOREIGN KEY (`helpdesk_id`) REFERENCES `helpdesk` (`id`) ON DELETE SET NULL ON UPDATE SET NULL,
