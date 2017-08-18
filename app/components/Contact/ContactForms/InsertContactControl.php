@@ -42,16 +42,8 @@ class InsertContactControl extends Control
 
     function insertFormSucceeded(\Nette\Forms\BootstrapPHForm $form)
     {
-        $doc = new \App\Model\Document($this->database);
-        $doc->setType(5);
-        $doc->createSlug("contact-" . $form->values->title);
-        $doc->setTitle($form->values->title);
-        $page = $doc->create($this->template->user->getId());
-        \App\Model\IO::directoryMake(substr(APP_DIR, 0, -4) . '/www/media/' . $page, 0755);
-
         $arr = array(
             "users_id" => null,
-            "pages_id" => $page,
             "type" => $form->values->type,
         );
 
@@ -61,9 +53,9 @@ class InsertContactControl extends Control
             $arr["company"] = $form->values->title;
         }
 
-        $this->database->table("contacts")->insert($arr);
+        $id = $this->database->table("contacts")->insert($arr);
 
-        $this->presenter->redirect(":Admin:Contacts:detail", array("id" => $page));
+        $this->presenter->redirect(":Admin:Contacts:detail", array("id" => $id));
     }
 
     public function render()
