@@ -76,17 +76,7 @@ class ContactGridControl extends Control
     function handleDelete($id)
     {
         for ($a = 0; $a < count($id); $a++) {
-            $contacts = $this->database->table("contacts")->get($id[$a]);
-
-            if ($contacts) {
-                $page = $this->database->table("pages")->get($contacts->pages_id);
-
-                if ($page) {
-                    $doc = new \App\Model\Document($this->database);
-                    $doc->delete($page->id);
-                    \App\Model\IO::removeDirectory(APP_DIR . '/media/' . $page->id);
-                }
-            }
+            $this->database->table("contacts")->get($id[$a])->delete();
         }
 
         $this->presenter->redirect(this, array("id" => null));
