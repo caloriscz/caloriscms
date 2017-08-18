@@ -55,13 +55,11 @@ class InsertHourControl extends Control
 
     function insertFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
     {
-        $this->database->table("contacts_openinghours")
-            ->insert(array(
+        $this->database->table("contacts_openinghours")->insert(array(
                 "day" => $form->values->day,
                 "hourstext" => $form->values->hourstext,
                 "contacts_id" => $form->values->contact_id,
             ));
-
 
         $this->presenter->redirect(this, array("id" => $form->values->contact_id));
     }

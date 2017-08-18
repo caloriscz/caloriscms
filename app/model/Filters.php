@@ -59,16 +59,16 @@ class Filters extends \Nette\Object
 
     public static function numericday($s)
     {
-        $nazvy = array(
-            1 => 'dictionary.days.Sunday',
-            2 => 'dictionary.days.Monday',
-            3 => 'dictionary.days.Tuesday',
-            4 => 'dictionary.days.Wednesday',
-            5 => 'dictionary.days.Thursday',
-            6 => 'dictionary.days.Friday',
-            7 => 'dictionary.days.Saturday');
+        $names = array(
+            1 => 'dictionary.days.Monday',
+            2 => 'dictionary.days.Tuesday',
+            3 => 'dictionary.days.Wednesday',
+            4 => 'dictionary.days.Thursday',
+            5 => 'dictionary.days.Friday',
+            6 => 'dictionary.days.Saturday',
+            7 => 'dictionary.days.Sunday');
 
-        return $nazvy[$s];
+        return $names[$s];
     }
 
     public static function numericmonth($s)

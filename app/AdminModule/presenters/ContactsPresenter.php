@@ -96,9 +96,9 @@ class ContactsPresenter extends BasePresenter
      */
     function handleDeleteHour($id)
     {
-        $this->database->table("contacts_openinghours")->get($id)->delete();
+        $this->database->table("contacts_openinghours")->get($this->getParameter("hour"))->delete();
 
-        $this->redirect(":Admin:Contacts:detailOpeningHours", array("id" => $this->getParameter("page")));
+        $this->redirect(":Admin:Contacts:detailOpeningHours", array("id" => $id));
     }
 
     /**

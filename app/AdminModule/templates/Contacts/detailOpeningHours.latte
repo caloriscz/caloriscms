@@ -40,11 +40,6 @@
                 <div class="card">
                     <div class="card-header">{_dictionary.main.OpeningHours}</div>
                     <div class="card-block">
-
-                        <p class="text-info">Pokud přidáte nový záznam k již zadanému dni, starší záznam bude
-                            přepsán.</p>
-                        <br>
-
                         <table class="table">
                             <tbody>
                             {foreach $hours as $open}
@@ -53,7 +48,7 @@
                                     <td class="col-md-1">{_ $oh}</td>
                                     <td>{$open->hourstext}</td>
                                     <td class="text-right">
-                                        <a n:href="deleteHour! id => $open->id, page => $presenter->getParameter('page')">
+                                        <a n:href="deleteHour! id => $open->contacts_id, hour => $open->id">
                                             <i class="fa fa-times font-red"></i></a>
                                     </td>
                                 </tr>
