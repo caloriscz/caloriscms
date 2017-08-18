@@ -165,8 +165,7 @@ class ContactsPresenter extends BasePresenter
 
     public function renderDetailOpeningHours()
     {
-        $contact = $this->database->table("contacts")->where("pages_id", $this->template->page->id)->fetch();
-        $this->template->hours = $this->database->table("contacts_openinghours")->where("contacts_id", $contact->id);
+        $this->template->hours = $this->database->table("contacts_openinghours")->where("contacts_id", $this->getParameter("id"));
     }
 
     public function renderCommunications()

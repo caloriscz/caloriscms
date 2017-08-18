@@ -24,7 +24,6 @@ class InsertHourControl extends Control
         $form->getElementPrototype()->role = 'form';
         $form->getElementPrototype()->autocomplete = 'off';
         $form->addHidden('contact_id');
-        $form->addHidden('page_id');
         $form->addSelect('day', 'dictionary.main.DayOfTheWeek', array(
             1 => 'dictionary.days.Monday', 2 => 'dictionary.days.Tuesday', 3 => 'dictionary.days.Wednesday',
             4 => 'dictionary.days.Thursday', 5 => 'dictionary.days.Friday', 6 => 'dictionary.days.Saturday', 7 => 'dictionary.days.Sunday'))
@@ -32,11 +31,10 @@ class InsertHourControl extends Control
         $form->addText('hourstext', 'Hodiny (např. 14.00-20.00, jen objednaní)')
             ->setRequired('Vložte hodiny od-do nebo nějakou informaci');
 
-        $contact = $this->database->table("contacts")->where("pages_id", $this->presenter->getParameter("id"))->fetch();
+        $contact = $this->database->table("contacts")->get($this->presenter->getParameter("id"));
 
         $form->setDefaults(array(
             "contact_id" => $contact->id,
-            "page_id" => $this->presenter->getParameter("id"),
         ));
 
         $form->addSubmit("submitm", "dictionary.main.Insert")
@@ -65,7 +63,7 @@ class InsertHourControl extends Control
             ));
 
 
-        $this->presenter->redirect(this, array("id" => $form->values->page_id));
+        $this->presenter->redirect(this, array("id" => $form->values->contact_id));
     }
 
 

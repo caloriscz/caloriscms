@@ -24,11 +24,12 @@ class EditContactControl extends Control
         $this->template->id = $this->presenter->getParameter('id');
 
         $groups = $this->database->table("contacts_categories")->fetchPairs("id", "title");
+        $pages = $this->database->table("pages")->fetchPairs("id", "title");
 
         $form = new \Nette\Forms\BootstrapUIForm();
         $form->setTranslator($this->presenter->translator);
         $form->addHidden('contact_id');
-        $form->addHidden('pages_id');
+        $form->addSelect('page_id', "", $pages);
         $form->addText("name");
         $form->addText("company");
         $form->addRadioList("type", "", array(0 => " osoby", 1 => " organizace"));

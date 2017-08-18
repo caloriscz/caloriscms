@@ -39,7 +39,7 @@ class ContactGridControl extends Control
                     $name = $item->name;
                 }
 
-                $url = \Nette\Utils\Html::el('a')->href($this->presenter->link('detail', array("id" => $item->pages_id)))
+                $url = \Nette\Utils\Html::el('a')->href($this->presenter->link('detail', array("id" => $item->id)))
                     ->setText($name);
                 return $url;
             })
