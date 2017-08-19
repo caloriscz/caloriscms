@@ -6,7 +6,7 @@
 <!DOCTYPE html>
 <html lang="{$langSelected}">
 <head>
-    {control head $pageId}
+    {control head $slugArray}
 </head>
 <body>
 {if $settings['social:fb:enabled']}
@@ -22,7 +22,6 @@
     </script>
 {/if}
 {control adminBar}
-
 <header>
     {control navigation}
 </header>

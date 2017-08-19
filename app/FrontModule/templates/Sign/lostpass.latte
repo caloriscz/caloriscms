@@ -1,3 +1,5 @@
+{var $slugArray["title"] = "Přihlášený"}
+{var $slugArray["og:title"] = "Přihlášený"}
 {block content}
 
 <div class="container heading">
@@ -5,7 +7,6 @@
 </div>
 
 <section class="container">
-
     {foreach $flashes as $flash}
         <div class="flash {$flash->type}">{$flash->message}</div>
     {/foreach}

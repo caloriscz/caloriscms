@@ -1,4 +1,5 @@
 <?php
+
 namespace Caloriscz\Navigation\Head;
 
 use Kdyby\Translation\Translator;
@@ -15,14 +16,19 @@ class HeadControl extends Control
         $this->database = $database;
     }
 
-    public function render()
+    public function render($slugArray)
     {
         $template = $this->template;
 
         $page = $this->presenter->template->page;
+        $template->slug = $slugArray;
 
         /* Choose correct language columns */
-        if ($this->presenter->translator->getLocale() == $this->presenter->translator->getDefaultLocale()) {
+        if (count($slugArray) > 0) {
+            $template->title = $slugArray["title"];
+            $template->metadesc = $slugArray["metadesc"];
+            $template->metakeys = $slugArray["metakeys"];
+        } elseif ($this->presenter->translator->getLocale() == $this->presenter->translator->getDefaultLocale()) {
             $template->title = $page->title;
             $template->metadesc = $page->metadesc;
             $template->metakeys = $page->metakeys;
