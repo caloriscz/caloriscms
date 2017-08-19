@@ -6,16 +6,17 @@
 </div>
 
 <div class="container">
+    {foreach $flashes as $flash}
+        <div class="flash {$flash->type}">{$flash->message}</div>
+        <br/>
+    {/foreach}
+
+
     <div class="row">
         <div class="col-md-3">
             {control profileMenu}
         </div>
         <div class="col-md-9">
-            {foreach $flashes as $flash}
-                <div class="flash {$flash->type}">{$flash->message}</div>
-                <br/>
-            {/foreach}
-
             {control profileEdit}
             <br/>
             <p><span style="color: red;">*</span> {_store.forms.TheseItemsAreRequired}</p>

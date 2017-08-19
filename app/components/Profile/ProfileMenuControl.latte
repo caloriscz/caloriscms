@@ -1,6 +1,6 @@
-<ul class="nav nav-pills nav-stacked">
-    <li{if $pageId == 8} class="active"{/if}><a href="{control pageSlug 8}">{_store.order.ContactInformation}</a></li>
-    <li{if $pageId == 9} class="active"{/if}><a href="{control pageSlug 9}">{_store.profile.ProfileImage}</a></li>
-    <li{if $pageId == 10} class="active"{/if}><a href="{control pageSlug 10}">{_store.profile.PasswordChange}</a></li>
-    <li{if $pageId == 11} class="active"{/if}><a href="{control pageSlug 11}">{_dictionary.main.addresses|firstUpper}</a></li>
-</ul>
+<nav class="nav flex-column text-left">
+    <a href="{control pageSlug 8}"{if $pageId == 8} class="active"{/if}>{_store.order.ContactInformation}</a>
+    <a href="{control pageSlug 9}"{if $pageId == 9} class="active"{/if}>{_store.profile.ProfileImage}</a>
+    <a href="{control pageSlug 10}"{if $pageId == 10} class="active"{/if}>{_store.profile.PasswordChange}</a>
+    <a href="{control pageSlug 11}"{if $pageId == 11} class="active"{/if}>{_dictionary.main.addresses|firstUpper}</a>
+</nav>

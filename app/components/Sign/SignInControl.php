@@ -92,9 +92,15 @@ class SignInControl extends Control
 
     public function render($type = 'front')
     {
+        if ($type == 'front') {
+            $templateName = "SignInFrontControl";
+        } else {
+            $templateName = "SignInAdminControl";
+        }
+
         $template = $this->template;
         $template->type = $type;
-        $template->setFile(__DIR__ . '/SignInControl.latte');
+        $template->setFile(__DIR__ . "/" . $templateName . ".latte");
 
         $template->render();
     }

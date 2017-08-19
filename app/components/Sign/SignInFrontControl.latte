@@ -1,0 +1,26 @@
+<form n:name="signInForm" class="form-horizontal" role="form" autocomplete="off">
+    <input n:name="type" value="{$type}">
+
+    <div class="input-group mb-3">
+       <span class="input-group-addon w-25">
+           Uživatel
+       </span>
+        <input type="text" n:name="username" class="form-control">
+    </div>
+    <div class="input-group mb-4">
+        <span class="input-group-addon w-25">
+            Heslo
+        </span>
+        <input type="password" n:name="password" class="form-control">
+    </div>
+    <div class="row">
+        <div class="col-6">
+            <input type="submit" class="btn btn-primary px-4" value="Login">
+        </div>
+        <div class="col-6 text-right">
+                <a href="/sign/lost-pass" class="btn btn-link px-0">
+                    {_dictionary.main.ForgottenPassword}
+                </a>
+        </div>
+    </div>
+</form>
