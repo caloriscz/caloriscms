@@ -2,16 +2,9 @@
 {block content}
 
 <ol class="breadcrumb">
-    <li class="breadcrumb-item">Home</li>
-    <li class="breadcrumb-item"><a href="/admin/">Admin</a></li>
-    <li class="breadcrumb-item active"><a href="/admin/pages/">Seznam stránek</a></li>
+    <li class="breadcrumb-item"><a href="/admin/">Home</a></li>
+    <li class="breadcrumb-item active"><a href="/admin/pages/">Stránky</a></li>
 </ol>
-
-{foreach $flashes as $flash}
-    <br/>
-    <div class="flash {$flash->type}">{$flash->message}</div>
-    <br/>
-{/foreach}
 
 <div class="container-fluid">
     <div class="animated fadeIn">
@@ -21,9 +14,7 @@
                     <div class="card-header">
                         {if $type == 2}
                             Nový příspěvek
-                        {elseif $type == 3}
-                            Nová událost/akce
-                        {else}
+                        {elseif $type == 1}
                             {_dictionary.main.NewPage}
                         {/if}
                     </div>
@@ -32,7 +23,7 @@
                             {control insertBlogForm}
                         {elseif $type == 3}
                             {control insertEventPage}
-                        {else}
+                        {elseif $type == 1}
                             {control insertPageForm}
                         {/if}
                     </div>
@@ -43,17 +34,7 @@
                 <div class="card">
                     <div class="card-header">Stránky</div>
                     <div class="card-block">
-                        {if $type == 0}
-                            <div class="alert alert-info">
-                                <p>Text šablony se upravuje přímo ve zdrojovém kódu. Obsah, který napíšete do políčka
-                                    editoru se
-                                    nemusí objevit přímo na stránce. Pokud chcete, aby se tento text objevil na stránce,
-                                    konzultujte
-                                    to s administrátorem stránky.</p>
-                            </div>
-                        {/if}
-
-                        {control pageList}
+                        {control pageList, $type}
                     </div>
                 </div>
             </div>

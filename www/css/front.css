@@ -520,7 +520,7 @@ div.calendar table tbody tr td.calendar-month-year {
   position: relative;
 }
 #sliderx .buttons {
-  background: url("../../detailreality/images/buttons.png") no-repeat scroll 0 0 transparent;
+  background: url("../../images/buttons.png") no-repeat scroll 0 0 transparent;
   display: block;
   margin: 20px 10px 0 0;
   background-position: 0 -38px;

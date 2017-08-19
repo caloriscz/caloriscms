@@ -1,4 +1,5 @@
 <?php
+
 namespace Caloriscz\Page\Pages;
 
 use Nette\Application\UI\Control;
@@ -13,6 +14,12 @@ class PageListControl extends Control
     public function __construct(\Nette\Database\Context $database)
     {
         $this->database = $database;
+    }
+
+    protected function createComponentMenuInsert()
+    {
+        $control = new \Caloriscz\Menus\MenuForms\InsertMenuControl($this->database);
+        return $control;
     }
 
     /**
@@ -42,19 +49,22 @@ class PageListControl extends Control
         $this->onSave($this->getParameter("type"));
     }
 
-    public function render($fileTemplate = "PageListControl")
+    public function render($type = 1, $fileTemplate = "PageListControl")
     {
         $template = $this->template;
         $template->setFile(__DIR__ . '/' . $fileTemplate . '.latte');
 
-        if ($this->presenter->template->type) {
-            $type = $this->presenter->template->type;
+        if ($type == 2) {
+            $order = "title";
         } else {
-            $type = 9;
+            $order = "FIELD(id, 1, 3, 4, 6, 2), title";
         }
 
+        $template->menu = $this->database->table("pages")->where('pages_id', null)->order($order);
+
         $template->type = $type;
-        $template->pages = $this->database->table("pages")->where(array("pages_types_id" => $type))->order("title");
+        $template->database = $this->database;
+        $template->pages = $this->database->table("pages")->where(array("pages_types_id" => $type))->order($order);
 
         $template->render();
     }
