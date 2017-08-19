@@ -52,19 +52,29 @@
 {/if}
 
 {if $signed != false}
-    <div class="app-body">
+<div class="app-body">
 
-        <div class="sidebar">
-            <nav class="sidebar-nav">
-                <ul class="nav">
-                    {control mainMenu}
-                </ul>
-            </nav>
-        </div>
-        <main class="main">
-            {include content}
-        </main>
+    <div class="sidebar">
+        <nav class="sidebar-nav">
+            <ul class="nav">
+                {control mainMenu}
+            </ul>
+        </nav>
     </div>
+    <main class="main">
+        {foreach $flashes as $flash}
+            {if $iterator->first}
+                <div class="text-center mt-3 mb-3">
+            {/if}
+            <div class="flash {$flash->type}">{$flash->message}</div>
+            {if $iterator->last}
+                </div>
+            {/if}
+        {/foreach}
+
+        {include content}
+    </main>
+</div>
 {else}
 <body class="app flex-row align-items-center">
 <div class="container">

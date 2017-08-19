@@ -1,7 +1,9 @@
 <?php
+
 namespace Caloriscz\Profile\Admin;
 
 use Nette\Application\UI\Control;
+use Nette\Utils\Validators;
 
 class EditControl extends Control
 {
@@ -22,29 +24,38 @@ class EditControl extends Control
     {
         $form = new \Nette\Forms\BootstrapUIForm();
         $form->setTranslator($this->presenter->translator);
-        $form->getElementPrototype()->class = "form-horizontal";
-        $form->getElementPrototype()->role = 'form';
         $form->getElementPrototype()->autocomplete = 'off';
 
-        $members = $this->database->table("users")
-            ->get($this->presenter->user->getId());
-
-        $cols = array(
-            "username" => $members->username,
-            "email" => $members->email,
-            "name" => $members->name,
-        );
-
-        $form->addGroup("Základní nastavení");
-        $form->addText("name", "Name");
+        $form->addText("email");
+        $form->addText("name");
+        $form->addCheckbox("adminbar")
+            ->setDefaultValue($this->presenter->template->member->adminbar_enabled);
+        $form->addSelect("language", "", array("cs" => "česky", "en" => "English"));
 
         $form->setDefaults(array(
-            "name" => $cols["name"],
+            "name" => $this->presenter->template->member->name,
+            "email" => $this->presenter->template->member->email,
+            "language" => $this->presenter->request->getCookie('language_admin')
         ));
 
-        $form->addSubmit("submit", "dictionary.main.Save");
+        $form->addSubmit("submit");
+
         $form->onSuccess[] = array($this, 'editFormSucceeded');
+        $form->onValidate[] = array($this, 'validateFormSucceeded');
         return $form;
+    }
+
+    function validateFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
+    {
+        if (Validators::isEmail($form->values->email) == false) {
+            $this->onSave("E-mail je povinný");
+        }
+
+        $userExists = $this->database->table("users")->where("email = ? AND NOT id = ?", $form->values->email, $this->presenter->user->getId());
+
+        if ($userExists->count() > 0) {
+            $this->onSave("E-mail již existuje");
+        }
     }
 
     /**
@@ -53,15 +64,19 @@ class EditControl extends Control
      */
     function editFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
     {
-        $this->database->table("users")->get($this->presenter->user->getId())
-            ->update(array(
-                "name" => $form->values->name,
-            ));
+        $this->database->table("users")->get($this->presenter->user->getId())->update(array(
+            "name" => $form->values->name,
+            "email" => $form->values->email,
+            "adminbar_enabled" => $form->values->adminbar,
+        ));
+
+        $this->presenter->response->setCookie('language_admin', $form->values->language, '180 days');
     }
 
     public function render()
     {
         $template = $this->template;
+        $template->member = $this->presenter->template->member->username;
         $template->setFile(__DIR__ . '/EditControl.latte');
 
         $template->render();

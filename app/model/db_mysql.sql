@@ -500,7 +500,8 @@ CREATE TABLE `users` (
   `type` int(11) NOT NULL DEFAULT '1',
   `users_roles_id` int(11) DEFAULT '0',
   `login_error` int(11) NOT NULL DEFAULT '0',
-  `login_success` int(11) NOT NULL DEFAULT '0'
+  `login_success` int(11) NOT NULL DEFAULT '0',
+  `adminbar_enabled` smallint(6) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
 
 INSERT INTO `users` (`id`, `username`, `users_categories_id`, `email`, `sex`, `name`, `password`, `date_created`, `date_visited`, `state`, `activation`, `newsletter`, `type`, `users_roles_id`, `login_error`, `login_success`) VALUES
