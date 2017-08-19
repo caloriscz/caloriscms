@@ -1,8 +1,8 @@
-<meta charset="UTF-8">
+<meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>{$title} | {$settings['site:title']}</title>
-<link rel="stylesheet" href="{$baseUri}/css/front.css" type="text/css">
+<link rel="stylesheet" href="/css/front.css" type="text/css">
 
 {if $page->title}<meta property="og:title" content="{$title}">{/if}
 {if $page->metadesc}<meta property="og:description" content="{$metadesc}">{/if}
@@ -21,6 +21,8 @@
 <!--[if lt IE 9]>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.2/html5shiv.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js"></script>
+
+
 <![endif]-->
 
 {if $settings['social:ga_code']}

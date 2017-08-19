@@ -39,7 +39,7 @@ class NavigationControl extends Control
 
         $template->args = $this->presenter->getParameters(TRUE);
 
-        $template->setFile(__DIR__ . '/NavigationTopDoubleMenuControl.latte');
+        $template->setFile(__DIR__ . '/NavigationControl.latte');
 
         $template->render();
     }

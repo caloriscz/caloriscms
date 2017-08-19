@@ -23,23 +23,20 @@
 {/if}
 {control adminBar}
 
-<h1>Hello, world!</h1>
-
-
 <header>
     {control navigation}
 </header>
 
-{include content}
+<div class="page">
+    {include content}
+</div>
 
 <footer>
     {control footer}
 </footer>
 
 
-<script src="{$baseUri}/js/kea-front.js" type="text/javascript"></script>
-<script src="{$baseUri}/js/jquery-ui.min.js" type="text/javascript"></script>
-<script src="{$baseUri}/js/custom.js" type="text/javascript"></script>
-
+<script src="{$baseUri}/js/all-front.js" type="text/javascript"></script>
+<script src="{$baseUri}/js/all-front-custom.js" type="text/javascript"></script>
 </body>
 </html>

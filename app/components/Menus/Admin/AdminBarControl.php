@@ -88,7 +88,7 @@ class AdminBarControl extends Control
             $template->enabled = false;
         }
 
-        $page = $this->database->table("pages")->get($this->presenter->getParameter("page_id"));
+        $page = $this->database->table("pages")->get($this->presenter->template->page->id);
 
         if ($page) {
             $template->page = $page;

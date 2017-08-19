@@ -1,44 +1,39 @@
 {if $enabled}
-    <nav class="navbar navbar-inverse" style="border-radius: 0;">
-        <div class="container-fluid">
-            <div class="navbar-header">
-                <div class="navbar-header">
-                    <a class="navbar-brand" href="#">
-                        <img alt="Brand" src="/images/admin/icon_caloris.png" style="height: 24px;">
-                    </a>
-                </div>
+ <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+        <a class="navbar-brand" href="/">
+            <img alt="Brand" src="/images/admin/icon_caloris.png" style="height: 30px;"></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault"
+                aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
 
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
-                        data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="#">{$settings['site:title']}</a>
-            </div>
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul class="nav navbar-nav">
-                    <li><a href="{plink ':Admin:Settings:default'}">{_dictionary.main.Settings}</a></li>
-                    <li><a href="{plink ':Admin:Menu:default'}">Menu</a></li>
-                    {if $page != false}
-                        <li class="navbar-text" style="color: #fff;">Upravit:</li>
-                        <li><a href="{plink ':Admin:Pages:detail', id => $page->id}">stránku</a></li>
-                        <li><a href="{plink ':Admin:Pages:detailImages', id => $page->id}">obrázky</a></li>
-                        <li><a href="{plink ':Admin:Pages:detailFiles', id => $page->id}">soubory</a></li>
-                        <li><a href="{plink ':Admin:Pages:detailRelated', id => $page->id}">související</a></li>
-
-                        {if $page->pages_types_id == 3}
-                            <li><a href="{plink ':Admin:Pages:detail', id => $page->id}">uprav</a></li>
-                        {elseif $page->pages_types_id == 4}
-                            <li><a href="{plink ':Admin:Product:stock', id => $page->id}">zásoby</a></li>
-                        {/if}
-                    {/if}
-                </ul>
-                <ul class="nav navbar-nav navbar-right">
-                    <li><a href="{plink ':Admin:Sign:out', id => null}">{_dictionary.main.logout}</a></li>
-                </ul>
-            </div>
+        <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin/settings">{$settings['site:title']}</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin/menu">Menu</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="http://example.com" id="dropdown01" data-toggle="dropdown"
+                       aria-haspopup="true" aria-expanded="false">Stránka</a>
+                    <div class="dropdown-menu" aria-labelledby="dropdown01">
+                        <a class="dropdown-item" href="{plink ':Admin:Pages:detail', id => $page->id}">stránku</a>
+                        <a class="dropdown-item" href="{plink ':Admin:Pages:detailImages', id => $page->id}">obrázky</a>
+                        <a class="dropdown-item" href="{plink ':Admin:Pages:detailFiles', id => $page->id}">soubory</a>
+                        <a class="dropdown-item" href="{plink ':Admin:Pages:detailRelated', id => $page->id}">související</a>
+                    </div>
+                </li>
+            </ul>
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{plink ':Admin:Sign:out', id => null}">{_dictionary.main.logout}</a>
+                </li>
+            </ul>
         </div>
     </nav>
 {/if}

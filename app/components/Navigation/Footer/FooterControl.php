@@ -29,6 +29,7 @@ class FooterControl extends Control
     public function render()
     {
         $template = $this->template;
+        $template->settings = $this->presenter->template->settings;
         $template->setFile(__DIR__ . '/FooterControl.latte');
 
         $template->render();

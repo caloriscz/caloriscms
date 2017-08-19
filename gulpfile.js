@@ -30,3 +30,17 @@ gulp.task("scripts-a", function () {
         .pipe(concat('all-back.js'))
         .pipe(gulp.dest('./www/js/'));
 });
+
+gulp.task("scripts-f", function () {
+    gulp.src([
+        './bower_components/jquery/dist/jquery.min.js',
+        './bower_components/popper.js/dist/umd/popper.min.js',
+        './bower_components/bootstrap/dist/js/bootstrap.min.js',
+        './bower_components/jquery-ui/jquery-ui.min.js',
+        './bower_components/jquery-colorbox/jquery.colorbox-min.js',
+        './bower_components/nette-forms/src/assets/netteForms.js',
+        './bower_components/nette.ajax.js/nette.ajax.js'
+    ])
+        .pipe(concat('all-front.js'))
+        .pipe(gulp.dest('./www/js/'));
+});
