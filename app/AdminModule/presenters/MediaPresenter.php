@@ -187,7 +187,7 @@ class MediaPresenter extends BasePresenter
             $this->template->idN = $this->getParameter('id');
         } else {
             $arr = array(
-                'file_type' => 1,
+                'file_type' => 3,
             );
         }
 
@@ -195,7 +195,7 @@ class MediaPresenter extends BasePresenter
 
         $paginator = new \Nette\Utils\Paginator;
         $paginator->setItemCount($mediaDb->count("*"));
-        $paginator->setItemsPerPage(10);
+        $paginator->setItemsPerPage(16);
         $paginator->setPage($this->getParameter("page"));
 
         $this->template->args = $this->getParameters();

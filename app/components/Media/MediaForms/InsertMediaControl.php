@@ -30,11 +30,11 @@ class InsertMediaControl extends Control
             ->setAttribute("class", "form-control");
 
         if ($this->presenter->getView() == 'albums') {
-            $category = 4;
-            $type = 8;
-        } else {
             $category = 6;
             $type = 6;
+        } else {
+            $category = 4;
+            $type = 8;
         }
 
         $form->setDefaults(array(
