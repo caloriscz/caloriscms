@@ -5,27 +5,29 @@
 </div>
 
 <div class="container">
-    <div class="col-md-3">
-        {control profileMenu}
-    </div>
-    <div class="col-md-9">
-        {foreach $flashes as $flash}
-            <div class="flash {$flash->type}">{$flash->message}</div>
-        {/foreach}
+    <div class="row">
+        <div class="col-md-3">
+            {control profileMenu}
+        </div>
+        <div class="col-md-9">
+            {foreach $flashes as $flash}
+                <div class="flash {$flash->type}">{$flash->message}</div>
+            {/foreach}
 
-        {if file_exists($basePath.'images/profiles/portrait-' . $member->id . '.jpg')}
-            <img src="{$baseUri}/images/profiles/portrait-{$member->id}.jpg" style="max-width: 120px;"/><br/><br/>
-            <a n:href="deletePortrait!" class="btn btn-xs">{_dictionary.main.delete|firstUpper}</a>
-        {else}
-            {if $member->sex == 1}
-                <img src="{$baseUri}/images/foto_woman.jpg"
-                     style="visibility: hidden; max-height: 170px; max-width: 200px;"/><br/>
+            {if file_exists($basePath.'images/profiles/portrait-' . $member->id . '.jpg')}
+                <img src="{$baseUri}/images/profiles/portrait-{$member->id}.jpg" style="max-width: 120px;"/><br/><br/>
+                <a n:href="deletePortrait!" class="btn btn-xs">{_dictionary.main.delete|firstUpper}</a>
             {else}
-                <img src="{$baseUri}/images/foto_man.jpg"
-                     style="visibility: hidden; max-height: 170px; max-width: 200px;"/><br/>
+                {if $member->sex == 1}
+                    <img src="{$baseUri}/images/foto_woman.jpg"
+                         style="visibility: hidden; max-height: 170px; max-width: 200px;"/><br/>
+                {else}
+                    <img src="{$baseUri}/images/foto_man.jpg"
+                         style="visibility: hidden; max-height: 170px; max-width: 200px;"/><br/>
+                {/if}
             {/if}
-        {/if}
-        <br/>
-        {control profileChangePortrait}
+            <br/>
+            {control profileChangePortrait}
+        </div>
     </div>
 </div>

@@ -5,23 +5,25 @@
 </div>
 
 <div class="container">
-    <div class="col-md-3">
-        {control profileMenu}
-    </div>
-    <div class="col-md-9">
-        {foreach $flashes as $flash}
-            <div class="flash {$flash->type}">{$flash->message}</div>
-        {/foreach}
-
-        <table class="table">
-            {foreach $addresses as $address}
-                <tr>
-                    <td><a href="{control pageSlug 27}?orderid={$address->id}">{$address->name}</a></td>
-                    <td>{$address->street}, {$address->zip} {$address->city}</td>
-                </tr>
+    <div class="row">
+        <div class="col-md-3">
+            {control profileMenu}
+        </div>
+        <div class="col-md-9">
+            {foreach $flashes as $flash}
+                <div class="flash {$flash->type}">{$flash->message}</div>
             {/foreach}
-        </table>
 
-        {control profileInsertAddress}
+            <table class="table">
+                {foreach $addresses as $address}
+                    <tr>
+                        <td><a href="{control pageSlug 27}?orderid={$address->id}">{$address->name}</a></td>
+                        <td>{$address->street}, {$address->zip} {$address->city}</td>
+                    </tr>
+                {/foreach}
+            </table>
+
+            {control profileInsertAddress}
+        </div>
     </div>
 </div>

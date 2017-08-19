@@ -22,24 +22,18 @@ class EditControl extends Control
     {
         $form = new \Nette\Forms\BootstrapUIForm();
         $form->setTranslator($this->presenter->translator);
-        $form->getElementPrototype()->class = "form-horizontal";
-        $form->getElementPrototype()->role = 'form';
-        $form->getElementPrototype()->autocomplete = 'off';
-        $form->addGroup("Osobní údaje");
-        $form->addText("username", "Uživatel")
-            ->setAttribute("style", "border: 0; font-size: 1.5em;")
-            ->setDisabled();
-        $form->addRadioList('sex', 'Pohlaví', array(
-            1 => "\xC2\xA0" . 'žena',
-            2 => "\xC2\xA0" . 'muž',
-        ))->setAttribute("class", "checkboxlistChoose");
+
+        $form->addText("username");
+        $form->addRadioList('sex', '', array(
+            1 => "\xC2\xA0" . 'žena', 2 => "\xC2\xA0" . 'muž',
+        ));
 
         $form->setDefaults(array(
             "username" => $this->presenter->template->member->username,
             "sex" => $this->presenter->template->member->sex,
         ));
 
-        $form->addSubmit("submit", "dictionary.main.Save");
+        $form->addSubmit("submit");
         $form->onSuccess[] = [$this, "editFormSucceeded"];
         return $form;
     }

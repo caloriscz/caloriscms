@@ -1,6 +1,7 @@
+{var $temp = $presenter->getView()}
 <nav class="nav flex-column text-left">
-    <a href="{control pageSlug 8}"{if $pageId == 8} class="active"{/if}>{_store.order.ContactInformation}</a>
-    <a href="{control pageSlug 9}"{if $pageId == 9} class="active"{/if}>{_store.profile.ProfileImage}</a>
-    <a href="{control pageSlug 10}"{if $pageId == 10} class="active"{/if}>{_store.profile.PasswordChange}</a>
-    <a href="{control pageSlug 11}"{if $pageId == 11} class="active"{/if}>{_dictionary.main.addresses|firstUpper}</a>
+    <a href="/profile" class="nav-link {if $temp == "default"} disabled{/if}">{_store.order.ContactInformation}</a>
+    <a href="/profile/image" class="nav-link {if $temp == "image"} disabled{/if}">{_store.profile.ProfileImage}</a>
+    <a href="/profile/password" class="nav-link {if $temp == "password"} disabled{/if}">{_store.profile.PasswordChange}</a>
+    <a href="/profile/addresses" class="nav-link {if $temp == "addresses"} disabled{/if}">{_dictionary.main.addresses|firstUpper}</a>
 </nav>
