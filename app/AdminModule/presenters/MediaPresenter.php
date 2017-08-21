@@ -149,7 +149,7 @@ class MediaPresenter extends BasePresenter
             $this->template->idN = $this->getParameter('id');
         } else {
             $arr = array(
-                'file_type' => 0,
+                'file_type' => 3,
             );
         }
 

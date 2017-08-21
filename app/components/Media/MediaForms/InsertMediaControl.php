@@ -1,4 +1,5 @@
 <?php
+
 namespace Caloriscz\Media\MediaForms;
 
 use Nette\Application\UI\Control;
@@ -30,11 +31,15 @@ class InsertMediaControl extends Control
             ->setAttribute("class", "form-control");
 
         if ($this->presenter->getView() == 'albums') {
-            $category = 6;
+            $category = 4;
             $type = 6;
         } else {
-            $category = 4;
+            $category = 6;
             $type = 8;
+        }
+
+        if ($this->presenter->getParameter("id")) {
+            $category = $this->presenter->getParameter("id");
         }
 
         $form->setDefaults(array(
@@ -50,8 +55,6 @@ class InsertMediaControl extends Control
 
     function insertFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
     {
-        echo $form->values->category;
-
         $doc = new \App\Model\Document($this->database);
         $doc->setType($form->values->type);
         $doc->setTitle($form->values->title);

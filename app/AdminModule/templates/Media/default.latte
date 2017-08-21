@@ -6,9 +6,11 @@
     <li class="breadcrumb-item active"><a href="/admin/media">Dokumenty</a></li>
     {if count($breadcrumbs) > 0}
         {foreach $breadcrumbs as $crumbId => $crumbValue}
-            <li class="breadcrumb-item active">
-                <a n:href=":Admin:Media:default, id => $crumbId, type => $pageId">{$crumbValue}</a>
-            </li>
+            {if !$iterator->first}
+                <li class="breadcrumb-item active">
+                    <a n:href=":Admin:Media:albums, id => $crumbId, type => $pageId">{$crumbValue}</a>
+                </li>
+            {/if}
         {/foreach}
     {/if}
 </ol>
