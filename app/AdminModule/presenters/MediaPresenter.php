@@ -54,7 +54,7 @@ class MediaPresenter extends BasePresenter
 
         $imageDb->delete();
 
-        $this->redirect(":Admin:Media:default", array(
+        $this->redirect(this, array(
             "id" => $imageDb->pages_id,
             "type" => $this->getParameter("type"),
         ));

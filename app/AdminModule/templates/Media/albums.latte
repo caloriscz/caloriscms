@@ -4,13 +4,16 @@
 <ol class="breadcrumb">
     <li class="breadcrumb-item"><a href="/admin/">Home</a></li>
     <li class="breadcrumb-item">{_dictionary.main.Media}</li>
-    <li class="breadcrumb-item active"><a href="/admin/media/albums">Galerie</a></li>
     {if count($breadcrumbs) > 0}
         {foreach $breadcrumbs as $crumbId => $crumbValue}
-            <li class="breadcrumb-item active">
-                <a n:href=":Admin:Media:albums, id => $crumbId, type => $pageId">{$crumbValue}</a>
-            </li>
+            {if !$iterator->first}
+                <li class="breadcrumb-item active">
+                    <a n:href=":Admin:Media:albums, id => $crumbId, type => $pageId">{$crumbValue}</a>
+                </li>
+            {/if}
         {/foreach}
+    {else}
+        <li class="breadcrumb-item active"><a href="/admin/media/albums">Galerie</a></li>
     {/if}
 </ol>
 
@@ -53,7 +56,8 @@
                                         <div class="card-img text-center" style="max-height: 180px;">
                                             <a n:href=":Admin:Media:image id => $item->id">
                                                 <img src="{$baseUri}/media/{$idN}/{$item->name}" alt="{$item->name}"
-                                                     class="img-responsive-centered" style="max-height: 180px; max-width: 270px;">
+                                                     class="img-responsive-centered"
+                                                     style="max-height: 180px; max-width: 270px;">
                                             </a>
                                         </div>
                                         <div class="card-block text-center">

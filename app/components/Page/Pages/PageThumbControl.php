@@ -48,11 +48,16 @@ class PageThumbControl extends Control
         $template = $this->template;
         $template->setFile(__DIR__ . '/PageThumbControl.latte');
 
-
+        if ($type == 6) {
+            $pagesId = 4;
+        } else {
+            $pagesId = 6;
+        }
 
         if ($id == "") {
             $arr = array(
                 "pages_types_id" => $type,
+                "pages_id" => $pagesId,
             );
         } else {
             $arr = array(
