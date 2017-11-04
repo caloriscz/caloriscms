@@ -7,62 +7,34 @@
 <li class="nav-item">
     <a class="nav-link" href="/"><i class="icon-speedometer"></i> {_admin.navigation.homepage}</a>
 </li>
-<li class="nav-item" class="nav-item">
+<li class="nav-item">
     <a class="nav-link" href="/admin/menu"><i class="icon-menu"></i> Menu</a>
 </li>
-<li class="nav-item">
-    <a class="nav-link" href="/admin/pages?type=1">
-        <i class="fa fa-files-o fa-fw"></i> {_admin.navigation.pages}
-    </a>
-</li>
-<li class="nav-item">
-    <a class="nav-link" href="/admin/pages?type=2">
-        <i class="fa fa-newspaper-o fa-fw"></i> {_dictionary.main.blog|firstUpper}
-    </a>
-</li>
-<li class="nav-item nav-dropdown">
-    <a class="nav-link nav-dropdown-toggle" href="#"><i class="icon-picture"></i> Media</a>
-    <ul class="nav-dropdown-items">
-        <li class="nav-item">
-            <a class="nav-link" href="/admin/media/albums">{_dictionary.main.Galleries}</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="/admin/media">{_dictionary.main.Documents}</a>
-        </li>
-    </ul>
-</li>
-<li class="nav-item">
+{foreach $pagesTypes as $type}
+    <li class="nav-item">
+        <a href="/admin/{$type->admin_link}" class="nav-link">
+            <i class="fa {$type->icon} fa-fw"></i> {$type->content_type}
+        </a>
+    </li>
+{/foreach}
+    <li class="nav-item">
     <a class="nav-link" href="/admin/contacts">
         <i class="fa fa-database fa-fw"></i> {_dictionary.main.contacts|firstUpper}
     </a>
 </li>
 
-{if $database->table('addons')->where('key AND active = 1', 'caloriscms-pricelist')->count() > 0}
-    <li class="nav-item">
-        <a class="nav-link" href="/admin/pricelist">
-            <i class="fa fa-list-ol fa-fw"></i> {_dictionary.main.Pricelist}
-        </a>
-    </li>
-{/if}
 <li class="nav-item">
     <a class="nav-link" href="/admin/members">
         <i class="fa fa-users fa-fw"></i> {_admin.navigation.members}
     </a>
 </li>
-{if $database->table('addons')->where('key = ? AND active = 1', 'caloriscms-links')->count() > 0}
+{foreach $addons as $addon}
     <li class="nav-item">
-        <a class="nav-link" href="/admin/links">
-            <i class="fa fa-link fa-fw"></i> {_dictionary.main.Links}
+        <a href="/admin/{$addon->admin_link}" class="nav-link">
+            <i class="fa {$addon->icon} fa-fw"></i> {$addon->name}
         </a>
     </li>
-{/if}
-{if $database->table('addons')->where('key AND active = 1', 'caloriscms-board')->count() > 0}
-    <li class="nav-item">
-        <a class="nav-link" href="/admin/links">
-            <i class="fa fa-smile-o fa-fw"></i> Board
-        </a>
-    </li>
-{/if}
+{/foreach}
 <li class="nav-item">
     <a class="nav-link" href="/admin/helpdesk">
         <i class="fa fa-life-ring fa-fw"></i> {_dictionary.main.Helpdesk}

@@ -27,6 +27,9 @@ class MainMenuControl extends Control
         $template->settings = $this->presenter->template->settings;
         $template->database = $this->database;
 
+        $template->pagesTypes = $this->database->table("pages_types");
+        $template->addons = $this->database->table("addons");
+
         $template->setFile(__DIR__ . '/MainMenuControl.latte');
 
         $template->render();
