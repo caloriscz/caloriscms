@@ -44,15 +44,16 @@
                 {foreach $menu as $item}
                     <li><span><i class="fa fa-folder"></i></span>
                         <a href="/admin/pages/detail/{$item->id}">{$item->title}</a>
-                        {if $item->pages_types_id != 9}
+
                             <button type="button" class="btn btn-default btn-sm"
                                     class="btn btn-default btn-sm tool-tip" data-toggle="modal"
                                     data-target="#catModal{$item->id}" title="Přidat podkategorii">
                                 <i class="fa fa-plus"></i>
                             </button>
-                        {/if}
+                        {if $item->pages_types_id != 9}
                         <a n:href="delete!, $item->id" class="btn btn-danger btn-sm"><i
                                     class="fa fa-times"></i></a>
+                        {/if}
 
                         {var $categoryCount = $database->table('menu')->where('pages_id', $item->pages_id)->count()}
                         {if $category != $item->pages_id}

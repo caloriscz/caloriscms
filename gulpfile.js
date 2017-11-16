@@ -6,11 +6,12 @@ gulp.task("scripts-a", function () {
         './bower_components/jquery/dist/jquery.min.js',
         './bower_components/jquery-ui/jquery-ui.min.js',
         './bower_components/tether/dist/js/tether.min.js',
+        './bower_components/popper.js/dist/umd/popper.min.js',
         './bower_components/bootstrap/dist/js/bootstrap.js',
         './bower_components/pace/pace.min.js',
         './bower_components/dropzone/dist/min/dropzone.min.js',
-        './bower_components/summernote/dist/summernote.min.js',
-        './bower_components/summernote/lang/summernote-cs-CZ.js',
+        './node_modules/summernote/dist/summernote.min.js',
+        './node_modules/summernote/lang/summernote-cs-CZ.js',
         './bower_components/elfinder/js/elfinder.min.js',
         './bower_components/elfinder/i18n/elfinder.cs.js',
         './bower_components/jquery-colorbox/jquery.colorbox-min.js',
@@ -25,7 +26,6 @@ gulp.task("scripts-a", function () {
         './bower_components/ublaboo-datagrid/assets/dist/datagrid.min.js',
         './bower_components/ublaboo-datagrid/assets/dist/datagrid-spinners.min.js',
         './bower_components/jquery-autocomplete/jquery.autocomplete.js',
-        './bower_components/chart.js/dist/Chart.js',
     ])
         .pipe(concat('all-back.js'))
         .pipe(gulp.dest('./www/js/'));

@@ -2,8 +2,7 @@
 
 namespace App\AdminModule\Presenters;
 
-use Nette,
-    App\Model;
+use Caloriscz\Page\Editor\BlockControl;
 
 /**
  * Pages presenter.
@@ -29,6 +28,12 @@ class PagesPresenter extends BasePresenter
             $this->redirect(this, array("type" => $type));
         };
 
+        return $control;
+    }
+
+    protected function createComponentBlock()
+    {
+        $control = new BlockControl($this->database);
         return $control;
     }
 
@@ -65,12 +70,6 @@ class PagesPresenter extends BasePresenter
     protected function createComponentInsertBlogForm()
     {
         $control = new \Caloriscz\Blog\BlogForms\InsertFormControl($this->database);
-        return $control;
-    }
-
-    protected function createComponentInsertEventPage()
-    {
-        $control = new \Caloriscz\Events\InsertEventPageControl($this->database);
         return $control;
     }
 

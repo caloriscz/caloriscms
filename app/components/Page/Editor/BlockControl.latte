@@ -1,0 +1,27 @@
+<div class="card-header">
+    <strong>Widgets</strong>
+</div>
+<div class="card-block">
+    {foreach $widgets as $item}
+        <div class="row">
+            <div class="col-md-3">
+                active/passive/sort/100% vs 50%
+            </div>
+            <div class="col-md-3">
+                {$item->title}
+            </div>
+            <div class="col-md-5">
+                {$item->description}
+            </div>
+            <div class="col-md-1">
+                <a href="" class="btn btn-primary btn-sm">edit</a>
+            </div>
+        </div>
+    {/foreach}
+
+</div>
+<div class="card-footer">
+    <div class="text-center">
+        <button type="submit" class="btn btn-lg btn-success">{_dictionary.main.Save}</button>
+    </div>
+</div>

@@ -38,8 +38,7 @@
             <pre id="document">{$document}</pre>
 
             <a href="{link toggle! editortype => 'summernote', id => $presenter->getParameter('id')}">přepnout
-                na
-                Summernote</a>
+                na Summernote</a>
         {elseif $editortype == 'ace'}
             <textarea n:name="document" class="summernote form-control" cols="3"></textarea>
 
