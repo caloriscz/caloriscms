@@ -30,8 +30,8 @@
 </li>
 {foreach $addons as $addon}
     <li class="nav-item">
-        <a href="/admin/{$addon->admin_link}" class="nav-link">
-            <i class="fa {$addon->icon} fa-fw"></i> {$addon->name}
+        <a href="/admin/{$addon->getAdminLink()}" class="nav-link">
+            <i class="fa {$addon->getIcon()} fa-fw"></i> {$addon->getName()}
         </a>
     </li>
 {/foreach}

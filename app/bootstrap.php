@@ -1,7 +1,6 @@
 <?php
 
 require __DIR__ . '/../vendor/autoload.php';
-require_once '../vendor/ezyang/htmlpurifier/library/HTMLPurifier.php';
 
 $configurator = new Nette\Configurator;
 $configurator->setDebugMode(array("0.0.0.0")); // enable for your remote IP

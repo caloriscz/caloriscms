@@ -16,6 +16,9 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
     /** @var Nette\Database\Context */
     public $database;
 
+    /** @var \Kdyby\Doctrine\EntityManager @inject */
+    public $em;
+
     /** @persistent */
     public $locale;
 
@@ -34,14 +37,14 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
     /** @var Nette\Http\IResponse @inject */
     public $response;
 
+    /** @var string @persistent */
+    public $ajax = 'on';
+
     public function __construct(\Nette\Database\Context $database, \Nette\Mail\IMailer $mailer)
     {
         $this->database = $database;
         $this->mailer = $mailer;
     }
-
-    /** @var string @persistent */
-    public $ajax = 'on';
 
     /**
      * Common handler for grid operations.
@@ -158,10 +161,9 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
 
     protected function createComponentMainMenu()
     {
-        $control = new \Caloriscz\Menus\Admin\MainMenuControl($this->database);
+        $control = new \Caloriscz\Menus\Admin\MainMenuControl($this->database, $this->em);
         return $control;
     }
-
 
     protected function createComponentPageTopMenu()
     {

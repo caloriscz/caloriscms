@@ -13,6 +13,9 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
     /** @var Nette\Database\Context */
     public $database;
 
+    /** @var \Kdyby\Doctrine\EntityManager */
+    public $em;
+
     /** @persistent */
     public $locale;
 

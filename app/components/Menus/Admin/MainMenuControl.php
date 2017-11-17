@@ -2,6 +2,7 @@
 
 namespace Caloriscz\Menus\Admin;
 
+use App\Model\Entity\Addons;
 use Nette\Application\UI\Control;
 
 class MainMenuControl extends Control
@@ -10,9 +11,13 @@ class MainMenuControl extends Control
     /** @var \Nette\Database\Context */
     public $database;
 
-    public function __construct(\Nette\Database\Context $database)
+    /** @var \Kdyby\Doctrine\EntityManager @inject */
+    public $em;
+
+    public function __construct(\Nette\Database\Context $database, \Kdyby\Doctrine\EntityManager $em)
     {
         $this->database = $database;
+        $this->em = $em;
     }
 
 
@@ -28,7 +33,9 @@ class MainMenuControl extends Control
         $template->database = $this->database;
 
         $template->pagesTypes = $this->database->table("pages_types");
-        $template->addons = $this->database->table("addons")->where("active", 1);
+
+        $links = $this->em->getRepository(Addons::class);
+        $template->addons = $links->findBy(["active" => 1]);
 
         $template->setFile(__DIR__ . '/MainMenuControl.latte');
 
