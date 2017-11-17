@@ -386,19 +386,6 @@ INSERT INTO `settings` (`id`, `settings_categories_id`, `setkey`, `setvalue`, `d
   (44, 17, 'social:fb:type', 'page', 'Typ: účet nebo stránka', 'Type: account or page', NULL, 1),
   (45, 17, 'social:fb:url', '', 'Adresa stránky nebo účtu včetně http', 'Address of the page or account including http', NULL, 1),
   (46, 17, 'social:twitter:account', '', 'Účet na Twitteru', 'Twitter account', NULL, 1),
-  (47, 13, 'store:enabled', '0', 'Provozujete obchod?', 'Is it store?', 'boolean', 1),
-  (48, 13, 'store:stock:hideEmpty', '1', 'Schovávat zboží, které není na skladu', 'Hide products not in stock', 'boolean', 1),
-  (49, 13, 'store:new:days', '14', 'Počet dní, kdy je produkt označován jako nový', 'Number of days when product is displayed as new', NULL, 1),
-  (50, 13, 'store_admin_dashboard', '1', 'Zobrazit dashboard obchodu na homepage administrace', 'View store dashboard in administration''s homepage', 'boolean', 1),
-  (51, 13, 'store:order:generateIdsOnOrderConfirm', '1', 'Vytvářet automaticky čísla objednávek už při dokončení objednávky', 'Generate purchase order identifiers immediately aftter checkout', 'boolean', 1),
-  (52, 13, 'store:currency:code', 'CZK', 'Kód měny', 'Currency code', NULL, 1),
-  (53, 13, 'store:currency:symbol', 'Kč', 'Symbol měny', 'Currency symbol', NULL, 1),
-  (54, 13, 'store:stock:amountDefault', '10', 'Přednastavení množství položek na skladu', 'Preset amount of items in stock', 'boolean', 0),
-  (55, 13, 'store:parametres:searchEnabled', '0', 'Parametrické hledání povoleno', 'Parametric search enabled', 'boolean', 1),
-  (56, 13, 'store:stock:shippingByWeight', '1', 'Cena poštovného podle hmotnosti', 'Shipping price calculated by weight', 'boolean', 1),
-  (57, 13, 'store:order:guestOrderEnabled', '1', 'Povolit objednání neregistrovanému uživateli', 'Unregistered user order enabled', 'boolean', 1),
-  (58, 13, 'store:order:isVatIncluded', '1', 'Je DPH připočítáváno nebo odpočítáváno (1 je připočítáváno)', 'Is VAT included (1 means included)', 'boolean', 0),
-  (59, 13, 'store:stock:deductStock', '0', 'Odečítat zboží po jeho koupi', 'Subtract the stock after purchase', 'boolean', 1),
   (60, 20, 'appearance:paths:logo', 'logo.png', 'Obrázek loga ve vysokém rozlišení a barvě', 'Image of logo in high resolution and color', 'local_path', 0),
   (61, 20, 'appearance:paths:favicon:ico', 'favicon.ico', 'Favicon s příponou ico', 'Favicon with ico suffix', 'local_path', 0),
   (62, 21, 'appearance:carousel:directions', '0', 'Zobrazit indikátory (levá a pravá šipka)', 'Show indicators (left and right arrow)', 'boolean', 1),
@@ -422,8 +409,6 @@ CREATE TABLE `settings_categories` (
 INSERT INTO `settings_categories` (`id`, `parent_id`, `description`, `title`, `sorted`) VALUES
   (10, NULL, NULL, 'Základní nastavení', 146),
   (12, NULL, NULL, 'Členové', 148),
-  (13, NULL, NULL, 'Obchod', 147),
-  (14, 13, NULL, 'Bonus', 167),
   (15, NULL, NULL, 'Blog', 154),
   (16, NULL, NULL, 'Kontakty', 166),
   (17, NULL, NULL, 'Služby', 176),
@@ -439,7 +424,7 @@ CREATE TABLE `snippets` (
   `pages_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
 
-INSERT INTO `snippets` (`id`, `keyword`, `content`, `pages_id`) VALUES
+INSERT INTO `snippets`(`id`, `keyword`, `content`, `pages_id`) VALUES
   (1, 'Zkouška inline editace', 'Toto je zkouška inlineghjghjghjeditace <strong>panoramatu a dalších informací<br></strong>', 1);
 
 CREATE TABLE `users` (

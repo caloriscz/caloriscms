@@ -57,7 +57,7 @@ class PagesPresenter extends BasePresenter
 
     protected function createComponentInsertPageForm()
     {
-        $control = new \Caloriscz\Page\PageForms\InsertFormControl($this->database);
+        $control = new \Caloriscz\Page\PageForms\InsertFormControl($this->database, $this->em);
         return $control;
     }
 

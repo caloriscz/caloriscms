@@ -7,6 +7,8 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Pages
  *
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\PagesRepository")
+ *
  * @ORM\Table(name="pages", indexes={@ORM\Index(name="users_id", columns={"users_id"}), @ORM\Index(name="pages_id", columns={"pages_id"}), @ORM\Index(name="content_type", columns={"pages_types_id"}), @ORM\Index(name="pages_ibfk_7", columns={"pages_templates_id"})})
  * @ORM\Entity
  */
