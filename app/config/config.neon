@@ -33,7 +33,6 @@ services:
 
 extensions:
     translation: Kdyby\Translation\DI\TranslationExtension
-    mobileDetect: IPub\MobileDetect\DI\MobileDetectExtension
 
 translation:
     default: cs

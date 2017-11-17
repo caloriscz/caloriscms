@@ -23,14 +23,12 @@
         "latte/latte": "~2.4",
         "tracy/tracy": "~2.4",
         "kdyby/translation": "dev-master",
-        "ipub/mobile-detect": "dev-master",
         "nette/forms": "~2.4",
         "nette/mail": "~2.4",
         "joseki/pdf-response": "dev-master",
         "h4kuna/ares": "dev-master",
         "ezyang/htmlpurifier": "v4.7.0",
         "studio-42/elfinder": "2.1.16",
-        "nette/tester": "dev-master",
         "ublaboo/datagrid": "v5.1.2"
     }
 }

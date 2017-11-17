@@ -10,8 +10,6 @@ use Nette;
  */
 abstract class BasePresenter extends Nette\Application\UI\Presenter
 {
-    use \IPub\MobileDetect\TMobileDetect;
-
     /** @var Nette\Database\Context */
     public $database;
 
@@ -34,10 +32,6 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
     {
         $template = parent::createTemplate($class);
         $template->addFilter(NULL, '\Filters::common');
-
-        // Add mobile detect and its helper to template
-        $template->_mobileDetect = $this->mobileDetect;
-        $template->_deviceView = $this->deviceView;
 
         return $template;
     }
