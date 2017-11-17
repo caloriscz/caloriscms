@@ -2,18 +2,27 @@
 {var $name = $presenter->getName()}
 {var $id = $presenter->getParameter('id')}
 <br>
-{if $page->pages_types_id == 6 || $page->pages_types_id == 8}
+{if $page->pages_types->id == 6 || $page->pages_types_id == 8}
     {var $pageRoot = 'media?type=' . $page->pages_types_id}
-{elseif $page->pages_types_id == 9}
-    {var $pageRoot = 'pages?type=9'}
-{elseif $page->pages_types_id == 3}
+    {var $pageTitle = 'Všechny stránky'}
+{elseif $page->pages_types->id == 2}
+    {var $pageRoot = 'pages?type=2'}
+    {var $pageTitle = 'Všechny aktuality'}
+{elseif $page->pages_types->id == 3}
     {var $pageRoot = 'events'}
-{elseif $page->pages_types_id == 4}
+    {var $pageTitle = 'Všechny události'}
+{elseif $page->pages_types->id == 4}
     {var $pageRoot = 'catalogue'}
-{elseif $page->pages_types_id == 5}
+    {var $pageTitle = 'Celý katalog'}
+{elseif $page->pages_types->id == 5}
     {var $pageRoot = 'contacts'}
+    {var $pageTitle = 'Všechny kontakty'}
+{elseif $page->pages_types->id == 9}
+    {var $pageRoot = 'pages?type=9'}
+    {var $pageTitle = 'Všechny šablony'}
 {else}
-    {var $pageRoot = 'pages?type=' . $page->pages_types_id}
+    {var $pageRoot = 'pages?type=' . $page->pages_types->id}
+    {var $pageTitle = 'Všechny stránky'}
 {/if}
 <li class="breadcrumb-menu d-md-down-none">
     <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
@@ -57,19 +66,20 @@
         {if $view != 'detail' && $name != 'Admin:Pages'}
             <a href="/admin/pages/detail/{$id}" class="btn btn-secondary">{_dictionary.main.Page}</a>
         {/if}
-        {if $view != 'snippets'}
+        {if $page->pages_types->enable_snippets && $view != 'snippets'}
             <a href="/admin/pages/snippets/{$id}" class="btn btn-secondary">{_dictionary.main.Snippets}</a>
         {/if}
-        {if $view != 'detailImages'}
+        {if $page->pages_types->enable_images && $view != 'detailImages'}
             <a href="/admin/pages/detail-images/{$id}" class="btn btn-secondary">{_dictionary.main.Images}</a>
         {/if}
-        {if $view != 'detailFiles'}
+        {if $page->pages_types->enable_files && $view != 'detailFiles'}
             <a href="/admin/pages/detail-files/{$id}" class="btn btn-secondary">{_dictionary.main.Files}</a>
         {/if}
-        {if $view != 'detailRelated'}
+        {if $page->pages_types->enable_related && $view != 'detailRelated'}
             <a href="/admin/pages/detail-related/{$id}" class="btn btn-secondary">Související příspěvky</a>
         {/if}
 
         <a href="/{$page->slug}" class="btn btn-secondary" target="_blank">{_dictionary.main.Preview}</a>
+        {$page->pages_types->id}
     </div>
 </li>
