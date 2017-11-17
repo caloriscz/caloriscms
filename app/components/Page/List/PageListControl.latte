@@ -1,0 +1,37 @@
+<table class="table table-sm">
+    <tbody>
+    {foreach $pages as $page}
+        <tr>
+            <td class="w-50">
+                <a href="{plink ':Admin:Pages:detail', id => $page->getId()}">{$page->getTitle()}</a>
+            </td>
+            <td class="w-25"> &nbsp;
+                <a href="/{$page->getSlug()}" class="btn btn-default btn-xs" target="_blank"
+                   title="{_dictionary.main.Slug}: {$settings['site:url:base']}/{$page->getSlug()}">
+                    {_dictionary.main.Preview}
+                </a>
+            </td>
+            <td class="text-right w-25">
+                {if $page->getPagesTypes()->getId() != 9}
+                    <a href="{link delete!, id => $page->getId(), type => $type}"
+                       onclick="return confirm('Opravdu smazat?')">
+                        <i class="fa fa-times font-red"></i>
+                    </a>
+                {/if}
+
+                <a n:href="public! 'id' => $page->getId(), type => $type" class="btn btn-default btn-xs">
+                    {if $page->getPublic() == 0}
+                        <span title="Povolit">
+                            <i class="fa fa-toggle-off"></i>
+                        </span>
+                    {else}
+                        <span title="Zakázat">
+                        <i class="fa fa-toggle-on"></i>
+                    </span>
+                    {/if}
+                </a>
+            </td>
+        </tr>
+    {/foreach}
+    </tbody>
+</table>
