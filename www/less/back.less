@@ -1,31 +1,8 @@
-@base-url: "";
+@import "caloris-back.less";
 
-/* Bootstrap */
-@import (inline) "../../bower_components/bootstrap/dist/css/bootstrap.min.css";
-@import (inline) "../../bower_components/tether/dist/css/tether.min.css";
-
-// Utility classes
-@import (inline) "../css/simple-line-icons.css";
-@import (inline) "../css/jquery-ui.min.css";
-@import (inline) "../css/summernote.css";
-@import (inline) "../css/elfinder.min.css";
-@import (inline) "../css/style.css"; /* Core UI style */
-
-@import "../../bower_components/font-awesome/less/font-awesome.less";
-@import (inline) "https://fonts.googleapis.com/css?family=Open+Sans:400,300italic,700&subset=latin,latin-ext";
-
-/* Autocomplete used in Caloris params */
-@import "laniakea/js-autocomplete.less";
-@import (inline) "../../bower_components/dropzone/dist/min/dropzone.min.css";
-/* Dropzone file upload */
-@import (inline) "../../node_modules/summernote/dist/summernote.css";
-/* Wysiwyg editor */
-@import (inline) "../../bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker3.min.css";
-@import (inline) "../../bower_components/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css";
-@import (inline) '../../bower_components/jquery-colorbox/example1/colorbox.css';
-@import (inline) '../../bower_components/ublaboo-datagrid/assets/dist/datagrid.min.css';
-@import (inline) '../../bower_components/fullcalendar/dist/fullcalendar.min.css';
-
-/* Category with inserts and edits */
-@import "laniakea/category-tree.less";
-
+// Logo
+.navbar-brand {
+  display: block;
+  max-height: 45px;
+  margin-top: 10px;
+}

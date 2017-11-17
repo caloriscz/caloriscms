@@ -12371,3 +12371,8 @@ hr.transparent {
   border: 1px solid #94a0b4;
   color: #000;
 }
+.navbar-brand {
+  display: block;
+  max-height: 45px;
+  margin-top: 10px;
+}
