@@ -3,6 +3,7 @@
 namespace App\AdminModule\Presenters;
 
 use Caloriscz\Page\Editor\BlockControl;
+use Caloriscz\Page\Pages\PageListControl;
 
 /**
  * Pages presenter.
@@ -23,7 +24,7 @@ class PagesPresenter extends BasePresenter
 
     protected function createComponentPageList()
     {
-        $control = new \Caloriscz\Page\Pages\PageListControl($this->database);
+        $control = new PageListControl($this->database, $this->em);
         $control->onSave[] = function ($type) {
             $this->redirect(this, array("type" => $type));
         };
@@ -67,19 +68,13 @@ class PagesPresenter extends BasePresenter
         return $control;
     }
 
-    protected function createComponentInsertBlogForm()
-    {
-        $control = new \Caloriscz\Blog\BlogForms\InsertFormControl($this->database);
-        return $control;
-    }
-
     protected function createComponentImageEditForm()
     {
         $control = new \Caloriscz\Media\MediaForms\ImageEditFormControl($this->database);
         return $control;
     }
 
-    function handleChangeState($id, $public)
+    protected function handleChangeState($id, $public)
     {
         if ($public == 0) {
             $idState = 1;
