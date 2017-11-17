@@ -19,11 +19,7 @@
                         {/if}
                     </div>
                     <div class="card-block">
-                        {if $type == 2}
-                            {control insertBlogForm}
-                        {elseif $type == 3}
-                            {control insertEventPage}
-                        {elseif $type == 1}
+                        {if $type != 9}
                             {control insertPageForm}
                         {/if}
                     </div>

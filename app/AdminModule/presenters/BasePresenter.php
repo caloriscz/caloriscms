@@ -161,7 +161,7 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
 
     protected function createComponentMainMenu()
     {
-        $control = new \Caloriscz\Menus\Admin\MainMenuControl($this->database, $this->em);
+        $control = new \Caloriscz\Menus\Admin\MainMenuControl($this->em);
         return $control;
     }
 

@@ -3,43 +3,36 @@
 namespace Caloriscz\Menus\Admin;
 
 use App\Model\Entity\Addons;
+use App\Model\Entity\PagesTypes;
 use Nette\Application\UI\Control;
 
 class MainMenuControl extends Control
 {
-
-    /** @var \Nette\Database\Context */
-    public $database;
-
     /** @var \Kdyby\Doctrine\EntityManager @inject */
     public $em;
 
-    public function __construct(\Nette\Database\Context $database, \Kdyby\Doctrine\EntityManager $em)
+    public function __construct(\Kdyby\Doctrine\EntityManager $em)
     {
-        $this->database = $database;
         $this->em = $em;
     }
 
-
     public function render()
     {
-        $template = $this->template;
-
         if (isset($this->presenter->template->member)) {
-            $template->member = $this->presenter->template->member;
+            $this->template->member = $this->presenter->template->member;
         }
 
-        $template->settings = $this->presenter->template->settings;
-        $template->database = $this->database;
+        $this->template->settings = $this->presenter->template->settings;
 
-        $template->pagesTypes = $this->database->table("pages_types");
+        $pageTypes = $this->em->getRepository(PagesTypes::class);
+        $this->template->pageTypes = $pageTypes->findAll();
 
         $links = $this->em->getRepository(Addons::class);
-        $template->addons = $links->findBy(["active" => 1]);
+        $this->template->addons = $links->findBy(["active" => 1]);
 
-        $template->setFile(__DIR__ . '/MainMenuControl.latte');
+        $this->template->setFile(__DIR__ . '/MainMenuControl.latte');
 
-        $template->render();
+        $this->template->render();
     }
 
 }

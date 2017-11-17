@@ -10,10 +10,10 @@
 <li class="nav-item">
     <a class="nav-link" href="/admin/menu"><i class="icon-menu"></i> Menu</a>
 </li>
-{foreach $pagesTypes as $type}
+{foreach $pageTypes as $type}
     <li class="nav-item">
-        <a href="/admin/{$type->admin_link}" class="nav-link">
-            <i class="fa {$type->icon} fa-fw"></i> {$type->content_type}
+        <a href="/admin/{$type->getAdminLink()}" class="nav-link">
+            <i class="fa {$type->getIcon()} fa-fw"></i> {$type->getContentType()}
         </a>
     </li>
 {/foreach}

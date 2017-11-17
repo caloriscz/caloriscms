@@ -18,16 +18,19 @@ class InsertFormControl extends Control
     {
         $form = new \Nette\Forms\BootstrapUIForm();
         $form->setTranslator($this->presenter->translator);
-        $form->getElementPrototype()->class = "form-horizontal";
-        $form->getElementPrototype()->role = 'form';
-        $form->getElementPrototype()->autocomplete = 'off';
+
+        if ($this->presenter->getParameter('type') == '') {
+            $pageType = 9;
+        } else {
+            $pageType = $this->presenter->getParameter('type');
+        }
 
         $form->addHidden("id");
-        $form->addText("title", "dictionary.main.Title")
-            ->setRequired($this->presenter->translator->translate('messages.pages.NameThePage'));
+        $form->addHidden("section");
+        $form->addText("title");
 
         $form->setDefaults(array(
-            "section" => $this->presenter->getParameter('id'),
+            "section" => $pageType,
         ));
 
         $form->addSubmit("submit", "dictionary.main.Create")
@@ -41,9 +44,11 @@ class InsertFormControl extends Control
     function insertFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
     {
         $doc = new \App\Model\Document($this->database);
-        $doc->setType(1);
+        $doc->setType($form->values->section);
         $doc->setTitle($form->values->title);
         $page = $doc->create($this->presenter->user->getId());
+
+
         \App\Model\IO::directoryMake(APP_DIR . '/media/' . $page, 0755);
         \App\Model\IO::directoryMake(APP_DIR . '/media/' . $page . "/tn", 0755);
 
