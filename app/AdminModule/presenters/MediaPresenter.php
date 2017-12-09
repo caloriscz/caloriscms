@@ -45,7 +45,7 @@ class MediaPresenter extends BasePresenter
     /**
      * Delete image
      */
-    function handleDelete($id, $type)
+    public function handleDelete($id, $type)
     {
         $imageDb = $this->database->table("media")->get($id);
 
@@ -63,7 +63,7 @@ class MediaPresenter extends BasePresenter
     /**
      * Delete page
      */
-    function handleDeletePage($id)
+    public function handleDeletePage($id)
     {
         $page = new Model\Page($this->database);
         $pages = $page->getChildren($id);
@@ -82,7 +82,7 @@ class MediaPresenter extends BasePresenter
     /**
      * Toggle display
      */
-    function handleToggle()
+    public function handleToggle()
     {
         if ($this->getParameter('mediatype') == 'image') {
             $this->response->setCookie('mediatype', 'image', '180 days');
@@ -97,7 +97,7 @@ class MediaPresenter extends BasePresenter
     /**
      * Move image up
      */
-    function handleUp($id, $sorted, $album)
+    public function handleUp($id, $sorted, $album)
     {
         $sortDb = $this->database->table("media")->where(array(
             "sorted > ?" => $sorted,
@@ -119,7 +119,7 @@ class MediaPresenter extends BasePresenter
     /**
      * Move image down
      */
-    function handleDown($id, $sorted, $album)
+    public function handleDown($id, $sorted, $album)
     {
         $sortDb = $this->database->table("media")->where(array(
             "sorted < ?" => $sorted,

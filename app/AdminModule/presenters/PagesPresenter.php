@@ -90,7 +90,7 @@ class PagesPresenter extends BasePresenter
         $this->redirect(":Admin:Pages:default", array("id" => null));
     }
 
-    function handleDeleteRelated($id)
+    public function handleDeleteRelated($id)
     {
         $this->database->table("pages_related")->get($id)->delete();
         $this->redirect(":Admin:Pages:detailRelated", array("id" => $this->getParameter("item")));
@@ -108,7 +108,7 @@ class PagesPresenter extends BasePresenter
     /**
      * Delete image
      */
-    function handleDeleteImage($id)
+    public function handleDeleteImage($id)
     {
         $this->database->table("media")->get($id)->delete();
 
@@ -118,7 +118,7 @@ class PagesPresenter extends BasePresenter
         $this->redirect(":Admin:Pages:detailImages", array("id" => $this->getParameter("name"),));
     }
 
-    function handleInsertRelated($id)
+    public function handleInsertRelated($id)
     {
         $this->database->table("pages_related")->insert(array(
             "pages_id" => $this->getParameter("item"),
@@ -130,7 +130,7 @@ class PagesPresenter extends BasePresenter
     /**
      * Delete snippet
      */
-    function handleDeleteSnippet($id)
+    public function handleDeleteSnippet($id)
     {
         $this->database->table("snippets")->get($id)->delete();
         $this->redirect(":Admin:Pages:snippets", array("id" => $this->getParameter("page")));

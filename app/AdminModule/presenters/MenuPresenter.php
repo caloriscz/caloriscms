@@ -32,7 +32,7 @@ class MenuPresenter extends BasePresenter
     /**
      * Delete categories
      */
-    function handleDelete($id)
+    public function handleDelete($id)
     {
         $menu = new Model\Menu($this->database);
 
@@ -44,7 +44,7 @@ class MenuPresenter extends BasePresenter
     /**
      * Delete image
      */
-    function handleDeleteImage($id)
+    public function handleDeleteImage($id)
     {
         $type = $this->getParameter("type");
 
@@ -53,7 +53,7 @@ class MenuPresenter extends BasePresenter
         $this->redirect(":Admin:Menu:detail", array("id" => $id));
     }
 
-    function handleUp($id, $sorted)
+    public function handleUp($id, $sorted)
     {
         $sortDb = $this->database->table("menu")->where(array(
             "sorted > ?" => $sorted,
@@ -70,7 +70,7 @@ class MenuPresenter extends BasePresenter
         $this->redirect(":Admin:Menu:default", array("id" => null));
     }
 
-    function handleDown($id, $sorted, $category)
+    public function handleDown($id, $sorted, $category)
     {
         $sortDb = $this->database->table("menu")->where(array(
             "sorted < ?" => $sorted,
@@ -86,7 +86,7 @@ class MenuPresenter extends BasePresenter
         $this->redirect(this, array("id" => null));
     }
 
-    function renderDefault()
+    public function renderDefault()
     {
         if ($this->getParameter('id')) {
             $categoryId = $this->getParameter('id');
@@ -99,7 +99,7 @@ class MenuPresenter extends BasePresenter
             ->order("sorted DESC");
     }
 
-    function renderDetail()
+    public function renderDetail()
     {
         $this->template->menu = $this->database->table("menu")->get($this->getParameter("id"));
     }

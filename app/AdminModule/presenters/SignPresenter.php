@@ -54,7 +54,7 @@ class SignPresenter extends BasePresenter
         $control = new \Caloriscz\Sign\SignInControl($this->database);
 
         $logger = new \App\Model\Logger($this->database);
-        $logger->setEvent("Uživatel přihlášen");
+        $logger->setEvent('Uživatel přihlášen');
         $logger->setDescription("");
         $logger->setUser($this->user->getId());
         $logger->save();
@@ -72,9 +72,9 @@ class SignPresenter extends BasePresenter
 
     function renderResetpass()
     {
-        $activation = $this->database->table("users")->where(array(
-            "email" => $this->getParameter("email"),
-            "activation" => $this->getParameter("code"),
+        $activation = $this->database->table('users')->where(array(
+            'email' => $this->getParameter('email'),
+            'activation' => $this->getParameter('code'),
         ));
 
         if ($activation->count() > 0) {

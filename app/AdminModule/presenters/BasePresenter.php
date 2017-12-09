@@ -3,9 +3,13 @@
 namespace App\AdminModule\Presenters;
 
 use Caloriscz\Media\DropZoneControl;
+use Caloriscz\Menus\Admin\AdminCategoryPanelControl;
+use Caloriscz\Menus\Admin\MainMenuControl;
+use Caloriscz\Menus\Admin\PageTopMenuControl;
+use Caloriscz\Page\Editor\EditorControl;
+use Caloriscz\Page\Editor\EditorSettingsControl;
 use Caloriscz\Utilities\PagingControl;
-use Nette,
-    App\Model;
+use Nette;
 
 /**
  * @property-read \Nette\Bridges\ApplicationLatte\Template|\stdClass $template
@@ -47,9 +51,10 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
     }
 
     /**
-     * Common handler for grid operations.
-     * @param string $operation
-     * @param array $id
+     * Common handler for grid operations
+     * @param $operation
+     * @param $id
+     * @throws Nette\Application\AbortException
      */
     public function handleOperations($operation, $id)
     {
@@ -85,17 +90,17 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
         // Login check
         if ($this->getName() != 'Admin:Sign') {
             $role = $this->user->getRoles();
-            $roleCheck = $this->database->table("users_roles")->get($role[0]);
+            $roleCheck = $this->database->table('users_roles')->get($role[0]);
 
             if ($roleCheck->admin_access == 0) {
-                $this->flashMessage($this->translator->translate('messages.sign.invalidLogin'), "error");
+                $this->flashMessage($this->translator->translate('messages.sign.invalidLogin'), 'error');
                 $this->redirect(':Admin:Sign:in');
             }
 
             if ($this->user->isLoggedIn()) {
             } else {
                 if ($this->user->logoutReason === Nette\Security\IUserStorage::INACTIVITY) {
-                    $this->flashMessage($this->translator->translate('messages.sign.youWereLoggedIn'), "note");
+                    $this->flashMessage($this->translator->translate('messages.sign.youWereLoggedIn'), 'note');
                 }
                 $this->redirect('Sign:in', array('backlink' => $this->storeRequest()));
             }
@@ -105,18 +110,18 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
         if ($this->user->isLoggedIn()) {
             $this->template->isLoggedIn = TRUE;
 
-            $this->template->member = $this->database->table("users")->get($this->user->getId());
+            $this->template->member = $this->database->table('users')->get($this->user->getId());
         }
 
         // Set values from db
-        $this->template->settings = $this->database->table("settings")->fetchPairs("setkey", "setvalue");
+        $this->template->settings = $this->database->table('settings')->fetchPairs('setkey', 'setvalue');
 
         $this->template->appDir = APP_DIR;
         $this->template->signed = TRUE;
         $this->template->langSelected = $this->translator->getLocale();
 
         // Set language from cookie
-        if ($this->request->getCookie("langugage_admin") == '') {
+        if ($this->request->getCookie('langugage_admin') == '') {
             $this->translator->setLocale($this->translator->getDefaultLocale());
         } else {
             $this->translator->setLocale($this->request->getCookie('language_admin'));
@@ -131,13 +136,13 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
 
     protected function createComponentEditor()
     {
-        $control = new \Caloriscz\Page\Editor\EditorControl($this->database);
+        $control = new EditorControl($this->database);
         return $control;
     }
 
     protected function createComponentEditorSettings()
     {
-        $control = new \Caloriscz\Page\Editor\EditorSettingsControl($this->database);
+        $control = new EditorSettingsControl($this->database);
         return $control;
     }
 
@@ -149,25 +154,25 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
 
     protected function createComponentImageBrowser()
     {
-        $control = new \Caloriscz\Media\ImageBrowserControl($this->database);
+        $control = new ImageBrowserControl($this->database);
         return $control;
     }
 
     protected function createComponentAdminCategoryPanel()
     {
-        $control = new \Caloriscz\Menus\Admin\AdminCategoryPanelControl($this->database);
+        $control = new AdminCategoryPanelControl($this->database);
         return $control;
     }
 
     protected function createComponentMainMenu()
     {
-        $control = new \Caloriscz\Menus\Admin\MainMenuControl($this->em);
+        $control = new MainMenuControl($this->em);
         return $control;
     }
 
     protected function createComponentPageTopMenu()
     {
-        $control = new \Caloriscz\Menus\Admin\PageTopMenuControl($this->database);
+        $control = new PageTopMenuControl($this->database);
         return $control;
     }
 

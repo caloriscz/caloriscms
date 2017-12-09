@@ -6,7 +6,7 @@ use Nette,
     App\Model;
 
 /**
- * Homepage presenter.
+ * Image folder file manager
  */
 class FilesPresenter extends BasePresenter
 {
@@ -18,18 +18,18 @@ class FilesPresenter extends BasePresenter
     }
 
     /**
-     * Delete files
+     * Delete file
      */
-    function handleDelete()
+    public function handleDelete()
     {
-        Model\IO::remove(APP_DIR . '/images/' . $this->getParameter("path"));
+        Model\IO::remove(APP_DIR . '/images/' . $this->getParameter('path'));
 
         $this->redirect(this);
     }
 
     public function renderDefault()
     {
-        $this->template->files = \Nette\Utils\Finder::findFiles('')->in(APP_DIR . "/images");
+        $this->template->files = \Nette\Utils\Finder::findFiles('')->in(APP_DIR . '/images');
     }
 
 }

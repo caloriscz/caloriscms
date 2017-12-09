@@ -3,7 +3,7 @@
 namespace App\AdminModule\Presenters;
 
 /**
- * Import from files
+ * User profile presenter
  * @author Petr Karásek <caloris@caloris.cz>
  */
 class ProfilePresenter extends BasePresenter

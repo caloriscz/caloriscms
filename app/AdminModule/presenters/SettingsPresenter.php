@@ -41,7 +41,7 @@ class SettingsPresenter extends BasePresenter
         return $control;
     }
     
-    function handleInstall($id)
+    public function handleInstall($id)
     {
         $default = $this->database->table("languages")->where("default = 1");
 
@@ -63,7 +63,7 @@ class SettingsPresenter extends BasePresenter
         $this->redirect(":Admin:Settings:languages");
     }
 
-    function handleMakeDefault($id)
+    public function handleMakeDefault($id)
     {
         if ($this->template->member->users_roles->settings_edit == 0) {
             $this->database->query("UPDATE languages SET `default` = NULL");
@@ -73,7 +73,7 @@ class SettingsPresenter extends BasePresenter
         $this->redirect(":Admin:Settings:languages");
     }
 
-    function handleMakeDefaultCurrency($id)
+    public function handleMakeDefaultCurrency($id)
     {
         if ($this->template->member->users_roles->settings_edit == 0) {
             $this->database->query("UPDATE currencies SET `used` = NULL");
@@ -83,7 +83,7 @@ class SettingsPresenter extends BasePresenter
         $this->redirect(":Admin:Settings:languages");
     }
 
-    function handleToggle($id)
+    public function handleToggle($id)
     {
         if ($this->template->member->users_roles->settings_edit == 0) {
             $toggle = $this->database->table("languages")->get($id);
@@ -100,7 +100,7 @@ class SettingsPresenter extends BasePresenter
         $this->redirect(":Admin:Settings:languages");
     }
 
-    function handleToggleCountry($id)
+    public function handleToggleCountry($id)
     {
         if ($this->template->member->users_roles->settings_edit == 0) {
             $toggle = $this->database->table("countries")->get($id);
@@ -118,7 +118,7 @@ class SettingsPresenter extends BasePresenter
     }
 
 
-    function checkColumn($table, $column, $type, $lang)
+    public function checkColumn($table, $column, $type, $lang)
     {
         $pages_title = $this->database->query("SHOW COLUMNS FROM `" . $table . "` LIKE ?", $column . '_' . $lang)->getRowCount();
 

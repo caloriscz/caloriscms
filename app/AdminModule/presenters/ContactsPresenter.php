@@ -16,7 +16,7 @@ class ContactsPresenter extends BasePresenter
     {
         parent::startup();
 
-        $this->template->page = $this->database->table("pages")->get($this->getParameter("id"));
+        $this->template->page = $this->database->table("pages")->get($this->getParameter('id'));
     }
 
     /** @var \Caloriscz\Contacts\ContactForms\IEditContactControlFactory @inject */
@@ -27,7 +27,7 @@ class ContactsPresenter extends BasePresenter
         $control = $this->editContactControlFactory->create();
         $control->onSave[] = function ($pages_id, $error = null) {
             if ($error == 1) {
-                $this->flashMessage($this->translator->translate('messages.sign.fillInEmail'), "error");
+                $this->flashMessage($this->translator->translate('messages.sign.fillInEmail'), 'error');
             }
 
             $this->redirect(this, array("id" => $pages_id));
@@ -94,54 +94,54 @@ class ContactsPresenter extends BasePresenter
     /**
      * Delete hour
      */
-    function handleDeleteHour($id)
+    public function handleDeleteHour($id)
     {
-        $this->database->table("contacts_openinghours")->get($this->getParameter("hour"))->delete();
+        $this->database->table('contacts_openinghours')->get($this->getParameter('hour'))->delete();
 
-        $this->redirect(":Admin:Contacts:detailOpeningHours", array("id" => $id));
+        $this->redirect(':Admin:Contacts:detailOpeningHours', array('id' => $id));
     }
 
     /**
      * Delete categories
      */
-    function handleDeleteCategory($id)
+    public function handleDeleteCategory($id)
     {
         $category = new Model\Category($this->database);
 
-        $this->database->table("categories")->where("id", $category->getSubIds($id))
+        $this->database->table('categories')->where('id', $category->getSubIds($id))
             ->delete();
 
-        $this->redirect(":Admin:Categories:default");
+        $this->redirect(':Admin:Categories:default');
     }
 
-    function handleUpCategory($id, $sorted)
+    public function handleUpCategory($id, $sorted)
     {
-        $sortDb = $this->database->table("categories")->where(array(
-            "sorted > ?" => $sorted,
-            "parent_id" => $this->getParameter("category"),
+        $sortDb = $this->database->table('categories')->where(array(
+            'sorted > ?' => $sorted,
+            'parent_id' => $this->getParameter('category'),
         ))->order("sorted")->limit(1);
         $sort = $sortDb->fetch();
 
         if ($sortDb->count() > 0) {
-            $this->database->table("categories")->where(array("id" => $id))->update(array("sorted" => $sort->sorted));
-            $this->database->table("categories")->where(array("id" => $sort->id))
-                ->update(array("sorted" => $sorted));
+            $this->database->table('categories')->where(array('id' => $id))->update(array('sorted' => $sort->sorted));
+            $this->database->table('categories')->where(array('id' => $sort->id))
+                ->update(array('sorted' => $sorted));
         }
 
         $this->redirect(":Admin:Categories:default", array("id" => null));
     }
 
-    function handleDownCategory($id, $sorted, $category)
+    public function handleDownCategory($id, $sorted, $category)
     {
-        $sortDb = $this->database->table("contacts_categories")->where(array(
-            "sorted < ?" => $sorted,
-            "parent_id" => $category,
-        ))->order("sorted DESC")->limit(1);
+        $sortDb = $this->database->table('contacts_categories')->where(array(
+            'sorted < ?' => $sorted,
+            'parent_id' => $category,
+        ))->order('sorted DESC')->limit(1);
         $sort = $sortDb->fetch();
 
         if ($sortDb->count() > 0) {
-            $this->database->table("contacts_categories")->where(array("id" => $id))->update(array("sorted" => $sort->sorted));
-            $this->database->table("contacts_categories")->where(array("id" => $sort->id))->update(array("sorted" => $sorted));
+            $this->database->table('contacts_categories')->where(array('id' => $id))->update(array('sorted' => $sort->sorted));
+            $this->database->table('contacts_categories')->where(array('id' => $sort->id))->update(array('sorted' => $sorted));
         }
 
         $this->presenter->redirect(this, array("id" => null));
@@ -149,34 +149,34 @@ class ContactsPresenter extends BasePresenter
 
     public function renderDefault()
     {
-        $contactsDb = $this->database->table("contacts")->order("name");
+        $contactsDb = $this->database->table('contacts')->order('name');
 
         $paginator = new \Nette\Utils\Paginator;
-        $paginator->setItemCount($contactsDb->count("*"));
+        $paginator->setItemCount($contactsDb->count('\*'));
         $paginator->setItemsPerPage(20);
-        $paginator->setPage($this->getParameter("page"));
+        $paginator->setPage($this->getParameter('page'));
 
         $this->template->args = $this->getParameters();
         $this->template->paginator = $paginator;
         $this->template->contacts = $contactsDb->limit($paginator->getLength(), $paginator->getOffset());
 
-        $this->template->menu = $this->database->table("contacts_categories")->where('parent_id', null);
+        $this->template->menu = $this->database->table('contacts_categories')->where('parent_id', null);
     }
 
     public function renderDetailOpeningHours()
     {
-        $this->template->hours = $this->database->table("contacts_openinghours")->where("contacts_id", $this->getParameter("id"));
+        $this->template->hours = $this->database->table('contacts_openinghours')->where('contacts_id', $this->getParameter('id'));
     }
 
     public function renderCommunications()
     {
-        $this->template->page = $this->database->table("pages")->get($this->getParameter("id"));
-        $this->template->communications = $this->database->table("contacts_communications")->where(array(
-            "contacts_id" => $this->getParameter('id'),
+        $this->template->page = $this->database->table('pages')->get($this->getParameter('id'));
+        $this->template->communications = $this->database->table('contacts_communications')->where(array(
+            'contacts_id' => $this->getParameter('id'),
         ));
     }
 
-    function renderCategories()
+    public function renderCategories()
     {
         if ($this->getParameter('id')) {
             $categoryId = $this->getParameter('id');
@@ -185,13 +185,13 @@ class ContactsPresenter extends BasePresenter
         }
 
         $this->template->database = $this->database;
-        $this->template->menu = $this->database->table("contacts_categories")->where('parent_id', $categoryId)
-            ->order("sorted DESC");
+        $this->template->menu = $this->database->table('contacts_categories')->where('parent_id', $categoryId)
+            ->order('sorted DESC');
     }
 
-    function renderCategoriesDetail()
+    public function renderCategoriesDetail()
     {
-        $this->template->menu = $this->database->table("contacts_categories")->get($this->getParameter("id"));
+        $this->template->menu = $this->database->table('contacts_categories')->get($this->getParameter('id'));
     }
 
 }

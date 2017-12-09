@@ -70,7 +70,7 @@ class MembersPresenter extends BasePresenter
     /**
      * Contact for user delete
      */
-    function handleDeleteContact($id)
+    public function handleDeleteContact($id)
     {
         if (!$this->template->member->users_roles->members_edit) {
             $this->flashMessage($this->translator->translate("messages.members.PermissionDenied"), 'error');
