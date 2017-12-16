@@ -152,7 +152,7 @@ class ContactsPresenter extends BasePresenter
         $contactsDb = $this->database->table('contacts')->order('name');
 
         $paginator = new \Nette\Utils\Paginator;
-        $paginator->setItemCount($contactsDb->count('\*'));
+        $paginator->setItemCount($contactsDb->count('*'));
         $paginator->setItemsPerPage(20);
         $paginator->setPage($this->getParameter('page'));
 
