@@ -1,7 +1,9 @@
 <?php
 namespace Caloriscz\Helpdesk;
 
+use App\Model\Helpdesk;
 use Nette\Application\UI\Control;
+use Nette\Forms\BootstrapUIForm;
 
 class HelpdeskControl extends Control
 {
@@ -14,11 +16,11 @@ class HelpdeskControl extends Control
         $this->database = $database;
     }
 
-    function createComponentSendForm()
+    public function createComponentSendForm()
     {
         $helpdesk = $this->database->table("helpdesk")->get(1);
 
-        $form = new \Nette\Forms\BootstrapUIForm();
+        $form = new BootstrapUIForm();
         $form->setTranslator($this->presenter->translator);
         $form->getElementPrototype()->class = "form-horizontal";
         $form->getElementPrototype()->role = 'form';
@@ -46,7 +48,7 @@ class HelpdeskControl extends Control
         return $form;
     }
 
-    function sendFormValidated(\Nette\Forms\BootstrapUIForm $form)
+    public function sendFormValidated(\Nette\Forms\BootstrapUIForm $form)
     {
         if (strlen($form->values->name) < 2) {
             $this->presenter->flashMessage($this->presenter->translator->translate('messages.sign.fillInName'), "error");
@@ -64,7 +66,7 @@ class HelpdeskControl extends Control
         }
     }
 
-    function sendFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
+    public function sendFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
     {
         if ($this->presenter->user->isLoggedIn()) {
             $arr["users_id"] = $this->presenter->template->member->id;
@@ -76,7 +78,7 @@ class HelpdeskControl extends Control
             'message' => $form->values->message,
         );
 
-        $helpdesk = new \App\Model\Helpdesk($this->database, $this->presenter->mailer);
+        $helpdesk = new Helpdesk($this->database, $this->presenter->mailer);
         $helpdesk->setId(1);
         $helpdesk->setEmail($form->values->email);
         $helpdesk->setSettings($this->presenter->template->settings);

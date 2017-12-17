@@ -144,7 +144,7 @@ class ContactsPresenter extends BasePresenter
             $this->database->table('contacts_categories')->where(array('id' => $sort->id))->update(array('sorted' => $sorted));
         }
 
-        $this->presenter->redirect(this, array("id" => null));
+        $this->presenter->redirect(this, array('id' => null));
     }
 
     public function renderDefault()

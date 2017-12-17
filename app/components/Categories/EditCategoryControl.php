@@ -16,14 +16,14 @@ class EditCategoryControl extends Control
 
     protected function createComponentEditForm()
     {
-        $category = $this->database->table("pages")->get($this->presenter->getParameter("id"));
+        $category = $this->database->table('pages')->get($this->presenter->getParameter('id'));
 
-        $categories = $this->database->table("pages")->where("pages_types_id", 7)->fetchPairs("id", "title");
+        $categories = $this->database->table('pages')->where('pages_types_id', 7)->fetchPairs('id', 'title');
         unset($categories[$category->id]);
 
         $form = new \Nette\Forms\BootstrapUIForm();
         $form->setTranslator($this->presenter->translator);
-        $form->getElementPrototype()->class = "form-horizontal";
+        $form->getElementPrototype()->class = 'form-horizontal';
         $form->getElementPrototype()->role = 'form';
         $form->getElementPrototype()->autocomplete = 'off';
 
@@ -31,32 +31,32 @@ class EditCategoryControl extends Control
         $form->addText('title', 'dictionary.main.Title');
         $form->addSelect('parent', 'Nadřazená kategorie', $categories)
             ->setPrompt('admin.categories.NothingRelated')
-            ->setAttribute("class", "form-control");
+            ->setAttribute('class', 'form-control');
         $form->addText('url', 'dictionary.main.URL');
         $form->addSubmit('submitm', 'dictionary.main.Save');
 
 
         $arr = array(
-            "id" => $category->id,
-            "title" => $category->title,
-            "parent" => $category->pages_id,
+            'id' => $category->id,
+            'title' => $category->title,
+            'parent' => $category->pages_id,
         );
 
         $form->setDefaults(array_filter($arr));
 
-        $form->onSuccess[] = [$this, "editFormSucceeded"];
+        $form->onSuccess[] = [$this, 'editFormSucceeded'];
         return $form;
     }
 
     public function editFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
     {
-        $this->database->table("contacts_categories")->get($form->values->id)
+        $this->database->table('contacts_categories')->get($form->values->id)
             ->update(array(
-                "title" => $form->values->title,
-                "parent_id" => $form->values->parent,
+                'title' => $form->values->title,
+                'parent_id' => $form->values->parent,
             ));
 
-        $this->presenter->redirect(this, array("id" => $form->values->id));
+        $this->presenter->redirect(this, array('id' => $form->values->id));
     }
 
     public function render()

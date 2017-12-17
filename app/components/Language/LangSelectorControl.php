@@ -2,31 +2,32 @@
 
 use Nette\Application\UI\Control;
 
+/**
+ * List of languages for administration
+ * Class LangSelectorControl
+ */
 class LangSelectorControl extends Control
 {
 
-    /** @var \Nette\Database\Context */
-    public $database;
+    /** @var \Kdyby\Doctrine\EntityManager @inject */
+    public $em;
 
-    public function __construct(\Nette\Database\Context $database)
+    public function __construct(\Kdyby\Doctrine\EntityManager $em)
     {
-        $this->database = $database;
+        $this->em = $em;
     }
 
     public function render()
     {
-        $template = $this->template;
-        $template->id = $this->presenter->getParameter('id');
+        $this->template->id = $this->getPresenter()->getParameter('id');
+        $this->template->languages = $this->em->getRepository(\App\Model\Entity\Languages::class)->findAll();
 
-        $template->languages = $this->database->table("languages");
-        $template->langSelected = $this->presenter->getParameter("l");
-        $template->arr = $this->presenter->getParameters();
+        $this->template->langSelected = $this->getPresenter()->getParameter('l');
+        $this->template->arr = $this->getPresenter()->getParameters();
 
-        $template->settings = $this->presenter->template->settings;
-        $template->setFile(__DIR__ . '/LangSelectorControl.latte');
-
-
-        $template->render();
+        $this->template->settings = $this->getPresenter()->template->settings;
+        $this->template->setFile(__DIR__ . '/LangSelectorControl.latte');
+        $this->template->render();
     }
 
 }

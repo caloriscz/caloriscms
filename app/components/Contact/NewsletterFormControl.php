@@ -17,59 +17,59 @@ class NewsletterFormControl extends Control
      * Newsletter
      * @return \Nette\Forms\BootstrapUIForm
      */
-    function createComponentAdd()
+    public function createComponentAdd()
     {
-        $form = new \Nette\Forms\BootstrapUIForm;
+        $form = new \Nette\Forms\BootstrapUIForm();
         $form->setTranslator($this->presenter->translator);
-        $form->getElementPrototype()->class = "";
+        $form->getElementPrototype()->class = '';
         $form->getElementPrototype()->autocomplete = 'off';
 
-        $form->addText("email")
-            ->setAttribute("class", "form-control");
-        $form->addSubmit("submitm", "messages.helpdesk.send")
-            ->setAttribute("class", "btn btn-yellow");
+        $form->addText('email')
+            ->setAttribute('class', 'form-control');
+        $form->addSubmit('submitm', 'messages.helpdesk.send')
+            ->setAttribute('class', 'btn btn-yellow');
 
-        $form->onValidate[] = [$this, "addValidated"];
-        $form->onSuccess[] = [$this, "addSucceeded"];
+        $form->onValidate[] = [$this, 'addValidated'];
+        $form->onSuccess[] = [$this, 'addSucceeded'];
         return $form;
     }
 
-    function addValidated(\Nette\Forms\BootstrapUIForm $form)
+    public function addValidated(\Nette\Forms\BootstrapUIForm $form)
     {
-        $dbEmail = $this->database->table("contacts")->where(array(
-            "categories_id" => 19,
-            "email" => $form->values->email,
+        $dbEmail = $this->database->table('contacts')->where(array(
+            'categories_id' => 19,
+            'email' => $form->values->email,
         ));
 
         if ($dbEmail->count() > 0) {
-            $this->flashMessage("Váš e-mail byl již přidán");
-            $this->presenter->redirect(":Front:Homepage:default");
+            $this->flashMessage('Váš e-mail byl již přidán');
+            $this->presenter->redirect(this);
         }
     }
 
-    function addSucceeded(\Nette\Forms\BootstrapUIForm $form)
+    public function addSucceeded(\Nette\Forms\BootstrapUIForm $form)
     {
         $doc = new \App\Model\Document($this->database);
         $doc->setType(5);
-        $doc->createSlug("contact-" . $form->values->email);
+        $doc->createSlug('contact-' . $form->values->email);
         $doc->setTitle($form->values->email);
         $page = $doc->create($this->presenter->user->getId());
 
         \App\Model\IO::directoryMake(substr(APP_DIR, 0, -4) . '/www/media/' . $page, 0755);
 
         $arr = array(
-            "users_id" => null,
-            "pages_id" => $page,
-            "type" => 0,
+            'users_id' => null,
+            'pages_id' => $page,
+            'type' => 0,
         );
 
-        $arr["email"] = $form->values->email;
-        $arr["name"] = $form->values->email;
+        $arr['email'] = $form->values->email;
+        $arr['name'] = $form->values->email;
 
-        $this->database->table("contacts")
+        $this->database->table('contacts')
             ->insert($arr);
 
-        $this->presenter->flashMessage("Byli jste přihlášení k odeběru newsletteru");
+        $this->presenter->flashMessage('Byli jste přihlášení k odeběru newsletteru');
         $this->presenter->redirect(this);
     }
 

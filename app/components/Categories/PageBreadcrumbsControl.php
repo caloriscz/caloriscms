@@ -1,6 +1,7 @@
 <?php
 namespace Caloriscz\Categories;
 
+use App\Model\Category;
 use Nette\Application\UI\Control;
 
 class PageBreadcrumbsControl extends Control
@@ -18,8 +19,8 @@ class PageBreadcrumbsControl extends Control
     {
         $template = $this->template;
 
-        $breadcrumb = new \App\Model\Category($this->database);
-        $template->breadcrumbs = $breadcrumb->getPageBreadcrumb($this->presenter->getParameter("page_id"));
+        $breadcrumb = new Category($this->database);
+        $template->breadcrumbs = $breadcrumb->getPageBreadcrumb($this->presenter->getParameter('page_id'));
 
         $template->setFile(__DIR__ . '/PageBreadcrumbsControl.latte');
 

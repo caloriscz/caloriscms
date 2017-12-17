@@ -1,21 +1,21 @@
-{if $languages->count() >= 2}
+{if count($languages) > 1}
     <p>
         Jazykové mutace:
         {foreach $languages as $item}
-            {if $item->default}
+            {if $item->getDefault()}
                 {var $code = null}
             {else}
-                {var $code = $item->code}
+                {var $code = $item->getCode()}
             {/if}
 
-            {if $langSelected == $item->code}
+            {if $langSelected == $item->getCode()}
                 {var $active = " btn-primary"}
-            {elseif $langSelected == '' && $item->default == 1}
+            {elseif $langSelected == '' && $item->getDefault() == 1}
                 {var $active = " btn-primary"}
             {else}
                 {var $active = ""}
             {/if}
-            <a href="{plink this, id => $id, (expand) $arr, l => $code}" class="btn{$active}">{$item->title}</a>
+            <a href="{plink this, id => $id, (expand) $arr, l => $code}" class="btn{$active}">{$item->getTitle()}</a>
         {/foreach}
     </p>
 {/if}

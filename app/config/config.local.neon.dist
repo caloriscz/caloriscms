@@ -8,6 +8,13 @@ database:
 	options:
 		lazy: yes
 
+
+doctrine:
+		user: ''
+		password: ''
+		dbname: ''
+		host: 'localhost'
+
 services:
 	nette.latteFactory:
 		setup:

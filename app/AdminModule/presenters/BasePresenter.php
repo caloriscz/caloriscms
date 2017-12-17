@@ -136,7 +136,7 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
 
     protected function createComponentEditor()
     {
-        $control = new EditorControl($this->database);
+        $control = new EditorControl($this->database, $this->em);
         return $control;
     }
 

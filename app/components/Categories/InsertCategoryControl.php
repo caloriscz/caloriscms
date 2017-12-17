@@ -2,6 +2,7 @@
 namespace Caloriscz\Categories;
 
 use Nette\Application\UI\Control;
+use Nette\Forms\BootstrapUIForm;
 
 class InsertCategoryControl extends Control
 {
@@ -19,37 +20,32 @@ class InsertCategoryControl extends Control
      */
     protected function createComponentInsertForm()
     {
-        $form = new \Nette\Forms\BootstrapUIForm();
+        $form = new BootstrapUIForm();
         $form->setTranslator($this->presenter->translator);
-        $form->getElementPrototype()->class = "form-horizontal";
-        $form->getElementPrototype()->role = 'form';
-        $form->getElementPrototype()->autocomplete = 'off';
 
-        $form->addHidden("parent");
-        $form->addText('title', 'dictionary.main.Title')
-            ->setAttribute("class", "form-control");
-        $form->addSubmit('submitm', 'dictionary.main.Insert')
-            ->setAttribute("class", "btn btn-primary");
+        $form->addHidden('parent');
+        $form->addText('title', 'dictionary.main.Title')->setAttribute('class', 'form-control');
+        $form->addSubmit('submitm', 'dictionary.main.Insert')->setAttribute('class', 'btn btn-primary');
 
-        $form->onSuccess[] = [$this, "insertFormSucceeded"];
-        $form->onValidate[] = [$this, "validateFormSucceeded"];
+        $form->onSuccess[] = [$this, 'insertFormSucceeded'];
+        $form->onValidate[] = [$this, 'validateFormSucceeded'];
         return $form;
     }
 
     public function validateFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
     {
-        $category = $this->database->table("categories")->where(array(
-            "parent_id" => $form->values->parent,
-            "title" => $form->values->title,
+        $category = $this->database->table('contacts_categories')->where(array(
+            'parent_id' => $form->values->parent,
+            'title' => $form->values->title,
         ));
 
         if ($category->count() > 0) {
-            $this->presenter->flashMessage($this->presenter->translator->translate('messages.sign.categoryAlreadyExists'), "error");
+            $this->presenter->flashMessage($this->presenter->translator->translate('messages.sign.categoryAlreadyExists'), 'error');
             $this->presenter->redirect(this);
         }
 
         if ($form->values->title == "") {
-            $this->presenter->flashMessage($this->translator->translate('messages.sign.categoryMustHaveSomeName'), "error");
+            $this->presenter->flashMessage($this->translator->translate('messages.sign.categoryMustHaveSomeName'), 'error');
             $this->presenter->redirect(this);
         }
     }
@@ -59,7 +55,7 @@ class InsertCategoryControl extends Control
         $category = new \App\Model\Category($this->database);
         $category->setCategory($form->values->title, $form->values->parent);
 
-        $this->presenter->redirect(this, array("id" => null));
+        $this->presenter->redirect(this, array('id' => null));
     }
 
     public function render($id = null)

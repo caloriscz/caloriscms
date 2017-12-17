@@ -19,7 +19,7 @@ class ContactListControl extends Control
         $template = $this->template;
         $template->setFile(__DIR__ . '/ContactListControl.latte');
 
-        $template->contacts = $this->database->table("contacts")->where("categories_id", 9)->order("order ASC");
+        $template->contacts = $this->database->table('contacts')->where('categories_id', 9)->order('order ASC');
 
         $template->render();
     }

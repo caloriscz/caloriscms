@@ -20,7 +20,7 @@ class EditHelpdeskEmailSettingsControl extends Control
     /**
      * Send teste-mail
      */
-    function createComponentEditForm()
+    public function createComponentEditForm()
     {
         $form = new \Nette\Forms\BootstrapUIForm();
         $form->setTranslator($this->presenter->translator);
@@ -48,7 +48,7 @@ class EditHelpdeskEmailSettingsControl extends Control
         return $form;
     }
 
-    function editFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
+    public function editFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
     {
         $this->database->table("helpdesk_emails")->get($form->values->helpdesk_email_id)->update(array(
             "helpdesk_templates_id" => $form->values->helpdesk_templates_id,

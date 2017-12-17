@@ -27,7 +27,7 @@ class SideCatControl extends Control
         $template->categories = $this->database->table('pages')->where(array(
             'pages_id' => $id,
             'pages_types_id' => 7,
-        ))->order("sorted DESC");
+        ))->order('sorted DESC');
         $template->render();
     }
 

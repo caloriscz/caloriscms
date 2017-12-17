@@ -18,8 +18,8 @@ class CommunicationGridControl extends Control
     {
         $grid = new \Ublaboo\DataGrid\DataGrid($this, $name);
 
-        $dbCommunications = $this->database->table("contacts_communication")
-            ->where(array("contacts_id" => $this->presenter->getParameter('id')));
+        $dbCommunications = $this->database->table('contacts_communication')
+            ->where(array('contacts_id' => $this->presenter->getParameter('id')));
 
         $grid->setDataSource($dbCommunications);
         $grid->setItemsPerPageList(array(20));
@@ -32,13 +32,13 @@ class CommunicationGridControl extends Control
         $grid->setTranslator($this->presenter->translator);
     }
 
-    function handleDeleteCommunication($id)
+    public function handleDeleteCommunication($id)
     {
         for ($a = 0; $a < count($id); $a++) {
-            $contacts = $this->database->table("contacts_communication")->get($id);
+            $contacts = $this->database->table('contacts_communication')->get($id);
             $contactsId = $contacts->contacts_id;
             $contacts->delete();
-            $this->presenter->redirect(this, array("id" => $contactsId));
+            $this->presenter->redirect(this, array('id' => $contactsId));
         }
     }
 

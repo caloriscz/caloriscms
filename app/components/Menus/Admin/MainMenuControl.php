@@ -28,7 +28,7 @@ class MainMenuControl extends Control
         $this->template->pageTypes = $pageTypes->findAll();
 
         $links = $this->em->getRepository(Addons::class);
-        $this->template->addons = $links->findBy(["active" => 1]);
+        $this->template->addons = $links->findBy(['active' => 1]);
 
         $this->template->setFile(__DIR__ . '/MainMenuControl.latte');
 

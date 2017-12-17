@@ -18,7 +18,7 @@ class SendTestMailControl extends Control
     /**
      * Send teste-mail
      */
-    function createComponentSendForm()
+    public function createComponentSendForm()
     {
         $form = new \Nette\Forms\BootstrapUIForm();
         $form->setTranslator($this->presenter->translator);
@@ -37,7 +37,7 @@ class SendTestMailControl extends Control
         return $form;
     }
 
-    function sendFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
+    public function sendFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
     {
         $emailDb = $this->database->table("helpdesk_emails")->get($form->values->id);
 

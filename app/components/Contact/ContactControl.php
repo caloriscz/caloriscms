@@ -17,7 +17,7 @@ class ContactControl extends Control
     {
         $template = $this->template;
         $template->setFile(__DIR__ . '/ContactControl.latte');
-        $contact = $this->database->table("contacts")->get($id);
+        $contact = $this->database->table('contacts')->get($id);
 
         $template->contact = $contact;
 

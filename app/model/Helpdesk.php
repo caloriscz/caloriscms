@@ -27,12 +27,12 @@ class Helpdesk
     /**
      * Sets identificator for the helpdesk table
      */
-    function setId($id)
+    public function setId($id)
     {
         $this->id = $id;
     }
 
-    function getId()
+    public function getId()
     {
         return $this->id;
     }
@@ -41,23 +41,23 @@ class Helpdesk
      * Sets customer e-mail. Other e-mails are set in database
      */
 
-    function setEmail($email)
+    public function setEmail($email)
     {
         $this->email = $email;
     }
 
-    function getEmail()
+    public function getEmail()
     {
         return $this->email;
     }
 
-    function setSettings($settings)
+    public function setSettings($settings)
     {
         $this->settings = $settings;
     }
 
 
-    function getSettings()
+    public function getSettings()
     {
         return $this->settings;
     }
@@ -65,12 +65,12 @@ class Helpdesk
     /**
      * Sets parameters for e-mail template
      */
-    function setParams($params)
+    public function setParams($params)
     {
         $this->params = $params;
     }
 
-    function getParams()
+    public function getParams()
     {
         $params = $this->params;
 
@@ -86,7 +86,7 @@ class Helpdesk
     /*
      * Get information about helpdesk
      */
-    function getInfo()
+    public function getInfo()
     {
         $helpdesk = $this->database->table("helpdesk")->get($this->id);
 
@@ -96,7 +96,7 @@ class Helpdesk
     /**
      * Send information to all e-mails
      */
-    function send()
+    public function send()
     {
         $info = $this->getInfo();
         $emails = $info->related('helpdesk_emails', 'helpdesk_id');
@@ -119,7 +119,7 @@ class Helpdesk
         }
     }
 
-    function fillEmail($email, $subject, $body, $templateId, $params, $log)
+    private function fillEmail($email, $subject, $body, $templateId, $params, $log)
     {
         $latte = new \Latte\Engine;
         $latte->setLoader(new \Latte\Loaders\StringLoader());
@@ -138,7 +138,7 @@ class Helpdesk
         }
     }
 
-    function renderBody($subjectContent, $bodyContent, $templateId)
+    public function renderBody($subjectContent, $bodyContent, $templateId)
     {
         $templateBody = $this->database->table("helpdesk_templates")->get($templateId)->document;
 
@@ -148,7 +148,7 @@ class Helpdesk
         return $bodyParse;
     }
 
-    function log($email, $emailMessage)
+    public function log($email, $emailMessage)
     {
 
         $this->database->table("helpdesk_messages")->insert(array(

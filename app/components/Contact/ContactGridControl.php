@@ -73,13 +73,13 @@ class ContactGridControl extends Control
     /**
      * Delete contact with all other tables and related page
      */
-    function handleDelete($id)
+    public function handleDelete($id)
     {
         for ($a = 0; $a < count($id); $a++) {
-            $this->database->table("contacts")->get($id[$a])->delete();
+            $this->database->table('contacts')->get($id[$a])->delete();
         }
 
-        $this->presenter->redirect(this, array("id" => null));
+        $this->presenter->redirect(this, array('id' => null));
     }
 
     public function render()

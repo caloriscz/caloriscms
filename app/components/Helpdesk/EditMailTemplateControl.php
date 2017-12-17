@@ -17,7 +17,7 @@ class EditMailTemplateControl extends Control
     /**
      * E-mail template edit
      */
-    function createComponentEditForm()
+    public function createComponentEditForm()
     {
         $emailDb = $this->database->table("helpdesk_emails")->get($this->presenter->getParameter("id"));
 
@@ -44,7 +44,7 @@ class EditMailTemplateControl extends Control
         return $form;
     }
 
-    function editFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
+    public function editFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
     {
         $this->database->table("helpdesk_emails")->get($form->values->id)
             ->update(array(
