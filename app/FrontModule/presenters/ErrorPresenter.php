@@ -3,7 +3,6 @@
 namespace App\FrontModule\Presenters;
 
 use Nette,
-    App\Model,
     Tracy\ILogger;
 
 /**
@@ -22,8 +21,8 @@ class ErrorPresenter extends BasePresenter
     }
 
     /**
-     * @param  Exception
-     * @return void
+     * @param $exception
+     * @throws Nette\Application\AbortException
      */
     public function renderDefault($exception)
     {

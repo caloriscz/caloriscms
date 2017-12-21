@@ -20,9 +20,9 @@ class PageSlugControl extends Control
         $page = $this->database->table("pages")->get($pageId);
 
         if ($this->presenter->translator->getLocale() == $this->presenter->translator->getDefaultLocale()) {
-            $template->slug = "/" . $page->slug;
+            $template->slug = '/' . $page->slug;
         } else {
-            $template->slug = "/" . $this->presenter->translator->getLocale() . '/' . $page->{'slug_' . $this->presenter->translator->getLocale()};
+            $template->slug = '/' . $this->presenter->translator->getLocale() . '/' . $page->{'slug_' . $this->presenter->translator->getLocale()};
         }
 
         $template->setFile(__DIR__ . '/PageSlugControl.latte');

@@ -18,7 +18,7 @@ class SnippetControl extends Control
     {
         $template = $this->template;
 
-        $template->page = $this->database->table("snippets")->get($snippetId);
+        $template->page = $this->database->table('snippets')->get($snippetId);
 
         if ($this->presenter->translator->getLocale() == $this->presenter->translator->getDefaultLocale()) {
             $snippet = $template->page->content;

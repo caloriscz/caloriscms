@@ -302,16 +302,13 @@ CREATE TABLE `pages_types` (
   `prefix` varchar(60) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
 
-INSERT INTO `pages_types` (`id`, `content_type`, `presenter`, `action`, `prefix`) VALUES
-  (1, 'Page', 'Front:Pages', 'default', ''),
-  (2, 'Blog', 'Front:Blog', 'detail', 'blog'),
-  (3, 'Event', 'Front:Events', 'detail', ''),
-  (4, 'Product', 'Front:Product', 'default', ''),
-  (6, 'Galerie', 'Front:Media', 'album', ''),
-  (7, 'Product Category', 'Front:Catalogue', 'default', ''),
-  (8, 'Dokumenty', 'Front:Media', 'folder', ''),
-  (9, 'Template', '', 'default', ''),
-  (10, 'Blog categories', '', '', 'blog-categories');
+INSERT INTO `pages_types` (`id`, `content_type`, `presenter`, `action`, `prefix`, `admin_enabled`, `admin_link`, `icon`, `enable_snippets`, `enable_images`, `enable_files`, `enable_related`, `pages_id`) VALUES
+  (1, 'Stránky', 'Front:Pages', 'default', '', 1, 'pages/?type=1', 'fa-files-o', 0, 1, 1, 1, 1),
+  (2, 'Aktuality', 'Front:Blog', 'detail', 'blog', 1, 'pages/?type=2', 'fa-newspaper-o', 1, 1, 1, 1, 3),
+  (6, 'Galerie', 'Front:Media', 'album', '', 1, 'media/albums', 'icon-picture', 0, 1, 1, 1, 4),
+  (8, 'Dokumenty', 'Front:Media', 'folder', '', 1, 'media', 'icon-file', 1, 1, 1, 1, 6),
+  (9, 'Šablony', '', 'default', '', 1, 'pages?type=9', 'fa-th', 1, 1, 1, 1, 1),
+  (10, 'Kategorie blogu', '', '', 'blog-categories', 1, 'pages?type=10', 'fa-snowlake-o', 1, 1, 1, 1, 1);
 
 CREATE TABLE `param` (
   `id` int(11) NOT NULL,

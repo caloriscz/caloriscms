@@ -3,7 +3,6 @@
 namespace App\AdminModule\Presenters;
 
 use Caloriscz\Media\DropZoneControl;
-use Caloriscz\Menus\Admin\AdminCategoryPanelControl;
 use Caloriscz\Menus\Admin\MainMenuControl;
 use Caloriscz\Menus\Admin\PageTopMenuControl;
 use Caloriscz\Page\Editor\EditorControl;
@@ -155,12 +154,6 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
     protected function createComponentImageBrowser()
     {
         $control = new ImageBrowserControl($this->database);
-        return $control;
-    }
-
-    protected function createComponentAdminCategoryPanel()
-    {
-        $control = new AdminCategoryPanelControl($this->database);
         return $control;
     }
 

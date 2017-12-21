@@ -2,8 +2,9 @@
 
 namespace App\AdminModule\Presenters;
 
-use Nette,
-    App\Model;
+use Caloriscz\Files\DropUploadControl;
+use App\Model;
+use Nette\Utils\Finder;
 
 /**
  * Image folder file manager
@@ -13,8 +14,7 @@ class FilesPresenter extends BasePresenter
 
     protected function createComponentDropUploadFiles()
     {
-        $control = new \Caloriscz\Files\DropUploadControl($this->database);
-        return $control;
+        return new DropUploadControl($this->database);
     }
 
     /**
@@ -29,7 +29,7 @@ class FilesPresenter extends BasePresenter
 
     public function renderDefault()
     {
-        $this->template->files = \Nette\Utils\Finder::findFiles('')->in(APP_DIR . '/images');
+        $this->template->files = Finder::findFiles('')->in(APP_DIR . '/images');
     }
 
 }

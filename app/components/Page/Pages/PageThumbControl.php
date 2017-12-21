@@ -2,6 +2,7 @@
 
 namespace Caloriscz\Page\Pages;
 
+use App\Model\IO;
 use Nette\Application\UI\Control;
 
 class PageThumbControl extends Control
@@ -19,18 +20,18 @@ class PageThumbControl extends Control
     /**
      * Delete page
      */
-    function handleDelete($id)
+    public function handleDelete($id)
     {
         $doc = new \App\Model\Document($this->database);
         $doc->delete($id);
-        \App\Model\IO::removeDirectory(APP_DIR . '/media/' . $id);
+        IO::removeDirectory(APP_DIR . '/media/' . $id);
 
-        $this->onSave($this->getParameter("type"));
+        $this->onSave($this->getParameter('type'));
     }
 
-    function handlePublic()
+    public function handlePublic()
     {
-        $page = $this->database->table("pages")->get($this->getParameter("id"));
+        $page = $this->database->table('pages')->get($this->getParameter('id'));
 
         if ($page->public == 1) {
             $show = 0;
@@ -38,12 +39,12 @@ class PageThumbControl extends Control
             $show = 1;
         }
 
-        $this->database->table("pages")->get($this->getParameter("id"))->update(array("public" => $show));
+        $this->database->table('pages')->get($this->getParameter('id'))->update(array('public' => $show));
 
-        $this->onSave($this->getParameter("type"));
+        $this->onSave($this->getParameter('type'));
     }
 
-    public function render($type, $id = "")
+    public function render($type, $id = '')
     {
         $template = $this->template;
         $template->setFile(__DIR__ . '/PageThumbControl.latte');
@@ -54,19 +55,19 @@ class PageThumbControl extends Control
             $pagesId = 6;
         }
 
-        if ($id == "") {
+        if ($id == '') {
             $arr = array(
-                "pages_types_id" => $type,
-                "pages_id" => $pagesId,
+                'pages_types_id' => $type,
+                'pages_id' => $pagesId,
             );
         } else {
             $arr = array(
-                "pages_types_id" => $type,
-                "pages_id" => $id,
+                'pages_types_id' => $type,
+                'pages_id' => $id,
             );
         }
 
-        $template->pages = $this->database->table("pages")->where($arr);
+        $template->pages = $this->database->table('pages')->where($arr);
 
         $template->render();
     }

@@ -20,7 +20,7 @@ class PagesPresenter extends BasePresenter
     {
         parent::startup();
 
-        $this->template->page = $this->database->table("pages")->get($this->getParameter("page_id"));
+        $this->template->page = $this->database->table('pages')->get($this->getParameter('page_id'));
 
     }
 

@@ -18,7 +18,7 @@ class FilterFormControl extends Control
     {
         $form = new \Nette\Forms\BootstrapUIForm();
         $form->setTranslator($this->presenter->translator);
-        $form->getElementPrototype()->class = "form-horizontal";
+        $form->getElementPrototype()->class = 'form-horizontal';
         $form->getElementPrototype()->role = 'form';
         $form->getElementPrototype()->autocomplete = 'off';
 
@@ -27,18 +27,18 @@ class FilterFormControl extends Control
         $form->addSubmit('submitm', 'dictionary.main.Search');
 
         $form->setDefaults(array(
-            "id" => $this->getParameter("id"),
+            'id' => $this->getParameter('id'),
         ));
 
-        $form->onSuccess[] = [$this, "filterFormSucceeded"];
+        $form->onSuccess[] = [$this, 'filterFormSucceeded'];
         return $form;
     }
 
     public function filterFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
     {
         $this->presenter->redirect(this, array(
-            "id" => $form->values->id,
-            "src" => $form->values->src,
+            'id' => $form->values->id,
+            'src' => $form->values->src,
         ));
     }
 

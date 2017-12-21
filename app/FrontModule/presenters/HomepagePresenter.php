@@ -28,7 +28,7 @@ class HomepagePresenter extends BasePresenter
 
     public function renderDefault()
     {
-        $this->template->page = $this->database->table("pages")->get(1);
+        $this->template->page = $this->database->table('pages')->get(1);
     }
 
 }

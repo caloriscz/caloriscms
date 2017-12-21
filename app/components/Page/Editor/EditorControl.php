@@ -82,9 +82,9 @@ class EditorControl extends Control
 
     public function permissionFormValidated()
     {
-        if ($this->presenter->template->member->users_roles->pages_edit == 0) {
-            $this->presenter->flashMessage('Nemáte oprávnění k této akci', 'error');
-            $this->presenter->redirect(this);
+        if ($this->getPresenter()->template->member->users_roles->pages_edit == 0) {
+            $this->getPresenter()->flashMessage('Nemáte oprávnění k této akci', 'error');
+            $this->getPresenter()->redirect(this);
         }
     }
 

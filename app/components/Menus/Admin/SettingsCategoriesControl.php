@@ -26,7 +26,7 @@ class SettingsCategoriesControl extends Control
         $template->type = $type;
 
         $getParams = $this->getParameters();
-        unset($getParams["page"]);
+        unset($getParams['page']);
         $template->args = $getParams;
 
         $template->setFile(__DIR__ . '/SettingsCategoriesControl.latte');

@@ -20,9 +20,9 @@ class BlockControl extends Control
     {
         $template = $this->template;
         $template->settings = $this->presenter->template->settings;
-        $template->widgets = $this->database->table("pages_widgets")
-            ->where("pages_id", $this->presenter->getParameter("id"))
-            ->order("sorted");
+        $template->widgets = $this->database->table('pages_widgets')
+            ->where('pages_id', $this->presenter->getParameter('id'))
+            ->order('sorted');
 
         $template->setFile(__DIR__ . '/BlockControl.latte');
 

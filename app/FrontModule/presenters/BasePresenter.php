@@ -47,7 +47,7 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
             session_start();
         }
 
-        $this->template->page = $this->database->table("pages")->get($this->getParameter("page_id"));
+        $this->template->page = $this->database->table("pages")->get($this->getParameter('page_id'));
 
         $this->template->settings = $this->database->table("settings")->fetchPairs("setkey", "setvalue");
 

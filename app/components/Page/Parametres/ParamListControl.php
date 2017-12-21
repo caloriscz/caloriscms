@@ -20,7 +20,7 @@ class ParamListControl extends Control
         $template->page = $page;
 
         if ($this->presenter->translator->getLocale() != $this->presenter->translator->getDefaultLocale()) {
-            $template->langSuffix = '_' . $this->presenter->translator->getLocale();
+            $template->langSuffix = '_' . $this->getPresenter()->translator->getLocale();
         }
 
         $template->setFile(__DIR__ . '/ParamListControl.latte');
