@@ -1,6 +1,7 @@
 <?php
 namespace Caloriscz\Menus\Admin;
 
+use function GuzzleHttp\Promise\exception_for;
 use Nette\Application\UI\Control;
 
 class PageTopMenuControl extends Control
@@ -16,17 +17,13 @@ class PageTopMenuControl extends Control
 
     public function render()
     {
-        $template = $this->template;
+        $this->template->page = $this->database->table('pages')->get($this->getPresenter()->template->presenter->getParameter('id'));
+        $this->template->contact = $this->database->table('contacts')
+            ->where(['pages_id' => $this->template->page->id])->fetch();
 
-        $template->page = $this->database->table('pages')->get($this->presenter->template->presenter->getParameter('id'));
+        $this->template->setFile(__DIR__ . '/PageTopMenuControl.latte');
 
-        $template->contact = $this->database->table('contacts')
-            ->where(array('pages_id' => $template->page->id))->fetch();
-        $template->user = $this->database->table('users')->get($template->contact->users_id);
-
-        $template->setFile(__DIR__ . '/PageTopMenuControl.latte');
-
-        $template->render();
+        $this->template->render();
     }
 
 }

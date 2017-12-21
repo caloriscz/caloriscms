@@ -58,7 +58,7 @@
             {if $view != 'detailOpeningHours'}
                 <a href="/admin/contacts/detail-opening-hours/{$id}" class="btn btn-secondary">{_dictionary.main.OpeningHours}</a>
             {/if}
-            {if $user}
+            {if $userEdit}
                 <a href="/admin/members/edit/{$id}" class="btn btn-secondary">{_dictionary.main.Member}</a>
             {/if}
         {/if}
@@ -80,6 +80,5 @@
         {/if}
 
         <a href="/{$page->slug}" class="btn btn-secondary" target="_blank">{_dictionary.main.Preview}</a>
-        {$page->pages_types->id}
     </div>
 </li>

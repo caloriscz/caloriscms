@@ -20,7 +20,7 @@ class SettingsCategoriesControl extends Control
      * @param type $id
      * @param type $type Specifies type of category: store, media, blog, menu etc. Some categories have special needs
      */
-    public function render($id, $type = null)
+    public function render($id = null, $type = null)
     {
         $template = $this->template;
         $template->type = $type;
@@ -32,7 +32,7 @@ class SettingsCategoriesControl extends Control
         $template->setFile(__DIR__ . '/SettingsCategoriesControl.latte');
 
         $template->id = $id;
-        $template->idActive = $this->presenter->getParameter("id");
+        $template->idActive = $this->presenter->getParameter('id');
         $template->menu = $this->database->table('settings_categories')->where('parent_id', null);
         $template->render();
     }

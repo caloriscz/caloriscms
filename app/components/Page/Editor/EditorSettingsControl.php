@@ -4,6 +4,7 @@ namespace Caloriscz\Page\Editor;
 
 use App\Model\Document;
 use Nette\Application\UI\Control;
+use Nette\Database\Context;
 use Nette\Forms\BootstrapUIForm;
 
 class EditorSettingsControl extends Control
@@ -13,12 +14,12 @@ class EditorSettingsControl extends Control
     /** @var \Nette\Database\Context */
     public $database;
 
-    public function __construct(\Nette\Database\Context $database)
+    public function __construct(Context $database)
     {
         $this->database = $database;
 
         $config = \HTMLPurifier_Config::createDefault();
-        $this->htmlPurifier = new \HtmlPurifier($config);
+        $this->htmlPurifier = new \HTMLPurifier($config);
     }
 
     /**
@@ -26,13 +27,13 @@ class EditorSettingsControl extends Control
      */
     public function createComponentEditForm()
     {
-        $pages = $this->database->table("pages")->get($this->presenter->getParameter("id"));
+        $pages = $this->database->table('pages')->get($this->presenter->getParameter('id'));
         $form = new BootstrapUIForm();
         $form->setTranslator($this->presenter->translator);
-        $form->getElementPrototype()->class = "form-horizontal";
+        $form->getElementPrototype()->class = 'form-horizontal';
         $form->getElementPrototype()->role = 'form';
         $form->getElementPrototype()->autocomplete = 'off';
-        $l = $this->presenter->getParameter("l");
+        $l = $this->presenter->getParameter('l');
 
         if ($this->presenter->template->member->users_roles->pages_document) {
             $enabled = false;
@@ -40,31 +41,31 @@ class EditorSettingsControl extends Control
             $enabled = true;
         }
 
-        $form->addHidden("id");
-        $form->addHidden("l");
-        $form->addHidden("docs_id");
+        $form->addHidden('id');
+        $form->addHidden('l');
+        $form->addHidden('docs_id');
 
         if ($l == '') {
             $form->setDefaults(array(
-                "id" => $pages->id,
+                'id' => $pages->id,
             ));
         } else {
             $form->setDefaults(array(
-                "id" => $pages->id,
-                "l" => $l,
+                'id' => $pages->id,
+                'l' => $l,
             ));
         }
 
-        $form->addHidden("slug_old");
-        $form->addGroup("");
-        $form->addCheckbox("public");
-        $form->addText("date_published");
-        $form->addText("title");
-        $form->addText("slug");
-        $form->addSelect("parent");
-        $form->addTextArea("metadesc");
-        $form->addTextArea("metakeys");
-        $form->addCheckbox("sitemap");
+        $form->addHidden('slug_old');
+        $form->addGroup('');
+        $form->addCheckbox('public');
+        $form->addText('date_published');
+        $form->addText('title');
+        $form->addText('slug');
+        $form->addSelect('parent');
+        $form->addTextArea('metadesc');
+        $form->addTextArea('metakeys');
+        $form->addCheckbox('sitemap');
 
         if ($l == '') {
             $form->setDefaults(array(
@@ -130,7 +131,7 @@ class EditorSettingsControl extends Control
 
     public function handlePublic()
     {
-        $page = $this->database->table("pages")->get($this->presenter->getParameter("id"));
+        $page = $this->database->table('pages')->get($this->presenter->getParameter('id'));
 
         if ($page->public === 1) {
             $show = 0;
@@ -148,7 +149,7 @@ class EditorSettingsControl extends Control
     {
         $template = $this->template;
         $template->settings = $this->getPresenter()->template->settings;
-        $template->editortype = $_COOKIE['editortype'];
+        $template->editortype = $this->presenter->request->getCookie('editortype');
 
         $template->pages = $this->database->table('pages')->where('NOT id', $this->presenter->getParameter('id'));
         $template->page = $this->database->table('pages')->get($this->presenter->getParameter('id'));

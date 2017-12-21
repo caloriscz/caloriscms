@@ -1,9 +1,16 @@
 <?php
 
 namespace App\AdminModule\Presenters;
+use App\Model\Category;
+use App\Model\Document;
+use App\Model\IO;
+use App\Model\Page;
+use Caloriscz\Media\MediaForms\EditFileControl;
+use Caloriscz\Media\MediaForms\InsertMediaControl;
+use Caloriscz\Page\Pages\PageThumbControl;
+use Nette\Http\FileUpload;
+use Nette\Utils\Paginator;
 
-use Nette,
-    App\Model;
 
 /**
  * Homepage presenter.
@@ -20,25 +27,25 @@ class MediaPresenter extends BasePresenter
 
     protected function createComponentInsertMediaForm()
     {
-        $control = new \Caloriscz\Media\MediaForms\InsertMediaControl($this->database);
+        $control = new InsertMediaControl($this->database);
         return $control;
     }
 
     protected function createComponentEditFile()
     {
-        $control = new \Caloriscz\Media\MediaForms\EditFileControl($this->database);
+        $control = new EditFileControl($this->database);
         return $control;
     }
 
     protected function createComponentPageThumb()
     {
-        $control = new \Caloriscz\Page\Pages\PageThumbControl($this->database);
+        $control = new PageThumbControl($this->database);
         return $control;
     }
 
     public function handleUpload($folder)
     {
-        $fileUpload = new \Nette\Http\FileUpload($_FILES['uploadfile']);
+        $fileUpload = new FileUpload($_FILES['uploadfile']);
         $this->upload->singleFileToDir($fileUpload, $folder);
     }
 
@@ -47,16 +54,16 @@ class MediaPresenter extends BasePresenter
      */
     public function handleDelete($id, $type)
     {
-        $imageDb = $this->database->table("media")->get($id);
+        $imageDb = $this->database->table('media')->get($id);
 
-        \App\Model\IO::remove(APP_DIR . '/media/' . $imageDb->pages_id . '/' . $imageDb->name);
-        \App\Model\IO::remove(APP_DIR . '/media/' . $imageDb->pages_id . '/tn/' . $imageDb->name);
+       IO::remove(APP_DIR . '/media/' . $imageDb->pages_id . '/' . $imageDb->name);
+        IO::remove(APP_DIR . '/media/' . $imageDb->pages_id . '/tn/' . $imageDb->name);
 
         $imageDb->delete();
 
         $this->redirect(this, array(
-            "id" => $imageDb->pages_id,
-            "type" => $this->getParameter("type"),
+            'id' => $imageDb->pages_id,
+            'type' => $this->getParameter('type'),
         ));
     }
 
@@ -65,18 +72,18 @@ class MediaPresenter extends BasePresenter
      */
     public function handleDeletePage($id)
     {
-        $page = new Model\Page($this->database);
+        $page = new Page($this->database);
         $pages = $page->getChildren($id);
         $pages[] = $id;
 
         foreach ($pages as $item) {
             echo 1;
-            $doc = new Model\Document($this->database);
+            $doc = new Document($this->database);
             $doc->delete($item);
-            Model\IO::removeDirectory(APP_DIR . '/media/' . $item);
+            IO::removeDirectory(APP_DIR . '/media/' . $item);
         }
 
-        $this->redirect(this, array("id" => null, "type" => $this->getParameter("type")));
+        $this->redirect(this, array('id' => null, 'type' => $this->getParameter('type')));
     }
 
     /**
@@ -91,7 +98,7 @@ class MediaPresenter extends BasePresenter
         }
 
 
-        $this->redirect(":Admin:Media:default", array("type" => $this->getParameter("type")));
+        $this->redirect(':Admin:Media:default', array('type' => $this->getParameter('type')));
     }
 
     /**
@@ -99,20 +106,20 @@ class MediaPresenter extends BasePresenter
      */
     public function handleUp($id, $sorted, $album)
     {
-        $sortDb = $this->database->table("media")->where(array(
-            "sorted > ?" => $sorted,
-            "categories_id" => $album,
-        ))->order("sorted")->limit(1);
+        $sortDb = $this->database->table('media')->where(array(
+            'sorted > ?' => $sorted,
+            'categories_id' => $album,
+        ))->order('sorted')->limit(1);
         $sort = $sortDb->fetch();
 
         if ($sortDb->count() > 0) {
-            $this->database->table("media")->where(array("id" => $id))->update(array("sorted" => $sort->sorted));
-            $this->database->table("media")->where(array("id" => $sort->id))->update(array("sorted" => $sorted));
+            $this->database->table('media')->where(array('id' => $id))->update(array('sorted' => $sort->sorted));
+            $this->database->table('media')->where(array('id' => $sort->id))->update(array('sorted' => $sorted));
         }
 
-        $this->redirect(":Admin:Media:detail", array(
-            "id" => $this->getParameter("album"),
-            "category" => $this->getParameter("category"),
+        $this->redirect(':Admin:Media:detail', array(
+            'id' => $this->getParameter('album'),
+            'category' => $this->getParameter('category'),
         ));
     }
 
@@ -121,26 +128,26 @@ class MediaPresenter extends BasePresenter
      */
     public function handleDown($id, $sorted, $album)
     {
-        $sortDb = $this->database->table("media")->where(array(
-            "sorted < ?" => $sorted,
-            "categories_id" => $album,
-        ))->order("sorted DESC")->limit(1);
+        $sortDb = $this->database->table('media')->where(array(
+            'sorted < ?' => $sorted,
+            'categories_id' => $album,
+        ))->order('sorted DESC')->limit(1);
         $sort = $sortDb->fetch();
 
         if ($sortDb->count() > 0) {
-            $this->database->table("media")->where(array("id" => $id))->update(array("sorted" => $sort->sorted));
-            $this->database->table("media")->where(array("id" => $sort->id))->update(array("sorted" => $sorted));
+            $this->database->table('media')->where(array('id' => $id))->update(array('sorted' => $sort->sorted));
+            $this->database->table('media')->where(array('id' => $sort->id))->update(array('sorted' => $sorted));
         }
 
-        $this->redirect(":Admin:Media:detail", array(
-            "id" => $this->getParameter("album"),
-            "category" => $this->getParameter("category"),
+        $this->redirect(':Admin:Media:detail', array(
+            'id' => $this->getParameter('album'),
+            'category' => $this->getParameter('category'),
         ));
     }
 
     public function renderDefault()
     {
-        if ($this->getParameter("id")) {
+        if ($this->getParameter('id')) {
             $arr = array(
                 'media.pages_id' => $this->getParameter('id'),
                 'file_type' => 0,
@@ -153,12 +160,12 @@ class MediaPresenter extends BasePresenter
             );
         }
 
-        $mediaDb = $this->database->table("media")->where($arr)->order("name");
+        $mediaDb = $this->database->table('media')->where($arr)->order('name');
 
         $paginator = new \Nette\Utils\Paginator;
-        $paginator->setItemCount($mediaDb->count("*"));
+        $paginator->setItemCount($mediaDb->count('*'));
         $paginator->setItemsPerPage(10);
-        $paginator->setPage($this->getParameter("page"));
+        $paginator->setPage($this->getParameter('page'));
 
         $this->template->args = $this->getParameters();
 
@@ -168,9 +175,11 @@ class MediaPresenter extends BasePresenter
         $this->template->paginator = $paginator;
         $this->template->productsArr = $mediaDb->limit($paginator->getLength(), $paginator->getOffset());
 
-        if ($this->getParameter("id")) {
-            $category = new Model\Category($this->database);
-            $this->template->breadcrumbs = $category->getPageBreadcrumb($this->getParameter("id"));
+        if ($this->getParameter('id')) {
+            $category = new Category($this->database);
+            $this->template->breadcrumbs = $category->getPageBreadcrumb($this->getParameter('id'));
+        } else {
+            $this->template->breadcrumbs = [];
         }
 
         $this->template->mediatype = $this->request->getCookie('mediatype');
@@ -178,7 +187,7 @@ class MediaPresenter extends BasePresenter
 
     public function renderAlbums()
     {
-        if ($this->getParameter("id")) {
+        if ($this->getParameter('id')) {
             $arr = array(
                 'media.pages_id' => $this->getParameter('id'),
                 'file_type' => 1,
@@ -191,12 +200,12 @@ class MediaPresenter extends BasePresenter
             );
         }
 
-        $mediaDb = $this->database->table("media")->where($arr)->order("name");
+        $mediaDb = $this->database->table('media')->where($arr)->order('name');
 
-        $paginator = new \Nette\Utils\Paginator;
-        $paginator->setItemCount($mediaDb->count("*"));
+        $paginator = new Paginator();
+        $paginator->setItemCount($mediaDb->count('*'));
         $paginator->setItemsPerPage(16);
-        $paginator->setPage($this->getParameter("page"));
+        $paginator->setPage($this->getParameter('page'));
 
         $this->template->args = $this->getParameters();
 
@@ -206,9 +215,11 @@ class MediaPresenter extends BasePresenter
         $this->template->paginator = $paginator;
         $this->template->productsArr = $mediaDb->limit($paginator->getLength(), $paginator->getOffset());
 
-        if ($this->getParameter("id")) {
-            $category = new Model\Category($this->database);
-            $this->template->breadcrumbs = $category->getPageBreadcrumb($this->getParameter("id"));
+        if ($this->getParameter('id')) {
+            $category = new Category($this->database);
+            $this->template->breadcrumbs = $category->getPageBreadcrumb($this->getParameter('id'));
+        } else {
+            $this->template->breadcrumbs = [];
         }
 
         $this->template->mediatype = $this->request->getCookie('mediatype');
@@ -216,7 +227,7 @@ class MediaPresenter extends BasePresenter
 
     public function renderImage()
     {
-        $this->template->file = $this->database->table("media")
+        $this->template->file = $this->database->table('media')
             ->get($this->getParameter('id'));
 
         $isItImage = mime_content_type(APP_DIR . '/media/' . $this->template->file->pages_id . '/' . $this->template->file->name);

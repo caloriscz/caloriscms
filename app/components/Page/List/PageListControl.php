@@ -27,8 +27,7 @@ class PageListControl extends Control
 
     protected function createComponentMenuInsert()
     {
-        $control = new InsertMenuControl($this->database);
-        return $control;
+        return new InsertMenuControl($this->database);
     }
 
     /**
@@ -77,6 +76,7 @@ class PageListControl extends Control
             $this->template->pages = $pages->findBy(['pagesTypes' => $type], ['title' => 'ASC']);
         }
 
+        $this->template->settings = $this->getPresenter()->template->settings;
         $this->template->type = $type;
         $this->template->database = $this->database;
 

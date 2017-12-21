@@ -20,6 +20,8 @@ class EditorControl extends Control
     /** @var \Nette\Database\Context */
     public $database;
 
+
+
     /** @var \Kdyby\Doctrine\EntityManager @inject */
     public $em;
 
@@ -29,7 +31,7 @@ class EditorControl extends Control
         $this->em = $em;
 
         $config = \HTMLPurifier_Config::createDefault();
-        $this->htmlPurifier = new \HtmlPurifier($config);
+        $this->htmlPurifier = new \HTMLPurifier($config);
     }
 
     protected function createComponentLangSelector()
@@ -123,7 +125,7 @@ class EditorControl extends Control
     {
         $template = $this->template;
         $template->settings = $this->presenter->template->settings;
-        $template->editortype = $_COOKIE['editortype'];
+        $template->editortype = $this->presenter->request->getCookie('editortype');
 
         $template->pages = $this->database->table('pages')->where('NOT id', $this->presenter->getParameter('id'));
         $template->page = $this->database->table('pages')->get($this->presenter->getParameter('id'));
