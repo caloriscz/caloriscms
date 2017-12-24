@@ -2,6 +2,16 @@
 
 namespace App\FrontModule\Presenters;
 
+use Caloriscz\Menus\Admin\AdminBarControl;
+use Caloriscz\Menus\MenuControl;
+use Caloriscz\Menus\SideMenuControl;
+use Caloriscz\Navigation\Footer\FooterControl;
+use Caloriscz\Navigation\Head\HeadControl;
+use Caloriscz\Navigation\NavigationControl;
+use Caloriscz\Page\Filters\AdvancedSearchControl;
+use Caloriscz\Page\PageDocumentControl;
+use Caloriscz\Page\PageSlugControl;
+use Caloriscz\Page\PageTitleControl;
 use Caloriscz\Utilities\PagingControl;
 use Nette;
 
@@ -24,6 +34,9 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
 
     /** @var \Nette\Mail\IMailer @inject */
     public $mailer;
+
+    /** @var Nette\Http\IRequest @inject */
+    public $request;
 
     public function __construct(\Nette\Database\Context $database, \Nette\Mail\IMailer $mailer)
     {
@@ -77,7 +90,7 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
         }
 
         /* Secret password mode */
-        $secret = $_COOKIE["secretx"];
+        $secret = $this->request->getCookie('secretx');
 
         if ($this->template->settings['site_cookie_whitelist'] != '') {
             if ($this->template->settings["site_cookie_whitelist"] != $secret) {
@@ -121,80 +134,69 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
 
         $this->template->appDir = APP_DIR;
         $this->template->languageSelected = $this->translator->getLocale();
+        $this->template->slugArray = [];
 
 
     }
 
     protected function createComponentPaging()
     {
-        $control = new PagingControl;
-        return $control;
+        return new PagingControl;
     }
 
     protected function createComponentNavigation()
     {
-        $control = new \Caloriscz\Navigation\NavigationControl($this->database);
-        return $control;
+        return new NavigationControl($this->database);
     }
 
     protected function createComponentContact()
     {
-        $control = new \ContactControl($this->database);
-        return $control;
+        return new \ContactControl($this->database);
     }
 
     protected function createComponentSideMenu()
     {
-        $control = new \Caloriscz\Menus\SideMenuControl($this->database);
-        return $control;
+        return new SideMenuControl($this->database);
     }
 
     protected function createComponentAdvancedSearch()
     {
-        $control = new \Caloriscz\Page\Filters\AdvancedSearchControl($this->database);
-        return $control;
+        return new AdvancedSearchControl($this->database);
     }
 
     protected function createComponentHead()
     {
-        $control = new \Caloriscz\Navigation\Head\HeadControl($this->database);
-        return $control;
+        return new HeadControl($this->database);
     }
 
     protected function createComponentPageTitle()
     {
-        $control = new \Caloriscz\Page\PageTitleControl($this->database);
-        return $control;
+        return new PageTitleControl($this->database);
     }
 
     protected function createComponentPageDocument()
     {
-        $control = new \Caloriscz\Page\PageDocumentControl($this->database);
-        return $control;
+        return new PageDocumentControl($this->database);
     }
 
     protected function createComponentPageSlug()
     {
-        $control = new \Caloriscz\Page\PageSlugControl($this->database);
-        return $control;
+        return new PageSlugControl($this->database);
     }
 
     protected function createComponentAdminBar()
     {
-        $control = new \Caloriscz\Menus\Admin\AdminBarControl($this->database);
-        return $control;
+        return new AdminBarControl($this->database);
     }
 
     protected function createComponentMenu()
     {
-        $control = new \Caloriscz\Menus\MenuControl($this->database);
-        return $control;
+        return new MenuControl($this->database);
     }
 
     protected function createComponentFooter()
     {
-        $control = new \Caloriscz\Navigation\Footer\FooterControl($this->database);
-        return $control;
+        return new FooterControl($this->database);
     }
 
     /**
@@ -202,8 +204,8 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
      */
     public function handleSnippet()
     {
-        $this->database->table("snippets")->get($this->getParameter("snippetId"))->update(array(
-            "content" => $this->getParameter("text")
+        $this->database->table('snippets')->get($this->getParameter('snippetId'))->update(array(
+            'content' => $this->getParameter('text')
         ));
         exit();
 
@@ -214,8 +216,8 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
      */
     public function handlePagetitle()
     {
-        $this->database->table("pages")->where("id", $this->getParameter("editorId"))->update(array(
-            "title" => $this->getParameter("text")
+        $this->database->table('pages')->where('id', $this->getParameter('editorId'))->update(array(
+            'title' => $this->getParameter('text')
         ));
         exit();
 

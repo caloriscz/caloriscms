@@ -22,23 +22,19 @@ class SlugRouter extends Nette\Object implements Nette\Application\IRouter
 
     /**
      * Maps HTTP request to a Request object.
-     *
-     * @param \Nette\Http\IRequest $httpRequest
-     * @throws \Nette\Application\BadRequestException
-     * @return App\Request|NULL
+     * @param Http\IRequest $httpRequest
+     * @return App\Request|null
      */
     public function match(Http\IRequest $httpRequest)
     {
         // 1) PARSE URL
         $url = $httpRequest->getUrl();
         $path = trim($url->path, $url->scriptPath);
-        $params = array();
-        $lang = array();
+        $params = [];
+        $lang = [];
 
         if ($path !== '') {
             $parts = explode($url->scriptPath, $path, 4);
-
-//            echo print_r($parts);
 
             if (in_array($parts[0], $this->slugManager->getLocale())) {
                 $params['locale'] = $parts[0];
@@ -46,7 +42,7 @@ class SlugRouter extends Nette\Object implements Nette\Application\IRouter
                 unset($parts[0]);
                 $parts = array_values($parts);
 
-                if (count($parts) == 2) {
+                if (count($parts) === 2) {
                     $slugName = $parts[1];
                     $params['prefix'] = $parts[0];
                 } else {
@@ -59,6 +55,7 @@ class SlugRouter extends Nette\Object implements Nette\Application\IRouter
                     $params['prefix'] = $parts[0];
                 } else {
                     $slugName = $parts[0];
+                    $params['prefix'] = null;
                 }
             }
 

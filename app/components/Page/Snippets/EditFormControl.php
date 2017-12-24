@@ -2,6 +2,7 @@
 namespace Caloriscz\Page\Snippets;
 
 use Nette\Application\UI\Control;
+use Nette\Forms\BootstrapUIForm;
 
 class EditFormControl extends Control
 {
@@ -19,14 +20,10 @@ class EditFormControl extends Control
      */
     public function createComponentEditSnippetForm()
     {
-        $form = new \Nette\Forms\BootstrapPHForm();
-        $form->setTranslator($this->presenter->translator);
-        $form->getElementPrototype()->class = "form-horizontal";
-        $form->getElementPrototype()->role = 'form';
-        $form->getElementPrototype()->autocomplete = 'off';
+        $form = new BootstrapUIForm();
+        $form->setTranslator($this->getPresenter()->translator);
 
-        $l = $this->presenter->getParameter('l');
-        $snippet = $this->database->table('snippets')->get($this->getPresenter()->getParameter('snippet'));
+        $snippet = $this->database->table('snippets')->get($this->getPresenter()->getParameter('id'));
 
         $form->addHidden('page_id');
         $form->addHidden('snippet_id');
@@ -37,16 +34,15 @@ class EditFormControl extends Control
             ->setAttribute('height', '250px')
             ->setHtmlId('wysiwyg-sm');
 
-        if ($l == '') {
-            $arr["content"] = $snippet->content;
+        if ($this->getPresenter()->getParameter('l') === null) {
+            $arr['content'] = $snippet->content;
         } else {
-            $arr['content'] = $snippet->{'content_' . $l};
-            $arr['l'] = $this->presenter->getParameter('l');
+            $arr['content'] = $snippet->{'content_' . $this->getPresenter()->getParameter('l')};
+            $arr['l'] = $this->getPresenter()->getParameter('l');
         }
 
-        $arr['page_id'] = $this->presenter->getParameter('id');
-        $arr['snippet_id'] = $this->presenter->getParameter('snippet');
-
+        $arr['page_id'] = $this->getPresenter()->getParameter('id');
+        $arr['snippet_id'] = $this->getPresenter()->getParameter('snippet');
 
         $form->setDefaults($arr);
 
@@ -59,31 +55,30 @@ class EditFormControl extends Control
         return $form;
     }
 
-    public function editSnippetFormSucceeded(\Nette\Forms\BootstrapPHForm $form)
+    public function editSnippetFormSucceeded(BootstrapUIForm $form)
     {
+        $langSuffix = '';
         $content = $form->getHttpData($form::DATA_TEXT, 'content');
 
-        if ($form->values->l != '') {
+        if ($form->values->l !== '') {
             $langSuffix = '_' . $form->values->l;
         }
 
-        $this->database->table('snippets')->get($form->values->snippet_id)->update(array(
+        $this->database->table('snippets')->get($form->values->snippet_id)->update([
             'content' . $langSuffix => $content,
-        ));
+        ]);
 
-        $this->presenter->redirect(this, array(
+        $this->getPresenter()->redirect('this', [
             'id' => $form->values->page_id,
             'snippet' => $form->values->snippet_id,
             'l' => $form->values->l
-        ));
+        ]);
     }
 
     public function render()
     {
-        $template = $this->template;
-        $template->setFile(__DIR__ . '/EditFormControl.latte');
-
-        $template->render();
+        $this->template->setFile(__DIR__ . '/EditFormControl.latte');
+        $this->template->render();
     }
 
 }

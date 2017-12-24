@@ -416,11 +416,7 @@ CREATE TABLE `snippets` (
   `id` int(11) NOT NULL,
   `keyword` varchar(80) NOT NULL,
   `content` text,
-  `pages_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
-
-INSERT INTO `snippets`(`id`, `keyword`, `content`, `pages_id`) VALUES
-  (1, 'Zkouška inline editace', 'Toto je zkouška inlineghjghjghjeditace <strong>panoramatu a dalších informací<br></strong>', 1);
 
 CREATE TABLE `users` (
   `id` int(11) NOT NULL,
@@ -574,8 +570,7 @@ ALTER TABLE `settings_categories`
   ADD KEY `parent_id` (`parent_id`);
 
 ALTER TABLE `snippets`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `pages_id` (`pages_id`);
+  ADD PRIMARY KEY (`id`);
 
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id`),
@@ -711,9 +706,6 @@ ALTER TABLE `params`
 
 ALTER TABLE `settings`
   ADD CONSTRAINT `settings_ibfk_1` FOREIGN KEY (`settings_categories_id`) REFERENCES `settings_categories` (`id`) ON DELETE SET NULL ON UPDATE SET NULL;
-
-ALTER TABLE `snippets`
-  ADD CONSTRAINT `snippets_ibfk_1` FOREIGN KEY (`pages_id`) REFERENCES `pages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 ALTER TABLE `users`
   ADD CONSTRAINT `users_ibfk_1` FOREIGN KEY (`users_roles_id`) REFERENCES `users_roles` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,

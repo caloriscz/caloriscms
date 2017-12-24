@@ -1,10 +1,9 @@
-{block #titles}{$page->title}{/block}
+{block #titles}{$snippet->keyword}{/block}
 {block content}
 
 <ol class="breadcrumb">
     <li class="breadcrumb-item">Home</li>
     <li class="breadcrumb-item"><a href="/admin">Admin</a></li>
-    <li class="breadcrumb-item"><a href="/admin/pages/detail/{$page->id}">{$page->title}</a></li>
     <li class="breadcrumb-item">{_dictionary.main.Snippets}</li>
     <li class="breadcrumb-item active">{$snippet->keyword}</li>
 
@@ -14,10 +13,6 @@
 <div class="container-fluid">
     <div class="card">
         <div class="card-block">
-
-            <p><a n:href=":Admin:Pages:snippets, id => $page->id"><i class="fa fa-chevron-left"></i> zpět na všechny
-                    ústřižky</a></p>
-
             {control langSelector}
 
             {control editSnippetForm}

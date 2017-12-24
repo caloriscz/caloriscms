@@ -10,29 +10,32 @@ use Caloriscz\Page\Pages\PageListControl;
 use Caloriscz\Page\Related\FilterFormControl;
 use Caloriscz\Page\Snippets\EditFormControl;
 use Caloriscz\Page\Snippets\InsertFormControl;
+use Kdyby\Doctrine\EntityManager;
+use Nette\Database\Context;
 
 /**
  * Pages presenter.
  */
 class PagesPresenter extends BasePresenter
 {
-    public function __construct(\Nette\Database\Context $database)
+    public function __construct(Context $database, EntityManager $em)
     {
         $this->database = $database;
+        $this->em = $em;
     }
 
     public function startup()
     {
         parent::startup();
 
-        $this->template->type = $this->getParameter("type");
+        $this->template->type = $this->getParameter('type');
     }
 
     protected function createComponentPageList()
     {
         $control = new PageListControl($this->database, $this->em);
         $control->onSave[] = function ($type) {
-            $this->redirect(this, array("type" => $type));
+            $this->redirect(this, array('type' => $type));
         };
 
         return $control;
@@ -40,66 +43,46 @@ class PagesPresenter extends BasePresenter
 
     protected function createComponentBlock()
     {
-        $control = new BlockControl($this->database);
-        return $control;
-    }
-
-    protected function createComponentEditSnippetForm()
-    {
-        $control = new EditFormControl($this->database);
-        return $control;
-    }
-
-    protected function createComponentInsertSnippetForm()
-    {
-        $control = new InsertFormControl($this->database);
-        return $control;
+        return new BlockControl($this->database);
     }
 
     protected function createComponentPageFilterRelated()
     {
-        $control = new FilterFormControl($this->database);
-        return $control;
+        return new FilterFormControl($this->database);
     }
 
     protected function createComponentInsertPageForm()
     {
-        $control = new \Caloriscz\Page\PageForms\InsertFormControl($this->database, $this->em);
-        return $control;
+        return new \Caloriscz\Page\PageForms\InsertFormControl($this->database, $this->em);
     }
 
     protected function createComponentLangSelector()
     {
-        $control = new \LangSelectorControl($this->database);
-        return $control;
+        return new \LangSelectorControl($this->em);
     }
 
     protected function createComponentImageEditForm()
     {
-        $control = new ImageEditFormControl($this->database);
-        return $control;
+        return new ImageEditFormControl($this->database);
     }
 
     protected function handleChangeState($id, $public)
     {
-        if ($public == 0) {
+        if ($public === 0) {
             $idState = 1;
         } else {
             $idState = 0;
         }
 
-        $this->database->table('pages')->get($id)
-            ->update(array(
-                'public' => $idState,
-            ));
+        $this->database->table('pages')->get($id)->update(['public' => $idState]);
 
-        $this->redirect(':Admin:Pages:default', array('id' => null));
+        $this->redirect('this', ['id' => null]);
     }
 
     public function handleDeleteRelated($id)
     {
         $this->database->table('pages_related')->get($id)->delete();
-        $this->redirect(':Admin:Pages:detailRelated', array('id' => $this->getParameter('item')));
+        $this->redirect(':Admin:Pages:detailRelated', ['id' => $this->getParameter('item')]);
     }
 
     protected function createComponentProductFileList()
@@ -121,7 +104,7 @@ class PagesPresenter extends BasePresenter
         IO::remove(APP_DIR . '/media/' . $id . '/' . $this->getParameter('name'));
         IO::remove(APP_DIR . '/media/' . $id . '/tn/' . $this->getParameter('name'));
 
-        $this->redirect(':Admin:Pages:detailImages', array('id' => $this->getParameter('name'),));
+        $this->redirect(':Admin:Pages:detailImages', ['id' => $this->getParameter('name')]);
     }
 
     public function handleInsertRelated($id)
@@ -130,16 +113,7 @@ class PagesPresenter extends BasePresenter
             'pages_id' => $this->getParameter('item'),
             'related_pages_id' => $id,
         ));
-        $this->redirect(':Admin:Pages:detailRelated', array('id' => $this->getParameter('item')));
-    }
-
-    /**
-     * Delete snippet
-     */
-    public function handleDeleteSnippet($id)
-    {
-        $this->database->table('snippets')->get($id)->delete();
-        $this->redirect(':Admin:Pages:snippets', array('id' => $this->getParameter('page')));
+        $this->redirect(':Admin:Pages:detailRelated', ['id' => $this->getParameter('item')]);
     }
 
     public function renderDetail()
@@ -166,20 +140,7 @@ class PagesPresenter extends BasePresenter
     {
         $this->template->page = $this->database->table('pages')->get($this->getParameter('id'));
         $this->template->files = $this->database->table('media')
-            ->where(array('pages_id' => $this->getParameter('id'), 'file_type' => 0));
-    }
-
-    public function renderSnippets()
-    {
-        $this->template->catalogue = $this->database->table('pages')->get($this->getParameter('id'));
-        $this->template->snippets = $this->database->table('snippets')
-            ->where(array('pages_id' => $this->getParameter('id')));
-    }
-
-    public function renderSnippetsDetail()
-    {
-        $this->template->page = $this->database->table('pages')->get($this->getParameter('id'));
-        $this->template->snippet = $this->database->table('snippets')->get($this->getParameter('snippet'));
+            ->where(['pages_id' => $this->getParameter('id'), 'file_type' => 0]);
     }
 
     public function renderDetailRelated()
@@ -187,9 +148,9 @@ class PagesPresenter extends BasePresenter
         $src = $this->getParameter('src');
 
         $this->template->relatedSearch = $this->database->table('pages')
-            ->where(array('title LIKE ?' => '%' . $src . '%'))->limit(20);
+            ->where(['title LIKE ?' => '%' . $src . '%'])->limit(20);
         $this->template->related = $this->database->table('pages_related')
-            ->where(array('pages_id' => $this->getParameter('id')));
+            ->where(['pages_id' => $this->getParameter('id')]);
         $this->template->catalogue = $this->database->table('pages')->get($this->getParameter('id'));
     }
 

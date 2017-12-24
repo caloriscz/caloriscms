@@ -20,7 +20,11 @@ class IO
 {
 
     /**
-     *  Uploads file
+     * Uploads file
+     * @param $pathDirectory
+     * @param $fileName
+     * @param int $chmod
+     * @return bool
      */
     public static function upload($pathDirectory, $fileName, $chmod = 0644)
     {
@@ -38,7 +42,8 @@ class IO
     }
 
     /**
-     *  Remove file or empty directory
+     * Remove file or empty directory
+     * @param $fileName
      */
     public static function remove($fileName)
     {
@@ -53,7 +58,8 @@ class IO
     }
 
     /**
-     *  Deletes directory with subdirectories and all files
+     * Deletes directory with subdirectories and all files
+     * @param $path
      */
     public static function removeDirectory($path)
     {
@@ -77,39 +83,45 @@ class IO
     }
 
     /**
-     *  Reads files. When 1 is set to highlight parameter, Caloris extensions syntax is highlighted
-     * @param string $path Path to file
+     * Reads files.
+     * @param $path
+     * @return bool|string
      */
     public static function get($path)
     {
-        $fileHandle = fopen($path, "r");
+        $type = null;
+        $fileHandle = fopen($path, 'r');
 
         if (file_exists($path) && filesize($path) > 0) {
-            $typer = fread($fileHandle, filesize($path));
+            $type = fread($fileHandle, filesize($path));
         }
 
         fclose($fileHandle);
 
-        return $typer;
+        return $type;
     }
 
     /**
-     *  Creates directory and sets user rights.
+     * Creates directory and sets user rights.
+     * @param $path
+     * @param int $chmod
      */
     public static function directoryMake($path, $chmod = 0755)
     {
-        $pathConv = str_replace("\\", "/", $path);
+        $pathConvert = str_replace("\\", '/', $path);
 
-        if (!file_exists($pathConv)) {
+        if (!file_exists($pathConvert)) {
             $oldUmask = umask(0);
-            Debugger::barDump($pathConv);
-            mkdir($pathConv, $chmod);
+            Debugger::barDump($pathConvert);
+            mkdir($pathConvert, $chmod);
             umask($oldUmask);
         }
     }
 
     /**
-     *  Renames files or moves to a different directory.
+     * Renames files or moves to a different directory.
+     * @param $pathFrom
+     * @param $pathTo
      */
     public static function rename($pathFrom, $pathTo)
     {
@@ -119,7 +131,9 @@ class IO
     }
 
     /**
-     *  Checks for empty diorectories
+     * Checks for empty directories
+     * @param $directory
+     * @return bool
      */
     public static function isEmptyDirectory($directory)
     {
@@ -128,6 +142,9 @@ class IO
 
     /**
      * Creates and/or edit file
+     * @param $path
+     * @param null $text
+     * @param int $chmod
      */
     public static function file($path, $text = null, $chmod = 0777)
     {
@@ -139,32 +156,35 @@ class IO
 
     /**
      * Get files list as array
+     * @param $filePath
+     * @return array
      */
     public static function listFiles($filePath)
     {
         $files = scandir($filePath);
-        $arrayA = array(".", "..");
+        $arrayA = ['.', '..'];
         $filesComplete = array_diff($files, $arrayA);
 
         return array_values($filesComplete);
     }
 
-    /*
+    /**
      * Folder size
+     * @param $dir
+     * @return int
      */
-
     public static function folderSize($dir)
     {
         $count_size = 0;
         $count = 0;
         $dir_array = scandir($dir);
         foreach ($dir_array as $key => $filename) {
-            if ($filename != ".." && $filename != ".") {
-                if (is_dir($dir . "/" . $filename)) {
-                    $new_foldersize = foldersize($dir . "/" . $filename);
-                    $count_size = $count_size + $new_foldersize;
-                } else if (is_file($dir . "/" . $filename)) {
-                    $count_size = $count_size + filesize($dir . "/" . $filename);
+            if ($filename !== '..' && $filename !== '.') {
+                if (is_dir($dir . '/' . $filename)) {
+                    $new_folderSize = foldersize($dir . '/' . $filename);
+                    $count_size += $new_folderSize;
+                } else if (is_file($dir . '/' . $filename)) {
+                    $count_size += filesize($dir . '/' . $filename);
                     $count++;
                 }
             }
@@ -173,7 +193,7 @@ class IO
     }
 
     /**
-     * Am I image or what?
+     * Is it image or other type of file
      * @param type $path
      * @return boolean
      */
@@ -182,23 +202,17 @@ class IO
         $finfo = finfo_open(FILEINFO_MIME_TYPE);
         $type = finfo_file($finfo, $path);
 
-        $valid_image_type = array();
+        $valid_image_type = [];
         $valid_image_type['image/png'] = '';
         $valid_image_type['image/jpg'] = '';
         $valid_image_type['image/jpeg'] = '';
-        //$valid_image_type['image/jpe'] = '';
         $valid_image_type['image/gif'] = '';
-        //$valid_image_type['image/tif'] = '';
-        //$valid_image_type['image/tiff'] = '';
-        //$valid_image_type['image/svg'] = '';
-        //$valid_image_type['image/ico'] = '';
-        //$valid_image_type['image/icon'] = '';
-        //$valid_image_type['image/x-icon'] = '';
+        $valid_image_type['image/bmp'] = '';
 
         if (isset($valid_image_type[$type])) {
-            return TRUE;
+            return true;
         } else {
-            return FALSE;
+            return false;
         }
     }
 

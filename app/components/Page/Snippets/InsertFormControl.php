@@ -2,6 +2,7 @@
 namespace Caloriscz\Page\Snippets;
 
 use Nette\Application\UI\Control;
+use Nette\Forms\BootstrapUIForm;
 
 class InsertFormControl extends Control
 {
@@ -16,53 +17,46 @@ class InsertFormControl extends Control
 
     public function createComponentInsertForm()
     {
-        $form = new \Nette\Forms\BootstrapUIForm();
+        $form = new BootstrapUIForm();
         $form->setTranslator($this->presenter->translator);
         $form->getElementPrototype()->class = 'form-horizontal';
         $form->getElementPrototype()->role = 'form';
         $form->getElementPrototype()->autocomplete = 'off';
 
-        $form->addHidden('id')
-            ->setAttribute('class', 'form-control');
+        $form->addHidden('id')->setAttribute('class', 'form-control');
         $form->addText('title', 'dictionary.main.Title');
 
-        $form->setDefaults(array(
-            'id' => $this->presenter->getParameter('id'),
-        ));
+        $form->setDefaults(['id' => $this->getPresenter()->getParameter('id')]);
 
-        $form->addSubmit('submit', 'dictionary.main.Create')
-            ->setHtmlId('formxins');
+        $form->addSubmit('submit', 'dictionary.main.Create')->setHtmlId('formxins');
 
-        $form->onSuccess[] = $this->insertFormSucceeded;
-        $form->onValidate[] = $this->permissionValidated;
+        $form->onSuccess[] = [$this, 'insertFormSucceeded'];
+        $form->onValidate[] = [$this, 'permissionValidated'];
 
         return $form;
     }
 
-    public function permissionValidated(\Nette\Forms\BootstrapUIForm $form)
+    public function permissionValidated()
     {
-        if ($this->presenter->template->member->users_roles->pages_edit == 0) {
-            $this->presenter->flashMessage('Nemáte oprávnění k této akci', 'error');
-            $this->presenter->redirect(this);
+        if ($this->getPresenter()->template->member->users_roles->pages_edit === 0) {
+            $this->getPresenter()->flashMessage('Nemáte oprávnění k této akci', 'error');
+            $this->getPresenter()->redirect(this);
         }
     }
 
-    public function insertFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
+    public function insertFormSucceeded(BootstrapUIForm $form)
     {
-        $this->database->table('snippets')->insert(array(
+        $this->database->table('snippets')->insert([
             'keyword' => $form->values->title,
-            'pages_id' => $form->values->id,
-        ));
+        ]);
 
-        $this->presenter->redirect(this);
+        $this->getPresenter()->redirect('this');
     }
 
     public function render()
     {
-        $template = $this->template;
-        $template->setFile(__DIR__ . '/InsertFormControl.latte');
-
-        $template->render();
+        $this->template->setFile(__DIR__ . '/InsertFormControl.latte');
+        $this->template->render();
     }
 
 }

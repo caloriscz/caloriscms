@@ -66,9 +66,6 @@
         {if $view != 'detail' && $name != 'Admin:Pages'}
             <a href="/admin/pages/detail/{$id}" class="btn btn-secondary">{_dictionary.main.Page}</a>
         {/if}
-        {if $page->pages_types->enable_snippets && $view != 'snippets'}
-            <a href="/admin/pages/snippets/{$id}" class="btn btn-secondary">{_dictionary.main.Snippets}</a>
-        {/if}
         {if $page->pages_types->enable_images && $view != 'detailImages'}
             <a href="/admin/pages/detail-images/{$id}" class="btn btn-secondary">{_dictionary.main.Images}</a>
         {/if}

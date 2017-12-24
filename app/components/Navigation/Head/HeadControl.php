@@ -4,6 +4,7 @@ namespace Caloriscz\Navigation\Head;
 
 use Kdyby\Translation\Translator;
 use Nette\Application\UI\Control;
+use Nette\Database\Context;
 
 class HeadControl extends Control
 {
@@ -11,37 +12,36 @@ class HeadControl extends Control
     /** @var \Nette\Database\Context */
     public $database;
 
-    public function __construct(\Nette\Database\Context $database)
+    public function __construct(Context $database)
     {
         $this->database = $database;
     }
 
     public function render($slugArray)
     {
-        $template = $this->template;
-
-        $page = $this->presenter->template->page;
-        $template->slug = $slugArray;
+        $page = $this->getPresenter()->template->page;
+        $this->template->page = $page;
+        $this->template->slug = $slugArray;
 
         /* Choose correct language columns */
         if (count($slugArray) > 0) {
-            $template->title = $slugArray["title"];
-            $template->metadesc = $slugArray["metadesc"];
-            $template->metakeys = $slugArray["metakeys"];
-        } elseif ($this->presenter->translator->getLocale() == $this->presenter->translator->getDefaultLocale()) {
-            $template->title = $page->title;
-            $template->metadesc = $page->metadesc;
-            $template->metakeys = $page->metakeys;
+            $this->template->title = $slugArray["title"];
+            $this->template->metadesc = $slugArray["metadesc"];
+            $this->template->metakeys = $slugArray["metakeys"];
+        } elseif ($this->getPresenter()->translator->getLocale() === $this->getPresenter()->translator->getDefaultLocale()) {
+            $this->template->title = $page->title;
+            $this->template->metadesc = $page->metadesc;
+            $this->template->metakeys = $page->metakeys;
         } else {
-            $template->title = $page->{'title_' . $this->presenter->translator->getLocale()};
-            $template->metadesc = $page->{'metadesc_' . $this->presenter->translator->getLocale()};
-            $template->metakeys = $page->{'metakeys_' . $this->presenter->translator->getLocale()};
+            $this->template->title = $page->{'title_' . $this->presenter->translator->getLocale()};
+            $this->template->metadesc = $page->{'metadesc_' . $this->presenter->translator->getLocale()};
+            $this->template->metakeys = $page->{'metakeys_' . $this->presenter->translator->getLocale()};
         }
 
-        $template->settings = $this->presenter->template->settings;
-        $template->setFile(__DIR__ . '/HeadControl.latte');
+        $this->template->settings = $this->presenter->template->settings;
+        $this->template->setFile(__DIR__ . '/HeadControl.latte');
 
-        $template->render();
+        $this->template->render();
     }
 
 }

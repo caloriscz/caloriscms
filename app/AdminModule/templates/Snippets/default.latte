@@ -1,13 +1,10 @@
-{block #titles}{$catalogue->title}{/block}
+{block #titles}{_dictionary.main.Snippets}{/block}
 {block content}
 
 <ol class="breadcrumb">
     <li class="breadcrumb-item">Home</li>
     <li class="breadcrumb-item"><a href="#">Admin</a></li>
-    <li class="breadcrumb-item active">{$catalogue->title}</li>
     <li class="breadcrumb-item active">{_dictionary.main.Snippets}</li>
-
-    {control pageTopMenu}
 </ol>
 
 <div class="container-fluid">
@@ -39,16 +36,13 @@
                         {foreach $snippets as $item}
                             <tr>
                                 <td class="col-1">
-                                    <a n:href="deleteSnippet!, id => $item->id, page => $catalogue->id"
-                                            class="btn btn-default btn-xs" role="button"
+                                    <a n:href="delete!, id => $item->id" class="btn btn-default btn-xs" role="button"
                                             onclick="return confirm('{_admin.catalogue.deletereallymessage}')">
                                         <i class="fa fa-times font-red"></i>
                                     </a>
                                 </td>
                                 <td class="col-8">
-                                    <a n:href=":Admin:Pages:snippetsDetail, id => $item->pages_id, snippet => $item->id">
-                                        {$item->keyword}
-                                    </a>
+                                    <a n:href=":Admin:Snippets:detail, id => $item->id">{$item->keyword}</a>
                                 </td>
                                 <td class="col-3">[snippet="{$item->id}"]</td>
                             </tr>

@@ -91,7 +91,7 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
             $role = $this->user->getRoles();
             $roleCheck = $this->database->table('users_roles')->get($role[0]);
 
-            if ($roleCheck->admin_access == 0) {
+            if ($roleCheck->admin_access === 0) {
                 $this->flashMessage($this->translator->translate('messages.sign.invalidLogin'), 'error');
                 $this->redirect(':Admin:Sign:in');
             }
@@ -120,7 +120,7 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
         $this->template->langSelected = $this->translator->getLocale();
 
         // Set language from cookie
-        if ($this->request->getCookie('langugage_admin') == '') {
+        if ($this->request->getCookie('langugage_admin') === '') {
             $this->translator->setLocale($this->translator->getDefaultLocale());
         } else {
             $this->translator->setLocale($this->request->getCookie('language_admin'));
@@ -129,8 +129,7 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
 
     protected function createComponentPaging()
     {
-        $control = new PagingControl;
-        return $control;
+        return new PagingControl;
     }
 
     protected function createComponentEditor()
@@ -141,32 +140,27 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
 
     protected function createComponentEditorSettings()
     {
-        $control = new EditorSettingsControl($this->database);
-        return $control;
+        return new EditorSettingsControl($this->database);
     }
 
     protected function createComponentDropZone()
     {
-        $control = new DropZoneControl($this->database);
-        return $control;
+        return new DropZoneControl($this->database);
     }
 
     protected function createComponentImageBrowser()
     {
-        $control = new ImageBrowserControl($this->database);
-        return $control;
+        return new ImageBrowserControl($this->database);
     }
 
     protected function createComponentMainMenu()
     {
-        $control = new MainMenuControl($this->em);
-        return $control;
+        return new MainMenuControl($this->em);
     }
 
     protected function createComponentPageTopMenu()
     {
-        $control = new PageTopMenuControl($this->database);
-        return $control;
+        return new PageTopMenuControl($this->database);
     }
 
 }
