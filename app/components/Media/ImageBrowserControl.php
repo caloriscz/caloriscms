@@ -2,15 +2,19 @@
 
 namespace Caloriscz\Media;
 
+use App\Model\IO;
 use Nette\Application\UI\Control;
+use Nette\Database\Context;
 
 class ImageBrowserControl extends Control
 {
 
-    /** @var \Nette\Database\Context */
+    /**
+     * @var Context
+     */
     public $database;
 
-    public function __construct(\Nette\Database\Context $database)
+    public function __construct(Context $database)
     {
         $this->database = $database;
 
@@ -18,22 +22,24 @@ class ImageBrowserControl extends Control
 
     /**
      * Delete image
+     * @param $id
+     * @throws \Nette\Application\AbortException
      */
-    function handleDelete($id)
+    public function handleDelete($id)
     {
-        $imageDb = $this->database->table("media")->get($this->getParameter("name"));
+        $imageDb = $this->database->table('media')->get($this->getParameter('name'));
         $imageDb->delete();
 
-        \App\Model\IO::remove(APP_DIR . '/media/' . $id . '/' . $imageDb->name);
-        \App\Model\IO::remove(APP_DIR . '/media/' . $id . '/tn/' . $imageDb->name);
+        IO::remove(APP_DIR . '/media/' . $id . '/' . $imageDb->name);
+        IO::remove(APP_DIR . '/media/' . $id . '/tn/' . $imageDb->name);
 
-        $this->redirect(this, array("id" => $this->presenter->getParameter("name"),));
+        $this->redirect('this', array('id' => $this->presenter->getParameter('name'),));
     }
 
     /**
      * Set image as main  image
      */
-    function handleSetMain()
+    public function handleSetMain()
     {
         // Set all other media images in this folder as 0
         $this->database->table("media")->where(array("pages_id" => $this->getParameter("id"), "file_type" => 1))
@@ -48,16 +54,13 @@ class ImageBrowserControl extends Control
 
     public function render()
     {
-        $template = $this->template;
-        $template->settings = $this->presenter->template->settings;
-
-        $template->catalogue = $this->database->table("pages")->get($this->presenter->getParameter("id"));
-        $template->images = $this->database->table("media")
+        $this->template->settings = $this->presenter->template->settings;
+        $this->template->catalogue = $this->database->table("pages")->get($this->presenter->getParameter("id"));
+        $this->template->images = $this->database->table("media")
             ->where(array("pages_id" => $this->presenter->getParameter("id"), "file_type" => 1));
+        $this->template->setFile(__DIR__ . '/ImageBrowserControl.latte');
 
-        $template->setFile(__DIR__ . '/ImageBrowserControl.latte');
-
-        $template->render();
+        $this->template->render();
     }
 
 }

@@ -2,7 +2,11 @@
 
 namespace App\AdminModule\Presenters;
 
+use Caloriscz\Members\EditMemberControl;
+use Caloriscz\Members\InsertContactForMemberControl;
+use Caloriscz\Members\InsertMemberControl;
 use Caloriscz\Members\MemberCategoriesControl;
+use Caloriscz\Members\MemberGridControl;
 use Nette,
     App\Model;
 
@@ -28,13 +32,12 @@ class MembersPresenter extends BasePresenter
 
     protected function createComponentEditMember()
     {
-        $control = new \Caloriscz\Members\EditMemberControl($this->database);
-        return $control;
+        return new EditMemberControl($this->database);
     }
 
     protected function createComponentInsertMember()
     {
-        $control = new \Caloriscz\Members\InsertMemberControl($this->database);
+        $control = new InsertMemberControl($this->database);
         $control->onSave[] = function ($message, $userId) {
             if ($message) {
                 $this->flashMessage($this->translator->translate($message), 'error');
@@ -51,20 +54,17 @@ class MembersPresenter extends BasePresenter
 
     protected function createComponentInsertContactForMember()
     {
-        $control = new \Caloriscz\Members\InsertContactForMemberControl($this->database);
-        return $control;
+        return new InsertContactForMemberControl($this->database);
     }
     
     protected function createComponentMemberGrid()
     {
-        $control = new \Caloriscz\Members\MemberGridControl($this->database);
-        return $control;
+        return new MemberGridControl($this->database);
     }
     
     protected function createComponentMemberCategories()
     {
-        $control = new MemberCategoriesControl($this->database);
-        return $control;
+        return new MemberCategoriesControl($this->database);
     }
 
     /**
@@ -73,8 +73,8 @@ class MembersPresenter extends BasePresenter
     public function handleDeleteContact($id)
     {
         if (!$this->template->member->users_roles->members_edit) {
-            $this->flashMessage($this->translator->translate("messages.members.PermissionDenied"), 'error');
-            $this->redirect(":Admin:Members:edit", array("id" => $this->getParameter("contact")));
+            $this->flashMessage($this->translator->translate('messages.members.PermissionDenied'), 'error');
+            $this->redirect(':Admin:Members:edit', ['id' => $this->getParameter('contact')]);
         }
 
         try {

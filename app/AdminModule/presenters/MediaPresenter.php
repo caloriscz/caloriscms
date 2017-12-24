@@ -188,16 +188,16 @@ class MediaPresenter extends BasePresenter
     public function renderAlbums()
     {
         if ($this->getParameter('id')) {
-            $arr = array(
+            $arr = [
                 'media.pages_id' => $this->getParameter('id'),
-                'file_type' => 1,
-            );
+                'file_type' => 1
+            ];
 
             $this->template->idN = $this->getParameter('id');
         } else {
-            $arr = array(
-                'file_type' => 3,
-            );
+            $arr = [
+                'file_type' => 3
+            ];
         }
 
         $mediaDb = $this->database->table('media')->where($arr)->order('name');

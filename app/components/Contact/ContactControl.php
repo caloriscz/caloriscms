@@ -15,13 +15,9 @@ class ContactControl extends Control
 
     public function render($id)
     {
-        $template = $this->template;
-        $template->setFile(__DIR__ . '/ContactControl.latte');
-        $contact = $this->database->table('contacts')->get($id);
-
-        $template->contact = $contact;
-
-        $template->render();
+        $this->template->setFile(__DIR__ . '/ContactControl.latte');
+        $this->template->contact = $this->database->table('contacts')->get($id);
+        $this->template->render();
     }
 
 }

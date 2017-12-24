@@ -36,18 +36,6 @@ class Snippets
     private $content;
 
     /**
-     * @var \App\Model\Entity\Pages
-     *
-     * @ORM\ManyToOne(targetEntity="App\Model\Entity\Pages")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="pages_id", referencedColumnName="id")
-     * })
-     */
-    private $pages;
-
-
-
-    /**
      * Get id
      *
      * @return integer
@@ -103,29 +91,5 @@ class Snippets
     public function getContent()
     {
         return $this->content;
-    }
-
-    /**
-     * Set pages
-     *
-     * @param \App\Model\Entity\Pages $pages
-     *
-     * @return Snippets
-     */
-    public function setPages(\App\Model\Entity\Pages $pages = null)
-    {
-        $this->pages = $pages;
-
-        return $this;
-    }
-
-    /**
-     * Get pages
-     *
-     * @return \App\Model\Entity\Pages
-     */
-    public function getPages()
-    {
-        return $this->pages;
     }
 }

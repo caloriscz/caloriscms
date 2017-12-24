@@ -2,6 +2,8 @@
 namespace Caloriscz\Contact;
 
 use Nette\Application\UI\Control;
+use Nette\Database\Context;
+use Ublaboo\DataGrid\DataGrid;
 
 class ContactGridControl extends Control
 {
@@ -9,7 +11,7 @@ class ContactGridControl extends Control
     /** @var \Nette\Database\Context */
     public $database;
 
-    public function __construct(\Nette\Database\Context $database)
+    public function __construct(Context $database)
     {
         $this->database = $database;
     }
@@ -17,17 +19,16 @@ class ContactGridControl extends Control
     protected function createComponentContactsGrid($name)
     {
 
-        $grid = new \Ublaboo\DataGrid\DataGrid($this, $name);
+        $grid = new DataGrid($this, $name);
 
         if ($this->presenter->id == null) {
-            $contacts = $this->database->table("contacts");
+            $contacts = $this->database->table('contacts');
         } else {
-            $contacts = $this->database->table("contacts")->where("contacts_categories_id", $this->presenter->id);
+            $contacts = $this->database->table('contacts')->where('contacts_categories_id', $this->presenter->id);
         }
 
         $grid->setDataSource($contacts);
         $grid->addGroupAction($this->presenter->translator->translate('dictionary.main.Delete'))->onSelect[] = [$this, 'handleDelete'];
-
 
         $grid->addColumnLink('name', 'dictionary.main.Title')
             ->setRenderer(function ($item) {
@@ -42,8 +43,7 @@ class ContactGridControl extends Control
                 $url = \Nette\Utils\Html::el('a')->href($this->presenter->link('detail', array("id" => $item->id)))
                     ->setText($name);
                 return $url;
-            })
-            ->setSortable();
+            })->setSortable();
         $grid->addFilterText('name', $this->presenter->translator->translate('dictionary.main.Name'));
         $grid->addColumnText('email', $this->presenter->translator->translate('dictionary.main.Email'))
             ->setSortable();

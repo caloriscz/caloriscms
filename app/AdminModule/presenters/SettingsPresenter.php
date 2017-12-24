@@ -17,32 +17,27 @@ class SettingsPresenter extends BasePresenter
 
     protected function createComponentEditSettings()
     {
-        $control = new EditSettingsControl($this->database);
-        return $control;
+        return new EditSettingsControl($this->database);
     }
 
     protected function createComponentInsertLanguage()
     {
-        $control = new InsertLanguageControl($this->database);
-        return $control;
+        return new InsertLanguageControl($this->database);
     }
 
     protected function createComponentInsertCountry()
     {
-        $control = new InsertCountryControl($this->database);
-        return $control;
+        return new InsertCountryControl($this->database);
     }
 
     protected function createComponentInsertCurrency()
     {
-        $control = new InsertCurrencyControl($this->database);
-        return $control;
+        return new InsertCurrencyControl($this->database);
     }
 
     protected function createComponentSettingsCategories()
     {
-        $control = new SettingsCategoriesControl($this->database);
-        return $control;
+        return new SettingsCategoriesControl($this->database);
     }
     
     public function handleInstall($id)
@@ -71,7 +66,7 @@ class SettingsPresenter extends BasePresenter
     {
         if ($this->template->member->users_roles->settings_edit == 0) {
             $this->database->query('UPDATE languages SET `default` = NULL');
-            $this->database->table('languages')->get($id)->update(array('default' => 1));
+            $this->database->table('languages')->get($id)->update(['default' => 1]);
         }
 
         $this->redirect(':Admin:Settings:languages');
@@ -81,7 +76,7 @@ class SettingsPresenter extends BasePresenter
     {
         if ($this->template->member->users_roles->settings_edit == 0) {
             $this->database->query('UPDATE currencies SET `used` = NULL');
-            $this->database->table('currencies')->get($id)->update(array('used' => 1));
+            $this->database->table('currencies')->get($id)->update(['used' => 1]);
         }
 
         $this->redirect(':Admin:Settings:languages');
@@ -98,7 +93,7 @@ class SettingsPresenter extends BasePresenter
                 $state = 1;
             }
 
-            $this->database->table('languages')->get($id)->update(array('used' => $state));
+            $this->database->table('languages')->get($id)->update(['used' => $state]);
         }
 
         $this->redirect(':Admin:Settings:languages');
@@ -115,7 +110,7 @@ class SettingsPresenter extends BasePresenter
                 $state = 1;
             }
 
-            $this->database->table('countries')->get($id)->update(array('show' => $state));
+            $this->database->table('countries')->get($id)->update(['show' => $state]);
         }
 
         $this->redirect(':Admin:Settings:countries');
@@ -142,17 +137,17 @@ class SettingsPresenter extends BasePresenter
 
     public function renderLanguages()
     {
-        $this->template->languages = $this->database->table("languages");
+        $this->template->languages = $this->database->table('languages');
     }
 
     public function renderCountries()
     {
-        $this->template->countries = $this->database->table("countries");
+        $this->template->countries = $this->database->table('countries');
     }
 
     public function renderCurrencies()
     {
-        $this->template->currencies = $this->database->table("currencies");
+        $this->template->currencies = $this->database->table('currencies');
     }
 
 }

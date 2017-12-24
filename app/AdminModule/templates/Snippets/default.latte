@@ -36,15 +36,15 @@
                         {foreach $snippets as $item}
                             <tr>
                                 <td class="col-1">
-                                    <a n:href="delete!, id => $item->id" class="btn btn-default btn-xs" role="button"
+                                    <a n:href="delete!, id => $item->getId()" class="btn btn-default btn-xs" role="button"
                                             onclick="return confirm('{_admin.catalogue.deletereallymessage}')">
                                         <i class="fa fa-times font-red"></i>
                                     </a>
                                 </td>
                                 <td class="col-8">
-                                    <a n:href=":Admin:Snippets:detail, id => $item->id">{$item->keyword}</a>
+                                    <a n:href=":Admin:Snippets:detail, id => $item->getId()">{$item->getKeyword()}</a>
                                 </td>
-                                <td class="col-3">[snippet="{$item->id}"]</td>
+                                <td class="col-3">[snippet="{$item->getId()}"]</td>
                             </tr>
                         {/foreach}
                     </table>

@@ -75,11 +75,9 @@ class NewsletterFormControl extends Control
 
     public function render()
     {
-        $template = $this->template;
-        $template->setFile(__DIR__ . '/NewsletterFormControl.latte');
-        $template->settings = $this->presenter->template->settings;
-
-        $template->render();
+        $this->template->setFile(__DIR__ . '/NewsletterFormControl.latte');
+        $this->template->settings = $this->presenter->template->settings;
+        $this->template->render();
     }
 
 }

@@ -2,6 +2,10 @@
 
 namespace App\AdminModule\Presenters;
 
+use App\Model\Logger;
+use Caloriscz\Sign\LostPassControl;
+use Caloriscz\Sign\ResetPassControl;
+use Caloriscz\Sign\SignInControl;
 use Nette,
     Nette\Application\UI;
 
@@ -23,19 +27,19 @@ class SignPresenter extends BasePresenter
 
     protected function createComponentLostPass()
     {
-        $control = new \Caloriscz\Sign\LostPassControl($this->database);
+        $control = new LostPassControl($this->database);
         $control->onSave[] = function($message) {
             if ($message) {
-                $this->flashMessage($message, "error");
+                $this->flashMessage($message, 'error');
             } else {
-                $this->flashMessage("Informace o zapomenutém hesle odeslány", "success");
+                $this->flashMessage('Informace o zapomenutém hesle odeslány', 'success');
             }
 
             $this->redirect(this);
         };
 
-        $logger = new \App\Model\Logger($this->database);
-        $logger->setEvent("Uživatel v administraci si nechal zaslat heslo");
+        $logger = new Logger($this->database);
+        $logger->setEvent('Uživatel v administraci si nechal zaslat heslo');
         $logger->setDescription("");
         $logger->setUser($this->user->getId());
         $logger->save();
@@ -45,17 +49,16 @@ class SignPresenter extends BasePresenter
 
     protected function createComponentResetPass()
     {
-        $control = new \Caloriscz\Sign\ResetPassControl($this->database);
-        return $control;
+        return new ResetPassControl($this->database);
     }
 
     protected function createComponentSignIn()
     {
-        $control = new \Caloriscz\Sign\SignInControl($this->database);
+        $control = new SignInControl($this->database);
 
-        $logger = new \App\Model\Logger($this->database);
+        $logger = new Logger($this->database);
         $logger->setEvent('Uživatel přihlášen');
-        $logger->setDescription("");
+        $logger->setDescription('');
         $logger->setUser($this->user->getId());
         $logger->save();
 
@@ -70,12 +73,12 @@ class SignPresenter extends BasePresenter
 
     }
 
-    function renderResetpass()
+    public function renderResetpass()
     {
-        $activation = $this->database->table('users')->where(array(
+        $activation = $this->database->table('users')->where([
             'email' => $this->getParameter('email'),
-            'activation' => $this->getParameter('code'),
-        ));
+            'activation' => $this->getParameter('code')
+        ]);
 
         if ($activation->count() > 0) {
             $this->template->activationValid = TRUE;

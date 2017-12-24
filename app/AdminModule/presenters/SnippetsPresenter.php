@@ -2,6 +2,7 @@
 
 namespace App\AdminModule\Presenters;
 
+use App\Model\Entity\Snippets;
 use App\Model\IO;
 use Caloriscz\Media\FileListControl;
 use Caloriscz\Media\MediaForms\ImageEditFormControl;
@@ -59,11 +60,11 @@ class SnippetsPresenter extends BasePresenter
 
     public function renderDefault()
     {
-        $this->template->snippets = $this->database->table('snippets')->order('keyword');
+        $this->template->snippets = $this->em->getRepository(Snippets::class)->findAll([], ['order' => 'ASC']);
     }
 
     public function renderDetail()
     {
-        $this->template->snippet = $this->database->table('snippets')->get($this->getParameter('id'));
+        $this->template->snippet = $this->em->getRepository(Snippets::class)->find($this->getParameter('id'));
     }
 }

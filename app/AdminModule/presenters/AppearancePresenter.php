@@ -2,6 +2,9 @@
 
 namespace App\AdminModule\Presenters;
 
+use Caloriscz\Appearance\CarouselGridControl;
+use Caloriscz\Appearance\EditCarouselControl;
+use Caloriscz\Appearance\SavePathsControl;
 use Nette,
     App\Model;
 
@@ -13,20 +16,17 @@ class AppearancePresenter extends BasePresenter
 
     protected function createComponentEditCarousel()
     {
-        $control = new \Caloriscz\Appearance\EditCarouselControl($this->database);
-        return $control;
+        return new EditCarouselControl($this->database);
     }
 
     protected function createComponentSavePaths()
     {
-        $control = new \Caloriscz\Appearance\SavePathsControl($this->database);
-        return $control;
+        return new SavePathsControl($this->database);
     }
 
     protected function createComponentCarouselGrid()
     {
-        $control = new \Caloriscz\Appearance\CarouselGridControl($this->database);
-        return $control;
+        return new CarouselGridControl($this->database);
     }
 
     /**
@@ -83,8 +83,7 @@ class AppearancePresenter extends BasePresenter
             'type" => "local_path',
         );
 
-        $this->template->settingsDb = $this->database->table('settings')
-            ->where($arr);
+        $this->template->settingsDb = $this->database->table('settings')->where($arr);
     }
 
 }

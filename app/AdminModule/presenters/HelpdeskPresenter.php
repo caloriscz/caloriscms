@@ -2,8 +2,11 @@
 
 namespace App\AdminModule\Presenters;
 
-use Nette,
-    App\Model;
+use Caloriscz\Contacts\ContactForms\EditContactControl;
+use Caloriscz\Helpdesk\EditHelpdeskEmailSettingsControl;
+use Caloriscz\Helpdesk\EditMailTemplateControl;
+use Caloriscz\Helpdesk\SendTestMailControl;
+use Nette\Utils\Paginator;
 
 /**
  * Helpdesk presenter.
@@ -12,13 +15,12 @@ class HelpdeskPresenter extends BasePresenter
 {
     protected function createComponentSendTestMail()
     {
-        $control = new \Caloriscz\Helpdesk\SendTestMailControl($this->database);
-        return $control;
+        return new SendTestMailControl($this->database);
     }
 
     protected function createComponentEditHelpdeskEmailSettings()
     {
-        $control = new \Caloriscz\Helpdesk\EditHelpdeskEmailSettingsControl($this->database);
+        $control = new EditHelpdeskEmailSettingsControl($this->database);
         $control->onSave[] = function ($helpdeskId) {
             $this->redirect(this, array('id' => $helpdeskId));
         };
@@ -28,17 +30,15 @@ class HelpdeskPresenter extends BasePresenter
 
     protected function createComponentEditContactForm()
     {
-        $control = new \Caloriscz\Helpdesk\EditContactFormControl($this->database);
-        return $control;
+        return new EditContactControl($this->database);
     }
 
     protected function createComponentEditMailTemplate()
     {
-        $control = new \Caloriscz\Helpdesk\EditMailTemplateControl($this->database);
-        return $control;
+        return new EditMailTemplateControl($this->database);
     }
 
-    function handleDelete($id)
+    public function handleDelete($id)
     {
         $this->database->table('helpdesk_messages')->get($id)->delete();
 
@@ -52,7 +52,7 @@ class HelpdeskPresenter extends BasePresenter
     {
         $this->database->table('helpdesk_emails')->get($id)->delete();
 
-        $this->redirect(':Admin:Helpdesk:default', array('id' => $this->getParameter('helpdesk')));
+        $this->redirect(':Admin:Helpdesk:default', ['id' => $this->getParameter('helpdesk')]);
     }
 
     public function renderDefault()
@@ -69,8 +69,8 @@ class HelpdeskPresenter extends BasePresenter
         $messages = $this->database->table('helpdesk_messages')->where(array('helpdesk_id' => $helpdeskId))
             ->order('date_created DESC');
 
-        $paginator = new \Nette\Utils\Paginator;
-        $paginator->setItemCount($messages->count("*"));
+        $paginator = new Paginator();
+        $paginator->setItemCount($messages->count('*'));
         $paginator->setItemsPerPage(20);
         $paginator->setPage($this->getParameter('page'));
 
