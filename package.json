@@ -1,0 +1,31 @@
+{
+  "name": "caloris",
+  "version": "1.0.0",
+  "description": "Caloris CMS",
+  "main": "gulpfile.js",
+  "directories": {
+    "test": "tests"
+  },
+  "dependencies": {
+    "bootstrap": "^4.0.0-beta.3",
+    "bower": "^1.8.2",
+    "gulp": "^3.9.1",
+    "gulp-concat": "^2.6.1",
+    "gulp-install": "^1.1.0",
+    "summernote": "^0.8.8"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/caloriscz/caloriscms.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/caloriscz/caloriscms/issues"
+  },
+  "homepage": "https://github.com/caloriscz/caloriscms#readme"
+}
