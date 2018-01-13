@@ -48,7 +48,7 @@
 
                 {if ($paginator->getPageCount() - $paginator->getPage()) >= $interval}
                     <li class="next-page">
-                        <a href="{plink $template, (expand) $args, 'page' => $paginator->getPage()+$interval}"
+                        <a href="{plink $templateName, (expand) $args, 'page' => $paginator->getPage()+$interval}"
                            data-paging="{$paginator->getPage()+$interval}" title="+ {$iterator} stránek">
                             <i class="fa fa-angle-right"></i>
                         </a>

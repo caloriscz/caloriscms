@@ -53,7 +53,7 @@ class PagesPresenter extends BasePresenter
 
     protected function createComponentInsertPageForm()
     {
-        return new \Caloriscz\Page\PageForms\InsertFormControl($this->database, $this->em);
+        return new InsertFormControl($this->database, $this->em);
     }
 
     protected function createComponentLangSelector()
@@ -68,10 +68,10 @@ class PagesPresenter extends BasePresenter
 
     protected function handleChangeState($id, $public)
     {
+        $idState = 0;
+
         if ($public === 0) {
             $idState = 1;
-        } else {
-            $idState = 0;
         }
 
         $this->database->table('pages')->get($id)->update(['public' => $idState]);
