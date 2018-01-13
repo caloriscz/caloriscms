@@ -8,6 +8,8 @@
 
 namespace App\Model;
 
+use Nette\Database\Context;
+
 /**
  * Get category name
  * @author Petr Karásek <caloris@caloris.cz>
@@ -18,47 +20,49 @@ class Logger
     /** @var \Nette\Database\Context */
     private $database;
 
-    public function __construct(\Nette\Database\Context $database)
+    private $pageId;
+
+    public function __construct(Context $database)
     {
         $this->database = $database;
     }
 
-    function setEvent($event)
+    public function setEvent($event)
     {
         $this->event = $event;
     }
 
-    function getEvent()
+    public function getEvent()
     {
         return $this->event;
     }
 
-    function setDescription($description)
+    public function setDescription($description)
     {
         $this->description = $description;
     }
 
-    function getDescription()
+    public function getDescription()
     {
         return $this->description;
     }
 
-    function setUser($user)
+    public function setUser($user)
     {
         $this->user = $user;
     }
 
-    function getUser()
+    public function getUser()
     {
         return $this->user;
     }
 
-    function setType($type)
+    public function setType($type)
     {
         $this->type = $type;
     }
 
-    function getType()
+    public function getType()
     {
         if (!isset($this->type)) {
             $this->type = 0;
@@ -67,12 +71,12 @@ class Logger
         return $this->type;
     }
 
-    function setPageId($pageId)
+    public function setPageId($pageId)
     {
         $this->pageId = $pageId;
     }
 
-    function getPageId()
+    public function getPageId()
     {
         return $this->pageId;
     }
@@ -81,27 +85,21 @@ class Logger
     /**
      * Save event to database
      */
-    function save()
+    public function save()
     {
-       /* echo "<br>";
-        echo "<strong>event:</strong> " . $this->getEvent() . "<br>";
-        echo "<strong>description:</strong> " . $this->getDescription() . "<br>";
-        echo "<strong>user:</strong> " . $this->getUser() . "<br>";
-        echo "<strong>type:</strong> " . $this->getType() . "<br>";*/
-
-        $arr = array(
-            "event" => $this->getEvent(),
-            "description" => $this->getDescription(),
-            "users_id" => $this->getUser(),
-            "date_created" => date("Y-m-d H:i:s"),
-            "event_types_id" => $this->getType(),
-        );
+        $arr = [
+            'event' => $this->getEvent(),
+            'description' => $this->getDescription(),
+            'users_id' => $this->getUser(),
+            'date_created' => date('Y-m-d H:i:s'),
+            'event_types_id' => $this->getType(),
+        ];
 
         if ($this->getPageId()) {
-            $arr["pages_id"] = $this->getPageId();
+            $arr['pages_id'] = $this->getPageId();
         }
 
-        $this->database->table("logger")->insert($arr);
+        $this->database->table('logger')->insert($arr);
 
 
         return true;

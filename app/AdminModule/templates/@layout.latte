@@ -1,11 +1,9 @@
-{var $adminMember = $member->username}
-{if $adminMember == 'admin'}
+{if $member && $member->username == 'admin'}
     {var $admin = true}
 {/if}
 <!DOCTYPE html>
 <html lang="{$langSelected}">
 <head>
-
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -34,10 +32,9 @@
             <li class="nav-item dropdown d-md-down-none">
                 <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
                    aria-expanded="false">
-                    <span class="d-md-down-none">{$member->username}</span>
+                    <span class="d-md-down-none">{if $member}{$member->username}{/if}</span>
                 </a>
                 <div class="dropdown-menu dropdown-menu-right">
-
                     <div class="dropdown-header text-center">
                         <strong>Nastavení</strong>
                     </div>

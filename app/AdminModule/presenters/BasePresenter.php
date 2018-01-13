@@ -88,10 +88,11 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
 
         // Login check
         if ($this->getName() != 'Admin:Sign') {
+
             $role = $this->user->getRoles();
             $roleCheck = $this->database->table('users_roles')->get($role[0]);
 
-            if ($roleCheck->admin_access === 0) {
+            if ($roleCheck && $roleCheck->admin_access === 'guest') {
                 $this->flashMessage($this->translator->translate('messages.sign.invalidLogin'), 'error');
                 $this->redirect(':Admin:Sign:in');
             }
@@ -106,10 +107,12 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
         }
 
 
-        if ($this->user->isLoggedIn()) {
-            $this->template->isLoggedIn = TRUE;
-
-            $this->template->member = $this->database->table('users')->get($this->user->getId());
+        if ($this->getUser()->isLoggedIn()) {
+            $this->template->isLoggedIn = true;
+            $this->template->member = $this->database->table('users')->get($this->getUser()->getId());
+        } else {
+            $this->template->isLoggedIn = false;
+            $this->template->member = false;
         }
 
         // Set values from db

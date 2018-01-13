@@ -28,7 +28,7 @@ class HomepagePresenter extends BasePresenter
         }
     }
 
-    function renderdefault()
+    public function renderdefault()
     {
         $this->template->channel = 'channel';
         $this->template->items = 'item';
