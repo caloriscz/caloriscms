@@ -22,19 +22,18 @@ class SettingsCategoriesControl extends Control
      */
     public function render($id = null, $type = null)
     {
-        $template = $this->template;
-        $template->type = $type;
+        $this->template->type = $type;
 
         $getParams = $this->getParameters();
         unset($getParams['page']);
-        $template->args = $getParams;
+        $this->template->args = $getParams;
 
-        $template->setFile(__DIR__ . '/SettingsCategoriesControl.latte');
+        $this->template->setFile(__DIR__ . '/SettingsCategoriesControl.latte');
 
-        $template->id = $id;
-        $template->idActive = $this->presenter->getParameter('id');
-        $template->menu = $this->database->table('settings_categories')->where('parent_id', null);
-        $template->render();
+        $this->template->id = $id;
+        $this->template->idActive = $this->presenter->getParameter('id');
+        $this->template->menu = $this->database->table('settings_categories')->where('parent_id', null);
+        $this->template->render();
     }
 
 }
