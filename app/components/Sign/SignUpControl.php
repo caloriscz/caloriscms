@@ -10,6 +10,7 @@ use h4kuna\Ares\Ares;
 use Nette\Application\UI\Control;
 use Nette\Database\Context;
 use Nette\Forms\BootstrapUIForm;
+use Nette\Forms\Form;
 use Nette\Mail\SmtpException;
 use Nette\Security\Passwords;
 use Nette\Utils\Random;
@@ -30,18 +31,18 @@ class SignUpControl extends Control
 
     public function createComponentSignUpForm()
     {
-        $form = new \Nette\Forms\BootstrapUIForm();
+        $form = new BootstrapUIForm();
         $form->setTranslator($this->presenter->translator);
 
         $form->addText('email')
-            ->addRule(\Nette\Forms\Form::EMAIL, 'messages.sign.enterValidEmail')
+            ->addRule(Form::EMAIL, 'messages.sign.enterValidEmail')
             ->setRequired('messages.sign.enterValidEmail');
         $form->addText('username')
             ->setOption('description', (string)'messages.sign.descriptionSymbolsEnabled')
             ->setRequired('messages.sign.enterValidUserName')
-            ->addRule(\Nette\Forms\Form::PATTERN, 'messages.sign.descriptionSymbolsEnabled', '[a-z0-9-]+')
-            ->addRule(\Nette\Forms\Form::MIN_LENGTH, 'messages.sign.enterUserNameMinimum', 5)
-            ->addRule(\Nette\Forms\Form::MAX_LENGTH, 'messages.sign.enterUserNameMaximum', 40);
+            ->addRule(Form::PATTERN, 'messages.sign.descriptionSymbolsEnabled', '[a-z0-9-]+')
+            ->addRule(Form::MIN_LENGTH, 'messages.sign.enterUserNameMinimum', 5)
+            ->addRule(Form::MAX_LENGTH, 'messages.sign.enterUserNameMaximum', 40);
 
         $groups = $this->database->table('users_categories')->fetchPairs('id', 'title');
 
@@ -49,29 +50,29 @@ class SignUpControl extends Control
 
         $form->addPassword('pwd')
             ->setRequired('messages.sign.enterValidPassword')
-            ->addRule(\Nette\Forms\Form::MIN_LENGTH, 'messages.sign.enterPasswordMinimum', 6)
-            ->addRule(\Nette\Forms\Form::MAX_LENGTH, 'messages.sign.enterPasswordMaximum', 40);
+            ->addRule(Form::MIN_LENGTH, 'messages.sign.enterPasswordMinimum', 6)
+            ->addRule(Form::MAX_LENGTH, 'messages.sign.enterPasswordMaximum', 40);
 
         $form->addPassword('pwd2')
             ->setRequired('messages.sign.enterEmailForCheck')
-            ->addRule(\Nette\Forms\Form::EQUAL, 'messages.sign.passwords-not-same', $form['pwd']);
+            ->addRule(Form::EQUAL, 'messages.sign.passwords-not-same', $form['pwd']);
 
         $form->addText('name')
             ->setRequired('messages.sign.enterValidName')
-            ->addRule(\Nette\Forms\Form::MIN_LENGTH, 'messages.sign.EnterValidName', 3)
-            ->addRule(\Nette\Forms\Form::MAX_LENGTH, 'messages.sign.EnterValidName', 200);
+            ->addRule(Form::MIN_LENGTH, 'messages.sign.EnterValidName', 3)
+            ->addRule(Form::MAX_LENGTH, 'messages.sign.EnterValidName', 200);
         $form->addText('street')
             ->setRequired('messages.sign.enterValidStreet')
-            ->addRule(\Nette\Forms\Form::MIN_LENGTH, 'messages.sign.EnterValidStreet', 3)
-            ->addRule(\Nette\Forms\Form::MAX_LENGTH, 'messages.sign.EnterValidStreet', 200);
+            ->addRule(Form::MIN_LENGTH, 'messages.sign.EnterValidStreet', 3)
+            ->addRule(Form::MAX_LENGTH, 'messages.sign.EnterValidStreet', 200);
         $form->addText('zip')
             ->setRequired('messages.sign.enterValidZip')
-            ->addRule(\Nette\Forms\Form::MIN_LENGTH, 'messages.sign.EnterValidZip', 3)
-            ->addRule(\Nette\Forms\Form::MAX_LENGTH, 'messages.sign.EnterValidZip', 20);
+            ->addRule(Form::MIN_LENGTH, 'messages.sign.EnterValidZip', 3)
+            ->addRule(Form::MAX_LENGTH, 'messages.sign.EnterValidZip', 20);
         $form->addText('city')
             ->setRequired('messages.sign.enterValidCity')
-            ->addRule(\Nette\Forms\Form::MIN_LENGTH, 'messages.sign.EnterValidCity', 1)
-            ->addRule(\Nette\Forms\Form::MAX_LENGTH, 'messages.sign.EnterValidCity', 80);
+            ->addRule(Form::MIN_LENGTH, 'messages.sign.EnterValidCity', 1)
+            ->addRule(Form::MAX_LENGTH, 'messages.sign.EnterValidCity', 80);
 
         $form->addText('company');
         $form->addText('vatin');
@@ -103,7 +104,7 @@ class SignUpControl extends Control
         return $form;
     }
 
-    public function signUpFormValidated(\Nette\Forms\BootstrapUIForm $form)
+    public function signUpFormValidated(BootstrapUIForm $form)
     {
         $userCorrects = preg_match("/^[abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_]{4,40}$/", $form->getValues()->username, $userTest);
 
@@ -116,7 +117,7 @@ class SignUpControl extends Control
         if ($userExists > 0 && $this->getPresenter()->template->settings['members_username_as_email'] === 0) {
             unset($formVal['username']);
             $this->getPresenter()->flashMessage('messages.sign.userNameAlreadyExists', 'error');
-        } elseif (Validators::isEmail($form->values->email) == false) {
+        } elseif (Validators::isEmail($form->values->email) === false) {
             unset($formVal['email']);
             $this->getPresenter()->flashMessage('messages.sign.enterValidEmail', 'error');
         } elseif ($emailExists > 0) {
@@ -209,9 +210,9 @@ class SignUpControl extends Control
         );
 
         try {
-            $helpdesk = new Helpdesk($this->database, $this->presenter->mailer);
+            $helpdesk = new Helpdesk($this->database, $this->getPresenter()->mailer);
 
-            if ($this->presenter->template->settings['members:signup:confirmByAdmin']) {
+            if ($this->getPresenter()->template->settings['members:signup:confirmByAdmin']) {
                 $helpdesk->setId(12);
                 $message = 'messages.sign.signupSuccessfulLoginWhenVerified';
             } else {
@@ -233,12 +234,10 @@ class SignUpControl extends Control
 
     public function render()
     {
-        $template = $this->template;
-        $template->setFile(__DIR__ . '/SignUpControl.latte');
-        $template->settings = $this->getPresenter()->template->settings;
-        $template->addon = $this->database->table('addons');
-
-        $template->render();
+        $this->template->setFile(__DIR__ . '/SignUpControl.latte');
+        $this->template->settings = $this->getPresenter()->template->settings;
+        $this->template->addon = $this->database->table('addons');
+        $this->template->render();
     }
 
 }

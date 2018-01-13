@@ -48,21 +48,17 @@ class PageDocumentControl extends Control
 
     public function render($page)
     {
-        $template = $this->template;
+        $this->template->page = $page;
 
-        $template->page = $page;
-
-        if ($this->presenter->translator->getLocale() == $this->presenter->translator->getDefaultLocale()) {
+        if ($this->getPresenter()->translator->getLocale() === $this->getPresenter()->translator->getDefaultLocale()) {
             $document = $page->document;
         } else {
-            $document = $page->{'document_' . $this->presenter->translator->getLocale()};
+            $document = $page->{'document_' . $this->getPresenter()->translator->getLocale()};
         }
 
-        $template->document = $this->parseSnippets($document);
-
-        $template->setFile(__DIR__ . '/PageDocumentControl.latte');
-
-        $template->render();
+        $this->template->document = $this->parseSnippets($document);
+        $this->template->setFile(__DIR__ . '/PageDocumentControl.latte');
+        $this->template->render();
     }
 
 }

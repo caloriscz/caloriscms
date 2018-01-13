@@ -2,8 +2,12 @@
 
 namespace Caloriscz\Sign;
 
+use App\Model\Helpdesk;
+use App\Model\MemberModel;
 use Nette\Application\UI\Control;
 use Nette\Forms\BootstrapUIForm;
+use Nette\Utils\Random;
+use Nette\Utils\Validators;
 
 class LostPassControl extends Control
 {
@@ -22,24 +26,24 @@ class LostPassControl extends Control
      * Form: User fills in e-mail address to send e-mail with a password generator link
      * @return string
      */
-    function createComponentSendForm()
+    public function createComponentSendForm()
     {
         $form = new BootstrapUIForm();
         $form->setTranslator($this->presenter->translator);
         $form->getElementPrototype()->autocomplete = 'off';
 
-        $form->addHidden("layer");
-        $form->addText("email", "dictionary.main.Email");
+        $form->addHidden('layer');
+        $form->addText('email', 'dictionary.main.Email');
         $form->addSubmit('submitm', 'dictionary.main.Send');
 
-        $form->onSuccess[] = [$this, "sendFormSucceeded"];
-        $form->onValidate[] = [$this, "sendFormValidated"];
+        $form->onSuccess[] = [$this, 'sendFormSucceeded'];
+        $form->onValidate[] = [$this, 'sendFormValidated'];
         return $form;
     }
 
-    function sendFormValidated(BootstrapUIForm $form)
+    public function sendFormValidated(BootstrapUIForm $form)
     {
-        if (!\Nette\Utils\Validators::isEmail($form->values->email)) {
+        if (!Validators::isEmail($form->values->email)) {
             $this->onSave("Adresa je neplatná");
         }
 
@@ -48,11 +52,11 @@ class LostPassControl extends Control
         }
     }
 
-    function sendFormSucceeded(BootstrapUIForm $form)
+    public function sendFormSucceeded(BootstrapUIForm $form)
     {
-        $passwordGenerate = \Nette\Utils\Random::generate(12, "987654321zyxwvutsrqponmlkjihgfedcba");
+        $passwordGenerate = Random::generate(12, "987654321zyxwvutsrqponmlkjihgfedcba");
 
-        $member = new \App\Model\MemberModel($this->database);
+        $member = new MemberModel($this->database);
         $member->setActivation($form->values->email, $passwordGenerate);
 
         $params = array(
@@ -60,7 +64,7 @@ class LostPassControl extends Control
             "email" => $form->values->email,
         );
 
-        $helpdesk = new \App\Model\Helpdesk($this->database, $this->presenter->mailer);
+        $helpdesk = new Helpdesk($this->database, $this->presenter->mailer);
         $helpdesk->setId(11);
         $helpdesk->setEmail($form->values->email);
         $helpdesk->setSettings($this->presenter->template->settings);
@@ -72,12 +76,10 @@ class LostPassControl extends Control
 
     public function render($layer = 'front')
     {
-        $template = $this->template;
-        $template->setFile(__DIR__ . '/LostPassControl.latte');
-        $template->addon = $this->database->table("addons");
-        $template->layer = $layer;
-
-        $template->render();
+        $this->template->setFile(__DIR__ . '/LostPassControl.latte');
+        $this->template->addon = $this->database->table("addons");
+        $this->template->layer = $layer;
+        $this->template->render();
     }
 
 }

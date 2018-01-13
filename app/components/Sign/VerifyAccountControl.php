@@ -2,38 +2,39 @@
 namespace Caloriscz\Sign;
 
 use Nette\Application\UI\Control;
+use Nette\Database\Context;
 
 class VerifyAccountControl extends Control
 {
 
-    /** @var \Nette\Database\Context */
+    /** @var Context */
     public $database;
 
-    public function __construct(\Nette\Database\Context $database)
+    public function __construct(Context $database)
     {
         $this->database = $database;
     }
 
-    function handleCheck()
+    public function handleCheck()
     {
         $userLoggedDb = $this->database->table('users')->where(array(
-            'activation' => $this->presenter->getParameter("code"),
-            'username' => $this->presenter->getParameter("user")
+            'activation' => $this->getPresenter()->getParameter('code'),
+            'username' => $this->getPresenter()->getParameter('user')
         ));
 
-        if ($userLoggedDb->count() == 0) {
-            $this->presenter->flashMessage('Aktivace není platná', 'error');
-            $this->presenter->redirect(":Front:Sign:verify");
+        if ($userLoggedDb->count() === 0) {
+            $this->getPresenter()->flashMessage('Aktivace není platná', 'error');
+            $this->getPresenter()->redirect(':Front:Sign:verify');
         } else {
-            $this->database->table("users")->where(array(
-                "activation" => $this->presenter->getParameter("code"),
-                'username' => $this->presenter->getParameter("user")
+            $this->database->table('users')->where(array(
+                'activation' => $this->getPresenter()->getParameter('code'),
+                'username' => $this->getPresenter()->getParameter('user')
             ))->update(array(
-                "state" => 1
+                'state' => 1
             ));
 
-            $this->presenter->flashMessage('Úspěšně ověřeno. Nyní se můžete přihlásit.', 'note');
-            $this->presenter->redirect(":Front:Sign:in");
+            $this->getPresenter()->flashMessage('Úspěšně ověřeno. Nyní se můžete přihlásit.', 'note');
+            $this->getPresenter()->redirect(':Front:Sign:in');
         }
     }
 

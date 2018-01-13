@@ -16,22 +16,18 @@ class PageTitleControl extends Control
 
     public function render($page)
     {
-        $template = $this->template;
+        $this->template->page = $page;
 
-        $template->page = $page;
-
-        if ($this->presenter->translator->getLocale() == $this->presenter->translator->getDefaultLocale()) {
+        if ($this->getPresenter()->translator->getLocale() == $this->getPresenter()->translator->getDefaultLocale()) {
             $title = $page->title;
         } else {
-            $title = $page->{'title_' . $this->presenter->translator->getLocale()};
+            $title = $page->{'title_' . $this->getPresenter()->translator->getLocale()};
         }
 
-        $template->title = $title;
-        $template->pageId = $page->id;
-
-        $template->setFile(__DIR__ . '/PageTitleControl.latte');
-
-        $template->render();
+        $this->template->title = $title;
+        $this->template->pageId = $page->id;
+        $this->template->setFile(__DIR__ . '/PageTitleControl.latte');
+        $this->template->render();
     }
 
 }

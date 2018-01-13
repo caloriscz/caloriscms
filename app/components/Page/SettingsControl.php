@@ -4,6 +4,7 @@ namespace Caloriscz\Page;
 
 use App\Model\Document;
 use Nette\Application\UI\Control;
+use Nette\Forms\BootstrapUIForm;
 
 class SettingsControl extends Control
 {
@@ -21,8 +22,8 @@ class SettingsControl extends Control
     public function createComponentSetForm()
     {
         $pages = $this->database->table('pages')->get($this->getPresenter()->getParameter('id'));
-        $form = new \Nette\Forms\BootstrapPHForm();
-        $form->setTranslator($this->presenter->translator);
+        $form = new BootstrapUIForm();
+        $form->setTranslator($this->getPresenter()->translator);
         $form->getElementPrototype()->class = 'form-horizontal';
         $form->getElementPrototype()->role = 'form';
         $form->getElementPrototype()->autocomplete = 'off';
@@ -83,7 +84,7 @@ class SettingsControl extends Control
         }
     }
 
-    public function setFormSucceeded(\Nette\Forms\BootstrapPHForm $form)
+    public function setFormSucceeded(BootstrapUIForm $form)
     {
         $doc = new Document($this->database);
         $doc->setLanguage($form->values->l);
@@ -95,13 +96,13 @@ class SettingsControl extends Control
         $doc->setMetaDescription($form->values->metadesc);
         $doc->save($form->values->id, $this->presenter->user->getId());
 
-        $this->presenter->redirect(this, array('id' => $form->values->id, 'l' => $form->values->l));
+        $this->getPresenter()->redirect(this, array('id' => $form->values->id, 'l' => $form->values->l));
     }
 
     public function render()
     {
         $template = $this->template;
-        $template->settings = $this->presenter->template->settings;
+        $template->settings = $this->getPresenter()->template->settings;
         $template->setFile(__DIR__ . '/SettingsControl.latte');
 
         $template->render();

@@ -2,32 +2,31 @@
 namespace Caloriscz\Page;
 
 use Nette\Application\UI\Control;
+use Nette\Database\Context;
 
 class PageSlugControl extends Control
 {
 
-    /** @var \Nette\Database\Context */
+    /** @var Context */
     public $database;
 
-    public function __construct(\Nette\Database\Context $database)
+    public function __construct(Context $database)
     {
         $this->database = $database;
     }
 
     public function render($pageId)
     {
-        $template = $this->template;
-        $page = $this->database->table("pages")->get($pageId);
+        $page = $this->database->table('pages')->get($pageId);
 
-        if ($this->presenter->translator->getLocale() == $this->presenter->translator->getDefaultLocale()) {
-            $template->slug = '/' . $page->slug;
+        if ($this->getPresenter()->translator->getLocale() === $this->getPresenter()->translator->getDefaultLocale()) {
+            $this->template->slug = '/' . $page->slug;
         } else {
-            $template->slug = '/' . $this->presenter->translator->getLocale() . '/' . $page->{'slug_' . $this->presenter->translator->getLocale()};
+            $this->template->slug = '/' . $this->getPresenter()->translator->getLocale() . '/' . $page->{'slug_' . $this->getPresenter()->translator->getLocale()};
         }
 
-        $template->setFile(__DIR__ . '/PageSlugControl.latte');
-
-        $template->render();
+        $this->template->setFile(__DIR__ . '/PageSlugControl.latte');
+        $this->template->render();
     }
 
 }

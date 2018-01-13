@@ -3,14 +3,17 @@
 namespace Caloriscz\Sign;
 
 use Nette\Application\UI\Control;
+use Nette\Database\Context;
+use Nette\Forms\BootstrapUIForm;
+use Nette\Security\Passwords;
 
 class ResetPassControl extends Control
 {
 
-    /** @var \Nette\Database\Context */
+    /** @var Context */
     public $database;
 
-    public function __construct(\Nette\Database\Context $database)
+    public function __construct(Context $database)
     {
         $this->database = $database;
     }
@@ -20,24 +23,24 @@ class ResetPassControl extends Control
      */
     public function createComponentResetForm()
     {
-        $form = new \Nette\Forms\BootstrapUIForm();
-        $form->setTranslator($this->presenter->translator);
+        $form = new BootstrapUIForm();
+        $form->setTranslator($this->getPresenter()->translator);
         $form->getElementPrototype()->autocomplete = 'off';
-        $form->addHidden("email");
-        $form->addHidden("code");
-        $form->addPassword("password", "Nové heslo");
-        $form->addPassword("password2", "Zopakujte nové heslo");
+        $form->addHidden('email');
+        $form->addHidden('code');
+        $form->addPassword('password', 'Nové heslo');
+        $form->addPassword('password2', 'Zopakujte nové heslo');
         $form->addSubmit('name', 'dictionary.main.Change');
         $form->setDefaults(array(
-            "email" => $this->presenter->getParameter("email"),
-            "code" => $this->presenter->getParameter("code"),
+            'email' => $this->getPresenter()->getParameter('email'),
+            'code' => $this->getPresenter()->getParameter('code'),
         ));
 
-        $form->onSuccess[] = [$this, "resetFormSucceeded"];
+        $form->onSuccess[] = [$this, 'resetFormSucceeded'];
         return $form;
     }
 
-    function resetFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
+    public function resetFormSucceeded(BootstrapUIForm $form)
     {
         $email = $form->values->email;
         $emailExistsDb = $this->database->table('users')->where(array(
@@ -45,33 +48,32 @@ class ResetPassControl extends Control
             'activation' => $form->values->code,
         ));
 
-        if ($emailExistsDb->count() == 0) {
+        if ($emailExistsDb->count() === 0) {
             $msg = 'Aktivace není platná';
         } elseif (strcmp($form->getValues()->password, $form->getValues()->password2) <> 0) {
             $msg = 'Hesla se neshodují';
         } else {
             $msg = 'Vytvořili jste nové heslo. Můžete se přihlásit.';
-            $this->database->table("users")->where(array(
-                "email" => $email,
+            $this->database->table('users')->where(array(
+                'email' => $email,
             ))->update(array(
-                "activation" => NULL,
-                "password" => \Nette\Security\Passwords::hash($form->getValues()->password),
+                'activation' => NULL,
+                'password' => Passwords::hash($form->getValues()->password),
             ));
         }
 
-        $this->presenter->flashMessage($msg, 'success');
-        $this->presenter->redirect("Sign:in");
+        $this->getPresenter()->flashMessage($msg, 'success');
+        $this->getPresenter()->redirect('Sign:in');
     }
 
     public function render($layer = 'front')
     {
-        $template = $this->template;
-        $template->setFile(__DIR__ . '/ResetPassControl.latte');
-        $template->addon = $this->database->table("addons");
-        $template->layer = $layer;
-        $template->member = $this->presenter->template->member;
+        $this->template->setFile(__DIR__ . '/ResetPassControl.latte');
+        $this->template->addon = $this->database->table('addons');
+        $this->template->layer = $layer;
+        $this->template->member = $this->getPresenter()->template->member;
 
-        $template->render();
+        $this->template->render();
     }
 
 }
