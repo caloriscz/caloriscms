@@ -21,7 +21,7 @@ class LoadVatControl extends Control
     {
         $this->template->id = $this->presenter->getParameter('id');
 
-        $contact = $this->database->table("contacts")->where("pages_id", $this->presenter->getParameter("id"));
+        $contact = $this->database->table("contacts")->get($this->presenter->getParameter("id"));
 
         $form = new \Nette\Forms\BootstrapUIForm();
         $form->setTranslator($this->presenter->translator);
@@ -35,14 +35,14 @@ class LoadVatControl extends Control
             ->setAttribute("placeholder", "dictionary.main.VatIn");
 
         $form->setDefaults(array(
-            "contact_id" => $contact->fetch()->id,
+            "contact_id" => $contact->id,
             "pages_id" => $this->presenter->getParameter("id"),
         ));
 
         $form->addSubmit("submitm", "Načíst")
             ->setAttribute("class", "btn btn-success");
 
-        $form->onSuccess[] = $this->loadVatFormSucceeded;
+        $form->onSuccess[] = [$this, 'loadVatFormSucceeded'];
         return $form;
     }
 

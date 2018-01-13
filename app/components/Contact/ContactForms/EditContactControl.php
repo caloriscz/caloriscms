@@ -22,7 +22,7 @@ class EditContactControl extends Control
     /**
      * Edit contact
      */
-    private function createComponentEditForm()
+    protected function createComponentEditForm()
     {
         $this->template->id = $this->getPresenter()->getParameter('id');
 
