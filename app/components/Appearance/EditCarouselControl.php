@@ -14,6 +14,7 @@ class EditCarouselControl extends Control
 
     public function __construct(Context $database)
     {
+        parent::__construct();
         $this->database = $database;
     }
 
@@ -65,7 +66,7 @@ class EditCarouselControl extends Control
             'visible' => $form->values->visible,
         );
 
-        if ($form->values->the_file->error == 0) {
+        if ($form->values->the_file->error === 0) {
             $arr['image'] = $image;
 
             if (file_exists(APP_DIR . '/images/carousel/' . $image)) {

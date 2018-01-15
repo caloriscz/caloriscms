@@ -78,10 +78,10 @@ class AppearancePresenter extends BasePresenter
 
     public function renderDefault()
     {
-        $arr = array(
+        $arr = [
             'settings_categories_id' => 20,
-            'type" => "local_path',
-        );
+            'type' => 'local_path',
+        ];
 
         $this->template->settingsDb = $this->database->table('settings')->where($arr);
     }

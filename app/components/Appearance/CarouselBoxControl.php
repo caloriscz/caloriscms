@@ -2,6 +2,7 @@
 namespace Caloriscz\Appearance;
 
 use Nette\Application\UI\Control;
+use Nette\Database\Context;
 
 class CarouselBoxControl extends Control
 {
@@ -9,8 +10,10 @@ class CarouselBoxControl extends Control
     /** @var \Nette\Database\Context */
     public $database;
 
-    public function __construct(\Nette\Database\Context $database)
+    public function __construct(Context $database)
     {
+        parent::__construct();
+
         $this->database = $database;
     }
 

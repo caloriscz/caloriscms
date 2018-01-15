@@ -136,8 +136,8 @@ class ContactsPresenter extends BasePresenter
         $sort = $sortDb->fetch();
 
         if ($sortDb->count() > 0) {
-            $this->database->table('contacts_categories')->where(array('id' => $id))->update(['sorted' => $sort->sorted]);
-            $this->database->table('contacts_categories')->where(array('id' => $sort->id))->update(['sorted' => $sorted]);
+            $this->database->table('contacts_categories')->where(['id' => $id])->update(['sorted' => $sort->sorted]);
+            $this->database->table('contacts_categories')->where(['id' => $sort->id])->update(['sorted' => $sorted]);
         }
 
         $this->presenter->redirect(this, ['id' => null]);
@@ -174,10 +174,10 @@ class ContactsPresenter extends BasePresenter
 
     public function renderCategories()
     {
+        $categoryId = null;
+
         if ($this->getParameter('id')) {
             $categoryId = $this->getParameter('id');
-        } else {
-            $categoryId = null;
         }
 
         $this->template->database = $this->database;
