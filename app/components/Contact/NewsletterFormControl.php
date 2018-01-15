@@ -10,6 +10,7 @@ class NewsletterFormControl extends Control
 
     public function __construct(\Nette\Database\Context $database)
     {
+        parent::__construct();
         $this->database = $database;
     }
 
@@ -20,7 +21,7 @@ class NewsletterFormControl extends Control
     public function createComponentAdd()
     {
         $form = new \Nette\Forms\BootstrapUIForm();
-        $form->setTranslator($this->presenter->translator);
+        $form->setTranslator($this->getPresenter()->translator);
         $form->getElementPrototype()->class = '';
         $form->getElementPrototype()->autocomplete = 'off';
 
@@ -36,41 +37,33 @@ class NewsletterFormControl extends Control
 
     public function addValidated(\Nette\Forms\BootstrapUIForm $form)
     {
-        $dbEmail = $this->database->table('contacts')->where(array(
+        $dbEmail = $this->database->table('contacts')->where([
             'categories_id' => 19,
-            'email' => $form->values->email,
-        ));
+            'email' => $form->values->email
+        ]);
 
         if ($dbEmail->count() > 0) {
             $this->flashMessage('Váš e-mail byl již přidán');
-            $this->presenter->redirect(this);
+            $this->getPresenter()->redirect(this);
         }
     }
 
     public function addSucceeded(\Nette\Forms\BootstrapUIForm $form)
     {
-        $doc = new \App\Model\Document($this->database);
-        $doc->setType(5);
-        $doc->createSlug('contact-' . $form->values->email);
-        $doc->setTitle($form->values->email);
-        $page = $doc->create($this->presenter->user->getId());
-
         \App\Model\IO::directoryMake(substr(APP_DIR, 0, -4) . '/www/media/' . $page, 0755);
 
-        $arr = array(
+        $arr = [
             'users_id' => null,
-            'pages_id' => $page,
             'type' => 0,
-        );
+        ];
 
         $arr['email'] = $form->values->email;
         $arr['name'] = $form->values->email;
 
-        $this->database->table('contacts')
-            ->insert($arr);
+        $this->database->table('contacts')->insert($arr);
 
-        $this->presenter->flashMessage('Byli jste přihlášení k odeběru newsletteru');
-        $this->presenter->redirect(this);
+        $this->getPresenter()->flashMessage('Byli jste přihlášení k odeběru newsletteru');
+        $this->getPresenter()->redirect(this);
     }
 
     public function render()
