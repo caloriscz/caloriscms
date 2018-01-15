@@ -24,7 +24,7 @@ class MembersPresenter extends BasePresenter
                 $this->flashMessage($pwd, 'success');
             }
 
-            $this->redirect(this, array("id" => $contactId, "pdd" => $pwd));
+            $this->redirect(this, array('id' => $contactId, 'pdd' => $pwd));
         };
 
         return $control;
@@ -41,12 +41,12 @@ class MembersPresenter extends BasePresenter
         $control->onSave[] = function ($message, $userId) {
             if ($message) {
                 $this->flashMessage($this->translator->translate($message), 'error');
-                $code = ":Admin:Members:default";
+                $code = ':Admin:Members:default';
             } else {
-                $code = ":Admin:Members:edit";
+                $code = ':Admin:Members:edit';
             }
 
-            $this->redirect($code, array("id" => $userId));
+            $this->redirect($code, array('id' => $userId));
         };
 
         return $control;
@@ -78,21 +78,21 @@ class MembersPresenter extends BasePresenter
         }
 
         try {
-            $this->database->table("contacts")->get($id)->delete();
+            $this->database->table('contacts')->get($id)->delete();
         } catch (\PDOException $e) {
             if (substr($e->getMessage(), 0, 15) == 'SQLSTATE[23000]') {
                 $message = ': Kontkat je potřebný v Objednávkách';
             }
 
-            $this->flashMessage($this->translator->translate('messages.sign.CannotBeDeleted') . ': ' . $message, "error");
+            $this->flashMessage($this->translator->translate('messages.sign.CannotBeDeleted') . ': ' . $message, 'error');
         }
 
-        $this->redirect(":Admin:Members:edit", array("id" => $this->getParameter("contact")));
+        $this->redirect(':Admin:Members:edit', array('id' => $this->getParameter('contact')));
     }
 
     public function renderEdit()
     {
-        $this->template->members = $this->database->table("users")->get($this->getParameter("id"));
+        $this->template->members = $this->database->table('users')->get($this->getParameter('id'));
         $this->template->role = $this->user->getRoles();
     }
 

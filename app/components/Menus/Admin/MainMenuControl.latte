@@ -1,5 +1,7 @@
 {if $member->username == 'admin'}
     {var $admin = true}
+{else}
+    {var $admin = false}
 {/if}
 
 <li class="nav-item">
@@ -15,7 +17,7 @@
         </a>
     </li>
 {/foreach}
-    <li class="nav-item">
+<li class="nav-item">
     <a class="nav-link" href="/admin/contacts">
         <i class="fa fa-database fa-fw"></i> {_dictionary.main.contacts|firstUpper}
     </a>

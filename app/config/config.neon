@@ -6,10 +6,8 @@
 #
 parameters:
 
-
 php:
 	date.timezone: Europe/Prague
-
 
 application:
 	errorPresenter: Front:Error

@@ -2,6 +2,7 @@
 
 namespace Caloriscz\Members;
 
+use App\Model\Helpdesk;
 use App\Model\MemberModel;
 use Nette\Application\UI\Control;
 use Nette\Database\Context;
@@ -54,26 +55,26 @@ class InsertMemberControl extends Control
         return $form;
     }
 
-    public function insertFormValidated(\Nette\Forms\BootstrapUIForm $form)
+    public function insertFormValidated(BootstrapUIForm $form)
     {
         $member = new MemberModel($this->database);
         $userExists = $member->getUserName($form->values->username);
         $emailExists = $member->getEmail($form->values->email);
 
-        if (!$this->presenter->template->member->users_roles->members_create) {
+        if (!$this->getPresenter()->template->member->users_roles->members_create) {
             $this->onSave('messages.members.PermissionDenied');
         }
 
-        if (Validators::isEmail($form->values->email) == false) {
-            $this->onSave('messages.members.invalidEmailFormat');
+        if (Validators::isEmail($form->values->email) === false) {
+            $this->onSave('messages.members.invalidEmailFormat', false);
         } elseif ($emailExists > 0) {
-            $this->onSave('messages.members.emailAlreadyExists');
+            $this->onSave('messages.members.emailAlreadyExists', false);
         } elseif ($userExists > 0) {
-            $this->onSave('messages.members.memberAlreadyExists');
+            $this->onSave('messages.members.memberAlreadyExists', false);
         }
     }
 
-    public function insertFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
+    public function insertFormSucceeded(BootstrapUIForm $form)
     {
         $pwd = Random::generate(10);
         $pwdEncrypted = Passwords::hash($pwd);
@@ -94,7 +95,7 @@ class InsertMemberControl extends Control
                 'password' => $pwd
             );
 
-            $helpdesk = new \App\Model\Helpdesk($this->database, $this->presenter->mailer);
+            $helpdesk = new Helpdesk($this->database, $this->presenter->mailer);
             $helpdesk->setId(5);
             $helpdesk->setEmail($form->values->email);
             $helpdesk->setSettings($this->presenter->template->settings);
