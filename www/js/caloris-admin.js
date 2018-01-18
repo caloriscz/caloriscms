@@ -53,12 +53,6 @@ $(document).ready(function () {
         return false;
     });
 
-    $(function () {
-        $('.datetimepicker').datetimepicker({
-            format: 'YYYY-MM-DD HH:mm:ss'
-        });
-    });
-
     /* Summernote */
     $(function () {
         $("#wysiwyg").summernote({
@@ -92,20 +86,6 @@ $(document).ready(function () {
     });
 
     $(document).ready(function () {
-        if ($('input[name="allday"]').attr('checked')) {
-            $('#event_hour, #event_minute, #event_end_hour, #event_end_minute').hide();
-        } else {
-            $('#event_hour, #event_minute, #event_end_hour, #event_end_minute').show();
-        }
-
-        $('input[name="allday"]').change(function () {
-            if (this.checked) {
-                $('#event_hour, #event_minute, #event_end_hour, #event_end_minute').hide();
-            } else {
-                $('#event_hour, #event_minute, #event_end_hour, #event_end_minute').show();
-            }
-        });
-
         $('.wysiwyg-disabled').summernote({
             toolbar: [
                 // [groupName, [list of button]]
@@ -147,64 +127,8 @@ $(document).ready(function () {
     });
 
 
-    /*Events - full calendar */
-    $('#calendar').fullCalendar({
-        header: {
-            left: 'prev,next today',
-            center: 'title',
-            right: 'month,agendaWeek,agendaDay'
-        },
-        events: '/api/events/default',
-        lang: 'cs',
-        weekends: true,
-
-    })
-
-    /* on message key up */
-    $('.message').keyup(function () {
-        var maxLength = $(this).attr("maxlength");
-        var length = $(this).val().length;
-        var length = maxLength - length;
-        $('#chars').text(length);
-    });
-
-});
-/* Autocomplete for parametres */
-$(document).ready(function () {
-    // TypeError: $.browser is undefined solution for autocomplete
-    var matched, browser;
-
-    jQuery.uaMatch = function (ua) {
-        ua = ua.toLowerCase();
-
-        var match = /(chrome)[ \/]([\w.]+)/.exec(ua) ||
-            /(webkit)[ \/]([\w.]+)/.exec(ua) ||
-            /(opera)(?:.*version|)[ \/]([\w.]+)/.exec(ua) ||
-            /(msie) ([\w.]+)/.exec(ua) ||
-            ua.indexOf("compatible") < 0 && /(mozilla)(?:.*? rv:([\w.]+)|)/.exec(ua) ||
-            [];
-
-        return {
-            browser: match[1] || "",
-            version: match[2] || "0"
-        };
-    };
-    matched = jQuery.uaMatch(navigator.userAgent);
-    browser = {};
-
-    if (matched.browser) {
-        browser[matched.browser] = true;
-        browser.version = matched.version;
-    }
-
-    // Chrome is Webkit, but Webkit is also Safari.
-    if (browser.chrome) {
-        browser.webkit = true;
-    } else if (browser.webkit) {
-        browser.safari = true;
-    }
-
-    jQuery.browser = browser;
+    // Flatpickr
+    $(".datepicker").flatpickr();
 });
 
 /* Focus on modal */
@@ -213,28 +137,4 @@ $(document).ready(function () {
         $('#frm-insertForm-title').focus();
     })
 
-});
-
-/*Parametres autocomplete */
-if ($("input[name='paramkey']").length > 0) {
-    var groupkey = $("input[name='paramkey']").attr("data-params").split(";");
-    $("input[name='paramkey']").autocomplete({source: groupkey});
-}
-
-$('.datepicker').datepicker({
-    language: document.documentElement.lang,
-    format: 'd. m. yyyy',
-    startDate: '0d',
-    endDate: '+2m',
-    autoclose: true
-});
-
-$('#event_start').datepicker({
-    language: document.documentElement.lang,
-    format: 'd. m. yyyy',
-    startDate: '0d',
-    endDate: '+2m',
-    autoclose: true
-}).on('changeDate', function (ev) {
-    $('input[name="date_event_end"]').val($('#event_start').val());
 });

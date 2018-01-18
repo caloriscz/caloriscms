@@ -17,16 +17,15 @@ class EditorControl extends Control
 {
     private $htmlPurifier;
 
-    /** @var \Nette\Database\Context */
+    /** @var Context */
     public $database;
 
-
-
-    /** @var \Kdyby\Doctrine\EntityManager @inject */
+    /** @var EntityManager @inject */
     public $em;
 
     public function __construct(Context $database, EntityManager $em)
     {
+        parent::__construct();
         $this->database = $database;
         $this->em = $em;
 
@@ -44,7 +43,7 @@ class EditorControl extends Control
      */
     public function createComponentEditForm()
     {
-        $pages = $this->database->table('pages')->get($this->presenter->getParameter('id'));
+        $pages = $this->database->table('pages')->get($this->getPresenter()->getParameter('id'));
         $form = new BootstrapUIForm();
         $form->setTranslator($this->presenter->translator);
         $form->getElementPrototype()->autocomplete = 'off';
@@ -61,7 +60,7 @@ class EditorControl extends Control
         $form->addHidden('docs_id');
         $form->addTextArea('document')->setDisabled($enabled);
 
-        if ($l == '') {
+        if (null === $l) {
             $form->setDefaults(array(
                 'id' => $pages->id,
                 'document' => $pages->document,
@@ -84,7 +83,7 @@ class EditorControl extends Control
 
     public function permissionFormValidated()
     {
-        if ($this->getPresenter()->template->member->users_roles->pages_edit == 0) {
+        if ($this->getPresenter()->template->member->users_roles->pages_edit === 0) {
             $this->getPresenter()->flashMessage('Nemáte oprávnění k této akci', 'error');
             $this->getPresenter()->redirect(this);
         }
@@ -101,7 +100,7 @@ class EditorControl extends Control
         $doc->setLanguage($form->values->l);
         $doc->save($form->values->id, $this->presenter->user->getId());
 
-        $this->presenter->redirect(this, array('id' => $form->values->id, 'l' => $form->values->l));
+        $this->getPresenter()->redirect('this', ['id' => $form->values->id, 'l' => $form->values->l]);
     }
 
     /**
@@ -111,7 +110,7 @@ class EditorControl extends Control
     {
         setcookie('editortype', $this->getParameter('editortype'), time() + 15552000);
 
-        $this->presenter->redirect(this, array('id' => $this->getParameter('id')));
+        $this->getPresenter()->redirect('this', ['id' => $this->getParameter('id')]);
     }
 
     /************************************/
@@ -123,26 +122,23 @@ class EditorControl extends Control
 
     public function render()
     {
-        $template = $this->template;
-        $template->settings = $this->presenter->template->settings;
-        $template->editortype = $this->presenter->request->getCookie('editortype');
+        $this->template->settings = $this->getPresenter()->template->settings;
+        $this->template->editortype = $this->getPresenter()->request->getCookie('editortype');
 
-        $template->pages = $this->database->table('pages')->where('NOT id', $this->presenter->getParameter('id'));
-        $template->page = $this->database->table('pages')->get($this->presenter->getParameter('id'));
+        $this->template->pages = $this->database->table('pages')->where('NOT id', $this->getPresenter()->getParameter('id'));
+        $this->template->page = $this->database->table('pages')->get($this->getPresenter()->getParameter('id'));
 
-        $template->templates = $this->database->table('pages_templates')->where('pages_types_id IS NULL')->order('title');
+        $this->template->templates = $this->database->table('pages_templates')->where('pages_types_id IS NULL')->order('title');
 
-        if ($this->presenter->template->member->users_roles->pages_document) {
-            $template->enabled = true;
+        if ($this->getPresenter()->template->member->users_roles->pages_document) {
+            $this->template->enabled = true;
         } else {
-            $template->enabled = false;
+            $this->template->enabled = false;
         }
 
-        $template->page_id = $this->presenter->getParameter('id');
-
-        $template->setFile(__DIR__ . '/EditorControl.latte');
-
-        $template->render();
+        $this->template->page_id = $this->getPresenter()->getParameter('id');
+        $this->template->setFile(__DIR__ . '/EditorControl.latte');
+        $this->template->render();
     }
 
 }

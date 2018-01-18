@@ -17,12 +17,11 @@ gulp.task("scripts-a", function () {
         './bower_components/jquery-colorbox/jquery.colorbox-min.js',
         './bower_components/nette-forms/src/assets/netteForms.js',
         './bower_components/nette.ajax.js/nette.ajax.js',
-        './bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js',
-        './bower_components/bootstrap-datepicker/js/locales/bootstrap-datepicker.cs.js',
-        './bower_components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js',
         './bower_components/ublaboo-datagrid/assets/dist/datagrid.min.js',
         './bower_components/ublaboo-datagrid/assets/dist/datagrid-spinners.min.js',
         './bower_components/jquery-autocomplete/jquery.autocomplete.js',
+        './node_modules/moment/moment.min.js',
+        './node_modules/flatpickr/dist/flatpickr.js'
     ])
         .pipe(concat('all-back.js'))
         .pipe(gulp.dest('./www/js/'));
