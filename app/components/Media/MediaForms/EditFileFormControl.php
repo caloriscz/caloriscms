@@ -2,41 +2,44 @@
 namespace Caloriscz\Media\MediaForms;
 
 use Nette\Application\UI\Control;
+use Nette\Database\Context;
+use Nette\Forms\BootstrapUIForm;
 
 class EditFileControl extends Control
 {
 
-    /** @var \Nette\Database\Context */
+    /** @var Context */
     public $database;
 
-    public function __construct(\Nette\Database\Context $database)
+    public function __construct(Context $database)
     {
+        parent::__construct();
         $this->database = $database;
     }
 
     /**
      * Edit file information
      */
-    function createComponentEditForm()
+    protected function createComponentEditForm()
     {
-        $image = $this->database->table("media")->get($this->presenter->getParameter("id"));
+        $image = $this->database->table('media')->get($this->getPresenter()->getParameter('id'));
 
-        $form = new \Nette\Forms\BootstrapUIForm();
-        $form->setTranslator($this->presenter->translator);
-        $form->getElementPrototype()->class = "form-horizontal";
+        $form = new BootstrapUIForm();
+        $form->setTranslator($this->getPresenter()->translator);
+        $form->getElementPrototype()->class = 'form-horizontal';
         $form->getElementPrototype()->role = 'form';
         $form->getElementPrototype()->autocomplete = 'off';
 
         $form->addHidden('id');
         $form->addText('title', 'dictionary.main.Title');
-        $form->addTextarea('description', "dictionary.main.Description")
-            ->setAttribute("style", "height: 200px;")
-            ->setAttribute("class", "form-control");
-        $form->setDefaults(array(
-            "id" => $image->id,
-            "title" => $image->title,
-            "description" => $image->description,
-        ));
+        $form->addTextArea('description', 'dictionary.main.Description')
+            ->setAttribute('style', 'height: 200px;')
+            ->setAttribute('class', 'form-control');
+        $form->setDefaults([
+            'id' => $image->id,
+            'title' => $image->title,
+            'description' => $image->description,
+        ]);
 
         $form->addSubmit('send', 'dictionary.main.Save');
 
@@ -44,26 +47,23 @@ class EditFileControl extends Control
         return $form;
     }
 
-    function editFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
+    public function editFormSucceeded(BootstrapUIForm $form)
     {
-        $this->database->table("media")
-            ->get($form->values->id)->update(array(
+        $this->database->table('media')
+            ->get($form->values->id)->update([
                 'title' => $form->values->title,
                 'description' => $form->values->description,
-            ));
+            ]);
 
-
-        $this->presenter->redirect(this, array(
-            "id" => $form->values->id,
+        $this->getPresenter()->redirect(this, array(
+            'id' => $form->values->id,
         ));
     }
 
     public function render()
     {
-        $template = $this->template;
-        $template->setFile(__DIR__ . '/EditFileFormControl.latte');
-
-        $template->render();
+        $this->template->setFile(__DIR__ . '/EditFileFormControl.latte');
+        $this->template->render();
     }
 
 }

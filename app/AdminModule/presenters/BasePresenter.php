@@ -3,6 +3,7 @@
 namespace App\AdminModule\Presenters;
 
 use Caloriscz\Media\DropZoneControl;
+use Caloriscz\Media\ImageBrowserControl;
 use Caloriscz\Menus\Admin\MainMenuControl;
 use Caloriscz\Menus\Admin\PageTopMenuControl;
 use Caloriscz\Page\Editor\EditorControl;
@@ -45,6 +46,7 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
 
     public function __construct(\Nette\Database\Context $database, \Nette\Mail\IMailer $mailer)
     {
+        parent::__construct();
         $this->database = $database;
         $this->mailer = $mailer;
     }
@@ -137,8 +139,7 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
 
     protected function createComponentEditor()
     {
-        $control = new EditorControl($this->database, $this->em);
-        return $control;
+        return new EditorControl($this->database, $this->em);
     }
 
     protected function createComponentEditorSettings()

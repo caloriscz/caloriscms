@@ -1,5 +1,4 @@
 <?php
-
 use Nette\Application\UI\Control;
 
 class NewsletterFormControl extends Control
@@ -69,7 +68,7 @@ class NewsletterFormControl extends Control
     public function render()
     {
         $this->template->setFile(__DIR__ . '/NewsletterFormControl.latte');
-        $this->template->settings = $this->presenter->template->settings;
+        $this->template->settings = $this->getPresenter()->template->settings;
         $this->template->render();
     }
 

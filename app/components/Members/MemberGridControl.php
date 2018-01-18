@@ -1,4 +1,5 @@
 <?php
+
 namespace Caloriscz\Members;
 
 use Nette\Application\UI\Control;
@@ -14,6 +15,7 @@ class MemberGridControl extends Control
 
     public function __construct(Context $database)
     {
+        parent::__construct();
         $this->database = $database;
     }
 
@@ -27,36 +29,41 @@ class MemberGridControl extends Control
         } else {
             $contacts = $this->database->table('users')->where('users_categories_id', $this->getParameter('id'));
         }
-        $grid->setTranslator($this->presenter->translator);
-        $grid->setDataSource($contacts);
-        $grid->addGroupAction('Delete')->onSelect[] = [$this, 'handleDelete'];
 
+        try {
+            $grid->setTranslator($this->getPresenter()->translator);
+            $grid->setDataSource($contacts);
+            $grid->addGroupAction('Delete')->onSelect[] = [$this, 'handleDelete'];
 
-        $grid->addColumnLink('name', 'dictionary.main.Title')
-            ->setRenderer(function ($item) {
-                $url = Html::el('a')->href($this->presenter->link('edit', array("id" => $item->id)))
-                    ->setText($item->username);
-                return $url;
-            })
-            ->setSortable();
-        $grid->addColumnText('email', $this->presenter->translator->translate('dictionary.main.Email'))
-            ->setSortable();
-        $grid->addColumnText('state', $this->presenter->translator->translate('dictionary.main.State'))->setRenderer(function ($item) {
-            if ($item->date_created === 1) {
-                $text = 'dictionary.main.enabled';
-            } else {
+            $grid->addColumnLink('name', 'dictionary.main.Title')
+                ->setRenderer(function ($item) {
+                    $url = Html::el('a')->href($this->getPresenter()->link('edit', array("id" => $item->id)))
+                        ->setText($item->username);
+                    return $url;
+                })
+                ->setSortable();
+            $grid->addColumnText('email', $this->getPresenter()->translator->translate('dictionary.main.Email'))
+                ->setSortable();
+            $grid->addColumnText('state', $this->getPresenter()->translator->translate('dictionary.main.State'))->setRenderer(function ($item) {
                 $text = 'dictionary.main.disabled';
-            }
-            return $this->presenter->translator->translate($text);
-        })
-            ->setSortable();
-        $grid->addColumnText('date_created', $this->presenter->translator->translate('dictionary.main.Date'))
-            ->setRenderer(function ($item) {
-                $date = date('j. n. Y', strtotime($item->date_created));
 
-                return $date;
+                if ($item->date_created === 1) {
+                    $text = 'dictionary.main.enabled';
+                }
+
+                return $this->getPresenter()->translator->translate($text);
             })
-            ->setSortable();
+                ->setSortable();
+            $grid->addColumnText('date_created', $this->getPresenter()->translator->translate('dictionary.main.Date'))
+                ->setRenderer(function ($item) {
+                    $date = date('j. n. Y', strtotime($item->date_created));
+
+                    return $date;
+                })
+                ->setSortable();
+        } catch (\Exception $e) {
+            echo 'data error';
+        }
 
         //$grid->setTranslator($this->translator);
     }

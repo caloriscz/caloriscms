@@ -21,6 +21,7 @@ class SnippetsPresenter extends BasePresenter
 {
     public function __construct(Context $database, EntityManager $em)
     {
+        parent::__construct();
         $this->database = $database;
         $this->em = $em;
     }

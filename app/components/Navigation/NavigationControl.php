@@ -2,6 +2,7 @@
 
 namespace Caloriscz\Navigation;
 
+use Caloriscz\Page\Filters\SearchControl;
 use Nette\Application\UI\Control;
 
 class NavigationControl extends Control
@@ -16,7 +17,7 @@ class NavigationControl extends Control
 
     protected function createComponentSearch()
     {
-        $control = new \Caloriscz\Page\Filters\SearchControl($this->database);
+        $control = new SearchControl($this->database);
         return $control;
     }
 

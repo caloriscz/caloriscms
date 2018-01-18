@@ -24,7 +24,6 @@
     "eonasdan-bootstrap-datetimepicker": "bootstrap3-datetimepicker#^4.17.47",
     "bootstrap-datepicker": "^1.6.4",
     "ublaboo-datagrid": "^5.4.1",
-    "fullcalendar": "^3.4.0",
     "PACE": "pace#^1.0.2",
     "nette": "^2.0.11",
     "nette-forms": "^2.4.4",
