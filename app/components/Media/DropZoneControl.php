@@ -55,7 +55,7 @@ class DropZoneControl extends Control
 
             $checkImage = $this->database->table('media')->where([
                 'name' => $fileName,
-                'pages_id' => $form->values->id,
+                'pages_id' => $form->values->pages_id,
             ]);
 
             if ($checkImage->count() === 0) {

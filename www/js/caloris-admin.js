@@ -125,10 +125,12 @@ $(document).ready(function () {
     });
 
 
-    // Flatpickr -
+    // Flatpickr
     $(".datepicker").flatpickr({
         altInoput: "Y-m-d H:i",
-        enableTime: true
+        enableTime: true,
+        locale: 'cs',
+        time_24hr: true
     });
 });
 
