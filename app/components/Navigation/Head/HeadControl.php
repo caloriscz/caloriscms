@@ -9,25 +9,34 @@ use Nette\Database\Context;
 class HeadControl extends Control
 {
 
-    /** @var \Nette\Database\Context */
+    /** @var Context */
     public $database;
 
     public function __construct(Context $database)
     {
+        parent::__construct();
         $this->database = $database;
     }
 
     public function render($slugArray)
     {
-        $page = $this->getPresenter()->template->page;
+        $page = $this->presenter->template->page;
         $this->template->page = $page;
         $this->template->slug = $slugArray;
 
         /* Choose correct language columns */
         if (count($slugArray) > 0) {
-            $this->template->title = $slugArray["title"];
-            $this->template->metadesc = $slugArray["metadesc"];
-            $this->template->metakeys = $slugArray["metakeys"];
+            if (!isset($slugArray['metadesc'])) {
+                $slugArray['metadesc'] = '';
+            }
+
+            if (!isset($slugArray['metakeys'])) {
+                $slugArray['metakeys'] = '';
+            }
+
+            $this->template->title = $slugArray['title'];
+            $this->template->metadesc = $slugArray['metadesc'];
+            $this->template->metakeys = $slugArray['metakeys'];
         } elseif ($this->getPresenter()->translator->getLocale() === $this->getPresenter()->translator->getDefaultLocale()) {
             $this->template->title = $page->title;
             $this->template->metadesc = $page->metadesc;
@@ -40,7 +49,6 @@ class HeadControl extends Control
 
         $this->template->settings = $this->presenter->template->settings;
         $this->template->setFile(__DIR__ . '/HeadControl.latte');
-
         $this->template->render();
     }
 
