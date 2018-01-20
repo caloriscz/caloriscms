@@ -27,6 +27,12 @@ class Document
     private $public;
     private $title;
     private $pageTemplate;
+    private $metakey;
+    private $metadesc;
+    private $sitemap;
+    private $date_published;
+    private $slug;
+    private $parent;
 
     public function __construct(Context $database)
     {
