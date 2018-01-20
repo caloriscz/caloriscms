@@ -7,6 +7,7 @@
  */
 
 namespace App\Model;
+use Nette\Database\Context;
 
 /**
  * Get category name
@@ -15,101 +16,27 @@ namespace App\Model;
 class Category
 {
 
-    /** @var \Nette\Database\Context */
+    /** @var Context */
     private $database;
 
-    public function __construct(\Nette\Database\Context $database)
+    public function __construct(Context $database)
     {
         $this->database = $database;
     }
 
-    /**
-     * Get name of the category
-     */
-    function getName($category)
-    {
-        $categoryDb = $this->database->table("categories")->get($category);
-
-        return $categoryDb->title;
-    }
-
-    /**
-     * Get published Categories as an array
-     * @return aray of categories with id
-     */
-    function getPublished()
-    {
-        foreach ($this->database->table("store")->group("category")->having("publish = 1") as $categories) {
-            $category[$categories->category] = $this->getName($categories->category);
-        }
-
-        return $category;
-    }
-
-    /**
-     * Get published Categories as an array
-     * @return aray of categories with id
-     */
-    function getAll()
-    {
-        foreach ($categoryDb = $this->database->table("categories")->order("title") as $categories) {
-            $category[$categories->id] = $categories->title;
-        }
-
-        return $category;
-    }
-
-    /**
-     * Get published Categories as an array
-     * @return aray of categories with id
-     */
-    function getAllWithSubs()
-    {
-        foreach ($categoryDb = $this->database->table("categories")->where('parent_id', NULL)->order("title") as $categories) {
-            $catsSubs = $categoryDbSub = $this->database->table("categories")->where('parent_id', $categories->id)->order("sorted, title");
-
-            if ($catsSubs->count() > 0) {
-                foreach ($catsSubs as $categoriesSub) {
-                    $categorySub[$categoriesSub->id] = $categoriesSub->title;
-                }
-
-                $category[$categories->title] = $categorySub;
-            } else {
-                $category[$categories->id] = $categories->title;
-            }
-        }
-
-        return $category;
-    }
 
     /**
      * Get breadcrumb navigation in associative array
+     * @param $id
+     * @param null $arr
+     * @return array|null
      */
-    function getBreadcrumb($id, $arr = NULL)
+    public function getPageBreadcrumb($id, $arr = null)
     {
-        if ($id == NULL) {
-            return array_reverse($arr, TRUE);
+        if ($id === null) {
+            return array_reverse($arr, true);
         } else {
-            $catDb = $this->database->table("categories")->get($id);
-
-            if ($catDb) {
-                $arr[$catDb->ref('slug', 'slug_id')->title] = $catDb->title;
-                return $this->getBreadcrumb($catDb->parent_id, $arr);
-            } else {
-                return $arr;
-            }
-        }
-    }
-
-    /**
-     * Get breadcrumb navigation in associative array
-     */
-    function getPageBreadcrumb($id, $arr = NULL)
-    {
-        if ($id == NULL) {
-            return array_reverse($arr, TRUE);
-        } else {
-            $catDb = $this->database->table("pages")->get($id);
+            $catDb = $this->database->table('pages')->get($id);
 
             if ($catDb) {
                 $arr[$catDb->id] = $catDb->title;
@@ -122,10 +49,13 @@ class Category
 
     /**
      * Get breadcrumb ids
+     * @param $id
+     * @param null $arr
+     * @return array|null
      */
-    function getSubIds($id, $arr = NULL)
+    public function getSubIds($id, $arr = null)
     {
-        $catDb = $this->database->table("categories")->where("parent_id", $id);
+        $catDb = $this->database->table('categories')->where('parent_id', $id);
 
         if (!is_array($arr)) {
             $arr[] = (int)$id;
@@ -147,18 +77,18 @@ class Category
     /**
      * Create new category
      */
-    function setCategory($title, $parent, $slug = null)
+    public function setCategory($title, $parent, $slug = null)
     {
-        if (is_numeric($parent) == false) {
+        if (is_numeric($parent) === false) {
             $parent = null;
         }
 
-        $this->database->table("categories")->insert(array(
-            "title" => $title,
-            "parent_id" => $parent,
-        ));
+        $this->database->table('categories')->insert([
+            'title' => $title,
+            'parent_id' => $parent
+        ]);
 
-        $this->database->query("UPDATE categories SET sorted = id WHERE sorted = 0");
+        $this->database->query('UPDATE categories SET sorted = id WHERE sorted = 0');
     }
 
 }

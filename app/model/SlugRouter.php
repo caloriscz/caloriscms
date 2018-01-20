@@ -2,11 +2,9 @@
 namespace App;
 
 use Model;
-use Nette\Application\Routers;
 use Nette\Application as App;
 use Nette;
 use Nette\Http;
-use Symfony\Component\Translation\Translator;
 
 
 class SlugRouter extends Nette\Object implements Nette\Application\IRouter
@@ -50,7 +48,7 @@ class SlugRouter extends Nette\Object implements Nette\Application\IRouter
                 }
 
             } else {
-                if (count($parts) == 2) {
+                if (count($parts) === 2) {
                     $slugName = $parts[1];
                     $params['prefix'] = $parts[0];
                 } else {
@@ -90,7 +88,7 @@ class SlugRouter extends Nette\Object implements Nette\Application\IRouter
             }
         }
 
-        if ($row->pages_templates_id != null) {
+        if ($row->pages_templates_id !== null) {
             $templateInfo = explode(":", $row->pages_templates->template);
 
             $presenter = $templateInfo[0] . ':' . $templateInfo[1];
@@ -98,7 +96,7 @@ class SlugRouter extends Nette\Object implements Nette\Application\IRouter
         } else {
             $presenter = $row->pages_types->presenter;
 
-            if ($row->pages_types_id == 9) {
+            if ($row->pages_types_id === 9) {
                 $params['action'] = substr($row->presenter, strrpos($row->presenter, ":") + 1);
             } else {
                 $params['action'] = $row->pages_types->action;

@@ -8,8 +8,7 @@
 
 namespace App\Model;
 
-use Tracy\Debugger;
-
+use Nette\Utils\Image;
 
 /**
  * Thumbnail maker
@@ -17,60 +16,69 @@ use Tracy\Debugger;
  */
 class Thumbnail
 {
-    function setFile($path, $file)
+    private $height;
+    private $width;
+    private $file;
+    private $path;
+
+    public function setFile($path, $file)
     {
         $this->path = $path;
         $this->file = $file;
     }
 
-    function getPath()
+    public function getPath()
     {
         return $this->path;
     }
 
-    function getFile()
+    public function getFile()
     {
         return $this->file;
     }
 
-    function setDimensions($width = null, $height = null)
+    public function setDimensions($width = null, $height = null)
     {
         $this->width = $width;
         $this->height = $height;
     }
 
-    function getWidth()
+    public function getWidth()
     {
-        if ($this->width == null && $this->height == null) {
+        if ($this->width === null && $this->height === null) {
             return 300;
         } else {
             return $this->width;
         }
     }
 
-    function getHeight()
+    public function getHeight()
     {
         return $this->height;
     }
 
     /**
      * Check file and folder
+     * @param $path
+     * @return bool
      */
-    function check($path)
+    public function check($path)
     {
-        \App\Model\IO::directoryMake(APP_DIR . "/" . $this->getPath() . $path, 0755);
+        IO::directoryMake(APP_DIR . '/' . $this->getPath() . $path, 0755);
 
-        if (\App\Model\IO::isImage(APP_DIR . "/" . $this->getPath() . "/" . $this->getFile()) == false) {
+        if (IO::isImage(APP_DIR . '/' . $this->getPath() . '/' . $this->getFile()) === false) {
             return false;
-        } else {
-            return true;
         }
     }
 
     /**
      * Save to appropriate path
+     * @param string $path
+     * @param bool $realFile
+     * @return bool
+     * @throws \Nette\Utils\UnknownImageFileException
      */
-    function save($path = "tn", $realFile = false)
+    public function save($path = "tn", $realFile = false)
     {
         if (!$this->check($path)) {
             return false;
@@ -82,14 +90,12 @@ class Thumbnail
             $fileName = $this->getFile();
         }
 
-        $image = \Nette\Utils\Image::fromFile(APP_DIR . "/" . $this->getPath() . "/" . $this->getFile());
+        $image = Image::fromFile(APP_DIR . '/' . $this->getPath() . '/' . $this->getFile());
         $image->resize($this->getWidth(), $this->getHeight(), \Nette\Utils\Image::SHRINK_ONLY);
         $image->sharpen();
-        $image->save(APP_DIR . "/" . $this->getPath() . "/" . $path . '/' . $fileName);
-        chmod(APP_DIR . "/" . $this->getPath() . "/" . $path . '/' . $fileName, 0644);
-
+        $image->save(APP_DIR . '/' . $this->getPath() . '/' . $path . '/' . $fileName);
+        chmod(APP_DIR . '/' . $this->getPath() . '/' . $path . '/' . $fileName, 0644);
 
         return true;
     }
-
 }

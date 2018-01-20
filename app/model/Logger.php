@@ -21,6 +21,8 @@ class Logger
     private $database;
 
     private $pageId;
+    private $description;
+    private $event;
 
     public function __construct(Context $database)
     {
@@ -100,7 +102,6 @@ class Logger
         }
 
         $this->database->table('logger')->insert($arr);
-
 
         return true;
     }

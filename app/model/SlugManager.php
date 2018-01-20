@@ -33,9 +33,9 @@ class SlugManager extends Nette\Object
             $arr['pages_types.prefix'] = $prefix;
         }
 
-        $arr["public"] = 1;
+        $arr['public'] = 1;
 
-        $db = $this->database->table("pages")->where($arr);
+        $db = $this->database->table('pages')->where($arr);
         $row = $db->fetch();
 
         if ($db->count() > 0) {
@@ -47,7 +47,7 @@ class SlugManager extends Nette\Object
 
     public function getDefault()
     {
-        $row = $this->database->table("pages")->where(array("id" => 1))->fetch();
+        $row = $this->database->table('pages')->where(array('id' => 1))->fetch();
         if ($row) {
             return $row;
         } else {
@@ -57,7 +57,7 @@ class SlugManager extends Nette\Object
 
     public function getSlugById($id)
     {
-        $row = $this->database->table("pages")->get($id);
+        $row = $this->database->table('pages')->get($id);
         if ($row) {
             return $row;
         } else {
@@ -70,7 +70,7 @@ class SlugManager extends Nette\Object
         $languages = $this->translator->getAvailableLocales();
 
         foreach ($languages as $itemL) {
-            $result = explode("_", $itemL);
+            $result = explode('_', $itemL);
             $iLocale[] = $result[0];
         }
 

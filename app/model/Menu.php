@@ -1,12 +1,14 @@
 <?php
 
 /*
- * Caloris Category
+ * Caloris Menu
  *
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU GPL3
  */
 
 namespace App\Model;
+
+use Nette\Database\Context;
 
 /**
  * Get category name
@@ -15,31 +17,36 @@ namespace App\Model;
 class Menu
 {
 
-    /** @var \Nette\Database\Context */
+    /** @var Context */
     private $database;
 
-    public function __construct(\Nette\Database\Context $database)
+    public function __construct(Context $database)
     {
         $this->database = $database;
     }
 
     /**
      * Get name of the category
+     * @param $category
+     * @return bool|mixed|\Nette\Database\Table\ActiveRow|\Nette\Database\Table\IRow
      */
-    function getName($category)
+    public function getName($category)
     {
-        $categoryDb = $this->database->table("menu")->get($category);
+        $categoryDb = $this->database->table('menu')->get($category);
 
         return $categoryDb->title;
     }
 
     /**
      * Get published Categories as an array
-     * @return aray of categories with id
+     * @return array
      */
-    function getAll()
+    public function getAll()
     {
-        foreach ($categoryDb = $this->database->table("menu")->order("title") as $categories) {
+        $categoryDb = $this->database->table('menu')->order('title');
+        $category = [];
+
+        foreach ($categoryDb as $categories) {
             $category[$categories->id] = $categories->title;
         }
 
@@ -50,10 +57,12 @@ class Menu
      * Get published Categories as an array
      * @return aray of categories with id
      */
-    function getAllWithSubs()
+    public function getAllWithSubs()
     {
-        foreach ($categoryDb = $this->database->table("menu")->where('parent_id', NULL)->order("title") as $categories) {
-            $catsSubs = $categoryDbSub = $this->database->table("menu")->where('parent_id', $categories->id)->order("sorted, title");
+        $category = $this->database->table('menu')->where('parent_id', NULL)->order('title');
+
+        foreach ($category as $categories) {
+            $catsSubs = $categoryDbSub = $this->database->table('menu')->where('parent_id', $categories->id)->order('sorted, title');
 
             if ($catsSubs->count() > 0) {
                 foreach ($catsSubs as $categoriesSub) {
@@ -71,13 +80,16 @@ class Menu
 
     /**
      * Get breadcrumb navigation in associative array
+     * @param $id
+     * @param null $arr
+     * @return array|null
      */
-    function getBreadcrumb($id, $arr = NULL)
+    public function getBreadcrumb($id, $arr = NULL)
     {
-        if ($id == NULL) {
+        if ($id === null) {
             return array_reverse($arr, TRUE);
         } else {
-            $catDb = $this->database->table("menu")->get($id);
+            $catDb = $this->database->table('menu')->get($id);
 
             if ($catDb) {
                 $arr[$catDb->ref('slug', 'slug_id')->title] = $catDb->title;
@@ -90,10 +102,13 @@ class Menu
 
     /**
      * Get breadcrumb ids
+     * @param $id
+     * @param null $arr
+     * @return array|null
      */
-    function getSubIds($id, $arr = NULL)
+    public function getSubIds($id, $arr = NULL)
     {
-        $catDb = $this->database->table("menu")->where("parent_id", $id);
+        $catDb = $this->database->table('menu')->where('parent_id', $id);
 
         if (!is_array($arr)) {
             $arr[] = (int)$id;
@@ -114,20 +129,23 @@ class Menu
 
     /**
      * Create new category
+     * @param $title
+     * @param $parent
+     * @param null $slug
      */
-    function setCategory($title, $parent, $slug = null)
+    public function setCategory($title, $parent, $slug = null)
     {
-        if (is_numeric($parent) == false) {
+        if (is_numeric($parent) === false) {
             $parent = null;
         }
 
-        $this->database->table("menu")->insert(array(
-            "title" => $title,
-            "slug_id" => $slug,
-            "parent_id" => $parent,
-        ));
+        $this->database->table('menu')->insert([
+            'title' => $title,
+            'slug_id' => $slug,
+            'parent_id' => $parent
+        ]);
 
-        $this->database->query("UPDATE menus SET sorted = id WHERE sorted = 0");
+        $this->database->query('UPDATE menus SET sorted = id WHERE sorted = 0');
     }
 
 }

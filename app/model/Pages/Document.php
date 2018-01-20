@@ -33,6 +33,7 @@ class Document
     private $date_published;
     private $slug;
     private $parent;
+    private $lang;
 
     public function __construct(Context $database)
     {
@@ -119,17 +120,15 @@ class Document
     {
         if ($this->date_published) {
             return $this->date_published;
-        } else {
-            return false;
         }
     }
 
     public function setPublic($public = 0)
     {
+        $this->public = 0;
+
         if ($public === 1) {
             $this->public = 1;
-        } else {
-            $this->public = 0;
         }
 
         return $this->public;
@@ -139,8 +138,6 @@ class Document
     {
         if (is_numeric($this->public)) {
             return $this->public;
-        } else {
-            return false;
         }
     }
 
@@ -154,8 +151,6 @@ class Document
     {
         if ($this->lang) {
             return $this->lang;
-        } else {
-            return false;
         }
     }
 
@@ -426,6 +421,7 @@ class Document
 
     /**
      * Remove slug
+     * @param $slugId
      */
     public function remove($slugId)
     {
@@ -436,6 +432,8 @@ class Document
 
     /**
      * Delete document
+     * @param $id
+     * @return bool
      */
     public function delete($id)
     {

@@ -7,6 +7,7 @@
  */
 
 namespace App\Model;
+use Nette\Database\Context;
 
 /**
  * Authenticating and authorizing users
@@ -15,21 +16,22 @@ namespace App\Model;
 class MemberModel
 {
 
-    /** @var \Nette\Database\Context */
+    /** @var Context */
     public $database;
 
-    public function __construct(\Nette\Database\Context $database)
+    public function __construct(Contextt $database)
     {
         $this->database = $database;
     }
 
     /**
      * Get member table
-     * @param string $user User name
+     * @param $user
+     * @return bool|mixed|\Nette\Database\Table\ActiveRow|\Nette\Database\Table\IRow
      */
-    function getTable($user)
+    public function getTable($user)
     {
-        $userDb = $this->database->table('users')->where(array("username" => $user))->limit(1);
+        $userDb = $this->database->table('users')->where(['username' => $user])->limit(1);
 
         if ($userDb->count() > 0) {
             $user = $userDb->fetch();
@@ -42,50 +44,56 @@ class MemberModel
 
     /**
      * Get new ID
-     * @param string $username User name
+     * @return string
      */
-    function getID()
+    public function getID()
     {
-        foreach ($this->database->table('users')->order("uid DESC")->limit(1) as $idfCheck) {
+        $orderID = '';
+        $menuId = $this->database->table('users')->order('uid DESC')->limit(1);
+        
+        foreach ($menuId as $idfCheck) {
             $orderID = $idfCheck->uid;
         }
 
-        $idfActive = substr($orderID, "TA");
+        $idfActive = substr($orderID, 'TA');
 
         if (count($idfCheck) > 0) {
-            $idf = str_pad(($idfActive + 1), 6, "0", STR_PAD_LEFT);
+            $idf = str_pad($idfActive + 1, 6, '0', STR_PAD_LEFT);
         } else {
-            $idf = str_pad((0 + 1), 6, "0", STR_PAD_LEFT);
+            $idf = str_pad(0 + 1, 6, '0', STR_PAD_LEFT);
         }
 
-        $idfComplete = "MU" . $idf;
+        $idfComplete = 'MU' . $idf;
 
         return $idfComplete;
     }
 
     /**
      * Get user name from ID
-     * @param string $username User name
+     * @param $username
+     * @return bool|mixed|\Nette\Database\Table\ActiveRow|\Nette\Database\Table\IRow3
      */
-    function getUserNameID($username)
+    public function getUserNameID($username)
     {
         return $this->database->table('users')->where('username', $username)->fetch()->id;
     }
 
     /**
      * Does username exists
-     * @param string $username User name
+     * @param $username
+     * @return int
      */
-    function getUserName($username)
+    public function getUserName($username)
     {
         return $this->database->table('users')->where('username', $username)->count();
     }
 
     /**
      * Check if user exists and user name and password is correct
-     * @param string $username User name
+     * @param $username
+     * @return bool
      */
-    function getState($username)
+    public function getState($username)
     {
         $stateDb = $this->database->table('users')->where(array(
             'username' => $username,
@@ -111,7 +119,7 @@ class MemberModel
      * @param string $email E-mail address
      * @return object
      */
-    function getEmail($email)
+    public function getEmail($email)
     {
         return $this->database->table('users')->where('email', $email)->count();
     }
@@ -119,9 +127,9 @@ class MemberModel
     /**
      * Delete given user
      */
-    function delete($cols)
+    public function delete($cols)
     {
-        $this->database->table("users")->get($cols["id"])->delete();
+        $this->database->table('users')->get($cols['id'])->delete();
     }
 
     /**
@@ -129,12 +137,12 @@ class MemberModel
      * @param type $email
      * @param type $passwordGenerate
      */
-    function setActivation($email, $passwordGenerate)
+    public function setActivation($email, $passwordGenerate)
     {
-        $this->database->table("users")->where(array(
+        $this->database->table('users')->where(array(
             'email' => $email
         ))->update(array(
-            "activation" => $passwordGenerate)
+            'activation' => $passwordGenerate)
         );
     }
 

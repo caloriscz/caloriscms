@@ -8,7 +8,7 @@
 
 namespace App\Model;
 
-use Nette\Utils\Strings;
+use Nette\Database\Context;
 
 /**
  * Image model
@@ -17,25 +17,28 @@ use Nette\Utils\Strings;
 class File
 {
 
-    /** @var \Nette\Database\Context */
+    /** @var Context */
     public $database;
     public $user;
     private $path = "/media";
+    private $pageId;
+    private $file;
 
-    public function __construct(\Nette\Database\Context $database)
+    public function __construct(Context $database)
     {
         $this->database = $database;
     }
 
     /**
-     * @param Set page id
+     * Set page identifier
+     * @param $pageId
      */
-    function setPageId($pageId)
+    public function setPageId($pageId)
     {
         $this->pageId = $pageId;
     }
 
-    function getPageId()
+    public function getPageId()
     {
         return $this->pageId;
     }
@@ -43,36 +46,37 @@ class File
     /**
      * @param Set file name
      */
-    function setFile($file)
+    public function setFile($file)
     {
         $this->file = $file;
     }
 
-    function getFile()
+    public function getFile()
     {
         return $this->file;
     }
 
     /**
-     * @param Set type: image = 1, file = 0
+     * Set type of the file
+     * @param $type
      */
-    function setType($type)
+    public function setType($type)
         {
             $this->type = $type;
         }
 
-    function getType() {
+    public function getType() {
         return $this->type;
     }
 
-    function create()
+    public function create()
     {
-        $this->database->table("media")->insert(array(
+        $this->database->table('media')->insert(array(
             'name' => $this->getFile(),
             'pages_id' => $this->getPageId(),
-            'filesize' => filesize(APP_DIR . "/". $this->path . "/" . $this->getPageId() . "/" . $this->getFile()),
+            'filesize' => filesize(APP_DIR . '/'. $this->path . '/' . $this->getPageId() . '/' . $this->getFile()),
             'file_type' => $this->getType(),
-            'date_created' => date("Y-m-d H:i:s"),
+            'date_created' => date('Y-m-d H:i:s'),
         ));
     }
 
