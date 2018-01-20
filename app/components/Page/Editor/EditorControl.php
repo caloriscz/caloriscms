@@ -48,11 +48,10 @@ class EditorControl extends Control
         $form->setTranslator($this->presenter->translator);
         $form->getElementPrototype()->autocomplete = 'off';
         $l = $this->presenter->getParameter('l');
+        $enabled = true;
 
         if ($this->presenter->template->member->users_roles->pages_document) {
             $enabled = false;
-        } else {
-            $enabled = true;
         }
 
         $form->addHidden('id');
@@ -60,7 +59,7 @@ class EditorControl extends Control
         $form->addHidden('docs_id');
         $form->addTextArea('document')->setDisabled($enabled);
 
-        if (null === $l) {
+        if (null === $l || $l === '') {
             $form->setDefaults(array(
                 'id' => $pages->id,
                 'document' => $pages->document,
