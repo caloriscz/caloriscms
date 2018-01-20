@@ -2,8 +2,7 @@
 
 namespace App\FrontModule\Presenters;
 
-use Nette,
-    App\Model;
+use Caloriscz\Blog\BlogListControl;
 
 /**
  * Displays pages with page_type = 0
@@ -12,8 +11,7 @@ class PagesPresenter extends BasePresenter
 {
     protected function createComponentBlogList()
     {
-        $control = new \Caloriscz\Blog\BlogListControl($this->database);
-        return $control;
+        return new BlogListControl($this->database);
     }
 
     protected function startup()

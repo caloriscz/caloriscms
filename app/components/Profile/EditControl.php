@@ -3,60 +3,60 @@
 namespace Caloriscz\Profile;
 
 use Nette\Application\UI\Control;
+use Nette\Database\Context;
+use Nette\Forms\BootstrapUIForm;
 
 class EditControl extends Control
 {
 
-    /** @var \Nette\Database\Context */
+    /** @var Context */
     public $database;
 
-    public function __construct(\Nette\Database\Context $database)
+    public function __construct(Context $database)
     {
+        parent::__construct();
         $this->database = $database;
     }
 
     /**
      * Edit your profile
      */
-    function createComponentEditForm()
+    protected function createComponentEditForm()
     {
-        $form = new \Nette\Forms\BootstrapUIForm();
+        $gender = 1;
+
+        if (!$gender) {
+            $gender = $this->presenter->template->member->sex;
+        }
+
+        $form = new BootstrapUIForm();
         $form->setTranslator($this->presenter->translator);
 
-        $form->addText("username");
-        $form->addRadioList('sex', '', array(
-            1 => "\xC2\xA0" . 'žena', 2 => "\xC2\xA0" . 'muž',
-        ));
+        $form->addText('username');
+        $form->addRadioList('sex', '', ['1' => '\xC2\xA0' . 'žena', '2' => '\xC2\xA0' . 'muž']);
 
-        $form->setDefaults(array(
-            "username" => $this->presenter->template->member->username,
-            "sex" => $this->presenter->template->member->sex,
-        ));
+        $form->setDefaults([
+            'username' => $this->presenter->template->member->username,
+            'sex' => $gender,
+        ]);
 
-        $form->addSubmit("submit");
-        $form->onSuccess[] = [$this, "editFormSucceeded"];
+        $form->addSubmit('submit');
+        $form->onSuccess[] = [$this, 'editFormSucceeded'];
         return $form;
     }
 
-    function editFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
+    public function editFormSucceeded(BootstrapUIForm $form)
     {
-        $this->database->table("users")->where(array(
-            "id" => $this->presenter->user->getId()
-        ))
-            ->update(array(
-                "sex" => $form->values->sex,
-            ));
+        $this->database->table('users')->where(['id' => $this->presenter->user->getId()])
+            ->update(['sex' => $form->values->sex]);
 
-        $this->presenter->redirect(this);
+        $this->presenter->redirect('this');
     }
 
     public function render()
     {
-        $template = $this->template;
-        $template->setFile(__DIR__ . '/EditControl.latte');
-
-
-        $template->render();
+        $this->template->setFile(__DIR__ . '/EditControl.latte');
+        $this->template->render();
     }
 
 }

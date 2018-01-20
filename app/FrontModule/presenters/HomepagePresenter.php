@@ -2,8 +2,7 @@
 
 namespace App\FrontModule\Presenters;
 
-use Nette,
-    App\Model;
+use Caloriscz\Page\Pages\Homepage\HomepageControl;
 
 /**
  * Homepage presenter.
@@ -15,15 +14,14 @@ class HomepagePresenter extends BasePresenter
     {
         parent::startup();
 
-        if (session_status() == PHP_SESSION_NONE) {
+        if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
     }
 
     protected function createComponentHomepage()
     {
-        $control = new \Caloriscz\Page\Pages\Homepage\HomepageControl($this->database);
-        return $control;
+        return new HomepageControl($this->database);
     }
 
     public function renderDefault()

@@ -11,8 +11,7 @@ class ContactPresenter extends BasePresenter
 {
     protected function createComponentHelpdesk()
     {
-        $control = new HelpdeskControl($this->database);
-        return $control;
+        return new HelpdeskControl($this->database);
     }
 
     public function renderDefault()

@@ -2,6 +2,7 @@
 
 namespace App\FrontModule\Presenters;
 
+use Caloriscz\Sign\LostPassControl;
 use Caloriscz\Sign\ResetPassControl;
 use Caloriscz\Sign\SignInControl;
 use Caloriscz\Sign\SignUpControl;
@@ -20,8 +21,8 @@ class SignPresenter extends BasePresenter
 
     protected function createComponentLostPass()
     {
-        $control = new \Caloriscz\Sign\LostPassControl($this->database);
-        $control->onSave[] = function($message) {
+        $control = new LostPassControl($this->database);
+        $control->onSave[] = function ($message) {
             if ($message) {
                 $this->flashMessage($message, 'error');
             } else {
@@ -36,22 +37,17 @@ class SignPresenter extends BasePresenter
 
     protected function createComponentResetPass()
     {
-        $control = new ResetPassControl($this->database);
-        return $control;
+        return new ResetPassControl($this->database);
     }
-    
+
     protected function createComponentVerify()
     {
-        $control = new VerifyAccountControl($this->database);
-
-        return $control;
+        return new VerifyAccountControl($this->database);
     }
 
     protected function createComponentSignIn()
     {
-        $control = new SignInControl($this->database);
-
-        return $control;
+        return new SignInControl($this->database);
     }
 
     protected function createComponentSignUp()
@@ -76,17 +72,17 @@ class SignPresenter extends BasePresenter
 
     public function renderIn()
     {
-        if ($this->getParameter('msg') == 1) {
+        if ($this->getParameter('msg') === 1) {
             $this->template->msg = true;
         }
     }
 
     public function renderResetpass()
     {
-        $activation = $this->database->table('users')->where(array(
+        $activation = $this->database->table('users')->where([
             'email' => $this->getParameter('email'),
-            'activation' => $this->getParameter('code'),
-        ));
+            'activation' => $this->getParameter('code')
+        ]);
 
         if ($activation->count() > 0) {
             $this->template->activationValid = true;

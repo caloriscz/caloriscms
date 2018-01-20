@@ -1,38 +1,37 @@
 <?php
 namespace Caloriscz\Navigation\Footer;
 
+use Caloriscz\Social\FacebookControl;
 use Nette\Application\UI\Control;
+use Nette\Database\Context;
 
 class FooterControl extends Control
 {
 
-    /** @var \Nette\Database\Context */
+    /** @var Context */
     public $database;
 
-    public function __construct(\Nette\Database\Context $database)
+    public function __construct(Context $database)
     {
+        parent::__construct();
         $this->database = $database;
     }
 
     protected function createComponentSocialFacebook()
     {
-        $control = new \Caloriscz\Social\FacebookControl;
-        return $control;
+        return new FacebookControl();
     }
 
     protected function createComponentNewsletterForm()
     {
-        $control = new \NewsletterFormControl($this->database);
-        return $control;
+        return new \NewsletterFormControl($this->database);
     }
 
     public function render()
     {
-        $template = $this->template;
-        $template->settings = $this->presenter->template->settings;
-        $template->setFile(__DIR__ . '/FooterControl.latte');
-
-        $template->render();
+        $this->template->settings = $this->presenter->template->settings;
+        $this->template->setFile(__DIR__ . '/FooterControl.latte');
+        $this->template->render();
     }
 
 }

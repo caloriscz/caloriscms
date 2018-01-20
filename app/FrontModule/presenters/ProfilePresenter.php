@@ -2,6 +2,7 @@
 
 namespace App\FrontModule\Presenters;
 
+use App\Model\IO;
 use Caloriscz\Profile\ChangePasswordControl;
 use Caloriscz\Profile\ChangePortraitControl;
 use Caloriscz\Profile\EditAddressControl;
@@ -27,56 +28,50 @@ class ProfilePresenter extends \App\FrontModule\Presenters\BasePresenter
 
     protected function createComponentProfileChangePortrait()
     {
-        $control = new ChangePortraitControl($this->database);
-        return $control;
+        return new ChangePortraitControl($this->database);
     }
 
     protected function createComponentProfileMenu()
     {
-        $control = new ProfileMenuControl($this->database);
-        return $control;
+        return new ProfileMenuControl($this->database);
     }
 
     protected function createComponentProfileChangePassword()
     {
-        $control = new ChangePasswordControl($this->database);
-        return $control;
+        return new ChangePasswordControl($this->database);
     }
 
     protected function createComponentProfileEdit()
     {
-        $control = new EditControl($this->database);
-        return $control;
+        return new EditControl($this->database);
     }
 
     protected function createComponentProfileInsertAddress()
     {
-        $control = new InsertAddressControl($this->database);
-        return $control;
+        return new InsertAddressControl($this->database);
     }
 
     protected function createComponentProfileEditAddress()
     {
-        $control = new EditAddressControl($this->database);
-        return $control;
+        return new EditAddressControl($this->database);
     }
 
-    function handleDeletePortrait()
+    public function handleDeletePortrait()
     {
         $idfFolder = substr(__DIR__, 0, -27) . '/www';
 
-        if (file_exists($idfFolder . "/images/profiles/portrait-" . $this->user->getId() . ".jpg")) {
-            \App\Model\IO::remove($idfFolder . "/images/profiles/portrait-" . $this->user->getId() . ".jpg");
+        if (file_exists($idfFolder . '/images/profiles/portrait-' . $this->user->getId() . '.jpg')) {
+            IO::remove($idfFolder . '/images/profiles/portrait-' . $this->user->getId() . '.jpg');
         }
 
         $this->redirect(this);
     }
 
-    function renderAddresses()
+    public function renderAddresses()
     {
-        $this->template->addresses = $this->database->table("contacts")->where(array(
-            "users_id" => $this->user->getId(),
-        ));
+        $this->template->addresses = $this->database->table('contacts')->where([
+            'users_id' => $this->user->getId()
+        ]);
     }
 
 }

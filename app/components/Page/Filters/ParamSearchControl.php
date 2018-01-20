@@ -1,69 +1,72 @@
 <?php
 namespace Caloriscz\Page\Filters;
 
+use Caloriscz\Page\PageSlugControl;
 use Nette\Application\UI\Control;
+use Nette\Database\Context;
+use Nette\Forms\BootstrapUIForm;
 
 class ParamSearchControl extends Control
 {
 
-    /** @var \Nette\Database\Context */
+    /** @var Context */
     public $database;
 
-    public function __construct(\Nette\Database\Context $database)
+    public function __construct(Context $database)
     {
+        parent::__construct();
         $this->database = $database;
     }
 
     protected function createComponentPageSlug()
     {
-        $control = new \Caloriscz\Page\PageSlugControl($this->database);
-        return $control;
+        return new PageSlugControl($this->database);
     }
 
     protected function createComponentSearchForm()
     {
-        $form = new \Nette\Forms\BootstrapPHForm();
+        $form = new BootstrapUIForm();
         $form->setTranslator($this->presenter->translator);
-        $form->getElementPrototype()->class = "form-horizontal";
+        $form->getElementPrototype()->class = 'form-horizontal';
         $form->getElementPrototype()->role = 'form';
         $form->getElementPrototype()->autocomplete = 'off';
 
-        $form->setMethod("GET");
+        $form->setMethod('GET');
 
         $form->addHidden('idr');
         $form->addHidden('src');
-        $form->addHidden("priceFrom");
-        $form->addHidden("priceTo");
-        $form->addHidden("brand");
-        $form->addHidden("category");
+        $form->addHidden('priceFrom');
+        $form->addHidden('priceTo');
+        $form->addHidden('brand');
+        $form->addHidden('category');
 
         $form->setDefaults(array(
-            "idr" => $this->presenter->getParameter("id"),
-            "src" => $this->presenter->getParameter("src"),
-            "priceFrom" => $this->presenter->getParameter("priceFrom"),
-            "priceTo" => $this->presenter->getParameter("priceTo"),
-            "brand" => $this->presenter->getParameter("brand"),
-            "category" => $this->presenter->getParameter("page_id"),
+            'idr' => $this->presenter->getParameter('id'),
+            'src' => $this->presenter->getParameter('src'),
+            'priceFrom' => $this->presenter->getParameter('priceFrom'),
+            'priceTo' => $this->presenter->getParameter('priceTo'),
+            'brand' => $this->presenter->getParameter('brand'),
+            'category' => $this->presenter->getParameter('page_id'),
         ));
 
         $form->addSubmit('submitm', 'dictionary.main.Save')
-            ->setAttribute("class", "btn btn-info btn-lg");
+            ->setAttribute('class', 'btn btn-info btn-lg');
 
 
-        $form->onSuccess[] = [$this, "searchFormSucceeded"];
+        $form->onSuccess[] = [$this, 'searchFormSucceeded'];
         return $form;
     }
 
-    public function searchFormSucceeded(\Nette\Forms\BootstrapPHForm $form)
+    public function searchFormSucceeded(BootstrapUIForm $form)
     {
         $values = $form->getHttpData($form::DATA_TEXT); // get value from html input
-        unset($values["do"], $values["action"], $values["idr"], $values["locale"]
-            , $values["submitm"], $values["minsNow"], $values["maxNow"], $values["maxANow"], $values["category"]);
+        unset($values['do'], $values['action'], $values['idr'], $values['locale']
+            , $values['submitm'], $values['minsNow'], $values['maxNow'], $values['maxANow'], $values['category']);
 
         foreach ($values as $pmKey => $pmValue) {
             $pmKeyArr = explode("_", $pmKey);
 
-            if (substr($pmKey, 0, 3) == 'pm_') {
+            if (substr($pmKey, 0, 3) === 'pm_') {
                 if ($pmKeyArr[1] == $pmKeyLast) {
                     $pmValues = $pmValues . "*" . $pmValue;
                 } else {
@@ -88,16 +91,6 @@ class ParamSearchControl extends Control
                 unset($values[$key]);
             }
         }
-
-        /*
-                echo 'testing:<br>';
-                echo dump($pmArray);
-                echo http_build_query($pmArray);
-                parse_str(http_build_query($pmArray), $test);
-                echo "test query:<br>";
-                dump($test);
-        */
-        //dump(array_merge($values, $pmArray));
 
         $category = $form->values->category;
         $catalogue = $this->database->table("pages")->get($category);
