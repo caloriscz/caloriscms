@@ -19,7 +19,6 @@ gulp.task("scripts-a", function () {
         './bower_components/nette.ajax.js/nette.ajax.js',
         './bower_components/ublaboo-datagrid/assets/dist/datagrid.min.js',
         './bower_components/ublaboo-datagrid/assets/dist/datagrid-spinners.min.js',
-        './bower_components/jquery-autocomplete/jquery.autocomplete.js',
         './node_modules/moment/moment.min.js',
         './node_modules/flatpickr/dist/flatpickr.js'
     ])

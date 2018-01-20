@@ -94,8 +94,6 @@ $(document).ready(function () {
             height: 500
         });
 
-        $('.wysiwyg-disabled').summernote('disabled');
-
         $('#wysiwyg-page').summernote({
             width: "99%",
             height: 500,
@@ -127,8 +125,11 @@ $(document).ready(function () {
     });
 
 
-    // Flatpickr
-    $(".datepicker").flatpickr();
+    // Flatpickr -
+    $(".datepicker").flatpickr({
+        altInoput: "Y-m-d H:i",
+        enableTime: true
+    });
 });
 
 /* Focus on modal */
