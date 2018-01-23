@@ -19,7 +19,7 @@ class MemberModel
     /** @var Context */
     public $database;
 
-    public function __construct(Contextt $database)
+    public function __construct(Context $database)
     {
         $this->database = $database;
     }

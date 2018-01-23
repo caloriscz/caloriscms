@@ -3,12 +3,7 @@
 namespace App\AdminModule\Presenters;
 
 use App\Model\Entity\Snippets;
-use App\Model\IO;
-use Caloriscz\Media\FileListControl;
-use Caloriscz\Media\MediaForms\ImageEditFormControl;
 use Caloriscz\Page\Editor\BlockControl;
-use Caloriscz\Page\Pages\PageListControl;
-use Caloriscz\Page\Related\FilterFormControl;
 use Caloriscz\Page\Snippets\EditFormControl;
 use Caloriscz\Page\Snippets\InsertFormControl;
 use Kdyby\Doctrine\EntityManager;
@@ -19,13 +14,6 @@ use Nette\Database\Context;
  */
 class SnippetsPresenter extends BasePresenter
 {
-    public function __construct(Context $database, EntityManager $em)
-    {
-        parent::__construct();
-        $this->database = $database;
-        $this->em = $em;
-    }
-
     protected function createComponentEditSnippetForm()
     {
         $control = new EditFormControl($this->database);
