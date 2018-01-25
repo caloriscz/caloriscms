@@ -1,4 +1,5 @@
 <?php
+
 namespace Caloriscz\Appearance;
 
 use App\Model\IO;
@@ -20,6 +21,7 @@ class EditCarouselControl extends Control
 
     /**
      * Edit category
+     * @return BootstrapUIForm
      */
     protected function createComponentEditForm()
     {

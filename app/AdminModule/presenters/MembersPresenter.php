@@ -2,29 +2,28 @@
 
 namespace App\AdminModule\Presenters;
 
+use Caloriscz\Contacts\ContactForms\SendLoginControl;
 use Caloriscz\Members\EditMemberControl;
 use Caloriscz\Members\InsertContactForMemberControl;
 use Caloriscz\Members\InsertMemberControl;
 use Caloriscz\Members\MemberCategoriesControl;
 use Caloriscz\Members\MemberGridControl;
-use Nette,
-    App\Model;
 
 /**
- * Homepage presenter.
+ * Members (aka Users) presenter
+ * @package App\AdminModule\Presenters
  */
 class MembersPresenter extends BasePresenter
 {
-
     protected function createComponentSendLogin()
     {
-        $control = new \Caloriscz\Contacts\ContactForms\SendLoginControl($this->database);
+        $control = new SendLoginControl($this->database);
         $control->onSave[] = function ($contactId, $pwd) {
             if ($pwd) {
                 $this->flashMessage($pwd, 'success');
             }
 
-            $this->redirect(this, array('id' => $contactId, 'pdd' => $pwd));
+            $this->redirect('this', ['id' => $contactId, 'pdd' => $pwd]);
         };
 
         return $control;
@@ -46,7 +45,7 @@ class MembersPresenter extends BasePresenter
                 $code = ':Admin:Members:edit';
             }
 
-            $this->redirect($code, array('id' => $userId));
+            $this->redirect($code, ['id' => $userId]);
         };
 
         return $control;
@@ -69,6 +68,8 @@ class MembersPresenter extends BasePresenter
 
     /**
      * Contact for user delete
+     * @param $id
+     * @throws \Nette\Application\AbortException
      */
     public function handleDeleteContact($id)
     {
@@ -77,17 +78,7 @@ class MembersPresenter extends BasePresenter
             $this->redirect(':Admin:Members:edit', ['id' => $this->getParameter('contact')]);
         }
 
-        try {
-            $this->database->table('contacts')->get($id)->delete();
-        } catch (\PDOException $e) {
-            if (substr($e->getMessage(), 0, 15) == 'SQLSTATE[23000]') {
-                $message = ': Kontkat je potřebný v Objednávkách';
-            }
-
-            $this->flashMessage($this->translator->translate('messages.sign.CannotBeDeleted') . ': ' . $message, 'error');
-        }
-
-        $this->redirect(':Admin:Members:edit', array('id' => $this->getParameter('contact')));
+        $this->redirect(':Admin:Members:edit', ['id' => $this->getParameter('contact')]);
     }
 
     public function renderEdit()

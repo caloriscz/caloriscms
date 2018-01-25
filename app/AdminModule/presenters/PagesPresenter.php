@@ -3,13 +3,11 @@
 namespace App\AdminModule\Presenters;
 
 use App\Model\IO;
-use Caloriscz\Media\FileListControl;
 use Caloriscz\Media\MediaForms\ImageEditFormControl;
 use Caloriscz\Page\Editor\BlockControl;
+use Caloriscz\Page\PageForms\InsertFormControl;
 use Caloriscz\Page\Pages\PageListControl;
 use Caloriscz\Page\Related\FilterFormControl;
-use Caloriscz\Page\Snippets\EditFormControl;
-use Caloriscz\Page\Snippets\InsertFormControl;
 use Kdyby\Doctrine\EntityManager;
 use Nette\Database\Context;
 
@@ -66,6 +64,12 @@ class PagesPresenter extends BasePresenter
         return new ImageEditFormControl($this->database);
     }
 
+    /**
+     * Changes public state
+     * @param $id
+     * @param $public
+     * @throws \Nette\Application\AbortException
+     */
     protected function handleChangeState($id, $public)
     {
         $idState = 0;
@@ -79,6 +83,11 @@ class PagesPresenter extends BasePresenter
         $this->redirect('this', ['id' => null]);
     }
 
+    /**
+     * Deletes related page
+     * @param $id
+     * @throws \Nette\Application\AbortException
+     */
     public function handleDeleteRelated($id)
     {
         $this->database->table('pages_related')->get($id)->delete();
@@ -96,6 +105,8 @@ class PagesPresenter extends BasePresenter
 
     /**
      * Delete image
+     * @param $id
+     * @throws \Nette\Application\AbortException
      */
     public function handleDeleteImage($id)
     {
@@ -107,12 +118,17 @@ class PagesPresenter extends BasePresenter
         $this->redirect(':Admin:Pages:detailImages', ['id' => $this->getParameter('name')]);
     }
 
+    /**
+     * Insert related page
+     * @param $id
+     * @throws \Nette\Application\AbortException
+     */
     public function handleInsertRelated($id)
     {
-        $this->database->table('pages_related')->insert(array(
+        $this->database->table('pages_related')->insert([
             'pages_id' => $this->getParameter('item'),
-            'related_pages_id' => $id,
-        ));
+            'related_pages_id' => $id
+        ]);
         $this->redirect(':Admin:Pages:detailRelated', ['id' => $this->getParameter('item')]);
     }
 

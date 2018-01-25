@@ -19,12 +19,13 @@ class FilesPresenter extends BasePresenter
 
     /**
      * Delete file
+     * @throws \Nette\Application\AbortException
      */
     public function handleDelete()
     {
         Model\IO::remove(APP_DIR . '/images/' . $this->getParameter('path'));
 
-        $this->redirect(this);
+        $this->redirect('this');
     }
 
     public function renderDefault()

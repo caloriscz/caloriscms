@@ -3,16 +3,17 @@
 namespace Caloriscz\Appearance;
 
 use Nette\Application\UI\Control;
+use Nette\Database\Context;
 use Nette\Utils\Html;
 use Ublaboo\DataGrid\DataGrid;
 
 class CarouselGridControl extends Control
 {
 
-    /** @var \Nette\Database\Context */
+    /** @var Context */
     public $database;
 
-    public function __construct(\Nette\Database\Context $database)
+    public function __construct(Context $database)
     {
         parent::__construct();
 
@@ -24,7 +25,7 @@ class CarouselGridControl extends Control
         $grid = new DataGrid($this, $name);
 
 
-        $test = $this->database->table("carousel")->order("sorted");
+        $test = $this->database->table('carousel')->order('sorted');
         try {
             $grid->setDataSource($test);
             $grid->setSortable(true);

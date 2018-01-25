@@ -2,14 +2,16 @@
 namespace Caloriscz\Categories;
 
 use Nette\Application\UI\Control;
+use Nette\Database\Context;
+use Nette\Forms\BootstrapUIForm;
 
 class EditCategoryControl extends Control
 {
 
-    /** @var \Nette\Database\Context */
+    /** @var Context */
     public $database;
 
-    public function __construct(\Nette\Database\Context $database)
+    public function __construct(Context $database)
     {
         $this->database = $database;
     }
@@ -21,7 +23,7 @@ class EditCategoryControl extends Control
         $categories = $this->database->table('pages')->where('pages_types_id', 7)->fetchPairs('id', 'title');
         unset($categories[$category->id]);
 
-        $form = new \Nette\Forms\BootstrapUIForm();
+        $form = new BootstrapUIForm();
         $form->setTranslator($this->presenter->translator);
         $form->getElementPrototype()->class = 'form-horizontal';
         $form->getElementPrototype()->role = 'form';
@@ -48,7 +50,7 @@ class EditCategoryControl extends Control
         return $form;
     }
 
-    public function editFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
+    public function editFormSucceeded(BootstrapUIForm $form)
     {
         $this->database->table('contacts_categories')->get($form->values->id)
             ->update(array(
@@ -56,7 +58,7 @@ class EditCategoryControl extends Control
                 'parent_id' => $form->values->parent,
             ));
 
-        $this->presenter->redirect(this, array('id' => $form->values->id));
+        $this->presenter->redirect('this', array('id' => $form->values->id));
     }
 
     public function render()

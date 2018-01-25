@@ -6,40 +6,37 @@ use App\Model\Entity\Snippets;
 use Caloriscz\Page\Editor\BlockControl;
 use Caloriscz\Page\Snippets\EditFormControl;
 use Caloriscz\Page\Snippets\InsertFormControl;
-use Kdyby\Doctrine\EntityManager;
-use Nette\Database\Context;
 
 /**
  * Snippet handling
+ * @package App\AdminModule\Presenters
  */
 class SnippetsPresenter extends BasePresenter
 {
     protected function createComponentEditSnippetForm()
     {
-        $control = new EditFormControl($this->database);
-        return $control;
+        return new EditFormControl($this->database);
     }
 
     protected function createComponentInsertSnippetForm()
     {
-        $control = new InsertFormControl($this->database);
-        return $control;
+        return new InsertFormControl($this->database, $this->em);
     }
 
     protected function createComponentBlock()
     {
-        $control = new BlockControl($this->database);
-        return $control;
+        return new BlockControl($this->database);
     }
 
     protected function createComponentLangSelector()
     {
-        $control = new \LangSelectorControl($this->em);
-        return $control;
+        return  new \LangSelectorControl($this->em);
     }
 
     /**
      * Delete snippet
+     * @param $id
+     * @throws \Nette\Application\AbortException
      */
     public function handleDelete($id)
     {

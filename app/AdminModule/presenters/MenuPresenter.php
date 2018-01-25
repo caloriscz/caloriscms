@@ -31,6 +31,8 @@ class MenuPresenter extends BasePresenter
 
     /**
      * Delete categories
+     * @param $id
+     * @throws Nette\Application\AbortException
      */
     public function handleDelete($id)
     {
@@ -43,6 +45,8 @@ class MenuPresenter extends BasePresenter
 
     /**
      * Delete image
+     * @param $id
+     * @throws Nette\Application\AbortException
      */
     public function handleDeleteImage($id)
     {
@@ -53,7 +57,13 @@ class MenuPresenter extends BasePresenter
         $this->redirect(':Admin:Menu:detail', ['id' => $id]);
     }
 
-    public function handleUp($id, $sorted)
+    /**
+     * Move up menu item
+     * @param $identifier
+     * @param $sorted
+     * @throws Nette\Application\AbortException
+     */
+    public function handleUp($identifier, $sorted)
     {
         $sortDb = $this->database->table('menu')->where([
             'sorted > ?' => $sorted,
@@ -62,36 +72,43 @@ class MenuPresenter extends BasePresenter
         $sort = $sortDb->fetch();
 
         if ($sortDb->count() > 0) {
-            $this->database->table('menu')->where(['id' => $id])->update(['sorted' => $sort->sorted]);
+            $this->database->table('menu')->where(['id' => $identifier])->update(['sorted' => $sort->sorted]);
             $this->database->table('menu')->where(['id' => $sort->id])
                 ->update(array('sorted' => $sorted));
         }
 
-        $this->redirect(':Admin:Menu:default', array('id' => null));
+        $this->redirect(':Admin:Menu:default', ['id' => null]);
     }
 
-    public function handleDown($id, $sorted, $category)
+    /**
+     * Move down menu item
+     * @param $identifier
+     * @param $sorted
+     * @param $category
+     * @throws Nette\Application\AbortException
+     */
+    public function handleDown($identifier, $sorted, $category)
     {
-        $sortDb = $this->database->table('menu')->where(array(
+        $sortDb = $this->database->table('menu')->where([
             'sorted < ?' => $sorted,
             'parent_id' => $category,
-        ))->order('sorted DESC')->limit(1);
+        ])->order('sorted DESC')->limit(1);
         $sort = $sortDb->fetch();
 
         if ($sortDb->count() > 0) {
-            $this->database->table('menu')->where(['id' => $id])->update(['sorted' => $sort->sorted]);
+            $this->database->table('menu')->where(['id' => $identifier])->update(['sorted' => $sort->sorted]);
             $this->database->table('menu')->where(['id' => $sort->id])->update(['sorted' => $sorted]);
         }
 
-        $this->redirect(this, ['id' => null]);
+        $this->redirect('this', ['id' => null]);
     }
 
     public function renderDefault()
     {
+        $categoryId = null;
+
         if ($this->getParameter('id')) {
             $categoryId = $this->getParameter('id');
-        } else {
-            $categoryId = null;
         }
 
         $this->template->database = $this->database;

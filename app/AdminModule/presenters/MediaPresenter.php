@@ -1,6 +1,7 @@
 <?php
 
 namespace App\AdminModule\Presenters;
+
 use App\Model\Category;
 use App\Model\Document;
 use App\Model\IO;
@@ -27,20 +28,17 @@ class MediaPresenter extends BasePresenter
 
     protected function createComponentInsertMediaForm()
     {
-        $control = new InsertMediaControl($this->database);
-        return $control;
+        return new InsertMediaControl($this->database);
     }
 
     protected function createComponentEditFile()
     {
-        $control = new EditFileControl($this->database);
-        return $control;
+        return new EditFileControl($this->database);
     }
 
     protected function createComponentPageThumb()
     {
-        $control = new PageThumbControl($this->database);
-        return $control;
+        return new PageThumbControl($this->database);
     }
 
     public function handleUpload($folder)
@@ -51,12 +49,15 @@ class MediaPresenter extends BasePresenter
 
     /**
      * Delete image
+     * @param $id
+     * @param $type
+     * @throws \Nette\Application\AbortException
      */
     public function handleDelete($id, $type)
     {
         $imageDb = $this->database->table('media')->get($id);
 
-       IO::remove(APP_DIR . '/media/' . $imageDb->pages_id . '/' . $imageDb->name);
+        IO::remove(APP_DIR . '/media/' . $imageDb->pages_id . '/' . $imageDb->name);
         IO::remove(APP_DIR . '/media/' . $imageDb->pages_id . '/tn/' . $imageDb->name);
 
         $imageDb->delete();
@@ -69,6 +70,8 @@ class MediaPresenter extends BasePresenter
 
     /**
      * Delete page
+     * @param $id
+     * @throws \Nette\Application\AbortException
      */
     public function handleDeletePage($id)
     {
@@ -88,6 +91,7 @@ class MediaPresenter extends BasePresenter
 
     /**
      * Toggle display
+     * @throws \Nette\Application\AbortException
      */
     public function handleToggle()
     {
@@ -103,6 +107,10 @@ class MediaPresenter extends BasePresenter
 
     /**
      * Move image up
+     * @param $id
+     * @param $sorted
+     * @param $album
+     * @throws \Nette\Application\AbortException
      */
     public function handleUp($id, $sorted, $album)
     {
@@ -125,6 +133,10 @@ class MediaPresenter extends BasePresenter
 
     /**
      * Move image down
+     * @param $id
+     * @param $sorted
+     * @param $album
+     * @throws \Nette\Application\AbortException
      */
     public function handleDown($id, $sorted, $album)
     {
@@ -237,7 +249,7 @@ class MediaPresenter extends BasePresenter
                 'image/png', 'image/jpg', 'image/jpeg', 'image/jpe', 'image/gif',
                 'image/tif', 'image/tiff', 'image/svg', 'image/ico', 'image/icon', 'image/x-icon');
 
-            if (in_array($isItImage, $type)) {
+            if (in_array($isItImage, $type, true)) {
                 $this->template->isImage = true;
             } else {
                 $this->template->isImage = false;

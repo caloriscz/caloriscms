@@ -1,18 +1,26 @@
 <?php
+
 namespace Caloriscz\Page\Snippets;
 
+use Kdyby\Doctrine\EntityManager;
 use Nette\Application\UI\Control;
+use Nette\Database\Context;
 use Nette\Forms\BootstrapUIForm;
 
 class InsertFormControl extends Control
 {
 
-    /** @var \Nette\Database\Context */
+    /** @var Context */
     public $database;
 
-    public function __construct(\Nette\Database\Context $database)
+    /** @var EntityManager @inject */
+    public $em;
+
+    public function __construct(Context $database, EntityManager $em)
     {
+        parent::__construct();
         $this->database = $database;
+        $this->em = $em;
     }
 
     public function createComponentInsertForm()
@@ -40,7 +48,7 @@ class InsertFormControl extends Control
     {
         if ($this->getPresenter()->template->member->users_roles->pages_edit === 0) {
             $this->getPresenter()->flashMessage('Nemáte oprávnění k této akci', 'error');
-            $this->getPresenter()->redirect(this);
+            $this->getPresenter()->redirect('this');
         }
     }
 

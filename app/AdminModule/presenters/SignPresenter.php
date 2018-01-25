@@ -18,6 +18,9 @@ class SignPresenter extends BasePresenter
     /** @persistent */
     public $backlink = '';
 
+    /**
+     * @throws Nette\Application\AbortException
+     */
     protected function startup()
     {
         parent::startup();
@@ -28,7 +31,7 @@ class SignPresenter extends BasePresenter
     protected function createComponentLostPass()
     {
         $control = new LostPassControl($this->database);
-        $control->onSave[] = function($message) {
+        $control->onSave[] = function ($message) {
             if ($message) {
                 $this->flashMessage($message, 'error');
             } else {
@@ -65,6 +68,10 @@ class SignPresenter extends BasePresenter
         return $control;
     }
 
+    /**
+     * Logs out user
+     * @throws Nette\Application\AbortException
+     */
     public function actionOut()
     {
         $this->getUser()->logout();
@@ -75,15 +82,15 @@ class SignPresenter extends BasePresenter
 
     public function renderResetpass()
     {
+        $this->template->activationValid = false;
+
         $activation = $this->database->table('users')->where([
             'email' => $this->getParameter('email'),
             'activation' => $this->getParameter('code')
         ]);
 
         if ($activation->count() > 0) {
-            $this->template->activationValid = TRUE;
-        } else {
-            $this->template->activationValid = FALSE;
+            $this->template->activationValid = true;
         }
     }
 

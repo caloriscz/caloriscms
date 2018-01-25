@@ -34,9 +34,14 @@ class SavePathsControl extends Control
         return $form;
     }
 
+    /**
+     * Edit setting for path
+     * @param BootstrapUIForm $form
+     * @throws \Nette\Application\AbortException
+     */
     public function editSettingsSucceeded(BootstrapUIForm $form)
     {
-        if (strlen($form->values->path->name) < 1) {
+        if ('' === $form->values->path->name) {
             $this->presenter->redirect(this, array('id' => null));
         }
 
@@ -56,7 +61,7 @@ class SavePathsControl extends Control
 
         }
 
-        $this->redirect(this, array("id" => null));
+        $this->redirect('this', array("id" => null));
     }
 
     public function render($item)

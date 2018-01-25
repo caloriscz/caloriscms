@@ -2,15 +2,16 @@
 namespace Caloriscz\Categories;
 
 use Nette\Application\UI\Control;
+use Nette\Database\Context;
 use Nette\Forms\BootstrapUIForm;
 
 class InsertCategoryControl extends Control
 {
 
-    /** @var \Nette\Database\Context */
+    /** @var Context */
     public $database;
 
-    public function __construct(\Nette\Database\Context $database)
+    public function __construct(Context $database)
     {
         $this->database = $database;
     }
@@ -32,7 +33,7 @@ class InsertCategoryControl extends Control
         return $form;
     }
 
-    public function validateFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
+    public function validateFormSucceeded(BootstrapUIForm $form)
     {
         $category = $this->database->table('contacts_categories')->where(array(
             'parent_id' => $form->values->parent,
@@ -41,30 +42,28 @@ class InsertCategoryControl extends Control
 
         if ($category->count() > 0) {
             $this->presenter->flashMessage($this->presenter->translator->translate('messages.sign.categoryAlreadyExists'), 'error');
-            $this->presenter->redirect(this);
+            $this->presenter->redirect('this');
         }
 
-        if ($form->values->title == "") {
+        if ($form->values->title === '') {
             $this->presenter->flashMessage($this->translator->translate('messages.sign.categoryMustHaveSomeName'), 'error');
-            $this->presenter->redirect(this);
+            $this->presenter->redirect('this');
         }
     }
 
-    public function insertFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
+    public function insertFormSucceeded(BootstrapUIForm $form)
     {
         $category = new \App\Model\Category($this->database);
         $category->setCategory($form->values->title, $form->values->parent);
 
-        $this->presenter->redirect(this, array('id' => null));
+        $this->presenter->redirect('this', array('id' => null));
     }
 
-    public function render($id = null)
+    public function render($identifier = null)
     {
-        $template = $this->template;
-        $template->categoryId = $id;
-        $template->setFile(__DIR__ . '/InsertCategoryControl.latte');
-
-        $template->render();
+        $this->template->categoryId = $identifier;
+        $this->template->setFile(__DIR__ . '/InsertCategoryControl.latte');
+        $this->template->render();
     }
 
 }

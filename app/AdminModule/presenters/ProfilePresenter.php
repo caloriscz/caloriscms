@@ -6,7 +6,7 @@ use Caloriscz\Profile\ChangePasswordControl;
 
 /**
  * User profile presenter
- * @author Petr Karásek <caloris@caloris.cz>
+ * @package App\AdminModule\Presenters
  */
 class ProfilePresenter extends BasePresenter
 {

@@ -44,7 +44,7 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
     /** @var string @persistent */
     public $ajax = 'on';
 
-    public function __construct(\Nette\Database\Context $database, \Nette\Mail\IMailer $mailer)
+    public function __construct(Nette\Database\Context $database, Nette\Mail\IMailer $mailer)
     {
         parent::__construct();
         $this->database = $database;
@@ -84,12 +84,15 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
         return $template;
     }
 
+    /**
+     * @throws Nette\Application\AbortException
+     */
     protected function startup()
     {
         parent::startup();
 
         // Login check
-        if ($this->getName() != 'Admin:Sign') {
+        if ($this->getName() !== 'Admin:Sign') {
 
             $role = $this->user->getRoles();
             $roleCheck = $this->database->table('users_roles')->get($role[0]);
@@ -107,7 +110,6 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
                 $this->redirect('Sign:in', array('backlink' => $this->storeRequest()));
             }
         }
-
 
         if ($this->getUser()->isLoggedIn()) {
             $this->template->isLoggedIn = true;

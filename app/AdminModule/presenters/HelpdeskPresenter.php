@@ -38,19 +38,26 @@ class HelpdeskPresenter extends BasePresenter
         return new EditMailTemplateControl($this->database);
     }
 
-    public function handleDelete($id)
+    /**
+     * Delete message
+     * @param $identifier
+     * @throws \Nette\Application\AbortException
+     */
+    public function handleDelete($identifier)
     {
-        $this->database->table('helpdesk_messages')->get($id)->delete();
+        $this->database->table('helpdesk_messages')->get($identifier)->delete();
 
-        $this->redirect(this, array("id" => $this->getParameter("helpdesk")));
+        $this->redirect('this', array('id' => $this->getParameter('helpdesk')));
     }
 
     /**
-     * Delete post
+     * Delete template
+     * @param $identifier
+     * @throws \Nette\Application\AbortException
      */
-    public function handleDeleteTemplate($id)
+    public function handleDeleteTemplate($identifier)
     {
-        $this->database->table('helpdesk_emails')->get($id)->delete();
+        $this->database->table('helpdesk_emails')->get($identifier)->delete();
 
         $this->redirect(':Admin:Helpdesk:default', ['id' => $this->getParameter('helpdesk')]);
     }
@@ -66,7 +73,7 @@ class HelpdeskPresenter extends BasePresenter
             $helpdeskId = $this->getParameter('id');
         }
 
-        $messages = $this->database->table('helpdesk_messages')->where(array('helpdesk_id' => $helpdeskId))
+        $messages = $this->database->table('helpdesk_messages')->where(['helpdesk_id' => $helpdeskId])
             ->order('date_created DESC');
 
         $paginator = new Paginator();

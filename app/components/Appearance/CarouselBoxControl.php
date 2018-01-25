@@ -7,7 +7,7 @@ use Nette\Database\Context;
 class CarouselBoxControl extends Control
 {
 
-    /** @var \Nette\Database\Context */
+    /** @var Context */
     public $database;
 
     public function __construct(Context $database)
@@ -19,17 +19,10 @@ class CarouselBoxControl extends Control
 
     public function render()
     {
-        $template = $this->template;
-        $template->settings = $this->presenter->template->settings;
-
-        $template->carousel = $this->database->table("carousel")->where(array(
-            "visible" => 1
-        ))->order("sorted");
-
-        $template->setFile(__DIR__ . '/CarouselBoxControl.latte');
-
-
-        $template->render();
+        $this->template->settings = $this->presenter->template->settings;
+        $this->template->carousel = $this->database->table('carousel')->where(['visible' => 1])->order('sorted');
+        $this->template->setFile(__DIR__ . '/CarouselBoxControl.latte');
+        $this->template->render();
     }
 
 }

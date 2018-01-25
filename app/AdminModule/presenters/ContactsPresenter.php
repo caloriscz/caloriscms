@@ -16,6 +16,7 @@ use Nette,
 
 /**
  * Contacts presenter.
+ * @package App\AdminModule\Presenters
  */
 class ContactsPresenter extends BasePresenter
 {

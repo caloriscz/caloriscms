@@ -2,18 +2,17 @@
 
 namespace App\AdminModule\Presenters;
 
-use Caloriscz\Navigation\DashboardControl;
 use Caloriscz\Page\Editor\ElfinderControl;
 
 /**
- * Homepage presenter.
+ * Admin homepage presenter.
+ * @package App\AdminModule\Presenters
  */
 class HomepagePresenter extends BasePresenter
 {
     protected function createComponentElfinder()
     {
-        $control = new ElfinderControl();
-        return $control;
+        return new ElfinderControl();
     }
 
 }

@@ -30,27 +30,29 @@ class AppearancePresenter extends BasePresenter
     }
 
     /**
-     * Sorting
+     * Sorting carousel
+     * @throws Nette\Application\AbortException
      */
     public function handleSort()
     {
         if ($this->getParameter('prev_id')) {
             $prev = $this->database->table('carousel')->get($this->getParameter('prev_id'));
 
-            $this->database->table('carousel')->where(array("id" => $this->getParameter('item_id')))->update(array('sorted' => ($prev->sorted + 1)));
+            $this->database->table('carousel')->where(['id' => $this->getParameter('item_id')])->update(['sorted' => ($prev->sorted + 1)]);
         } else {
             $next = $this->database->table('carousel')->get($this->getParameter('next_id'));
 
-            $this->database->table('carousel')->where(array("id" => $this->getParameter('item_id')))->update(array('sorted' => ($next->sorted - 1)));
+            $this->database->table('carousel')->where(['id' => $this->getParameter('item_id')])->update(['sorted' => ($next->sorted - 1)]);
         }
 
         $this->database->query('SET @i = 1;UPDATE `carousel` SET `sorted` = @i:=@i+2 ORDER BY `sorted` ASC');
 
-        $this->redirect(':Admin:Appearance:carousel', array('id' => null));
+        $this->redirect(':Admin:Appearance:carousel', ['id' => null]);
     }
 
-    /*
-     * Insert new
+    /**
+     * Insert new carousel
+     * @throws Nette\Application\AbortException
      */
     public function handleInsert()
     {
@@ -58,9 +60,14 @@ class AppearancePresenter extends BasePresenter
 
         $this->database->query('SET @i = 1;UPDATE `carousel` SET `sorted` = @i:=@i+2 ORDER BY `sorted` ASC');
 
-        $this->redirect(":Admin:Appearance:carouselDetail", array("id" => $carousel));
+        $this->redirect(':Admin:Appearance:carouselDetail', ['id' => $carousel]);
     }
 
+    /**
+     * Delete carousel
+     * @param $id
+     * @throws Nette\Application\AbortException
+     */
     public function handleDelete($id)
     {
         for ($a = 0; $a < count($id); $a++) {
@@ -73,7 +80,7 @@ class AppearancePresenter extends BasePresenter
             unset($image);
         }
 
-        $this->redirect(":Admin:Appearance:carousel", array("id" => null));
+        $this->redirect(':Admin:Appearance:carousel', array('id' => null));
     }
 
     public function renderDefault()

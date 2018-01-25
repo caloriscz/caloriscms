@@ -124,6 +124,10 @@ $(document).ready(function () {
         }
     });
 
+    flatpickr.prototype.getMinutes = function(givenDate){
+        return '01';
+    }
+
 
     // Flatpickr
     $(".datepicker").flatpickr({

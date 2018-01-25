@@ -3,14 +3,15 @@ namespace Caloriscz\Categories;
 
 use App\Model\Category;
 use Nette\Application\UI\Control;
+use Nette\Database\Context;
 
 class PageBreadcrumbsControl extends Control
 {
 
-    /** @var \Nette\Database\Context */
+    /** @var Context */
     public $database;
 
-    public function __construct(\Nette\Database\Context $database)
+    public function __construct(Context $database)
     {
         $this->database = $database;
     }
