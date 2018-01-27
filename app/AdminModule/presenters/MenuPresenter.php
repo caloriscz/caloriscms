@@ -13,7 +13,6 @@ use Nette,
  */
 class MenuPresenter extends BasePresenter
 {
-
     protected function createComponentMenuInsert()
     {
         return new InsertMenuControl($this->database);
@@ -31,30 +30,30 @@ class MenuPresenter extends BasePresenter
 
     /**
      * Delete categories
-     * @param $id
+     * @param $identifier
      * @throws Nette\Application\AbortException
      */
-    public function handleDelete($id)
+    public function handleDelete($identifier)
     {
         $menu = new Model\Menu($this->database);
 
-        $this->database->table('menu')->where('id', $menu->getSubIds($id))->delete();
+        $this->database->table('menu')->where('id', $menu->getSubIds($identifier))->delete();
 
-        $this->redirect(this, ['id' => null]);
+        $this->redirect('this', ['id' => null]);
     }
 
     /**
      * Delete image
-     * @param $id
+     * @param $identifier
      * @throws Nette\Application\AbortException
      */
-    public function handleDeleteImage($id)
+    public function handleDeleteImage($identifier)
     {
         $type = $this->getParameter('type');
 
-        Model\IO::remove(APP_DIR . '/images/menu/' . $id . $type . '.png');
+        Model\IO::remove(APP_DIR . '/images/menu/' . $identifier . $type . '.png');
 
-        $this->redirect(':Admin:Menu:detail', ['id' => $id]);
+        $this->redirect(':Admin:Menu:detail', ['id' => $identifier]);
     }
 
     /**

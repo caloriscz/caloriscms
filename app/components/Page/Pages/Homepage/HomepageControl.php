@@ -1,60 +1,50 @@
 <?php
 namespace Caloriscz\Page\Pages\Homepage;
 
+use App\Forms\Contact\NewsletterFormControl;
 use Caloriscz\Appearance\CarouselBoxControl;
+use Caloriscz\Blog\BlogPreviewControl;
 use Caloriscz\Page\PageTitleControl;
 use Caloriscz\Snippets\SnippetControl;
 use Nette\Application\UI\Control;
+use Nette\Database\Context;
 
 class HomepageControl extends Control
 {
 
-    /** @var \Nette\Database\Context */
+    /** @var Context */
     public $database;
 
-    public function __construct(\Nette\Database\Context $database)
+    public function __construct(Context $database)
     {
         $this->database = $database;
     }
 
     protected function createComponentBlogPreview()
     {
-        $control = new \Caloriscz\Blog\BlogPreviewControl($this->database);
-        return $control;
-    }
-
-    protected function createComponentEventsCalendar()
-    {
-        $control = new \EventsCalendarControl($this->database);
-        return $control;
+        return new BlogPreviewControl($this->database);
     }
 
     protected function createComponentCarouselBox()
     {
-        $control = new CarouselBoxControl($this->database);
-        return $control;
+        return new CarouselBoxControl($this->database);
     }
 
     protected function createComponentSnippet()
     {
-        $control = new SnippetControl($this->database);
-        return $control;
+        return new SnippetControl($this->database);
     }
 
     protected function createComponentPageTitle()
     {
-        $control = new PageTitleControl($this->database);
-        return $control;
+        return new PageTitleControl($this->database);
     }
-
 
     public function render()
     {
-        $template = $this->template;
-        $template->page = $this->presenter->template->page;
-        $template->setFile(__DIR__ . '/HomepageControl.latte');
-
-        $template->render();
+        $this->template->page = $this->presenter->template->page;
+        $this->template->setFile(__DIR__ . '/HomepageControl.latte');
+        $this->template->render();
     }
 
 }

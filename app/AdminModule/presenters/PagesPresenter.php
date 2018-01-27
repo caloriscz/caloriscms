@@ -5,6 +5,7 @@ namespace App\AdminModule\Presenters;
 use App\Model\IO;
 use Caloriscz\Media\MediaForms\ImageEditFormControl;
 use Caloriscz\Page\Editor\BlockControl;
+use Caloriscz\Page\File\FileListControl;
 use Caloriscz\Page\PageForms\InsertFormControl;
 use Caloriscz\Page\Pages\PageListControl;
 use Caloriscz\Page\Related\FilterFormControl;
@@ -16,12 +17,9 @@ use Nette\Database\Context;
  */
 class PagesPresenter extends BasePresenter
 {
-    public function __construct(Context $database, EntityManager $em)
-    {
-        $this->database = $database;
-        $this->em = $em;
-    }
-
+    /**
+     * @throws \Nette\Application\AbortException
+     */
     public function startup()
     {
         parent::startup();
@@ -66,11 +64,11 @@ class PagesPresenter extends BasePresenter
 
     /**
      * Changes public state
-     * @param $id
+     * @param $identifier
      * @param $public
      * @throws \Nette\Application\AbortException
      */
-    protected function handleChangeState($id, $public)
+    protected function handleChangeState($identifier, $public)
     {
         $idState = 0;
 
@@ -78,7 +76,7 @@ class PagesPresenter extends BasePresenter
             $idState = 1;
         }
 
-        $this->database->table('pages')->get($id)->update(['public' => $idState]);
+        $this->database->table('pages')->get($identifier)->update(['public' => $idState]);
 
         $this->redirect('this', ['id' => null]);
     }
@@ -96,9 +94,9 @@ class PagesPresenter extends BasePresenter
 
     protected function createComponentProductFileList()
     {
-        $control = new \Caloriscz\Page\File\FileListControl($this->database);
+        $control = new FileListControl($this->database);
         $control->onSave[] = function ($pages_id) {
-            $this->redirect(this, array("id" => $pages_id));
+            $this->redirect('this', ['id' => $pages_id]);
         };
         return $control;
     }
