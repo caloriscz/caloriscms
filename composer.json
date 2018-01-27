@@ -32,7 +32,6 @@
         "h4kuna/ares": "dev-master",
         "ezyang/htmlpurifier": "v4.7.0",
         "studio-42/elfinder": "2.1.16",
-        "ublaboo/datagrid": "v5.1.2",
-        "phpmd/phpmd": "2.6.0"
+        "ublaboo/datagrid": "v5.1.2"
     }
 }

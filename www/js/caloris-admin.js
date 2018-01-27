@@ -124,7 +124,7 @@ $(document).ready(function () {
         }
     });
 
-    flatpickr.prototype.getMinutes = function(givenDate){
+    flatpickr.prototype.getMinutes = function (givenDate) {
         return '01';
     }
 

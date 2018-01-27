@@ -2,6 +2,7 @@
 
 namespace App\AdminModule\Presenters;
 
+use Caloriscz\Appearance\CarouselManagerControl;
 use Caloriscz\Appearance\CarouselGridControl;
 use Caloriscz\Appearance\EditCarouselControl;
 use Caloriscz\Appearance\SavePathsControl;
@@ -24,9 +25,9 @@ class AppearancePresenter extends BasePresenter
         return new SavePathsControl($this->database);
     }
 
-    protected function createComponentCarouselGrid()
+    protected function createComponentCarouselManager()
     {
-        return new CarouselGridControl($this->database);
+        return new CarouselManagerControl($this->em);
     }
 
     /**

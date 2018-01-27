@@ -178,6 +178,22 @@
 
     /* Set focus to login field */
     $(".login-panel input[type='text']").focus();
+
+    /* Sortable */
+    $("#sortable").sortable({
+        update: function (event, ui) {
+            var data = $(this).sortable('serialize');
+            var newOrder = $(this).sortable('toArray').toString();
+            var Ids = document.querySelector('div#sorter-ids');
+
+            $.ajax({
+                data: 'do=carouselManager-images&sortable=' + newOrder + '&ids=' + Ids.dataset.images,
+                type: 'GET',
+                url: '/admin/appearance/carousel'
+            });
+        }
+    });
+    $("#sortable").disableSelection();
 </script>
 
 </body>

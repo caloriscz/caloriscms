@@ -1,0 +1,16 @@
+<div id="sorter-ids" class="hidden"
+     data-images="{foreach $carousel as $itemS}{$itemS->getId()}{sep},{/sep}{/foreach}"></div>
+
+<div id="sortable">
+    {foreach $carousel as $item}
+        <div class="card sort-item" style="width: 18rem;">
+            <img src="/images/carousel/{$item->getImage()}" alt="" style="max-height: 100px;">
+            <div class="card-body">
+                <p>{$item->getTitle()}</p>
+                <p class="card-text">{$item->getDescription()}</p>
+            </div>
+
+            <a href="{link delete! id => $item->getId()}">smazat</a>
+        </div>
+    {/foreach}
+</div>
