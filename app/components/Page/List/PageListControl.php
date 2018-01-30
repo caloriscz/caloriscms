@@ -2,11 +2,13 @@
 
 namespace Caloriscz\Page\Pages;
 
+use App\Forms\Menu\InsertMenuControl;
 use App\Model\Document;
 use App\Model\Entity\Pages;
 use App\Model\IO;
-use Caloriscz\Menus\MenuForms\InsertMenuControl;
+use Kdyby\Doctrine\EntityManager;
 use Nette\Application\UI\Control;
+use Nette\Database\Context;
 
 class PageListControl extends Control
 {
@@ -19,7 +21,7 @@ class PageListControl extends Control
 
     public $onSave;
 
-    public function __construct(\Nette\Database\Context $database, \Kdyby\Doctrine\EntityManager $em)
+    public function __construct(Context $database, EntityManager $em)
     {
         $this->database = $database;
         $this->em = $em;

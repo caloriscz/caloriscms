@@ -1,6 +1,6 @@
 <?php
 
-namespace Caloriscz\Media\MediaForms;
+namespace App\Forms\Media;
 
 use App\Model\Document;
 use App\Model\IO;

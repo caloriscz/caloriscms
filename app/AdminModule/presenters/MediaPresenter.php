@@ -2,12 +2,12 @@
 
 namespace App\AdminModule\Presenters;
 
+use App\Forms\Media\EditFileControl;
+use App\Forms\Media\InsertMediaControl;
 use App\Model\Category;
 use App\Model\Document;
 use App\Model\IO;
 use App\Model\Page;
-use Caloriscz\Media\MediaForms\EditFileControl;
-use Caloriscz\Media\MediaForms\InsertMediaControl;
 use Caloriscz\Page\Pages\PageThumbControl;
 use Nette\Http\FileUpload;
 use Nette\Utils\Paginator;
@@ -23,7 +23,7 @@ class MediaPresenter extends BasePresenter
     {
         parent::startup();
 
-        $this->template->pageId = $this->getParameter("type");
+        $this->template->pageId = $this->getParameter('type');
     }
 
     protected function createComponentInsertMediaForm()

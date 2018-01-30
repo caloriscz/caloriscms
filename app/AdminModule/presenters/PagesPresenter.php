@@ -2,15 +2,13 @@
 
 namespace App\AdminModule\Presenters;
 
+use App\Forms\Media\ImageEditFormControl;
 use App\Model\IO;
-use Caloriscz\Media\MediaForms\ImageEditFormControl;
 use Caloriscz\Page\Editor\BlockControl;
 use Caloriscz\Page\File\FileListControl;
 use Caloriscz\Page\PageForms\InsertFormControl;
 use Caloriscz\Page\Pages\PageListControl;
 use Caloriscz\Page\Related\FilterFormControl;
-use Kdyby\Doctrine\EntityManager;
-use Nette\Database\Context;
 
 /**
  * Pages presenter.

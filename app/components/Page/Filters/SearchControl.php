@@ -56,7 +56,7 @@ class SearchControl extends Control
         $values = $form->getValues(true);
         unset($values['do'], $values['action'], $values['idr']);
 
-        $this->presenter->redirect(':Front:Catalogue:default', $values);
+        $this->presenter->redirect('this', $values);
     }
 
     public function render()

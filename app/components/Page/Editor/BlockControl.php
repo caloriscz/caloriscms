@@ -3,15 +3,15 @@
 namespace Caloriscz\Page\Editor;
 
 use Nette\Application\UI\Control;
+use Nette\Database\Context;
 
 class BlockControl extends Control
 {
-    private $htmlPurifier;
 
-    /** @var \Nette\Database\Context */
+    /** @var Context */
     public $database;
 
-    public function __construct(\Nette\Database\Context $database)
+    public function __construct(Context $database)
     {
         $this->database = $database;
     }

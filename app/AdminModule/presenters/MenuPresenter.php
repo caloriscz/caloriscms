@@ -2,9 +2,9 @@
 
 namespace App\AdminModule\Presenters;
 
-use Caloriscz\Menus\MenuForms\EditMenuControl;
-use Caloriscz\Menus\MenuForms\InsertMenuControl;
-use Caloriscz\Menus\MenuForms\UpdateImagesControl;
+use App\Forms\Menu\EditMenuControl;
+use App\Forms\Menu\InsertMenuControl;
+use App\Forms\Menu\UpdateImagesControl;
 use Nette,
     App\Model;
 
@@ -31,7 +31,6 @@ class MenuPresenter extends BasePresenter
     /**
      * Delete categories
      * @param $identifier
-     * @throws Nette\Application\AbortException
      */
     public function handleDelete($identifier)
     {
@@ -45,7 +44,6 @@ class MenuPresenter extends BasePresenter
     /**
      * Delete image
      * @param $identifier
-     * @throws Nette\Application\AbortException
      */
     public function handleDeleteImage($identifier)
     {
@@ -60,7 +58,6 @@ class MenuPresenter extends BasePresenter
      * Move up menu item
      * @param $identifier
      * @param $sorted
-     * @throws Nette\Application\AbortException
      */
     public function handleUp($identifier, $sorted)
     {
@@ -84,7 +81,6 @@ class MenuPresenter extends BasePresenter
      * @param $identifier
      * @param $sorted
      * @param $category
-     * @throws Nette\Application\AbortException
      */
     public function handleDown($identifier, $sorted, $category)
     {

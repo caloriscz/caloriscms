@@ -1,5 +1,5 @@
 <?php
-namespace Caloriscz\Media\MediaForms;
+namespace App\Forms\Media;
 
 use Nette\Application\UI\Control;
 use Nette\Database\Context;
