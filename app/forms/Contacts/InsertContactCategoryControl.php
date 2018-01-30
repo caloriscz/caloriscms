@@ -1,13 +1,13 @@
 <?php
 
-namespace Caloriscz\Menus\Admin;
+namespace App\Forms\Contacts;
 
 use App\Model\Category;
 use Nette\Application\UI\Control;
 use Nette\Database\Context;
 use Nette\Forms\BootstrapUIForm;
 
-class ContactCategoriesControl extends Control
+class InsertContactCategoryControl extends Control
 {
 
     /** @var \Nette\Database\Context */
@@ -83,19 +83,19 @@ class ContactCategoriesControl extends Control
      */
     public function render($id = null, $type = null)
     {
-        $template = $this->template;
+        $template = $this->getTemplate();
         $template->type = $type;
 
         $getParams = $this->getParameters();
         unset($getParams['page']);
         $template->args = $getParams;
 
-        $template->setFile(__DIR__ . '/ContactCategoriesControl.latte');
+        $template->setFile(__DIR__ . '/InsertContactCategory.latte');
 
         $template->id = $id;
-        $template->idActive = $this->presenter->getParameter("id");
+        $template->idActive = $this->presenter->getParameter('id');
 
-        if ($id == null) {
+        if ($id === null) {
             $template->menu = $this->database->table('contacts_categories');
         } else {
             $template->menu = $this->database->table('contacts_categories')->where('parent_id', $id);

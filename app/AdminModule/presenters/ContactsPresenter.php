@@ -4,6 +4,7 @@ namespace App\AdminModule\Presenters;
 
 use App\Forms\Contacts\EditContactControl;
 use App\Forms\Contacts\InsertCommunicationControl;
+use App\Forms\Contacts\InsertContactCategoryControl;
 use App\Forms\Contacts\InsertContactControl;
 use App\Forms\Contacts\InsertHourControl;
 use App\Forms\Contacts\LoadVatControl;
@@ -11,7 +12,6 @@ use Caloriscz\Categories\EditCategoryControl;
 use Caloriscz\Categories\InsertCategoryControl;
 use Caloriscz\Contact\CommunicationGridControl;
 use Caloriscz\Contact\ContactGridControl;
-use Caloriscz\Menus\Admin\ContactCategoriesControl;
 use Nette,
     App\Model;
 
@@ -85,7 +85,7 @@ class ContactsPresenter extends BasePresenter
 
     protected function createComponentContactCategories()
     {
-        return new ContactCategoriesControl($this->database);
+        return new InsertContactCategoryControl($this->database);
     }
 
     /**
@@ -110,7 +110,7 @@ class ContactsPresenter extends BasePresenter
         $this->redirect(':Admin:Categories:default');
     }
 
-    public function handleUpCategory($id, $sorted)
+    public function handleUp($id, $sorted)
     {
         $sortDb = $this->database->table('categories')->where([
             'sorted > ?' => $sorted,
@@ -126,7 +126,7 @@ class ContactsPresenter extends BasePresenter
         $this->redirect(':Admin:Categories:default', ['id' => null]);
     }
 
-    public function handleDownCategory($id, $sorted, $category)
+    public function handleDown($id, $sorted, $category)
     {
         $sortDb = $this->database->table('contacts_categories')->where([
             'sorted < ?' => $sorted,
@@ -140,6 +140,11 @@ class ContactsPresenter extends BasePresenter
         }
 
         $this->presenter->redirect(this, ['id' => null]);
+    }
+
+    public function handleDelete($id)
+    {
+        $this->database->table('contacts_categories');
     }
 
     public function renderDefault()

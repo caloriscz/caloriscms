@@ -75,7 +75,7 @@
                                                             class="fa fa-arrow-down"></i></a>
                                             {/if}
                                             &nbsp;
-                                            <a n:href=":Admin:Categories:default, id => $item->id"><i class="fa fa-level-down"></i></a>
+                                            <a n:href=":Admin:Contacts:categories, id => $item->id"><i class="fa fa-level-down"></i></a>
                                             <div class="modal fade" id="catModal{$item->id}" tabindex="-1" role="dialog"
                                                  aria-labelledby="myModalLabel">
                                                 <div class="modal-dialog" role="document">
@@ -95,7 +95,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            {? $selection = $item->related('contacts_categories','parent_id')->order('sorted DESC')}
+                                            {php $selection = $item->related('contacts_categories','parent_id')->order('sorted DESC')}
                                             {if $selection->count() > 0}
                                                 {include #menu, menu => $selection}
                                             {/if}
