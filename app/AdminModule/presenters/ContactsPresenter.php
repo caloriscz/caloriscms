@@ -2,6 +2,7 @@
 
 namespace App\AdminModule\Presenters;
 
+use App\Forms\Contacts\EditContactControl;
 use Caloriscz\Categories\EditCategoryControl;
 use Caloriscz\Categories\InsertCategoryControl;
 use Caloriscz\Contact\CommunicationGridControl;
@@ -28,18 +29,15 @@ class ContactsPresenter extends BasePresenter
         $this->template->page = $this->database->table('pages')->get($this->getParameter('id'));
     }
 
-    /** @var \Caloriscz\Contacts\ContactForms\IEditContactControlFactory @inject */
-    public $editContactControlFactory;
-
     protected function createComponentEditContact()
     {
-        $control = $this->editContactControlFactory->create();
+        $control = new EditContactControl($this->database);
         $control->onSave[] = function ($pages_id, $error = null) {
             if ($error === 1) {
                 $this->flashMessage($this->translator->translate('messages.sign.fillInEmail'), 'error');
             }
 
-            $this->redirect(this, array('id' => $pages_id));
+            $this->redirect('this', array('id' => $pages_id));
         };
 
         return $control;

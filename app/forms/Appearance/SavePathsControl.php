@@ -1,5 +1,5 @@
 <?php
-namespace Caloriscz\Appearance;
+namespace App\Forms\Appearance;
 
 use App\Model\IO;
 use Nette\Application\UI\Control;
@@ -37,7 +37,6 @@ class SavePathsControl extends Control
     /**
      * Edit setting for path
      * @param BootstrapUIForm $form
-     * @throws \Nette\Application\AbortException
      */
     public function editSettingsSucceeded(BootstrapUIForm $form)
     {
@@ -55,9 +54,9 @@ class SavePathsControl extends Control
                 IO::remove(APP_DIR . '/www/images/paths/' . $form->values->path->name);
             }
 
-            $this->database->table('settings')->get($form->values->path_id)->update(array(
+            $this->database->table('settings')->get($form->values->path_id)->update([
                 'setvalue' => $form->values->path->name,
-            ));
+            ]);
 
         }
 

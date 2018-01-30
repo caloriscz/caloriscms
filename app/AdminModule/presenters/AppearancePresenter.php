@@ -2,13 +2,10 @@
 
 namespace App\AdminModule\Presenters;
 
+use App\Forms\Appearance\EditCarouselControl;
+use App\Forms\Appearance\InsertCarouselControl;
+use App\Forms\Appearance\SavePathsControl;
 use Caloriscz\Appearance\CarouselManagerControl;
-use Caloriscz\Appearance\CarouselGridControl;
-use Caloriscz\Appearance\EditCarouselControl;
-use Caloriscz\Appearance\InsertCarouselControl;
-use Caloriscz\Appearance\SavePathsControl;
-use Nette,
-    App\Model;
 
 /**
  * Settings presenter.

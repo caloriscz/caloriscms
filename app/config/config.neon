@@ -26,7 +26,6 @@ services:
 	- App\RouterFactory
 	- Model\SlugManager
 	- Caloriscz\Profile\Admin\IEditControlFactory
-	- Caloriscz\Contacts\ContactForms\IEditContactControlFactory
 	- {class: Doctrine\ORM\Tools\Console\Command\GenerateEntitiesCommand, tags: [kdyby.console.command]}
 	router: @App\RouterFactory::createRouter
 

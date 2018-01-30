@@ -1,6 +1,6 @@
 <?php
 
-namespace Caloriscz\Contacts\ContactForms;
+namespace App\Forms\Contacts;
 
 use Nette\Application\UI\Control;
 use Nette\Database\Context;
@@ -120,10 +120,4 @@ class EditContactControl extends Control
         $this->template->render();
     }
 
-}
-
-interface IEditContactControlFactory
-{
-    /** @return \Caloriscz\Contacts\ContactForms\EditContactControl */
-    public function create();
 }

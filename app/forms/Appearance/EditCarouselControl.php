@@ -1,6 +1,6 @@
 <?php
 
-namespace Caloriscz\Appearance;
+namespace App\Forms\Appearance;
 
 use App\Model\IO;
 use Nette\Application\UI\Control;

@@ -5,7 +5,6 @@ namespace App\AdminModule\Presenters;
 use Caloriscz\Contacts\ContactForms\EditContactControl;
 use Caloriscz\Helpdesk\EditHelpdeskEmailSettingsControl;
 use Caloriscz\Helpdesk\EditMailTemplateControl;
-use Caloriscz\Helpdesk\SendTestMailControl;
 use Nette\Utils\Paginator;
 
 /**
@@ -13,10 +12,6 @@ use Nette\Utils\Paginator;
  */
 class HelpdeskPresenter extends BasePresenter
 {
-    protected function createComponentSendTestMail()
-    {
-        return new SendTestMailControl($this->database);
-    }
 
     protected function createComponentEditHelpdeskEmailSettings()
     {
@@ -26,11 +21,6 @@ class HelpdeskPresenter extends BasePresenter
         };
 
         return $control;
-    }
-
-    protected function createComponentEditContactForm()
-    {
-        return new EditContactControl($this->database);
     }
 
     protected function createComponentEditMailTemplate()
@@ -85,8 +75,6 @@ class HelpdeskPresenter extends BasePresenter
         $this->template->messages = $messages->limit($paginator->getLength(), $paginator->getOffset());
 
         $this->template->args = $this->getParameters();
-
-
     }
 
     public function renderDetail()
