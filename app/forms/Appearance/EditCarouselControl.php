@@ -80,8 +80,7 @@ class EditCarouselControl extends Control
             }
         }
 
-        $this->database->table('carousel')->get($form->values->carousel_id)
-            ->update($arr);
+        $this->database->table('carousel')->get($form->values->carousel_id)->update($arr);
 
 
         $this->redirect('this', array('carousel_id' => $form->values->carousel_id));

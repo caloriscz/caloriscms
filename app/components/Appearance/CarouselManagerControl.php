@@ -38,8 +38,6 @@ class CarouselManagerControl extends Control
             $arrIds = explode(',', $this->presenter->getParameter('ids'));
 
             for ($a = 0; $a < count($arrSorted); $a++) {
-                echo $arrIds[$a] . ' - ' . $arrSorted[$a] . '<br>';
-
                 $this->em->getReference(Carousel::class, $arrSorted[$a])->setSorted($a);
             }
 

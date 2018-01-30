@@ -186,6 +186,7 @@
             var newOrder = $(this).sortable('toArray').toString();
             var Ids = document.querySelector('div#sorter-ids');
 
+            console.log(newOrder);
             $.ajax({
                 data: 'do=carouselManager-images&sortable=' + newOrder + '&ids=' + Ids.dataset.images,
                 type: 'GET',

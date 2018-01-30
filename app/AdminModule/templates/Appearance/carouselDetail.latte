@@ -5,14 +5,20 @@
     <li class="breadcrumb-item"><a href="/admin">Home</a></li>
     <li class="breadcrumb-item"><a href="/admin/">Vzhled</a></li>
     <li class="breadcrumb-item"><a href="/admin/appearance/carousel">Carousel</a></li>
-    <li class="breadcrumb-item active">Detail infomation</li>
+    <li class="breadcrumb-item active">
+        {if $carouselId}Upravit položku carouselu{else }Nová položka carouselu{/if}
+    </li>
 </ol>
 
 <div class="container-fluid">
     <div class="card">
         <div class="card-block">
             <div class="col-lg-9">
-                {control editCarousel}
+                {if $carouselId}
+                    {control editFormCarousel}
+                {else }
+                    {control insertFormCarousel}
+                {/if}
             </div>
         </div>
     </div>

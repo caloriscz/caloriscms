@@ -3,14 +3,16 @@
 
 <div id="sortable">
     {foreach $carousel as $item}
-        <div class="card sort-item" style="width: 18rem;">
-            <img src="/images/carousel/{$item->getImage()}" alt="" style="max-height: 100px;">
+        <div class="card sort-item" id="{$item->getId()}">
+            <img src="/images/carousel/{$item->getImage()}" alt="" style="max-height: 135px;">
             <div class="card-body">
-                <p>{$item->getTitle()}</p>
+                <p><strong>{$item->getTitle()}</strong></p>
                 <p class="card-text">{$item->getDescription()}</p>
+                <div>
+                    <a href="{link delete! id => $item->getId()}" class="text-danger">smazat položku</a>
+                    <a href="{plink ':Admin:Appearance:carouselDetail' id => $item->getId()}" class="float-right">upravit položku</a>
+                </div>
             </div>
-
-            <a href="{link delete! id => $item->getId()}">smazat</a>
         </div>
     {/foreach}
 </div>
