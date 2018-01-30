@@ -2,7 +2,7 @@
 
 namespace App\AdminModule\Presenters;
 
-use Caloriscz\Contacts\ContactForms\SendLoginControl;
+use App\Forms\Contacts\SendLoginControl;
 use Caloriscz\Members\EditMemberControl;
 use Caloriscz\Members\InsertContactForMemberControl;
 use Caloriscz\Members\InsertMemberControl;

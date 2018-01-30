@@ -3,14 +3,14 @@
 namespace App\AdminModule\Presenters;
 
 use App\Forms\Contacts\EditContactControl;
+use App\Forms\Contacts\InsertCommunicationControl;
+use App\Forms\Contacts\InsertContactControl;
+use App\Forms\Contacts\InsertHourControl;
+use App\Forms\Contacts\LoadVatControl;
 use Caloriscz\Categories\EditCategoryControl;
 use Caloriscz\Categories\InsertCategoryControl;
 use Caloriscz\Contact\CommunicationGridControl;
 use Caloriscz\Contact\ContactGridControl;
-use Caloriscz\Contacts\ContactForms\InsertCommunicationControl;
-use Caloriscz\Contacts\ContactForms\InsertContactControl;
-use Caloriscz\Contacts\ContactForms\InsertHourControl;
-use Caloriscz\Contacts\ContactForms\LoadVatControl;
 use Caloriscz\Menus\Admin\ContactCategoriesControl;
 use Nette,
     App\Model;

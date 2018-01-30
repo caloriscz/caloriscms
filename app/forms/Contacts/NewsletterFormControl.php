@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Forms\Contact;
+namespace App\Forms\Contacts;
 
 use Nette\Application\UI\Control;
 use Nette\Database\Context;

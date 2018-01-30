@@ -1,6 +1,6 @@
 <?php
 
-namespace Caloriscz\Contacts\ContactForms;
+namespace App\Forms\Contacts;
 
 use App\Model\Helpdesk;
 use Nette\Application\UI\Control;
