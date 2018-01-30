@@ -34,9 +34,10 @@ class EditContactControl extends Control
         $form = new BootstrapUIForm();
         $form->setTranslator($this->presenter->translator);
         $form->addHidden('contact_id');
-        $form->addSelect('page_id', '', $pages);
+        $form->addSelect('pages_id', '', $pages);
         $form->addText('name');
         $form->addText('company');
+        $form->addText('post');
         $form->addRadioList('type', '', array(0 => ' osoby', 1 => ' organizace'));
         $form->addText('tpost');
         $form->addText('email');
@@ -95,6 +96,7 @@ class EditContactControl extends Control
             ->where(['id' => $form->values->contact_id])
             ->update([
                 'name' => $form->values->name,
+                'pages_id' => $form->values->pages_id,
                 'company' => $form->values->company,
                 'post' => $form->values->post,
                 'type' => $form->values->type,
@@ -111,7 +113,7 @@ class EditContactControl extends Control
                 'notes' => $form->values->notes,
             ]);
 
-        $this->onSave($form->values->pages_id);
+        $this->onSave($form->values->contact_id);
     }
 
     public function render()

@@ -131,8 +131,17 @@ $(document).ready(function () {
 
     // Flatpickr
     $(".datepicker").flatpickr({
-        altInoput: "Y-m-d H:i",
+        altFormat: "j. n. Y H:i",
+        altInput: true,
         enableTime: true,
+        locale: 'cs',
+        time_24hr: true
+    });
+
+    $(".datepicker-date").flatpickr({
+        altFormat: "j. n. Y",
+        altInput: true,
+        enableTime: false,
         locale: 'cs',
         time_24hr: true
     });
