@@ -90,7 +90,7 @@ class InsertContactCategoryControl extends Control
         unset($getParams['page']);
         $template->args = $getParams;
 
-        $template->setFile(__DIR__ . '/InsertContactCategory.latte');
+        $template->setFile(__DIR__ . '/InsertContactCategoryControl.latte');
 
         $template->id = $id;
         $template->idActive = $this->presenter->getParameter('id');
