@@ -4,9 +4,9 @@ namespace App\AdminModule\Presenters;
 
 use App\Forms\Media\ImageEditFormControl;
 use App\Model\IO;
+use Apps\Forms\Pages\InsertFormControl;
 use Caloriscz\Page\Editor\BlockControl;
 use Caloriscz\Page\File\FileListControl;
-use Caloriscz\Page\PageForms\InsertFormControl;
 use Caloriscz\Page\Pages\PageListControl;
 use Caloriscz\Page\Related\FilterFormControl;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Caloriscz\Page\Filters;
+namespace App\Forms\Pages;
 
 use Nette\Application\UI\Control;
 use Nette\Database\Context;
@@ -24,7 +24,6 @@ class SearchControl extends Control
     protected function createComponentSearchTopForm()
     {
         $form = new BootstrapUIForm();
-
         $form->setMethod('GET');
         $form->getElementPrototype()->class = 'form-inline';
 

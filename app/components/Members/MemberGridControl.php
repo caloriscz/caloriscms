@@ -10,7 +10,7 @@ use Ublaboo\DataGrid\DataGrid;
 class MemberGridControl extends Control
 {
 
-    /** @var \Nette\Database\Context */
+    /** @var Context*/
     public $database;
 
     public function __construct(Context $database)
@@ -64,8 +64,6 @@ class MemberGridControl extends Control
         } catch (\Exception $e) {
             echo 'data error';
         }
-
-        //$grid->setTranslator($this->translator);
     }
 
     /**
@@ -75,16 +73,16 @@ class MemberGridControl extends Control
     {
         if (!$this->getPresenter()->template->member->users_roles->members_delete) {
             $this->flashMessage($this->getPresenter()->translator->translate('messages.members.PermissionDenied'), 'error');
-            $this->redirect(this, array('id' => null));
+            $this->redirect('this', ['id' => null]);
         }
 
         for ($a = 0; $a < count($id); $a++) {
             $member = $this->database->table('users')->get($id[$a]);
 
-            if ($member->username == 'admin') {
+            if ($member->username === 'admin') {
                 $this->flashMessage('Nemůžete smazat účet administratora', 'error');
                 $this->redirect(':Admin:Members:default', array('id' => null));
-            } elseif ($member->id == $this->getPresenter()->user->getId()) {
+            } elseif ($member->id === $this->getPresenter()->user->getId()) {
                 $this->flashMessage('Nemůžete smazat vlastní účet', 'error');
                 $this->redirect(':Admin:Members:default', array('id' => null));
             }
@@ -92,7 +90,7 @@ class MemberGridControl extends Control
             $this->database->table('users')->get($id[$a])->delete();
         }
 
-        $this->redirect(this, array('id' => null));
+        $this->redirect('this', ['id' => null]);
     }
 
     public function render()

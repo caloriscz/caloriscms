@@ -1,5 +1,5 @@
 <?php
-namespace Caloriscz\Page\Snippets;
+namespace App\Forms\Snippets;
 
 use Nette\Application\UI\Control;
 use Nette\Forms\BootstrapUIForm;

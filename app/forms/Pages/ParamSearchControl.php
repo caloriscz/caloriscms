@@ -1,5 +1,5 @@
 <?php
-namespace Caloriscz\Page\Filters;
+namespace App\Forms\Pages;
 
 use Caloriscz\Page\PageSlugControl;
 use Nette\Application\UI\Control;

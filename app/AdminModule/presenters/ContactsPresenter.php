@@ -8,6 +8,7 @@ use App\Forms\Contacts\InsertContactCategoryControl;
 use App\Forms\Contacts\InsertContactControl;
 use App\Forms\Contacts\InsertHourControl;
 use App\Forms\Contacts\LoadVatControl;
+use Apps\Forms\Profile\EditControl;
 use Caloriscz\Categories\EditCategoryControl;
 use Caloriscz\Categories\InsertCategoryControl;
 use Caloriscz\Contact\CommunicationGridControl;
@@ -31,7 +32,7 @@ class ContactsPresenter extends BasePresenter
 
     protected function createComponentEditContact()
     {
-        $control = new EditContactControl($this->database);
+        $control = new EditControl($this->database);
         $control->onSave[] = function ($pages_id, $error = null) {
             if ($error === 1) {
                 $this->flashMessage($this->translator->translate('messages.sign.fillInEmail'), 'error');

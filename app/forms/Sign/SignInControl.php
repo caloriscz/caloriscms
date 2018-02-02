@@ -1,5 +1,5 @@
 <?php
-namespace Caloriscz\Sign;
+namespace App\Forms\Sign;
 
 use App\Model\MemberModel;
 use Nette\Application\UI\Control;
@@ -96,7 +96,7 @@ class SignInControl extends Control
         }
 
         $this->template->type = $type;
-        $this->template->setFile(__DIR__ . '/' . $templateName . '.latte');
+        $this->template->setFile(__DIR__ . 'SignInControl.php/' . $templateName . '.latte');
         $this->template->render();
     }
 

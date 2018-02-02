@@ -1,5 +1,5 @@
 <?php
-namespace Caloriscz\Page\Filters;
+namespace App\Forms\Pages;
 
 use Nette\Application\UI\Control;
 use Nette\Database\Context;
@@ -22,29 +22,22 @@ class AdvancedSearchControl extends Control
         $form = new BootstrapUIForm();
         $form->setTranslator($this->presenter->translator->domain('dictionary.main'));
         $form->setMethod('GET');
-        $form->getElementPrototype()->class = 'form-inline';
-        $form->getElementPrototype()->role = 'form';
-        $form->getElementPrototype()->autocomplete = 'off';
 
         $form->addHidden('idr', 'ID:');
         $form->addText('src')
-            ->setAttribute('class', 'form-control')
             ->setAttribute('placeholder', Strings::firstUpper('src'));
-        $form->addText('priceFrom')
-            ->setAttribute('style', 'width: 50px;');
-        $form->addText('priceTo')
-            ->setAttribute('style', 'width: 50px;');
+        $form->addText('priceFrom');
+        $form->addText('priceTo');
         $form->addText('brand');
 
         if ($this->getParameter('id')) {
-            $form->setDefaults(array(
+            $form->setDefaults([
                 'idr' => $this->presenter->getParameter('id'),
-            ));
+            ]);
         }
 
         $form->addSubmit('submitm', 'dictionary.main.Search')
             ->setAttribute('class', 'btn btn-info btn-lg');
-
 
         $form->onSuccess[] = [$this, 'searchFormSucceeded'];
         return $form;
@@ -52,12 +45,12 @@ class AdvancedSearchControl extends Control
 
     public function searchFormSucceeded(BootstrapUIForm $form)
     {
-        $values = $form->getValues(TRUE);
+        $values = $form->getValues(true);
 
         unset($values['do'], $values['action'], $values['idr']);
         $values['id'] = $form->values->idr;
 
-        $this->presenter->redirect(':Front:Catalogue:default', $values);
+        $this->presenter->redirect('this', $values);
     }
 
     public function render()

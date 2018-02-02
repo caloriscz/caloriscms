@@ -1,14 +1,13 @@
 <?php
-
 namespace App\FrontModule\Presenters;
 
+use App\Forms\Pages\AdvancedSearchControl;
 use Caloriscz\Menus\Admin\AdminBarControl;
 use Caloriscz\Menus\MenuControl;
 use Caloriscz\Menus\SideMenuControl;
 use Caloriscz\Navigation\Footer\FooterControl;
 use Caloriscz\Navigation\Head\HeadControl;
 use Caloriscz\Navigation\NavigationControl;
-use Caloriscz\Page\Filters\AdvancedSearchControl;
 use Caloriscz\Page\PageDocumentControl;
 use Caloriscz\Page\PageSlugControl;
 use Caloriscz\Page\PageTitleControl;
@@ -38,7 +37,7 @@ class BasePresenter extends Nette\Application\UI\Presenter
     /** @var Nette\Http\IRequest @inject */
     public $request;
 
-    public function __construct(\Nette\Database\Context $database, \Nette\Mail\IMailer $mailer)
+    public function __construct(Nette\Database\Context $database, \Nette\Mail\IMailer $mailer)
     {
         $this->database = $database;
         $this->mailer = $mailer;
@@ -56,34 +55,29 @@ class BasePresenter extends Nette\Application\UI\Presenter
     {
         parent::startup();
 
-        if (session_status() == PHP_SESSION_NONE) {
-            session_start();
-        }
+        $this->template->page = $this->database->table('pages')->get($this->getParameter('page_id'));
+        $this->template->settings = $this->database->table('settings')->fetchPairs('setkey', 'setvalue');
 
-        $this->template->page = $this->database->table("pages")->get($this->getParameter('page_id'));
-
-        $this->template->settings = $this->database->table("settings")->fetchPairs("setkey", "setvalue");
-
-        /* Maintenance mode */
-        if ($this->template->settings["maintenance_enabled"]) {
-            if (empty($this->template->settings["maintenance_message"])) {
+        // Maintenance mode
+        if ($this->template->settings['maintenance_enabled']) {
+            if (empty($this->template->settings['maintenance_message'])) {
                 include_once('.maintenance.php');
             } else {
-                echo $this->template->settings["maintenance_message"];
+                echo $this->template->settings['maintenance_message'];
             }
 
             exit();
         }
 
-        /* IP mode */
-        $ip = explode(";", $this->template->settings["site_ip_whitelist"]);
+        // IP mode
+        $ip = explode(';', $this->template->settings['site_ip_whitelist']);
 
-        if (strlen($this->template->settings["site_ip_whitelist"]) < 4 || in_array($_SERVER['REMOTE_ADDR'], $ip)) {
+        if (strlen($this->template->settings['site_ip_whitelist']) < 4 || in_array($_SERVER['REMOTE_ADDR'], $ip, true)) {
         } else {
-            if (empty($this->template->settings["maintenance_message"])) {
+            if (empty($this->template->settings['maintenance_message'])) {
                 include_once('.maintenance.php');
             } else {
-                echo $this->template->settings["maintenance_message"];
+                echo $this->template->settings['maintenance_message'];
             }
 
             exit();

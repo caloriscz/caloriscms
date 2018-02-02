@@ -1,6 +1,6 @@
 <?php
 
-namespace Caloriscz\Sign;
+namespace App\Forms\Sign;
 
 use App\Model\Document;
 use App\Model\Helpdesk;

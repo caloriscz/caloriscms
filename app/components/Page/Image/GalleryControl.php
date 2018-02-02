@@ -2,14 +2,15 @@
 namespace Caloriscz\Page\Image;
 
 use Nette\Application\UI\Control;
+use Nette\Database\Context;
 
 class GalleryControl extends Control
 {
 
-    /** @var \Nette\Database\Context */
+    /** @var Context */
     public $database;
 
-    public function __construct(\Nette\Database\Context $database)
+    public function __construct(Context $database)
     {
         $this->database = $database;
     }

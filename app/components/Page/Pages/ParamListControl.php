@@ -1,30 +1,30 @@
 <?php
-namespace Caloriscz\Page\Parametres;
+namespace Caloriscz\Pages;
 
 use Nette\Application\UI\Control;
+use Nette\Database\Context;
 
 class ParamListControl extends Control
 {
 
-    /** @var \Nette\Database\Context */
+    /** @var Context */
     public $database;
 
-    public function __construct(\Nette\Database\Context $database)
+    public function __construct(Context $database)
     {
         $this->database = $database;
     }
 
     public function render($page)
     {
-        $template = $this->template;
+        $template = $this->getTemplate();
         $template->page = $page;
 
-        if ($this->presenter->translator->getLocale() != $this->presenter->translator->getDefaultLocale()) {
+        if ($this->presenter->translator->getLocale() !== $this->presenter->translator->getDefaultLocale()) {
             $template->langSuffix = '_' . $this->getPresenter()->translator->getLocale();
         }
 
         $template->setFile(__DIR__ . '/ParamListControl.latte');
-
         $template->render();
     }
 

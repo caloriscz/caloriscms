@@ -2,14 +2,15 @@
 namespace Caloriscz\Menus;
 
 use Nette\Application\UI\Control;
+use Nette\Database\Context;
 
 class NavbarMenuControl extends Control
 {
 
-    /** @var \Nette\Database\Context */
+    /** @var Context */
     public $database;
 
-    public function __construct(\Nette\Database\Context $database)
+    public function __construct(Context $database)
     {
         $this->database = $database;
     }
@@ -22,8 +23,7 @@ class NavbarMenuControl extends Control
 
         $template->id = $id;
         $template->style = $style;
-        $template->categories = $this->database->table('menu')
-                ->where('parent_id = ?  AND (NOT id = 136)', $id);
+        $template->categories = $this->database->table('menu')->where('parent_id', $id);
         $template->render();
     }
 

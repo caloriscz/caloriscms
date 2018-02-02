@@ -2,13 +2,11 @@
 
 namespace App\FrontModule\Presenters;
 
-use Caloriscz\Sign\LostPassControl;
-use Caloriscz\Sign\ResetPassControl;
-use Caloriscz\Sign\SignInControl;
-use Caloriscz\Sign\SignUpControl;
+use App\Forms\Sign\LostPassControl;
+use App\Forms\Sign\ResetPassControl;
+use App\Forms\Sign\SignInControl;
+use App\Forms\Sign\SignUpControl;
 use Caloriscz\Sign\VerifyAccountControl;
-use Nette,
-    Nette\Application\UI;
 
 /**
  * Sign in/out presenters.

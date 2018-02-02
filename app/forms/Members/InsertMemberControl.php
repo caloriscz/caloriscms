@@ -1,6 +1,6 @@
 <?php
 
-namespace Caloriscz\Members;
+namespace App\Forms\Members;
 
 use App\Model\Helpdesk;
 use App\Model\MemberModel;
@@ -41,7 +41,7 @@ class InsertMemberControl extends Control
             ->addRule(Form::MIN_LENGTH, 'Uživatelské jméno musí mít aspoň %d znaků', 3);
         $form->addText('email', 'dictionary.main.Email');
 
-        if ($this->presenter->template->member->username == 'admin') {
+        if ($this->presenter->template->member->username === 'admin') {
             $form->addSelect('role', 'dictionary.main.Role', $roles)
                 ->setAttribute('class', 'form-control');
         }

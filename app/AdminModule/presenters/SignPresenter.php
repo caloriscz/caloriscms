@@ -2,30 +2,29 @@
 
 namespace App\AdminModule\Presenters;
 
+use App\Forms\Sign\LostPassControl;
+use App\Forms\Sign\ResetPassControl;
+use App\Forms\Sign\SignInControl;
 use App\Model\Logger;
-use Caloriscz\Sign\LostPassControl;
-use Caloriscz\Sign\ResetPassControl;
-use Caloriscz\Sign\SignInControl;
-use Nette,
-    Nette\Application\UI;
+use Nette;
 
 /**
  * Sign in/out presenters.
  */
 class SignPresenter extends BasePresenter
 {
-
-    /** @persistent */
-    public $backlink = '';
-
     /**
      * @throws Nette\Application\AbortException
      */
     protected function startup()
     {
         parent::startup();
-
         $this->template->signed = FALSE;
+    }
+
+    protected function createComponentResetPass()
+    {
+        return new ResetPassControl($this->database);
     }
 
     protected function createComponentLostPass()
@@ -50,11 +49,6 @@ class SignPresenter extends BasePresenter
         return $control;
     }
 
-    protected function createComponentResetPass()
-    {
-        return new ResetPassControl($this->database);
-    }
-
     protected function createComponentSignIn()
     {
         $control = new SignInControl($this->database);
@@ -70,7 +64,6 @@ class SignPresenter extends BasePresenter
 
     /**
      * Logs out user
-     * @throws Nette\Application\AbortException
      */
     public function actionOut()
     {

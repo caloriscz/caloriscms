@@ -13,10 +13,10 @@ use Nette\Database\Context;
 class PageListControl extends Control
 {
 
-    /** @var \Nette\Database\Context @inject  */
+    /** @var Context @inject  */
     public $database;
 
-    /** @var \Kdyby\Doctrine\EntityManager @inject */
+    /** @var EntityManager @inject */
     public $em;
 
     public $onSave;

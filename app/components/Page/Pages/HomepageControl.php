@@ -1,7 +1,6 @@
 <?php
-namespace Caloriscz\Page\Pages\Homepage;
+namespace Caloriscz\Page\Pages;
 
-use App\Forms\Contacts\NewsletterFormControl;
 use Caloriscz\Appearance\CarouselBoxControl;
 use Caloriscz\Blog\BlogPreviewControl;
 use Caloriscz\Page\PageTitleControl;

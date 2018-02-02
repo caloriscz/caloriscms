@@ -1,8 +1,8 @@
 <?php
 
 namespace App\FrontModule\Presenters;
+use Caloriscz\Page\Pages\HomepageControl;
 
-use Caloriscz\Page\Pages\Homepage\HomepageControl;
 
 /**
  * Homepage presenter.

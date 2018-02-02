@@ -30,6 +30,7 @@ class EditorControl extends Control
         $this->em = $em;
 
         $config = \HTMLPurifier_Config::createDefault();
+        //$config->set('HTML.AllowedAttributes', 'img.src,*.style,*.class');
         $this->htmlPurifier = new \HTMLPurifier($config);
     }
 
@@ -93,9 +94,10 @@ class EditorControl extends Control
         $doc = new Document($this->database);
         $doc->setLanguage($form->values->l);
 
-        //$document = $this->purify($form->values->document);
+        $document = $this->purify($form->values->document);
 
-        $doc->setDocument($form->values->document);
+        $doc->setDocument($document);
+        //$doc->setDocument($form->values->document);
         $doc->setLanguage($form->values->l);
         $doc->save($form->values->id, $this->presenter->user->getId());
 

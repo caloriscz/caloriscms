@@ -1,5 +1,5 @@
 <?php
-namespace Caloriscz\Members;
+namespace App\Forms\Members;
 
 use Nette\Application\UI\Control;
 use Nette\Database\Context;

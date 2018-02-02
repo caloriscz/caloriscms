@@ -2,8 +2,8 @@
 
 namespace Caloriscz\Navigation;
 
+use App\Forms\Pages\SearchControl;
 use Caloriscz\Menus\NavbarMenuControl;
-use Caloriscz\Page\Filters\SearchControl;
 use Nette\Application\UI\Control;
 use Nette\Database\Context;
 
@@ -19,14 +19,12 @@ class NavigationControl extends Control
 
     protected function createComponentSearch()
     {
-        $control = new SearchControl($this->database);
-        return $control;
+        return new SearchControl($this->database);
     }
 
     protected function createComponentNavbarMenu()
     {
-        $control = new NavbarMenuControl($this->database);
-        return $control;
+        return new NavbarMenuControl($this->database);
     }
 
     public function render()

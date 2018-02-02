@@ -2,17 +2,19 @@
 
 namespace Caloriscz\Page\Pages;
 
+use App\Model\Document;
 use App\Model\IO;
 use Nette\Application\UI\Control;
+use Nette\Database\Context;
 
 class PageThumbControl extends Control
 {
 
-    /** @var \Nette\Database\Context */
+    /** @var Context */
     public $database;
     public $onSave;
 
-    public function __construct(\Nette\Database\Context $database)
+    public function __construct(Context $database)
     {
         $this->database = $database;
     }
@@ -22,7 +24,7 @@ class PageThumbControl extends Control
      */
     public function handleDelete($id)
     {
-        $doc = new \App\Model\Document($this->database);
+        $doc = new Document($this->database);
         $doc->delete($id);
         IO::removeDirectory(APP_DIR . '/media/' . $id);
 
@@ -33,7 +35,7 @@ class PageThumbControl extends Control
     {
         $page = $this->database->table('pages')->get($this->getParameter('id'));
 
-        if ($page->public == 1) {
+        if ($page->public === 1) {
             $show = 0;
         } else {
             $show = 1;
@@ -46,29 +48,28 @@ class PageThumbControl extends Control
 
     public function render($type, $id = '')
     {
-        $template = $this->template;
+        $template = $this->getTemplate();
         $template->setFile(__DIR__ . '/PageThumbControl.latte');
 
-        if ($type == 6) {
+        if ($type === 6) {
             $pagesId = 4;
         } else {
             $pagesId = 6;
         }
 
-        if ($id == '') {
-            $arr = array(
+        if ($id === '') {
+            $arr = [
                 'pages_types_id' => $type,
                 'pages_id' => $pagesId,
-            );
+            ];
         } else {
-            $arr = array(
+            $arr = [
                 'pages_types_id' => $type,
                 'pages_id' => $id,
-            );
+            ];
         }
 
         $template->pages = $this->database->table('pages')->where($arr);
-
         $template->render();
     }
 

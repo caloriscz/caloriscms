@@ -1,6 +1,6 @@
 <?php
 
-namespace Caloriscz\Members;
+namespace App\Forms\Members;
 
 use App\Model\Document;
 use App\Model\IO;

@@ -2,10 +2,10 @@
 
 namespace App\AdminModule\Presenters;
 
+use App\Forms\Snippets\EditFormControl;
+use App\Forms\Snippets\InsertFormControl;
 use App\Model\Entity\Snippets;
 use Caloriscz\Page\Editor\BlockControl;
-use Caloriscz\Page\Snippets\EditFormControl;
-use Caloriscz\Page\Snippets\InsertFormControl;
 
 /**
  * Snippet handling
@@ -36,7 +36,6 @@ class SnippetsPresenter extends BasePresenter
     /**
      * Delete snippet
      * @param $id
-     * @throws \Nette\Application\AbortException
      */
     public function handleDelete($id)
     {

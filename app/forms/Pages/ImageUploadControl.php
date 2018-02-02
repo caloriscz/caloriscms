@@ -1,16 +1,20 @@
 <?php
-namespace Caloriscz\Page\Image;
+namespace App\Forms\Pages;
 
 use App\Model\IO;
 use Nette\Application\UI\Control;
+use Nette\Database\Context;
+use Nette\Forms\BootstrapUIForm;
+use Nette\Forms\Form;
+use Nette\Utils\Image;
 
 class ImageUploadControl extends Control
 {
 
-    /** @var \Nette\Database\Context */
+    /** @var Context */
     public $database;
 
-    public function __construct(\Nette\Database\Context $database)
+    public function __construct(Context $database)
     {
         $this->database = $database;
     }
@@ -20,7 +24,7 @@ class ImageUploadControl extends Control
      */
     public function createComponentUploadFilesForm()
     {
-        $form = new \Nette\Forms\BootstrapUIForm();
+        $form = new BootstrapUIForm();
         $form->setTranslator($this->presenter->translator);
         $form->getElementPrototype()->class = 'form-horizontal';
         $form->getElementPrototype()->role = 'form';
@@ -39,26 +43,26 @@ class ImageUploadControl extends Control
         return $form;
     }
 
-    public function uploadFilesFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
+    public function uploadFilesFormSucceeded(BootstrapUIForm $form)
     {
         $album = $form->values->id;
         $fileDirectory = APP_DIR . '/media/' . $album . '/';
-        \App\Model\IO::directoryMake($fileDirectory, 0755);
+        IO::directoryMake($fileDirectory, 0755);
 
         if (strlen($_FILES['the_file']['tmp_name']) > 1) {
-            $imageExists = $this->database->table('media')->where(array(
+            $imageExists = $this->database->table('media')->where([
                 'name' => $_FILES['the_file']['name'],
                 'pages_id' => $form->values->id,
-            ));
+            ]);
 
             if ($imageExists->count() == 0) {
-                $this->database->table('media')->insert(array(
+                $this->database->table('media')->insert([
                     'name' => $_FILES['the_file']['name'],
                     'pages_id' => $form->values->id,
                     'description' => $form->values->description,
                     'date_created' => date('Y-m-d H:i:s'),
                     'file_type' => 0,
-                ));
+                ]);
             }
 
             $fileName = $fileDirectory . $_FILES['the_file']['name'];
@@ -68,9 +72,9 @@ class ImageUploadControl extends Control
             chmod($fileName, 0644);
         }
 
-        $this->redirect(this, array(
+        $this->redirect('this', [
             'id' => $form->values->id,
-        ));
+        ]);
     }
 
     /**
@@ -78,46 +82,46 @@ class ImageUploadControl extends Control
      */
     public function createComponentUploadForm()
     {
-        $form = new \Nette\Forms\BootstrapUIForm();
+        $form = new BootstrapUIForm();
         $form->setTranslator($this->presenter->translator);
         $form->getElementPrototype()->class = 'form-horizontal';
         $form->getElementPrototype()->role = 'form';
         $form->getElementPrototype()->autocomplete = 'off';
-        $imageTypes = array('image/png', 'image/jpeg', 'image/jpg', 'image/gif');
+        $imageTypes = ['image/png', 'image/jpeg', 'image/jpg', 'image/gif'];
 
         $form->addHidden('id');
         $form->addUpload('the_file', 'dictionary.main.InsertImage')
-            ->addRule(\Nette\Forms\Form::MIME_TYPE, 'messages.error.invalidTypeOfMessage', $imageTypes);
+            ->addRule(Form::MIME_TYPE, 'messages.error.invalidTypeOfMessage', $imageTypes);
         $form->addTextArea('description', 'dictionary.main.Description')
             ->setAttribute('class', 'form-control');
         $form->addSubmit('send', 'dictionary.main.Image');
 
-        $form->setDefaults(array(
+        $form->setDefaults([
             'id' => $this->presenter->getParameter('id'),
-        ));
+        ]);
 
         $form->onSuccess[] = [$this, 'uploadFormSucceeded'];
         return $form;
     }
 
-    public function uploadFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
+    public function uploadFormSucceeded(BootstrapUIForm $form)
     {
         $fileDirectory = APP_DIR . '/media/' . $form->values->id;
-        \App\Model\IO::directoryMake($fileDirectory, 0755);
+        IO::directoryMake($fileDirectory, 0755);
 
         if (strlen($_FILES['the_file']['tmp_name']) > 1) {
-            $imageExists = $this->database->table('media')->where(array(
+            $imageExists = $this->database->table('media')->where([
                 'name' => $_FILES['the_file']['name'],
                 'pages_id' => $form->values->id,
-            ));
+            ]);
 
             $fileName = $fileDirectory . '/' . $_FILES['the_file']['name'];
-            \App\Model\IO::remove($fileName);
+            IO::remove($fileName);
 
             copy($_FILES['the_file']['tmp_name'], $fileName);
             chmod($fileName, 0644);
 
-            if ($imageExists->count() == 0) {
+            if ($imageExists->count() === 0) {
                 $this->database->table('media')->insert(array(
                     'name' => $_FILES['the_file']['name'],
                     'pages_id' => $form->values->id,
@@ -129,17 +133,17 @@ class ImageUploadControl extends Control
             }
 
             // thumbnails
-            $image = \Nette\Utils\Image::fromFile($fileName);
-            $image->resize(400, 250, \Nette\Utils\Image::SHRINK_ONLY);
+            $image = Image::fromFile($fileName);
+            $image->resize(400, 250, Image::SHRINK_ONLY);
             $image->sharpen();
             $image->save(APP_DIR . '/media/' . $form->values->id . '/tn/' . $_FILES['the_file']['name']);
             chmod(APP_DIR . '/media/' . $form->values->id . '/tn/' . $_FILES['the_file']['name'], 0644);
         }
 
-        $this->redirect(this, array(
+        $this->redirect('this', [
             'id' => $form->values->id,
             'category' => $form->values->category,
-        ));
+        ]);
     }
 
     public function render($id = 0)
@@ -149,7 +153,6 @@ class ImageUploadControl extends Control
         $template->settings = $this->presenter->template->settings;
 
         $template->setFile(__DIR__ . '/ImageUploadControl.latte');
-
         $template->render();
     }
 

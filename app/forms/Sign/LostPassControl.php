@@ -1,10 +1,11 @@
 <?php
 
-namespace Caloriscz\Sign;
+namespace App\Forms\Sign;
 
 use App\Model\Helpdesk;
 use App\Model\MemberModel;
 use Nette\Application\UI\Control;
+use Nette\Database\Context;
 use Nette\Forms\BootstrapUIForm;
 use Nette\Utils\Random;
 use Nette\Utils\Validators;
@@ -12,12 +13,12 @@ use Nette\Utils\Validators;
 class LostPassControl extends Control
 {
 
-    /** @var \Nette\Database\Context */
+    /** @var Context */
     public $database;
 
     public $onSave;
 
-    public function __construct(\Nette\Database\Context $database)
+    public function __construct(Context $database)
     {
         $this->database = $database;
     }
@@ -44,25 +45,25 @@ class LostPassControl extends Control
     public function sendFormValidated(BootstrapUIForm $form)
     {
         if (!Validators::isEmail($form->values->email)) {
-            $this->onSave("Adresa je neplatná");
+            $this->onSave('Adresa je neplatná');
         }
 
-        if ($this->database->table('users')->where(array('email' => $form->values->email))->count() == 0) {
-            $this->onSave("E-mail nenalezen");
+        if ($this->database->table('users')->where(['email' => $form->values->email])->count() == 0) {
+            $this->onSave('E-mail nenalezen');
         }
     }
 
     public function sendFormSucceeded(BootstrapUIForm $form)
     {
-        $passwordGenerate = Random::generate(12, "987654321zyxwvutsrqponmlkjihgfedcba");
+        $passwordGenerate = Random::generate(12, '987654321zyxwvutsrqponmlkjihgfedcba');
 
         $member = new MemberModel($this->database);
         $member->setActivation($form->values->email, $passwordGenerate);
 
-        $params = array(
-            "code" => $passwordGenerate,
-            "email" => $form->values->email,
-        );
+        $params = [
+            'code' => $passwordGenerate,
+            'email' => $form->values->email,
+        ];
 
         $helpdesk = new Helpdesk($this->database, $this->presenter->mailer);
         $helpdesk->setId(11);
@@ -77,7 +78,7 @@ class LostPassControl extends Control
     public function render($layer = 'front')
     {
         $this->template->setFile(__DIR__ . '/LostPassControl.latte');
-        $this->template->addon = $this->database->table("addons");
+        $this->template->addon = $this->database->table('addons');
         $this->template->layer = $layer;
         $this->template->render();
     }

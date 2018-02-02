@@ -3,11 +3,11 @@
 namespace App\AdminModule\Presenters;
 
 use App\Forms\Contacts\SendLoginControl;
-use Caloriscz\Members\EditMemberControl;
-use Caloriscz\Members\InsertContactForMemberControl;
-use Caloriscz\Members\InsertMemberControl;
-use Caloriscz\Members\MemberCategoriesControl;
+use App\Forms\Members\EditMemberControl;
+use App\Forms\Members\InsertContactForMemberControl;
+use App\Forms\Members\InsertMemberControl;
 use Caloriscz\Members\MemberGridControl;
+use Caloriscz\Members\MemberCategoriesControl;
 
 /**
  * Members (aka Users) presenter
@@ -69,7 +69,6 @@ class MembersPresenter extends BasePresenter
     /**
      * Contact for user delete
      * @param $id
-     * @throws \Nette\Application\AbortException
      */
     public function handleDeleteContact($id)
     {

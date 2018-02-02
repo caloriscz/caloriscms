@@ -1,6 +1,6 @@
 <?php
 
-namespace Caloriscz\Page\Snippets;
+namespace App\Forms\Snippets;
 
 use Kdyby\Doctrine\EntityManager;
 use Nette\Application\UI\Control;

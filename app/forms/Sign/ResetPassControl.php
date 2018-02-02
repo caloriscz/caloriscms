@@ -1,6 +1,6 @@
 <?php
 
-namespace Caloriscz\Sign;
+namespace App\Forms\Sign;
 
 use Nette\Application\UI\Control;
 use Nette\Database\Context;

@@ -2,6 +2,7 @@
 
 namespace App\AdminModule\Presenters;
 
+use Apps\Forms\Profile\EditControl;
 use Caloriscz\Profile\ChangePasswordControl;
 
 /**
@@ -10,12 +11,9 @@ use Caloriscz\Profile\ChangePasswordControl;
  */
 class ProfilePresenter extends BasePresenter
 {
-    /** @var \Caloriscz\Profile\Admin\IEditControlFactory @inject */
-    public $editControlFactory;
-
     protected function createComponentEditProfile()
     {
-        $control = $this->editControlFactory->create();
+        $control = new EditControl($this->database);
         $control->onSave[] = function ($error = false) {
             if ($error != false) {
                 $this->flashMessage($error, 'error');

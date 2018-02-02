@@ -1,0 +1,37 @@
+<div class="products">
+    <div class="thumbnail-image">
+        {var $slugTitle = $item->slug}
+        <a href="/{$slugTitle}">
+            {var $image = $item->related('media', 'pages_id')->limit(1)}
+            {if $image->count() > 0}
+                <img src="/media/{$item->id}/{$image->fetch()->name}" class="img-responsive">
+            {var $new = (strtotime($today) - strtotime($item->date_created))/60/60/24}
+                {if intval($new) <= $settings['store:new:days']}
+                    <span class="badge-new">novinka</span>
+                {/if}
+            {else}
+
+            {/if}
+        </a>
+    </div>
+    <div class="caption">
+        <div class="product-title">
+            <a href="/{$slugTitle}">{$item->title}</a>
+        </div>
+        <div class="product-text">
+            {$item->preview|noescape|truncate:150}
+        </div>
+        <div class="col-xs-6">
+            <div class="price">{number_format($item->price, 2, ',', ' ')} {$settings['store:currency:symbol']}</div>
+        </div>
+        <div class="col-xs-6">
+            <div class="row pull-right">
+                <div class="btn-group" role="group">
+                    <a href="/{$slugTitle}" class="btn btn-cart-in">
+                        {_dictionary.main.Detail}
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
