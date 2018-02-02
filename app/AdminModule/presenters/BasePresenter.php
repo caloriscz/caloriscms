@@ -1,13 +1,12 @@
 <?php
-
 namespace App\AdminModule\Presenters;
 
+use App\Forms\Pages\EditorSettingsControl;
 use Caloriscz\Media\DropZoneControl;
 use Caloriscz\Media\ImageBrowserControl;
 use Caloriscz\Menus\Admin\MainMenuControl;
 use Caloriscz\Menus\Admin\PageTopMenuControl;
 use Caloriscz\Page\Editor\EditorControl;
-use Caloriscz\Page\Editor\EditorSettingsControl;
 use Caloriscz\Utilities\PagingControl;
 use Nette;
 
@@ -84,9 +83,6 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
         return $template;
     }
 
-    /**
-     * @throws Nette\Application\AbortException
-     */
     protected function startup()
     {
         parent::startup();

@@ -2,9 +2,8 @@
 
 namespace App\AdminModule\Presenters;
 
-use Caloriscz\Contacts\ContactForms\EditContactControl;
-use Caloriscz\Helpdesk\EditHelpdeskEmailSettingsControl;
-use Caloriscz\Helpdesk\EditMailTemplateControl;
+use App\Forms\Helpdesk\EditHelpdeskEmailSettingsControl;
+use App\Forms\Helpdesk\EditMailTemplateControl;
 use Nette\Utils\Paginator;
 
 /**

@@ -17,11 +17,10 @@ class AlbumControl extends Control
 
     public function render($itemCat)
     {
-        $template = $this->template;
+        $template = $this->getTemplate();
         $template->settings = $this->presenter->template->settings;
         $template->itemCat = $itemCat;
         $template->setFile(__DIR__ . '/AlbumControl.latte');
-
         $template->render();
     }
 

@@ -23,7 +23,7 @@ class AdminBarControl extends Control
      */
     public function render()
     {
-        $template = $this->template;
+        $template = $this->getTemplate();
         $template->settings = $this->presenter->template->settings;
         $template->enabled = false;
         $template->page = false;

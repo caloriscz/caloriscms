@@ -1,5 +1,5 @@
 <?php
-namespace Caloriscz\Helpdesk;
+namespace App\Forms\Helpdesk;
 
 use Nette\Application\UI\Control;
 use Nette\Database\Context;

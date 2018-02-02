@@ -1,7 +1,8 @@
 <?php
-namespace Caloriscz\Helpdesk;
+namespace App\Forms\Helpdesk;
 
 use Nette\Application\UI\Control;
+use Nette\Database\Context;
 use Nette\Forms\BootstrapUIForm;
 
 class EditContactFormControl extends Control
@@ -10,7 +11,7 @@ class EditContactFormControl extends Control
     /** @var \Nette\Database\Context */
     public $database;
 
-    public function __construct(\Nette\Database\Context $database)
+    public function __construct(Context $database)
     {
         $this->database = $database;
     }
@@ -57,14 +58,13 @@ class EditContactFormControl extends Control
                 'fill_phone' => $form->values->fill_phone,
             ));
 
-        $this->presenter->redirect(this, array('id' => $form->values->helpdesk_id));
+        $this->presenter->redirect('this', array('id' => $form->values->helpdesk_id));
     }
 
     public function render()
     {
-        $template = $this->template;
+        $template = $this->getTemplate();
         $template->setFile(__DIR__ . '/EditContactFormControl.latte');
-
         $template->render();
     }
 

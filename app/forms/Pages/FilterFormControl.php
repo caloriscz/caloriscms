@@ -1,22 +1,24 @@
 <?php
-namespace Caloriscz\Page\Related;
+namespace App\Forms\Pages;
 
 use Nette\Application\UI\Control;
+use Nette\Database\Context;
+use Nette\Forms\BootstrapUIForm;
 
 class FilterFormControl extends Control
 {
 
-    /** @var \Nette\Database\Context */
+    /** @var Context */
     public $database;
 
-    public function __construct(\Nette\Database\Context $database)
+    public function __construct(Context $database)
     {
         $this->database = $database;
     }
 
     protected function createComponentFilterForm()
     {
-        $form = new \Nette\Forms\BootstrapUIForm();
+        $form = new BootstrapUIForm();
         $form->setTranslator($this->presenter->translator);
         $form->getElementPrototype()->class = 'form-horizontal';
         $form->getElementPrototype()->role = 'form';
@@ -26,27 +28,26 @@ class FilterFormControl extends Control
         $form->addText('src', 'dictionary.main.Title');
         $form->addSubmit('submitm', 'dictionary.main.Search');
 
-        $form->setDefaults(array(
-            'id' => $this->getParameter('id'),
-        ));
+        $form->setDefaults([
+            'id' => $this->getParameter('id')
+        ]);
 
         $form->onSuccess[] = [$this, 'filterFormSucceeded'];
         return $form;
     }
 
-    public function filterFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
+    public function filterFormSucceeded(BootstrapUIForm $form)
     {
-        $this->presenter->redirect(this, array(
+        $this->presenter->redirect('this', [
             'id' => $form->values->id,
             'src' => $form->values->src,
-        ));
+        ]);
     }
 
     public function render()
     {
-        $template = $this->template;
+        $template = $this->getTemplate();
         $template->setFile(__DIR__ . '/FilterFormControl.latte');
-
         $template->render();
     }
 

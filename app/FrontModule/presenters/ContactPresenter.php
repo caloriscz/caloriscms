@@ -1,8 +1,8 @@
 <?php
 
 namespace App\FrontModule\Presenters;
+use App\Forms\Helpdesk\HelpdeskControl;
 
-use Caloriscz\Helpdesk\HelpdeskControl;
 
 /**
  * Contact presenter.

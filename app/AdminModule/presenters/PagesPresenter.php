@@ -3,12 +3,12 @@
 namespace App\AdminModule\Presenters;
 
 use App\Forms\Media\ImageEditFormControl;
+use App\Forms\Pages\FilterFormControl;
 use App\Model\IO;
 use Apps\Forms\Pages\InsertFormControl;
 use Caloriscz\Page\Editor\BlockControl;
 use Caloriscz\Page\File\FileListControl;
 use Caloriscz\Page\Pages\PageListControl;
-use Caloriscz\Page\Related\FilterFormControl;
 
 /**
  * Pages presenter.
@@ -29,7 +29,7 @@ class PagesPresenter extends BasePresenter
     {
         $control = new PageListControl($this->database, $this->em);
         $control->onSave[] = function ($type) {
-            $this->redirect(this, array('type' => $type));
+            $this->redirect('this', array('type' => $type));
         };
 
         return $control;
@@ -64,7 +64,6 @@ class PagesPresenter extends BasePresenter
      * Changes public state
      * @param $identifier
      * @param $public
-     * @throws \Nette\Application\AbortException
      */
     protected function handleChangeState($identifier, $public)
     {
@@ -82,7 +81,6 @@ class PagesPresenter extends BasePresenter
     /**
      * Deletes related page
      * @param $id
-     * @throws \Nette\Application\AbortException
      */
     public function handleDeleteRelated($id)
     {
@@ -102,7 +100,6 @@ class PagesPresenter extends BasePresenter
     /**
      * Delete image
      * @param $id
-     * @throws \Nette\Application\AbortException
      */
     public function handleDeleteImage($id)
     {
@@ -117,7 +114,6 @@ class PagesPresenter extends BasePresenter
     /**
      * Insert related page
      * @param $id
-     * @throws \Nette\Application\AbortException
      */
     public function handleInsertRelated($id)
     {
@@ -165,5 +161,4 @@ class PagesPresenter extends BasePresenter
             ->where(['pages_id' => $this->getParameter('id')]);
         $this->template->catalogue = $this->database->table('pages')->get($this->getParameter('id'));
     }
-
 }

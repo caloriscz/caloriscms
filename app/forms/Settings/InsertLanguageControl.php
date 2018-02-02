@@ -1,11 +1,12 @@
 <?php
-namespace Caloriscz\Settings\Countries;
+
+namespace App\Forms\Settings;
 
 use Nette\Application\UI\Control;
 use Nette\Database\Context;
 use Nette\Forms\BootstrapUIForm;
 
-class InsertCountryControl extends Control
+class InsertLanguageControl extends Control
 {
 
     /** @var Context */
@@ -13,9 +14,11 @@ class InsertCountryControl extends Control
 
     public function __construct(Context $database)
     {
+        parent::__construct();
         $this->database = $database;
     }
 
+    /* Insert new language */
     protected function createComponentInsertForm()
     {
         $form = new BootstrapUIForm();
@@ -24,8 +27,8 @@ class InsertCountryControl extends Control
         $form->getElementPrototype()->role = 'form';
         $form->getElementPrototype()->autocomplete = 'off';
 
-        $form->addText('country_cs', 'Země (česky)');
-        $form->addText('country_en', 'Země (anglicky)');
+        $form->addText('language', 'Jazyk');
+        $form->addText('code', 'Kód');
 
         $form->addSubmit('send', 'dictionary.main.Save')
             ->setAttribute('class', 'btn btn-success');
@@ -37,35 +40,34 @@ class InsertCountryControl extends Control
 
     public function permissionValidated()
     {
-        if ($this->presenter->template->member->users_roles->settings_edit == 0) {
-            $this->flashMessage('Nemáte oprávnění k této akci', 'error');
-            $this->redirect('this');
+        if ($this->presenter->template->member->users_roles->settings_edit === 0) {
+            $this->presenter->flashMessage('Nemáte oprávnění k této akci', 'error');
+            $this->presenter->redirect(this);
         }
     }
 
-
     public function insertFormSucceeded(BootstrapUIForm $form)
     {
-        $exists = $this->database->table('countries')->where('title_cs = ? OR title_en = ?',
-            $form->values->country_cs, $form->values->country_en);
+        $langExists = $this->database->table('languages')->where('title = ? OR code = ?',
+            $form->values->language, $form->values->code);
 
-        if ($exists->count() > 0) {
-            $this->flashMessage('Země už je v seznamu', 'error');
-            $this->redirect(this);
+        if ($langExists->count() > 0) {
+            $this->presenter->flashMessage('Název jazyka nebo kód již existuje', 'error');
+            $this->presenter->redirect(this);
         } else {
-            $this->database->table('countries')->insert(array(
-                'title_cs' => $form->values->country_cs,
-                'title_en' => $form->values->country_en,
+            $this->database->table('languages')->insert(array(
+                'title' => $form->values->language,
+                'code' => $form->values->code,
             ));
 
-            $this->redirect('this');
+            $this->presenter->redirect(this);
         }
     }
 
     public function render()
     {
         $template = $this->template;
-        $template->setFile(__DIR__ . '/InsertCountryControl.latte');
+        $template->setFile(__DIR__ . '/InsertLanguageControl.latte');
 
         $template->render();
     }

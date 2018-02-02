@@ -1,12 +1,12 @@
 <?php
 
-namespace Caloriscz\Page;
+namespace App\Forms\Pages;
 
 use App\Model\Document;
 use Nette\Application\UI\Control;
 use Nette\Forms\BootstrapUIForm;
 
-class SettingsControl extends Control
+class PageSettingsControl extends Control
 {
     /** @var \Nette\Database\Context */
     public $database;
@@ -80,7 +80,7 @@ class SettingsControl extends Control
     public function permissionValidated() {
         if ($this->getPresenter()->template->member->users_roles->pages_edit == 0) {
             $this->flashMessage('Nemáte oprávnění k této akci', 'error');
-            $this->redirect(this);
+            $this->redirect('this');
         }
     }
 
@@ -103,7 +103,7 @@ class SettingsControl extends Control
     {
         $template = $this->template;
         $template->settings = $this->getPresenter()->template->settings;
-        $template->setFile(__DIR__ . '/SettingsControl.latte');
+        $template->setFile(__DIR__ . '/PageSettingsControl.latte');
 
         $template->render();
     }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Caloriscz\Page\Editor;
+namespace App\Forms\Pages;
 
 use App\Model\Document;
 use Nette\Application\UI\Control;
@@ -11,7 +11,7 @@ class EditorSettingsControl extends Control
 {
     private $htmlPurifier;
 
-    /** @var \Nette\Database\Context */
+    /** @var Context */
     public $database;
 
     public function __construct(Context $database)
@@ -39,15 +39,15 @@ class EditorSettingsControl extends Control
         $form->addHidden('l');
         $form->addHidden('docs_id');
 
-        if ($l == '') {
-            $form->setDefaults(array(
+        if ($l === '') {
+            $form->setDefaults([
                 'id' => $pages->id,
-            ));
+            ]);
         } else {
-            $form->setDefaults(array(
+            $form->setDefaults([
                 'id' => $pages->id,
                 'l' => $l,
-            ));
+            ]);
         }
 
         $form->addHidden('slug_old');
@@ -62,7 +62,7 @@ class EditorSettingsControl extends Control
         $form->addCheckbox('sitemap');
 
         if ($l == '') {
-            $form->setDefaults(array(
+            $form->setDefaults([
                 'id' => $pages->id,
                 'slug' => $pages->slug,
                 'slug_old' => $pages->slug,
@@ -72,9 +72,9 @@ class EditorSettingsControl extends Control
                 'public' => $pages->public,
                 'date_published' => $pages->date_published,
                 'sitemap' => $pages->sitemap,
-            ));
+            ]);
         } else {
-            $form->setDefaults(array(
+            $form->setDefaults([
                 'id' => $pages->id,
                 'l' => $l,
                 'slug' => $pages->{'slug_' . $l},
@@ -85,7 +85,7 @@ class EditorSettingsControl extends Control
                 'public' => $pages->public,
                 'date_published' => $pages->date_published,
                 'sitemap' => $pages->sitemap,
-            ));
+            ]);
         }
 
         $form->onSuccess[] = [$this, 'editFormSucceeded'];
@@ -100,7 +100,7 @@ class EditorSettingsControl extends Control
     {
         if ($this->getPresenter()->template->member->users_roles->pages_edit === 0) {
             $this->getPresenter()->flashMessage('Nemáte oprávnění k této akci', 'error');
-            $this->getPresenter()->redirect(this);
+            $this->getPresenter()->redirect('this');
         }
     }
 
@@ -120,7 +120,7 @@ class EditorSettingsControl extends Control
         $doc->setParent($values['parent']);
         $doc->save($form->values->id, $this->getPresenter()->user->getId());
 
-        $this->getPresenter()->redirect('this', array('id' => $form->values->id, 'l' => $form->values->l));
+        $this->getPresenter()->redirect('this', ['id' => $form->values->id, 'l' => $form->values->l]);
     }
 
     public function handlePublic()
@@ -132,12 +132,10 @@ class EditorSettingsControl extends Control
             $show = 0;
         }
 
-        $this->database->table('pages')->get($this->getPresenter()->getParameter('id'))->update(array('public' => $show));
+        $this->database->table('pages')->get($this->getPresenter()->getParameter('id'))->update(['public' => $show]);
 
-        $this->getPresenter()->redirect('this', array('id' => $this->getPresenter()->getParameter('id'), 'l' => $this->getPresenter()->getParameter('l')));
+        $this->getPresenter()->redirect('this', ['id' => $this->getPresenter()->getParameter('id'), 'l' => $this->getPresenter()->getParameter('l')]);
     }
-
-    /************************************/
 
     public function render()
     {

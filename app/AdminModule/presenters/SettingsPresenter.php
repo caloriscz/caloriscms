@@ -2,12 +2,12 @@
 
 namespace App\AdminModule\Presenters;
 
+use App\Forms\Settings\EditSettingsControl;
+use App\Forms\Settings\InsertCountryControl;
+use App\Forms\Settings\InsertCurrencyControl;
+use App\Forms\Settings\InsertLanguageControl;
 use Caloriscz\Menus\Admin\AdminPanelControl;
 use Caloriscz\Menus\Admin\SettingsCategoriesControl;
-use Caloriscz\Settings\Countries\InsertCountryControl;
-use Caloriscz\Settings\Currency\InsertCurrencyControl;
-use Caloriscz\Settings\EditSettingsControl;
-use Caloriscz\Settings\Languages\InsertLanguageControl;
 
 /**
  * Settings presenter.

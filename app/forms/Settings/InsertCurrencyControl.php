@@ -1,5 +1,5 @@
 <?php
-namespace Caloriscz\Settings\Currency;
+namespace App\Forms\Settings;
 
 use Nette\Application\UI\Control;
 use Nette\Database\Context;

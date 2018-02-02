@@ -18,13 +18,10 @@ class PageBreadcrumbsControl extends Control
 
     public function render()
     {
-        $template = $this->template;
-
+        $template = $this->getTemplate();
         $breadcrumb = new Category($this->database);
         $template->breadcrumbs = $breadcrumb->getPageBreadcrumb($this->presenter->getParameter('page_id'));
-
         $template->setFile(__DIR__ . '/PageBreadcrumbsControl.latte');
-
         $template->render();
     }
 
