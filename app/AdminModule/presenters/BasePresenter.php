@@ -1,9 +1,8 @@
 <?php
 namespace App\AdminModule\Presenters;
 
+use App\Forms\Media\DropZoneControl;
 use App\Forms\Pages\EditorSettingsControl;
-use Caloriscz\Media\DropZoneControl;
-use Caloriscz\Media\ImageBrowserControl;
 use Caloriscz\Menus\Admin\MainMenuControl;
 use Caloriscz\Menus\Admin\PageTopMenuControl;
 use Caloriscz\Page\Editor\EditorControl;
@@ -54,7 +53,6 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
      * Common handler for grid operations
      * @param $operation
      * @param $id
-     * @throws Nette\Application\AbortException
      */
     public function handleOperations($operation, $id)
     {
@@ -150,11 +148,6 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
         return new DropZoneControl($this->database);
     }
 
-    protected function createComponentImageBrowser()
-    {
-        return new ImageBrowserControl($this->database);
-    }
-
     protected function createComponentMainMenu()
     {
         return new MainMenuControl($this->em);
@@ -164,5 +157,4 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
     {
         return new PageTopMenuControl($this->database);
     }
-
 }

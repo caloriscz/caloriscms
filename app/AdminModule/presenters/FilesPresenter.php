@@ -2,7 +2,7 @@
 
 namespace App\AdminModule\Presenters;
 
-use Caloriscz\Files\DropUploadControl;
+use App\Forms\Files\DropUploadControl;
 use App\Model;
 use Nette\Utils\Finder;
 

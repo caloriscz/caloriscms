@@ -18,7 +18,7 @@ class BlockControl extends Control
 
     public function render()
     {
-        $template = $this->template;
+        $template = $this->getTemplate();
         $template->settings = $this->presenter->template->settings;
         $template->widgets = $this->database->table('pages_widgets')
             ->where('pages_id', $this->presenter->getParameter('id'))

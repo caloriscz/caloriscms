@@ -60,8 +60,7 @@ class ElfinderControl extends Control
 
     public function render()
     {
-        $template = $this->template;
-
+        $template = $this->getTemplate();
         $template->render();
     }
 

@@ -1,12 +1,12 @@
 <?php
 
-namespace Caloriscz\Profile;
+namespace App\Forms\Profile;
 
 use Nette\Application\UI\Control;
 use Nette\Database\Context;
 use Nette\Forms\BootstrapUIForm;
 
-class EditControl extends Control
+class EditFrontProfileControl extends Control
 {
 
     /** @var Context */
@@ -55,7 +55,7 @@ class EditControl extends Control
 
     public function render()
     {
-        $this->template->setFile(__DIR__ . '/EditControl.latte');
+        $this->template->setFile(__DIR__ . '/EditFrontProfileControl.latte');
         $this->template->render();
     }
 

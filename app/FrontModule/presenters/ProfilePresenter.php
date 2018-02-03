@@ -2,27 +2,27 @@
 
 namespace App\FrontModule\Presenters;
 
+use App\Forms\Profile\ChangePasswordControl;
+use App\Forms\Profile\ChangePortraitControl;
+use App\Forms\Profile\EditAddressControl;
+use App\Forms\Profile\EditFrontProfileControl;
+use App\Forms\Profile\InsertAddressControl;
 use App\Model\IO;
-use Caloriscz\Profile\ChangePasswordControl;
-use Caloriscz\Profile\ChangePortraitControl;
-use Caloriscz\Profile\EditAddressControl;
-use Caloriscz\Profile\EditControl;
-use Caloriscz\Profile\InsertAddressControl;
 use Caloriscz\Profile\ProfileMenuControl;
+use Nette\Security\IUserStorage;
 
-class ProfilePresenter extends \App\FrontModule\Presenters\BasePresenter
+class ProfilePresenter extends BasePresenter
 {
-
     protected function startup()
     {
         parent::startup();
 
         if (!$this->user->isLoggedIn()) {
-            if ($this->user->logoutReason === \Nette\Security\IUserStorage::INACTIVITY) {
+            if ($this->user->logoutReason === IUserStorage::INACTIVITY) {
                 $this->flashMessage('Byli jste odhlášeni');
             }
 
-            $this->redirect('Sign:in', array('backlink' => $this->storeRequest()));
+            $this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
         }
     }
 
@@ -43,7 +43,7 @@ class ProfilePresenter extends \App\FrontModule\Presenters\BasePresenter
 
     protected function createComponentProfileEdit()
     {
-        return new EditControl($this->database);
+        return new EditFrontProfileControl($this->database);
     }
 
     protected function createComponentProfileInsertAddress()
@@ -64,7 +64,7 @@ class ProfilePresenter extends \App\FrontModule\Presenters\BasePresenter
             IO::remove($idfFolder . '/images/profiles/portrait-' . $this->user->getId() . '.jpg');
         }
 
-        $this->redirect(this);
+        $this->redirect('this');
     }
 
     public function renderAddresses()
@@ -73,5 +73,4 @@ class ProfilePresenter extends \App\FrontModule\Presenters\BasePresenter
             'users_id' => $this->user->getId()
         ]);
     }
-
 }

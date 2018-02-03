@@ -1,6 +1,7 @@
 <?php
-namespace Caloriscz\Categories;
+namespace App\Forms\Contacts;
 
+use App\Model\Category;
 use Nette\Application\UI\Control;
 use Nette\Database\Context;
 use Nette\Forms\BootstrapUIForm;
@@ -25,8 +26,8 @@ class InsertCategoryControl extends Control
         $form->setTranslator($this->presenter->translator);
 
         $form->addHidden('parent');
-        $form->addText('title', 'dictionary.main.Title')->setAttribute('class', 'form-control');
-        $form->addSubmit('submitm', 'dictionary.main.Insert')->setAttribute('class', 'btn btn-primary');
+        $form->addText('title');
+        $form->addSubmit('submitm');
 
         $form->onSuccess[] = [$this, 'insertFormSucceeded'];
         $form->onValidate[] = [$this, 'validateFormSucceeded'];
@@ -35,10 +36,10 @@ class InsertCategoryControl extends Control
 
     public function validateFormSucceeded(BootstrapUIForm $form)
     {
-        $category = $this->database->table('contacts_categories')->where(array(
+        $category = $this->database->table('contacts_categories')->where([
             'parent_id' => $form->values->parent,
             'title' => $form->values->title,
-        ));
+        ]);
 
         if ($category->count() > 0) {
             $this->presenter->flashMessage($this->presenter->translator->translate('messages.sign.categoryAlreadyExists'), 'error');
@@ -53,7 +54,7 @@ class InsertCategoryControl extends Control
 
     public function insertFormSucceeded(BootstrapUIForm $form)
     {
-        $category = new \App\Model\Category($this->database);
+        $category = new Category($this->database);
         $category->setCategory($form->values->title, $form->values->parent);
 
         $this->presenter->redirect('this', array('id' => null));
@@ -65,5 +66,4 @@ class InsertCategoryControl extends Control
         $this->template->setFile(__DIR__ . '/InsertCategoryControl.latte');
         $this->template->render();
     }
-
 }

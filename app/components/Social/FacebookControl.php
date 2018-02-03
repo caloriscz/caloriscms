@@ -12,5 +12,4 @@ class FacebookControl extends Control {
         $this->template->type = $type;
         $this->template->render();
     }
-
 }

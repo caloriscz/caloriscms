@@ -1,6 +1,6 @@
 <?php
 
-namespace Caloriscz\Profile;
+namespace App\Forms\Profile;
 
 use App\Model\Document;
 use Nette\Application\UI\Control;
@@ -73,5 +73,4 @@ class InsertAddressControl extends Control
         $this->template->setFile(__DIR__ . '/InsertAddressControl.latte');
         $this->template->render();
     }
-
 }

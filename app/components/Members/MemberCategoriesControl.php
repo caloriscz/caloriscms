@@ -17,12 +17,9 @@ class MemberCategoriesControl extends Control
 
     public function render()
     {
-        $template = $this->template;
+        $template = $this->getTemplate();
         $template->categories = $this->database->table('users_categories')->order('id');
-
         $template->setFile(__DIR__ . '/MemberCategoriesControl.latte');
-
         $template->render();
     }
-
 }

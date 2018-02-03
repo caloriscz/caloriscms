@@ -1,5 +1,5 @@
 <?php
-namespace Caloriscz\Files;
+namespace App\Forms\Files;
 
 use Nette\Application\UI\Control;
 use Nette\Database\Context;
@@ -8,7 +8,7 @@ use Nette\Forms\BootstrapUIForm;
 class DropUploadControl extends Control
 {
 
-    /** @var \Nette\Database\Context */
+    /** @var Context */
     public $database;
 
     public function __construct(Context $database)
@@ -32,7 +32,7 @@ class DropUploadControl extends Control
         return $form;
     }
 
-    public function dropUploadFormSucceeded(BootstrapUIForm $form)
+    public function dropUploadFormSucceeded()
     {
         if (!empty($_FILES)) {
             $ds = DIRECTORY_SEPARATOR;
@@ -52,7 +52,7 @@ class DropUploadControl extends Control
 
     public function render()
     {
-        $template = $this->template;
+        $template = $this->getTemplate();
         $template->setFile(__DIR__ . '/DropUploadControl.latte');
 
         $template->render();

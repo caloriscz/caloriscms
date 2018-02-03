@@ -56,7 +56,7 @@ class PageListControl extends Control
             $show = 0;
         }
 
-        $this->database->table('pages')->get($this->getParameter('id'))->update(array('public' => $show));
+        $this->database->table('pages')->get($this->getParameter('id'))->update(['public' => $show]);
 
         $this->onSave($this->getParameter('type'));
     }

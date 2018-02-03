@@ -4,7 +4,6 @@ namespace App\FrontModule\Presenters;
 use App\Forms\Pages\AdvancedSearchControl;
 use Caloriscz\Menus\Admin\AdminBarControl;
 use Caloriscz\Menus\MenuControl;
-use Caloriscz\Menus\SideMenuControl;
 use Caloriscz\Navigation\Footer\FooterControl;
 use Caloriscz\Navigation\Head\HeadControl;
 use Caloriscz\Navigation\NavigationControl;
@@ -146,11 +145,6 @@ class BasePresenter extends Nette\Application\UI\Presenter
     protected function createComponentContact()
     {
         return new \ContactControl($this->database);
-    }
-
-    protected function createComponentSideMenu()
-    {
-        return new SideMenuControl($this->database);
     }
 
     protected function createComponentAdvancedSearch()

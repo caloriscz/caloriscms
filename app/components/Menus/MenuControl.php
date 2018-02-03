@@ -18,18 +18,18 @@ class MenuControl extends Control
     {
         $template = $this->template;
 
-        if ($controlName == null) {
+        if ($controlName === null) {
             $controlName = 'MenuControl';
         }
 
-        if ($this->presenter->translator->getLocale() != $this->presenter->translator->getDefaultLocale()) {
+        if ($this->presenter->translator->getLocale() !== $this->presenter->translator->getDefaultLocale()) {
             $template->langSuffix = '_' . $this->presenter->translator->getLocale();
             $template->langPrefix = '/' . $this->presenter->translator->getLocale();
         }
 
         $template->setFile(__DIR__ . '/' . $controlName . '.latte');
 
-        $template->active = strtok($_SERVER["REQUEST_URI"], '?');
+        $template->active = strtok($_SERVER['REQUEST_URI'], '?');
 
         $template->id = $id;
         $template->style = $style;

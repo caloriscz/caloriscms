@@ -17,7 +17,7 @@ class NavbarMenuControl extends Control
 
     public function render($id, $style = 'navbar')
     {
-        $template = $this->template;
+        $template = $this->getTemplate();
         $template->appDir = APP_DIR;
         $template->setFile(__DIR__ . '/NavbarMenuControl.latte');
 

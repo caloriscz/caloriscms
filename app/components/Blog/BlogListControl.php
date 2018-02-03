@@ -9,7 +9,7 @@ use Nette\Utils\Paginator;
 class BlogListControl extends Control
 {
 
-    /** @var \Nette\Database\Context */
+    /** @var Context */
     public $database;
 
     public function __construct(Context $database)
@@ -19,32 +19,27 @@ class BlogListControl extends Control
 
     protected function createComponentPaging()
     {
-        $control = new PagingControl();
-        return $control;
+        return new PagingControl();
     }
 
     public function render()
     {
         $template = $this->template;
 
-        $blog = $this->database->table('pages')->where(array(
+        $blog = $this->database->table('pages')->where([
             'date_published <= ?' => date('Y-m-d H:i:s'),
             'pages_types_id' => 2,
-        ))
-            ->order('date_created DESC');
+        ])->order('date_created DESC');
 
         $paginator = new Paginator();
-        $paginator->setItemCount($blog->count("*"));
+        $paginator->setItemCount($blog->count('*'));
         $paginator->setItemsPerPage(20);
-        $paginator->setPage($this->presenter->getParameter("page"));
+        $paginator->setPage($this->presenter->getParameter('page'));
 
         $template->blog = $blog->limit($paginator->getLength(), $paginator->getOffset());
         $template->paginator = $paginator;
         $template->args = $this->getParameters();
-
         $template->setFile(__DIR__ . '/BlogListControl.latte');
-
         $template->render();
     }
-
 }

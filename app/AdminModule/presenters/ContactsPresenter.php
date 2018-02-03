@@ -2,15 +2,14 @@
 
 namespace App\AdminModule\Presenters;
 
-use App\Forms\Contacts\EditContactControl;
+use App\Forms\Contacts\EditCategoryControl;
+use App\Forms\Contacts\InsertCategoryControl;
 use App\Forms\Contacts\InsertCommunicationControl;
 use App\Forms\Contacts\InsertContactCategoryControl;
 use App\Forms\Contacts\InsertContactControl;
 use App\Forms\Contacts\InsertHourControl;
 use App\Forms\Contacts\LoadVatControl;
 use Apps\Forms\Profile\EditControl;
-use Caloriscz\Categories\EditCategoryControl;
-use Caloriscz\Categories\InsertCategoryControl;
 use Caloriscz\Contact\CommunicationGridControl;
 use Caloriscz\Contact\ContactGridControl;
 use Nette,

@@ -17,10 +17,9 @@ class GalleryControl extends Control
 
     public function render($page)
     {
-        $template = $this->template;
+        $template = $this->getTemplate();
         $template->page = $page;
         $template->setFile(__DIR__ . '/GalleryControl.latte');
-
         $template->render();
     }
 

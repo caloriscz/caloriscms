@@ -83,12 +83,12 @@ class Category
             $parent = null;
         }
 
-        $this->database->table('categories')->insert([
+        $this->database->table('contacts_categories')->insert([
             'title' => $title,
             'parent_id' => $parent
         ]);
 
-        $this->database->query('UPDATE categories SET sorted = id WHERE sorted = 0');
+        $this->database->query('UPDATE contacts_categories SET sorted = id WHERE sorted = 0');
     }
 
 }

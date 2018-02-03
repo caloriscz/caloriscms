@@ -20,13 +20,12 @@ class ProfileMenuControl extends Control
 
     protected function createComponentPageSlug()
     {
-        $control = new PageSlugControl($this->database);
-        return $control;
+        return new PageSlugControl($this->database);
     }
 
     public function render()
     {
-        $this->template->pageId = $this->presenter->getParameter("page_id");
+        $this->template->pageId = $this->presenter->getParameter('page_id');
         $this->template->setFile(__DIR__ . '/ProfileMenuControl.latte');
         $this->template->render();
     }

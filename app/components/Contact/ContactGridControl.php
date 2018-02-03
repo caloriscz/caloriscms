@@ -26,7 +26,6 @@ class ContactGridControl extends Control
      */
     protected function createComponentContactsGrid($name)
     {
-
         $grid = new DataGrid($this, $name);
 
         if ($this->getPresenter()->id === null) {

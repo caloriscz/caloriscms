@@ -1,5 +1,5 @@
 <?php
-namespace Caloriscz\Categories;
+namespace App\Forms\Contacts;
 
 use Nette\Application\UI\Control;
 use Nette\Database\Context;
@@ -19,7 +19,6 @@ class EditCategoryControl extends Control
     protected function createComponentEditForm()
     {
         $category = $this->database->table('pages')->get($this->presenter->getParameter('id'));
-
         $categories = $this->database->table('pages')->where('pages_types_id', 7)->fetchPairs('id', 'title');
         unset($categories[$category->id]);
 
@@ -37,7 +36,6 @@ class EditCategoryControl extends Control
         $form->addText('url', 'dictionary.main.URL');
         $form->addSubmit('submitm', 'dictionary.main.Save');
 
-
         $arr = array(
             'id' => $category->id,
             'title' => $category->title,
@@ -53,19 +51,18 @@ class EditCategoryControl extends Control
     public function editFormSucceeded(BootstrapUIForm $form)
     {
         $this->database->table('contacts_categories')->get($form->values->id)
-            ->update(array(
+            ->update([
                 'title' => $form->values->title,
                 'parent_id' => $form->values->parent,
-            ));
+            ]);
 
         $this->presenter->redirect('this', array('id' => $form->values->id));
     }
 
     public function render()
     {
-        $template = $this->template;
+        $template = $this->getTemplate();
         $template->setFile(__DIR__ . '/EditCategoryControl.latte');
-
         $template->render();
     }
 

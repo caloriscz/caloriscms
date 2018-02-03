@@ -1,20 +1,21 @@
 <?php
 
-namespace Caloriscz\Media;
+namespace App\Forms\Media;
 
 use App\Model\File;
 use App\Model\IO;
 use App\Model\Thumbnail;
 use Nette\Application\UI\Control;
+use Nette\Database\Context;
 use Nette\Forms\BootstrapUIForm;
 
 class DropZoneControl extends Control
 {
 
-    /** @var \Nette\Database\Context */
+    /** @var Context */
     public $database;
 
-    public function __construct(\Nette\Database\Context $database)
+    public function __construct(Context $database)
     {
         $this->database = $database;
     }
@@ -81,10 +82,10 @@ class DropZoneControl extends Control
      */
     public function createComponentDropFileUploadForm($id)
     {
-        if ($this->getPresenter()->getView() == 'albums') {
+        $type = 0;
+
+        if ($this->getPresenter()->getView() === 'albums') {
             $type = 1;
-        } else {
-            $type = 0;
         }
 
         $form = new BootstrapUIForm();
@@ -97,10 +98,10 @@ class DropZoneControl extends Control
         $form->addHidden('type');
         $form->addUpload('file_upload')
             ->setHtmlId('file_upload');
-        $form->setDefaults(array(
+        $form->setDefaults([
             'pages_id' => $this->getPresenter()->getParameter('id'),
             'type' => $type,
-        ));
+        ]);
 
         $form->onSuccess[] = [$this, 'dropFileUploadFormSucceeded'];
 
@@ -131,13 +132,13 @@ class DropZoneControl extends Control
             ));
 
             if ($checkImage->count() === 0) {
-                $this->database->table('media')->insert(array(
+                $this->database->table('media')->insert([
                     'name' => $realFile,
                     'pages_id' => $form->values->pages_id,
                     'filesize' => $fileSize,
                     'file_type' =>  $form->values->type,
                     'date_created' => date('Y-m-d H:i:s'),
-                ));
+                ]);
             } else {
                 echo 'Nejsem reálný soubor';
             }
@@ -149,11 +150,9 @@ class DropZoneControl extends Control
     public function render($id)
     {
         $this->template->id = $id;
-        $template = $this->template;
+        $template = $this->getTemplate();
         $template->settings = $this->getPresenter()->template->settings;
-
         $template->setFile(__DIR__ . '/DropZoneControl.latte');
         $template->render();
     }
-
 }
