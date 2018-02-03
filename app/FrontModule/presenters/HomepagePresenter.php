@@ -1,7 +1,8 @@
 <?php
 
 namespace App\FrontModule\Presenters;
-use Caloriscz\Page\Pages\HomepageControl;
+
+use Caloriscz\Page\HomepageControl;
 
 
 /**
@@ -13,10 +14,6 @@ class HomepagePresenter extends BasePresenter
     protected function startup()
     {
         parent::startup();
-
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
     }
 
     protected function createComponentHomepage()
@@ -28,5 +25,4 @@ class HomepagePresenter extends BasePresenter
     {
         $this->template->page = $this->database->table('pages')->get(1);
     }
-
 }

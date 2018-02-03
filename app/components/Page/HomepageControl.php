@@ -1,5 +1,5 @@
 <?php
-namespace Caloriscz\Page\Pages;
+namespace Caloriscz\Page;
 
 use Caloriscz\Appearance\CarouselBoxControl;
 use Caloriscz\Blog\BlogPreviewControl;

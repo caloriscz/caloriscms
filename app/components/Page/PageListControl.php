@@ -1,6 +1,6 @@
 <?php
 
-namespace Caloriscz\Page\Pages;
+namespace Caloriscz\Page;
 
 use App\Forms\Menu\InsertMenuControl;
 use App\Model\Document;
@@ -34,6 +34,7 @@ class PageListControl extends Control
 
     /**
      * Delete page
+     * @param $id
      */
     public function handleDelete($id)
     {
@@ -72,7 +73,7 @@ class PageListControl extends Control
 
         $pages = $this->em->getRepository(Pages::class);
 
-        if ($fileTemplate === 'PageTreeControl') {
+        if ($fileTemplate === 'PageListTreeControl') {
             $this->template->menu = $this->database->table('pages')->where('pages_id', null)->order($order);
         } else {
             $this->template->pages = $pages->findBy(['pagesTypes' => $type], ['title' => 'ASC']);

@@ -1,5 +1,5 @@
 <?php
-namespace Caloriscz\Page\Editor;
+namespace Caloriscz\Utilities;
 
 use Nette\Application\UI\Control;
 

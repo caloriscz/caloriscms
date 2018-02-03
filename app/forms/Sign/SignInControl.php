@@ -96,7 +96,7 @@ class SignInControl extends Control
         }
 
         $this->template->type = $type;
-        $this->template->setFile(__DIR__ . 'SignInControl.php/' . $templateName . '.latte');
+        $this->template->setFile(__DIR__ . '/' . $templateName . '.latte');
         $this->template->render();
     }
 

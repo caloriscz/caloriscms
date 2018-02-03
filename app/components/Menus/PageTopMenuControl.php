@@ -1,5 +1,5 @@
 <?php
-namespace Caloriscz\Menus\Admin;
+namespace Caloriscz\Menus;
 
 use Nette\Application\UI\Control;
 use Nette\Database\Context;

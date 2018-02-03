@@ -1,6 +1,6 @@
 <?php
 
-namespace Caloriscz\Navigation\Head;
+namespace Caloriscz\Navigation;
 
 use Kdyby\Translation\Translator;
 use Nette\Application\UI\Control;

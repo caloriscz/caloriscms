@@ -1,6 +1,6 @@
 <?php
 
-namespace Caloriscz\Menus\Admin;
+namespace Caloriscz\Settings;
 
 use Nette\Application\UI\Control;
 use Nette\Database\Context;

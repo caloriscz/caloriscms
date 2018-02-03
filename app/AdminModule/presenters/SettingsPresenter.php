@@ -6,8 +6,7 @@ use App\Forms\Settings\EditSettingsControl;
 use App\Forms\Settings\InsertCountryControl;
 use App\Forms\Settings\InsertCurrencyControl;
 use App\Forms\Settings\InsertLanguageControl;
-use Caloriscz\Menus\Admin\AdminPanelControl;
-use Caloriscz\Menus\Admin\SettingsCategoriesControl;
+use Caloriscz\Settings\SettingsCategoriesControl;
 
 /**
  * Settings presenter.
@@ -39,7 +38,7 @@ class SettingsPresenter extends BasePresenter
     {
         return new SettingsCategoriesControl($this->database);
     }
-    
+
     public function handleInstall($id)
     {
         $default = $this->database->table('languages')->where('default = 1');
@@ -64,7 +63,7 @@ class SettingsPresenter extends BasePresenter
 
     public function handleMakeDefault($id)
     {
-        if ($this->template->member->users_roles->settings_edit == 0) {
+        if ($this->template->member->users_roles->settings_edit === 0) {
             $this->database->query('UPDATE languages SET `default` = NULL');
             $this->database->table('languages')->get($id)->update(['default' => 1]);
         }
@@ -74,7 +73,7 @@ class SettingsPresenter extends BasePresenter
 
     public function handleMakeDefaultCurrency($id)
     {
-        if ($this->template->member->users_roles->settings_edit == 0) {
+        if ($this->template->member->users_roles->settings_edit === 0) {
             $this->database->query('UPDATE currencies SET `used` = NULL');
             $this->database->table('currencies')->get($id)->update(['used' => 1]);
         }
@@ -84,7 +83,7 @@ class SettingsPresenter extends BasePresenter
 
     public function handleToggle($id)
     {
-        if ($this->template->member->users_roles->settings_edit == 0) {
+        if ($this->template->member->users_roles->settings_edit === 0) {
             $toggle = $this->database->table('languages')->get($id);
 
             if ($toggle->used) {
@@ -131,7 +130,8 @@ class SettingsPresenter extends BasePresenter
         return $message . '<br>';
     }
 
-    public function renderDefault()     {
+    public function renderDefault()
+    {
         $this->template->categoryId = null;
     }
 

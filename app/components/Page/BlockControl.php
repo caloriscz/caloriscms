@@ -1,6 +1,6 @@
 <?php
 
-namespace Caloriscz\Page\Editor;
+namespace Caloriscz\Page;
 
 use Nette\Application\UI\Control;
 use Nette\Database\Context;

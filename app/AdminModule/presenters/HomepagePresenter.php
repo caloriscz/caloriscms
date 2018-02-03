@@ -2,7 +2,8 @@
 
 namespace App\AdminModule\Presenters;
 
-use Caloriscz\Page\Editor\ElfinderControl;
+use Caloriscz\Utilities\ElfinderControl;
+
 
 /**
  * Admin homepage presenter.

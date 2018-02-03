@@ -6,18 +6,15 @@ use App\Forms\Media\ImageEditFormControl;
 use App\Forms\Pages\FilterFormControl;
 use App\Model\IO;
 use Apps\Forms\Pages\InsertFormControl;
-use Caloriscz\Page\Editor\BlockControl;
-use Caloriscz\Page\File\FileListControl;
-use Caloriscz\Page\Pages\PageListControl;
+use Caloriscz\Page\BlockControl;
+use Caloriscz\Page\FileListControl;
+use Caloriscz\Page\PageListControl;
 
 /**
  * Pages presenter.
  */
 class PagesPresenter extends BasePresenter
 {
-    /**
-     * @throws \Nette\Application\AbortException
-     */
     public function startup()
     {
         parent::startup();
@@ -64,6 +61,7 @@ class PagesPresenter extends BasePresenter
      * Changes public state
      * @param $identifier
      * @param $public
+     * @throws \Nette\Application\AbortException
      */
     protected function handleChangeState($identifier, $public)
     {
@@ -81,6 +79,7 @@ class PagesPresenter extends BasePresenter
     /**
      * Deletes related page
      * @param $id
+     * @throws \Nette\Application\AbortException
      */
     public function handleDeleteRelated($id)
     {
@@ -100,6 +99,7 @@ class PagesPresenter extends BasePresenter
     /**
      * Delete image
      * @param $id
+     * @throws \Nette\Application\AbortException
      */
     public function handleDeleteImage($id)
     {
@@ -114,6 +114,7 @@ class PagesPresenter extends BasePresenter
     /**
      * Insert related page
      * @param $id
+     * @throws \Nette\Application\AbortException
      */
     public function handleInsertRelated($id)
     {

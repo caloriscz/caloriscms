@@ -1,6 +1,6 @@
 <?php
 
-namespace Caloriscz\Page\Editor;
+namespace Caloriscz\Page;
 
 use App\Model\Document;
 use Kdyby\Doctrine\EntityManager;

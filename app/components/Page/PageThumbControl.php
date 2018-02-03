@@ -1,6 +1,6 @@
 <?php
 
-namespace Caloriscz\Page\Pages;
+namespace Caloriscz\Page;
 
 use App\Model\Document;
 use App\Model\IO;

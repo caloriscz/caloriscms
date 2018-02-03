@@ -1,5 +1,5 @@
 <?php
-namespace Caloriscz\Categories\Navigation;
+namespace Caloriscz\Menus;
 
 use Nette\Application\UI\Control;
 use Nette\Database\Context;
@@ -18,7 +18,7 @@ class SideCatControl extends Control
     public function render($style = 'sidemenu', $templateFile = 'SideCatControl', $id = null)
     {
         $template = $this->getTemplate();
-        $template->setFile(__DIR__ . '/' . $templateFile . '.latte');
+        $template->setFile(__DIR__ . 'SideCatControl.php/' . $templateFile . '.latte');
         $template->id = $id;
         $template->database = $this->database;
         $template->style = $style;

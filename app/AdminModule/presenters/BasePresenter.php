@@ -4,8 +4,8 @@ namespace App\AdminModule\Presenters;
 use App\Forms\Media\DropZoneControl;
 use App\Forms\Pages\EditorSettingsControl;
 use Caloriscz\Menus\Admin\MainMenuControl;
-use Caloriscz\Menus\Admin\PageTopMenuControl;
-use Caloriscz\Page\Editor\EditorControl;
+use Caloriscz\Menus\PageTopMenuControl;
+use Caloriscz\Page\EditorControl;
 use Caloriscz\Utilities\PagingControl;
 use Nette;
 
@@ -42,6 +42,9 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
     /** @var string @persistent */
     public $ajax = 'on';
 
+    /** @persistent */
+    public $backlink = '';
+
     public function __construct(Nette\Database\Context $database, Nette\Mail\IMailer $mailer)
     {
         parent::__construct();
@@ -53,12 +56,13 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
      * Common handler for grid operations
      * @param $operation
      * @param $id
+     * @throws Nette\Application\AbortException
      */
     public function handleOperations($operation, $id)
     {
         if ($id) {
             $row = implode(', ', $id);
-            $this->flashMessage("Process operation '$operation' for row with id: $row...", 'info');
+            $this->flashMessage("Process operation '$operation' for row with id: $row...");
         } else {
             $this->flashMessage('No rows selected.', 'error');
         }
@@ -69,9 +73,6 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
             $this->redirect($operation, array('idm' => $id));
         }
     }
-
-    /** @persistent */
-    public $backlink = '';
 
     protected function createTemplate($class = NULL)
     {

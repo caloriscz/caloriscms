@@ -8,7 +8,7 @@ use App\Model\Category;
 use App\Model\Document;
 use App\Model\IO;
 use App\Model\Page;
-use Caloriscz\Page\Pages\PageThumbControl;
+use Caloriscz\Page\PageThumbControl;
 use Nette\Http\FileUpload;
 use Nette\Utils\Paginator;
 

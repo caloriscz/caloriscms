@@ -2,10 +2,10 @@
 namespace App\FrontModule\Presenters;
 
 use App\Forms\Pages\AdvancedSearchControl;
-use Caloriscz\Menus\Admin\AdminBarControl;
 use Caloriscz\Menus\MenuControl;
-use Caloriscz\Navigation\Footer\FooterControl;
-use Caloriscz\Navigation\Head\HeadControl;
+use Caloriscz\Navigation\AdminBarControl;
+use Caloriscz\Navigation\FooterControl;
+use Caloriscz\Navigation\HeadControl;
 use Caloriscz\Navigation\NavigationControl;
 use Caloriscz\Page\PageDocumentControl;
 use Caloriscz\Page\PageSlugControl;
@@ -82,7 +82,7 @@ class BasePresenter extends Nette\Application\UI\Presenter
             exit();
         }
 
-        /* Secret password mode */
+        // Secret password mode
         $secret = $this->request->getCookie('secretx');
 
         if ($this->template->settings['site_cookie_whitelist'] != '') {
