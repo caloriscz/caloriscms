@@ -1,9 +1,9 @@
 <ul class="{$style}">
-    {foreach $categories as $rowCategories}
-        <li{if strcmp($langPrefix.$rowCategories->{'url'.$langSuffix}, $active) == 0} class="active"{/if}>
-            <a href="{$langPrefix.$rowCategories->{'url'.$langSuffix}}">
+    {foreach $categories as $row}
+        <li class="nav-item{if strcmp($langPrefix.$row->{'url'.$langSuffix}, $active) == 0} active{/if}">
+            <a href="{$langPrefix.$row->{'url'.$langSuffix}}" class="nav-link">
                 {var $title = 'title'.$langSuffix}
-                <span>{$rowCategories->{$title}}</span>
+                <span>{$row->{$title}}</span>
             </a>
         </li>
     {/foreach}

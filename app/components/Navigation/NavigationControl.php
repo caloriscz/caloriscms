@@ -3,6 +3,7 @@
 namespace Caloriscz\Navigation;
 
 use App\Forms\Pages\SearchControl;
+use Caloriscz\Menus\MenuControl;
 use Caloriscz\Menus\NavbarMenuControl;
 use Nette\Application\UI\Control;
 use Nette\Database\Context;
@@ -27,6 +28,12 @@ class NavigationControl extends Control
         return new NavbarMenuControl($this->database);
     }
 
+    protected function createComponentMenu()
+    {
+        return new MenuControl($this->database);
+    }
+
+
     public function render()
     {
         $template = $this->getTemplate();
@@ -38,7 +45,7 @@ class NavigationControl extends Control
             $template->member = $this->presenter->template->member;
         }
 
-        $template->args = $this->presenter->getParameters(TRUE);
+        $template->args = $this->presenter->getParameters(true);
         $template->setFile(__DIR__ . '/NavigationControl.latte');
         $template->render();
     }

@@ -56,6 +56,7 @@ class SettingsPresenter extends BasePresenter
         $this->checkColumn('pages', 'metadesc', 'varchar(200)', $id);
         $this->checkColumn('menu', 'title', 'varchar(80)', $id);
         $this->checkColumn('menu', 'description', 'text', $id);
+        $this->checkColumn('menu', 'url', 'text', $id);
         $this->checkColumn('snippets', 'content', 'text', $id);
 
         $this->redirect(':Admin:Settings:languages');

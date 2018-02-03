@@ -2,6 +2,7 @@
 namespace Caloriscz\Menus;
 
 use Nette\Application\UI\Control;
+use Nette\Database\Context;
 
 class MenuControl extends Control
 {
@@ -9,14 +10,21 @@ class MenuControl extends Control
     /** @var \Nette\Database\Context */
     public $database;
 
-    public function __construct(\Nette\Database\Context $database)
+    public function __construct(Context $database)
     {
         $this->database = $database;
     }
 
+    /**
+     * @param null $id
+     * @param string $style
+     * @param null $controlName
+     */
     public function render($id = null, $style = 'sidemenu', $controlName = null)
     {
-        $template = $this->template;
+        $template = $this->getTemplate();
+        $template->langSuffix = '';
+        $template->langPrefix = '';
 
         if ($controlName === null) {
             $controlName = 'MenuControl';

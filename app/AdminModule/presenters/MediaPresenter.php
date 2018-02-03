@@ -51,7 +51,6 @@ class MediaPresenter extends BasePresenter
      * Delete image
      * @param $id
      * @param $type
-     * @throws \Nette\Application\AbortException
      */
     public function handleDelete($id, $type)
     {
@@ -71,7 +70,6 @@ class MediaPresenter extends BasePresenter
     /**
      * Delete page
      * @param $id
-     * @throws \Nette\Application\AbortException
      */
     public function handleDeletePage($id)
     {
@@ -91,7 +89,6 @@ class MediaPresenter extends BasePresenter
 
     /**
      * Toggle display
-     * @throws \Nette\Application\AbortException
      */
     public function handleToggle()
     {
@@ -110,7 +107,6 @@ class MediaPresenter extends BasePresenter
      * @param $id
      * @param $sorted
      * @param $album
-     * @throws \Nette\Application\AbortException
      */
     public function handleUp($id, $sorted, $album)
     {
@@ -136,7 +132,6 @@ class MediaPresenter extends BasePresenter
      * @param $id
      * @param $sorted
      * @param $album
-     * @throws \Nette\Application\AbortException
      */
     public function handleDown($id, $sorted, $album)
     {
@@ -174,7 +169,7 @@ class MediaPresenter extends BasePresenter
 
         $mediaDb = $this->database->table('media')->where($arr)->order('name');
 
-        $paginator = new \Nette\Utils\Paginator;
+        $paginator = new Paginator();
         $paginator->setItemCount($mediaDb->count('*'));
         $paginator->setItemsPerPage(10);
         $paginator->setPage($this->getParameter('page'));
