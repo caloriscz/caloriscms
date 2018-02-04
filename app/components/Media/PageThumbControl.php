@@ -1,6 +1,6 @@
 <?php
 
-namespace Caloriscz\Page;
+namespace Caloriscz\Media;
 
 use App\Model\Document;
 use App\Model\IO;
@@ -51,21 +51,15 @@ class PageThumbControl extends Control
         $template = $this->getTemplate();
         $template->setFile(__DIR__ . '/PageThumbControl.latte');
 
-        if ($type === 6) {
-            $pagesId = 4;
-        } else {
-            $pagesId = 6;
-        }
+        $arr = [
+            'pages_types_id' => $type,
+            'pages_id' => $id,
+        ];
 
-        if ($id === '') {
+        if (empty($id)) {
             $arr = [
                 'pages_types_id' => $type,
-                'pages_id' => $pagesId,
-            ];
-        } else {
-            $arr = [
-                'pages_types_id' => $type,
-                'pages_id' => $id,
+                'pages_id' => 6,
             ];
         }
 

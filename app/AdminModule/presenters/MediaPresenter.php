@@ -8,7 +8,7 @@ use App\Model\Category;
 use App\Model\Document;
 use App\Model\IO;
 use App\Model\Page;
-use Caloriscz\Page\PageThumbControl;
+use Caloriscz\Media\PageThumbControl;
 use Nette\Http\FileUpload;
 use Nette\Utils\Paginator;
 
@@ -48,9 +48,10 @@ class MediaPresenter extends BasePresenter
     }
 
     /**
-     * Delete image
+     * Delete file
      * @param $id
      * @param $type
+     * @throws \Nette\Application\AbortException
      */
     public function handleDelete($id, $type)
     {
@@ -61,7 +62,7 @@ class MediaPresenter extends BasePresenter
 
         $imageDb->delete();
 
-        $this->redirect(this, array(
+        $this->redirect('this', array(
             'id' => $imageDb->pages_id,
             'type' => $this->getParameter('type'),
         ));
@@ -70,6 +71,7 @@ class MediaPresenter extends BasePresenter
     /**
      * Delete page
      * @param $id
+     * @throws \Nette\Application\AbortException
      */
     public function handleDeletePage($id)
     {
@@ -84,7 +86,7 @@ class MediaPresenter extends BasePresenter
             IO::removeDirectory(APP_DIR . '/media/' . $item);
         }
 
-        $this->redirect(this, array('id' => null, 'type' => $this->getParameter('type')));
+        $this->redirect('this', ['id' => null, 'type' => $this->getParameter('type')]);
     }
 
     /**
@@ -98,40 +100,41 @@ class MediaPresenter extends BasePresenter
             $this->response->setCookie('mediatype', 'list', '180 days');
         }
 
-
-        $this->redirect(':Admin:Media:default', array('type' => $this->getParameter('type')));
+        $this->redirect(':Admin:Media:default', ['type' => $this->getParameter('type')]);
     }
 
     /**
-     * Move image up
+     * Move document up
      * @param $id
      * @param $sorted
      * @param $album
+     * @throws \Nette\Application\AbortException
      */
     public function handleUp($id, $sorted, $album)
     {
-        $sortDb = $this->database->table('media')->where(array(
+        $sortDb = $this->database->table('media')->where([
             'sorted > ?' => $sorted,
             'categories_id' => $album,
-        ))->order('sorted')->limit(1);
+        ])->order('sorted')->limit(1);
         $sort = $sortDb->fetch();
 
         if ($sortDb->count() > 0) {
-            $this->database->table('media')->where(array('id' => $id))->update(array('sorted' => $sort->sorted));
-            $this->database->table('media')->where(array('id' => $sort->id))->update(array('sorted' => $sorted));
+            $this->database->table('media')->where(['id' => $id])->update(['sorted' => $sort->sorted]);
+            $this->database->table('media')->where(['id' => $sort->id])->update(['sorted' => $sorted]);
         }
 
-        $this->redirect(':Admin:Media:detail', array(
+        $this->redirect(':Admin:Media:detail', [
             'id' => $this->getParameter('album'),
             'category' => $this->getParameter('category'),
-        ));
+        ]);
     }
 
     /**
-     * Move image down
+     * Move document down
      * @param $id
      * @param $sorted
      * @param $album
+     * @throws \Nette\Application\AbortException
      */
     public function handleDown($id, $sorted, $album)
     {
@@ -142,8 +145,8 @@ class MediaPresenter extends BasePresenter
         $sort = $sortDb->fetch();
 
         if ($sortDb->count() > 0) {
-            $this->database->table('media')->where(array('id' => $id))->update(array('sorted' => $sort->sorted));
-            $this->database->table('media')->where(array('id' => $sort->id))->update(array('sorted' => $sorted));
+            $this->database->table('media')->where(['id' => $id])->update(['sorted' => $sort->sorted]);
+            $this->database->table('media')->where(['id' => $sort->id])->update(['sorted' => $sorted]);
         }
 
         $this->redirect(':Admin:Media:detail', [
@@ -191,27 +194,4 @@ class MediaPresenter extends BasePresenter
 
         $this->template->mediatype = $this->request->getCookie('mediatype');
     }
-
-    public function renderImage()
-    {
-        $this->template->file = $this->database->table('media')
-            ->get($this->getParameter('id'));
-
-        $isItImage = mime_content_type(APP_DIR . '/media/' . $this->template->file->pages_id . '/' . $this->template->file->name);
-
-        if (isset($isItImage)) {
-            $type = array(
-                'image/png', 'image/jpg', 'image/jpeg', 'image/jpe', 'image/gif',
-                'image/tif', 'image/tiff', 'image/svg', 'image/ico', 'image/icon', 'image/x-icon');
-
-            if (in_array($isItImage, $type, true)) {
-                $this->template->isImage = true;
-            } else {
-                $this->template->isImage = false;
-            }
-
-            $this->template->fileType = $isItImage;
-        }
-    }
-
 }

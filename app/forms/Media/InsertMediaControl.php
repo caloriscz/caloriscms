@@ -67,7 +67,7 @@ class InsertMediaControl extends Control
 
         IO::directoryMake(APP_DIR . '/media/' . $page);
 
-        $this->getPresenter()->redirect(this, array(
+        $this->getPresenter()->redirect('this', array(
             'id' => $form->values->category,
         ));
     }
