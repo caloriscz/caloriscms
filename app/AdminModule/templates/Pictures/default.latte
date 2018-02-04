@@ -3,7 +3,7 @@
 
 <ol class="breadcrumb">
     <li class="breadcrumb-item"><a href="/admin/">Home</a></li>
-    <li class="breadcrumb-item">{_dictionary.main.Media}</li>
+    <li class="breadcrumb-item">Galerie</li>
     {if count($breadcrumbs) > 0}
         {foreach $breadcrumbs as $crumbId => $crumbValue}
             {if !$iterator->first}
@@ -54,8 +54,8 @@
                                 <div class="col-lg-3">
                                     <div class="card">
                                         <div class="card-img text-center" style="max-height: 180px;">
-                                            <a n:href=":Admin:Media:image id => $item->id">
-                                                <img src="{$baseUri}/media/{$idN}/{$item->name}" alt="{$item->name}"
+                                            <a n:href=":Admin:Pictures:detail id => $item->id">
+                                                <img src="{$baseUri}/pictures/{$item->pages_id}/{$item->name}" alt="{$item->name}"
                                                      class="img-responsive-centered"
                                                      style="max-height: 180px; max-width: 270px;">
                                             </a>

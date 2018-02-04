@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Snippets
  *
- * @ORM\Table(name="snippets", indexes={@ORM\Index(name="pages_id", columns={"pages_id"})})
+ * @ORM\Table(name="snippets")
  * @ORM\Entity
  */
 class Snippets
