@@ -1,15 +1,29 @@
-{block #titles}{$page->title}{/block}
+{block #titles}{$page->title} - {_dictionary.main.Files}{/block}
 {block content}
 
-{control pageTopMenu}
+<ol class="breadcrumb">
+    <li class="breadcrumb-item">Home</li>
+    <li class="breadcrumb-item"><a href="/admin/">Admin</a></li>
+    <li class="breadcrumb-item active">{$page->title}</li>
+    <li class="breadcrumb-item active">{_dictionary.main.Files}</li>
 
-<h1 class="page-header">{$page->title} - {_dictionary.main.Files}</h1>
+    {control pageTopMenu}
+</ol>
 
-{control dropZone, 0}
+<div class="container-fluid">
 
-<h2>Seznam souborů</h2>
+    <div class="card">
+        <div class="card-block">
+            {control dropZonePictures}
+        </div>
+    </div>
 
-<table class="table">
-    {control productFileList $page, 'FileListAdminControl'}
-</table>
-
+    <div class="card">
+        <div class="card-header">
+            <strong>{_admin.catalogue.ProductGallery}</strong>
+        </div>
+        <div class="card-block">
+            {control productFileList $page, 'FileListAdminControl'}
+        </div>
+    </div>
+</div>

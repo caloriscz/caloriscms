@@ -35,7 +35,7 @@ class FileListControl extends Control
         $template->database = $this->database;
 
         if ($templateFile == true) {
-            $template->setFile(__DIR__ . 'FileListControl.php/' . $templateFile . '.latte');
+            $template->setFile(__DIR__ . '/' . $templateFile . '.latte');
 
         } else {
             $template->setFile(__DIR__ . '/FileListControl.latte');

@@ -2,10 +2,13 @@
 
 namespace App\AdminModule\Presenters;
 
+use App\Forms\Media\DropZoneControl as DropZoneMediaControl;
+use App\Forms\Pictures\DropZoneControl as DropZonePicturesControl;
 use App\Forms\Media\ImageEditFormControl;
 use App\Forms\Pages\FilterFormControl;
 use App\Model\IO;
 use Apps\Forms\Pages\InsertFormControl;
+use Caloriscz\Media\ImageBrowserControl;
 use Caloriscz\Page\BlockControl;
 use Caloriscz\Page\FileListControl;
 use Caloriscz\Page\PageListControl;
@@ -55,6 +58,21 @@ class PagesPresenter extends BasePresenter
     protected function createComponentImageEditForm()
     {
         return new ImageEditFormControl($this->database);
+    }
+
+    protected function createComponentDropZoneMedia()
+    {
+        return new DropZoneMediaControl($this->database);
+    }
+
+    protected function createComponentDropZonePictures()
+    {
+        return new DropZonePicturesControl($this->database);
+    }
+
+    public function createComponentImageBrowser()
+    {
+        return new ImageBrowserControl($this->database);
     }
 
     /**

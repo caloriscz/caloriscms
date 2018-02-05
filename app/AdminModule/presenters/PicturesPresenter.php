@@ -10,6 +10,7 @@ use App\Model\Category;
 use App\Model\Document;
 use App\Model\IO;
 use App\Model\Page;
+use Caloriscz\Media\ImageBrowserControl;
 use Caloriscz\Pictures\PageThumbControl;
 use Nette\Http\FileUpload;
 use Nette\Utils\Paginator;
@@ -43,15 +44,15 @@ class PicturesPresenter extends BasePresenter
         return new PageThumbControl($this->database);
     }
 
+    protected function createComponentDropZone()
+    {
+        return new DropZoneControl($this->database);
+    }
+
     public function handleUpload($folder)
     {
         $fileUpload = new FileUpload($_FILES['uploadfile']);
         $this->upload->singleFileToDir($fileUpload, $folder);
-    }
-
-    protected function createComponentDropZone()
-    {
-        return new DropZoneControl($this->database);
     }
 
     /**
