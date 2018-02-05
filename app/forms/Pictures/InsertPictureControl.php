@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Forms\Media;
+namespace App\Forms\Pictures;
 
 use App\Model\Document;
 use App\Model\IO;
@@ -9,7 +9,7 @@ use Nette\Database\Context;
 use Nette\Diagnostics\Debugger;
 use Nette\Forms\BootstrapUIForm;
 
-class InsertMediaControl extends Control
+class InsertPictureControl extends Control
 {
 
     /** @var Context */
@@ -34,7 +34,7 @@ class InsertMediaControl extends Control
         $form->addTextArea('preview', 'dictionary.main.Description')
             ->setAttribute('class', 'form-control');
 
-        $category = 6;
+        $category = 4;
 
         if ($this->getPresenter()->getParameter('id')) {
             $category = $this->getPresenter()->getParameter('id');
@@ -42,7 +42,7 @@ class InsertMediaControl extends Control
 
         $form->setDefaults([
             'category' => $category,
-            'type' => 8
+            'type' => 6
         ]);
 
         $form->addSubmit('submitm', 'dictionary.main.Insert');
@@ -59,7 +59,7 @@ class InsertMediaControl extends Control
         $doc->setPreview($form->values->preview);
         $page = $doc->create($this->getPresenter()->user->getId(), $form->values->category);
 
-        IO::directoryMake(APP_DIR . '/media/' . $page);
+        IO::directoryMake(APP_DIR . '/pictures/' . $page);
 
         $this->getPresenter()->redirect('this', array(
             'id' => $form->values->category,
@@ -68,7 +68,7 @@ class InsertMediaControl extends Control
 
     public function render()
     {
-        $this->template->setFile(__DIR__ . '/InsertMediaControl.latte');
+        $this->template->setFile(__DIR__ . '/InsertPictureControl.latte');
         $this->template->render();
     }
 

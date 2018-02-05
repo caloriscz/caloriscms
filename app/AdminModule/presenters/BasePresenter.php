@@ -1,7 +1,6 @@
 <?php
 namespace App\AdminModule\Presenters;
 
-use App\Forms\Media\DropZoneControl;
 use App\Forms\Pages\EditorSettingsControl;
 use Caloriscz\Menus\Admin\MainMenuControl;
 use Caloriscz\Menus\PageTopMenuControl;
@@ -142,11 +141,6 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
     protected function createComponentEditorSettings()
     {
         return new EditorSettingsControl($this->database);
-    }
-
-    protected function createComponentDropZone()
-    {
-        return new DropZoneControl($this->database);
     }
 
     protected function createComponentMainMenu()

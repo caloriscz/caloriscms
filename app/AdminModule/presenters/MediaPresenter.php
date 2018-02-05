@@ -2,8 +2,9 @@
 
 namespace App\AdminModule\Presenters;
 
+use App\Forms\Media\DropZoneControl;
 use App\Forms\Media\EditFileControl;
-use App\Forms\Media\InsertMediaControl;
+use App\Forms\Media\InsertPictureControl;
 use App\Model\Category;
 use App\Model\Document;
 use App\Model\IO;
@@ -28,7 +29,7 @@ class MediaPresenter extends BasePresenter
 
     protected function createComponentInsertMediaForm()
     {
-        return new InsertMediaControl($this->database);
+        return new InsertPictureControl($this->database);
     }
 
     protected function createComponentEditFile()
@@ -39,6 +40,11 @@ class MediaPresenter extends BasePresenter
     protected function createComponentPageThumb()
     {
         return new PageThumbControl($this->database);
+    }
+
+    protected function createComponentDropZone()
+    {
+        return new DropZoneControl($this->database);
     }
 
     public function handleUpload($folder)
@@ -53,19 +59,18 @@ class MediaPresenter extends BasePresenter
      * @param $type
      * @throws \Nette\Application\AbortException
      */
-    public function handleDelete($id, $type)
+    public function handleDelete($id)
     {
         $imageDb = $this->database->table('media')->get($id);
 
         IO::remove(APP_DIR . '/media/' . $imageDb->pages_id . '/' . $imageDb->name);
-        IO::remove(APP_DIR . '/media/' . $imageDb->pages_id . '/tn/' . $imageDb->name);
 
         $imageDb->delete();
 
-        $this->redirect('this', array(
+        $this->redirect('this', [
             'id' => $imageDb->pages_id,
             'type' => $this->getParameter('type'),
-        ));
+        ]);
     }
 
     /**

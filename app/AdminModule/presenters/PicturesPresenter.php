@@ -3,7 +3,9 @@
 namespace App\AdminModule\Presenters;
 
 use App\Forms\Media\EditFileControl;
-use App\Forms\Media\InsertMediaControl;
+use App\Forms\Media\EditPictureFormControl;
+use App\Forms\Pictures\InsertPictureControl;
+use App\Forms\Pictures\DropZoneControl;
 use App\Model\Category;
 use App\Model\Document;
 use App\Model\IO;
@@ -28,12 +30,12 @@ class PicturesPresenter extends BasePresenter
 
     protected function createComponentInsertMediaForm()
     {
-        return new InsertMediaControl($this->database);
+        return new InsertPictureControl($this->database);
     }
 
     protected function createComponentEditFile()
     {
-        return new EditFileControl($this->database);
+        return new EditPictureFormControl($this->database);
     }
 
     protected function createComponentPageThumb()
@@ -47,6 +49,11 @@ class PicturesPresenter extends BasePresenter
         $this->upload->singleFileToDir($fileUpload, $folder);
     }
 
+    protected function createComponentDropZone()
+    {
+        return new DropZoneControl($this->database);
+    }
+
     /**
      * Delete image
      * @param $id
@@ -55,10 +62,10 @@ class PicturesPresenter extends BasePresenter
      */
     public function handleDelete($id, $type)
     {
-        $imageDb = $this->database->table('media')->get($id);
+        $imageDb = $this->database->table('pictures')->get($id);
 
-        IO::remove(APP_DIR . '/media/' . $imageDb->pages_id . '/' . $imageDb->name);
-        IO::remove(APP_DIR . '/media/' . $imageDb->pages_id . '/tn/' . $imageDb->name);
+        IO::remove(APP_DIR . '/pictures/' . $imageDb->pages_id . '/' . $imageDb->name);
+        IO::remove(APP_DIR . '/pictures/' . $imageDb->pages_id . '/tn/' . $imageDb->name);
 
         $imageDb->delete();
 
@@ -80,13 +87,12 @@ class PicturesPresenter extends BasePresenter
         $pages[] = $id;
 
         foreach ($pages as $item) {
-            echo 1;
             $doc = new Document($this->database);
             $doc->delete($item);
-            IO::removeDirectory(APP_DIR . '/media/' . $item);
+            IO::removeDirectory(APP_DIR . '/pictures/' . $item);
         }
 
-        $this->redirect(this, array('id' => null, 'type' => $this->getParameter('type')));
+        $this->redirect('this', array('id' => null, 'type' => $this->getParameter('type')));
     }
 
     /**
