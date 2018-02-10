@@ -152,4 +152,13 @@ class SettingsPresenter extends BasePresenter
         $this->template->currencies = $this->database->table('currencies');
     }
 
+    public function renderPageTypes()
+    {
+        $this->template->pagesTypes = $this->database->table('pages_types');
+    }
+
+    public function renderPageTemplates()
+    {
+        $this->template->pagesTemplates = $this->database->table('pages_templates');
+    }
 }

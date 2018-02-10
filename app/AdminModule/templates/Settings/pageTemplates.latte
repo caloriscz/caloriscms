@@ -1,0 +1,47 @@
+{block #titles}{_dictionary.main.Settings}{/block}
+{block content}
+
+<ol class="breadcrumb">
+    <li class="breadcrumb-item">Home</li>
+    <li class="breadcrumb-item"><a href="/admin/">Admin</a></li>
+    <li class="breadcrumb-item active"><a href="/admin/settings/">{_dictionary.main.Settings}</a></li>
+    <li class="breadcrumb-menu d-md-down-none">
+        <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
+            <a href="/admin/settings/page-types" class="btn btn-secondary">Typy stránek</a>
+            <a href="/admin/settings/languages" class="btn btn-secondary">Jazykové mutace</a>
+            <a href="/admin/settings/countries" class="btn btn-secondary">Země</a>
+            <a href="/admin/settings/currencies" class="btn btn-secondary">Měny</a>
+        </div>
+    </li>
+</ol>
+
+<div class="container-fluid">
+    <div class="animated fadeIn">
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="card">
+
+                </div>
+            </div>
+            <div class="col-lg-9">
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fa fa-align-justify"></i> Seznam šablon stránek
+                    </div>
+                    <div class="card-block">
+                        <table class="table">
+                            <tr>
+                                <th>Název</th>
+                            </tr>
+                        {foreach $pagesTemplates as $item}
+                            <tr>
+                                <td>{$item->title}</td>
+                            </tr>
+                        {/foreach}
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

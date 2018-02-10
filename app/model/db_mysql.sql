@@ -291,17 +291,18 @@ CREATE TABLE `pages_related` (
 CREATE TABLE `pages_templates` (
   `id` int(11) NOT NULL,
   `pages_types_id` int(11) DEFAULT NULL,
-  `template` varchar(250) NOT NULL,
-  `title` varchar(80) DEFAULT NULL
+  `template` varchar(250) COLLATE utf8_czech_ci NOT NULL,
+  `title` varchar(80) COLLATE utf8_czech_ci DEFAULT NULL,
+  `title_en` varchar(250) COLLATE utf8_czech_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
 
-INSERT INTO `pages_templates` (`id`, `pages_types_id`, `template`, `title`) VALUES
-  (1, NULL, 'Front:Media:albumWithDescription', 'Album with description'),
-  (2, NULL, 'Front:Pages:blogList', 'Blog list'),
-  (3, NULL, 'Front:Pages:default', 'Simple page'),
-  (4, NULL, 'Front:Homepage:default', 'Homepage'),
-  (5, NULL, 'Front:Contact:default', 'Contact page'),
-  (6, NULL, 'Front:Pages:blogDetail', 'Blog detail');
+INSERT INTO `pages_templates` (`id`, `pages_types_id`, `template`, `title`, `title_en`) VALUES
+  (1, NULL, 'Front:Media:albumWithDescription', 'Galerie s onáhledy obrázků s podporou Lightboxu', 'Album with description'),
+  (2, NULL, 'Front:Pages:blogList', 'Seznam příspěvků', 'List of articles'),
+  (3, NULL, 'Front:Pages:default', 'Základní typ stránky', 'Basic type of page'),
+  (4, NULL, 'Front:Homepage:default', 'Homepage', 'Homepage'),
+  (5, NULL, 'Front:Contact:default', 'Kontaktní stránka s kontaktníém formulářem', 'Contact page with contact/request form'),
+  (6, NULL, 'Front:Pages:blogDetail', 'Detail příspěvu', 'Article page');
 
 CREATE TABLE `pages_types` (
   `id` int(11) NOT NULL,

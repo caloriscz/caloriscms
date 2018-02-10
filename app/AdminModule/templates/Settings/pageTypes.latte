@@ -8,7 +8,6 @@
     <li class="breadcrumb-menu d-md-down-none">
         <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
             <a href="/admin/settings/page-templates" class="btn btn-secondary">Šablony stránek</a>
-            <a href="/admin/settings/page-types" class="btn btn-secondary">Typy stránek</a>
             <a href="/admin/settings/languages" class="btn btn-secondary">Jazykové mutace</a>
             <a href="/admin/settings/countries" class="btn btn-secondary">Země</a>
             <a href="/admin/settings/currencies" class="btn btn-secondary">Měny</a>
@@ -27,32 +26,34 @@
                                 class="btn btn-default btn-xs pull-right">Všechny kategorie</a>
                     </div>
                     <div class="card-block">
-                        {control settingsCategories $categoryId}
-                    </div>
-                </div>
 
-                <div class="card">
-                    <div class="card-header">
-                        <i class="fa fa-align-justify"></i> {_admin.settings.whenUsedInTemplate}</div>
-                    <div class="card-block text-left">
-                        <pre>
-                            <span n:syntax="off">{$settings['site:currency:code']}</span>
-                        </pre>
                     </div>
                 </div>
             </div>
             <div class="col-lg-9">
                 <div class="card">
                     <div class="card-header">
-                        <i class="fa fa-align-justify"></i> Seznam souborů
+                        <i class="fa fa-align-justify"></i> Seznam typů stránek
                     </div>
                     <div class="card-block">
-
-                        {if $member->users_roles->settings_display}
-                            {control editSettings}
-                        {else}
-                            <p>Nemáte oprávnění k zobrazení této stránky</p>
-                        {/if}
+                        <table class="table">
+                            <tr>
+                                <th>Název</th>
+                                <th>Ústřižky</th>
+                                <th>Obrázky</th>
+                                <th>Soubory</th>
+                                <th>Související</th>
+                            </tr>
+                        {foreach $pagesTypes as $item}
+                            <tr>
+                                <td>{$item->content_type}</td>
+                                <td>{if $item->enable_snippets} <i class="fa fa-check text-info"></i>{else} <i class="fa fa-times text-danger"></i> {/if}</td>
+                                <td>{if $item->enable_images} <i class="fa fa-check text-info"></i>{else} <i class="fa fa-times text-danger"></i> {/if}</td>
+                                <td>{if $item->enable_files} <i class="fa fa-check text-info"></i>{else} <i class="fa fa-times text-danger"></i> {/if}</td>
+                                <td>{if $item->enable_related} <i class="fa fa-check text-info"></i>{else} <i class="fa fa-times text-danger"></i> {/if}</td>
+                            </tr>
+                        {/foreach}
+                        </table>
                     </div>
                 </div>
             </div>
