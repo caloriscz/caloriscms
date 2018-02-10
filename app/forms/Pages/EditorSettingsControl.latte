@@ -7,6 +7,7 @@
     }
 </style>
 
+{control langSelector}
 
 <form n:name="editForm" class="form-horizontal" role="form">
     <div class="card-header">
@@ -14,14 +15,10 @@
 
         {if $page->public == 0}
             <a href="{link public!}" class="btn btn-default">
-                <i class="fa fa-toggle-off"></i>
-                Povolit
-            </a>
+                <i class="fa fa-toggle-off"></i>Povolit</a>
         {else}
             <a href="{link public!}" class="btn btn-default">
-                <i class="fa fa-toggle-on"></i>
-                Zakázat
-            </a>
+                <i class="fa fa-toggle-on"></i>Zakázat</a>
         {/if}
     </div>
     <div class="card-block">
@@ -39,6 +36,15 @@
                        placeholder="{_dictionary.main.Slug}">
             </div>
         </div>
+        {if $page->pages_types_id == 2}
+            <div class="form-group row">
+                <label for="inputCat" class="col-sm-3 control-label">{_dictionary.main.Category}</label>
+                <div class="col-sm-9">
+                    <select type="text" n:name="pages_categories_id" class="form-control" id="inputCat"
+                            placeholder="{_dictionary.main.Category}"></select>
+                </div>
+            </div>
+        {/if}
         <div class="form-group row">
             <label for="inputParent" class="col-sm-3 control-label">Nadřazená stránka</label>
             <div class="col-sm-9">

@@ -3,6 +3,7 @@
 namespace App\AdminModule\Presenters;
 
 use App\Forms\Contacts\EditCategoryControl;
+use App\Forms\Contacts\EditContactControl;
 use App\Forms\Contacts\InsertCategoryControl;
 use App\Forms\Contacts\InsertCommunicationControl;
 use App\Forms\Contacts\InsertContactCategoryControl;
@@ -31,7 +32,7 @@ class ContactsPresenter extends BasePresenter
 
     protected function createComponentEditContact()
     {
-        $control = new EditControl($this->database);
+        $control = new EditContactControl($this->database);
         $control->onSave[] = function ($pages_id, $error = null) {
             if ($error === 1) {
                 $this->flashMessage($this->translator->translate('messages.sign.fillInEmail'), 'error');

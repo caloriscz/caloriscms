@@ -3,6 +3,7 @@
 namespace App\AdminModule\Presenters;
 
 use App\Forms\Media\DropZoneControl as DropZoneMediaControl;
+use App\Forms\Pages\EditorSettingsControl;
 use App\Forms\Pictures\DropZoneControl as DropZonePicturesControl;
 use App\Forms\Media\ImageEditFormControl;
 use App\Forms\Pages\FilterFormControl;
@@ -73,6 +74,11 @@ class PagesPresenter extends BasePresenter
     public function createComponentImageBrowser()
     {
         return new ImageBrowserControl($this->database);
+    }
+
+    public function createComponentEditorSettings()
+    {
+        return new EditorSettingsControl($this->database, $this->em);
     }
 
     /**

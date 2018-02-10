@@ -24,6 +24,7 @@ class Document
 
     private $doc;
     private $preview;
+    private $category;
     private $public;
     private $title;
     private $pageTemplate;
@@ -50,9 +51,9 @@ class Document
     {
         if ($this->title) {
             return $this->title;
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     public function setTemplate($pageTemplate = false)
@@ -65,9 +66,9 @@ class Document
     {
         if ($this->pageTemplate) {
             return $this->pageTemplate;
-        } else {
-            return null;
         }
+
+        return null;
     }
 
     public function setMetaKey($metakey = false)
@@ -80,9 +81,9 @@ class Document
     {
         if ($this->metakey) {
             return $this->metakey;
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     public function setMetaDescription($metadesc = false)
@@ -95,9 +96,9 @@ class Document
     {
         if ($this->metadesc) {
             return $this->metadesc;
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     public function setSitemap($sitemap)
@@ -180,9 +181,9 @@ class Document
     {
         if ($this->slug) {
             return $this->slug;
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     public function setType($type = false)
@@ -195,9 +196,9 @@ class Document
     {
         if ($this->type) {
             return $this->type;
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     public function setParent($parent = false)
@@ -215,9 +216,9 @@ class Document
     {
         if ($this->parent) {
             return $this->parent;
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     public function setPreview($preview = false)
@@ -230,11 +231,21 @@ class Document
     {
         if ($this->preview) {
             return $this->preview;
-        } else {
-            return false;
         }
+
+        return false;
     }
 
+    public function setCategory($category = null)
+    {
+        $this->category = $category;
+        return $this->category;
+    }
+
+    public function getCategory()
+    {
+        return $this->category;
+    }
 
     public function setDocument($doc = false)
     {
@@ -269,6 +280,9 @@ class Document
 
         $arr['pages_templates_id'] = $this->getTemplate();
 
+        if ($this->getCategory() !== null) {
+            $arr['pages_categories_id'] = $this->getCategory();
+        }
 
         if ($this->getPreview()) {
             $arr['preview'] = $this->getPreview();
@@ -341,6 +355,10 @@ class Document
             $arr['document'] = $this->getDocument();
         }
 
+        if ($this->getCategory() != null) {
+            $arr['pages_categories_id'] = $this->getCategory();
+        }
+
         if ($this->getPreview() && $this->getLanguage()) {
             $arr['preview' . '_' . $this->getLanguage()] = $this->getPreview();
         } elseif ($this->getPreview()) {
@@ -411,12 +429,7 @@ class Document
     public function exists($slug)
     {
         $slugName = $this->database->table('pages')->where('title', $slug);
-
-        if ($slugName->count() > 0) {
-            return true;
-        } else {
-            return false;
-        }
+        return $slugName->count() > 0;
     }
 
     /**
@@ -483,9 +496,9 @@ class Document
             while (in_array((++$max . '-' . $slug), $slugs)) ;
 
             return $max . '-' . $slug;
-        } else {
-            return $slug;
         }
+
+        return $slug;
     }
 
 }

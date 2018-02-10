@@ -4,7 +4,7 @@ namespace App\AdminModule\Presenters;
 
 use App\Forms\Media\DropZoneControl;
 use App\Forms\Media\EditFileControl;
-use App\Forms\Media\InsertPictureControl;
+use App\Forms\Media\InsertMediaControl;
 use App\Model\Category;
 use App\Model\Document;
 use App\Model\IO;
@@ -29,7 +29,7 @@ class MediaPresenter extends BasePresenter
 
     protected function createComponentInsertMediaForm()
     {
-        return new InsertPictureControl($this->database);
+        return new InsertMediaControl($this->database);
     }
 
     protected function createComponentEditFile()

@@ -1,4 +1,5 @@
 <?php
+
 namespace Apps\Forms\Pages;
 
 use App\Model\Document;
@@ -25,6 +26,8 @@ class InsertFormControl extends Control
 
     protected function createComponentInsertForm()
     {
+        $category = $this->database->table('pages_categories');
+
         $form = new BootstrapUIForm();
         $form->setTranslator($this->presenter->translator);
 
@@ -34,16 +37,21 @@ class InsertFormControl extends Control
             $pageType = $this->presenter->getParameter('type');
         }
 
+        if ($category->count() > 1) {
+            $form->addSelect('category', '', $category->fetchPairs('id', 'title'));
+        } else {
+            $form->addHidden('category');
+        }
+
         $form->addHidden('id');
         $form->addHidden('section');
         $form->addText('title');
 
-        $form->setDefaults(array(
+        $form->setDefaults([
             'section' => $pageType,
-        ));
+        ]);
 
-        $form->addSubmit('submit', 'dictionary.main.Create')
-            ->setHtmlId('formxins');
+        $form->addSubmit('submit', 'dictionary.main.Create');
 
         $form->onSuccess[] = [$this, 'insertFormSucceeded'];
 
@@ -53,6 +61,7 @@ class InsertFormControl extends Control
     public function insertFormSucceeded(BootstrapUIForm $form)
     {
         $doc = new Document($this->database);
+        $doc->setCategory($form->values->category);
         $doc->setType($form->values->section);
         $doc->setTitle($form->values->title);
         $page = $doc->create($this->presenter->user->getId());
@@ -66,6 +75,7 @@ class InsertFormControl extends Control
     public function render()
     {
         $template = $this->getTemplate();
+        $template->category = $this->database->table('pages_categories');
         $template->setFile(__DIR__ . '/InsertFormControl.latte');
         $template->render();
     }

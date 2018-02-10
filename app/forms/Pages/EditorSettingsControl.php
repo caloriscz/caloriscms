@@ -3,6 +3,7 @@
 namespace App\Forms\Pages;
 
 use App\Model\Document;
+use Kdyby\Doctrine\EntityManager;
 use Nette\Application\UI\Control;
 use Nette\Database\Context;
 use Nette\Forms\BootstrapUIForm;
@@ -14,12 +15,21 @@ class EditorSettingsControl extends Control
     /** @var Context */
     public $database;
 
-    public function __construct(Context $database)
+    /** @var EntityManager @inject */
+    public $em;
+
+    public function __construct(Context $database, EntityManager $em)
     {
         $this->database = $database;
+        $this->em = $em;
 
         $config = \HTMLPurifier_Config::createDefault();
         $this->htmlPurifier = new \HTMLPurifier($config);
+    }
+
+    protected function createComponentLangSelector()
+    {
+        return new \LangSelectorControl($this->em);
     }
 
     /**
@@ -28,6 +38,8 @@ class EditorSettingsControl extends Control
     public function createComponentEditForm()
     {
         $pages = $this->database->table('pages')->get($this->getPresenter()->getParameter('id'));
+        $pagesCategories = $this->database->table('pages_categories')->order('title');
+
         $form = new BootstrapUIForm();
         $form->setTranslator($this->getPresenter()->translator);
         $form->getElementPrototype()->class = 'form-horizontal';
@@ -88,6 +100,11 @@ class EditorSettingsControl extends Control
             ]);
         }
 
+        if ($pages->pages_types_id === 2) {
+            $form->addSelect('pages_categories_id', '', $pagesCategories->fetchPairs('id', 'title'));
+            $form->setDefaults(['pages_categories_id' => $pages->pages_categories_id]);
+        }
+
         $form->onSuccess[] = [$this, 'editFormSucceeded'];
         $form->onValidate[] = [$this, 'permissionFormValidated'];
         $form->addSubmit('submit', 'dictionary.main.Save')
@@ -111,6 +128,7 @@ class EditorSettingsControl extends Control
         $doc = new Document($this->database);
         $doc->setLanguage($form->values->l);
         $doc->setDatePublished($form->values->date_published);
+        $doc->setCategory($form->values->pages_categories_id);
         $doc->setTitle($form->values->title);
         $doc->setTemplate($values['template']);
         $doc->setSlug($form->values->slug_old, $form->values->slug);

@@ -56,7 +56,8 @@
                 <a href="/admin/contacts/detail-communications/{$id}" class="btn btn-secondary">Komunikace</a>
             {/if}
             {if $view != 'detailOpeningHours'}
-                <a href="/admin/contacts/detail-opening-hours/{$id}" class="btn btn-secondary">{_dictionary.main.OpeningHours}</a>
+                <a href="/admin/contacts/detail-opening-hours/{$id}"
+                   class="btn btn-secondary">{_dictionary.main.OpeningHours}</a>
             {/if}
             {if $userEdit}
                 <a href="/admin/members/edit/{$id}" class="btn btn-secondary">{_dictionary.main.Member}</a>
@@ -75,6 +76,7 @@
         {if $page->pages_types->enable_related && $view != 'detailRelated'}
             <a href="/admin/pages/detail-related/{$id}" class="btn btn-secondary">Související příspěvky</a>
         {/if}
+        <a href="/admin/pages/settings/{$id}" class="btn btn-secondary">Nastavení</a>
 
         <a href="/{$page->slug}" class="btn btn-secondary" target="_blank">{_dictionary.main.Preview}</a>
     </div>

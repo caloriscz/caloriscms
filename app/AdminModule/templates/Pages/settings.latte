@@ -5,8 +5,10 @@
     <li class="breadcrumb-item">Home</li>
     <li class="breadcrumb-item"><a href="/admin/">Admin</a></li>
     <li class="breadcrumb-item active"><a href="/admin/pages/default?type={$pages->pages_types_id}">Stránky</a></li>
-    <li class="breadcrumb-item active"><a
-                href="/admin/pages/detail/{$pages->id}?type={$pages->pages_types_id}">{$pages->title}</a></li>
+    <li class="breadcrumb-item active">Nastavení</li>
+    <li class="breadcrumb-item active">
+        <a href="/admin/pages/detail/{$pages->id}?type={$pages->pages_types_id}">{$pages->title}</a>
+    </li>
 
     {control pageTopMenu}
 </ol>
@@ -15,11 +17,7 @@
     <div class="row">
         <div class="col-md-12">
             <div class="card">
-                {if $pages->pages_types->id == 9}
-                    {control block}
-                {else}
-                    {control editor}
-                {/if}
+                {control editorSettings}
             </div>
         </div>
     </div>

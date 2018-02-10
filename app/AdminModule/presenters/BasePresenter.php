@@ -138,11 +138,6 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
         return new EditorControl($this->database, $this->em);
     }
 
-    protected function createComponentEditorSettings()
-    {
-        return new EditorSettingsControl($this->database);
-    }
-
     protected function createComponentMainMenu()
     {
         return new MainMenuControl($this->em);
