@@ -8,6 +8,7 @@
     <li class="breadcrumb-item active"><a href="/admin/settings/countries">Země</a></li>
     <li class="breadcrumb-menu d-md-down-none">
         <div class="btn-group" role="group">
+            <a href="/admin/settings/user-roles" class="btn btn-secondary">Oprávnění</a>
             <a href="/admin/settings/page-templates" class="btn btn-secondary">Šablony stránek</a>
             <a href="/admin/settings/page-types" class="btn btn-secondary">Typy stránek</a>
             <a href="/admin/settings/languages" class="btn btn-secondary">Jazykové mutace</a>
@@ -25,7 +26,7 @@
 <div class="container-fluid">
     <div class="animated fadeIn">
         <div class="row">
-            {if $member->users_roles->settings_display}
+            {if $member->users_roles->settings}
             <div class="col-lg-3">
                 <div class="card">
                     <div class="card-header">Vložit zemi</div>

@@ -61,7 +61,7 @@ class InsertMemberControl extends Control
         $userExists = $member->getUserName($form->values->username);
         $emailExists = $member->getEmail($form->values->email);
 
-        if (!$this->getPresenter()->template->member->users_roles->members_create) {
+        if (!$this->getPresenter()->template->member->users_roles->members) {
             $this->onSave('messages.members.PermissionDenied');
         }
 

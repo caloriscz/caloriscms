@@ -115,7 +115,7 @@ class EditorSettingsControl extends Control
 
     public function permissionFormValidated()
     {
-        if ($this->getPresenter()->template->member->users_roles->pages_edit === 0) {
+        if ($this->getPresenter()->template->member->users_roles->pages === 0) {
             $this->getPresenter()->flashMessage('Nemáte oprávnění k této akci', 'error');
             $this->getPresenter()->redirect('this');
         }
@@ -165,7 +165,7 @@ class EditorSettingsControl extends Control
 
         $this->template->templates = $this->database->table('pages_templates')->where('pages_types_id IS NULL')->order('title');
 
-        if ($this->getPresenter()->template->member->users_roles->pages_document) {
+        if ($this->getPresenter()->template->member->users_roles->pages) {
             $this->template->enabled = true;
         } else {
             $this->template->enabled = false;

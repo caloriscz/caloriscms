@@ -475,24 +475,24 @@ INSERT INTO `users_categories` (`id`, `title`) VALUES
 
 CREATE TABLE `users_roles` (
   `id` int(11) NOT NULL,
-  `title` varchar(40) NOT NULL,
-  `admin_access` tinyint(1) NOT NULL DEFAULT '0',
-  `appearance_images` tinyint(1) NOT NULL DEFAULT '0',
-  `helpdesk_edit` tinyint(1) NOT NULL DEFAULT '0',
-  `settings_display` tinyint(1) NOT NULL DEFAULT '0',
-  `settings_edit` tinyint(1) NOT NULL DEFAULT '0',
-  `members_display` tinyint(1) NOT NULL DEFAULT '0',
-  `members_edit` tinyint(1) NOT NULL DEFAULT '0',
-  `members_create` tinyint(1) NOT NULL DEFAULT '0',
-  `members_delete` tinyint(1) NOT NULL DEFAULT '0',
-  `pages_edit` tinyint(1) NOT NULL DEFAULT '0',
-  `pages_document` tinyint(1) NOT NULL DEFAULT '0'
+  `title` varchar(40) COLLATE utf8_czech_ci NOT NULL,
+  `sign` tinyint(1) NOT NULL DEFAULT '0',
+  `appearance` tinyint(1) NOT NULL DEFAULT '0',
+  `helpdesk` tinyint(1) NOT NULL DEFAULT '0',
+  `settings` tinyint(1) NOT NULL DEFAULT '0',
+  `settings_permissions` int(11) NOT NULL DEFAULT '0',
+  `members` tinyint(1) NOT NULL DEFAULT '0',
+  `pages` tinyint(1) NOT NULL DEFAULT '0',
+  `pictures` int(11) NOT NULL,
+  `media` int(11) DEFAULT '0',
+  `menu` int(11) NOT NULL DEFAULT '0',
+  `contacts` int(11) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
 
-INSERT INTO `users_roles` (`id`, `title`, `admin_access`, `appearance_images`, `helpdesk_edit`, `settings_display`, `settings_edit`, `members_display`, `members_edit`, `members_create`, `members_delete`, `pages_edit`, `pages_document`) VALUES
+INSERT INTO `users_roles` (`id`, `title`, `sign`, `appearance`, `helpdesk`, `settings`, `settings_permissions`, `members`, `pages`, `pictures`, `media`, `menu`, `contacts`) VALUES
   (1, 'Admin', 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-  (2, 'Super User', 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-  (3, 'Editor', 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1),
+  (2, 'Super User', 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1),
+  (3, 'Editor', 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1),
   (4, 'Site User', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 
 ALTER TABLE `addons`
@@ -748,7 +748,7 @@ ALTER TABLE `settings`
   ADD CONSTRAINT `settings_ibfk_1` FOREIGN KEY (`settings_categories_id`) REFERENCES `settings_categories` (`id`) ON DELETE SET NULL ON UPDATE SET NULL;
 
 ALTER TABLE `users`
-  ADD CONSTRAINT `users_ibfk_1` FOREIGN KEY (`users_roles_id`) REFERENCES `users_roles` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `users_ibfk_1` FOREIGN KEY (`users_roles_id`) REFERENCES `users_roles` (`id`) ON DELETE SET NULL ON UPDATE SET NULL,
   ADD CONSTRAINT `users_ibfk_2` FOREIGN KEY (`users_categories_id`) REFERENCES `users_categories` (`id`);
 
 COMMIT;

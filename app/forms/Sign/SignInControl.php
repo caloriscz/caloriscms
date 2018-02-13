@@ -63,7 +63,7 @@ class SignInControl extends Control
                 $role = $this->getPresenter()->user->getRoles();
                 $roleCheck = $this->database->table('users_roles')->get($role[0]);
 
-                if ($roleCheck && $roleCheck->admin_access === 0) {
+                if ($roleCheck && $roleCheck->sign === 0) {
                     $this->getPresenter()->flashMessage($this->getPresenter()->translator->translate('messages.sign.no-access'), 'error');
                     $this->getPresenter()->redirect(':Admin:Sign:in');
                 } else {

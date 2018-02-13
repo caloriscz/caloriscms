@@ -31,80 +31,45 @@ class UsersRoles
     /**
      * @var boolean
      *
-     * @ORM\Column(name="admin_access", type="boolean", nullable=false)
+     * @ORM\Column(name="sign", type="boolean", nullable=false)
      */
-    private $adminAccess = '0';
+    private $sign = '0';
 
     /**
      * @var boolean
      *
-     * @ORM\Column(name="appearance_images", type="boolean", nullable=false)
+     * @ORM\Column(name="appearance", type="boolean", nullable=false)
      */
-    private $appearanceImages = '0';
+    private $appearance = '0';
 
     /**
      * @var boolean
      *
-     * @ORM\Column(name="helpdesk_edit", type="boolean", nullable=false)
+     * @ORM\Column(name="helpdesk", type="boolean", nullable=false)
      */
-    private $helpdeskEdit = '0';
+    private $helpdesk = '0';
 
     /**
      * @var boolean
      *
-     * @ORM\Column(name="settings_display", type="boolean", nullable=false)
+     * @ORM\Column(name="settings", type="boolean", nullable=false)
      */
-    private $settingsDisplay = '0';
+    private $settings = '0';
 
     /**
      * @var boolean
      *
-     * @ORM\Column(name="settings_edit", type="boolean", nullable=false)
+     * @ORM\Column(name="members", type="boolean", nullable=false)
      */
-    private $settingsEdit = '0';
+    private $members = '0';
 
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="members_display", type="boolean", nullable=false)
-     */
-    private $membersDisplay = '0';
-
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="members_edit", type="boolean", nullable=false)
-     */
-    private $membersEdit = '0';
-
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="members_create", type="boolean", nullable=false)
-     */
-    private $membersCreate = '0';
-
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="members_delete", type="boolean", nullable=false)
-     */
-    private $membersDelete = '0';
 
     /**
      * @var boolean
      *
      * @ORM\Column(name="pages_edit", type="boolean", nullable=false)
      */
-    private $pagesEdit = '0';
-
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="pages_document", type="boolean", nullable=false)
-     */
-    private $pagesDocument = '0';
-
+    private $pages = '0';
 
 
     /**
@@ -142,87 +107,87 @@ class UsersRoles
     }
 
     /**
-     * Set adminAccess
+     * Set sign
      *
-     * @param boolean $adminAccess
+     * @param boolean $sign
      *
      * @return UsersRoles
      */
-    public function setAdminAccess($adminAccess)
+    public function setSign($sign)
     {
-        $this->adminAccess = $adminAccess;
+        $this->sign = $sign;
 
         return $this;
     }
 
     /**
-     * Get adminAccess
+     * Get sign
      *
      * @return boolean
      */
-    public function getAdminAccess()
+    public function getSign()
     {
-        return $this->adminAccess;
+        return $this->sign;
     }
 
     /**
      * Set appearanceImages
      *
-     * @param boolean $appearanceImages
+     * @param boolean $appearance
      *
      * @return UsersRoles
      */
-    public function setAppearanceImages($appearanceImages)
+    public function setAppearance($appearance)
     {
-        $this->appearanceImages = $appearanceImages;
+        $this->appearance = $appearance;
 
         return $this;
     }
 
     /**
-     * Get appearanceImages
+     * Get appearance
      *
      * @return boolean
      */
-    public function getAppearanceImages()
+    public function getAppearance()
     {
-        return $this->appearanceImages;
+        return $this->appearance;
     }
 
     /**
-     * Set helpdeskEdit
+     * Set helpdesk
      *
-     * @param boolean $helpdeskEdit
+     * @param boolean $helpdesk
      *
      * @return UsersRoles
      */
-    public function setHelpdeskEdit($helpdeskEdit)
+    public function setHelpdesk($helpdesk)
     {
-        $this->helpdeskEdit = $helpdeskEdit;
+        $this->helpdesk = $helpdesk;
 
         return $this;
     }
 
     /**
-     * Get helpdeskEdit
+     * Get helpdesk
      *
      * @return boolean
      */
-    public function getHelpdeskEdit()
+    public function getHelpdesk()
     {
-        return $this->helpdeskEdit;
+        return $this->helpdesk;
     }
 
     /**
-     * Set settingsDisplay
+     * Set settings
      *
-     * @param boolean $settingsDisplay
+     * @param boolean $settings
      *
      * @return UsersRoles
      */
-    public function setSettingsDisplay($settingsDisplay)
+    public function setSettings($settings)
     {
-        $this->settingsDisplay = $settingsDisplay;
+        $this->settings = $settings;
 
         return $this;
     }
@@ -232,45 +197,21 @@ class UsersRoles
      *
      * @return boolean
      */
-    public function getSettingsDisplay()
+    public function getSettings()
     {
-        return $this->settingsDisplay;
+        return $this->settings;
     }
 
     /**
-     * Set settingsEdit
+     * Set members
      *
-     * @param boolean $settingsEdit
+     * @param boolean $members
      *
      * @return UsersRoles
      */
-    public function setSettingsEdit($settingsEdit)
+    public function setMembers($members)
     {
-        $this->settingsEdit = $settingsEdit;
-
-        return $this;
-    }
-
-    /**
-     * Get settingsEdit
-     *
-     * @return boolean
-     */
-    public function getSettingsEdit()
-    {
-        return $this->settingsEdit;
-    }
-
-    /**
-     * Set membersDisplay
-     *
-     * @param boolean $membersDisplay
-     *
-     * @return UsersRoles
-     */
-    public function setMembersDisplay($membersDisplay)
-    {
-        $this->membersDisplay = $membersDisplay;
+        $this->members = $members;
 
         return $this;
     }
@@ -280,128 +221,32 @@ class UsersRoles
      *
      * @return boolean
      */
-    public function getMembersDisplay()
+    public function getMembers()
     {
-        return $this->membersDisplay;
-    }
-
-    /**
-     * Set membersEdit
-     *
-     * @param boolean $membersEdit
-     *
-     * @return UsersRoles
-     */
-    public function setMembersEdit($membersEdit)
-    {
-        $this->membersEdit = $membersEdit;
-
-        return $this;
-    }
-
-    /**
-     * Get membersEdit
-     *
-     * @return boolean
-     */
-    public function getMembersEdit()
-    {
-        return $this->membersEdit;
-    }
-
-    /**
-     * Set membersCreate
-     *
-     * @param boolean $membersCreate
-     *
-     * @return UsersRoles
-     */
-    public function setMembersCreate($membersCreate)
-    {
-        $this->membersCreate = $membersCreate;
-
-        return $this;
-    }
-
-    /**
-     * Get membersCreate
-     *
-     * @return boolean
-     */
-    public function getMembersCreate()
-    {
-        return $this->membersCreate;
-    }
-
-    /**
-     * Set membersDelete
-     *
-     * @param boolean $membersDelete
-     *
-     * @return UsersRoles
-     */
-    public function setMembersDelete($membersDelete)
-    {
-        $this->membersDelete = $membersDelete;
-
-        return $this;
-    }
-
-    /**
-     * Get membersDelete
-     *
-     * @return boolean
-     */
-    public function getMembersDelete()
-    {
-        return $this->membersDelete;
+        return $this->members;
     }
 
     /**
      * Set pagesEdit
      *
-     * @param boolean $pagesEdit
+     * @param boolean $pages
      *
      * @return UsersRoles
      */
-    public function setPagesEdit($pagesEdit)
+    public function setPages($pages)
     {
-        $this->pagesEdit = $pagesEdit;
+        $this->pages = $pages;
 
         return $this;
     }
 
     /**
-     * Get pagesEdit
+     * Get pages
      *
      * @return boolean
      */
-    public function getPagesEdit()
+    public function getPages()
     {
-        return $this->pagesEdit;
-    }
-
-    /**
-     * Set pagesDocument
-     *
-     * @param boolean $pagesDocument
-     *
-     * @return UsersRoles
-     */
-    public function setPagesDocument($pagesDocument)
-    {
-        $this->pagesDocument = $pagesDocument;
-
-        return $this;
-    }
-
-    /**
-     * Get pagesDocument
-     *
-     * @return boolean
-     */
-    public function getPagesDocument()
-    {
-        return $this->pagesDocument;
+        return $this->pages;
     }
 }

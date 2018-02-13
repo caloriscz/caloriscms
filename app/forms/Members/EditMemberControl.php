@@ -68,7 +68,7 @@ class EditMemberControl extends Control
 
     public function editFormValidated(BootstrapUIForm $form)
     {
-        if (!$this->presenter->template->member->users_roles->members_edit) {
+        if (!$this->presenter->template->member->users_roles->members) {
             $this->presenter->flashMessage($this->translator->translate('messages.members.PermissionDenied'), 'error');
             $this->presenter->redirect(this, array('id' => $form->values->id));
         }

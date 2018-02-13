@@ -42,7 +42,7 @@ class EditSettingsControl extends Control
 
     public function permissionValidated(BootstrapUIForm $form)
     {
-        if ($this->presenter->template->member->users_roles->settings_edit === 0) {
+        if ($this->presenter->template->member->users_roles->settings === 0) {
             $this->presenter->flashMessage('Nemáte oprávnění k této akci', 'error');
             $this->presenter->redirect(this);
         }

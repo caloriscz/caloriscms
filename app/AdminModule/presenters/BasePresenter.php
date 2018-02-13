@@ -91,7 +91,7 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
             $role = $this->user->getRoles();
             $roleCheck = $this->database->table('users_roles')->get($role[0]);
 
-            if ($roleCheck && $roleCheck->admin_access === 'guest') {
+            if ($roleCheck && $roleCheck->sign === 'guest') {
                 $this->flashMessage($this->translator->translate('messages.sign.invalidLogin'), 'error');
                 $this->redirect(':Admin:Sign:in');
             }

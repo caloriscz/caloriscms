@@ -71,7 +71,7 @@ class MemberGridControl extends Control
      */
     public function handleDelete($id)
     {
-        if (!$this->getPresenter()->template->member->users_roles->members_delete) {
+        if (!$this->getPresenter()->template->member->users_roles->members) {
             $this->flashMessage($this->getPresenter()->translator->translate('messages.members.PermissionDenied'), 'error');
             $this->redirect('this', ['id' => null]);
         }
