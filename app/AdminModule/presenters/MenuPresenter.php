@@ -31,6 +31,7 @@ class MenuPresenter extends BasePresenter
     /**
      * Delete categories
      * @param $identifier
+     * @throws Nette\Application\AbortException
      */
     public function handleDelete($identifier)
     {
@@ -44,6 +45,7 @@ class MenuPresenter extends BasePresenter
     /**
      * Delete image
      * @param $identifier
+     * @throws Nette\Application\AbortException
      */
     public function handleDeleteImage($identifier)
     {
@@ -58,6 +60,7 @@ class MenuPresenter extends BasePresenter
      * Move up menu item
      * @param $identifier
      * @param $sorted
+     * @throws Nette\Application\AbortException
      */
     public function handleUp($identifier, $sorted)
     {
@@ -81,6 +84,7 @@ class MenuPresenter extends BasePresenter
      * @param $identifier
      * @param $sorted
      * @param $category
+     * @throws Nette\Application\AbortException
      */
     public function handleDown($identifier, $sorted, $category)
     {

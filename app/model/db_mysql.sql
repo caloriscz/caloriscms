@@ -260,7 +260,6 @@ CREATE TABLE `pages` (
   `date_published` datetime DEFAULT NULL,
   `pages_types_id` int(11) DEFAULT '1',
   `pages_templates_id` int(11) DEFAULT NULL,
-  `pages_categories_id` int(11) DEFAULT '1',
   `sorted` int(11) NOT NULL DEFAULT '0',
   `editable` int(11) NOT NULL DEFAULT '1',
   `recommended` tinyint(4) DEFAULT '0',
@@ -273,13 +272,6 @@ INSERT INTO `pages` (`id`, `slug`, `title`, `document`, `preview`, `pages_id`, `
   (3, 'blog', 'Blog', '', NULL, NULL, 1, 1, '', '', NULL, NULL, 9, 2, 21, 0, 0, 1),
   (4, 'galerie', 'Galerie', '', NULL, NULL, 1, 1, '', '', NULL, NULL, 9, 2, 1, 0, 0, 1),
   (5, 'dokumenty', 'Dokumenty', '', NULL, NULL, 1, 1, '', '', NULL, NULL, 9, 2, 1, 0, 0, 1);
-
-CREATE TABLE `pages_categories` (
-  `id` int(11) NOT NULL,
-  `title` varchar(100) COLLATE utf8_czech_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
-
-INSERT INTO `pages_categories` (`id`, `title`) VALUES (1, 'Aktuality');
 
 CREATE TABLE `pages_related` (
   `id` int(11) NOT NULL,
@@ -561,8 +553,7 @@ ALTER TABLE `pages`
   ADD KEY `users_id` (`users_id`),
   ADD KEY `pages_id` (`pages_id`),
   ADD KEY `content_type` (`pages_types_id`),
-  ADD KEY `pages_ibfk_7` (`pages_templates_id`),
-  ADD KEY `pages_categories_id` (`pages_categories_id`);
+  ADD KEY `pages_ibfk_7` (`pages_templates_id`);
 
 ALTER TABLE `pages_related`
   ADD PRIMARY KEY (`id`),
@@ -660,9 +651,6 @@ ALTER TABLE `menu`
 ALTER TABLE `pages`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
 
-ALTER TABLE `pages_categories`
-  ADD PRIMARY KEY (`id`);
-
 ALTER TABLE `pages_related`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
@@ -728,10 +716,6 @@ ALTER TABLE `pages`
   ADD CONSTRAINT `pages_ibfk_5` FOREIGN KEY (`pages_id`) REFERENCES `pages` (`id`) ON DELETE SET NULL ON UPDATE SET NULL,
   ADD CONSTRAINT `pages_ibfk_6` FOREIGN KEY (`pages_types_id`) REFERENCES `pages_types` (`id`) ON DELETE SET NULL ON UPDATE SET NULL,
   ADD CONSTRAINT `pages_ibfk_7` FOREIGN KEY (`pages_templates_id`) REFERENCES `pages_templates` (`id`) ON DELETE SET NULL ON UPDATE SET NULL,
-  ADD CONSTRAINT `pages_ibfk_8` FOREIGN KEY (`pages_categories_id`) REFERENCES `pages_categories` (`id`);
-
-ALTER TABLE `pages_categories`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 ALTER TABLE `pages_related`
   ADD CONSTRAINT `pages_related_ibfk_3` FOREIGN KEY (`pages_id`) REFERENCES `pages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,

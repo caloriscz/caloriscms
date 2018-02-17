@@ -1,6 +1,68 @@
 @import "caloris-front";
 
+body {
+  display: flex; //for sticky footer
+  min-height: 100vh; //for sticky footer
+  flex-direction: column;  //for sticky footer
+}
+
 .page {
-  padding: 3rem 1.5rem;
+  flex: 1;  //for sticky footer
+  padding: 3rem 1.5rem 0rem 1.5rem;
   text-align: center;
+}
+
+footer, .push {
+  height: 50px;
+}
+
+// Gallery
+.cal-gallery.card-deck > .card {
+  flex-wrap: wrap;
+  flex: initial;
+  margin-bottom: 20px;
+  //border: 1px solid salmon;
+  margin-left: 10px;
+  margin-right: 10px;
+  width: 23.2%;
+
+  .card-text {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    width: 232px;
+    display: block;
+    overflow: hidden
+  }
+}
+
+.image-cover {
+  overflow: hidden;
+  height: 180px; /* Height of the "content" div */
+  width: 262px;
+  text-align: center;
+
+  img {
+    height: auto;
+    position: relative;
+    width: 400px;
+
+    &.crop-centered {
+      top: 50%;
+      left: 50%;
+      transform: translateY(-50%) translateX(-50%);
+    }
+
+    &.crop-topped {
+      top: 0%;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    &:hover {
+      cursor: pointer;
+      transition: width 2s;
+      width: 100%;
+      max-width: 400px;
+    }
+  }
 }

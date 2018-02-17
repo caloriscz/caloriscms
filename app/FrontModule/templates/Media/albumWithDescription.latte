@@ -11,18 +11,25 @@
     </div>
 </div>
 
-<div class="container white padded-top padded-btm">
-    <div class="col-md-12">
+<div class="container">
+    <div class="cal-gallery card-deck">
         {foreach $gallery as $item}
-            <div class="col-sm-6 col-md-3" style="height: 200px;">
-                <div class="thumbnail">
-                    <div style="text-align: center;">
-                        <a href="/media/{$item->pages_id}/{$item->name}" class="gallery">
-                            <img src="/media/{$item->pages_id}/tn/{$item->name}" class="img-responsive" style="max-height: 130px;" />
-                        </a>
-                    </div>
+            <div class="card">
+                <div class="image-cover">
+                    <a href="/pictures/{$item->pages_id}/{$item->name}" class="gallery">
+                        <img src="/pictures/{$item->pages_id}/{$item->name}" class="crop-topped">
+                    </a>
+                </div>
+                <div class="card-body">
+                    <p class="card-text">{$item->name}</p>
                 </div>
             </div>
         {/foreach}
+    </div>
+</div>
+
+<div class="container">
+    <div class="text-center">
+        {control paging, $args, $paginator}
     </div>
 </div>

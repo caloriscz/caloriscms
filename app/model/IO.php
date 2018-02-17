@@ -194,8 +194,8 @@ class IO
 
     /**
      * Is it image or other type of file
-     * @param type $path
-     * @return boolean
+     * @param $path
+     * @return bool
      */
     public static function isImage($path)
     {

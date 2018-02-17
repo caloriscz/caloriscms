@@ -1,11 +1,4 @@
 <form n:name="insertForm" class="form-horizontal" role="form">
-    {if $category->count() > 1}
-        <div class="input-group">
-            <select n:name="category" class="form-control" id="dfdkj"></select>
-        </div>
-    {else}
-        <input n:name="category">
-    {/if}
     <div class="input-group mt-3">
         <input type="text" n:name="title" class="form-control" placeholder="Zadejte název stránky..."
                aria-label="Zadejte název stránky..." required>
@@ -13,5 +6,4 @@
                     <button class="btn btn-secondary" type="submit">Vytvořit</button>
             </span>
     </div>
-
 </form>

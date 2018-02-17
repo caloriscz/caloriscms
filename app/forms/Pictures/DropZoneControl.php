@@ -2,8 +2,8 @@
 
 namespace App\Forms\Pictures;
 
-use App\Model\File;
 use App\Model\IO;
+use App\Model\Picture;
 use App\Model\Thumbnail;
 use Nette\Application\UI\Control;
 use Nette\Database\Context;
@@ -48,18 +48,19 @@ class DropZoneControl extends Control
             $fileName = $_FILES['file']['name'];
             $targetFile = APP_DIR . '/' . $storeFolder . '/' . $fileName;
 
-            IO::directoryMake(APP_DIR . '/' . $storeFolder, 0755);
+            IO::directoryMake(APP_DIR . '/' . $storeFolder);
+            IO::directoryMake(APP_DIR . '/' . $storeFolder . '/tn');
 
             move_uploaded_file($_FILES['file']['tmp_name'], $targetFile);
             chmod($targetFile, 0644);
 
-            $checkImage = $this->database->table('media')->where([
+            $checkImage = $this->database->table('pictures')->where([
                 'name' => $fileName,
                 'pages_id' => $form->values->pages_id,
             ]);
 
             if ($checkImage->count() === 0) {
-                $file = new File($this->database);
+                $file = new Picture($this->database);
                 $file->setPageId($form->values->pages_id);
                 $file->setType(1);
                 $file->setFile($fileName);

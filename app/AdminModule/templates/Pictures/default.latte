@@ -15,6 +15,7 @@
     {else}
         <li class="breadcrumb-item active"><a href="/admin/media/albums">Galerie</a></li>
     {/if}
+    {control pageTopMenu}
 </ol>
 
 
@@ -88,7 +89,7 @@
                 <h4 class="modal-title">Vložit album</h4>
             </div>
             <div class="modal-body">
-                {control insertMediaForm}
+                {control insertPictureForm}
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Zavřít</button>

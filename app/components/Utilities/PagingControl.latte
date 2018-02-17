@@ -3,17 +3,17 @@
     <nav>
             <ul class="pagination justify-content-center">
                 {if $paginator->getPage() > 1}
-                    <li class="prev-page">
-                        <a href="{plink $templateName, (expand) $args, 'page' => 1}" data-paging="1">
+                    <li class="page-item">
+                        <a class="page-link" href="{plink $templateName, (expand) $args, 'page' => 1}" data-paging="1">
                             <i class="fa fa-angle-double-left"></i>
                         </a>
                     </li>
                 {/if}
                 {var $interval = 10}
                 {if ($paginator->getPage()- $interval) >= 1}
-                    <li class="next-page">
+                    <li class="page-item">
                         <a href="{plink $templateName, (expand) $args, 'page' => ($paginator->getPage()-10)}"
-                           data-paging="{$paginator->getPage()-10}">
+                           data-paging="{$paginator->getPage()-10}" class="page-link">
                             <i class="fa fa-angle-left"></i>
                         </a>
                     </li>
@@ -38,27 +38,27 @@
 
                 {for $i = $first;$i < $last;$i++}
                     {if ($i + 1) == $paginator->getPage()}
-                        <li class="active">
+                        <li class="page-item active">
                             {else}
                         <li>
                     {/if}
-                    <a href="{plink $templateName, (expand) $args, 'page' => $i+1}" data-paging="{$i+1}">{$i+1}</a>
+                    <a class="page-link" href="{plink $templateName, (expand) $args, 'page' => $i+1}" data-paging="{$i+1}">{$i+1}</a>
                     </li>
                 {/for}
 
                 {if ($paginator->getPageCount() - $paginator->getPage()) >= $interval}
-                    <li class="next-page">
+                    <li class="page-item">
                         <a href="{plink $templateName, (expand) $args, 'page' => $paginator->getPage()+$interval}"
-                           data-paging="{$paginator->getPage()+$interval}" title="+ {$iterator} stránek">
+                           data-paging="{$paginator->getPage()+$interval}" title="+ {$iterator} stránek" class="page-link">
                             <i class="fa fa-angle-right"></i>
                         </a>
                     </li>
                 {/if}
 
                 {if $paginator->getPage() < $paginator->getPageCount()}
-                    <li class="next-page">
+                    <li class="page-item">
                         <a href="{plink $templateName, (expand) $args, 'page' => $paginator->lastPage}"
-                           data-paging="{$paginator->last}">
+                           data-paging="{$paginator->last}" class="page-link">
                             <i class="fa fa-angle-double-right"></i>
                         </a>
                     </li>

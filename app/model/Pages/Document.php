@@ -24,7 +24,6 @@ class Document
 
     private $doc;
     private $preview;
-    private $category;
     private $public;
     private $title;
     private $pageTemplate;
@@ -236,17 +235,6 @@ class Document
         return false;
     }
 
-    public function setCategory($category = null)
-    {
-        $this->category = $category;
-        return $this->category;
-    }
-
-    public function getCategory()
-    {
-        return $this->category;
-    }
-
     public function setDocument($doc = false)
     {
         $this->doc = $doc;
@@ -279,10 +267,6 @@ class Document
         }
 
         $arr['pages_templates_id'] = $this->getTemplate();
-
-        if ($this->getCategory() !== null) {
-            $arr['pages_categories_id'] = $this->getCategory();
-        }
 
         if ($this->getPreview()) {
             $arr['preview'] = $this->getPreview();
@@ -353,10 +337,6 @@ class Document
             $arr['document' . '_' . $this->getLanguage()] = $this->getDocument();
         } else {
             $arr['document'] = $this->getDocument();
-        }
-
-        if ($this->getCategory() != null) {
-            $arr['pages_categories_id'] = $this->getCategory();
         }
 
         if ($this->getPreview() && $this->getLanguage()) {

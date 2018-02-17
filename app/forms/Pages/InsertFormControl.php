@@ -26,8 +26,6 @@ class InsertFormControl extends Control
 
     protected function createComponentInsertForm()
     {
-        $category = $this->database->table('pages_categories');
-
         $form = new BootstrapUIForm();
         $form->setTranslator($this->presenter->translator);
 
@@ -35,12 +33,6 @@ class InsertFormControl extends Control
             $pageType = 9;
         } else {
             $pageType = $this->presenter->getParameter('type');
-        }
-
-        if ($category->count() > 1) {
-            $form->addSelect('category', '', $category->fetchPairs('id', 'title'));
-        } else {
-            $form->addHidden('category');
         }
 
         $form->addHidden('id');

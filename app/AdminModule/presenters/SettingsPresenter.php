@@ -54,7 +54,6 @@ class SettingsPresenter extends BasePresenter
         $this->checkColumn('pages', 'preview', 'varchar(250)', $id);
         $this->checkColumn('pages', 'metakeys', 'varchar(150)', $id);
         $this->checkColumn('pages', 'metadesc', 'varchar(200)', $id);
-        $this->checkColumn('pages_categories', 'title', 'varchar(100)', $id);
         $this->checkColumn('menu', 'title', 'varchar(80)', $id);
         $this->checkColumn('menu', 'description', 'text', $id);
         $this->checkColumn('menu', 'url', 'text', $id);

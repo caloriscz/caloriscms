@@ -1,0 +1,56 @@
+{block #titles}Menu{/block}
+{block content}
+
+<ol class="breadcrumb">
+    <li class="breadcrumb-item">Home</li>
+    <li class="breadcrumb-item"><a href="#">Admin</a></li>
+    <li class="breadcrumb-item active">Menu</li>
+    <li class="breadcrumb-item active"><a href="/admin/menu/detail/{$presenter->getParameter('id')}">Detail</a></li>
+</ol>
+
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-block">
+            <h2>{_dictionary.main.Images}</h2>
+
+            <p>Pro obrázky používejte formát PNG.</p>
+
+            {control menuUpdateImages}
+
+            <div class="row">
+                <div class="col-md-3">
+                    {if file_exists($basePath.'images/menu/' . $presenter->getParameter('id') . '.png')}
+                        <p><img src="{$baseUri}/images/menu/{$presenter->getParameter('id')}.png?{rand(0,400)}" class="img-responsive"></p>
+                        <p><a n:href="deleteImage!, id => $presenter->getParameter('id')"
+                                    class="btn btn-danger btn-xs">{_dictionary.main.delete|firstUpper}</a></p>
+                    {/if}
+                </div>
+                <div class="col-md-3">
+                    {if file_exists($basePath.'images/menu/' . $presenter->getParameter('id') . '_h.png')}
+                        <p><img src="{$baseUri}/images/menu/{$presenter->getParameter('id')}_h.png?{rand(0,400)}"
+                                class="img-responsive"></p>
+                        <p><a n:href="deleteImage!, id => $presenter->getParameter('id'), type => '_h'"
+                                    class="btn btn-danger btn-xs">{_dictionary.main.delete|firstUpper}</a></p>
+                    {/if}
+                </div>
+                <div class="col-md-3">
+                    {if file_exists($basePath.'images/menu/' . $presenter->getParameter('id') . '_a.png')}
+                        <p><img src="{$baseUri}/images/menu/{$presenter->getParameter('id')}_a.png?{rand(0,400)}"
+                                class="img-responsive"></p>
+                        <p><a n:href="deleteImage!, id => $presenter->getParameter('id'), type => '_a'"
+                                    class="btn btn-danger btn-xs">{_dictionary.main.delete|firstUpper}</a></p>
+                    {/if}
+                </div>
+                <div class="col-md-3">
+                    {if file_exists($basePath.'images/menu/' . $presenter->getParameter('id') . '_ah.png')}
+                        <p><img src="{$baseUri}/images/menu/{$presenter->getParameter('id')}_ah.png?{rand(0,400)}"
+                                class="img-responsive"></p>
+                        <p><a n:href="deleteImage!, id => $presenter->getParameter('id'), type => '_ah'"
+                                    class="btn btn-danger btn-xs">{_dictionary.main.delete|firstUpper}</a></p>
+                    {/if}
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

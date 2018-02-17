@@ -2,6 +2,8 @@
 
 namespace App\FrontModule\Presenters;
 
+use Nette\Utils\Paginator;
+
 /**
  * Images and files presenter.
  */
@@ -18,20 +20,29 @@ class MediaPresenter extends BasePresenter
 
     public function renderAlbum()
     {
-        $this->template->album = $this->database->table('pages')->get($this->getParameter('page_id'));
+        $arr = [
+            'pages_types_id' => 6
+        ];
 
-        $cols = ['pages_id' => $this->getParameter('page_id')];
-
-        $this->template->gallery = $this->database->table('media')->where($cols)->order('name');
+        $this->template->gallery = $this->database->table('pages')->where($arr)->order('title');
     }
 
     public function renderAlbumWithDescription()
     {
-        $this->template->album = $this->database->table('pages')->get($this->getParameter('page_id'));
-
         $cols = ['pages_id' => $this->getParameter('page_id')];
 
-        $this->template->gallery = $this->database->table('media')->where($cols)->order('name');
+        $gallery = $this->database->table('pictures')->where($cols)->order('name');
+
+
+        $paginator = new Paginator();
+        $paginator->setItemCount($gallery->count('*'));
+        $paginator->setItemsPerPage(20);
+        $paginator->setPage($this->getParameter('page'));
+
+        $this->template->paginator = $paginator;
+        $this->template->gallery = $gallery->limit($paginator->getLength(), $paginator->getOffset());
+
+        $this->template->args = $this->getParameters();
     }
 
 }

@@ -2,7 +2,6 @@
 
 namespace App\AdminModule\Presenters;
 
-use App\Forms\Media\EditFileControl;
 use App\Forms\Media\EditPictureFormControl;
 use App\Forms\Pictures\InsertPictureControl;
 use App\Forms\Pictures\DropZoneControl;
@@ -10,7 +9,6 @@ use App\Model\Category;
 use App\Model\Document;
 use App\Model\IO;
 use App\Model\Page;
-use Caloriscz\Media\ImageBrowserControl;
 use Caloriscz\Pictures\PageThumbControl;
 use Nette\Http\FileUpload;
 use Nette\Utils\Paginator;
@@ -29,7 +27,7 @@ class PicturesPresenter extends BasePresenter
         $this->template->pageId = $this->getParameter('type');
     }
 
-    protected function createComponentInsertMediaForm()
+    protected function createComponentInsertPictureForm()
     {
         return new InsertPictureControl($this->database);
     }
@@ -59,7 +57,6 @@ class PicturesPresenter extends BasePresenter
      * Delete image
      * @param $id
      * @param $type
-     * @throws \Nette\Application\AbortException
      */
     public function handleDelete($id, $type)
     {
@@ -79,7 +76,6 @@ class PicturesPresenter extends BasePresenter
     /**
      * Delete page
      * @param $id
-     * @throws \Nette\Application\AbortException
      */
     public function handleDeletePage($id)
     {
@@ -93,7 +89,7 @@ class PicturesPresenter extends BasePresenter
             IO::removeDirectory(APP_DIR . '/pictures/' . $item);
         }
 
-        $this->redirect('this', array('id' => null, 'type' => $this->getParameter('type')));
+        $this->redirect('this', ['id' => null, 'type' => $this->getParameter('type')]);
     }
 
     /**
@@ -108,7 +104,7 @@ class PicturesPresenter extends BasePresenter
         }
 
 
-        $this->redirect(':Admin:Media:default', array('type' => $this->getParameter('type')));
+        $this->redirect(':Admin:Media:default', ['type' => $this->getParameter('type')]);
     }
 
     /**
@@ -116,25 +112,24 @@ class PicturesPresenter extends BasePresenter
      * @param $id
      * @param $sorted
      * @param $album
-     * @throws \Nette\Application\AbortException
      */
     public function handleUp($id, $sorted, $album)
     {
-        $sortDb = $this->database->table('media')->where(array(
+        $sortDb = $this->database->table('media')->where([
             'sorted > ?' => $sorted,
             'categories_id' => $album,
-        ))->order('sorted')->limit(1);
+        ])->order('sorted')->limit(1);
         $sort = $sortDb->fetch();
 
         if ($sortDb->count() > 0) {
-            $this->database->table('media')->where(array('id' => $id))->update(array('sorted' => $sort->sorted));
-            $this->database->table('media')->where(array('id' => $sort->id))->update(array('sorted' => $sorted));
+            $this->database->table('media')->where(['id' => $id])->update(['sorted' => $sort->sorted]);
+            $this->database->table('media')->where(['id' => $sort->id])->update(['sorted' => $sorted]);
         }
 
-        $this->redirect(':Admin:Media:detail', array(
+        $this->redirect(':Admin:Media:detail', [
             'id' => $this->getParameter('album'),
             'category' => $this->getParameter('category'),
-        ));
+        ]);
     }
 
     /**
@@ -142,7 +137,6 @@ class PicturesPresenter extends BasePresenter
      * @param $id
      * @param $sorted
      * @param $album
-     * @throws \Nette\Application\AbortException
      */
     public function handleDown($id, $sorted, $album)
     {
@@ -153,14 +147,14 @@ class PicturesPresenter extends BasePresenter
         $sort = $sortDb->fetch();
 
         if ($sortDb->count() > 0) {
-            $this->database->table('media')->where(array('id' => $id))->update(array('sorted' => $sort->sorted));
-            $this->database->table('media')->where(array('id' => $sort->id))->update(array('sorted' => $sorted));
+            $this->database->table('media')->where(['id' => $id])->update(['sorted' => $sort->sorted]);
+            $this->database->table('media')->where(['id' => $sort->id])->update(['sorted' => $sorted]);
         }
 
-        $this->redirect(':Admin:Media:detail', array(
+        $this->redirect(':Admin:Media:detail', [
             'id' => $this->getParameter('album'),
-            'category' => $this->getParameter('category'),
-        ));
+            'category' => $this->getParameter('category')
+        ]);
     }
 
     public function renderDefault()
@@ -173,10 +167,7 @@ class PicturesPresenter extends BasePresenter
         $paginator->setPage($this->getParameter('page'));
 
         $this->template->args = $this->getParameters();
-
         $this->template->documents = $mediaDb->order('name');
-        $this->template->mediaType = $this->getParameter('cat');
-
         $this->template->paginator = $paginator;
         $this->template->productsArr = $mediaDb->limit($paginator->getLength(), $paginator->getOffset());
 
@@ -197,14 +188,14 @@ class PicturesPresenter extends BasePresenter
         $isItImage = mime_content_type(APP_DIR . '/pictures/' . $this->template->file->pages_id . '/' . $this->template->file->name);
 
         if (null !== $isItImage) {
+            $this->template->isImage = false;
+
             $type = [
                 'image/png', 'image/jpg', 'image/jpeg', 'image/jpe', 'image/gif',
                 'image/tif', 'image/tiff', 'image/svg', 'image/ico', 'image/icon', 'image/x-icon'];
 
             if (in_array($isItImage, $type, true)) {
                 $this->template->isImage = true;
-            } else {
-                $this->template->isImage = false;
             }
 
             $this->template->fileType = $isItImage;

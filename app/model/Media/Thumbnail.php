@@ -47,9 +47,9 @@ class Thumbnail
     {
         if ($this->width === null && $this->height === null) {
             return 300;
-        } else {
-            return $this->width;
         }
+
+        return $this->width;
     }
 
     public function getHeight()
@@ -78,7 +78,7 @@ class Thumbnail
      * @return bool
      * @throws \Nette\Utils\UnknownImageFileException
      */
-    public function save($path = "tn", $realFile = false)
+    public function save($path = 'tn', $realFile = false)
     {
         if (!$this->check($path)) {
             return false;
@@ -91,7 +91,7 @@ class Thumbnail
         }
 
         $image = Image::fromFile(APP_DIR . '/' . $this->getPath() . '/' . $this->getFile());
-        $image->resize($this->getWidth(), $this->getHeight(), \Nette\Utils\Image::SHRINK_ONLY);
+        $image->resize($this->getWidth(), $this->getHeight(), Image::SHRINK_ONLY);
         $image->sharpen();
         $image->save(APP_DIR . '/' . $this->getPath() . '/' . $path . '/' . $fileName);
         chmod(APP_DIR . '/' . $this->getPath() . '/' . $path . '/' . $fileName, 0644);

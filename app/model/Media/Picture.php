@@ -14,13 +14,13 @@ use Nette\Database\Context;
  * Image model
  * @author Petr Karásek <caloris@caloris.cz>
  */
-class File
+class Picture
 {
 
     /** @var Context */
     public $database;
     public $user;
-    private $path = '/media';
+    private $path = '/pictures';
     private $pageId;
     private $file;
     private $type;
@@ -73,13 +73,12 @@ class File
 
     public function create()
     {
-        $this->database->table('media')->insert(array(
+        $this->database->table('pictures')->insert([
             'name' => $this->getFile(),
             'pages_id' => $this->getPageId(),
             'filesize' => filesize(APP_DIR . '/'. $this->path . '/' . $this->getPageId() . '/' . $this->getFile()),
-            'file_type' => $this->getType(),
             'date_created' => date('Y-m-d H:i:s'),
-        ));
+        ]);
     }
 
 }
