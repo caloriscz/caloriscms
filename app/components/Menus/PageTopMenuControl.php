@@ -17,13 +17,10 @@ class PageTopMenuControl extends Control
 
     public function render()
     {
-        $this->template->page = $this->database->table('pages')->get($this->getPresenter()->template->presenter->getParameter('id'));
-        $this->template->contact = $this->database->table('contacts')
-            ->where(['pages_id' => $this->template->page->id])->fetch();
-
-        $this->template->setFile(__DIR__ . '/PageTopMenuControl.latte');
-
-        $this->template->render();
+        $template = $this->getTemplate();
+        $template->page = $this->database->table('pages')->get($this->presenter->getParameter('id'));
+        $template->setFile(__DIR__ . '/PageTopMenuControl.latte');
+        $template->render();
     }
 
 }

@@ -1,37 +1,26 @@
-{foreach $images as $item}
-    <div class="col-sm-6 col-md-3 col-lg-2">
-        <div class="thumbnail" style="height: 250px;{if $item->main_file} border: 1px solid green;{/if}">
-            <a href="/media/{$item->pages_id}/{$item->name}">
-                <img src="/media/{$item->pages_id}/tn/{$item->name}" alt="{$item->name}" style="max-height: 160px;">
-            </a>
-            <div class="caption">
-                <p>
-                    <small>{$item->name|truncate:28}</small>
-                </p>
-                <p>{$item->description}</p>
-                <div class="row">
-                    <div class="col-md-2">
-                        <a href="{link delete, id => $catalogue->id, name => $item->id}" class="btn btn-danger btn-xs"
-                           onclick="return confirm('Opravdu smazat?')">
-                            <i class="fa fa-times"></i>
-                        </a>
-                    </div>
-                    <div class="col-md-3">
-                        <a href="{plink ':Admin:Media:image', id => $item->id}" class="btn btn-default btn-xs">
-                            {_dictionary.main.Edit}
-                        </a>
-                    </div>
-                    <div class="col-md-7">
-                        {if $item->main_file}
-                            <span style="color: #008800;">titulní obrázek</span>
-                            {else}
-                        <a href="{link 'setMain!', id => $item->pages_id, image => $item->id}" class="btn btn-default btn-xs" title="nastavit jako titulní obrázek">
-                            <i class="fa fa-thumb-tack"></i> titulní
-                        </a>
-                        {/if}
-                    </div>
+<div class="row">
+    {foreach $documents as $item}
+        <div class="col-lg-3">
+            <div class="card">
+                <div class="card-img text-center" style="max-height: 180px;">
+                    <a href="{plink ':Admin:Pictures:detail', 'id' => $item->id}">
+                        <img src="{$baseUri}/pictures/{$item->pages_id}/{$item->name}" alt="{$item->name}"
+                             class="img-responsive-centered"
+                             style="max-height: 180px; max-width: 270px;">
+                    </a>
+                </div>
+                <div class="card-block text-center">
+                    <small>{$item->name}</small>
+                    <a href="{link delete!, id => $item->id, type => $item->name}"
+                       onclick="return confirm('Opravdu smazat?')">
+                        <i class="fa fa-times font-red"></i>
+                    </a>
                 </div>
             </div>
         </div>
-    </div>
-{/foreach}
+    {/foreach}
+</div>
+
+<div class="text-center">
+    {control paging, $args, $paginator}
+</div>

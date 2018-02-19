@@ -53,7 +53,6 @@ class InsertFormControl extends Control
     public function insertFormSucceeded(BootstrapUIForm $form)
     {
         $doc = new Document($this->database);
-        $doc->setCategory($form->values->category);
         $doc->setType($form->values->section);
         $doc->setTitle($form->values->title);
         $page = $doc->create($this->presenter->user->getId());
@@ -67,7 +66,6 @@ class InsertFormControl extends Control
     public function render()
     {
         $template = $this->getTemplate();
-        $template->category = $this->database->table('pages_categories');
         $template->setFile(__DIR__ . '/InsertFormControl.latte');
         $template->render();
     }

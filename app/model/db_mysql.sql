@@ -307,10 +307,10 @@ CREATE TABLE `pages_types` (
 INSERT INTO `pages_types` (`id`, `content_type`, `presenter`, `action`, `prefix`, `admin_enabled`, `admin_link`, `icon`, `enable_snippets`, `enable_images`, `enable_files`, `enable_related`, `pages_id`) VALUES
   (1, 'Stránky', 'Front:Pages', 'default', '', 1, 'pages/?type=1', 'fa-files-o', 0, 1, 1, 1, 1),
   (2, 'Aktuality', 'Front:Blog', 'detail', 'blog', 1, 'pages/?type=2', 'fa-newspaper-o', 1, 1, 1, 1, 3),
-  (6, 'Galerie', 'Front:Media', 'album', '', 1, 'media/albums', 'icon-picture', 0, 1, 1, 1, 4),
-  (8, 'Dokumenty', 'Front:Media', 'folder', '', 1, 'media', 'icon-file', 1, 1, 1, 1, 6),
-  (9, 'Šablony', '', 'default', '', 1, 'pages?type=9', 'fa-th', 1, 1, 1, 1, 1),
-  (10, 'Kategorie blogu', '', '', 'blog-categories', 1, 'pages?type=10', 'fa-snowlake-o', 1, 1, 1, 1, 1);
+  (6, 'Galerie', 'Front:Media', 'album', '', 1, 'pages/?type=6', 'fa-file-image-o', 0, 1, 1, 1, 4),
+  (8, 'Dokumenty', 'Front:Media', 'folder', '', 1, 'pages?type=8', 'fa-files-o', 1, 1, 1, 1, 6),
+  (9, 'Šablony', '', 'default', '', 1, 'pages?type=9', 'fa-th', 1, 1, 1, 1, 1);
+
 
 CREATE TABLE `param` (
   `id` int(11) NOT NULL,

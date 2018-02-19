@@ -14,7 +14,7 @@
             <td class="text-right w-25">
                 {if $page->getPagesTypes()->getId() != 9}
                     <a href="{link delete!, id => $page->getId(), type => $type}"
-                       onclick="return confirm('Opravdu smazat?')">
+                       onclick="return confirm('Opravdu smazat?')" class="text-danger">
                         <i class="fa fa-times font-red"></i>
                     </a>
                 {/if}

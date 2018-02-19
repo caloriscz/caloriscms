@@ -31,7 +31,7 @@ class FileListControl extends Control
     public function render($page, $templateFile = false)
     {
         $template = $this->getTemplate();
-        $template->page = $page->related('media', 'pages_id')->where('file_type = 0');
+        $template->page = $page->related('media', 'pages_id');
         $template->database = $this->database;
 
         if ($templateFile == true) {

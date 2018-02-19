@@ -2,9 +2,12 @@
 
 namespace Caloriscz\Media;
 
+use App\Model\Category;
 use App\Model\IO;
+use Caloriscz\Utilities\PagingControl;
 use Nette\Application\UI\Control;
 use Nette\Database\Context;
+use Nette\Utils\Paginator;
 
 class ImageBrowserControl extends Control
 {
@@ -20,19 +23,30 @@ class ImageBrowserControl extends Control
 
     }
 
+    protected function createComponentPaging()
+    {
+        return new PagingControl();
+    }
+
     /**
      * Delete image
      * @param $id
+     * @param $type
+     * @throws \Nette\Application\AbortException
      */
-    public function handleDelete($id)
+    public function handleDelete($id, $type)
     {
-        $imageDb = $this->database->table('pictures')->get($this->getParameter('name'));
+        $imageDb = $this->database->table('pictures')->get($id);
+
+        IO::remove(APP_DIR . '/pictures/' . $imageDb->pages_id . '/' . $imageDb->name);
+        IO::remove(APP_DIR . '/pictures/' . $imageDb->pages_id . '/tn/' . $imageDb->name);
+
         $imageDb->delete();
 
-        IO::remove(APP_DIR . '/pictures/' . $id . '/' . $imageDb->name);
-        IO::remove(APP_DIR . '/pictures/' . $id . '/tn/' . $imageDb->name);
-
-        $this->redirect('this', ['id' => $this->presenter->getParameter('name')]);
+        $this->redirect('this', [
+            'id' => $imageDb->pages_id,
+            'type' => $this->getParameter('type'),
+        ]);
     }
 
     /**
@@ -54,10 +68,26 @@ class ImageBrowserControl extends Control
     public function render()
     {
         $template = $this->getTemplate();
-        $template->settings = $this->presenter->template->settings;
-        $template->catalogue = $this->database->table('pages')->get($this->presenter->getParameter('id'));
-        $template->images = $this->database->table('pictures')
-            ->where(['pages_id' => $this->presenter->getParameter('id')]);
+        $mediaDb = $this->database->table('pictures')->where(['pages_id' => $this->presenter->getParameter('id')]);
+
+        $paginator = new Paginator();
+        $paginator->setItemCount($mediaDb->count('*'));
+        $paginator->setItemsPerPage(16);
+        $paginator->setPage($this->presenter->getParameter('page'));
+
+        $template->args = $this->presenter->getParameters();
+        $template->documents = $mediaDb->order('name');
+        $template->paginator = $paginator;
+        $template->productsArr = $mediaDb->limit($paginator->getLength(), $paginator->getOffset());
+
+        if ($this->getParameter('id')) {
+            $category = new Category($this->database);
+            $template->breadcrumbs = $category->getPageBreadcrumb($this->presenter->getParameter('id'));
+        } else {
+            $template->breadcrumbs = [];
+        }
+
+
         $template->setFile(__DIR__ . '/ImageBrowserControl.latte');
         $template->render();
     }

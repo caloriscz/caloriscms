@@ -63,7 +63,7 @@ class PageThumbControl extends Control
             ];
         }
 
-        $template->pages = $this->database->table('pages')->where($arr);
+        $template->pages = $this->database->table('pages')->where($arr)->order('title');
         $template->render();
     }
 }
