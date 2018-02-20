@@ -27,6 +27,12 @@ services:
 	- Model\SlugManager
 	- {class: Doctrine\ORM\Tools\Console\Command\GenerateEntitiesCommand, tags: [kdyby.console.command]}
 	router: @App\RouterFactory::createRouter
+	cacheClear:
+		class: App\Console\CacheClearCommand
+		tags: [kdyby.console.command]
+	thumbnailGenerator:
+		class: App\Console\ThumbnailGeneratorCommand
+		tags: [kdyby.console.command]
 
 extensions:
     translation: Kdyby\Translation\DI\TranslationExtension

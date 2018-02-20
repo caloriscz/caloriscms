@@ -26,16 +26,16 @@ class IO
      * @param int $chmod
      * @return bool
      */
-    public static function upload($pathDirectory, $fileName, $chmod = 0644)
+    public static function upload($pathDirectory, $fileName, $chmod = 0644): ?bool
     {
         $path = $pathDirectory . '/' . $fileName;
 
         if (file_exists($path)) {
             return false;
-        } elseif ($_FILES['the_file']['tmp_name'] == "") {
+        } elseif ($_FILES['the_file']['tmp_name'] === '') {
             return false;
         } else {
-            copy($_FILES["the_file"]["tmp_name"], $path);
+            copy($_FILES['the_file']['tmp_name'], $path);
             chmod($path, $chmod);
             return true;
         }
@@ -45,7 +45,7 @@ class IO
      * Remove file or empty directory
      * @param $fileName
      */
-    public static function remove($fileName)
+    public static function remove($fileName): void
     {
         if (file_exists($fileName)) {
 
@@ -61,7 +61,7 @@ class IO
      * Deletes directory with subdirectories and all files
      * @param $path
      */
-    public static function removeDirectory($path)
+    public static function removeDirectory($path, $leaveDir = null): void
     {
         $pathD = $path;
         if (file_exists($path)) {
@@ -76,7 +76,7 @@ class IO
                 }
             }
 
-            if (file_exists($pathD)) {
+            if ($leaveDir && file_exists($pathD)) {
                 rmdir($pathD);
             }
         }
@@ -106,7 +106,7 @@ class IO
      * @param $path
      * @param int $chmod
      */
-    public static function directoryMake($path, $chmod = 0755)
+    public static function directoryMake($path, $chmod = 0755): void
     {
         $pathConvert = str_replace("\\", '/', $path);
 
@@ -123,7 +123,7 @@ class IO
      * @param $pathFrom
      * @param $pathTo
      */
-    public static function rename($pathFrom, $pathTo)
+    public static function rename($pathFrom, $pathTo): void
     {
         if (!file_exists($pathFrom) && file_exists($pathTo)) {
             rename($pathFrom, $pathTo);
@@ -137,7 +137,7 @@ class IO
      */
     public static function isEmptyDirectory($directory)
     {
-        return (($files = @scandir($directory)) && count($files) <= 2);
+        return (($files = @scandir($directory, SCANDIR_SORT_ASCENDING)) && \count($files) <= 2);
     }
 
     /**
@@ -146,7 +146,7 @@ class IO
      * @param null $text
      * @param int $chmod
      */
-    public static function file($path, $text = null, $chmod = 0777)
+    public static function file($path, $text = null, $chmod = 0755): void
     {
         $fileHandle = fopen($path, 'w');
         fwrite($fileHandle, $text);
@@ -159,9 +159,9 @@ class IO
      * @param $filePath
      * @return array
      */
-    public static function listFiles($filePath)
+    public static function listFiles($filePath): array
     {
-        $files = scandir($filePath);
+        $files = scandir($filePath, SCANDIR_SORT_ASCENDING);
         $arrayA = ['.', '..'];
         $filesComplete = array_diff($files, $arrayA);
 
@@ -169,21 +169,21 @@ class IO
     }
 
     /**
-     * Folder size
+     * Directory size
      * @param $dir
      * @return int
      */
-    public static function folderSize($dir)
+    public static function folderSize($dir): int
     {
         $count_size = 0;
         $count = 0;
-        $dir_array = scandir($dir);
+        $dir_array = scandir($dir, SCANDIR_SORT_ASCENDING);
         foreach ($dir_array as $key => $filename) {
             if ($filename !== '..' && $filename !== '.') {
                 if (is_dir($dir . '/' . $filename)) {
-                    $new_folderSize = foldersize($dir . '/' . $filename);
+                    $new_folderSize = folderSize($dir . '/' . $filename);
                     $count_size += $new_folderSize;
-                } else if (is_file($dir . '/' . $filename)) {
+                } elseif (is_file($dir . '/' . $filename)) {
                     $count_size += filesize($dir . '/' . $filename);
                     $count++;
                 }
@@ -197,7 +197,7 @@ class IO
      * @param $path
      * @return bool
      */
-    public static function isImage($path)
+    public static function isImage($path): bool
     {
         $finfo = finfo_open(FILEINFO_MIME_TYPE);
         $type = finfo_file($finfo, $path);
@@ -211,9 +211,9 @@ class IO
 
         if (isset($valid_image_type[$type])) {
             return true;
-        } else {
-            return false;
         }
+
+        return false;
     }
 
 }

@@ -21,7 +21,7 @@ class Thumbnail
     private $file;
     private $path;
 
-    public function setFile($path, $file)
+    public function setFile($path, $file): void
     {
         $this->path = $path;
         $this->file = $file;
@@ -37,13 +37,13 @@ class Thumbnail
         return $this->file;
     }
 
-    public function setDimensions($width = null, $height = null)
+    public function setDimensions($width = null, $height = null): void
     {
         $this->width = $width;
         $this->height = $height;
     }
 
-    public function getWidth()
+    public function getWidth(): ?int
     {
         if ($this->width === null && $this->height === null) {
             return 300;
@@ -62,13 +62,15 @@ class Thumbnail
      * @param $path
      * @return bool
      */
-    public function check($path)
+    public function check($path): ?bool
     {
-        IO::directoryMake(APP_DIR . '/' . $this->getPath() . $path, 0755);
+        IO::directoryMake(APP_DIR . '/' . $this->getPath() . '/' . $path);
 
         if (IO::isImage(APP_DIR . '/' . $this->getPath() . '/' . $this->getFile()) === false) {
             return false;
         }
+
+        return true;
     }
 
     /**
@@ -78,7 +80,7 @@ class Thumbnail
      * @return bool
      * @throws \Nette\Utils\UnknownImageFileException
      */
-    public function save($path = 'tn', $realFile = false)
+    public function save($path = 'tn', $realFile = false): bool
     {
         if (!$this->check($path)) {
             return false;

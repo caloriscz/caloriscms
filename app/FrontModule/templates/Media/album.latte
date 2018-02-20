@@ -13,7 +13,7 @@
             <div class="card">
                 {if $galleryDb->count() > 0}
                     <div class="image-cover">
-                        <img src="/pictures/{$item->id}/{$galleryImage->name}">
+                        <img src="/pictures/{$item->id}/tn/{$galleryImage->name}" class="crop-topped">
                     </div>
                 {/if}
                 <div class="card-body">

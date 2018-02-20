@@ -3,6 +3,8 @@
 namespace App\AdminModule\Presenters;
 
 use App\Forms\Files\DropUploadControl;
+use App\Forms\Media\EditFileControl;
+use App\Forms\Media\EditPictureFormControl;
 use App\Model;
 use Nette\Utils\Finder;
 
@@ -31,6 +33,42 @@ class FilesPresenter extends BasePresenter
     public function renderDefault()
     {
         $this->template->files = Finder::findFiles('')->in(APP_DIR . '/images');
+    }
+
+    protected function createComponentEditFile()
+    {
+        return new EditFileControl($this->database);
+    }
+
+    protected function createComponentEditPicture()
+    {
+        return new EditPictureFormControl($this->database);
+    }
+
+    public function renderDetailPicture()
+    {
+        $this->template->file = $this->database->table('pictures')->get($this->getParameter('id'));
+
+        $isItImage = mime_content_type(APP_DIR . '/pictures/' . $this->template->file->pages_id . '/' . $this->template->file->name);
+
+        if (null !== $isItImage) {
+            $this->template->isImage = false;
+
+            $type = [
+                'image/png', 'image/jpg', 'image/jpeg', 'image/jpe', 'image/gif',
+                'image/tif', 'image/tiff', 'image/svg', 'image/ico', 'image/icon', 'image/x-icon'];
+
+            if (in_array($isItImage, $type, true)) {
+                $this->template->isImage = true;
+            }
+
+            $this->template->fileType = $isItImage;
+        }
+    }
+
+    public function renderDetailFile()
+    {
+        $this->template->file = $this->database->table('media')->get($this->getParameter('id'));
     }
 
 }

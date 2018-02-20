@@ -55,15 +55,16 @@ class EditFileControl extends Control
                 'description' => $form->values->description,
             ]);
 
-        $this->getPresenter()->redirect(this, array(
+        $this->getPresenter()->redirect('this', [
             'id' => $form->values->id,
-        ));
+        ]);
     }
 
     public function render()
     {
-        $this->template->setFile(__DIR__ . '/EditFileFormControl.latte');
-        $this->template->render();
+        $template = $this->getTemplate();
+        $template->setFile(__DIR__ . '/EditFileFormControl.latte');
+        $template->render();
     }
 
 }
