@@ -35,7 +35,7 @@ class EditorSettingsControl extends Control
     /**
      * Edit page content
      */
-    public function createComponentEditForm()
+    public function createComponentEditForm(): BootstrapUIForm
     {
         $pages = $this->database->table('pages')->get($this->getPresenter()->getParameter('id'));
 
@@ -107,7 +107,7 @@ class EditorSettingsControl extends Control
         return $form;
     }
 
-    public function permissionFormValidated()
+    public function permissionFormValidated(): void
     {
         if ($this->getPresenter()->template->member->users_roles->pages === 0) {
             $this->getPresenter()->flashMessage('Nemáte oprávnění k této akci', 'error');
@@ -120,14 +120,12 @@ class EditorSettingsControl extends Control
         $values = $form->getHttpData($form::DATA_TEXT); // get value from html input
 
         $doc = new Document($this->database);
+        $doc->setForm($form->getValues());
         $doc->setLanguage($form->values->l);
         $doc->setDatePublished($form->values->date_published);
-        $doc->setTitle($form->values->title);
         $doc->setTemplate($values['template']);
         $doc->setSlug($form->values->slug_old, $form->values->slug);
-        $doc->setMetaKey($form->values->metakeys);
-        $doc->setMetaDescription($form->values->metadesc);
-        $doc->setSitemap(1);
+        $doc->setSitemap($form->values->sitemap);
         $doc->setParent($values['parent']);
         $doc->save($form->values->id, $this->getPresenter()->user->getId());
 
@@ -150,23 +148,23 @@ class EditorSettingsControl extends Control
 
     public function render()
     {
-        $this->getTemplate()->settings = $this->getPresenter()->template->settings;
-        $this->template->editortype = $this->getPresenter()->request->getCookie('editortype');
+        $template = $this->getTemplate();
+        $template->settings = $this->getPresenter()->template->settings;
+        $template->editortype = $this->getPresenter()->request->getCookie('editortype');
 
-        $this->template->pages = $this->database->table('pages')->where('NOT id', $this->presenter->getParameter('id'));
-        $this->template->page = $this->database->table('pages')->get($this->presenter->getParameter('id'));
+        $template->pages = $this->database->table('pages')->where('NOT id', $this->presenter->getParameter('id'));
+        $template->page = $this->database->table('pages')->get($this->presenter->getParameter('id'));
 
-        $this->template->templates = $this->database->table('pages_templates')->where('pages_types_id IS NULL')->order('title');
+        $template->templates = $this->database->table('pages_templates')->where('pages_types_id IS NULL')->order('title');
+        $template->enabled = false;
 
         if ($this->getPresenter()->template->member->users_roles->pages) {
-            $this->template->enabled = true;
-        } else {
-            $this->template->enabled = false;
+            $template->enabled = true;
         }
 
-        $this->template->page_id = $this->getPresenter()->getParameter('id');
-        $this->template->setFile(__DIR__ . '/EditorSettingsControl.latte');
-        $this->template->render();
+        $template->page_id = $this->getPresenter()->getParameter('id');
+        $template->setFile(__DIR__ . '/EditorSettingsControl.latte');
+        $template->render();
     }
 
 }

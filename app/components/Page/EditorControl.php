@@ -42,7 +42,7 @@ class EditorControl extends Control
     /**
      * Edit page content
      */
-    public function createComponentEditForm()
+    public function createComponentEditForm(): BootstrapUIForm
     {
         $pages = $this->database->table('pages')->get($this->getPresenter()->getParameter('id'));
         $form = new BootstrapUIForm();
@@ -81,11 +81,11 @@ class EditorControl extends Control
         return $form;
     }
 
-    public function permissionFormValidated()
+    public function permissionFormValidated(): void
     {
         if ($this->getPresenter()->template->member->users_roles->pages === 0) {
             $this->getPresenter()->flashMessage('Nemáte oprávnění k této akci', 'error');
-            $this->getPresenter()->redirect(this);
+            $this->getPresenter()->redirect('this');
         }
     }
 
@@ -123,23 +123,22 @@ class EditorControl extends Control
 
     public function render()
     {
-        $this->template->settings = $this->getPresenter()->template->settings;
-        $this->template->editortype = $this->getPresenter()->request->getCookie('editortype');
+        $template = $this->getTemplate();
+        $template->settings = $this->getPresenter()->template->settings;
+        $template->editortype = $this->getPresenter()->request->getCookie('editortype');
+        $template->pages = $this->database->table('pages')->where('NOT id', $this->getPresenter()->getParameter('id'));
+        $template->page = $this->database->table('pages')->get($this->getPresenter()->getParameter('id'));
 
-        $this->template->pages = $this->database->table('pages')->where('NOT id', $this->getPresenter()->getParameter('id'));
-        $this->template->page = $this->database->table('pages')->get($this->getPresenter()->getParameter('id'));
-
-        $this->template->templates = $this->database->table('pages_templates')->where('pages_types_id IS NULL')->order('title');
+        $template->templates = $this->database->table('pages_templates')->where('pages_types_id IS NULL')->order('title');
+        $template->enabled = false;
 
         if ($this->getPresenter()->template->member->users_roles->pages) {
             $this->template->enabled = true;
-        } else {
-            $this->template->enabled = false;
         }
 
-        $this->template->page_id = $this->getPresenter()->getParameter('id');
-        $this->template->setFile(__DIR__ . '/EditorControl.latte');
-        $this->template->render();
+        $template->page_id = $this->getPresenter()->getParameter('id');
+        $template->setFile(__DIR__ . '/EditorControl.latte');
+        $template->render();
     }
 
 }

@@ -24,7 +24,7 @@ class InsertFormControl extends Control
         $this->em = $em;
     }
 
-    protected function createComponentInsertForm()
+    protected function createComponentInsertForm(): BootstrapUIForm
     {
         $form = new BootstrapUIForm();
         $form->setTranslator($this->presenter->translator);
@@ -50,15 +50,14 @@ class InsertFormControl extends Control
         return $form;
     }
 
-    public function insertFormSucceeded(BootstrapUIForm $form)
+    public function insertFormSucceeded(BootstrapUIForm $form): void
     {
         $doc = new Document($this->database);
         $doc->setType($form->values->section);
-        $doc->setTitle($form->values->title);
         $page = $doc->create($this->presenter->user->getId());
 
-        IO::directoryMake(APP_DIR . '/media/' . $page, 0755);
-        IO::directoryMake(APP_DIR . '/media/' . $page . '/tn', 0755);
+        IO::directoryMake(APP_DIR . '/media/' . $page);
+        IO::directoryMake(APP_DIR . '/media/' . $page . '/tn');
 
         $this->presenter->redirect(':Admin:Pages:detail', ['id' => $page]);
     }

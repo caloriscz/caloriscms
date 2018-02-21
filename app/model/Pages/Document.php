@@ -9,6 +9,7 @@
 namespace App\Model;
 
 use Nette\Database\Context;
+use Nette\Utils\ArrayHash;
 use Nette\Utils\Strings;
 
 /**
@@ -25,31 +26,30 @@ class Document
     private $doc;
     private $preview;
     private $public;
-    private $title;
     private $pageTemplate;
-    private $metakey;
-    private $metadesc;
     private $sitemap;
     private $date_published;
     private $slug;
     private $parent;
     private $lang;
+    private $type;
+    private $formValues;
 
     public function __construct(Context $database)
     {
         $this->database = $database;
     }
 
-    public function setTitle($title = false)
+    public function setForm($formValues): ArrayHash
     {
-        $this->title = $title;
-        return $this->title;
+        $this->formValues = $formValues;
+        return $this->formValues;
     }
 
-    public function getTitle()
+    public function getForm()
     {
-        if ($this->title) {
-            return $this->title;
+        if ($this->formValues) {
+            return $this->formValues;
         }
 
         return false;
@@ -70,37 +70,7 @@ class Document
         return null;
     }
 
-    public function setMetaKey($metakey = false)
-    {
-        $this->metakey = $metakey;
-        return $this->metakey;
-    }
-
-    public function getMetaKey()
-    {
-        if ($this->metakey) {
-            return $this->metakey;
-        }
-
-        return false;
-    }
-
-    public function setMetaDescription($metadesc = false)
-    {
-        $this->metadesc = $metadesc;
-        return $this->metadesc;
-    }
-
-    public function getMetaDescription()
-    {
-        if ($this->metadesc) {
-            return $this->metadesc;
-        }
-
-        return false;
-    }
-
-    public function setSitemap($sitemap)
+    public function setSitemap(bool $sitemap)
     {
         $this->sitemap = $sitemap;
     }
@@ -123,7 +93,7 @@ class Document
         }
     }
 
-    public function setPublic($public = 0)
+    public function setPublic(int $public = 0)
     {
         $this->public = 0;
 
@@ -154,7 +124,7 @@ class Document
         }
     }
 
-    public function createSlug($slug)
+    public function createSlug(string $slug): string
     {
         $this->slug = $slug;
 
@@ -254,6 +224,8 @@ class Document
      */
     public function create($user = null, $category = false)
     {
+        $values = $this->getForm();
+
         $arr['users_id'] = $user;
         $arr['date_created'] = date('Y-m-d H:i:s');
         $arr['date_published'] = date('Y-m-d H:i:s');
@@ -262,8 +234,8 @@ class Document
             $arr['pages_id'] = $category;
         }
 
-        if ($this->getTitle()) {
-            $arr['title'] = $this->getTitle();
+        if ($values->title) {
+            $arr['title'] = $values->title;
         }
 
         $arr['pages_templates_id'] = $this->getTemplate();
@@ -291,12 +263,12 @@ class Document
             }
         }
 
-        if ($this->getMetaKey()) {
-            $arr['metakeys'] = $this->getMetaKey();
+        if ($values->metakeys) {
+            $arr['metakeys'] = $values->metakeys;
         }
 
-        if ($this->getMetaDescription()) {
-            $arr['metadesc'] = $this->getMetaDescription();
+        if ($values->metadesc) {
+            $arr['metadesc'] = $values->metadesc;
         }
 
         if ($this->getSitemap()) {
@@ -323,12 +295,14 @@ class Document
      * @param null $user
      * @return bool|int
      */
-    public function save($id, $user = null)
+    public function save(int $id, $user = null)
     {
-        if ($this->getTitle() && $this->getLanguage()) {
-            $arr['title' . '_' . $this->getLanguage()] = $this->getTitle();
-        } elseif ($this->getTitle()) {
-            $arr['title'] = $this->getTitle();
+        $values = $this->getForm();
+
+        if ($values->title && $this->getLanguage()) {
+            $arr['title' . '_' . $this->getLanguage()] = $values->title;
+        } elseif ($values->title) {
+            $arr['title'] = $values->title;
         }
 
         $arr['pages_templates_id'] = $this->getTemplate();
@@ -345,20 +319,22 @@ class Document
             $arr['preview'] = $this->getPreview();
         }
 
-        if ($this->getMetaKey() && $this->getLanguage()) {
-            $arr['metakeys' . '_' . $this->getLanguage()] = $this->getMetaKey();
-        } elseif ($this->getMetaKey()) {
-            $arr['metakeys'] = $this->getMetaKey();
+        if ($values->metakeys && $this->getLanguage()) {
+            $arr['metakeys' . '_' . $this->getLanguage()] = $values->metakeys;
+        } elseif ($values->metakeys) {
+            $arr['metakeys'] = $values->metakeys;
         }
 
-        if ($this->getMetaDescription() && $this->getLanguage()) {
-            $arr['metadesc' . '_' . $this->getLanguage()] = $this->getMetaDescription();
-        } elseif ($this->getMetaDescription()) {
-            $arr['metadesc'] = $this->getMetaDescription();
+        if ($values->metadesc && $this->getLanguage()) {
+            $arr['metadesc' . '_' . $this->getLanguage()] = $values->metadesc;
+        } elseif ($values->metadesc) {
+            $arr['metadesc'] = $values->metadesc;
         }
 
         if ($this->getSitemap()) {
-            $arr['sitemap'] = $this->getSitemap();
+            $arr['sitemap'] = 1;
+        } else {
+            $arr['sitemap'] = 0;
         }
 
         if ($this->getSlug() && $this->getLanguage()) {
@@ -394,7 +370,7 @@ class Document
      * @param $slugOld
      * @return string
      */
-    public function update($slug, $slugOld)
+    public function update(string $slug, string $slugOld): string
     {
         if ($this->checkReservedNames($slug)) {
             $slug .= '-name';
@@ -406,7 +382,7 @@ class Document
         return $slugNew;
     }
 
-    public function exists($slug)
+    public function exists(string $slug): bool
     {
         $slugName = $this->database->table('pages')->where('title', $slug);
         return $slugName->count() > 0;
@@ -415,8 +391,9 @@ class Document
     /**
      * Remove slug
      * @param $slugId
+     * @return void
      */
-    public function remove($slugId)
+    public function remove($slugId): void
     {
         if (is_numeric($slugId)) {
             $this->database->table('pages')->get($slugId)->delete();
@@ -428,7 +405,7 @@ class Document
      * @param $id
      * @return bool
      */
-    public function delete($id)
+    public function delete(int $id): bool
     {
         $this->database->table('pages')->get($id)->delete();
 
@@ -440,7 +417,7 @@ class Document
      * @param $slug
      * @return bool
      */
-    public function checkReservedNames($slug)
+    public function checkReservedNames(string $slug): bool
     {
         $slugNames = [
             'blog', 'cart', 'catalogue', 'contacts', 'document', 'documents', 'error', 'events', 'gallery',
@@ -448,7 +425,7 @@ class Document
             'pricelist', 'product', 'profile', 'services', 'sign'
         ];
 
-        return in_array($slug, $slugNames, true);
+        return \in_array($slug, $slugNames, true);
     }
 
     /**
@@ -473,7 +450,7 @@ class Document
 
             $slugs = array_values($slugName->fetchPairs('slug', 'slug'));
 
-            while (in_array((++$max . '-' . $slug), $slugs)) ;
+            while (in_array((++$max . '-' . $slug), $slugs, true)) ;
 
             return $max . '-' . $slug;
         }
