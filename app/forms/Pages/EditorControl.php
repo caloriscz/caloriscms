@@ -1,6 +1,6 @@
 <?php
 
-namespace Caloriscz\Page;
+namespace App\Forms\Pages;
 
 use App\Model\Document;
 use Kdyby\Doctrine\EntityManager;
@@ -89,16 +89,13 @@ class EditorControl extends Control
         }
     }
 
-    public function editFormSucceeded(BootstrapUIForm $form)
+    public function editFormSucceeded(BootstrapUIForm $form): void
     {
-        $doc = new Document($this->database);
-        $doc->setLanguage($form->values->l);
-
         $document = $this->purify($form->values->document);
 
-        $doc->setDocument($document);
-        //$doc->setDocument($form->values->document);
+        $doc = new Document($this->database);
         $doc->setLanguage($form->values->l);
+        $doc->setDocument($document);
         $doc->save($form->values->id, $this->presenter->user->getId());
 
         $this->getPresenter()->redirect('this', ['id' => $form->values->id, 'l' => $form->values->l]);
@@ -113,8 +110,6 @@ class EditorControl extends Control
 
         $this->getPresenter()->redirect('this', ['id' => $this->getParameter('id')]);
     }
-
-    /************************************/
 
     public function purify($dirtyHtml)
     {

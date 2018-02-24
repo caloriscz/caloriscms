@@ -21,7 +21,7 @@ class ResetPassControl extends Control
     /**
      * Form: Resets passwords in database, user fill in new password
      */
-    public function createComponentResetForm()
+    public function createComponentResetForm(): BootstrapUIForm
     {
         $form = new BootstrapUIForm();
         $form->setTranslator($this->getPresenter()->translator);
@@ -66,14 +66,14 @@ class ResetPassControl extends Control
         $this->getPresenter()->redirect('Sign:in');
     }
 
-    public function render($layer = 'front')
+    public function render(string $layer = 'front')
     {
-        $this->template->setFile(__DIR__ . '/ResetPassControl.latte');
-        $this->template->addon = $this->database->table('addons');
-        $this->template->layer = $layer;
-        $this->template->member = $this->getPresenter()->template->member;
-
-        $this->template->render();
+        $template = $this->getTemplate();
+        $template->setFile(__DIR__ . '/ResetPassControl.latte');
+        $template->addon = $this->database->table('addons');
+        $template->layer = $layer;
+        $template->member = $this->getPresenter()->template->member;
+        $template->render();
     }
 
 }

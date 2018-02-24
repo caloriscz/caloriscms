@@ -29,7 +29,7 @@ class SignUpControl extends Control
         $this->database = $database;
     }
 
-    public function createComponentSignUpForm()
+    public function createComponentSignUpForm(): BootstrapUIForm
     {
         $form = new BootstrapUIForm();
         $form->setTranslator($this->presenter->translator);
@@ -139,7 +139,7 @@ class SignUpControl extends Control
         }
     }
 
-    public function signUpFormSucceeded(BootstrapUIForm $form)
+    public function signUpFormSucceeded(BootstrapUIForm $form): BootstrapUIForm
     {
         $activationCode = Random::generate(12, '987654321zyxwvutsrqponmlkjihgfedcba');
         $password = Passwords::hash($form->values->pwd);
@@ -168,14 +168,7 @@ class SignUpControl extends Control
         $userId = $this->database->table('users')->insert($arr);
 
         if ($this->getPresenter()->template->settings['members:signup:contactEnabled']) {
-            /* Associate page with contact */
-            $doc = new Document($this->database);
-            $doc->setType(5);
-            $doc->setTitle('contact-' . $form->values->title);
-            $page = $doc->create($this->presenter->user->getId());
-           IO::directoryMake(substr(APP_DIR, 0, -4) . '/www/media/' . $page, 0755);
-
-            $arrContacts = array(
+            $arrContacts = [
                 'contacts_categories_id' => 8,
                 'pages_id' => $page,
                 'users_id' => $userId,
@@ -184,7 +177,7 @@ class SignUpControl extends Control
                 'city' => $form->values->city,
                 'zip' => $form->values->zip,
                 'countries_id' => 1,
-            );
+            ];
 
             if ($this->getPresenter()->template->settings['members:signup:companyEnabled']) {
                 $arrContacts['company'] = $form->values->company;
@@ -193,7 +186,7 @@ class SignUpControl extends Control
             }
 
             $contactId = $this->database->table('contacts')->insert($arrContacts);
-            $this->database->table('contacts')->get($contactId)->update(array('order' => $contactId));
+            $this->database->table('contacts')->get($contactId)->update(['order' => $contactId]);
         }
 
         if ($form->values->vatin) {
@@ -234,10 +227,11 @@ class SignUpControl extends Control
 
     public function render()
     {
-        $this->template->setFile(__DIR__ . '/SignUpControl.latte');
-        $this->template->settings = $this->getPresenter()->template->settings;
-        $this->template->addon = $this->database->table('addons');
-        $this->template->render();
+        $this->getTemplate();
+        $template->setFile(__DIR__ . '/SignUpControl.latte');
+        $template->settings = $this->getPresenter()->template->settings;
+        $template->addon = $this->database->table('addons');
+        $template->render();
     }
 
 }

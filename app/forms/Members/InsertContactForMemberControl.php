@@ -22,7 +22,7 @@ class InsertContactForMemberControl extends Control
     /**
      * Insert contact
      */
-    public function createComponentInsertForm()
+    public function createComponentInsertForm(): BootstrapUIForm
     {
         $memberTable = $this->database->table('users')->get($this->presenter->getParameter('id'));
 
@@ -33,10 +33,10 @@ class InsertContactForMemberControl extends Control
         $form->addHidden('page');
         $form->addSubmit('submitm', 'dictionary.main.Create')
             ->setAttribute('class', 'btn btn-success btn-sm');
-        $form->setDefaults(array(
+        $form->setDefaults([
             'page' => $this->presenter->getParameter('id'),
             'user' => $memberTable->id,
-        ));
+        ]);
 
         $form->onSuccess[] = [$this, 'insertFormSucceeded'];
         $form->onValidate[] = [$this, 'insertFormValidated'];
@@ -47,26 +47,18 @@ class InsertContactForMemberControl extends Control
     {
         if (!$this->presenter->template->member->users_roles->members) {
             $this->presenter->flashMessage($this->translator->translate('messages.members.PermissionDenied'), 'error');
-            $this->presenter->redirect(':Admin:Members:default', array('id' => null));
+            $this->presenter->redirect(':Admin:Members:default', ['id' => null]);
         }
     }
 
     public function insertFormSucceeded(BootstrapUIForm $form)
     {
-        $doc = new Document($this->database);
-        $doc->setType(5);
-        $doc->createSlug('contact-' . $form->values->user);
-        $doc->setTitle($form->values->title);
-        $page = $doc->create($this->presenter->user->getId());
-
-        IO::directoryMake(substr(APP_DIR, 0, -4) . '/www/media/' . $page);
-
-        $arr = array(
+        $arr = [
             'pages_id' => $page,
             'type' => 1,
             'name' => 'contact-' . $form->values->user,
             'users_id' => $form->values->user,
-        );
+        ];
 
         $this->database->table('contacts')
             ->insert($arr);

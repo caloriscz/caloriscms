@@ -78,7 +78,17 @@ class PagesPresenter extends BasePresenter
 
     public function createComponentEditorSettings()
     {
-        return new EditorSettingsControl($this->database, $this->em);
+        $control = new EditorSettingsControl($this->database, $this->em);
+        $control->onSave[] = function (array $querystring, string $error = null) {
+
+            if ($error) {
+                $this->flashMessage($error, 'error');
+            }
+
+            $this->redirect('this', $querystring);
+        };
+
+        return $control;
     }
 
     /**
@@ -121,24 +131,8 @@ class PagesPresenter extends BasePresenter
     }
 
     /**
-     * Delete image
-     * @param $id
-     * @throws \Nette\Application\AbortException
-     */
-    public function handleDeleteImage($id)
-    {
-        $this->database->table('media')->get($id)->delete();
-
-        IO::remove(APP_DIR . '/media/' . $id . '/' . $this->getParameter('name'));
-        IO::remove(APP_DIR . '/media/' . $id . '/tn/' . $this->getParameter('name'));
-
-        $this->redirect(':Admin:Pages:detailImages', ['id' => $this->getParameter('name')]);
-    }
-
-    /**
      * Insert related page
      * @param $id
-     * @throws \Nette\Application\AbortException
      */
     public function handleInsertRelated($id)
     {

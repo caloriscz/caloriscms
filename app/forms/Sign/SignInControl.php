@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Forms\Sign;
 
 use App\Model\MemberModel;
@@ -18,7 +19,7 @@ class SignInControl extends Control
         $this->database = $database;
     }
 
-    protected function createComponentSignInForm()
+    protected function createComponentSignInForm(): BootstrapUIForm
     {
         $form = new BootstrapUIForm();
         $form->setTranslator($this->getPresenter()->translator);
@@ -44,6 +45,7 @@ class SignInControl extends Control
     {
         $member = new MemberModel($this->database);
         $blocked = $member->getState($form->values->username);
+        $typeUrl = 'Front';
 
         if ($blocked === false) {
             $this->getPresenter()->flashMessage('Musíte nejdříve ověřit váš účet', 'error');
@@ -52,8 +54,6 @@ class SignInControl extends Control
 
         if ($form->values->type === 'admin') {
             $typeUrl = 'Admin';
-        } else {
-            $typeUrl = 'Front';
         }
 
         try {

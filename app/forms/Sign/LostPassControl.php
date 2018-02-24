@@ -25,9 +25,9 @@ class LostPassControl extends Control
 
     /**
      * Form: User fills in e-mail address to send e-mail with a password generator link
-     * @return string
+     * @return BootstrapUIForm
      */
-    public function createComponentSendForm()
+    public function createComponentSendForm(): BootstrapUIForm
     {
         $form = new BootstrapUIForm();
         $form->setTranslator($this->presenter->translator);
@@ -48,7 +48,7 @@ class LostPassControl extends Control
             $this->onSave('Adresa je neplatná');
         }
 
-        if ($this->database->table('users')->where(['email' => $form->values->email])->count() == 0) {
+        if ($this->database->table('users')->where(['email' => $form->values->email])->count() === 0) {
             $this->onSave('E-mail nenalezen');
         }
     }

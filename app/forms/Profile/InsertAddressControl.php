@@ -48,14 +48,7 @@ class InsertAddressControl extends Control
 
     public function insertFormSucceeded(BootstrapUIForm $form)
     {
-        $doc = new Document($this->database);
-        $doc->setType(5);
-        $doc->createSlug('contact-' . $form->values->name);
-        $doc->setTitle($form->values->name);
-        $page = $doc->create($this->presenter->user->getId());
-
-        // create new contact
-        $this->database->table('contacts')->insert(array(
+        $this->database->table('contacts')->insert([
             'categories_id' => 5,
             'pages_id' => $page,
             'users_id' => $this->presenter->user->getId(),
@@ -63,7 +56,7 @@ class InsertAddressControl extends Control
             'street' => $form->values->street,
             'zip' => $form->values->zip,
             'city' => $form->values->city,
-        ));
+        ]);
 
         $this->presenter->redirect(':Front:Profile:addresses');
     }

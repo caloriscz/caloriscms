@@ -18,6 +18,8 @@ class EditorSettingsControl extends Control
     /** @var EntityManager @inject */
     public $em;
 
+    public $onSave;
+
     public function __construct(Context $database, EntityManager $em)
     {
         $this->database = $database;
@@ -40,10 +42,6 @@ class EditorSettingsControl extends Control
         $pages = $this->database->table('pages')->get($this->getPresenter()->getParameter('id'));
 
         $form = new BootstrapUIForm();
-        $form->setTranslator($this->getPresenter()->translator);
-        $form->getElementPrototype()->class = 'form-horizontal';
-        $form->getElementPrototype()->role = 'form';
-        $form->getElementPrototype()->autocomplete = 'off';
         $l = $this->getPresenter()->getParameter('l');
 
         $form->addHidden('id');
@@ -107,11 +105,10 @@ class EditorSettingsControl extends Control
         return $form;
     }
 
-    public function permissionFormValidated(): void
+    public function permissionFormValidated(BootstrapUIForm $form): void
     {
         if ($this->getPresenter()->template->member->users_roles->pages === 0) {
-            $this->getPresenter()->flashMessage('Nemáte oprávnění k této akci', 'error');
-            $this->getPresenter()->redirect('this');
+            $this->onSave(['id' => $form->values->id, 'l' => $form->values->l], 'Nemáte oprávnění k této akci');
         }
     }
 
@@ -122,14 +119,12 @@ class EditorSettingsControl extends Control
         $doc = new Document($this->database);
         $doc->setForm($form->getValues());
         $doc->setLanguage($form->values->l);
-        $doc->setDatePublished($form->values->date_published);
         $doc->setTemplate($values['template']);
-        $doc->setSlug($form->values->slug_old, $form->values->slug);
-        $doc->setSitemap($form->values->sitemap);
         $doc->setParent($values['parent']);
+        $doc->setSlug($form->values->slug_old, $form->values->slug);
         $doc->save($form->values->id, $this->getPresenter()->user->getId());
 
-        $this->getPresenter()->redirect('this', ['id' => $form->values->id, 'l' => $form->values->l]);
+        $this->onSave(['id' => $form->values->id, 'l' => $form->values->l]);
     }
 
     public function handlePublic()
@@ -142,8 +137,7 @@ class EditorSettingsControl extends Control
         }
 
         $this->database->table('pages')->get($this->getPresenter()->getParameter('id'))->update(['public' => $show]);
-
-        $this->getPresenter()->redirect('this', ['id' => $this->getPresenter()->getParameter('id'), 'l' => $this->getPresenter()->getParameter('l')]);
+        $this->onSave(['id' => $this->getPresenter()->getParameter('id'), 'l' => $this->getPresenter()->getParameter('l')]);
     }
 
     public function render()

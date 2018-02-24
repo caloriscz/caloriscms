@@ -2,10 +2,9 @@
 declare(strict_types=1);
 namespace App\AdminModule\Presenters;
 
-use App\Forms\Pages\EditorSettingsControl;
+use App\Forms\Pages\EditorControl;
 use Caloriscz\Menus\Admin\MainMenuControl;
 use Caloriscz\Menus\PageTopMenuControl;
-use Caloriscz\Page\EditorControl;
 use Caloriscz\Utilities\PagingControl;
 use Nette;
 

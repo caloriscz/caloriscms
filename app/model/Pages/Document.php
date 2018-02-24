@@ -27,7 +27,6 @@ class Document
     private $preview;
     private $public;
     private $pageTemplate;
-    private $sitemap;
     private $date_published;
     private $slug;
     private $parent;
@@ -68,47 +67,6 @@ class Document
         }
 
         return null;
-    }
-
-    public function setSitemap(bool $sitemap)
-    {
-        $this->sitemap = $sitemap;
-    }
-
-    public function getSitemap()
-    {
-        return $this->sitemap;
-    }
-
-    public function setDatePublished($date = false)
-    {
-        $this->date_published = $date;
-        return $this->date_published;
-    }
-
-    public function getDatePublished()
-    {
-        if ($this->date_published) {
-            return $this->date_published;
-        }
-    }
-
-    public function setPublic(int $public = 0)
-    {
-        $this->public = 0;
-
-        if ($public === 1) {
-            $this->public = 1;
-        }
-
-        return $this->public;
-    }
-
-    public function getPublic()
-    {
-        if (is_numeric($this->public)) {
-            return $this->public;
-        }
     }
 
     public function setLanguage($lang = false)
@@ -229,6 +187,7 @@ class Document
         $arr['users_id'] = $user;
         $arr['date_created'] = date('Y-m-d H:i:s');
         $arr['date_published'] = date('Y-m-d H:i:s');
+        $arr['public'] = 0;
 
         if ($category !== false) {
             $arr['pages_id'] = $category;
@@ -242,10 +201,6 @@ class Document
 
         if ($this->getPreview()) {
             $arr['preview'] = $this->getPreview();
-        }
-
-        if ($this->getPublic()) {
-            $arr['public'] = $this->getPublic();
         }
 
         if ($this->getParent()) {
@@ -285,8 +240,6 @@ class Document
         $this->database->query('SET @i = 1;UPDATE `pages` SET `sorted` = @i:=@i+2 ORDER BY `sorted` ASC');
 
         return $id;
-
-
     }
 
     /**
@@ -295,9 +248,10 @@ class Document
      * @param null $user
      * @return bool|int
      */
-    public function save(int $id, $user = null)
+    public function save(int $id, $user = null): bool
     {
         $values = $this->getForm();
+        $arr['sitemap'] = 0;
 
         if ($values->title && $this->getLanguage()) {
             $arr['title' . '_' . $this->getLanguage()] = $values->title;
@@ -331,10 +285,8 @@ class Document
             $arr['metadesc'] = $values->metadesc;
         }
 
-        if ($this->getSitemap()) {
+        if ($values->sitemap) {
             $arr['sitemap'] = 1;
-        } else {
-            $arr['sitemap'] = 0;
         }
 
         if ($this->getSlug() && $this->getLanguage()) {
@@ -349,14 +301,10 @@ class Document
             $arr['pages_id'] = null;
         }
 
-        if ($this->getDatePublished()) {
-            $arr['date_published'] = $this->getDatePublished();
+        if ($this->date_published) {
+            $arr['date_published'] = $this->date_published;
         } elseif ($this->getSlug()) {
             $arr['date_published'] = date('Y-m-d H:i:s');
-        }
-
-        if (is_numeric($this->getPublic())) {
-            $arr['public'] = $this->getPublic();
         }
 
         $arr['users_id'] = $user;
