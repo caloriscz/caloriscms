@@ -25,7 +25,6 @@ class Document
 
     private $doc;
     private $preview;
-    private $public;
     private $pageTemplate;
     private $date_published;
     private $slug;
@@ -54,6 +53,21 @@ class Document
         return false;
     }
 
+    public function setType($type = false)
+    {
+        $this->type = $type;
+        return $this->type;
+    }
+
+    public function getType()
+    {
+        if ($this->type) {
+            return $this->type;
+        }
+
+        return false;
+    }
+
     public function setTemplate($pageTemplate = false)
     {
         $this->pageTemplate = $pageTemplate;
@@ -64,6 +78,12 @@ class Document
     {
         if ($this->pageTemplate) {
             return $this->pageTemplate;
+        }
+
+        $pageType = $this->database->table('pages_types')->get($this->getType());
+
+        if ($pageType) {
+            return $pageType->pages_templates_id;
         }
 
         return null;
@@ -108,21 +128,6 @@ class Document
     {
         if ($this->slug) {
             return $this->slug;
-        }
-
-        return false;
-    }
-
-    public function setType($type = false)
-    {
-        $this->type = $type;
-        return $this->type;
-    }
-
-    public function getType()
-    {
-        if ($this->type) {
-            return $this->type;
         }
 
         return false;
@@ -188,6 +193,7 @@ class Document
         $arr['date_created'] = date('Y-m-d H:i:s');
         $arr['date_published'] = date('Y-m-d H:i:s');
         $arr['public'] = 0;
+        $arr['pages_templates_id'] = $this->getTemplate();
 
         if ($category !== false) {
             $arr['pages_id'] = $category;
@@ -241,9 +247,9 @@ class Document
         $values = $this->getForm();
         $arr['sitemap'] = 0;
 
-        if ($values->title && $this->getLanguage()) {
+        if (isset($values->title) && $this->getLanguage()) {
             $arr['title' . '_' . $this->getLanguage()] = $values->title;
-        } elseif ($values->title) {
+        } elseif (isset($values->title)) {
             $arr['title'] = $values->title;
         }
 
@@ -261,19 +267,19 @@ class Document
             $arr['preview'] = $this->getPreview();
         }
 
-        if ($values->metakeys && $this->getLanguage()) {
+        if (isset($values->metakeys) && $this->getLanguage()) {
             $arr['metakeys' . '_' . $this->getLanguage()] = $values->metakeys;
-        } elseif ($values->metakeys) {
+        } elseif (isset($values->metakeys)) {
             $arr['metakeys'] = $values->metakeys;
         }
 
-        if ($values->metadesc && $this->getLanguage()) {
+        if (isset($values->metadesc) && $this->getLanguage()) {
             $arr['metadesc' . '_' . $this->getLanguage()] = $values->metadesc;
-        } elseif ($values->metadesc) {
+        } elseif (isset($values->metadesc)) {
             $arr['metadesc'] = $values->metadesc;
         }
 
-        if ($values->sitemap) {
+        if (isset($values->sitemap)) {
             $arr['sitemap'] = 1;
         }
 
