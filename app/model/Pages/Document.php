@@ -218,18 +218,6 @@ class Document
             }
         }
 
-        if ($values->metakeys) {
-            $arr['metakeys'] = $values->metakeys;
-        }
-
-        if ($values->metadesc) {
-            $arr['metadesc'] = $values->metadesc;
-        }
-
-        if ($this->getSitemap()) {
-            $arr['sitemap'] = $this->getSitemap();
-        }
-
         $slugNew = $this->generate($slug);
 
         $arr['slug'] = $slugNew;

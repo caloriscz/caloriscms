@@ -21,7 +21,6 @@
     "jquery-colorbox": "^1.6.4",
     "jquery-ui": "^1.12.1",
     "dropzone": "^4.3.0",
-    "eonasdan-bootstrap-datetimepicker": "bootstrap3-datetimepicker#^4.17.47",
     "bootstrap-datepicker": "^1.6.4",
     "ublaboo-datagrid": "^5.4.1",
     "PACE": "pace#^1.0.2",

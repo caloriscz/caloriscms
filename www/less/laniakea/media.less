@@ -1,0 +1,62 @@
+// Gallery
+.cal-gallery.card-deck > .card {
+  flex-wrap: wrap;
+  flex: initial;
+  margin-bottom: 20px;
+  margin-left: 10px;
+  margin-right: 10px;
+  width: 23.2%;
+
+  .card-text {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 232px;
+  }
+}
+
+.image-cover {
+  height: 150px; /* Height of the "content" div */
+  overflow: hidden;
+  text-align: center;
+  width: 262px;
+
+  img {
+    height: auto;
+    position: relative;
+    width: 250px;
+
+    &.crop-centered {
+      left: 50%;
+      top: 50%;
+      transform: translateY(-50%) translateX(-50%);
+    }
+
+    &.crop-topped {
+      left: 50%;
+      top: 0%;
+      transform: translateX(-50%);
+    }
+  }
+}
+
+#cboxOverlay {
+  background-image: url(../assets/colorbox/overlay.png);
+}
+
+#cboxTopLeft, #cboxTopRight, #cboxBottomLeft, #cboxBottomRight, #cboxMiddleLeft, #cboxMiddleRight, #cboxPrevious, #cboxNext, #cboxClose {
+  background-image: url(../assets/colorbox/controls.png);
+}
+
+#cboxTopCenter, #cboxBottomCenter {
+  background-image: url(../assets/colorbox/border.png);
+}
+
+#cboxLoadingOverlay {
+  background-image: url(../assets/colorbox/loading_background.png);
+}
+
+#cboxLoadingGraphic {
+  background-image: url(../assets/colorbox/loading.gif);
+}

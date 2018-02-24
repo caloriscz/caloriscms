@@ -53,11 +53,9 @@ class InsertFormControl extends Control
     public function insertFormSucceeded(BootstrapUIForm $form): void
     {
         $doc = new Document($this->database);
+        $doc->setForm($form->getValues());
         $doc->setType($form->values->section);
         $page = $doc->create($this->presenter->user->getId());
-
-        IO::directoryMake(APP_DIR . '/media/' . $page);
-        IO::directoryMake(APP_DIR . '/media/' . $page . '/tn');
 
         $this->presenter->redirect(':Admin:Pages:detail', ['id' => $page]);
     }

@@ -21,10 +21,19 @@ class MediaPresenter extends BasePresenter
     public function renderAlbum()
     {
         $arr = [
-            'pages_types_id' => 6
+            'pages_types_id' => 6,
+            'public' => 1
         ];
 
-        $this->template->gallery = $this->database->table('pages')->where($arr)->order('title');
+        $gallery = $this->database->table('pages')->where($arr);
+
+        $paginator = new Paginator();
+        $paginator->setItemCount($gallery->count('*'));
+        $paginator->setItemsPerPage(10);
+        $paginator->setPage($this->getParameter('page'));
+
+        $this->template->paginator = $paginator;
+        $this->template->gallery = $gallery->order('title')->limit($paginator->getLength(), $paginator->getOffset());
     }
 
     public function renderAlbumWithDescription()

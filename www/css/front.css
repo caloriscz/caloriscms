@@ -1209,6 +1209,67 @@ ul.nav.nav-stacked.sidemenu li.active a:hover {
   margin-top: -20px;
   background-color: darkred;
 }
+.cal-gallery.card-deck > .card {
+  flex-wrap: wrap;
+  flex: initial;
+  margin-bottom: 20px;
+  margin-left: 10px;
+  margin-right: 10px;
+  width: 23.2%;
+}
+.cal-gallery.card-deck > .card .card-text {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 232px;
+}
+.image-cover {
+  height: 150px;
+  /* Height of the "content" div */
+  overflow: hidden;
+  text-align: center;
+  width: 262px;
+}
+.image-cover img {
+  height: auto;
+  position: relative;
+  width: 250px;
+}
+.image-cover img.crop-centered {
+  left: 50%;
+  top: 50%;
+  transform: translateY(-50%) translateX(-50%);
+}
+.image-cover img.crop-topped {
+  left: 50%;
+  top: 0%;
+  transform: translateX(-50%);
+}
+#cboxOverlay {
+  background-image: url(../assets/colorbox/overlay.png);
+}
+#cboxTopLeft,
+#cboxTopRight,
+#cboxBottomLeft,
+#cboxBottomRight,
+#cboxMiddleLeft,
+#cboxMiddleRight,
+#cboxPrevious,
+#cboxNext,
+#cboxClose {
+  background-image: url(../assets/colorbox/controls.png);
+}
+#cboxTopCenter,
+#cboxBottomCenter {
+  background-image: url(../assets/colorbox/border.png);
+}
+#cboxLoadingOverlay {
+  background-image: url(../assets/colorbox/loading_background.png);
+}
+#cboxLoadingGraphic {
+  background-image: url(../assets/colorbox/loading.gif);
+}
 body {
   display: flex;
   min-height: 100vh;
@@ -1222,41 +1283,4 @@ body {
 footer,
 .push {
   height: 50px;
-}
-.cal-gallery.card-deck > .card {
-  flex-wrap: wrap;
-  flex: initial;
-  margin-bottom: 20px;
-  margin-left: 10px;
-  margin-right: 10px;
-  width: 23.2%;
-}
-.cal-gallery.card-deck > .card .card-text {
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  width: 232px;
-  display: block;
-  overflow: hidden;
-}
-.image-cover {
-  overflow: hidden;
-  height: 150px;
-  /* Height of the "content" div */
-  width: 262px;
-  text-align: center;
-}
-.image-cover img {
-  height: auto;
-  position: relative;
-  width: 300px;
-}
-.image-cover img.crop-centered {
-  top: 50%;
-  left: 50%;
-  transform: translateY(-50%) translateX(-50%);
-}
-.image-cover img.crop-topped {
-  top: 0%;
-  left: 50%;
-  transform: translateX(-50%);
 }
