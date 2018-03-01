@@ -1,42 +1,103 @@
 // Gallery
 .cal-gallery.card-deck > .card {
-  flex-wrap: wrap;
+  display: flex;
   flex: initial;
   margin-bottom: 20px;
   margin-left: 10px;
   margin-right: 10px;
-  width: 23.2%;
+
+  @media (min-width: 0) and (max-width: 575px) {
+    width: 99%;
+  }
+
+  @media (min-width: 576px) and (max-width: 767px) {
+    width: 48%;
+  }
+
+  @media (min-width: 768px) and (max-width: 992px) {
+    width: 47%;
+  }
+
+  @media (min-width: 993px) and (max-width: 1199px) {
+    width: 30.2%;
+  }
+
+  @media (min-width: 1200px) {
+    width: 23.2%;
+  }
 
   .card-text {
     display: block;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    width: 232px;
+
+
+    @media (min-width: 0) and (max-width: 575px) {
+      width: 300px;
+    }
+
+    @media (min-width: 576px) and (max-width: 767px) {
+      width: 320px;
+    }
+
+    @media (min-width: 768px) and (max-width: 992px) {
+      width: 310px;
+    }
+
+    @media (min-width: 993px) and (max-width: 1199px) {
+      width: 270px;
+    }
+
+    @media (min-width: 1200px) {
+      width: 230px;
+    }
   }
 }
 
 .image-cover {
-  height: 150px; /* Height of the "content" div */
-  overflow: hidden;
+  height: 180px; /* Height of the "content" div */
+  margin-left: auto;
+  margin-right: auto;
   text-align: center;
-  width: 262px;
+  width: 100%;
 
   img {
+    max-height: 160px;
     height: auto;
     position: relative;
-    width: 250px;
 
-    &.crop-centered {
-      left: 50%;
-      top: 50%;
-      transform: translateY(-50%) translateX(-50%);
+    @media (min-width: 0) and (max-width: 575px) {
+      max-width: 262px;
+    }
+
+    @media (min-width: 576px) and (max-width: 767px) {
+      max-width: 200px;
+    }
+
+    @media (min-width: 768px) and (max-width: 992px) {
+      max-width: 240px;
+    }
+
+    @media (min-width: 993px) and (max-width: 1199px) {
+      max-width: 250px;
+    }
+
+    @media (min-width: 1200px) {
+      max-width: 260px;
+
     }
 
     &.crop-topped {
       left: 50%;
       top: 0%;
       transform: translateX(-50%);
+    }
+
+    &.crop-centered {
+      left: 50%;
+      top: 50%;
+      transform: translateY(-50%) translateX(-50%);
     }
   }
 }

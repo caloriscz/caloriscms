@@ -1210,41 +1210,115 @@ ul.nav.nav-stacked.sidemenu li.active a:hover {
   background-color: darkred;
 }
 .cal-gallery.card-deck > .card {
-  flex-wrap: wrap;
+  display: flex;
   flex: initial;
   margin-bottom: 20px;
   margin-left: 10px;
   margin-right: 10px;
-  width: 23.2%;
+}
+@media (min-width: 0) and (max-width: 575px) {
+  .cal-gallery.card-deck > .card {
+    width: 99%;
+  }
+}
+@media (min-width: 576px) and (max-width: 767px) {
+  .cal-gallery.card-deck > .card {
+    width: 48%;
+  }
+}
+@media (min-width: 768px) and (max-width: 992px) {
+  .cal-gallery.card-deck > .card {
+    width: 47%;
+  }
+}
+@media (min-width: 993px) and (max-width: 1199px) {
+  .cal-gallery.card-deck > .card {
+    width: 30.2%;
+  }
+}
+@media (min-width: 1200px) {
+  .cal-gallery.card-deck > .card {
+    width: 23.2%;
+  }
 }
 .cal-gallery.card-deck > .card .card-text {
   display: block;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  width: 232px;
+}
+@media (min-width: 0) and (max-width: 575px) {
+  .cal-gallery.card-deck > .card .card-text {
+    width: 300px;
+  }
+}
+@media (min-width: 576px) and (max-width: 767px) {
+  .cal-gallery.card-deck > .card .card-text {
+    width: 320px;
+  }
+}
+@media (min-width: 768px) and (max-width: 992px) {
+  .cal-gallery.card-deck > .card .card-text {
+    width: 310px;
+  }
+}
+@media (min-width: 993px) and (max-width: 1199px) {
+  .cal-gallery.card-deck > .card .card-text {
+    width: 270px;
+  }
+}
+@media (min-width: 1200px) {
+  .cal-gallery.card-deck > .card .card-text {
+    width: 230px;
+  }
 }
 .image-cover {
-  height: 150px;
+  height: 180px;
   /* Height of the "content" div */
-  overflow: hidden;
+  margin-left: auto;
+  margin-right: auto;
   text-align: center;
-  width: 262px;
+  width: 100%;
 }
 .image-cover img {
+  max-height: 160px;
   height: auto;
   position: relative;
-  width: 250px;
 }
-.image-cover img.crop-centered {
-  left: 50%;
-  top: 50%;
-  transform: translateY(-50%) translateX(-50%);
+@media (min-width: 0) and (max-width: 575px) {
+  .image-cover img {
+    max-width: 262px;
+  }
+}
+@media (min-width: 576px) and (max-width: 767px) {
+  .image-cover img {
+    max-width: 200px;
+  }
+}
+@media (min-width: 768px) and (max-width: 992px) {
+  .image-cover img {
+    max-width: 240px;
+  }
+}
+@media (min-width: 993px) and (max-width: 1199px) {
+  .image-cover img {
+    max-width: 250px;
+  }
+}
+@media (min-width: 1200px) {
+  .image-cover img {
+    max-width: 260px;
+  }
 }
 .image-cover img.crop-topped {
   left: 50%;
   top: 0%;
   transform: translateX(-50%);
+}
+.image-cover img.crop-centered {
+  left: 50%;
+  top: 50%;
+  transform: translateY(-50%) translateX(-50%);
 }
 #cboxOverlay {
   background-image: url(../assets/colorbox/overlay.png);

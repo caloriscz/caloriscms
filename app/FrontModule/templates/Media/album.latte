@@ -4,7 +4,7 @@
     <h1>{control pageTitle $page}</h1>
 </div>
 
-<div class="container">
+<div class="container" style="border: 1px solid #c0c0c0">
     <div class="cal-gallery card-deck">
         {foreach $gallery as $item}
             {var $galleryDb = $item->related('pictures', 'pages_id')}
@@ -13,7 +13,7 @@
             <div class="card">
                 {if $galleryDb->count() > 0}
                     <div class="image-cover">
-                        <img src="/pictures/{$item->id}/tn/{$galleryImage->name}" class="crop-topped">
+                        <img src="/pictures/{$item->id}/tn/{$galleryImage->name}">
                     </div>
                 {/if}
                 <div class="card-body">

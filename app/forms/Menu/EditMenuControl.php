@@ -19,9 +19,10 @@ class EditMenuControl extends Control
     }
 
     /**
-     * Edit category
+     * Edit Menu item form
+     * @return BootstrapUIForm
      */
-    protected function createComponentEditForm()
+    protected function createComponentEditForm(): BootstrapUIForm
     {
         $pages = new Page($this->database);
         $categoryAll = new Menu($this->database);
@@ -37,7 +38,7 @@ class EditMenuControl extends Control
 
         $form->addHidden('id');
         $form->addText('title', 'dictionary.main.Title');
-        $form->addTextarea('description', 'dictionary.main.Description')
+        $form->addTextArea('description', 'dictionary.main.Description')
             ->setAttribute('class', 'form-control');
         $form->addSelect('parent', 'Nadřazená kategorie', $categories)
             ->setPrompt('admin.categories.NothingRelated')
@@ -48,14 +49,14 @@ class EditMenuControl extends Control
         $form->addText('url', 'dictionary.main.URL');
         $form->addSubmit('submitm', 'dictionary.main.Save');
 
-        $arr = array(
+        $arr = [
             'id' => $category->id,
             'title' => $category->title,
             'description' => $category->description,
             'page' => $category->pages_id,
             'parent' => $category->parent_id,
             'url' => $category->url,
-        );
+        ];
 
         $form->setDefaults(array_filter($arr));
 
@@ -66,15 +67,15 @@ class EditMenuControl extends Control
     public function editFormSucceeded(BootstrapUIForm $form)
     {
         $this->database->table('menu')->get($form->values->id)
-            ->update(array(
+            ->update([
                 'title' => $form->values->title,
                 'description' => $form->values->description,
                 'pages_id' => $form->values->page,
                 'parent_id' => $form->values->parent,
                 'url' => $form->values->url,
-            ));
+            ]);
 
-        $this->presenter->redirect(this, array('id' => $form->values->id));
+        $this->presenter->redirect('this', ['id' => $form->values->id]);
     }
 
     public function render()
