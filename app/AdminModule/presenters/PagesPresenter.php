@@ -36,11 +36,6 @@ class PagesPresenter extends BasePresenter
         return $control;
     }
 
-    protected function createComponentBlock()
-    {
-        return new BlockControl($this->database);
-    }
-
     protected function createComponentPageFilterRelated()
     {
         return new FilterFormControl($this->database);

@@ -4,23 +4,23 @@
     <h1>{control pageTitle $page}</h1>
 </div>
 
-<div class="container content content-documents-folder">
-
-    <table class="table">
+<div class="container">
+    <div class="cal-gallery card-deck">
         {foreach $gallery as $item}
-            <tr>
-                <td>
+            {var $galleryDb = $item->related('media', 'pages_id')}
+            {var $galleryImage = $galleryDb->fetch()}
 
-                    {if $item->title}
-                    <p><a href="/media/{$item->pages_id}/{$item->name}" class="gallery">{$item->title}</a></p>
-
-                    <p>{$item->description}</p>
-                    {else}
-                    <a href="/media/{$item->pages_id}/{$item->name}" class="gallery">{$item->name}</p>
-                        {/if}
-                    </a>
-                </td>
-            </tr>
+            <div class="card">
+                <div class="card-body">
+                    <p class="card-text"><a href="/{$item->slug}">{$item->title}</a> ({$galleryDb->count()})</p>
+                </div>
+            </div>
         {/foreach}
-    </table>
+    </div>
+</div>
+
+<div class="container">
+    <div class="text-center">
+        {control paging, $args, $paginator}
+    </div>
 </div>
