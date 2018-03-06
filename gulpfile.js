@@ -20,7 +20,8 @@ gulp.task("scripts-a", function () {
         './bower_components/ublaboo-datagrid/assets/dist/datagrid-spinners.min.js',
         './node_modules/moment/moment.min.js',
         './node_modules/flatpickr/dist/flatpickr.js',
-        './node_modules/flatpickr/dist/l10n/cs.js'
+        './node_modules/flatpickr/dist/l10n/cs.js',
+        './node_modules/nestedSortable/jquery.mjs.nestedSortable.js'
     ])
         .pipe(concat('all-back.js'))
         .pipe(gulp.dest('./www/js/'));

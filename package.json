@@ -10,7 +10,7 @@
     "bootstrap": "^4.0.0",
     "bower": "^1.8.2",
     "flatpickr": "^4.2.4",
-    "gulp": "^3.9.1",y
+    "gulp": "^3.9.1",
     "gulp-concat": "^2.6.1",
     "gulp-install": "^1.1.0",
     "jquery": "^3.3.1",
