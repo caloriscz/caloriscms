@@ -10,41 +10,11 @@
                 <li id="j1_{$item->id}">
                     <a id="j1_{$item->id}_anchor"
                        href="{plink ':Admin:Menu:detail', id => $item->id}">{$item->title}</a>
-                    <button type="button" class="btn btn-default btn-xs"
-                            class="btn btn-default btn-sm tool-tip" data-toggle="modal"
-                            data-target="#catModal{$item->id}" title="Přidat podkategorii">
-                        <i class="fa fa-plus"></i>
-                    </button>
-                    <a href="{link 'delete!, $item->id'}" class="text-danger">
-                        x
-                    </a>
 
                     {var $categoryCount = $database->table('menu')->where('parent_id', $item->parent_id)->count()}
                     {if $category != $item->parent_id}
                         {var $counter = 1}
                     {/if}
-
-                    <div class="modal fade" id="catModal{$item->id}" tabindex="-1" role="dialog"
-                         aria-labelledby="myModalLabel">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-
-                                <div class="modal-header">
-                                    <button type="button" class="close" data-dismiss="modal"
-                                            aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                    <h4 class="modal-title" id="myModalLabel">Vložit menu</h4>
-                                </div>
-                                <div class="modal-body">
-                                    {control menuInsert, $item->id}
-                                    <button type="button" class="btn btn-default"
-                                            data-dismiss="modal">{_dictionary.main.close|firstUpper}</button>
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                     {php $selection = $item->related('menu','parent_id')->order('sorted')}
                     {if $selection->count() > 0}
                         {include #menu, menu => $selection}

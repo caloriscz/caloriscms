@@ -212,19 +212,50 @@
             type: 'GET',
             url: '/admin/menu/default'
         });
-    });
+    }).on('delete_node.jstree', function (e, data) {
+        $.ajax({
+            data: 'do=menuEditor-delete&node_id=' + data.node.id.substring(3),
+            type: 'GET',
+            url: '/admin/menu/default'
+        });
+    }).on('create_node.jstree', function (e, data) {
+        $.ajax({
+            data: 'do=menuEditor-create&node_id=' + data.node.parent.substring(3) + '&text=' + data.text,
+            datatype: 'json',
+            type: 'GET',
+            url: '/admin/menu/default',
+            success: function (output) {
 
+                var output = JSON.parse(output);
+
+                //$('.tree').jstree(true).refresh();
+                data.node.id = 'j1_' + output.id;
+                data.node.li_attr.id = 'j1_' + output.id;
+                data.node.a_attr.id = 'j1_' + output.id + '_anchor';
+                //$('.tree').jstree(true).set_node(data.node.id, output.id);
+                //console.log(data.node.li_attr.id);
+                //console.log(data.node.a_attr.id);
+                //console.log(data.node.id);
+            }
+        });
+    }).on('rename_node.jstree', function (e, data) {
+        $.ajax({
+            data: 'do=menuEditor-rename&node_id=' + data.node.id.substring(3) + '&text=' + data.text,
+            type: 'GET',
+            url: '/admin/menu/default'
+        });
+    });
 
     $('.tree').on('ready.jstree', function () {
         $(".tree").jstree("open_all");
     });
 
+
     $(".tree li").on("click", "a",
-        function() {
+        function () {
             document.location.href = this;
         }
     );
-
 </script>
 
 </body>

@@ -30,17 +30,46 @@ class MenuEditorControl extends Control
     }
 
     /**
-     * Delete categories
-     * @param $identifier
-     * @throws AbortException
+     * Delete category
      */
-    public function handleDelete($identifier)
+    public function handleDelete()
     {
-        $menu = new Menu($this->database);
+        Debugger::barDump($this->getPresenter()->getParameter('node_id'));
 
-        $this->database->table('menu')->where('id', $menu->getSubIds($identifier))->delete();
+        $this->database->table('menu')->get($this->getPresenter()->getParameter('node_id'))->delete();
 
-        $this->redirect('this', ['id' => null]);
+        exit();
+    }
+
+    /**
+     * Insert category
+     */
+    public function handleCreate()
+    {
+        $node = $this->database->table('menu')->insert([
+            'title' => 'New node',
+            'parent_id' => $this->getPresenter()->getParameter('node_id'),
+            'sorted' => 1000000,
+        ]);
+
+        $nodeArr['id'] = $node->id;
+
+        echo json_encode($nodeArr);
+        exit();
+    }
+
+    /**
+     * Rename category
+     */
+    public function handleRename()
+    {
+        Debugger::barDump($this->getPresenter()->getParameter('node_id'));
+
+        $this->database->table('menu')->get($this->getPresenter()->getParameter('node_id'))->update([
+            'title' => $this->getPresenter()->getParameter('text'),
+        ]);
+
+        exit();
     }
 
     /**
