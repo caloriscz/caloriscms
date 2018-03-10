@@ -28,8 +28,14 @@ class PagesPresenter extends BasePresenter
 
     protected function createComponentPageList()
     {
+        $view = 'simple';
+
+        if ($this->request->getCookie('view')) {
+            $view = $this->request->getCookie('view');
+        }
+
         $control = new PageListControl($this->database);
-        $control->setView($this->getParameter('view'));
+        $control->setView($view);
         $control->onSave[] = function ($type) {
             $this->redirect('this', array('type' => $type));
         };
@@ -138,6 +144,18 @@ class PagesPresenter extends BasePresenter
             'related_pages_id' => $id
         ]);
         $this->redirect(':Admin:Pages:detailRelated', ['id' => $this->getParameter('item')]);
+    }
+
+    public function handleView()
+    {
+        $this->response->setCookie('view', $this->getParameter('view'), '180 days');
+
+        $this->redirect(':Admin:Pages:default', ['type' => $this->getParameter('type'), 'view' => $this->getParameter('view')]);
+    }
+
+    public function renderDefault()
+    {
+        $this->template->view = $this->request->getCookie('view');
     }
 
     public function renderDetail()

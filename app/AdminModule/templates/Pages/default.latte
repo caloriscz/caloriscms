@@ -35,20 +35,27 @@
             <div class="col-lg-9">
                 <div class="card">
                     <div class="card-header">
-                        Stránky
+                        Stránky {$view}
 
-                        <small class="pull-right">
-                            <a n:href=":Admin:Pages:default, 'type' => $presenter->getParameter('type'), view => 'tree'"
-                                    class="btn btn-sm">Tree</a></small>
-                        <small class="pull-right">
-                            <a n:href=":Admin:Pages:default, 'type' => $presenter->getParameter('type'), view => 'simple'"
-                                    class="btn btn-sm">Simple</a></small>
-                        <small class="pull-right">
-                            <a n:href=":Admin:Pages:default, 'type' => $presenter->getParameter('type'), view => 'gallery'"
-                                    class="btn btn-sm">Gallery</a></small>
+                        <small class="pull-right font-weight-bold">
+                            <a n:href="view! 'type' => $presenter->getParameter('type'), view => 'tree'"
+                                    class="btn btn-sm{if $view === 'tree'} btn-primary{/if}"><i class="fa fa-tree"></i> Strom
+                            </a>
+                        </small>
+                        <small class="pull-right font-weight-bold">
+                            <a n:href="view! 'type' => $presenter->getParameter('type'), view => 'simple'"
+                                    class="btn btn-sm{if $view === 'simple'} btn-primary{/if}"><i class="fa fa-list"></i> Seznam
+                            </a>
+                        </small>
+                        <small class="pull-right font-weight-bold">
+                            <a n:href="view! 'type' => $presenter->getParameter('type'), view => 'gallery'"
+                                    class="btn btn-sm{if $view === 'gallery'} btn-primary{/if}">
+                                <i class="fa fa-th"></i> Galerie
+                            </a>
+                        </small>
                     </div>
                     <div class="card-block">
-                        {control pageList, $type}
+                        {control pageList}
                     </div>
                 </div>
             </div>

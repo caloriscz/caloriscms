@@ -4,12 +4,11 @@ namespace Caloriscz\Page;
 
 use App\Forms\Menu\InsertMenuControl;
 use App\Model\Document;
-use App\Model\Entity\Pages;
 use App\Model\IO;
-use Kdyby\Doctrine\EntityManager;
+use Caloriscz\Utilities\PagingControl;
 use Nette\Application\UI\Control;
-use Nette\ComponentModel\IContainer;
 use Nette\Database\Context;
+use Nette\Utils\Paginator;
 
 class PageListControl extends Control
 {
@@ -75,10 +74,17 @@ class PageListControl extends Control
         return $this->view;
     }
 
-    public function render($type = 1, $view = 'simple')
+    protected function createComponentPaging(): PagingControl
+    {
+        return new PagingControl();
+    }
+
+
+    public function render(?int $type = null)
     {
         $template = $this->getTemplate();
         $template->category = null;
+        $arr = [];
 
         if ($this->getView() === 'tree') {
             $template->setFile(__DIR__ . '/PageListTreeControl.latte');
@@ -90,14 +96,37 @@ class PageListControl extends Control
 
         $order = 'FIELD(id, 1, 3, 4, 6, 2), title';
 
+        if ($this->presenter->getParameter('type') != null) {
+            $type = $this->presenter->getParameter('type');
+        }
+
         if ($type === 2) {
             $order = 'title';
         }
 
+        if (is_numeric($type)) {
+            $arr['pages_types_id'] = $type;
+        }
+
+
+        $arr['NOT pages_types_id'] = null;
+
+
         if ($this->getView() === 'tree') {
-            $template->pages = $this->database->table('pages')->where('pages_id', null)->order($order);
+            $arr['pages_id'] = null;
+
+            $template->pages = $this->database->table('pages')->where($arr)->order($order);
         } else {
-            $template->pages = $this->database->table('pages')->where('pages_types_id', $type)->order('title ASC');
+            $pages = $this->database->table('pages')->where($arr)->order('title ASC');
+
+            $paginator = new Paginator();
+            $paginator->setItemCount($pages->count('*'));
+            $paginator->setItemsPerPage(20);
+            $paginator->setPage($this->presenter->getParameter('page'));
+
+            $template->pages = $pages->limit($paginator->getLength(), $paginator->getOffset());
+            $template->paginator = $paginator;
+            $template->args = $this->getPresenter()->getParameters();
         }
 
         $template->settings = $this->getPresenter()->template->settings;
