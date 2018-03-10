@@ -1,17 +1,25 @@
-<div class="container">
-    <div class="cal-gallery card-deck">
+<div class="card-group">
         {foreach $pages as $page}
             {var $galleryDb = $page->related('pictures', 'pages_id')}
             {var $galleryImage = $galleryDb->fetch()}
-
-            <div class="card">
-                {if $galleryDb->count() > 0}
-                    <div class="image-cover">
-                        <img src="/pictures/{$page->id}/tn/{$galleryImage->name}">
+            <div class="col-12 col-sm-6 col-lg-3 mb-3">
+                <div class="card" style="height: 320px;">
+                    <div style="height: 150px;" class="text-center">
+                        {if $galleryDb->count() > 0}
+                        <a href="{plink':Admin:Pages:detailImages', id => $page->id}" style="font-size: 18px;">
+                            <img class="card-img-top img-fluid" style="max-height: 150px; width: auto;"
+                                 src="/pictures/{$page->id}/tn/{$galleryImage->name}"
+                                 alt="Card image cap">
+                        </a>
+                        {/if}
                     </div>
-                {/if}
-                <div class="card-body">
-                    <p class="card-text"><a href="{plink':Admin:Pages:detail', id => $page->id}">{$page->title}</a> ({$galleryDb->count()})</p>
+                    <div class="card-body">
+                        <p class="card-title">
+                            <a href="{plink':Admin:Pages:detailImages', id => $page->id}" style="font-size: 18px;">{$page->title} ({$galleryDb->count()})</a>
+                        </p>
+                        <p class="card-text">Some quick example to build</p>
+                        <a href="{plink':Admin:Pages:detailImages', id => $page->id}" class="btn btn-primary btn-sm">Upravit</a>
+                    </div>
                 </div>
             </div>
         {/foreach}

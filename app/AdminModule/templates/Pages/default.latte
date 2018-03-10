@@ -37,9 +37,15 @@
                     <div class="card-header">
                         Stránky
 
-                        <small class="pull-right"><a n:href=":Admin:Pages:default, 'type' => $presenter->getParameter('type'), view => 'tree'" class="btn btn-sm">Tree</a></small>
-                        <small class="pull-right"><a n:href=":Admin:Pages:default, 'type' => $presenter->getParameter('type'), view => 'simple'" class="btn btn-sm">Simple</a></small>
-                        <small class="pull-right"><a n:href=":Admin:Pages:default, 'type' => $presenter->getParameter('type'), view => 'gallery'" class="btn btn-sm">Gallery</a></small>
+                        <small class="pull-right">
+                            <a n:href=":Admin:Pages:default, 'type' => $presenter->getParameter('type'), view => 'tree'"
+                                    class="btn btn-sm">Tree</a></small>
+                        <small class="pull-right">
+                            <a n:href=":Admin:Pages:default, 'type' => $presenter->getParameter('type'), view => 'simple'"
+                                    class="btn btn-sm">Simple</a></small>
+                        <small class="pull-right">
+                            <a n:href=":Admin:Pages:default, 'type' => $presenter->getParameter('type'), view => 'gallery'"
+                                    class="btn btn-sm">Gallery</a></small>
                     </div>
                     <div class="card-block">
                         {control pageList, $type}

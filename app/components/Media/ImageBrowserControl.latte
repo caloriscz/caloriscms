@@ -1,19 +1,22 @@
 <div class="row">
     {foreach $documents as $item}
-        <div class="col-lg-3">
-            <div class="card">
-                <div class="card-img text-center" style="max-height: 180px;">
+        <div class="col-12 col-sm-6 col-lg-3 mb-3">
+            <div class="card" style="height: 320px;">
+                <div style="height: 150px;" class="text-center">
                     <a href="{plink ':Admin:Files:detailPicture', 'id' => $item->id}">
                         <img src="{$baseUri}/pictures/{$item->pages_id}/{$item->name}" alt="{$item->name}"
-                             class="img-responsive-centered"
-                             style="max-height: 180px; max-width: 270px;">
+                             class="card-image-top img-fluid" style="max-height: 150px; width: auto;">
                     </a>
                 </div>
-                <div class="card-block text-center">
-                    <small>{$item->name}</small>
-                    <a href="{link delete!, id => $item->id, type => $item->name}"
-                       onclick="return confirm('Opravdu smazat?')">
-                        <i class="fa fa-times font-red"></i>
+                <div class="card-body">
+                    <p class="card-title"><span style="font-size: 18px;">{$item->name}</span><br>
+                        {$item->title}<br>{$item->description}</p>
+                    <a href="{link delete!, id => $item->id, type => $item->name}" onclick="return confirm('Opravdu smazat?')" class="btn btn-danger btn-sm">
+                        Smazat
+                    </a>
+
+                    <a href="{plink ':Admin:Files:detailPicture', id => $item->id}" class="btn btn-info btn-sm pull-right">
+                        Upravit
                     </a>
                 </div>
             </div>
