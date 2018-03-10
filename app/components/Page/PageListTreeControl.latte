@@ -1,7 +1,7 @@
 <div class="tree">
     {block #menu}
         <ul>
-            {foreach $menu as $item}
+            {foreach $pages as $item}
                 <li><span><i class="fa fa-folder"></i></span>
                     <a href="/admin/pages/detail/{$item->id}">{$item->title}</a>
 
@@ -11,11 +11,11 @@
                         <i class="fa fa-plus"></i>
                     </button>
                     {if $item->pages_types_id != 9}
-                        <a n:href="delete!, $item->id" class="btn btn-danger btn-sm"><i
+                        <a href="{'link delete!', $item->id}" class="btn btn-danger btn-sm"><i
                                     class="fa fa-times"></i></a>
                     {/if}
 
-                    {var $categoryCount = $database->table('menu')->where('pages_id', $item->pages_id)->count()}
+                    {var $categoryCount = $database->table('pages')->where('pages_id', $item->pages_id)->count()}
                     {if $category != $item->pages_id}
                         {var $firstArrow = 1}
                         {var $counter = 1}

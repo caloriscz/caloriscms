@@ -8,23 +8,21 @@ use App\Model\Entity\Pages;
 use App\Model\IO;
 use Kdyby\Doctrine\EntityManager;
 use Nette\Application\UI\Control;
+use Nette\ComponentModel\IContainer;
 use Nette\Database\Context;
 
 class PageListControl extends Control
 {
 
-    /** @var Context @inject  */
+    /** @var Context @inject */
     public $database;
 
-    /** @var EntityManager @inject */
-    public $em;
-
     public $onSave;
+    public $view;
 
-    public function __construct(Context $database, EntityManager $em)
+    public function __construct(Context $database)
     {
         $this->database = $database;
-        $this->em = $em;
     }
 
     protected function createComponentMenuInsert()
@@ -62,28 +60,51 @@ class PageListControl extends Control
         $this->onSave($this->getParameter('type'));
     }
 
-    public function render($type = 1, $fileTemplate = 'PageListControl')
+    public function setView($view = false): ?string
     {
-        $this->template->setFile(__DIR__ . '/' . $fileTemplate . '.latte');
+        $this->view = $view;
+        return $this->view;
+    }
+
+    public function getView(): ?string
+    {
+        if (empty($this->view)) {
+            return $this->view;
+        }
+
+        return $this->view;
+    }
+
+    public function render($type = 1, $view = 'simple')
+    {
+        $template = $this->getTemplate();
+        $template->category = null;
+
+        if ($this->getView() === 'tree') {
+            $template->setFile(__DIR__ . '/PageListTreeControl.latte');
+        } elseif ($this->getView() === 'gallery') {
+            $template->setFile(__DIR__ . '/PageListGalleryControl.latte');
+        } else {
+            $template->setFile(__DIR__ . '/PageListSimpleControl.latte');
+        }
+
         $order = 'FIELD(id, 1, 3, 4, 6, 2), title';
 
         if ($type === 2) {
             $order = 'title';
         }
 
-        $pages = $this->em->getRepository(Pages::class);
-
-        if ($fileTemplate === 'PageListTreeControl') {
-            $this->template->menu = $this->database->table('pages')->where('pages_id', null)->order($order);
+        if ($this->getView() === 'tree') {
+            $template->pages = $this->database->table('pages')->where('pages_id', null)->order($order);
         } else {
-            $this->template->pages = $pages->findBy(['pagesTypes' => $type], ['title' => 'ASC']);
+            $template->pages = $this->database->table('pages')->where('pages_types_id', $type)->order('title ASC');
         }
 
-        $this->template->settings = $this->getPresenter()->template->settings;
-        $this->template->type = $type;
-        $this->template->database = $this->database;
+        $template->settings = $this->getPresenter()->template->settings;
+        $template->type = $type;
+        $template->database = $this->database;
 
-        $this->template->render();
+        $template->render();
     }
 
 }

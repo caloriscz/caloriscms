@@ -16,8 +16,12 @@
                             Nový příspěvek
                         {elseif $type == 1}
                             {_dictionary.main.NewPage}
+                        {elseif $type == 1}
+                            Nový příspěvek
                         {elseif $type == 6}
-                            Galerie
+                            Nová galerie
+                        {elseif $type == 8}
+                            Nový dokument
                         {/if}
                     </div>
                     <div class="card-block">
@@ -30,7 +34,13 @@
             </div>
             <div class="col-lg-9">
                 <div class="card">
-                    <div class="card-header">Stránky</div>
+                    <div class="card-header">
+                        Stránky
+
+                        <small class="pull-right"><a n:href=":Admin:Pages:default, 'type' => $presenter->getParameter('type'), view => 'tree'" class="btn btn-sm">Tree</a></small>
+                        <small class="pull-right"><a n:href=":Admin:Pages:default, 'type' => $presenter->getParameter('type'), view => 'simple'" class="btn btn-sm">Simple</a></small>
+                        <small class="pull-right"><a n:href=":Admin:Pages:default, 'type' => $presenter->getParameter('type'), view => 'gallery'" class="btn btn-sm">Gallery</a></small>
+                    </div>
                     <div class="card-block">
                         {control pageList, $type}
                     </div>

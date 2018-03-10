@@ -1,0 +1,19 @@
+<div class="container">
+    <div class="cal-gallery card-deck">
+        {foreach $pages as $page}
+            {var $galleryDb = $page->related('pictures', 'pages_id')}
+            {var $galleryImage = $galleryDb->fetch()}
+
+            <div class="card">
+                {if $galleryDb->count() > 0}
+                    <div class="image-cover">
+                        <img src="/pictures/{$page->id}/tn/{$galleryImage->name}">
+                    </div>
+                {/if}
+                <div class="card-body">
+                    <p class="card-text"><a href="{plink':Admin:Pages:detail', id => $page->id}">{$page->title}</a> ({$galleryDb->count()})</p>
+                </div>
+            </div>
+        {/foreach}
+    </div>
+</div>

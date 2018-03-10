@@ -28,7 +28,8 @@ class PagesPresenter extends BasePresenter
 
     protected function createComponentPageList()
     {
-        $control = new PageListControl($this->database, $this->em);
+        $control = new PageListControl($this->database);
+        $control->setView($this->getParameter('view'));
         $control->onSave[] = function ($type) {
             $this->redirect('this', array('type' => $type));
         };
@@ -128,6 +129,7 @@ class PagesPresenter extends BasePresenter
     /**
      * Insert related page
      * @param $id
+     * @throws \Nette\Application\AbortException
      */
     public function handleInsertRelated($id)
     {
