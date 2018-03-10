@@ -279,3 +279,43 @@ $(function () {
 $(function () {
     $(".login-panel input[type='text']").focus();
 });
+
+/*Ace plugin with Emmett support ---- */
+$(function () {
+    if ($('pre#document').length > 0) {
+        var editor = ace.edit("document");
+        var textarea = $('textarea[name="document"]').hide();
+
+        editor.maxLines = Infinity;
+        editor.session.setMode("ace/mode/html");
+        editor.setTheme("ace/theme/terminal");
+        // enable emmet on the current editor
+        editor.setOption("enableEmmet", true);
+        editor.on('change', function () {
+            textarea.val(editor.getSession().getValue());
+        });
+    }
+});
+
+/* Summernote ----- */
+$(function () {
+    $('.summernote').summernote({
+        width: "99%",
+        height: 600,
+        tabsize: 2,
+        toolbar: [
+            ['style', ['bold', 'italic', 'underline', 'clear']],
+            ['font', ['strikethrough', 'superscript', 'subscript']],
+            ['fontsize', ['fontsize']],
+            ['color', ['color']],
+            ['para', ['ul', 'ol', 'paragraph']],
+            ['height', ['height']],
+            ['code', ['codeview']],
+            ['insert', ['picture', 'link', 'elfinder']],
+            ['myplugin', ['aceCodeEditor']]
+        ],
+        onImageUpload: function (files, editor, welEditable) {
+            sendFile(files[0], editor, welEditable);
+        }
+    });
+});
