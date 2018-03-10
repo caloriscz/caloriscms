@@ -16,6 +16,7 @@
     "jquery": "^3.3.1",
     "jquery-ui": "^1.12.1",
     "jquery-ui-dist": "^1.12.1",
+    "jstree": "^3.3.5",
     "moment": "^2.20.1",
     "pace": "0.0.4",
     "popper.js": "^1.13.0",

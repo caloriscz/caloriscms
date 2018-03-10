@@ -21,6 +21,7 @@ gulp.task("scripts-a", function () {
         './node_modules/moment/moment.min.js',
         './node_modules/flatpickr/dist/flatpickr.js',
         './node_modules/flatpickr/dist/l10n/cs.js',
+        './node_modules/jstree/dist/jstree.min.js',
         './node_modules/nestedSortable/jquery.mjs.nestedSortable.js'
     ])
         .pipe(concat('all-back.js'))
