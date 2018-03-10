@@ -228,14 +228,8 @@
 
                 var output = JSON.parse(output);
 
-                //$('.tree').jstree(true).refresh();
-                data.node.id = 'j1_' + output.id;
-                data.node.li_attr.id = 'j1_' + output.id;
+                data.instance.set_id(data.node.id, 'j1_' + output.id);
                 data.node.a_attr.id = 'j1_' + output.id + '_anchor';
-                //$('.tree').jstree(true).set_node(data.node.id, output.id);
-                //console.log(data.node.li_attr.id);
-                //console.log(data.node.a_attr.id);
-                //console.log(data.node.id);
             }
         });
     }).on('rename_node.jstree', function (e, data) {
@@ -256,6 +250,10 @@
             document.location.href = this;
         }
     );
+
+    setInterval(function () {
+        $('.tree').refresh();
+    }, 3000)
 </script>
 
 </body>
