@@ -28,7 +28,7 @@ class EditSettingsControl extends Control
         $form->addHidden('setkey');
         $form->addText('setvalue', 'dictionary.main.Description');
 
-        $arr = array_filter(array('category_id' => $this->presenter->getParameter('id')));
+        $arr = array_filter(['category_id' => $this->presenter->getParameter('id')]);
 
         $form->setDefaults($arr);
 
@@ -44,7 +44,7 @@ class EditSettingsControl extends Control
     {
         if ($this->presenter->template->member->users_roles->settings === 0) {
             $this->presenter->flashMessage('Nemáte oprávnění k této akci', 'error');
-            $this->presenter->redirect(this);
+            $this->presenter->redirect('this');
         }
     }
 
@@ -53,15 +53,15 @@ class EditSettingsControl extends Control
         $values = $form->getHttpData($form::DATA_TEXT); // get value from html input
 
         foreach ($values['set'] as $key => $value) {
-            $this->database->table('settings')->where(array(
+            $this->database->table('settings')->where([
                 'setkey' => $key,
-            ))
-                ->update(array(
+        ])
+                ->update([
                     'setvalue' => $value,
-                ));
+                ]);
         }
 
-        $this->presenter->redirect('this', array('id' => $form->values->category_id));
+        $this->presenter->redirect('this', ['id' => $form->values->category_id]);
     }
 
     public function render()
@@ -70,15 +70,15 @@ class EditSettingsControl extends Control
         $template->langSelected = $this->presenter->translator->getLocale();
 
         if (!$this->presenter->getParameter('id')) {
-            $arr = array(
+            $arr = [
                 'admin_editable' => 1,
                 'settings_categories_id' => 10,
-            );
+            ];
         } else {
-            $arr = array(
+            $arr = [
                 'admin_editable' => 1,
                 'settings_categories_id' => $this->presenter->getParameter('id'),
-            );
+            ];
         }
 
         $this->template->database = $this->database;

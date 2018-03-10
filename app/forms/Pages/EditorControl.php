@@ -30,7 +30,10 @@ class EditorControl extends Control
         $this->em = $em;
 
         $config = \HTMLPurifier_Config::createDefault();
-        //$config->set('HTML.AllowedAttributes', 'img.src,*.style,*.class');
+        $config->set('HTML.AllowedAttributes', 'img.src,*.style,*.class');
+        $config->set('HTML.ForbiddenElements', array('font'));
+        $config->set('AutoFormat.RemoveEmpty', true);
+
         $this->htmlPurifier = new \HTMLPurifier($config);
     }
 

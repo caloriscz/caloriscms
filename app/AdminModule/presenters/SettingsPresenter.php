@@ -45,7 +45,7 @@ class SettingsPresenter extends BasePresenter
 
         if (strcmp($default->fetch()->code, $id) === '0') {
             $this->flashMessage('This is default language. Cannot be installed with suffix.');
-            $this->redirect(':Admin:Settings:languages');
+            $this->redirect('this');
         }
 
         $this->checkColumn('pages', 'title', 'varchar(250)', $id);
@@ -59,7 +59,7 @@ class SettingsPresenter extends BasePresenter
         $this->checkColumn('menu', 'url', 'text', $id);
         $this->checkColumn('snippets', 'content', 'text', $id);
 
-        $this->redirect(':Admin:Settings:languages');
+        $this->redirect('this');
     }
 
     public function handleMakeDefault($id)
@@ -69,7 +69,7 @@ class SettingsPresenter extends BasePresenter
             $this->database->table('languages')->get($id)->update(['default' => 1]);
         }
 
-        $this->redirect(':Admin:Settings:languages');
+        $this->redirect('this');
     }
 
     public function handleMakeDefaultCurrency($id)
@@ -131,7 +131,7 @@ class SettingsPresenter extends BasePresenter
         return $message . '<br>';
     }
 
-    public function renderDefault()
+    public function renderGlobal()
     {
         $this->template->categoryId = null;
     }
@@ -164,5 +164,11 @@ class SettingsPresenter extends BasePresenter
     public function renderUserRoles()
     {
         $this->template->usersRoles = $this->database->table('users_roles');
+    }
+
+
+    public function renderAddons()
+    {
+        $this->template->addons = $this->database->table('addons')->order('name');
     }
 }

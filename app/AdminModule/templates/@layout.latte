@@ -32,7 +32,8 @@
         </ul>
         <ul class="nav navbar-nav ml-auto">
             <li class="nav-item dropdown d-md-down-none">
-                <a class="nav-link dropdown-toggle mr-5" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
+                <a class="nav-link dropdown-toggle mr-5" data-toggle="dropdown" href="#" role="button"
+                   aria-haspopup="true"
                    aria-expanded="false">
                     <span class="d-md-down-none">{if $member}{$member->username}{/if}</span>
                 </a>
@@ -56,7 +57,9 @@
     <div class="sidebar">
         <nav class="sidebar-nav">
             <ul class="nav">
-                {control mainMenu}
+                <nav class="sidebar-nav open" id="docsNavbarContent">
+                    {control mainMenu}
+                </nav>
             </ul>
         </nav>
     </div>
@@ -80,7 +83,6 @@
     <div class="row justify-content-center">
         {include content}
     </div>
-</div>
 </div>
 {/if}
 

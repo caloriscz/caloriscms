@@ -52,10 +52,36 @@
     </a>
 </li>
 {if $admin}
-    <li class="nav-item">
-        <a class="nav-link" href="/admin/settings">
+    <li class="nav-item nav-dropdown {if $presenter->getName() == 'Admin:Settings'} open{/if}">
+        <a class="nav-link nav-dropdown-toggle" href="#">
             <i class="fa fa-gear fa-fw"></i> {_dictionary.main.settings|firstUpper}
         </a>
+        <ul class="nav-dropdown-items">
+            <li class="nav-item">
+                <a href="/admin/settings/global" class="nav-link">Globální nastavení</a>
+            </li>
+            <li class="nav-item">
+                <a href="/admin/settings/user-roles" class="nav-link">Oprávnění</a>
+            </li>
+            <li class="nav-item">
+                <a href="/admin/settings/page-templates" class="nav-link">Šablony stránek</a>
+            </li>
+            <li class="nav-item">
+                <a href="/admin/settings/page-types" class="nav-link">Typy stránek</a>
+            </li>
+            <li class="nav-item">
+                <a href="/admin/settings/languages" class="nav-link">Jazykové mutace</a>
+            </li>
+            <li class="nav-item">
+                <a href="/admin/settings/countries" class="nav-link">Země</a>
+            </li>
+            <li class="nav-item">
+                <a href="/admin/settings/currencies" class="nav-link">Měny</a>
+            </li>
+            <li class="nav-item">
+                <a href="/admin/settings/addons" class="nav-link">Moduly</a>
+            </li>
+        </ul>
     </li>
 {/if}
 

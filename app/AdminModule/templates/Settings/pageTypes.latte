@@ -5,15 +5,6 @@
     <li class="breadcrumb-item">Home</li>
     <li class="breadcrumb-item"><a href="/admin/">Admin</a></li>
     <li class="breadcrumb-item active"><a href="/admin/settings/">{_dictionary.main.Settings}</a></li>
-    <li class="breadcrumb-menu d-md-down-none">
-        <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
-            <a href="/admin/settings/user-roles" class="btn btn-secondary">Oprávnění</a>
-            <a href="/admin/settings/page-templates" class="btn btn-secondary">Šablony stránek</a>
-            <a href="/admin/settings/languages" class="btn btn-secondary">Jazykové mutace</a>
-            <a href="/admin/settings/countries" class="btn btn-secondary">Země</a>
-            <a href="/admin/settings/currencies" class="btn btn-secondary">Měny</a>
-        </div>
-    </li>
 </ol>
 
 <div class="container-fluid">
@@ -23,7 +14,7 @@
                 <div class="card">
                     <div class="card-header">
                         <i class="fa fa-align-justify"></i> Kategorie
-                        <a n:href=":Admin:Settings:default, id => null"
+                        <a n:href=":Admin:Settings:global, id => null"
                                 class="btn btn-default btn-xs pull-right">Všechny kategorie</a>
                     </div>
                     <div class="card-block">

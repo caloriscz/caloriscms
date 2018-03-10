@@ -2,8 +2,8 @@
 
 namespace App\AdminModule\Presenters;
 
+use App\Forms\Profile\ChangePasswordControl;
 use Apps\Forms\Profile\EditControl;
-use Caloriscz\Profile\ChangePasswordControl;
 
 /**
  * User profile presenter
