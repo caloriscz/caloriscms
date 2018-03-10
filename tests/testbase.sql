@@ -329,16 +329,11 @@ CREATE TABLE IF NOT EXISTS `users_roles` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(40) NOT NULL,
   `admin_access` tinyint(1) NOT NULL DEFAULT '0',
-  `appearance_images` tinyint(1) NOT NULL DEFAULT '0',
-  `helpdesk_edit` tinyint(1) NOT NULL DEFAULT '0',
-  `settings_display` tinyint(1) NOT NULL DEFAULT '0',
-  `settings_edit` tinyint(1) NOT NULL DEFAULT '0',
-  `members_display` tinyint(1) NOT NULL DEFAULT '0',
-  `members_edit` tinyint(1) NOT NULL DEFAULT '0',
-  `members_create` tinyint(1) NOT NULL DEFAULT '0',
-  `members_delete` tinyint(1) NOT NULL DEFAULT '0',
-  `pages_edit` tinyint(1) NOT NULL DEFAULT '0',
-  `pages_document` tinyint(1) NOT NULL DEFAULT '0',
+  `appearance` tinyint(1) NOT NULL DEFAULT '0',
+  `helpdesk` tinyint(1) NOT NULL DEFAULT '0',
+  `settings` tinyint(1) NOT NULL DEFAULT '0',
+  `members` tinyint(1) NOT NULL DEFAULT '0',
+  `pages` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 
