@@ -116,8 +116,11 @@ class MenuEditorControl extends Control
             $categoryId = $this->presenter->getParameter('id');
         }
 
+        $arr['parent_id'] = $categoryId;
+        $arr['menu_menus_id'] = $this->presenter->getParameter('menu');
+
         $template->database = $this->database;
-        $template->menu = $this->database->table('menu')->where('parent_id', $categoryId)->order('sorted');
+        $template->menu = $this->database->table('menu')->where($arr)->order('sorted');
 
         $template->setFile(__DIR__ . '/MenuEditorControl.latte');
         $template->render();

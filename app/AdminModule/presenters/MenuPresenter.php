@@ -6,6 +6,7 @@ use App\Forms\Menu\EditMenuControl;
 use App\Forms\Menu\InsertMenuControl;
 use App\Forms\Menu\UpdateImagesControl;
 use Caloriscz\Menus\MenuEditorControl;
+use Caloriscz\Menus\MenuListControl;
 use Nette,
     App\Model;
 
@@ -17,6 +18,11 @@ class MenuPresenter extends BasePresenter
     protected function createComponentMenuEditor()
     {
         return new MenuEditorControl($this->database, $this->em);
+    }
+
+    protected function createComponentMenuList()
+    {
+        return new MenuListControl($this->database);
     }
 
     protected function createComponentMenuInsert()

@@ -11,35 +11,47 @@
 </ol>
 
 <div class="container-fluid">
-    <div class="card">
-        <div class="card-block">
-
-            <div class="row">
-                <div class="col-lg-3">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            Vložit menu
-                        </div>
-                        <div class="panel-body">
-                            {control menuInsert}
-                        </div>
+    <div class="animated fadeIn">
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="card">
+                    <div class="card-header">
+                        <strong>Seznam menu</strong>
+                    </div>
+                    <div class="card-block">
+                        {control menuList}
                     </div>
                 </div>
-                <div class="col-lg-9">
-                    {foreach $flashes as $flash}
-                        <br/>
-                        <div class="flash {$flash->type}">{$flash->message}</div>
-                        <br/>
-                    {/foreach}
-
-                    {if $presenter->getParameter('id')}
-                        <a n:href=":Admin:Menu:default, id => null" class="btn btn-default">Všechny menu</a>
-                    {/if}
-
-                    {control menuEditor}
+                <div class="card">
+                    <div class="card-header">
+                        <strong>Vložit menu</strong>
+                    </div>
+                    <div class="card-block">
+                        {control menuInsert}
+                    </div>
                 </div>
             </div>
+            <div class="col-lg-9">
+                <div class="card">
+                    <div class="card-header">
+                        <strong>Menu</strong>
+                    </div>
+                    <div class="card-block">
+                        {foreach $flashes as $flash}
+                            <br/>
+                            <div class="flash {$flash->type}">{$flash->message}</div>
+                            <br/>
+                        {/foreach}
 
+                        {if $presenter->getParameter('id')}
+                            <a n:href=":Admin:Menu:default, id => null" class="btn btn-default">Všechny menu</a>
+                        {/if}
+
+                        {control menuEditor}
+                    </div>
+                </div>
+            </div>
         </div>
+
     </div>
 </div>

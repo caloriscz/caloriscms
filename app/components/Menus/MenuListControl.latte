@@ -1,0 +1,8 @@
+<table class="table">
+    {foreach $menu as $item}
+        <tr>
+            <td><a href="{plink ':Admin:Menu:default', menu => $item->id}">{$item->title}</a></td>
+            <td></td>
+        </tr>
+    {/foreach}
+</table>
