@@ -1,4 +1,4 @@
-<ul class="{$style}">
+<ul class="{$class}">
     {foreach $categories as $row}
         <li class="nav-item{if strcmp($langPrefix.$row->{'url'.$langSuffix}, $active) == 0} active{/if}">
             <a href="{$langPrefix.$row->{'url'.$langSuffix}}" class="nav-link">

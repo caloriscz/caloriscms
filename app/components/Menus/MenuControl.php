@@ -1,4 +1,5 @@
 <?php
+
 namespace Caloriscz\Menus;
 
 use Nette\Application\UI\Control;
@@ -17,31 +18,30 @@ class MenuControl extends Control
 
     /**
      * @param null $id
-     * @param string $style
-     * @param null $controlName
      */
-    public function render($id = null, $style = 'sidemenu', $controlName = null)
+    public function render($id = null)
     {
         $template = $this->getTemplate();
         $template->langSuffix = '';
         $template->langPrefix = '';
 
-        if ($controlName === null) {
-            $controlName = 'MenuControl';
-        }
+        $menus = $this->database->table('menu_menus')->get($id);
 
         if ($this->presenter->translator->getLocale() !== $this->presenter->translator->getDefaultLocale()) {
             $template->langSuffix = '_' . $this->presenter->translator->getLocale();
             $template->langPrefix = '/' . $this->presenter->translator->getLocale();
         }
 
-        $template->setFile(__DIR__ . '/' . $controlName . '.latte');
+        $template->setFile(__DIR__ . '/MenuControl.latte');
 
         $template->active = strtok($_SERVER['REQUEST_URI'], '?');
 
+        $arr['parent_id'] = null;
+        $arr['menu_menus_id'] = $id;
+
         $template->id = $id;
-        $template->style = $style;
-        $template->categories = $this->database->table('menu')->where('parent_id', $id)->order('sorted DESC');
+        $template->class = $menus->class;
+        $template->categories = $this->database->table('menu')->where($arr)->order('sorted DESC');
         $template->render();
     }
 

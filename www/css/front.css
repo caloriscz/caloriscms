@@ -1344,17 +1344,18 @@ ul.nav.nav-stacked.sidemenu li.active a:hover {
 #cboxLoadingGraphic {
   background-image: url(../assets/colorbox/loading.gif);
 }
-body {
-  display: flex;
+body,
+wrapper {
   min-height: 100vh;
-  flex-direction: column;
 }
 .page {
   flex: 1;
   padding: 3rem 1.5rem 0rem 1.5rem;
   text-align: center;
 }
-footer,
-.push {
-  height: 50px;
+footer {
+  background-color: #e3f2fd;
+}
+footer a {
+  color: #212529;
 }

@@ -33,7 +33,6 @@ class NavigationControl extends Control
         return new MenuControl($this->database);
     }
 
-
     public function render()
     {
         $template = $this->getTemplate();

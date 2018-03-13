@@ -2,7 +2,7 @@
     {foreach $menu as $item}
         <tr>
             <td><a href="{plink ':Admin:Menu:default', menu => $item->id}">{$item->title}</a></td>
-            <td></td>
+            <td><a href="{plink ':Admin:Menu:menu', id => $item->id}" class="btn btn-info btn-sm pull-right">{_dictionary.main.edit}</a></td>
         </tr>
     {/foreach}
 </table>

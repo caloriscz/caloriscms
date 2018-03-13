@@ -1,17 +1,20 @@
 @import "caloris-front";
 
-body {
-  display: flex; //for sticky footer
-  min-height: 100vh; //for sticky footer
-  flex-direction: column;  //for sticky footer
+body, wrapper {
+  min-height:100vh;
 }
 
 .page {
-  flex: 1;  //for sticky footer
+  flex:1;
   padding: 3rem 1.5rem 0rem 1.5rem;
   text-align: center;
 }
 
-footer, .push {
-  height: 50px;
+footer {
+  
+  background-color: #e3f2fd;
+  
+  a {
+    color: #212529;
+  }
 }

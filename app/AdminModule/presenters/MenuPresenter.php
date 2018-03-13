@@ -4,6 +4,7 @@ namespace App\AdminModule\Presenters;
 
 use App\Forms\Menu\EditMenuControl;
 use App\Forms\Menu\InsertMenuControl;
+use App\Forms\Menu\MenuMenusEditControl;
 use App\Forms\Menu\UpdateImagesControl;
 use Caloriscz\Menus\MenuEditorControl;
 use Caloriscz\Menus\MenuListControl;
@@ -40,6 +41,11 @@ class MenuPresenter extends BasePresenter
         return new UpdateImagesControl($this->database);
     }
 
+    protected function createComponentMenuMenusEditForm()
+    {
+        return new MenuMenusEditControl($this->database);
+    }
+
     /**
      * Delete image
      * @param $identifier
@@ -59,4 +65,8 @@ class MenuPresenter extends BasePresenter
         $this->template->menu = $this->database->table('menu')->get($this->getParameter('id'));
     }
 
+    public function renderMenu()
+    {
+        $this->template->menu = $this->database->table('menu_menus')->get($this->getParameter('id'));
+    }
 }

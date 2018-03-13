@@ -231,6 +231,18 @@ CREATE TABLE `media` (
   `main_file` tinyint(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
 
+CREATE TABLE `menu_menus` (
+  `id` int(11) NOT NULL,
+  `title` varchar(30) CHARACTER SET utf8 COLLATE utf8_czech_ci NOT NULL,
+  `description` text CHARACTER SET utf8 COLLATE utf8_czech_ci,
+  `type` varchar(30) DEFAULT NULL,
+  `class` varchar(60) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+INSERT INTO `menu_menus` (`id`, `title`, `description`, `type`, `class`) VALUES
+  (1, 'Top', 'Top navigation menu', NULL, 'navbar-nav mr-auto'),
+  (2, 'Bottom', 'Simple menu for bottom navigation', 'Simple', 'nav flex-column');
+
 CREATE TABLE `menu` (
   `id` int(11) NOT NULL,
   `parent_id` int(11) DEFAULT NULL,
@@ -543,6 +555,9 @@ ALTER TABLE `media`
   ADD PRIMARY KEY (`id`),
   ADD KEY `albums_id` (`pages_id`);
 
+ALTER TABLE `menu_menus`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
 ALTER TABLE `menu`
   ADD PRIMARY KEY (`id`),
   ADD KEY `pages_id` (`pages_id`),
@@ -709,7 +724,8 @@ ALTER TABLE `media`
 
 ALTER TABLE `menu`
   ADD CONSTRAINT `menu_ibfk_1` FOREIGN KEY (`pages_id`) REFERENCES `pages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `menu_ibfk_2` FOREIGN KEY (`parent_id`) REFERENCES `menu` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `menu_ibfk_2` FOREIGN KEY (`parent_id`) REFERENCES `menu` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  ADD CONSTRAINT `menu_ibfk_3` FOREIGN KEY (`menu_menus_id`) REFERENCES `menu_menus` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;;
 
 ALTER TABLE `pages`
   ADD CONSTRAINT `pages_ibfk_4` FOREIGN KEY (`users_id`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE SET NULL,

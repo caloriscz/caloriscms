@@ -2,6 +2,7 @@
 namespace Caloriscz\Navigation;
 
 use App\Forms\Contacts\NewsletterFormControl;
+use Caloriscz\Menus\MenuControl;
 use Caloriscz\Social\FacebookControl;
 use Nette\Application\UI\Control;
 use Nette\Database\Context;
@@ -26,6 +27,11 @@ class FooterControl extends Control
     protected function createComponentNewsletterForm()
     {
         return new NewsletterFormControl($this->database);
+    }
+
+    protected function createComponentMenu()
+    {
+        return new MenuControl($this->database);
     }
 
     public function render()

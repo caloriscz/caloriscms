@@ -1,0 +1,17 @@
+{block #titles}{$menu->title}{/block}
+{block content}
+
+<ol class="breadcrumb">
+    <li class="breadcrumb-item">Home</li>
+    <li class="breadcrumb-item"><a href="#">Admin</a></li>
+    <li class="breadcrumb-item active">Menu</li>
+    <li class="breadcrumb-item active"><a href="/admin/menu/detail-images/{$presenter->getParameter('id')}">Nastavení</a></li>
+</ol>
+
+<div class="container-fluid">
+    <div class="card">
+        <div class="card-block">
+            {control menuMenusEditForm}
+        </div>
+    </div>
+</div>
