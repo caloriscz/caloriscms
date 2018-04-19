@@ -1,28 +1,28 @@
-
-        {form insertForm}
-        {input parent value => $menuId}
+{form insertForm}
+{input parent value => $menuId}
+{input menu_menus_id value => $presenter->getParameter('menu')}
+<div class="form-group">
+    <label class="col-sm-3 control-label">{label title /}</label>
+    <div class="col-sm-9"><input n:name="title"></div>
+</div>
+<div class="form-group">
+    <label class="col-sm-3 control-label">{label url /}</label>
+    <div class="col-sm-9"><input n:name="url"></div>
+</div>
+{foreach $languages as $lang}
+    <fieldset>
+        <legend>{$lang->title}</legend>
         <div class="form-group">
             <label class="col-sm-3 control-label">{label title /}</label>
-            <div class="col-sm-9"><input n:name="title"></div>
+            <div class="col-sm-9">{input title_{$lang->code}}</div>
         </div>
         <div class="form-group">
             <label class="col-sm-3 control-label">{label url /}</label>
-            <div class="col-sm-9"><input n:name="url"></div>
+            <div class="col-sm-9">{input url_{$lang->code}}</div>
         </div>
-        {foreach $languages as $lang}
-            <fieldset>
-                <legend>{$lang->title}</legend>
-                <div class="form-group">
-                    <label class="col-sm-3 control-label">{label title /}</label>
-                    <div class="col-sm-9">{input title_{$lang->code}}</div>
-                </div>
-                <div class="form-group">
-                    <label class="col-sm-3 control-label">{label url /}</label>
-                    <div class="col-sm-9">{input url_{$lang->code}}</div>
-                </div>
-            </fieldset>
-        {/foreach}
-    </div>
-    <div class="modal-footer">
-        {input submitm}
-        {/form}
+    </fieldset>
+{/foreach}
+</div>
+<div class="modal-footer">
+    {input submitm}
+    {/form}

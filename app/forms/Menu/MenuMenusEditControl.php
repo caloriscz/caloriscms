@@ -31,7 +31,7 @@ class MenuMenusEditControl extends Control
         $form->addText('title');
         $form->addText('class');
         $form->addTextArea('description');
-        $form->addSelect('type', 'Typ menu', ['SimpleMenu', 'TopMenu'])
+        $form->addSelect('type', 'Typ menu', ['SimpleMenu' => 'SimpleMenu', 'TopMenu' => 'TopMenu'])
             ->setAttribute('class', 'form-control');
         $form->addSubmit('submitm');
 

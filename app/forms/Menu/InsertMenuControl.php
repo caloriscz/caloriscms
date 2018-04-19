@@ -35,6 +35,7 @@ class InsertMenuControl extends Control
         }
 
         $form->addHidden('parent');
+        $form->addHidden('menu_menus_id');
         $form->addText('title', 'dictionary.main.Title')
             ->setAttribute('class', 'form-control');
         $form->addText('url', 'dictionary.main.URL')
@@ -62,6 +63,7 @@ class InsertMenuControl extends Control
     {
         $arr = [
             'parent_id' => $form->values->parent,
+            'menu_menus_id' => $form->values->menu_menus_id,
             'url' => $form->values->url,
             'title' => $form->values->title,
         ];
@@ -70,12 +72,12 @@ class InsertMenuControl extends Control
 
         if ($category->count() > 0) {
             $this->presenter->flashMessage($this->presenter->translator->translate('messages.sign.categoryAlreadyExists'), 'error');
-            $this->presenter->redirect(this);
+            $this->presenter->redirect('this');
         }
 
         if ($form->values->title === '') {
             $this->presenter->flashMessage($this->presenter->translator->translate('messages.sign.categoryMustHaveSomeName'), 'error');
-            $this->presenter->redirect(this);
+            $this->presenter->redirect('this');
         }
     }
 

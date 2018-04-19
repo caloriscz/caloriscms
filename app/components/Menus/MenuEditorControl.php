@@ -86,11 +86,20 @@ class MenuEditorControl extends Control
 
         $content = [];
 
-        if ($this->getPresenter()->getParameter('id_from') !== $this->getPresenter()->getParameter('id_to')) {
-            $arr['parent_id'] = $this->getPresenter()->getParameter('id_to');
+        $idTo = $this->getPresenter()->getParameter('id_to');
+
+        if ($idTo === '') {
+            $idTo = null;
         }
 
-        $menui = $this->database->table('menu')->where('parent_id', $this->getPresenter()->getParameter('id_to'))->order('sorted')->limit(1, ($this->getPresenter()->getParameter('position')));
+        if ($this->getPresenter()->getParameter('id_from') !== $idTo) {
+            $arr['parent_id'] = $idTo;
+        }
+
+        $menui = $this->database->table('menu')->where([
+            'parent_id' => $idTo
+        ])
+            ->order('sorted')->limit(1, ($this->getPresenter()->getParameter('position')));
 
         if ($menui->count() > 0) {
             if ($this->getPresenter()->getParameter('position') == 0) {
@@ -104,6 +113,7 @@ class MenuEditorControl extends Control
 
         $this->database->table('menu')->get($this->getPresenter()->getParameter('id_from'))->update($arr);
 
+        echo 'oo: ' . count($arr);
         exit();
     }
 
