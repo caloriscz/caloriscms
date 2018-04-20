@@ -805,4 +805,98 @@ ALTER TABLE `events`
 ALTER TABLE `events_signed`
   ADD CONSTRAINT `events_signed_ibfk_1` FOREIGN KEY (`events_id`) REFERENCES `events` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
+CREATE TABLE IF NOT EXISTS `links_categories` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `parent_id` int(11) DEFAULT NULL,
+  `description` text,
+  `title` varchar(80) NOT NULL,
+  `sorted` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  KEY `parent_id` (`parent_id`)
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS `links` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `links_categories_id` int(11) DEFAULT NULL,
+  `url` varchar(250) DEFAULT NULL,
+  `title` varchar(250) DEFAULT NULL,
+  `description` text,
+  PRIMARY KEY (`id`),
+  KEY `links_category_id` (`links_categories_id`)
+) ENGINE=InnoDB;
+
+ALTER TABLE `links`
+  ADD CONSTRAINT `links_ibfk_1` FOREIGN KEY (`links_categories_id`) REFERENCES `links_categories` (`id`) ON DELETE SET NULL ON UPDATE SET NULL;
+
+INSERT INTO `addons` (`id`, `name`, `key`, `active`, `description`) VALUES (NULL, 'Links', 'caloriscms-links', '1', 'Odkaz s kategoriemi a detekcí Youtube videa');
+
+CREATE TABLE IF NOT EXISTS `pricelist` (
+  `id` int(11) NOT NULL,
+  `pricelist_categories_id` int(11) DEFAULT NULL,
+  `title` varchar(400) NOT NULL,
+  `description` text,
+  `price` double NOT NULL,
+  `price_info` varchar(80) DEFAULT NULL,
+  `sorted` int(11) NOT NULL DEFAULT '0'
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS `pricelist_categories` (
+  `id` int(11) NOT NULL,
+  `parent_id` int(11) DEFAULT NULL,
+  `description` text,
+  `title` varchar(80) NOT NULL,
+  `sorted` int(11) NOT NULL DEFAULT '0'
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS `pricelist_daily` (
+  `id` int(11) NOT NULL,
+  `pricelist_categories_id` int(11) DEFAULT NULL,
+  `title` text NOT NULL,
+  `pricelist_dates_id` int(11) NOT NULL,
+  `price` double NOT NULL
+) ENGINE=InnoDB;
+
+CREATE TABLE IF NOT EXISTS `pricelist_dates` (
+  `id` int(11) NOT NULL,
+  `day` date NOT NULL
+) ENGINE=InnoDB;
+
+
+ALTER TABLE `pricelist`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `pricelist_categories_id` (`pricelist_categories_id`);
+
+ALTER TABLE `pricelist_categories`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `parent_id` (`parent_id`);
+
+ALTER TABLE `pricelist_daily`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `pricelist_categories_id` (`pricelist_categories_id`),
+  ADD KEY `pricelist_dates_id` (`pricelist_dates_id`),
+  ADD KEY `pricelist_dates_id_2` (`pricelist_dates_id`);
+
+ALTER TABLE `pricelist_dates`
+  ADD PRIMARY KEY (`id`);
+
+
+ALTER TABLE `pricelist`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `pricelist_categories`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `pricelist_daily`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `pricelist_dates`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE `pricelist`
+  ADD CONSTRAINT `pricelist_ibfk_1` FOREIGN KEY (`pricelist_categories_id`) REFERENCES `pricelist_categories` (`id`) ON DELETE SET NULL ON UPDATE SET NULL;
+
+ALTER TABLE `pricelist_categories`
+  ADD CONSTRAINT `pricelist_categories_ibfk_1` FOREIGN KEY (`parent_id`) REFERENCES `pricelist_categories` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+ALTER TABLE `pricelist_daily`
+  ADD CONSTRAINT `pricelist_daily_ibfk_1` FOREIGN KEY (`pricelist_dates_id`) REFERENCES `pricelist_dates` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `pricelist_daily_ibfk_2` FOREIGN KEY (`pricelist_categories_id`) REFERENCES `pricelist_categories` (`id`) ON DELETE SET NULL ON UPDATE SET NULL;
+
 COMMIT;

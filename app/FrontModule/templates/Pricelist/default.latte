@@ -1,0 +1,49 @@
+{block #titles}{_dictionary.main.Pricelist}{/block}
+{block content}
+
+<div class="heading-mobile">
+    <div class="container heading heading-content">
+        <h1>Ceník</h1>
+    </div>
+</div>
+
+<div class="container white content padded-top padded-btm nase-stranky">
+    <div class="row">
+        <div class="col-md-8">
+
+            <table class="table" id="dailyMenuTable">
+                {foreach $menu as $item}
+
+                    {if $category != $item->categories_id}
+                        <tr>
+                            <td colspan="2" class="typeDailyMenu">
+                                <strong>{$item->pricelist_categories->title}</strong>
+                                {if strlen($item->pricelist_categories->description) > 0}
+                                    <br/><em>* {$item->pricelist_categories->description}</em>
+                                {/if}
+                            </td>
+                        </tr>
+                    {else}
+                    {/if}
+                    <tr>
+                        <td class="dailyMenuText">
+                            <div>
+                            <span>
+                                {$item->amenu}<br>
+                                {$item->description|noescape}
+                            </span>
+                            </div>
+                        </td>
+                        <td class="dailyMenuText text-right" style="vertical-align: top; width: 95px; padding-left: 0;">
+                            {if $item->price > 0}{$item->price},- {$settings['store:currency:symbol']}{/if}
+                        </td>
+                    </tr>
+
+                    {var $category = $item->pricelist_categories_id}
+                {/foreach}
+            </table>
+
+        </div>
+    </div>
+</div>
+<br/>
