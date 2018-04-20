@@ -70,7 +70,6 @@ class ResetPassControl extends Control
     {
         $template = $this->getTemplate();
         $template->setFile(__DIR__ . '/ResetPassControl.latte');
-        $template->addon = $this->database->table('addons');
         $template->layer = $layer;
         $template->member = $this->getPresenter()->template->member;
         $template->render();

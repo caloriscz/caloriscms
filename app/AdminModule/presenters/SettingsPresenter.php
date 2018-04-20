@@ -165,10 +165,4 @@ class SettingsPresenter extends BasePresenter
     {
         $this->template->usersRoles = $this->database->table('users_roles');
     }
-
-
-    public function renderAddons()
-    {
-        $this->template->addons = $this->database->table('addons')->order('name');
-    }
 }

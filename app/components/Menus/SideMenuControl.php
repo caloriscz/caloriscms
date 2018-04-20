@@ -17,7 +17,7 @@ class SideMenuControl extends Control
 
     public function render($id, $style = 'sidemenu')
     {
-        $template = $this->template;
+        $template = $this->getTemplate();
         
         $template->setFile(__DIR__ . '/SideMenuControl.latte');
         

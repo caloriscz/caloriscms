@@ -7,14 +7,6 @@ SET NAMES 'utf8';
 
 START TRANSACTION;
 
-CREATE TABLE `addons` (
-  `id` int(11) NOT NULL,
-  `name` varchar(40) NOT NULL,
-  `key` varchar(40) NOT NULL,
-  `active` tinyint(1) NOT NULL DEFAULT '0',
-  `description` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
-
 CREATE TABLE `blacklist` (
   `id` int(11) NOT NULL,
   `title` varchar(100) DEFAULT NULL
@@ -504,9 +496,6 @@ INSERT INTO `users_roles` (`id`, `title`, `sign`, `appearance`, `helpdesk`, `set
   (3, 'Editor', 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1),
   (4, 'Site User', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 
-ALTER TABLE `addons`
-  ADD PRIMARY KEY (`id`);
-
 ALTER TABLE `blacklist`
   ADD PRIMARY KEY (`id`);
 
@@ -622,9 +611,6 @@ ALTER TABLE `users_categories`
 
 ALTER TABLE `users_roles`
   ADD PRIMARY KEY (`id`);
-
-ALTER TABLE `addons`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 ALTER TABLE `blacklist`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
@@ -827,8 +813,6 @@ CREATE TABLE IF NOT EXISTS `links` (
 
 ALTER TABLE `links`
   ADD CONSTRAINT `links_ibfk_1` FOREIGN KEY (`links_categories_id`) REFERENCES `links_categories` (`id`) ON DELETE SET NULL ON UPDATE SET NULL;
-
-INSERT INTO `addons` (`id`, `name`, `key`, `active`, `description`) VALUES (NULL, 'Links', 'caloriscms-links', '1', 'Odkaz s kategoriemi a detekcí Youtube videa');
 
 CREATE TABLE IF NOT EXISTS `pricelist` (
   `id` int(11) NOT NULL,

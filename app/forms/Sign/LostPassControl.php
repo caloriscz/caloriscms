@@ -78,7 +78,6 @@ class LostPassControl extends Control
     public function render($layer = 'front')
     {
         $this->template->setFile(__DIR__ . '/LostPassControl.latte');
-        $this->template->addon = $this->database->table('addons');
         $this->template->layer = $layer;
         $this->template->render();
     }

@@ -48,13 +48,6 @@
         <i class="fa fa-users fa-fw"></i> {_admin.navigation.members}
     </a>
 </li>
-{foreach $addons as $addon}
-    <li class="nav-item">
-        <a href="/admin/{$addon->getAdminLink()}" class="nav-link">
-            <i class="fa {$addon->getIcon()} fa-fw"></i> {$addon->getName()}
-        </a>
-    </li>
-{/foreach}
 <li class="nav-item">
     <a class="nav-link" href="/admin/helpdesk">
         <i class="fa fa-life-ring fa-fw"></i> {_dictionary.main.Helpdesk}
@@ -86,9 +79,6 @@
             </li>
             <li class="nav-item">
                 <a href="/admin/settings/currencies" class="nav-link">Měny</a>
-            </li>
-            <li class="nav-item">
-                <a href="/admin/settings/addons" class="nav-link">Moduly</a>
             </li>
         </ul>
     </li>

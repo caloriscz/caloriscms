@@ -230,7 +230,6 @@ class SignUpControl extends Control
         $this->getTemplate();
         $template->setFile(__DIR__ . '/SignUpControl.latte');
         $template->settings = $this->getPresenter()->template->settings;
-        $template->addon = $this->database->table('addons');
         $template->render();
     }
 

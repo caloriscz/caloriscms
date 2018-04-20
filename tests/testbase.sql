@@ -1,15 +1,6 @@
 SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
 
-CREATE TABLE IF NOT EXISTS `addons` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(40) COLLATE utf8_czech_ci NOT NULL,
-  `key` varchar(40) COLLATE utf8_czech_ci NOT NULL,
-  `active` tinyint(1) NOT NULL DEFAULT '0',
-  `description` text COLLATE utf8_czech_ci NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB;
-
 CREATE TABLE IF NOT EXISTS `blacklist` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(100) COLLATE utf8_czech_ci DEFAULT NULL,

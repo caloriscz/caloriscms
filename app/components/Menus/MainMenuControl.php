@@ -2,7 +2,6 @@
 
 namespace Caloriscz\Menus\Admin;
 
-use App\Model\Entity\Addons;
 use App\Model\Entity\PagesTypes;
 use Kdyby\Doctrine\EntityManager;
 use Nette\Application\UI\Control;
@@ -27,8 +26,6 @@ class MainMenuControl extends Control
         $pageTypes = $this->em->getRepository(PagesTypes::class);
         $this->template->pageTypes = $pageTypes->findAll();
 
-        $links = $this->em->getRepository(Addons::class);
-        $this->template->addons = $links->findBy(['active' => 1]);
         $this->template->setFile(__DIR__ . '/MainMenuControl.latte');
         $this->template->render();
     }
