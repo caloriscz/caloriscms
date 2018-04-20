@@ -301,12 +301,16 @@ CREATE TABLE `pages_templates` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
 
 INSERT INTO `pages_templates` (`id`, `pages_types_id`, `template`, `title`, `title_en`) VALUES
-  (1, NULL, 'Front:Media:albumWithDescription', 'Galerie s onáhledy obrázků s podporou Lightboxu', 'Album with description'),
+  (1, NULL, 'Front:Media:albumWithDescription', 'Galerie s náhledy obrázků s podporou Lightboxu', 'Album with description'),
   (2, NULL, 'Front:Pages:blogList', 'Seznam příspěvků', 'List of articles'),
   (3, NULL, 'Front:Pages:default', 'Základní typ stránky', 'Basic type of page'),
   (4, NULL, 'Front:Homepage:default', 'Homepage', 'Homepage'),
-  (5, NULL, 'Front:Contact:default', 'Kontaktní stránka s kontaktníém formulářem', 'Contact page with contact/request form'),
-  (6, NULL, 'Front:Pages:blogDetail', 'Detail příspěvu', 'Article page');
+  (5, NULL, 'Front:Contact:default', 'Kontaktní stránka s kontaktním formulářem', 'Contact page with contact/request form'),
+  (6, NULL, 'Front:Pages:blogDetail', 'Detail příspěvu', 'Article page'),
+  (7, NULL, 'Front:Media:album', 'Základní galerie', 'Basic gallery view'),
+  (8, NULL, 'Front:Media:folder', 'Seznam složek dokumentů', 'List of document folders'),
+  (9, NULL, 'Front:Media:folderList', 'Seznam dokumentů dané složky', 'List of documents of given folder'),
+  (10, NULL, 'Front:Events:detail', 'Seznam událostí', 'List of events');
 
 CREATE TABLE `pages_types` (
   `id` int(11) NOT NULL,
@@ -319,6 +323,7 @@ CREATE TABLE `pages_types` (
 INSERT INTO `pages_types` (`id`, `content_type`, `presenter`, `action`, `prefix`, `admin_enabled`, `admin_link`, `icon`, `enable_snippets`, `enable_images`, `enable_files`, `enable_related`, `pages_id`) VALUES
   (1, 'Stránky', 'Front:Pages', 'default', '', 1, 'pages/?type=1', 'fa-files-o', 0, 1, 1, 1, 1),
   (2, 'Aktuality', 'Front:Blog', 'detail', 'blog', 1, 'pages/?type=2', 'fa-newspaper-o', 1, 1, 1, 1, 3),
+  (2, 'Události', 'Front:Events', 'detail', '', 1, 'pages/?type=3', 'fa-calendar-o', 1, 1, 1, 1, 3),
   (6, 'Galerie', 'Front:Media', 'album', '', 1, 'pages/?type=6', 'fa-file-image-o', 0, 1, 1, 1, 4),
   (8, 'Dokumenty', 'Front:Media', 'folder', '', 1, 'pages?type=8', 'fa-files-o', 1, 1, 1, 1, 6),
   (9, 'Šablony', '', 'default', '', 1, 'pages?type=9', 'fa-th', 1, 1, 1, 1, 1);
@@ -750,5 +755,54 @@ ALTER TABLE `settings`
 ALTER TABLE `users`
   ADD CONSTRAINT `users_ibfk_1` FOREIGN KEY (`users_roles_id`) REFERENCES `users_roles` (`id`) ON DELETE SET NULL ON UPDATE SET NULL,
   ADD CONSTRAINT `users_ibfk_2` FOREIGN KEY (`users_categories_id`) REFERENCES `users_categories` (`id`);
+
+
+CREATE TABLE `events` (
+  `id` int(11) NOT NULL,
+  `date_event` datetime DEFAULT NULL,
+  `date_event_end` datetime DEFAULT NULL,
+  `all_day` tinyint(1) NOT NULL DEFAULT '1',
+  `show` tinyint(1) NOT NULL DEFAULT '0',
+  `pages_id` int(11) DEFAULT NULL,
+  `contacts_id` int(11) DEFAULT NULL,
+  `capacity` int(11) NOT NULL DEFAULT '0',
+  `capacity_start` int(11) NOT NULL DEFAULT '0',
+  `capacity_filled` int(11) NOT NULL DEFAULT '0',
+  `price` int(11) DEFAULT NULL,
+  `time_range` int(11) DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
+
+CREATE TABLE `events_signed` (
+  `id` int(11) NOT NULL,
+  `name` varchar(150) NOT NULL,
+  `email` varchar(150) NOT NULL,
+  `phone` varchar(30) DEFAULT NULL,
+  `note` text,
+  `events_id` int(11) NOT NULL,
+  `ipaddress` varchar(15) NOT NULL,
+  `date_created` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
+
+ALTER TABLE `events`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `pages_id` (`pages_id`),
+  ADD KEY `contacts_id` (`contacts_id`);
+
+ALTER TABLE `events_signed`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `events_id` (`events_id`);
+
+ALTER TABLE `events`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE `events_signed`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE `events`
+  ADD CONSTRAINT `events_ibfk_1` FOREIGN KEY (`pages_id`) REFERENCES `pages` (`id`) ON DELETE SET NULL ON UPDATE SET NULL,
+  ADD CONSTRAINT `events_ibfk_2` FOREIGN KEY (`contacts_id`) REFERENCES `contacts` (`id`) ON DELETE SET NULL ON UPDATE SET NULL;
+
+ALTER TABLE `events_signed`
+  ADD CONSTRAINT `events_signed_ibfk_1` FOREIGN KEY (`events_id`) REFERENCES `events` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 COMMIT;
