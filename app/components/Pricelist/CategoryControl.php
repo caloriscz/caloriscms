@@ -33,8 +33,8 @@ class CategoryControl extends Control
         $form->addSubmit('submitm', 'dictionary.main.insert')
             ->setAttribute("class", "btn btn-primary");
 
-        $form->onSuccess[] = $this->insertCategoryFormSucceeded;
-        $form->onValidate[] = $this->validateCategoryFormSucceeded;
+        $form->onSuccess[] = [$this, 'insertCategoryFormSucceeded'];
+        $form->onValidate[] = [$this, 'validateCategoryFormSucceeded'];
         return $form;
     }
 
@@ -65,12 +65,12 @@ class CategoryControl extends Control
             "parent_id" => $form->values->parent_id,
         ));
 
-        $this->presenter->redirect(this);
+        $this->presenter->redirect('this');
     }
 
     public function render()
     {
-        $template = $this->template;
+        $template = $this->getTemplate();
 
         $getParams = $this->getParameters();
         unset($getParams["page"]);

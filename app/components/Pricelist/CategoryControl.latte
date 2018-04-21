@@ -2,7 +2,7 @@
 <div class="panel panel-default">
     <div class="panel-heading">
         Kategorie
-        <button type="button" class="btn btn-default pull-right btn-xs" data-toggle="modal" data-target="#catModal{$idr}">
+        <button type="button" class="btn btn-default pull-right btn-xs" data-toggle="modal" data-target="#catModal">
             Vložit kategorii
         </button>         
         <a href="{plink $name, (expand) $args, id => null}" class="btn btn-default {if !$idActive}btn-outline {/if}btn-xs pull-right">Všechny kategorie</a> 
@@ -10,7 +10,7 @@
     </div>
     <div class="panel-body">
         <div class="tree">
-            <div class="modal fade" id="catModal{$idr}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal fade" id="catModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         {form insertCategoryForm}
@@ -23,8 +23,8 @@
                                 </h4>
                             </div>
                             <div class="modal-body">
-                                {input parent_id value => $id}
-                                {input type value => $type}
+                                {input parent_id value => $idActive}
+
                                 <div class="form-group">
                                     <label class="col-sm-3 control-label">{label title /}</label>
                                     <div class="col-sm-9">{input title}</div>
@@ -80,7 +80,7 @@
                                 </div>
                             </div>
                         </div>
-                        {? $selection = $item->related('pricelist_categories','parent_id')}
+                        {php $selection = $item->related('pricelist_categories','parent_id')}
                         {if $selection->count() > 0}
                             {include #menu, menu => $selection}
                         {/if}
