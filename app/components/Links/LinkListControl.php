@@ -3,14 +3,15 @@
 namespace Caloriscz\Links;
 
 use Nette\Application\UI\Control;
+use Nette\Database\Context;
 
 class LinkListControl extends Control
 {
 
-    /** @var Nette\Database\Context */
+    /** @var Context */
     public $database;
 
-    public function __construct(\Nette\Database\Context $database)
+    public function __construct(Context $database)
     {
         $this->database = $database;
 
@@ -18,12 +19,9 @@ class LinkListControl extends Control
 
     public function render($id)
     {
-
-        $template = $this->template;
+        $template = $this->getTemplate();
         $template->settings = $this->presenter->template->settings;
-
-        $template->links = $this->database->table("links")->where("categories_id", $id);
-
+        $template->links = $this->database->table('links')->where('categories_id', $id);
         $template->setFile(__DIR__ . '/LinkGalleryControl.latte');
 
         $template->render();

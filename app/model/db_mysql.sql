@@ -883,4 +883,23 @@ ALTER TABLE `pricelist_daily`
   ADD CONSTRAINT `pricelist_daily_ibfk_1` FOREIGN KEY (`pricelist_dates_id`) REFERENCES `pricelist_dates` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `pricelist_daily_ibfk_2` FOREIGN KEY (`pricelist_categories_id`) REFERENCES `pricelist_categories` (`id`) ON DELETE SET NULL ON UPDATE SET NULL;
 
+CREATE TABLE `board` (
+  `id` int(11) NOT NULL,
+  `parent_id` int(11) DEFAULT NULL,
+  `author` varchar(80) COLLATE utf8_czech_ci NOT NULL,
+  `email` varchar(150) COLLATE utf8_czech_ci DEFAULT NULL,
+  `subject` text COLLATE utf8_czech_ci NOT NULL,
+  `body` text COLLATE utf8_czech_ci,
+  `date_created` datetime DEFAULT NULL,
+  `show` smallint(6) NOT NULL DEFAULT '0',
+  `ipaddress` varchar(32) COLLATE utf8_czech_ci DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
+
+ALTER TABLE `board`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `parent_id` (`parent_id`);
+
+ALTER TABLE `board`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
 COMMIT;

@@ -2,7 +2,7 @@
 <div class="panel panel-default">
     <div class="panel-heading">
         Kategorie
-        <button type="button" class="btn btn-default pull-right btn-xs" data-toggle="modal" data-target="#catModal{$idr}">
+        <button type="button" class="btn btn-default pull-right btn-xs" data-toggle="modal" data-target="#catModal">
             Vložit kategorii
         </button>         
         <a href="{plink $name, (expand) $args, id => null}" class="btn btn-default {if !$idActive}btn-outline {/if}btn-xs pull-right">Všechny kategorie</a> 
@@ -10,7 +10,7 @@
     </div>
     <div class="panel-body">
         <div class="tree">
-            <div class="modal fade" id="catModal{$idr}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal fade" id="catModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         {form insertCategoryForm}
@@ -49,7 +49,9 @@
                                 class="btn btn-default btn-xs tool-tip" data-toggle="modal" data-target="#catModal{$item->id}" title="Přidat podkategorii">
                             <i class="fa fa-plus"></i>
                         </button>
-                        <a href="{plink ':Admin:Categories:detail', (expand) $args, id => $item->id}" class="btn btn-default btn-xs"><i class="fa fa-edit"></i></a>
+                        <a href="{plink ':Admin:Links:default', (expand) $args, id => $item->id}" class="btn btn-default btn-xs">
+                            <i class="fa fa-edit"></i>
+                        </a>
                         <a href="{plink $name, (expand) $args, id => $item->id}">{if $idActive == $item->id}<strong>{/if}{$item->title}{if $idActive == $item->id}</strong>{/if}</a>
                         <div class="modal fade" id="catModal{$item->id}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
                             <div class="modal-dialog" role="document">
@@ -81,7 +83,7 @@
                                 </div>
                             </div>
                         </div>
-                        {? $selection = $item->related('links_categories','parent_id')}
+                        {php $selection = $item->related('links_categories','parent_id')}
                         {if $selection->count() > 0}
                             {include #menu, menu => $selection}
                         {/if}

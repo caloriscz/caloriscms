@@ -1,47 +1,45 @@
 <?php
-
 namespace App\FrontModule\Presenters;
 
-use Nette,
-    App\Model;
+use Caloriscz\Events\SignEventControl;
+use Nette\Utils\Paginator;
 
 /**
- * Homepage presenter.
+ * Event presenter.
  */
 class EventsPresenter extends BasePresenter
 {
 
     protected function createComponentSignEvent()
     {
-        $control = new \Caloriscz\Events\SignEventControl($this->database);
-        return $control;
+        return new SignEventControl($this->database);;
     }
 
     public function renderDefault()
     {
         $type = 1;
 
-        if ($type == 1) {
-            $events = $this->database->table("pages")
-                ->where("pages_types_id = 3");
+        if ($type === 1) {
+            $events = $this->database->table('pages')
+                ->where('pages_types_id = 3');
         } else {
-            $events = $this->database->table("pages")
-                ->select(":events.id, pages.id, pages.title, pages.pages_types_id, :events.date_event, :events.date_event_end, 
+            $events = $this->database->table('pages')
+                ->select(':events.id, pages.id, pages.title, pages.pages_types_id, :events.date_event, :events.date_event_end, 
             :events.all_day, :events.contact, public, DATEDIFF(NOW(), 
-            :events.date_event) AS diffDate")
-                ->where("pages_types_id = 3");
+            :events.date_event) AS diffDate')
+                ->where('pages_types_id = 3');
         }
 
-        $paginator = new \Nette\Utils\Paginator;
-        $paginator->setItemCount($events->count("*"));
+        $paginator = new Paginator();
+        $paginator->setItemCount($events->count('*'));
         $paginator->setItemsPerPage(20);
-        $paginator->setPage($this->getParameter("page"));
+        $paginator->setPage($this->getParameter('page'));
 
         $type = 1;
+        $order = 'title';
+
         if ($type == 0) {
-            $order = "diffDate DESC";
-        } else {
-            $order = "title";
+            $order = 'diffDate DESC';
         }
 
         $this->template->events = $events->order($order)->limit($paginator->getLength(), $paginator->getOffset());
