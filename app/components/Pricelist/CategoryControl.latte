@@ -48,7 +48,7 @@
                                 class="btn btn-default btn-xs tool-tip" data-toggle="modal" data-target="#catModal{$item->id}" title="Přidat podkategorii">
                             <i class="fa fa-plus"></i>
                         </button>
-                        <a href="{plink ':Admin:Categories:detail', (expand) $args, id => $item->id}" class="btn btn-default btn-xs"><i class="fa fa-edit"></i></a>
+                        <a href="{plink ':Admin:Pricelist:detail', (expand) $args, id => $item->id}" class="btn btn-default btn-xs"><i class="fa fa-edit"></i></a>
                         <a href="{plink $name, (expand) $args, id => $item->id}">{if $idActive == $item->id}<strong>{/if}{$item->title}{if $idActive == $item->id}</strong>{/if}</a>
                         <div class="modal fade" id="catModal{$item->id}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
                             <div class="modal-dialog" role="document">
@@ -64,7 +64,6 @@
                                         </div>
                                         <div class="modal-body">
                                             {input parent_id value => $item->id}
-                                            {input type value => $type}
                                             <div class="form-group">
                                                 <label class="col-sm-3 control-label">{label title /}</label>
                                                 <div class="col-sm-9">{input title}</div>

@@ -3,14 +3,15 @@
 namespace Caloriscz\Pricelist;
 
 use Nette\Application\UI\Control;
+use Nette\Database\Context;
 
 class EditItemControl extends Control
 {
 
-    /** @var \Nette\Database\Context */
+    /** @var Context */
     public $database;
 
-    public function __construct(\Nette\Database\Context $database)
+    public function __construct(Context $database)
     {
         $this->database = $database;
     }
@@ -70,7 +71,7 @@ class EditItemControl extends Control
 
     public function render()
     {
-        $template = $this->template;
+        $template = $this->getTemplate();
         $template->setFile(__DIR__ . '/EditItemControl.latte');
 
         $template->render();
