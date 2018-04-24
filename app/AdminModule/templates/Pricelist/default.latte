@@ -6,69 +6,85 @@
 {var $category = 0}
 {var $counter = 2}
 
-<div class="row">
-    <div class="col-lg-3">
-        {control pricelistCategory}
+<div class="container-fluid">
+    <div class="animated fadeIn">
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="card">
+                    <div class="card-header">Seznam ceníků</div>
+                    <div class="card-block">
+                        {control pricelistCategory}
 
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                Vložit položku
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                Vložit položku
+                            </div>
+                            <div class="panel-body">
+                                {control pricelistNewItem}
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="panel-body">
-                {control pricelistNewItem}
+            <div class="col-lg-9">
+                <div class="card">
+                    <div class="card-header">Ceník</div>
+                    <div class="card-block">
+                        <table class="table">
+                            {foreach $pricelist as $item}
+                            <tr data-counter="{$counter++}">
+                            {var $categoryCount = $database->table('pricelist')->where('pricelist_categories_id', $item->pricelist_categories_id)->count()}
+                                {if $category != $item->pricelist_categories_id}
+                                    <tr>
+                                        <td colspan="3">
+                                            <strong>{$item->pricelist_categories->title}</strong>
+                                        </td>
+                                    </tr>
+                                    {var $firstArrow = 1}
+                                    {var $counter = 1}
+                                {else}
+                                    {var $firstArrow = 0}
+                                {/if}
+                                <td>
+                                    <a n:href="delete!, id => $item->id" onclick="return confirm('Opravdu smazat?')"><i
+                                                class="fa fa-times font-red"></i></a>
+                                    &nbsp;
+                                    {if $iterator->first}
+                                        <i class="fa fa-arrow-up font-grey"></i>
+                                    {elseif  $firstArrow == 1}
+                                        <i class="fa fa-arrow-up font-grey"></i>
+                                    {else}
+                                        <a n:href="up!, id => $item->id, sorted => $item->sorted, category => $item->pricelist_categories_id"><i
+                                                    class="fa fa-arrow-up"></i></a>
+                                    {/if}
+                                    &nbsp;
+                                    {if $iterator->last}
+                                        <i class="fa fa-arrow-down font-grey"></i>
+                                    {elseif  $counter - $categoryCount == 0}
+                                        <i class="fa fa-arrow-down font-grey"></i>
+                                    {else}
+                                        <a n:href="down!, id => $item->id, sorted => $item->sorted, category => $item->pricelist_categories_id"><i
+                                                    class="fa fa-arrow-down"></i></a>
+                                    {/if}
+                                    &nbsp;
+                                </td>
+                                <td><a n:href=":Admin:Pricelist:menuedit, id => $item->id">
+                                        {$item->amenu}
+                                    </a></td>
+                                <td class="col-md-2 text-right">{$item->price},- Kč</td>
+                                </tr>
+                                {var $category = $item->pricelist_categories_id}
+                            {/foreach}
+                        </table>
+
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="col-lg-9">
-
-        <table class="table">
-            {foreach $pricelist as $item}
-            <tr data-counter="{$counter++}">
-            {var $categoryCount = $database->table('pricelist')->where('pricelist_categories_id', $item->pricelist_categories_id)->count()}
-                {if $category != $item->pricelist_categories_id}
-                    <tr>
-                        <td colspan="3">
-                            <strong>{$item->pricelist_categories->title}</strong>
-                        </td>
-                    </tr>
-                    {var $firstArrow = 1}
-                    {var $counter = 1}
-                {else}
-                    {var $firstArrow = 0}
-                {/if}
-                <td>
-                    <a n:href="delete!, id => $item->id" onclick="return confirm('Opravdu smazat?')"><i class="fa fa-times font-red"></i></a>
-                    &nbsp;
-                    {if $iterator->first}
-                        <i class="fa fa-arrow-up font-grey"></i>
-                    {elseif  $firstArrow == 1}
-                        <i class="fa fa-arrow-up font-grey"></i>
-                    {else}
-                        <a n:href="up!, id => $item->id, sorted => $item->sorted, category => $item->pricelist_categories_id"><i class="fa fa-arrow-up"></i></a>
-                    {/if}
-                    &nbsp;
-                    {if $iterator->last}
-                        <i class="fa fa-arrow-down font-grey"></i>
-                    {elseif  $counter - $categoryCount == 0}
-                        <i class="fa fa-arrow-down font-grey"></i>
-                    {else}
-                        <a n:href="down!, id => $item->id, sorted => $item->sorted, category => $item->pricelist_categories_id"><i class="fa fa-arrow-down"></i></a>
-                    {/if}
-                    &nbsp;
-                </td>
-                <td><a n:href=":Admin:Pricelist:menuedit, id => $item->id">
-                        {$item->amenu}
-                    </a></td>
-                <td class="col-md-2 text-right">{$item->price},- Kč</td>
-                </tr>
-                {var $category = $item->pricelist_categories_id}
-            {/foreach}
-        </table>
-
     </div>
 </div>
 
 
-<div>
+<div class="text-center">
     <a n:href="generatePdf!">handle</a>
 </div>

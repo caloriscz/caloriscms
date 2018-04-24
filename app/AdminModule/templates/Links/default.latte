@@ -1,41 +1,58 @@
 {block #titles}{_dictionary.main.Links}{/block}
 {block content}
 
-<h1 class="page-header">{_dictionary.main.Links}</h1>
+<ol class="breadcrumb">
+    <li class="breadcrumb-item">Home</li>
+    <li class="breadcrumb-item"><a href="/admin">Admin</a></li>
+    <li class="breadcrumb-item active">{_dictionary.main.Links}</li>
+</ol>
 
-<div class="row">
-    <div class="col-lg-3">
-        {control categoryPanel $categoryId}
 
-        <div>{control insertForm}</div>
-    </div>
-    <div class="col-lg-9">
-        <div class="col-md-12">
-            <table class="table table-striped">
-                <tr>
-                    <th class="col-1"></th>
-                    <th>Kategorie</th>
-                    <th class="hidden-xs">Titulek</th>
-                </tr>
-                {foreach $links as $item}
-                    <tr>
-                        <td class="col-1">
-                            <a n:href="delete!, id => $item->id" class="btn"
-                                                                 onclick="return confirm('Opravdu smazat odkaz?')"
-                                                                 role="button">
-                                <i class="fa fa-times text-danger"></i>
-                            </a>
-                        </td>
-                        <td>
-                            <a n:href=":Admin:Links:detail id => $item->id">
-                                {if $item->title}{$item->title}{else}<em>nemá jméno</em>{/if}
-                            </a>
-                        </td>
-                        <td>{$item->links_categories->title}</td>
-                    </tr>
-                {/foreach}
-            </table>
+<div class="container-fluid">
+    <div class="animated fadeIn">
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="card">
+                    <div class="card-header">Kategorie odkazů</div>
+                    <div class="card-block">
+                        {control categoryPanel $categoryId}
+
+                        <div>{control insertForm}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-9">
+                <div class="card">
+                    <div class="card-header">Seznam odkazů</div>
+                    <div class="card-block">
+                        <table class="table table-striped">
+                            <tr>
+                                <th class="col-1"></th>
+                                <th>Kategorie</th>
+                                <th class="hidden-xs">Titulek</th>
+                            </tr>
+                            {foreach $links as $item}
+                                <tr>
+                                    <td class="col-1">
+                                        <a n:href="delete!, id => $item->id" class="btn"
+                                                                             onclick="return confirm('Opravdu smazat odkaz?')"
+                                                                             role="button">
+                                            <i class="fa fa-times text-danger"></i>
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <a n:href=":Admin:Links:detail id => $item->id">
+                                            {if $item->title}{$item->title}{else}<em>nemá jméno</em>{/if}
+                                        </a>
+                                    </td>
+                                    <td>{$item->links_categories->title}</td>
+                                </tr>
+                            {/foreach}
+                        </table>
+
+                    </div>
+                </div>
+            </div>
         </div>
-
     </div>
 </div>

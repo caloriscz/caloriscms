@@ -275,6 +275,7 @@ INSERT INTO `pages` (`id`, `slug`, `title`, `document`, `preview`, `pages_id`, `
   (2, 'kontakt', 'Kontakt', NULL, NULL, NULL, NULL, 1, '', '', NULL, NULL, 9, 5, 19, 0, 0, 1),
   (3, 'blog', 'Blog', '', NULL, NULL, 1, 1, '', '', NULL, NULL, 9, 2, 21, 0, 0, 1),
   (4, 'galerie', 'Galerie', '', NULL, NULL, 1, 1, '', '', NULL, NULL, 9, 2, 1, 0, 0, 1),
+  (4, 'udalosti', 'Události', '', NULL, NULL, 1, 1, '', '', NULL, NULL, 9, 10, 1, 0, 0, 1),
   (5, 'dokumenty', 'Dokumenty', '', NULL, NULL, 1, 1, '', '', NULL, NULL, 9, 2, 1, 0, 0, 1);
 
 CREATE TABLE `pages_related` (
@@ -318,7 +319,7 @@ INSERT INTO `pages_types` (`id`, `content_type`, `presenter`, `action`, `prefix`
   (2, 'Události', 'Front:Events', 'detail', '', 1, 'pages/?type=3', 'fa-calendar-o', 1, 1, 1, 1, 3),
   (6, 'Galerie', 'Front:Media', 'album', '', 1, 'pages/?type=6', 'fa-file-image-o', 0, 1, 1, 1, 4),
   (8, 'Dokumenty', 'Front:Media', 'folder', '', 1, 'pages?type=8', 'fa-files-o', 1, 1, 1, 1, 6),
-  (9, 'Šablony', '', 'default', '', 1, 'pages?type=9', 'fa-th', 1, 1, 1, 1, 1);
+  (9, 'Šablony', '', 'default', '', 1, 'pages?type=9', 'fa-th', 1, 1, 1, 5, 10);
 
 
 CREATE TABLE `param` (
