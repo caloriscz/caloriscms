@@ -2,12 +2,17 @@
 
 namespace Nette\Forms;
 
+use Nette\Application\UI\Form;
+
 /**
  * Simple Nette form renderer with supporting Twitter Bootstrap 3
  */
-class BootstrapUIForm extends \Nette\Application\UI\Form
+class BootstrapUIForm extends Form
 {
 
+    /**
+     * BootstrapUIForm constructor.
+     */
     public function __construct()
     {
         parent::__construct();

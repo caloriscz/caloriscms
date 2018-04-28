@@ -20,8 +20,9 @@ class ChangePortraitControl extends Control
 
     /**
      * Form: User fills in e-mail address to send e-mail with a password generator link
+     * @return BootstrapUIForm
      */
-    protected function createComponentChangePortraitForm()
+    protected function createComponentChangePortraitForm(): BootstrapUIForm
     {
         $form = new BootstrapUIForm();
         $form->setTranslator($this->presenter->translator);
@@ -34,7 +35,10 @@ class ChangePortraitControl extends Control
         return $form;
     }
 
-    public function changePortraitFormSucceeded()
+    /**
+     * @throws \Nette\Application\AbortException
+     */
+    public function changePortraitFormSucceeded(): void
     {
         $membersDb = $this->database->table('users')->where(['id' => $this->presenter->user->getId()]);
 
@@ -52,7 +56,7 @@ class ChangePortraitControl extends Control
         $this->presenter->redirect(':Front:Profile:image');
     }
 
-    public function render()
+    public function render(): void
     {
         $template = $this->getTemplate();
         $template->setFile(__DIR__ . '/ChangePortraitControl.latte');

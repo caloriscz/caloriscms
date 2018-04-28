@@ -26,7 +26,7 @@ class LoadVatControl extends Control
 
         $contact = $this->database->table('contacts')->get($this->presenter->getParameter('id'));
 
-        $form = new \Nette\Forms\BootstrapUIForm();
+        $form = new BootstrapUIForm();
         $form->setTranslator($this->presenter->translator);
         $form->getElementPrototype()->class = 'form-horizontal';
         $form->getElementPrototype()->role = 'form';
@@ -37,10 +37,10 @@ class LoadVatControl extends Control
         $form->addText('vatin', '')
             ->setAttribute('placeholder', 'dictionary.main.VatIn');
 
-        $form->setDefaults(array(
+        $form->setDefaults([
             'contact_id' => $contact->id,
             'pages_id' => $this->presenter->getParameter('id'),
-        ));
+        ]);
 
         $form->addSubmit('submitm', 'Načíst')
             ->setAttribute('class', 'btn btn-success');
@@ -49,7 +49,12 @@ class LoadVatControl extends Control
         return $form;
     }
 
-    public function loadVatFormSucceeded(BootstrapUIForm $form)
+    /**
+     * @param BootstrapUIForm $form
+     * @throws \Nette\Application\AbortException
+     * @throws \h4kuna\Ares\IdentificationNumberNotFoundException
+     */
+    public function loadVatFormSucceeded(BootstrapUIForm $form): void
     {
         if ($form->values->vatin) {
             $ares = new Ares();
@@ -57,17 +62,17 @@ class LoadVatControl extends Control
 
             if (count($aresArr) > 0) {
                 $this->database->table('contacts')
-                    ->where(array(
+                    ->where([
                         'id' => $form->values->contact_id,
-                    ))
-                    ->update(array(
+                    ])
+                    ->update([
                         'name' => $aresArr['company'],
                         'street' => $aresArr['street'],
                         'zip' => $aresArr['zip'],
                         'city' => $aresArr['city'],
                         'vatin' => $aresArr['in'],
                         'vatid' => $aresArr['tin'],
-                    ));
+                    ]);
             } else {
                 $this->presenter->flashMessage($this->translator->translate('messages.sign.NotFound'), 'error');
             }
@@ -75,12 +80,15 @@ class LoadVatControl extends Control
             $this->presenter->flashMessage($this->translator->translate('messages.sign.NotFound'), 'error');
         }
 
-        $this->presenter->redirect(this, array('id' => $form->values->pages_id));
+        $this->presenter->redirect('this', ['id' => $form->values->pages_id]);
     }
 
-    public function render()
+    /**
+     *
+     */
+    public function render(): void
     {
-        $template = $this->template;
+        $template = $this->getTemplate();
         $template->setFile(__DIR__ . '/LoadVatControl.latte');
 
         $template->render();

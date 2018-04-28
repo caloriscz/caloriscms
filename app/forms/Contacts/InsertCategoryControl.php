@@ -12,15 +12,20 @@ class InsertCategoryControl extends Control
     /** @var Context */
     public $database;
 
+    /**
+     * InsertCategoryControl constructor.
+     * @param Context $database
+     */
     public function __construct(Context $database)
     {
         $this->database = $database;
     }
 
     /**
-     * Insert category
+     * Insert Contact category
+     * @return BootstrapUIForm
      */
-    protected function createComponentInsertForm()
+    protected function createComponentInsertForm(): BootstrapUIForm
     {
         $form = new BootstrapUIForm();
         $form->setTranslator($this->presenter->translator);
@@ -34,7 +39,11 @@ class InsertCategoryControl extends Control
         return $form;
     }
 
-    public function validateFormSucceeded(BootstrapUIForm $form)
+    /**
+     * @param BootstrapUIForm $form
+     * @throws \Nette\Application\AbortException
+     */
+    public function validateFormSucceeded(BootstrapUIForm $form): void
     {
         $category = $this->database->table('contacts_categories')->where([
             'parent_id' => $form->values->parent,
@@ -52,15 +61,22 @@ class InsertCategoryControl extends Control
         }
     }
 
-    public function insertFormSucceeded(BootstrapUIForm $form)
+    /**
+     * @param BootstrapUIForm $form
+     * @throws \Nette\Application\AbortException
+     */
+    public function insertFormSucceeded(BootstrapUIForm $form): void
     {
         $category = new Category($this->database);
         $category->setCategory($form->values->title, $form->values->parent);
 
-        $this->presenter->redirect('this', array('id' => null));
+        $this->presenter->redirect('this', ['id' => null]);
     }
 
-    public function render($identifier = null)
+    /**
+     * @param null $identifier
+     */
+    public function render($identifier = null): void
     {
         $this->template->categoryId = $identifier;
         $this->template->setFile(__DIR__ . '/InsertCategoryControl.latte');

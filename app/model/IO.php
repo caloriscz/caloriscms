@@ -30,15 +30,7 @@ class IO
     {
         $path = $pathDirectory . '/' . $fileName;
 
-        if (file_exists($path)) {
-            return false;
-        } elseif ($_FILES['the_file']['tmp_name'] === '') {
-            return false;
-        } else {
-            copy($_FILES['the_file']['tmp_name'], $path);
-            chmod($path, $chmod);
-            return true;
-        }
+        return !(file_exists($path) || $_FILES['the_file']['tmp_name'] === '');
     }
 
     /**

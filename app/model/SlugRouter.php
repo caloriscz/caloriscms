@@ -1,19 +1,19 @@
 <?php
 namespace App;
 
-use Model;
+use Model\SlugManager;
 use Nette\Application as App;
 use Nette;
 use Nette\Http;
 
 
-class SlugRouter extends Nette\Object implements Nette\Application\IRouter
+class SlugRouter implements Nette\Application\IRouter
 {
 
     /** @var SlugManager */
     private $slugManager;
 
-    public function __construct(Model\SlugManager $slugManager)
+    public function __construct(SlugManager $slugManager)
     {
         $this->slugManager = $slugManager;
     }
@@ -29,7 +29,7 @@ class SlugRouter extends Nette\Object implements Nette\Application\IRouter
         $url = $httpRequest->getUrl();
         $path = trim($url->path, $url->scriptPath);
         $params = [];
-        $lang = [];
+        $lang = null;
 
         if ($path !== '') {
             $parts = explode($url->scriptPath, $path, 4);

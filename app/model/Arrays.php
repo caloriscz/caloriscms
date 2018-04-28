@@ -1,11 +1,4 @@
 <?php
-
-/*
- * Caloris
- * @copyright 2015 Petr Karásek (http://caloris.cz)
- * @license http://www.gnu.org/licenses/gpl-3.0.html GNU GPL3
- */
-
 namespace App\Model;
 
 /**
@@ -17,17 +10,17 @@ class Arrays
 
     /**
      *  Uploads file
+     * @param $haystack
+     * @param $needles
+     * @return bool|int
      */
     public static function strpos($haystack, $needles)
     {
-        if (is_array($needles)) {
+        if (\is_array($needles)) {
             foreach ($needles as $str) {
-                if (is_array($str)) {
-                    $pos = strpos_array($haystack, $str);
-                } else {
-                    $pos = strpos($haystack, $str);
-                }
-                if ($pos !== FALSE) {
+                $pos = \is_array($str) ? strpos_array($haystack, $str) : strpos($haystack, $str);
+
+                if ($pos !== false) {
                     return $pos;
                 }
             }

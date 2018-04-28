@@ -22,7 +22,10 @@ class LinksPresenter extends BasePresenter
             ->get($this->getParameter('id'));
     }
 
-    protected function createComponentCategoryPanel()
+    /**
+     * @return CategoryPanelControl
+     */
+    protected function createComponentCategoryPanel(): CategoryPanelControl
     {
 
         return new CategoryPanelControl($this->database);
@@ -31,7 +34,7 @@ class LinksPresenter extends BasePresenter
     /**
      * Insert contact
      */
-    function createComponentInsertForm()
+    public function createComponentInsertForm()
     {
         $form = new BootstrapUIForm();
         $form->setTranslator($this->translator);
@@ -44,7 +47,10 @@ class LinksPresenter extends BasePresenter
         return $form;
     }
 
-    function insertFormSucceeded()
+    /**
+     * @throws \Nette\Application\AbortException
+     */
+    public function insertFormSucceeded()
     {
         $id = $this->database->table('links')
             ->insert([
@@ -56,8 +62,10 @@ class LinksPresenter extends BasePresenter
 
     /**
      * Delete contact
+     * @param $id
+     * @throws \Nette\Application\AbortException
      */
-    function handleDelete($id)
+    public function handleDelete($id)
     {
         $this->database->table('links')->get($id)->delete();
 
@@ -66,6 +74,7 @@ class LinksPresenter extends BasePresenter
 
     /**
      * Edit contact
+     * @return BootstrapUIForm
      */
     function createComponentEditForm()
     {
@@ -100,18 +109,22 @@ class LinksPresenter extends BasePresenter
         return $form;
     }
 
+    /**
+     * @param BootstrapUIForm $form
+     * @throws \Nette\Application\AbortException
+     */
     function editFormSucceeded(BootstrapUIForm $form)
     {
         $this->database->table('links')
-            ->where(array(
+            ->where([
                 'id' => $form->values->id,
-            ))
-            ->update(array(
+            ])
+            ->update([
                 'title' => $form->values->title,
                 'url' => $form->values->url,
                 'links_categories_id' => $form->values->category,
                 'description' => $form->values->description,
-            ));
+            ]);
 
         $uid = Strings::padLeft($form->values->id, 6, '0');
 
@@ -124,6 +137,10 @@ class LinksPresenter extends BasePresenter
         $this->redirect(':Admin:Links:detail', ['id' => $form->values->id]);
     }
 
+    /**
+     * @param $id
+     * @throws \Nette\Application\AbortException
+     */
     function handleDeleteImage($id)
     {
         IO::remove(APP_DIR . '/links/' . Strings::padLeft($id, 6, '0') . '.jpg');
@@ -132,6 +149,8 @@ class LinksPresenter extends BasePresenter
 
     /**
      * Delete group
+     * @param $id
+     * @throws \Nette\Application\AbortException
      */
     function handleDeleteCategory($id)
     {

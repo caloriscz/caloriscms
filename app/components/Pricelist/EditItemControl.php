@@ -4,37 +4,47 @@ namespace Caloriscz\Pricelist;
 
 use Nette\Application\UI\Control;
 use Nette\Database\Context;
+use Nette\Forms\BootstrapUIForm;
+use Nette\Forms\Form;
 
+/**
+ * Menu Editor
+ * @package Caloriscz\Pricelist
+ */
 class EditItemControl extends Control
 {
 
     /** @var Context */
     public $database;
 
+    /**
+     * EditItemControl constructor.
+     * @param Context $database
+     */
     public function __construct(Context $database)
     {
         $this->database = $database;
     }
 
     /**
-     * Menu Edit
+     * @return BootstrapUIForm
      */
     protected function createComponentEditForm()
     {
         $item = $this->database->table('pricelist')->get($this->presenter->getParameter('id'));
-        $form = new \Nette\Forms\BootstrapUIForm();
+        $form = new BootstrapUIForm();
         $form->setTranslator($this->presenter->translator);
         $form->getElementPrototype()->class = 'form-horizontal';
         $form->getElementPrototype()->role = 'form';
         $form->getElementPrototype()->autocomplete = 'off';
         $form->addHidden('id');
         $form->addText('title', 'Výkon')
-            ->addRule(\Nette\Forms\Form::MIN_LENGTH, 'Zadávajte delší text', 1);
+            ->addRule(Form::MIN_LENGTH, 'Zadávajte delší text', 1);
         $form->addTextArea('description', 'Popis')
-            ->addRule(\Nette\Forms\Form::MIN_LENGTH, 'Zadávajte delší text', 1)
+            ->addRule(Form::MIN_LENGTH, 'Zadávajte delší text', 1)
             ->setHtmlId('wysiwyg-sm');
         $form->addText('price', 'Cena')
-            ->addRule(\Nette\Forms\Form::INTEGER, 'Zadávajte pouze čísla')
+            ->addRule(Form::INTEGER, 'Zadávajte pouze čísla')
             ->setAttribute('style', 'width: 80px; text-align: right;');
         $form->addText('price_info'
             . '', 'Info za cenou');
@@ -54,7 +64,11 @@ class EditItemControl extends Control
         return $form;
     }
 
-    public function editFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
+    /**
+     * @param BootstrapUIForm $form
+     * @throws \Nette\Application\AbortException
+     */
+    public function editFormSucceeded(BootstrapUIForm $form)
     {
         $this->database->table("pricelist")->where([
             "id" => $form->values->id,

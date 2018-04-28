@@ -36,9 +36,9 @@ class InsertAddressControl extends Control
         $form->addText('zip', 'dictionary.main.ZIP');
         $form->addText('city', 'dictionary.main.City');
 
-        $form->setDefaults(array(
+        $form->setDefaults([
             'contacts_group_id' => 2,
-        ));
+        ]);
 
         $form->addSubmit('submitm', 'dictionary.main.Save');
         $form->onSuccess[] = [$this, 'insertFormSucceeded'];

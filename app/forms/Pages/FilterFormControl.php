@@ -16,7 +16,10 @@ class FilterFormControl extends Control
         $this->database = $database;
     }
 
-    protected function createComponentFilterForm()
+    /**
+     * @return BootstrapUIForm
+     */
+    protected function createComponentFilterForm(): BootstrapUIForm
     {
         $form = new BootstrapUIForm();
         $form->setTranslator($this->presenter->translator);
@@ -36,7 +39,11 @@ class FilterFormControl extends Control
         return $form;
     }
 
-    public function filterFormSucceeded(BootstrapUIForm $form)
+    /**
+     * @param BootstrapUIForm $form
+     * @throws \Nette\Application\AbortException
+     */
+    public function filterFormSucceeded(BootstrapUIForm $form): void
     {
         $this->presenter->redirect('this', [
             'id' => $form->values->id,

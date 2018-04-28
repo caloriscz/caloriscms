@@ -21,6 +21,7 @@ class InsertContactForMemberControl extends Control
 
     /**
      * Insert contact
+     * @return BootstrapUIForm
      */
     public function createComponentInsertForm(): BootstrapUIForm
     {
@@ -43,7 +44,11 @@ class InsertContactForMemberControl extends Control
         return $form;
     }
 
-    public function insertFormValidated(BootstrapUIForm $form)
+    /**
+     * @param BootstrapUIForm $form
+     * @throws \Nette\Application\AbortException
+     */
+    public function insertFormValidated(BootstrapUIForm $form): void
     {
         if (!$this->presenter->template->member->users_roles->members) {
             $this->presenter->flashMessage($this->translator->translate('messages.members.PermissionDenied'), 'error');
@@ -51,7 +56,11 @@ class InsertContactForMemberControl extends Control
         }
     }
 
-    public function insertFormSucceeded(BootstrapUIForm $form)
+    /**
+     * @param BootstrapUIForm $form
+     * @throws \Nette\Application\AbortException
+     */
+    public function insertFormSucceeded(BootstrapUIForm $form): void
     {
         $arr = [
             'pages_id' => $page,
@@ -63,7 +72,7 @@ class InsertContactForMemberControl extends Control
         $this->database->table('contacts')
             ->insert($arr);
 
-        $this->presenter->redirect(this, array('id' => $form->values->page));
+        $this->presenter->redirect(this, ['id' => $form->values->page]);
     }
 
     public function render()

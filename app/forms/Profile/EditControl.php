@@ -25,8 +25,9 @@ class EditControl extends Control
 
     /**
      * Edit by user
+     * @return BootstrapUIForm
      */
-    protected function createComponentEditForm()
+    protected function createComponentEditForm(): BootstrapUIForm
     {
         $form = new BootstrapUIForm();
         $form->setTranslator($this->presenter->translator);
@@ -36,24 +37,24 @@ class EditControl extends Control
         $form->addText('name');
         $form->addCheckbox('adminbar')
             ->setDefaultValue($this->presenter->template->member->adminbar_enabled);
-        $form->addSelect('language', '', array('cs' => 'česky', 'en' => 'English'));
+        $form->addSelect('language', '', ['cs' => 'česky', 'en' => 'English']);
 
-        $form->setDefaults(array(
+        $form->setDefaults([
             'name' => $this->presenter->template->member->name,
             'email' => $this->presenter->template->member->email,
             'language' => $this->presenter->request->getCookie('language_admin')
-        ));
+        ]);
 
         $form->addSubmit('submit');
 
-        $form->onSuccess[] = array($this, 'editFormSucceeded');
-        $form->onValidate[] = array($this, 'validateFormSucceeded');
+        $form->onSuccess[] = [$this, 'editFormSucceeded'];
+        $form->onValidate[] = [$this, 'validateFormSucceeded'];
         return $form;
     }
 
     public function validateFormSucceeded(BootstrapUIForm $form)
     {
-        if (Validators::isEmail($form->values->email) == false) {
+        if (Validators::isEmail($form->values->email) === false) {
             $this->onSave('E-mail je povinný');
         }
 
@@ -68,7 +69,7 @@ class EditControl extends Control
      * Edit user settings by user
      * @param BootstrapUIForm $form
      */
-    public function editFormSucceeded(BootstrapUIForm $form)
+    public function editFormSucceeded(BootstrapUIForm $form): void
     {
         $this->database->table('users')->get($this->presenter->user->getId())->update(array(
             'name' => $form->values->name,

@@ -2,8 +2,13 @@
 
 namespace App\AdminModule\Presenters;
 
-use Nette,
-    App\Model;
+use Caloriscz\Pricelist\CategoryControl;
+use Caloriscz\Pricelist\EditItemControl;
+use Caloriscz\Pricelist\NewItemControl;
+use Joseki\Application\Responses\PdfResponse;
+use Latte\Engine;
+use Nette\Forms\BootstrapUIForm;
+use Nette\Forms\Form;
 
 /**
  * Pricelist presenter.
@@ -13,20 +18,17 @@ class PricelistPresenter extends BasePresenter
 
     protected function createComponentPricelistCategory()
     {
-        $control = new \Caloriscz\Pricelist\CategoryControl($this->database);
-        return $control;
+        return new CategoryControl($this->database);
     }
 
     protected function createComponentPricelistNewItem()
     {
-        $control = new \Caloriscz\Pricelist\NewItemControl($this->database);
-        return $control;
+        return new NewItemControl($this->database);
     }
 
     protected function createComponentPricelistEditItem()
     {
-        $control = new \Caloriscz\Pricelist\EditItemControl($this->database);
-        return $control;
+        return new EditItemControl($this->database);
     }
 
     /**
@@ -35,32 +37,36 @@ class PricelistPresenter extends BasePresenter
     protected function createComponentInsertDayForm()
     {
         for ($d = 0; $d < 30; $d++) {
-            $dateExists = $this->database->table("pricelist_dates")->where(array(
-                "day" => date("Y-m-d", mktime(0, 0, 0, date("m"), date("d") + $d, date("Y")))));
+            $dateExists = $this->database->table('pricelist_dates')->where(array(
+                'day' => date('Y-m-d', mktime(0, 0, 0, date('m'), date('d') + $d, date('Y')))));
 
-            if ($dateExists->count() == 0) {
-                $dates[date("Y-m-d", mktime(0, 0, 0, date("m"), date("d") + $d, date("Y")))] = date("j.n. Y", mktime(0, 0, 0, date("m"), date("d") + $d, date("Y")));
+            if ($dateExists->count() === 0) {
+                $dates[date('Y-m-d', mktime(0, 0, 0, date('m'), date('d') + $d, date('Y')))] = date('j.n. Y', mktime(0, 0, 0, date('m'), date('d') + $d, date('Y')));
             }
         }
 
-        $form = $this->baseFormFactory->createUI();
+        $form = new BootstrapUIForm();
+        $form->setTranslator($this->presenter->translator);
+        $form->getElementPrototype()->class = 'form-horizontal';
+        $form->getElementPrototype()->role = 'form';
+        $form->getElementPrototype()->autocomplete = 'off';
 
         $form->addSelect('day', 'Den', $dates)
-            ->setAttribute("class", "form-control")
-            ->setAttribute("style", "width: 120px;");
+            ->setAttribute('class', 'form-control')
+            ->setAttribute('style', 'width: 120px;');
         $form->addSubmit('submitm', 'Přidat');
 
         $form->onSuccess[] = $this->insertDayFormSucceeded;
         return $form;
     }
 
-    public function insertDayFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
+    public function insertDayFormSucceeded(BootstrapUIForm $form)
     {
-        $id = $this->database->table("pricelist_dates")->insert(array(
-            "day" => $form->values->day,
-        ));
+        $id = $this->database->table('pricelist_dates')->insert([
+            'day' => $form->values->day,
+        ]);
 
-        $this->redirect(":Admin:Pricelist:daily", array("day" => $id->id));
+        $this->redirect(':Admin:Pricelist:daily', ['day' => $id->id]);
     }
 
     /**
@@ -68,22 +74,22 @@ class PricelistPresenter extends BasePresenter
      */
     protected function createComponentInsertDailyForm()
     {
-        $category = $this->database->table("pricelist_categories")->order("id")->fetchPairs('id', 'title');
+        $category = $this->database->table('pricelist_categories')->order('id')->fetchPairs('id', 'title');
         $form = $this->baseFormFactory->createUI();
 
         $form->addHidden('day');
         $form->addTextarea('title', 'dictionary.main.Title')
-            ->setHtmlId("wysiwyg-sm")
-            ->setAttribute("class", "form-control")
-            ->addRule(\Nette\Forms\Form::MIN_LENGTH, 'Zadávejte delší text', 1);
+            ->setHtmlId('wysiwyg-sm')
+            ->setAttribute('class', 'form-control')
+            ->addRule(Form::MIN_LENGTH, 'Zadávejte delší text', 1);
         $form->addSelect('category', 'Kategorie', $category)
-            ->setAttribute("class", "form-control");
+            ->setAttribute('class', 'form-control');
         $form->addText('price', 'dictionary.main.Price')
-            ->addRule(\Nette\Forms\Form::INTEGER, 'Zadávajte pouze čísla')
-            ->setAttribute("style", "width: 50px; text-align: right;");
+            ->addRule(Form::INTEGER, 'Zadávajte pouze čísla')
+            ->setAttribute('style', 'width: 50px; text-align: right;');
 
         $form->setDefaults(array(
-            "day" => $this->getParameter("day"),
+            'day' => $this->getParameter('day'),
         ));
 
         $form->addSubmit('submitm', 'dictionary.main.Insert');
@@ -94,124 +100,99 @@ class PricelistPresenter extends BasePresenter
 
     public function insertDailyFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
     {
-        $this->database->table("pricelist_daily")->insert(array(
-            "title" => $form->values->title,
-            "pricelist_categories_id" => $form->values->category,
-            "price" => $form->values->price,
-            "pricelist_dates_id" => $form->values->day,
+        $this->database->table('pricelist_daily')->insert(array(
+            'title' => $form->values->title,
+            'pricelist_categories_id' => $form->values->category,
+            'price' => $form->values->price,
+            'pricelist_dates_id' => $form->values->day,
         ));
 
-        $this->redirect(":Admin:Pricelist:daily", array("day" => $form->values->day));
+        $this->redirect(':Admin:Pricelist:daily', ['day' => $form->values->day]);
     }
 
     /**
      * Delete food
      */
-    function handleDelete($id)
+    public function handleDelete($id)
     {
-        $this->database->table("pricelist")->get($id)->delete();
+        $this->database->table('pricelist')->get($id)->delete();
 
-        $this->redirect(":Admin:Pricelist:default", array("id" => null));
+        $this->redirect(':Admin:Pricelist:default', ['id' => null]);
     }
 
     /**
      * Delete daily food
      */
-    function handleDeleteDaily($id, $day)
+    public function handleDeleteDaily($id, $day)
     {
-        $this->database->table("pricelist_daily")->get($id)->delete();
+        $this->database->table('pricelist_daily')->get($id)->delete();
 
-        $this->redirect(":Admin:Pricelist:daily", array("day" => $day));
+        $this->redirect(':Admin:Pricelist:daily', ['day' => $day]);
     }
 
     /**
      * Delete daily food
      */
-    function handleDeleteDay($id)
+    public function handleDeleteDay($id)
     {
-        $this->database->table("pricelist_dates")->where(array("id" => $id))->delete();
+        $this->database->table('pricelist_dates')->where(['id' => $id])->delete();
 
-        $this->redirect(":Admin:Pricelist:days");
+        $this->redirect(':Admin:Pricelist:days');
     }
 
-    function handleUp($id, $sorted, $category)
+    public function handleUp($id, $sorted, $category)
     {
-        $sortDb = $this->database->table("pricelist")->where(array(
-            "sorted > ?" => $sorted,
-            "pricelist_categories_id" => $category,
-        ))->order("sorted")->limit(1);
+        $sortDb = $this->database->table('pricelist')->where([
+            'sorted > ?' => $sorted,
+            'pricelist_categories_id' => $category,
+        ])->order('sorted')->limit(1);
         $sort = $sortDb->fetch();
 
         if ($sortDb->count() > 0) {
-            $this->database->table("pricelist")->where(array("id" => $id))->update(array("sorted" => $sort->sorted));
-            $this->database->table("pricelist")->where(array("id" => $sort->id))->update(array("sorted" => $sorted));
+            $this->database->table('pricelist')->where(['id' => $id])->update(['sorted' => $sort->sorted]);
+            $this->database->table('pricelist')->where(['id' => $sort->id])->update(['sorted' => $sorted]);
         }
 
-        $this->redirect(":Admin:Pricelist:default", array("id" => null));
+        $this->redirect(':Admin:Pricelist:default', ['id' => null]);
     }
 
-    function handleDown($id, $sorted, $category)
+    public function handleDown($id, $sorted, $category)
     {
-        $sortDb = $this->database->table("pricelist")->where(array(
-            "sorted < ?" => $sorted,
-            "pricelist_categories_id" => $category,
-        ))->order("sorted DESC")->limit(1);
+        $sortDb = $this->database->table('pricelist')->where([
+            'sorted < ?' => $sorted,
+            'pricelist_categories_id' => $category,
+        ])->order('sorted DESC')->limit(1);
         $sort = $sortDb->fetch();
 
         if ($sortDb->count() > 0) {
-            $this->database->table("pricelist")->where(array("id" => $id))->update(array("sorted" => $sort->sorted));
-            $this->database->table("pricelist")->where(array("id" => $sort->id))->update(array("sorted" => $sorted));
+            $this->database->table('pricelist')->where(['id' => $id])->update(['sorted' => $sort->sorted]);
+            $this->database->table('pricelist')->where(['id' => $sort->id])->update(['sorted' => $sorted]);
         }
 
-        $this->redirect(":Admin:Pricelist:default", array("id" => null));
+        $this->redirect(':Admin:Pricelist:default', ['id' => null]);
     }
 
     public function renderDefault()
     {
         $this->template->database = $this->database;
 
-        $this->template->pricelist = $this->database->table("pricelist")
-            ->select("pricelist.id, pricelist.pricelist_categories_id, pricelist.title AS amenu, pricelist.sorted, pricelist.price, pricelist_categories.title")
-            ->order("pricelist_categories_id, sorted DESC");
+        $this->template->pricelist = $this->database->table('pricelist')
+            ->select('pricelist.id, pricelist.pricelist_categories_id, pricelist.title AS amenu, pricelist.sorted, pricelist.price, pricelist_categories.title')
+            ->order('pricelist_categories_id, sorted DESC');
     }
 
     public function renderDays()
     {
-        $this->template->days = $this->database->table("pricelist_dates")->order("day");
+        $this->template->days = $this->database->table('pricelist_dates')->order('day');
     }
 
     public function renderDaily()
     {
 
-        $this->template->menu = $this->database->table("pricelist_daily")
-            ->select("pricelist_daily.id, pricelist_daily.pricelist_dates_id, pricelist_daily.categories_id, "
-                . "pricelist_daily.title AS amenu, pricelist_daily.price, pricelist_categories.title")
-            ->where(array("pricelist_daily.pricelist_dates_id" => $this->getParameter("day")))
-            ->order("categories_id");
+        $this->template->menu = $this->database->table('pricelist_daily')
+            ->select('pricelist_daily.id, pricelist_daily.pricelist_dates_id, pricelist_daily.categories_id, '
+                . 'pricelist_daily.title AS amenu, pricelist_daily.price, pricelist_categories.title')
+            ->where(['pricelist_daily.pricelist_dates_id' => $this->getParameter('day')])
+            ->order('categories_id');
     }
-
-    function handleGeneratePdf($id)
-    {
-        $file = substr(APP_DIR, 0, -4) . '/app/AdminModule/templates';
-
-        $pricelist = $this->database->table("pricelist")
-            ->select("pricelist.id, pricelist.categories_id, pricelist.title AS amenu, pricelist.sorted, pricelist.price, categories.title")
-            ->order("categories_id, sorted DESC");
-
-
-        $params = array(
-            'pricelist' => $pricelist,
-            'settings' => $this->template->settings,
-        );
-
-        $latte = new \Latte\Engine;
-        $template = $latte->renderToString($file . "/components/pricelist.latte", $params);
-        $pdf = new \Joseki\Application\Responses\PdfResponse($template);
-        $pdf->setSaveMode(\Joseki\Application\Responses\PdfResponse::INLINE);
-        //$pdf->save(APP_DIR . '/files/invoices-125/', 'ivt-' . $order->oid . '.pdf');
-        //echo APP_DIR . '/files/invoices-125' . '/' .  'ivt-' . $order->oid . '.pdf';
-        //$pdf->setSaveMode(\Joseki\Application\Responses\PdfResponse::DOWNLOAD); //default behavior
-        $this->sendResponse($pdf);
-    }
-
 }

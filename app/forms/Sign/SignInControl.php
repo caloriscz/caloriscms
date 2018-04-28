@@ -41,6 +41,11 @@ class SignInControl extends Control
         return $form;
     }
 
+    /**
+     * @param $form
+     * @param $values
+     * @throws \Nette\Application\AbortException
+     */
     public function signInFormSucceeded($form, $values)
     {
         $member = new MemberModel($this->database);
@@ -59,7 +64,7 @@ class SignInControl extends Control
         try {
             $this->getPresenter()->getUser()->login($values->username, $values->password);
 
-            if ($form->values->type == 'admin') {
+            if ($form->values->type === 'admin') {
                 $role = $this->getPresenter()->user->getRoles();
                 $roleCheck = $this->database->table('users_roles')->get($role[0]);
 
@@ -67,14 +72,14 @@ class SignInControl extends Control
                     $this->getPresenter()->flashMessage($this->getPresenter()->translator->translate('messages.sign.no-access'), 'error');
                     $this->getPresenter()->redirect(':Admin:Sign:in');
                 } else {
-                    $this->database->table('users')->get($this->getPresenter()->user->getId())->update(array('date_visited' => date('Y-m-d H:i:s')));
+                    $this->database->table('users')->get($this->getPresenter()->user->getId())->update(['date_visited' => date('Y-m-d H:i:s')]);
                 }
             }
 
-            $this->database->table('users')->get($this->getPresenter()->user->getId())->update(array(
+            $this->database->table('users')->get($this->getPresenter()->user->getId())->update([
                 'date_visited' => date('Y-m-d H:i:s'),
                 'login_success' => new SqlLiteral('login_success + 1')
-            ));
+            ]);
 
             $this->getPresenter()->redirect(':' . $typeUrl . ':Homepage:default');
         } catch (AuthenticationException $e) {
@@ -91,7 +96,7 @@ class SignInControl extends Control
     {
         $templateName = 'SignInAdminControl';
 
-        if ($type == 'front') {
+        if ($type === 'front') {
             $templateName = 'SignInFrontControl';
         }
 

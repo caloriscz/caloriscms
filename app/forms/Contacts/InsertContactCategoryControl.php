@@ -3,6 +3,7 @@
 namespace App\Forms\Contacts;
 
 use App\Model\Category;
+use App\Model\Slug;
 use Nette\Application\UI\Control;
 use Nette\Database\Context;
 use Nette\Forms\BootstrapUIForm;
@@ -19,7 +20,8 @@ class InsertContactCategoryControl extends Control
     }
 
     /**
-     * Insert category
+     * Insert contact category
+     * @return BootstrapUIForm
      */
     protected function createComponentInsertCategoryForm()
     {
@@ -41,30 +43,38 @@ class InsertContactCategoryControl extends Control
         return $form;
     }
 
-    public function validateCategoryFormSucceeded(BootstrapUIForm $form)
+    /**
+     * @param BootstrapUIForm $form
+     * @throws \Nette\Application\AbortException
+     */
+    public function validateCategoryFormSucceeded(BootstrapUIForm $form): void
     {
         $redirectTo = $this->presenter->getName();
 
-        $category = $this->database->table('contacts_categories')->where(array(
+        $category = $this->database->table('contacts_categories')->where([
             'parent_id' => $form->values->parent_id,
             'title' => $form->values->title,
-        ));
+        ]);
 
         if ($category->count() > 0) {
             $this->flashMessage($this->translator->translate('messages.sign.categoryAlreadyExists'), 'error');
-            $this->redirect(':' . $redirectTo . ':default', array('id' => null));
+            $this->redirect(':' . $redirectTo . ':default', ['id' => null]);
         }
 
-        if ($form->values->title == '') {
+        if ($form->values->title === '') {
             $this->flashMessage($this->translator->translate('messages.sign.categoryMustHaveSomeName'), 'error');
-            $this->redirect(':' . $redirectTo . ':default', array('id' => null));
+            $this->redirect(':' . $redirectTo . ':default', ['id' => null]);
         }
     }
 
-    public function insertCategoryFormSucceeded(BootstrapUIForm $form)
+    /**
+     * @param BootstrapUIForm $form
+     * @throws \Nette\Application\AbortException
+     */
+    public function insertCategoryFormSucceeded(BootstrapUIForm $form): void
     {
         if (is_numeric($form->values->type)) {
-            $slugName = new \App\Model\Slug($this->database);
+            $slugName = new Slug($this->database);
             $slugId = $slugName->insert($form->values->title, $form->values->type);
         }
 
@@ -73,11 +83,10 @@ class InsertContactCategoryControl extends Control
 
         $redirectTo = $this->presenter->getName();
 
-        $this->presenter->redirect(':' . $redirectTo . ':default', array('id' => $form->values->parent_id));
+        $this->presenter->redirect(':' . $redirectTo . ':default', ['id' => $form->values->parent_id]);
     }
 
     /**
-     *
      * @param type $id
      * @param type $type Specifies type of category: store, media, blog, menu etc. Some categories have special needs
      */

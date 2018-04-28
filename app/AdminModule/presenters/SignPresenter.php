@@ -49,6 +49,9 @@ class SignPresenter extends BasePresenter
         return $control;
     }
 
+    /**
+     * @return SignInControl
+     */
     protected function createComponentSignIn()
     {
         $control = new SignInControl($this->database);

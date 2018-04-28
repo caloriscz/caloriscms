@@ -59,7 +59,7 @@ class EventsCalendarControl extends Control
     
     function getMonthNameInCzech($monthNumber)
     {
-        $months = array(
+        $months = [
           1 => 'leden',
           2 => 'únor',
           3 => 'březen',
@@ -71,8 +71,8 @@ class EventsCalendarControl extends Control
           9 => 'září',
           10 => 'říjen',
           11 => 'listopad',
-          12 => 'prosinec',
-        );
+          12 => 'prosinec'
+        ];
         
         return $months[$monthNumber];
     }

@@ -15,6 +15,9 @@ class VerifyAccountControl extends Control
         $this->database = $database;
     }
 
+    /**
+     * @throws \Nette\Application\AbortException
+     */
     public function handleCheck()
     {
         $userLoggedDb = $this->database->table('users')->where(array(

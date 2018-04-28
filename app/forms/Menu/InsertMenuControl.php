@@ -25,10 +25,7 @@ class InsertMenuControl extends Control
         $form->getElementPrototype()->role = 'form';
         $form->getElementPrototype()->autocomplete = 'off';
 
-        $languages = $this->database->table('languages')->where([
-            'default' => null,
-            'used' => 1,
-        ]);
+        $languages = $this->database->table('languages')->where(['default' => null, 'used' => 1]);
 
         if ($languages->count() > 1) {
             $form->addGroup('čeština');
@@ -59,7 +56,11 @@ class InsertMenuControl extends Control
         return $form;
     }
 
-    public function validateFormSucceeded(BootstrapUIForm $form)
+    /**
+     * @param BootstrapUIForm $form
+     * @throws \Nette\Application\AbortException
+     */
+    public function validateFormSucceeded(BootstrapUIForm $form): void
     {
         $arr = [
             'parent_id' => $form->values->parent,
@@ -81,7 +82,11 @@ class InsertMenuControl extends Control
         }
     }
 
-    public function insertFormSucceeded(BootstrapUIForm $form)
+    /**
+     * @param BootstrapUIForm $form
+     * @throws \Nette\Application\AbortException
+     */
+    public function insertFormSucceeded(BootstrapUIForm $form): void
     {
         if (is_numeric($form->values->parent) === false) {
             $arr['parent_id'] = null;
@@ -92,10 +97,10 @@ class InsertMenuControl extends Control
         $arr['title'] = $form->values->title;
         $arr['url'] = $form->values->url;
 
-        $languages = $this->database->table('languages')->where(array(
+        $languages = $this->database->table('languages')->where([
             'default' => null,
             'used' => 1,
-        ));
+        ]);
 
         foreach ($languages as $item) {
             $arr['url_' . $item->code] = $form->values->{'url_' . $item->code};
@@ -105,17 +110,20 @@ class InsertMenuControl extends Control
         $this->database->table('menu')->insert($arr);
         $this->database->query('SET @i = 1;UPDATE `menu` SET `sorted` = @i:=@i+2 ORDER BY `sorted` ASC');
 
-        $this->presenter->redirect('this', array('id' => null));
+        $this->presenter->redirect('this', ['id' => null]);
     }
 
-    public function render($menuId = null)
+    /**
+     * @param null $menuId
+     */
+    public function render($menuId = null): void
     {
         $template = $this->getTemplate();
         $template->menuId = $menuId;
-        $template->languages = $this->database->table('languages')->where(array(
+        $template->languages = $this->database->table('languages')->where([
             'default' => null,
             'used' => 1,
-        ));
+        ]);
 
         $template->setFile(__DIR__ . '/InsertMenuControl.latte');
         $template->render();

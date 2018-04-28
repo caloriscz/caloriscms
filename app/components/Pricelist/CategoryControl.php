@@ -2,6 +2,8 @@
 
 namespace Caloriscz\Pricelist;
 
+use Joseki\Application\Responses\PdfResponse;
+use Latte\Engine;
 use Nette\Application\UI\Control;
 use Nette\Database\Context;
 use Nette\Forms\BootstrapUIForm;
@@ -12,13 +14,48 @@ class CategoryControl extends Control
     /** @var Context */
     public $database;
 
+    /**
+     * CategoryControl constructor.
+     * @param Context $database
+     */
     public function __construct(Context $database)
     {
         $this->database = $database;
     }
 
     /**
+     * Generate PDF
+     * @param $id
+     * @throws \Nette\Application\AbortException
+     */
+    public function handleGeneratePdf($id)
+    {
+        $file = substr(APP_DIR, 0, -4) . '/app/AdminModule/templates/Pricelist';
+
+        $pricelist = $this->database->table('pricelist')
+            ->select('pricelist.id, pricelist.pricelist_categories_id, pricelist.title AS amenu, pricelist.sorted, pricelist.price, pricelist_categories.title')
+            ->order('pricelist_categories_id, sorted DESC');
+
+        $params = [
+            'pricelist' => $pricelist,
+            'settings' => $this->presenter->template->settings,
+        ];
+
+        $latte = new Engine();
+        $template = $latte->renderToString($file . '/pricelist.latte', $params);
+        $pdf = new PdfResponse($template);
+
+        $pdf->documentTitle = 'Ceník';
+
+        $pdf->setSaveMode(PdfResponse::INLINE);
+        $pdf->save(APP_DIR . '/files/pdf/', 'ivt-' . '.pdf');
+        $pdf->setSaveMode(PdfResponse::DOWNLOAD); //default behavior
+        $this->presenter->sendResponse($pdf);
+    }
+
+    /**
      * Insert category
+     * @return BootstrapUIForm
      */
     protected function createComponentInsertCategoryForm()
     {
@@ -40,6 +77,10 @@ class CategoryControl extends Control
         return $form;
     }
 
+    /**
+     * @param BootstrapUIForm $form
+     * @throws \Nette\Application\AbortException
+     */
     public function validateCategoryFormSucceeded(BootstrapUIForm $form)
     {
         $redirectTo = $this->presenter->getName();
@@ -60,6 +101,10 @@ class CategoryControl extends Control
         }
     }
 
+    /**
+     * @param BootstrapUIForm $form
+     * @throws \Nette\Application\AbortException
+     */
     public function insertCategoryFormSucceeded(BootstrapUIForm $form)
     {
         $this->database->table('pricelist_categories')->insert([
@@ -73,6 +118,7 @@ class CategoryControl extends Control
     public function render()
     {
         $template = $this->getTemplate();
+        $categoryId = null;
 
         $getParams = $this->getParameters();
         unset($getParams['page']);
@@ -80,8 +126,16 @@ class CategoryControl extends Control
 
         $template->setFile(__DIR__ . '/CategoryControl.latte');
 
-        $template->idActive = $this->presenter->getParameter('id');
-        $template->menu = $this->database->table('pricelist_categories');
+        if ($this->presenter->getParameter('id')) {
+            $categoryId = $this->presenter->getParameter('id');
+        }
+
+        $arr['parent_id'] = $categoryId;
+        $arr['pricelist_lists_id'] = $this->presenter->getParameter('pricelist');
+
+        $template->database = $this->database;
+        $template->menuList = $this->database->table('pricelist_lists')->order('title');
+        $template->menu = $this->database->table('pricelist_categories')->where($arr)->order('sorted');
         $template->render();
     }
 

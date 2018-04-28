@@ -19,17 +19,18 @@ class SortingFormControl extends Control
 
     /**
      * Sorting form
+     * @return BootstrapUIForm
      */
-    protected function createComponentSortingForm()
+    protected function createComponentSortingForm(): BootstrapUIForm
     {
-        $sortCols = array(
+        $sortCols = [
             'dd' => 'dictionary.sorting.new',
             'da' => 'dictionary.sorting.old',
             'pa' => 'dictionary.sorting.cheap',
             'pd' => 'dictionary.sorting.expensive',
             'na' => 'dictionary.sorting.az',
             'nd' => 'dictionary.sorting.za',
-        );
+        ];
 
         if ($this->presenter->getParameter("o") === '') {
             $sort = 'dd';
@@ -75,7 +76,11 @@ class SortingFormControl extends Control
         return $form;
     }
 
-    public function sortingFormSucceeded(BootstrapUIForm $form)
+    /**
+     * @param BootstrapUIForm $form
+     * @throws \Nette\Application\AbortException
+     */
+    public function sortingFormSucceeded(BootstrapUIForm $form): void
     {
         $filter = array_filter($form->getValues(TRUE));
         unset($filter['do'], $filter['action'], $filter['category']);
@@ -86,7 +91,7 @@ class SortingFormControl extends Control
         $this->presenter->redirectUrl('/' . $page->slug . '?' . http_build_query($filter));
     }
 
-    public function render()
+    public function render(): void
     {
         $template = $this->getTemplate();
         $template->setFile(__DIR__ . '/SortingFormControl.latte');

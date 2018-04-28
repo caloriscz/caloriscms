@@ -40,14 +40,14 @@ class ParamSearchControl extends Control
         $form->addHidden('brand');
         $form->addHidden('category');
 
-        $form->setDefaults(array(
+        $form->setDefaults([
             'idr' => $this->presenter->getParameter('id'),
             'src' => $this->presenter->getParameter('src'),
             'priceFrom' => $this->presenter->getParameter('priceFrom'),
             'priceTo' => $this->presenter->getParameter('priceTo'),
             'brand' => $this->presenter->getParameter('brand'),
             'category' => $this->presenter->getParameter('page_id'),
-        ));
+        ]);
 
         $form->addSubmit('submitm', 'dictionary.main.Save')
             ->setAttribute('class', 'btn btn-info btn-lg');
@@ -57,7 +57,11 @@ class ParamSearchControl extends Control
         return $form;
     }
 
-    public function searchFormSucceeded(BootstrapUIForm $form)
+    /**
+     * @param BootstrapUIForm $form
+     * @throws \Nette\Application\AbortException
+     */
+    public function searchFormSucceeded(BootstrapUIForm $form): void
     {
         $values = $form->getHttpData($form::DATA_TEXT); // get value from html input
         unset($values['do'], $values['action'], $values['idr'], $values['locale']
@@ -66,7 +70,7 @@ class ParamSearchControl extends Control
         foreach ($values as $pmKey => $pmValue) {
             $pmKeyArr = explode("_", $pmKey);
 
-            if (substr($pmKey, 0, 3) === 'pm_') {
+            if (0 === strpos($pmKey, 'pm_')) {
                 if ($pmKeyArr[1] == $pmKeyLast) {
                     $pmValues = $pmValues . "*" . $pmValue;
                 } else {
@@ -93,15 +97,14 @@ class ParamSearchControl extends Control
         }
 
         $category = $form->values->category;
-        $catalogue = $this->database->table("pages")->get($category);
+        $catalogue = $this->database->table('pages')->get($category);
 
-        $this->presenter->redirectUrl("/" . $catalogue->slug . "?" . http_build_query(array_merge(array_filter($values), array_filter($pmArray))));
+        $this->presenter->redirectUrl('/' . $catalogue->slug . '?' . http_build_query(array_merge(array_filter($values), array_filter($pmArray))));
     }
 
     protected function createComponentPageTitle()
     {
-        $control = new \Caloriscz\Page\PageTitleControl($this->database);
-        return $control;
+        return new \Caloriscz\Page\PageTitleControl($this->database);
     }
 
     public function render()
@@ -111,22 +114,22 @@ class ParamSearchControl extends Control
         $template->selected = $this->getParams();
 
         $template->qs = array_filter($this->presenter->getParameters());
-        unset($template->qs["action"], $template->qs["page_id"]);
+        unset($template->qs['action'], $template->qs['page_id']);
 
-        if ($this->presenter->translator->getLocale() != $this->presenter->translator->getDefaultLocale()) {
+        if ($this->presenter->translator->getLocale() !== $this->presenter->translator->getDefaultLocale()) {
             $template->langSuffix = '_' . $this->presenter->translator->getLocale();
         }
 
-        if ($this->presenter->getParameter("page_id") == 20) {
-            $params = $this->database->table("param")->where(array(
-                "ignore_front" => 0,
-            ));
+        if ($this->presenter->getParameter('page_id') === 20) {
+            $params = $this->database->table('param')->where([
+                'ignore_front' => 0,
+            ]);
 
         } else {
-            $params = $this->database->table("param")->where(array(
-                ":param_categories.pages_id" => $this->presenter->getParameter("page_id"),
-                "ignore_front" => 0,
-            ))->order("sorted");
+            $params = $this->database->table('param')->where([
+                ':param_categories.pages_id' => $this->presenter->getParameter('page_id'),
+                'ignore_front' => 0,
+            ])->order('sorted');
         }
 
         $template->params = $params;
@@ -145,11 +148,11 @@ class ParamSearchControl extends Control
         $values = $this->presenter->getParameters(true);
 
         foreach ($values as $pmKey => $pmValue) {
-            $pmKeyArr = explode("_", $pmKey);
+            $pmKeyArr = explode('_', $pmKey);
 
-            if (substr($pmKey, 0, 3) == 'pm_') {
-                if ($pmKeyArr[1] == $pmKeyLast) {
-                    $pmValues = $pmValues . "*" . $pmValue;
+            if (0 === strpos($pmKey, 'pm_')) {
+                if ($pmKeyArr[1] === $pmKeyLast) {
+                    $pmValues = $pmValues . '*' . $pmValue;
                 } else {
                     $pmValues = $pmValue;
                 }
@@ -157,12 +160,12 @@ class ParamSearchControl extends Control
                 $pmKeyLast = $pmKeyArr[1];
 
                 if (isset($pmKeyArr[3])) {
-                    $pmType = "_" . $pmKeyArr[3];
+                    $pmType = '_' . $pmKeyArr[3];
                 } else {
                     $pmType = null;
                 }
 
-                $pmArray["pm_" . $pmKeyArr[1] . $pmType] = urldecode($pmValues);
+                $pmArray['pm_' . $pmKeyArr[1] . $pmType] = urldecode($pmValues);
             }
         }
 

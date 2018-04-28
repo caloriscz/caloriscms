@@ -69,18 +69,25 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
             isset($this['grid']) && $this['grid']->reload();
             $this->redrawControl('flashes');
         } else {
-            $this->redirect($operation, array('idm' => $id));
+            $this->redirect($operation, ['idm' => $id]);
         }
     }
 
-    protected function createTemplate($class = NULL)
+    /**
+     * @param null $class
+     * @return Nette\Application\UI\ITemplate
+     */
+    protected function createTemplate($class = null)
     {
         $template = parent::createTemplate($class);
-        $template->addFilter(NULL, '\Filters::common');
+        $template->addFilter(null, '\Filters::common');
 
         return $template;
     }
 
+    /**
+     * @throws Nette\Application\AbortException
+     */
     protected function startup()
     {
         parent::startup();
@@ -101,7 +108,7 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
                 if ($this->user->logoutReason === Nette\Security\IUserStorage::INACTIVITY) {
                     $this->flashMessage($this->translator->translate('messages.sign.youWereLoggedIn'), 'note');
                 }
-                $this->redirect('Sign:in', array('backlink' => $this->storeRequest()));
+                $this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
             }
         }
 
@@ -117,7 +124,7 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
         $this->template->settings = $this->database->table('settings')->fetchPairs('setkey', 'setvalue');
 
         $this->template->appDir = APP_DIR;
-        $this->template->signed = TRUE;
+        $this->template->signed = true;
         $this->template->langSelected = $this->translator->getLocale();
 
         // Set language from cookie
@@ -128,22 +135,34 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
         }
     }
 
-    protected function createComponentPaging()
+    /**
+     * @return PagingControl
+     */
+    protected function createComponentPaging(): PagingControl
     {
         return new PagingControl;
     }
 
-    protected function createComponentEditor()
+    /**
+     * @return EditorControl
+     */
+    protected function createComponentEditor(): EditorControl
     {
         return new EditorControl($this->database, $this->em);
     }
 
-    protected function createComponentMainMenu()
+    /**
+     * @return MainMenuControl
+     */
+    protected function createComponentMainMenu(): MainMenuControl
     {
         return new MainMenuControl($this->em);
     }
 
-    protected function createComponentPageTopMenu()
+    /**
+     * @return PageTopMenuControl
+     */
+    protected function createComponentPageTopMenu(): PageTopMenuControl
     {
         return new PageTopMenuControl($this->database);
     }

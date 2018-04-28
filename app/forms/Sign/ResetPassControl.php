@@ -2,6 +2,7 @@
 
 namespace App\Forms\Sign;
 
+use Nette\Application\AbortException;
 use Nette\Application\UI\Control;
 use Nette\Database\Context;
 use Nette\Forms\BootstrapUIForm;
@@ -31,22 +32,26 @@ class ResetPassControl extends Control
         $form->addPassword('password', 'Nové heslo');
         $form->addPassword('password2', 'Zopakujte nové heslo');
         $form->addSubmit('name', 'dictionary.main.Change');
-        $form->setDefaults(array(
+        $form->setDefaults([
             'email' => $this->getPresenter()->getParameter('email'),
             'code' => $this->getPresenter()->getParameter('code'),
-        ));
+        ]);
 
         $form->onSuccess[] = [$this, 'resetFormSucceeded'];
         return $form;
     }
 
+    /**
+     * @param BootstrapUIForm $form
+     * @throws AbortException
+     */
     public function resetFormSucceeded(BootstrapUIForm $form)
     {
         $email = $form->values->email;
-        $emailExistsDb = $this->database->table('users')->where(array(
+        $emailExistsDb = $this->database->table('users')->where([
             'email' => $email,
             'activation' => $form->values->code,
-        ));
+        ]);
 
         if ($emailExistsDb->count() === 0) {
             $msg = 'Aktivace není platná';
@@ -54,12 +59,12 @@ class ResetPassControl extends Control
             $msg = 'Hesla se neshodují';
         } else {
             $msg = 'Vytvořili jste nové heslo. Můžete se přihlásit.';
-            $this->database->table('users')->where(array(
+            $this->database->table('users')->where([
                 'email' => $email,
-            ))->update(array(
+            ])->update([
                 'activation' => NULL,
                 'password' => Passwords::hash($form->getValues()->password),
-            ));
+            ]);
         }
 
         $this->getPresenter()->flashMessage($msg, 'success');

@@ -37,9 +37,9 @@ class SendLoginControl extends Control
         $form->addCheckbox('sendmail', '\xC2\xA0' . 'Odeslat e-mail s přihlašovacími informacemi')
             ->setValue(0);
 
-        $form->setDefaults(array(
+        $form->setDefaults([
             'contact_id' => $this->getPresenter()->getParameter('id'),
-        ));
+        ]);
 
         $form->addSubmit('submitm', 'Zaslat uživateli')->setAttribute('class', 'btn btn-success');
         $form->onSuccess[] = [$this, 'sendLoginFormSucceeded'];
@@ -53,16 +53,16 @@ class SendLoginControl extends Control
         $pwdEncrypted = Passwords::hash($pwd);
         $user = $this->database->table('users')->get($form->values->contact_id);
 
-        $this->database->table('users')->get($user->id)->update(array(
+        $this->database->table('users')->get($user->id)->update([
             'password' => $pwdEncrypted,
-        ));
+        ]);
 
         if ($form->values->sendmail) {
-            $params = array(
+            $params = [
                 'username' => $user->username,
                 'email' => $user->email,
                 'password' => $pwd,
-            );
+            ];
 
             $helpdesk = new Helpdesk($this->database, $this->getPresenter()->mailer);
             $helpdesk->setId(4);

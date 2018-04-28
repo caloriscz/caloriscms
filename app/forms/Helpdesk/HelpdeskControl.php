@@ -37,12 +37,12 @@ class HelpdeskControl extends Control
 
         $form->addTextArea('message');
 
-        $form->setDefaults(array(
+        $form->setDefaults([
             'name' => $this->getParameter('name'),
             'email' => $this->getParameter('email'),
             'phone' => $this->getParameter('phone'),
             'message' => $this->getParameter('message'),
-        ));
+        ]);
         $form->addSubmit('submitm');
 
         $form->onValidate[] = [$this, 'sendFormValidated'];
@@ -50,7 +50,11 @@ class HelpdeskControl extends Control
         return $form;
     }
 
-    public function sendFormValidated(BootstrapUIForm $form)
+    /**
+     * @param BootstrapUIForm $form
+     * @throws \Nette\Application\AbortException
+     */
+    public function sendFormValidated(BootstrapUIForm $form): void
     {
         if (strlen($form->values->name) < 2) {
             $this->presenter->flashMessage($this->presenter->translator->translate('messages.sign.fillInName'), 'error');
@@ -68,17 +72,21 @@ class HelpdeskControl extends Control
         }
     }
 
-    public function sendFormSucceeded(BootstrapUIForm $form)
+    /**
+     * @param BootstrapUIForm $form
+     * @throws \Nette\Application\AbortException
+     */
+    public function sendFormSucceeded(BootstrapUIForm $form): void
     {
         if ($this->presenter->user->isLoggedIn()) {
             $arr['users_id'] = $this->presenter->template->member->id;
         }
 
-        $params = array(
+        $params = [
             'name' => $form->values->name,
             'phone' => $form->values->phone,
             'message' => $form->values->message,
-        );
+        ];
 
         $helpdesk = new Helpdesk($this->database, $this->presenter->mailer);
         $helpdesk->setId(1);

@@ -7,7 +7,11 @@ use Nette\Application\UI\Control;
 class PagingControl extends Control
 {
 
-    public function render($args, $paginator)
+    /**
+     * @param $args
+     * @param $paginator
+     */
+    public function render($args, $paginator): void
     {
         $this->template->setFile(__DIR__ . '/PagingControl.latte');
         $this->template->args = $args;

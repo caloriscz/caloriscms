@@ -8,6 +8,8 @@
 
 namespace App\Model;
 use Nette\Database\Context;
+use Nette\Database\Table\ActiveRow;
+use Nette\Database\Table\IRow;
 
 /**
  * Authenticating and authorizing users
@@ -27,7 +29,7 @@ class MemberModel
     /**
      * Get member table
      * @param $user
-     * @return bool|mixed|\Nette\Database\Table\ActiveRow|\Nette\Database\Table\IRow
+     * @return bool|mixed|ActiveRow|IRow
      */
     public function getTable($user)
     {
@@ -71,7 +73,7 @@ class MemberModel
     /**
      * Get user name from ID
      * @param $username
-     * @return bool|mixed|\Nette\Database\Table\ActiveRow|\Nette\Database\Table\IRow3
+     * @return bool|mixed|ActiveRow|\Nette\Database\Table\IRow3
      */
     public function getUserNameID($username)
     {
@@ -95,20 +97,18 @@ class MemberModel
      */
     public function getState($username)
     {
-        $stateDb = $this->database->table('users')->where(array(
-            'username' => $username,
-        ));
+        $stateDb = $this->database->table('users')->where(['username' => $username]);
 
         if ($stateDb->count() > 0) {
             $stateInfo = $stateDb->fetch();
 
-            if ($stateInfo->state == 0) {
-                $stateMsg = FALSE;
+            if ($stateInfo->state === 0) {
+                $stateMsg = false;
             } else {
-                $stateMsg = TRUE;
+                $stateMsg = true;
             }
         } else {
-            $stateMsg = TRUE;
+            $stateMsg = true;
         }
 
         return $stateMsg;
@@ -117,7 +117,7 @@ class MemberModel
     /**
      * Check if e-mail address is in database
      * @param string $email E-mail address
-     * @return object
+     * @return int
      */
     public function getEmail($email)
     {
@@ -134,16 +134,12 @@ class MemberModel
 
     /**
      * Set activation code to database
-     * @param type $email
-     * @param type $passwordGenerate
+     * @param $email
+     * @param $passwordGenerate
      */
     public function setActivation($email, $passwordGenerate)
     {
-        $this->database->table('users')->where(array(
-            'email' => $email
-        ))->update(array(
-            'activation' => $passwordGenerate)
-        );
+        $this->database->table('users')->where(['email' => $email])->update(['activation' => $passwordGenerate]);
     }
 
 }

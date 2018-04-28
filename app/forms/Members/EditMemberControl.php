@@ -18,8 +18,9 @@ class EditMemberControl extends Control
 
     /**
      * Edit user data
+     * @return BootstrapUIForm
      */
-    public function createComponentEditForm()
+    public function createComponentEditForm(): BootstrapUIForm
     {
         $form = new BootstrapUIForm();
         $form->setTranslator($this->presenter->translator);
@@ -29,13 +30,13 @@ class EditMemberControl extends Control
         $user = $this->database->table('users')->get($this->presenter->getParameter('id'));
 
         $form->addHidden('id');
-        $form->addRadioList('sex', 'Pohlaví', array(1 => ' žena', 2 => ' muž'));
-        $form->addRadioList('newsletter', 'Odebírat newsletter', array(1 => ' ano', 2 => ' ne'));
-        $form->addRadioList('state', 'Stav účtu', array(1 => ' povolen', 2 => ' blokován'));
+        $form->addRadioList('sex', 'Pohlaví', [1 => ' žena', 2 => ' muž']);
+        $form->addRadioList('newsletter', 'Odebírat newsletter', [1 => ' ano', 2 => ' ne']);
+        $form->addRadioList('state', 'Stav účtu', [1 => ' povolen', 2 => ' blokován']);
 
         $roles = $this->database->table('users_roles')->fetchPairs('id', 'title');
 
-        if ($this->presenter->template->member->username == 'admin') {
+        if ($this->presenter->template->member->username === 'admin') {
             $form->addSelect('role', 'Role', $roles)
                 ->setAttribute('class', 'form-control');
         }
@@ -66,15 +67,23 @@ class EditMemberControl extends Control
         return $form;
     }
 
-    public function editFormValidated(BootstrapUIForm $form)
+    /**
+     * @param BootstrapUIForm $form
+     * @throws \Nette\Application\AbortException
+     */
+    public function editFormValidated(BootstrapUIForm $form): void
     {
         if (!$this->presenter->template->member->users_roles->members) {
             $this->presenter->flashMessage($this->translator->translate('messages.members.PermissionDenied'), 'error');
-            $this->presenter->redirect(this, array('id' => $form->values->id));
+            $this->presenter->redirect('this', ['id' => $form->values->id]);
         }
     }
 
-    public function editFormSucceeded(BootstrapUIForm $form)
+    /**
+     * @param BootstrapUIForm $form
+     * @throws \Nette\Application\AbortException
+     */
+    public function editFormSucceeded(BootstrapUIForm $form): void
     {
         $arr = [
             'sex' => $form->values->sex,
@@ -92,7 +101,7 @@ class EditMemberControl extends Control
 
         $this->database->table('users')->where(['id' => $form->values->id])->update($arr);
 
-        $this->presenter->redirect(this, array('' => $form->values->id));
+        $this->presenter->redirect('this', ['' => $form->values->id]);
     }
 
     public function render()

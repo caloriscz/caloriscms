@@ -31,7 +31,7 @@ class EditorControl extends Control
 
         $config = \HTMLPurifier_Config::createDefault();
         $config->set('HTML.AllowedAttributes', 'img.src,*.style,*.class');
-        $config->set('HTML.ForbiddenElements', array('font'));
+        $config->set('HTML.ForbiddenElements', ['font']);
         $config->set('AutoFormat.RemoveEmpty', true);
 
         $this->htmlPurifier = new \HTMLPurifier($config);
@@ -44,6 +44,7 @@ class EditorControl extends Control
 
     /**
      * Edit page content
+     * @return BootstrapUIForm
      */
     public function createComponentEditForm(): BootstrapUIForm
     {
@@ -64,16 +65,16 @@ class EditorControl extends Control
         $form->addTextArea('document')->setDisabled($enabled);
 
         if (null === $l || $l === '') {
-            $form->setDefaults(array(
+            $form->setDefaults([
                 'id' => $pages->id,
                 'document' => $pages->document,
-            ));
+            ]);
         } else {
-            $form->setDefaults(array(
+            $form->setDefaults([
                 'id' => $pages->id,
                 'l' => $l,
                 'document' => $pages->{'document_' . $l},
-            ));
+            ]);
         }
 
         $form->onSuccess[] = [$this, 'editFormSucceeded'];
@@ -84,6 +85,9 @@ class EditorControl extends Control
         return $form;
     }
 
+    /**
+     * @throws \Nette\Application\AbortException
+     */
     public function permissionFormValidated(): void
     {
         if ($this->getPresenter()->template->member->users_roles->pages === 0) {
@@ -92,6 +96,10 @@ class EditorControl extends Control
         }
     }
 
+    /**
+     * @param BootstrapUIForm $form
+     * @throws \Nette\Application\AbortException
+     */
     public function editFormSucceeded(BootstrapUIForm $form): void
     {
         $document = $this->purify($form->values->document);
@@ -106,15 +114,20 @@ class EditorControl extends Control
 
     /**
      * Toggle display
+     * @throws \Nette\Application\AbortException
      */
-    public function handleToggle()
+    public function handleToggle(): void
     {
         setcookie('editortype', $this->getParameter('editortype'), time() + 15552000);
 
         $this->getPresenter()->redirect('this', ['id' => $this->getParameter('id')]);
     }
 
-    public function purify($dirtyHtml)
+    /**
+     * @param $dirtyHtml
+     * @return string
+     */
+    public function purify($dirtyHtml): string
     {
         return $this->htmlPurifier->purify($dirtyHtml);
     }

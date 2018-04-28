@@ -14,31 +14,50 @@ use Caloriscz\Settings\SettingsCategoriesControl;
 class SettingsPresenter extends BasePresenter
 {
 
+    /**
+     * @return EditSettingsControl
+     */
     protected function createComponentEditSettings()
     {
         return new EditSettingsControl($this->database);
     }
 
+    /**
+     * @return InsertLanguageControl
+     */
     protected function createComponentInsertLanguage()
     {
         return new InsertLanguageControl($this->database);
     }
 
+    /**
+     * @return InsertCountryControl
+     */
     protected function createComponentInsertCountry()
     {
         return new InsertCountryControl($this->database);
     }
 
+    /**
+     * @return InsertCurrencyControl
+     */
     protected function createComponentInsertCurrency()
     {
         return new InsertCurrencyControl($this->database);
     }
 
+    /**
+     * @return SettingsCategoriesControl
+     */
     protected function createComponentSettingsCategories()
     {
         return new SettingsCategoriesControl($this->database);
     }
 
+    /**
+     * @param $id
+     * @throws \Nette\Application\AbortException
+     */
     public function handleInstall($id)
     {
         $default = $this->database->table('languages')->where('default = 1');
@@ -62,6 +81,10 @@ class SettingsPresenter extends BasePresenter
         $this->redirect('this');
     }
 
+    /**
+     * @param $id
+     * @throws \Nette\Application\AbortException
+     */
     public function handleMakeDefault($id)
     {
         if ($this->template->member->users_roles->settings === 0) {
@@ -72,6 +95,10 @@ class SettingsPresenter extends BasePresenter
         $this->redirect('this');
     }
 
+    /**
+     * @param $id
+     * @throws \Nette\Application\AbortException
+     */
     public function handleMakeDefaultCurrency($id)
     {
         if ($this->template->member->users_roles->settings === 0) {
@@ -82,16 +109,16 @@ class SettingsPresenter extends BasePresenter
         $this->redirect(':Admin:Settings:languages');
     }
 
+    /**
+     * @param $id
+     * @throws \Nette\Application\AbortException
+     */
     public function handleToggle($id)
     {
         if ($this->template->member->users_roles->settings === 0) {
             $toggle = $this->database->table('languages')->get($id);
 
-            if ($toggle->used) {
-                $state = 0;
-            } else {
-                $state = 1;
-            }
+            $state = $toggle->used ? 0 : 1;
 
             $this->database->table('languages')->get($id)->update(['used' => $state]);
         }
@@ -99,16 +126,16 @@ class SettingsPresenter extends BasePresenter
         $this->redirect(':Admin:Settings:languages');
     }
 
+    /**
+     * @param $id
+     * @throws \Nette\Application\AbortException
+     */
     public function handleToggleCountry($id)
     {
-        if ($this->template->member->users_roles->settings == 0) {
+        if ($this->template->member->users_roles->settings === 0) {
             $toggle = $this->database->table('countries')->get($id);
 
-            if ($toggle->show) {
-                $state = 0;
-            } else {
-                $state = 1;
-            }
+            $state = $toggle->show ? 0 : 1;
 
             $this->database->table('countries')->get($id)->update(['show' => $state]);
         }
@@ -117,6 +144,13 @@ class SettingsPresenter extends BasePresenter
     }
 
 
+    /**
+     * @param $table
+     * @param $column
+     * @param $type
+     * @param $lang
+     * @return string
+     */
     public function checkColumn($table, $column, $type, $lang)
     {
         $pages_title = $this->database->query('SHOW COLUMNS FROM `' . $table . '` LIKE ?', $column . '_' . $lang)->getRowCount();

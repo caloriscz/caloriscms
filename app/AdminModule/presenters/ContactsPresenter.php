@@ -30,6 +30,9 @@ class ContactsPresenter extends BasePresenter
         $this->template->page = $this->database->table('pages')->get($this->getParameter('id'));
     }
 
+    /**
+     * @return EditContactControl
+     */
     protected function createComponentEditContact()
     {
         $control = new EditContactControl($this->database);
@@ -91,6 +94,8 @@ class ContactsPresenter extends BasePresenter
 
     /**
      * Delete hour
+     * @param $id
+     * @throws Nette\Application\AbortException
      */
     public function handleDeleteHour($id)
     {
@@ -101,8 +106,10 @@ class ContactsPresenter extends BasePresenter
 
     /**
      * Delete categories
+     * @param $id
+     * @throws Nette\Application\AbortException
      */
-    public function handleDeleteCategory($id)
+    public function handleDeleteCategory($id): void
     {
         $category = new Model\Category($this->database);
 
@@ -111,7 +118,12 @@ class ContactsPresenter extends BasePresenter
         $this->redirect(':Admin:Categories:default');
     }
 
-    public function handleUp($id, $sorted)
+    /**
+     * @param $id
+     * @param $sorted
+     * @throws Nette\Application\AbortException
+     */
+    public function handleUp($id, $sorted): void
     {
         $sortDb = $this->database->table('categories')->where([
             'sorted > ?' => $sorted,
@@ -127,7 +139,13 @@ class ContactsPresenter extends BasePresenter
         $this->redirect(':Admin:Categories:default', ['id' => null]);
     }
 
-    public function handleDown($id, $sorted, $category)
+    /**
+     * @param $id
+     * @param $sorted
+     * @param $category
+     * @throws Nette\Application\AbortException
+     */
+    public function handleDown($id, $sorted, $category): void
     {
         $sortDb = $this->database->table('contacts_categories')->where([
             'sorted < ?' => $sorted,
@@ -143,7 +161,10 @@ class ContactsPresenter extends BasePresenter
         $this->presenter->redirect(this, ['id' => null]);
     }
 
-    public function handleDelete($id)
+    /**
+     * @param $id
+     */
+    public function handleDelete($id): void
     {
         $this->database->table('contacts_categories');
     }
@@ -164,12 +185,12 @@ class ContactsPresenter extends BasePresenter
         $this->template->menu = $this->database->table('contacts_categories')->where('parent_id', null);
     }
 
-    public function renderDetailOpeningHours()
+    public function renderDetailOpeningHours(): void
     {
         $this->template->hours = $this->database->table('contacts_openinghours')->where('contacts_id', $this->getParameter('id'));
     }
 
-    public function renderCommunications()
+    public function renderCommunications(): void
     {
         $this->template->page = $this->database->table('pages')->get($this->getParameter('id'));
         $this->template->communications = $this->database->table('contacts_communications')->where([
@@ -177,7 +198,7 @@ class ContactsPresenter extends BasePresenter
         ]);
     }
 
-    public function renderCategories()
+    public function renderCategories(): void
     {
         $categoryId = null;
 
@@ -190,7 +211,7 @@ class ContactsPresenter extends BasePresenter
             ->order('sorted DESC');
     }
 
-    public function renderCategoriesDetail()
+    public function renderCategoriesDetail(): void
     {
         $this->template->menu = $this->database->table('contacts_categories')->get($this->getParameter('id'));
     }

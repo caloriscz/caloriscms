@@ -17,7 +17,10 @@ class ImageEditFormControl extends Control
         $this->database = $database;
     }
 
-    protected function createComponentEditForm()
+    /**
+     * @return BootstrapUIForm
+     */
+    protected function createComponentEditForm(): BootstrapUIForm
     {
         $form = new BootstrapUIForm();
         $form->setTranslator($this->presenter->translator);
@@ -47,18 +50,22 @@ class ImageEditFormControl extends Control
         return $form;
     }
 
-    public function editFormSucceeded(BootstrapUIForm $form)
+    /**
+     * @param BootstrapUIForm $form
+     * @throws \Nette\Application\AbortException
+     */
+    public function editFormSucceeded(BootstrapUIForm $form): void
     {
         $this->database->table('media')->get($form->values->image_id)
-            ->update(array(
+            ->update([
                 'description' => $form->values->description,
                 'detail_view' => $form->values->detail_view,
-            ));
+            ]);
 
-        $this->getPresenter()->redirect(this, array(
+        $this->getPresenter()->redirect(this, [
             'id' => $form->values->page_id,
             'image' => $form->values->image_id,
-        ));
+        ]);
     }
 
     public function render()

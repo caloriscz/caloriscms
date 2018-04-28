@@ -46,14 +46,18 @@ class InsertCommunicationControl extends Control
         return $form;
     }
 
-    public function insertFormSucceeded(BootstrapUIForm $form)
+    /**
+     * @param BootstrapUIForm $form
+     * @throws \Nette\Application\AbortException
+     */
+    public function insertFormSucceeded(BootstrapUIForm $form): void
     {
         $this->database->table('contacts_communication')
-            ->insert(array(
+            ->insert([
                 'contacts_id' => $form->values->id,
                 'communication_type' => $form->values->type,
                 'communication_value' => $form->values->type_value,
-            ));
+            ]);
 
         $this->presenter->redirect(this, ['id' => $form->values->id]);
     }

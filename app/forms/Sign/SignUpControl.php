@@ -29,6 +29,9 @@ class SignUpControl extends Control
         $this->database = $database;
     }
 
+    /**
+     * @return BootstrapUIForm
+     */
     public function createComponentSignUpForm(): BootstrapUIForm
     {
         $form = new BootstrapUIForm();
@@ -85,7 +88,7 @@ class SignUpControl extends Control
         $form->addCheckbox('confirmation', '\xC2\xA0' . 'messages.sign.agreeWithConditions')
             ->setRequired('messages.sign.mustAgreeConditions');
 
-        $form->setDefaults(array(
+        $form->setDefaults([
             'username' => $this->presenter->getParameter('user'),
             'email' => $this->presenter->getParameter('email'),
             'newsletter' => $this->presenter->getParameter('newsletter'),
@@ -93,7 +96,7 @@ class SignUpControl extends Control
             'street' => $this->presenter->getParameter('street'),
             'city' => $this->presenter->getParameter('city'),
             'zip' => $this->presenter->getParameter('zip'),
-        ));
+        ]);
 
         $form->addSubmit('submit', 'dictionary.main.Signup')
             ->setAttribute('class', 'btn-lg btn-cart-in');
@@ -104,15 +107,17 @@ class SignUpControl extends Control
         return $form;
     }
 
-    public function signUpFormValidated(BootstrapUIForm $form)
+    /**
+     * @param BootstrapUIForm $form
+     * @throws \Nette\Application\AbortException
+     */
+    public function signUpFormValidated(BootstrapUIForm $form): void
     {
-        $userCorrects = preg_match("/^[abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_]{4,40}$/", $form->getValues()->username, $userTest);
-
         $member = new MemberModel($this->database);
         $userExists = $member->getUserName($form->values->username);
         $emailExists = $member->getEmail($form->values->email);
 
-        $formVal = $form->getValues(TRUE);
+        $formVal = $form->getValues(true);
 
         if ($userExists > 0 && $this->getPresenter()->template->settings['members_username_as_email'] === 0) {
             unset($formVal['username']);
@@ -123,10 +128,7 @@ class SignUpControl extends Control
         } elseif ($emailExists > 0) {
             unset($formVal['email']);
             $this->getPresenter()->flashMessage('messages.sign.emailAlreadyExists', 'error');
-        } elseif ($userTest == 0) {
-            unset($formVal['username']);
-            $this->getPresenter()->flashMessage('messages.sign.enterValidUserName', 'error');
-        } elseif (strlen($form->values->name) < 2) {
+        } elseif (\strlen($form->values->name) < 2) {
             $this->getPresenter()->flashMessage('messages.sign.enterValidName', 'error');
         } else {
             $msg = 1;
@@ -139,6 +141,11 @@ class SignUpControl extends Control
         }
     }
 
+    /**
+     * @param BootstrapUIForm $form
+     * @return BootstrapUIForm
+     * @throws \h4kuna\Ares\IdentificationNumberNotFoundException
+     */
     public function signUpFormSucceeded(BootstrapUIForm $form): BootstrapUIForm
     {
         $activationCode = Random::generate(12, '987654321zyxwvutsrqponmlkjihgfedcba');
@@ -150,7 +157,7 @@ class SignUpControl extends Control
             $username = $form->values->username;
         }
 
-        $arr = array(
+        $arr = [
             'email' => $form->values->email,
             'username' => $username,
             'password' => $password,
@@ -159,7 +166,7 @@ class SignUpControl extends Control
             'state' => 0,
             'users_roles_id' => 4,
             'date_created' => date('Y-m-d H:i:s')
-        );
+        ];
 
         if ($this->getPresenter()->template->settings['members:groups:enabled']) {
             $arr['users_categories_id'] = $form->values->group;
@@ -170,7 +177,6 @@ class SignUpControl extends Control
         if ($this->getPresenter()->template->settings['members:signup:contactEnabled']) {
             $arrContacts = [
                 'contacts_categories_id' => 8,
-                'pages_id' => $page,
                 'users_id' => $userId,
                 'name' => $form->values->name,
                 'street' => $form->values->street,
@@ -194,13 +200,13 @@ class SignUpControl extends Control
             $aresArr = $ares->loadData($form->values->vatin)->toArray();
         }
 
-        $params = array(
+        $params = [
             'username' => $form->values->username,
             'activationCode' => $activationCode,
             'settings' => $this->getPresenter()->template->settings,
             'form' => $form,
             'aresArr' => $aresArr,
-        );
+        ];
 
         try {
             $helpdesk = new Helpdesk($this->database, $this->getPresenter()->mailer);
@@ -227,7 +233,7 @@ class SignUpControl extends Control
 
     public function render()
     {
-        $this->getTemplate();
+        $template = $this->getTemplate();
         $template->setFile(__DIR__ . '/SignUpControl.latte');
         $template->settings = $this->getPresenter()->template->settings;
         $template->render();

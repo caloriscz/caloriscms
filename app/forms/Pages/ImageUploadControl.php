@@ -35,15 +35,19 @@ class ImageUploadControl extends Control
             ->setAttribute('class', 'form-control');
         $form->addSubmit('send', 'dictionary.main.Insert');
 
-        $form->setDefaults(array(
+        $form->setDefaults([
             'id' => $this->presenter->getParameter('id'),
-        ));
+        ]);
 
         $form->onSuccess[] = [$this, 'uploadFilesFormSucceeded'];
         return $form;
     }
 
-    public function uploadFilesFormSucceeded(BootstrapUIForm $form)
+    /**
+     * @param BootstrapUIForm $form
+     * @throws \Nette\Application\AbortException
+     */
+    public function uploadFilesFormSucceeded(BootstrapUIForm $form): void
     {
         $album = $form->values->id;
         $fileDirectory = APP_DIR . '/media/' . $album . '/';
@@ -55,7 +59,7 @@ class ImageUploadControl extends Control
                 'pages_id' => $form->values->id,
             ]);
 
-            if ($imageExists->count() == 0) {
+            if ($imageExists->count() === 0) {
                 $this->database->table('media')->insert([
                     'name' => $_FILES['the_file']['name'],
                     'pages_id' => $form->values->id,
@@ -79,8 +83,9 @@ class ImageUploadControl extends Control
 
     /**
      * Image Upload
+     * @return BootstrapUIForm
      */
-    public function createComponentUploadForm()
+    public function createComponentUploadForm(): BootstrapUIForm
     {
         $form = new BootstrapUIForm();
         $form->setTranslator($this->presenter->translator);
@@ -104,7 +109,12 @@ class ImageUploadControl extends Control
         return $form;
     }
 
-    public function uploadFormSucceeded(BootstrapUIForm $form)
+    /**
+     * @param BootstrapUIForm $form
+     * @throws \Nette\Application\AbortException
+     * @throws \Nette\Utils\UnknownImageFileException
+     */
+    public function uploadFormSucceeded(BootstrapUIForm $form): void
     {
         $fileDirectory = APP_DIR . '/media/' . $form->values->id;
         IO::directoryMake($fileDirectory, 0755);
@@ -122,14 +132,14 @@ class ImageUploadControl extends Control
             chmod($fileName, 0644);
 
             if ($imageExists->count() === 0) {
-                $this->database->table('media')->insert(array(
+                $this->database->table('media')->insert([
                     'name' => $_FILES['the_file']['name'],
                     'pages_id' => $form->values->id,
                     'description' => $form->values->description,
                     'filesize' => filesize($fileDirectory . '/' . $_FILES['the_file']['name']),
                     'file_type' => 1,
                     'date_created' => date('Y-m-d H:i:s'),
-                ));
+                ]);
             }
 
             // thumbnails

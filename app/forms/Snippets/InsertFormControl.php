@@ -23,7 +23,10 @@ class InsertFormControl extends Control
         $this->em = $em;
     }
 
-    public function createComponentInsertForm()
+    /**
+     * @return BootstrapUIForm
+     */
+    public function createComponentInsertForm(): BootstrapUIForm
     {
         $form = new BootstrapUIForm();
         $form->setTranslator($this->presenter->translator);
@@ -44,7 +47,10 @@ class InsertFormControl extends Control
         return $form;
     }
 
-    public function permissionValidated()
+    /**
+     * @throws \Nette\Application\AbortException
+     */
+    public function permissionValidated(): void
     {
         if ($this->getPresenter()->template->member->users_roles->pages === 0) {
             $this->getPresenter()->flashMessage('Nemáte oprávnění k této akci', 'error');
@@ -52,7 +58,11 @@ class InsertFormControl extends Control
         }
     }
 
-    public function insertFormSucceeded(BootstrapUIForm $form)
+    /**
+     * @param BootstrapUIForm $form
+     * @throws \Nette\Application\AbortException
+     */
+    public function insertFormSucceeded(BootstrapUIForm $form): void
     {
         $this->database->table('snippets')->insert([
             'keyword' => $form->values->title,

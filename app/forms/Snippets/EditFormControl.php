@@ -55,7 +55,11 @@ class EditFormControl extends Control
         return $form;
     }
 
-    public function editSnippetFormSucceeded(BootstrapUIForm $form)
+    /**
+     * @param BootstrapUIForm $form
+     * @throws \Nette\Application\AbortException
+     */
+    public function editSnippetFormSucceeded(BootstrapUIForm $form): void
     {
         $langSuffix = '';
         $content = $form->getHttpData($form::DATA_TEXT, 'content');

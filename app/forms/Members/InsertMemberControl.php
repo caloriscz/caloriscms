@@ -27,8 +27,9 @@ class InsertMemberControl extends Control
 
     /**
      * Insert new user
+     * @return BootstrapUIForm
      */
-    public function createComponentInsertForm()
+    public function createComponentInsertForm(): BootstrapUIForm
     {
         $roles = $this->database->table('users_roles')->fetchPairs('id', 'title');
         $form = new BootstrapUIForm();
@@ -55,7 +56,10 @@ class InsertMemberControl extends Control
         return $form;
     }
 
-    public function insertFormValidated(BootstrapUIForm $form)
+    /**
+     * @param BootstrapUIForm $form
+     */
+    public function insertFormValidated(BootstrapUIForm $form): void
     {
         $member = new MemberModel($this->database);
         $userExists = $member->getUserName($form->values->username);
@@ -74,26 +78,29 @@ class InsertMemberControl extends Control
         }
     }
 
-    public function insertFormSucceeded(BootstrapUIForm $form)
+    /**
+     * @param BootstrapUIForm $form
+     */
+    public function insertFormSucceeded(BootstrapUIForm $form): void
     {
         $pwd = Random::generate(10);
         $pwdEncrypted = Passwords::hash($pwd);
 
         $userId = $this->database->table('users')
-            ->insert(array(
+            ->insert([
                 'email' => $form->values->email,
                 'username' => $form->values->username,
                 'password' => $pwdEncrypted,
                 'date_created' => date('Y-m-d H:i:s'),
                 'users_roles_id' => $form->values->role,
                 'state' => 1,
-            ));
+            ]);
 
         if ($form->values->sendmail) {
-            $params = array(
+            $params = [
                 'username' => $form->values->username,
                 'password' => $pwd
-            );
+            ];
 
             $helpdesk = new Helpdesk($this->database, $this->presenter->mailer);
             $helpdesk->setId(5);

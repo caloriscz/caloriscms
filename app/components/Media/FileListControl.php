@@ -18,8 +18,7 @@ class FileListControl extends Control
 
     protected function createComponentPageSlug()
     {
-        $control = new PageSlugControl($this->database);
-        return $control;
+        return new PageSlugControl($this->database);
     }
 
     public function render()

@@ -2,34 +2,42 @@
 
 namespace Model;
 
-use Nette;
+use Kdyby\Translation\Translator;
+use Nette\Database\Context;
+use Nette\Database\Table\ActiveRow;
 
 
-class SlugManager extends Nette\Object
+class SlugManager
 {
 
-    /** @var Nette\Database\Context */
+    /** @var Context */
     private $database;
 
-    /** @var \Kdyby\Translation\Translator @inject */
+    /** @var Translator @inject */
     public $translator;
 
 
-    public function __construct(Nette\Database\Context $database, \Kdyby\Translation\Translator $translator)
+    public function __construct(Context $database, Translator $translator)
     {
         $this->database = $database;
         $this->translator = $translator;
     }
 
+    /**
+     * @param $slug
+     * @param null $lang
+     * @param null $prefix
+     * @return false|ActiveRow|null
+     */
     public function getRowBySlug($slug, $lang = null, $prefix = null)
     {
-        if ($lang != null && $lang != 'cs') {
+        if (null !== $lang && $lang !== 'cs') {
             $arr['slug_'. $lang] = $slug;
         } else {
             $arr['slug'] = $slug;
         }
 
-        if ($prefix != null) {
+        if ($prefix !== null) {
             $arr['pages_types.prefix'] = $prefix;
         }
 
@@ -38,33 +46,31 @@ class SlugManager extends Nette\Object
         $db = $this->database->table('pages')->where($arr);
         $row = $db->fetch();
 
-        if ($db->count() > 0) {
-            return $row;
-        } else {
-            return NULL;
-        }
+        return $db->count() > 0 ? $row : null;
     }
 
+    /**
+     * @return false|ActiveRow|null
+     */
     public function getDefault()
     {
-        $row = $this->database->table('pages')->where(array('id' => 1))->fetch();
-        if ($row) {
-            return $row;
-        } else {
-            return NULL;
-        }
+        $row = $this->database->table('pages')->where(['id' => 1])->fetch();
+        return $row ? $row : null;
     }
 
+    /**
+     * @param $id
+     * @return false|ActiveRow|null
+     */
     public function getSlugById($id)
     {
         $row = $this->database->table('pages')->get($id);
-        if ($row) {
-            return $row;
-        } else {
-            return NULL;
-        }
+        return $row ? $row : null;
     }
 
+    /**
+     * @return array
+     */
     public function getLocale()
     {
         $languages = $this->translator->getAvailableLocales();

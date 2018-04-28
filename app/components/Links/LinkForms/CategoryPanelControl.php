@@ -40,7 +40,11 @@ class CategoryPanelControl extends Control
         return $form;
     }
 
-    public function validateCategoryFormSucceeded(BootstrapUIForm $form)
+    /**
+     * @param BootstrapUIForm $form
+     * @throws \Nette\Application\AbortException
+     */
+    public function validateCategoryFormSucceeded(BootstrapUIForm $form): void
     {
         $redirectTo = $this->presenter->getName();
 
@@ -54,13 +58,17 @@ class CategoryPanelControl extends Control
             $this->redirect(':' . $redirectTo . ':default', ['id' => null]);
         }
 
-        if ($form->values->title == '') {
+        if ($form->values->title === '') {
             $this->flashMessage($this->translator->translate('messages.sign.categoryMustHaveSomeName'), 'error');
             $this->redirect(':' . $redirectTo . ':default', ['id' => null]);
         }
     }
 
-    public function insertCategoryFormSucceeded(BootstrapUIForm $form)
+    /**
+     * @param BootstrapUIForm $form
+     * @throws \Nette\Application\AbortException
+     */
+    public function insertCategoryFormSucceeded(BootstrapUIForm $form): void
     {
         $this->database->table('links_categories')->insert([
             'title' => $form->values->title,

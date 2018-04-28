@@ -45,6 +45,10 @@ class NewItemControl extends Control
         return $form;
     }
 
+    /**
+     * @param BootstrapUIForm $form
+     * @throws \Nette\Application\AbortException
+     */
     public function insertFormSucceeded(BootstrapUIForm $form)
     {
         $max = $this->database->table('pricelist')->max('sorted') + 1;

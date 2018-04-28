@@ -1,91 +1,43 @@
 {var $name = $presenter->getView()}
 <div class="panel panel-default">
     <div class="panel-heading">
-        Kategorie
-        <button type="button" class="btn btn-default pull-right btn-xs" data-toggle="modal" data-target="#catModal">
-            Vložit kategorii
-        </button>         
-        <a href="{plink $name, (expand) $args, id => null}" class="btn btn-default {if !$idActive}btn-outline {/if}btn-xs pull-right">Všechny kategorie</a> 
+        <table class="table">
+            {foreach $menuList as $item}
+                <tr>
+                    <td><a href="{plink ':Admin:Pricelist:default', pricelist => $item->id}">{$item->title}</a></td>
+                    <td class="w-10"><a href="{link generatePdf!}" class="btn btn-success btn-sm"><i class="fa fa-file-pdf-o"></i> PDF</a></td>
+                    <td class="w-10"><a href="{plink ':Admin:Pricelist:menu', id => $item->id}" class="btn btn-info btn-sm pull-right">{_dictionary.main.edit}</a></td>
+                </tr>
+            {/foreach}
+        </table>
 
     </div>
     <div class="panel-body">
+        <div id="sorter-ids" class="hidden"
+             data-images="{foreach $menu as $itemS}{$itemS->id}{sep},{/sep}{/foreach}"></div>
         <div class="tree">
-            <div class="modal fade" id="catModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        {form insertCategoryForm}
-                            <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                                <h4 class="modal-title" id="myModalLabel">
-                                    Vložit podkategorii
-                                </h4>
-                            </div>
-                            <div class="modal-body">
-                                {input parent_id value => $idActive}
+            {var $category = 0}
+            {var $counter = 2}
+            {block #menu}
+                <ul>
+                    {foreach $menu as $item}
+                        <li id="j1_{$item->id}">
+                            <a id="j1_{$item->id}_anchor"
+                               href="{plink ':Admin:Pricelist:detail', id => $item->id}">{$item->title}</a>
 
-                                <div class="form-group">
-                                    <label class="col-sm-3 control-label">{label title /}</label>
-                                    <div class="col-sm-9">{input title}</div>
-                                </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-default" data-dismiss="modal">
-                                    {_dictionary.main.close|firstUpper}
-                                </button>
-                                {input submitm}
-                            </div>
-                        {/form}
-                    </div>
-                </div>
-            </div>
-
-            <ul class="is-minus">
-                {foreach $menu as $item}
-                    <li><span><i class="fa fa-folder"></i></span>
-                        <button type="button"
-                                class="btn btn-default btn-xs tool-tip" data-toggle="modal" data-target="#catModal{$item->id}" title="Přidat podkategorii">
-                            <i class="fa fa-plus"></i>
-                        </button>
-                        <a href="{plink ':Admin:Pricelist:detail', (expand) $args, id => $item->id}" class="btn btn-default btn-xs"><i class="fa fa-edit"></i></a>
-                        <a href="{plink $name, (expand) $args, id => $item->id}">{if $idActive == $item->id}<strong>{/if}{$item->title}{if $idActive == $item->id}</strong>{/if}</a>
-                        <div class="modal fade" id="catModal{$item->id}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-                            <div class="modal-dialog" role="document">
-                                <div class="modal-content">
-                                    {form insertCategoryForm}
-                                        <div class="modal-header">
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                            <h4 class="modal-title" id="myModalLabel">
-                                                Vložit kategorii
-                                            </h4>
-                                        </div>
-                                        <div class="modal-body">
-                                            {input parent_id value => $item->id}
-                                            <div class="form-group">
-                                                <label class="col-sm-3 control-label">{label title /}</label>
-                                                <div class="col-sm-9">{input title}</div>
-                                            </div>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-default" data-dismiss="modal">
-                                                {_dictionary.main.close|firstUpper}
-                                            </button>
-                                            {input submitm}
-                                        </div>
-                                    {/form}
-                                </div>
-                            </div>
-                        </div>
-                        {php $selection = $item->related('pricelist_categories','parent_id')}
-                        {if $selection->count() > 0}
-                            {include #menu, menu => $selection}
-                        {/if}
-                    </li>
-                {/foreach}
-            </ul>
+                            {var $categoryCount = $database->table('pricelist_categories')->where('parent_id', $item->parent_id)->count()}
+                            {if $category != $item->parent_id}
+                                {var $counter = 1}
+                            {/if}
+                            {php $selection = $item->related('pricelist_categories','parent_id')->order('sorted')}
+                            {if $selection->count() > 0}
+                                {include #menu, menu => $selection}
+                            {/if}
+                            {var $category = $item->parent_id}
+                        </li>
+                    {/foreach}
+                </ul>
+            {/block}
         </div>
     </div>
 </div>

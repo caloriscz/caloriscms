@@ -20,8 +20,9 @@ class EditFrontProfileControl extends Control
 
     /**
      * Edit your profile
+     * @return BootstrapUIForm
      */
-    protected function createComponentEditForm()
+    protected function createComponentEditForm(): BootstrapUIForm
     {
         $gender = 1;
 
@@ -45,7 +46,11 @@ class EditFrontProfileControl extends Control
         return $form;
     }
 
-    public function editFormSucceeded(BootstrapUIForm $form)
+    /**
+     * @param BootstrapUIForm $form
+     * @throws \Nette\Application\AbortException
+     */
+    public function editFormSucceeded(BootstrapUIForm $form): void
     {
         $this->database->table('users')->where(['id' => $this->presenter->user->getId()])
             ->update(['sex' => $form->values->sex]);

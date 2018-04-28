@@ -10,6 +10,7 @@ namespace App\Model\Store;
 
 use Nette\Database\Context;
 use \Nette\Database\SqlLiteral;
+use Nette\Database\Table\Selection;
 
 /**
  * Get list of filtered products
@@ -33,7 +34,7 @@ class Filter
     public function setText()
     {
         if ($_GET["src"] == '') {
-            $this->search = FALSE;
+            $this->search = false;
         } else {
             $this->search = $_GET["src"];
         }
@@ -42,9 +43,9 @@ class Filter
     /**
      * Options
      */
-    public function setOptions($options = FALSE)
+    public function setOptions($options = false)
     {
-        if ($options == TRUE) {
+        if ($options === true) {
             $this->settings = $options;
         }
     }
@@ -58,7 +59,7 @@ class Filter
             $order = 'na';
         }
 
-        $arr = array(
+        $arr = [
             'pa' => '`price` ASC',
             'pd' => '`price` DESC',
             'na' => '`title` ASC',
@@ -69,7 +70,7 @@ class Filter
             'sd' => '`stock`.`amount_sold` DESC',
             'oa' => '`sorted` ASC',
             'od' => '`sorted` DESC'
-        );
+        ];
 
         $this->order = $arr[$order];
     }
@@ -106,7 +107,7 @@ class Filter
         if (is_array($category)) {
             $keys = array_keys($category);
             $this->category = implode(",", $keys);
-        } elseif ($category == '') {
+        } elseif ($category === '') {
             $this->category = false;
         } else {
             $this->category = $category;
@@ -124,7 +125,7 @@ class Filter
 
             if ($type === 0) {
                 $this->userf = $user;
-                $userDb = $this->database->table('users')->where(array('username' => $user));
+                $userDb = $this->database->table('users')->where(['username' => $user]);
 
                 if ($userDb->count() > 0) {
                     $this->userf = $userDb->fetch()->id;
@@ -182,7 +183,7 @@ class Filter
      * @param $arr
      * @return null
      */
-    public function setColumns($arr)
+    public function setColumns($arr): void
     {
         $columns = null;
 
@@ -204,17 +205,17 @@ class Filter
     {
         if (count($param) > 0) {
             foreach ($param as $pmKey => $pmValue) {
-                if (substr($pmKey, 0, 3) === 'pm_') {
+                if (0 === strpos($pmKey, 'pm_')) {
                     $pmKeyPart = explode('_', $pmKey);
 
-                    if ($pmKeyPart[2] == 'range') {
+                    if ($pmKeyPart[2] === 'range') {
                         $rangeArr = explode('*', urldecode($pmValue));
 
                         $sqlKey = ':params.param_id = ' . $pmKeyPart[1] . ' AND :params.paramvalue BETWEEN ?';
                         $sqlValue = $rangeArr[0] . ' AND ' . $rangeArr[1];
 
                         unset($rangeArr);
-                    } elseif ($pmKeyPart[2] == 'text') {
+                    } elseif ($pmKeyPart[2] === 'text') {
                         $rangeArr = explode('*', urldecode($pmValue));
 
                         $sqlKey = ':params.param_id = ' . $pmKeyPart[1] . ' AND :params.paramvalue = ?';
@@ -250,7 +251,7 @@ class Filter
     /**
      * Get sql connection
      */
-    public function assemble()
+    public function assemble(): Selection
     {
         $columns["pages.pages_types_id"] = 4;
 

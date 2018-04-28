@@ -18,6 +18,7 @@ class EditMailTemplateControl extends Control
 
     /**
      * E-mail template edit
+     * @return BootstrapUIForm
      */
     public function createComponentEditForm()
     {
@@ -35,18 +36,22 @@ class EditMailTemplateControl extends Control
             ->setAttribute('style', 'width: 500px;')
             ->setHtmlId('wysiwyg');
 
-        $form->setDefaults(array(
+        $form->setDefaults([
             'id' => $this->presenter->getParameter('id'),
             'subject' => $emailDb->subject,
             'body' => $emailDb->body,
-        ));
+        ]);
 
 
         $form->onSuccess[] = [$this, 'editFormSucceeded'];
         return $form;
     }
 
-    public function editFormSucceeded(BootstrapUIForm $form)
+    /**
+     * @param BootstrapUIForm $form
+     * @throws \Nette\Application\AbortException
+     */
+    public function editFormSucceeded(BootstrapUIForm $form): void
     {
         $this->database->table('helpdesk_emails')->get($form->values->id)
             ->update([

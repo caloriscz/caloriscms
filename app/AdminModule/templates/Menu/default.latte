@@ -37,12 +37,6 @@
                         <strong>Menu</strong>
                     </div>
                     <div class="card-block">
-                        {foreach $flashes as $flash}
-                            <br/>
-                            <div class="flash {$flash->type}">{$flash->message}</div>
-                            <br/>
-                        {/foreach}
-
                         {if $presenter->getParameter('id')}
                             <a n:href=":Admin:Menu:default, id => null" class="btn btn-default">Všechny menu</a>
                         {/if}

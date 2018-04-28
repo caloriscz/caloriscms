@@ -1,22 +1,26 @@
 <?php
 namespace Caloriscz\Events;
 
+use App\Model\Document;
+use App\Model\IO;
 use Nette\Application\UI\Control;
+use Nette\Database\Context;
+use Nette\Forms\BootstrapUIForm;
 
 class InsertEventPageControl extends Control
 {
 
-    /** @var \Nette\Database\Context */
+    /** @var Context */
     public $database;
 
-    public function __construct(\Nette\Database\Context $database)
+    public function __construct(Context $database)
     {
         $this->database = $database;
     }
 
     function createComponentInsertForm()
     {
-        $form = new \Nette\Forms\BootstrapUIForm();
+        $form = new BootstrapUIForm();
         $form->setTranslator($this->presenter->translator);
         $form->getElementPrototype()->class = "form-horizontal";
         $form->getElementPrototype()->role = 'form';
@@ -30,15 +34,19 @@ class InsertEventPageControl extends Control
         return $form;
     }
 
-    function insertFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
+    /**
+     * @param BootstrapUIForm $form
+     * @throws \Nette\Application\AbortException
+     */
+    function insertFormSucceeded(BootstrapUIForm $form)
     {
-        $doc = new \App\Model\Document($this->database);
+        $doc = new Document($this->database);
         $doc->setType(3);
         $doc->setTitle($form->values->title);
         $doc->setSlug($form->values->title);
         $id = $doc->create($this->presenter->user->getId());
 
-        \App\Model\IO::directoryMake(APP_DIR . '/media/' . $id);
+        IO::directoryMake(APP_DIR . '/media/' . $id);
 
         $this->presenter->redirect(":Admin:Events:detail", array(
             "id" => $id,
@@ -47,9 +55,8 @@ class InsertEventPageControl extends Control
 
     public function render()
     {
-        $template = $this->template;
+        $template = $this->getTemplate();
         $template->setFile(__DIR__ . '/InsertEventPageControl.latte');
-
         $template->render();
     }
 

@@ -48,7 +48,11 @@ class MenuMenusEditControl extends Control
         return $form;
     }
 
-    public function editFormSucceeded(BootstrapUIForm $form)
+    /**
+     * @param BootstrapUIForm $form
+     * @throws \Nette\Application\AbortException
+     */
+    public function editFormSucceeded(BootstrapUIForm $form): void
     {
         $this->database->table('menu_menus')->get($form->values->id)
             ->update([

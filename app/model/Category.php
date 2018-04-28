@@ -31,7 +31,7 @@ class Category
      * @param null $arr
      * @return array|null
      */
-    public function getPageBreadcrumb($id, $arr = null)
+    public function getPageBreadcrumb($id, $arr = null): ?array
     {
         if ($id === null) {
             return array_reverse($arr, true);
@@ -53,7 +53,7 @@ class Category
      * @param null $arr
      * @return array|null
      */
-    public function getSubIds($id, $arr = null)
+    public function getSubIds($id, $arr = null): ?array
     {
         $catDb = $this->database->table('categories')->where('parent_id', $id);
 
@@ -76,8 +76,11 @@ class Category
 
     /**
      * Create new category
+     * @param $title
+     * @param $parent
+     * @param null $slug
      */
-    public function setCategory($title, $parent, $slug = null)
+    public function setCategory($title, $parent, $slug = null): void
     {
         if (is_numeric($parent) === false) {
             $parent = null;

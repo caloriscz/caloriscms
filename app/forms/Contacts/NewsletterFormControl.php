@@ -25,7 +25,7 @@ class NewsletterFormControl extends Control
      * Newsletter
      * @return \Nette\Forms\BootstrapUIForm
      */
-    public function createComponentAddForm()
+    public function createComponentAddForm(): BootstrapUIForm
     {
         $form = new BootstrapUIForm();
         $form->setTranslator($this->getPresenter()->translator);
@@ -37,7 +37,10 @@ class NewsletterFormControl extends Control
         return $form;
     }
 
-    public function addFormValidated(BootstrapUIForm $form)
+    /**
+     * @param BootstrapUIForm $form
+     */
+    public function addFormValidated(BootstrapUIForm $form): void
     {
         if (Validators::isEmail($form->getValues()->email) === false) {
             $this->onSave('Zadejte platnou e-mailovou adresu', 'error');
@@ -53,7 +56,10 @@ class NewsletterFormControl extends Control
         }
     }
 
-    public function addFormSucceeded(BootstrapUIForm $form)
+    /**
+     * @param BootstrapUIForm $form
+     */
+    public function addFormSucceeded(BootstrapUIForm $form): void
     {
         $arr = [
             'contacts_categories_id' => 3,

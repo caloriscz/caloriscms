@@ -8,7 +8,7 @@ use Nette,
 /**
  * Users authenticator.
  */
-class Authenticator extends Nette\Object implements Security\IAuthenticator
+class Authenticator implements Security\IAuthenticator
 {
 
     /** @var Nette\Database\Context */

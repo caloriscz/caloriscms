@@ -21,8 +21,9 @@ class EditHelpdeskEmailSettingsControl extends Control
 
     /**
      * Send teste-mail
+     * @return BootstrapUIForm
      */
-    protected function createComponentEditForm()
+    protected function createComponentEditForm(): BootstrapUIForm
     {
         $form = new BootstrapUIForm();
         $form->setTranslator($this->presenter->translator);
@@ -39,18 +40,21 @@ class EditHelpdeskEmailSettingsControl extends Control
         $form->addCheckbox('log', ' Ukládat e-maily do databáze');
         $form->addSubmit('submitm', 'dictionary.main.Save');
 
-        $form->setDefaults(array(
+        $form->setDefaults([
             'helpdesk_email_id' => $this->presenter->getParameter('id'),
             'email' => $helpdeskEmailsDb->email,
             'helpdesk_templates_id' => $helpdeskEmailsDb->helpdesk_templates_id,
             'log' => $helpdeskEmailsDb->log,
-        ));
+        ]);
 
         $form->onSuccess[] = [$this, 'editFormSucceeded'];
         return $form;
     }
 
-    public function editFormSucceeded(BootstrapUIForm $form)
+    /**
+     * @param BootstrapUIForm $form
+     */
+    public function editFormSucceeded(BootstrapUIForm $form): void
     {
         $this->database->table('helpdesk_emails')->get($form->values->helpdesk_email_id)->update(array(
             'helpdesk_templates_id' => $form->values->helpdesk_templates_id,

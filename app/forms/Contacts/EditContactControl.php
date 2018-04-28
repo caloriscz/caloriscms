@@ -23,8 +23,9 @@ class EditContactControl extends Control
 
     /**
      * Edit contact
+     * @return BootstrapUIForm
      */
-    protected function createComponentEditForm()
+    protected function createComponentEditForm(): BootstrapUIForm
     {
         $this->template->id = $this->getPresenter()->getParameter('id');
 
@@ -38,7 +39,7 @@ class EditContactControl extends Control
         $form->addText('name');
         $form->addText('company');
         $form->addText('post');
-        $form->addRadioList('type', '', array(0 => ' osoby', 1 => ' organizace'));
+        $form->addRadioList('type', '', [0 => ' osoby', 1 => ' organizace']);
         $form->addText('tpost');
         $form->addText('email');
         $form->addText('phone');
@@ -83,14 +84,20 @@ class EditContactControl extends Control
         return $form;
     }
 
-    public function editFormValidated(BootstrapUIForm $form)
+    /**
+     * @param BootstrapUIForm $form
+     */
+    public function editFormValidated(BootstrapUIForm $form): void
     {
         if (Validators::isEmail($form->values->email) === false && strlen($form->values->email) > 0) {
             $this->onSave($form->values->pages_id, $error = 1);
         }
     }
 
-    public function editFormSucceeded(BootstrapUIForm $form)
+    /**
+     * @param BootstrapUIForm $form
+     */
+    public function editFormSucceeded(BootstrapUIForm $form): void
     {
         $this->database->table('contacts')
             ->where(['id' => $form->values->contact_id])

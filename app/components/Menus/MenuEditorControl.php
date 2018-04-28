@@ -112,8 +112,6 @@ class MenuEditorControl extends Control
         $arr = array_filter($arr, 'strlen');
 
         $this->database->table('menu')->get($this->getPresenter()->getParameter('id_from'))->update($arr);
-
-        echo 'oo: ' . count($arr);
         exit();
     }
 

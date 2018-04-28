@@ -16,7 +16,10 @@ class EditCategoryControl extends Control
         $this->database = $database;
     }
 
-    protected function createComponentEditForm()
+    /**
+     * @return BootstrapUIForm
+     */
+    protected function createComponentEditForm(): BootstrapUIForm
     {
         $category = $this->database->table('pages')->get($this->presenter->getParameter('id'));
         $categories = $this->database->table('pages')->where('pages_types_id', 7)->fetchPairs('id', 'title');
@@ -36,11 +39,11 @@ class EditCategoryControl extends Control
         $form->addText('url', 'dictionary.main.URL');
         $form->addSubmit('submitm', 'dictionary.main.Save');
 
-        $arr = array(
+        $arr = [
             'id' => $category->id,
             'title' => $category->title,
             'parent' => $category->pages_id,
-        );
+        ];
 
         $form->setDefaults(array_filter($arr));
 
@@ -48,7 +51,11 @@ class EditCategoryControl extends Control
         return $form;
     }
 
-    public function editFormSucceeded(BootstrapUIForm $form)
+    /**
+     * @param BootstrapUIForm $form
+     * @throws \Nette\Application\AbortException
+     */
+    public function editFormSucceeded(BootstrapUIForm $form): void
     {
         $this->database->table('contacts_categories')->get($form->values->id)
             ->update([
@@ -59,7 +66,7 @@ class EditCategoryControl extends Control
         $this->presenter->redirect('this', array('id' => $form->values->id));
     }
 
-    public function render()
+    public function render(): void
     {
         $template = $this->getTemplate();
         $template->setFile(__DIR__ . '/EditCategoryControl.latte');

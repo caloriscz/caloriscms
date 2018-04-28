@@ -18,9 +18,10 @@ class EditAddressControl extends Control
     }
 
     /**
-     * Form: User fills in e-mail address to send e-mail with a password generator link
+     * orm: User fills in e-mail address to send e-mail with a password generator link
+     * @return BootstrapUIForm
      */
-    protected function createComponentEditAddressForm()
+    protected function createComponentEditAddressForm(): BootstrapUIForm
     {
         $form = new BootstrapUIForm();
         $form->setTranslator($this->presenter->translator);
@@ -50,6 +51,10 @@ class EditAddressControl extends Control
         return $form;
     }
 
+    /**
+     * @param BootstrapUIForm $form
+     * @throws \Nette\Application\AbortException
+     */
     public function editAddressFormSucceeded(BootstrapUIForm $form)
     {
         $this->database->table('contacts')->where([
@@ -61,15 +66,13 @@ class EditAddressControl extends Control
             'city' => $form->values->city,
         ]);
 
-        $this->presenter->redirect(':Front:Profile:address', array('id' => $form->values->id));
+        $this->presenter->redirect(':Front:Profile:address', ['id' => $form->values->id]);
     }
 
-       public function render()
+    public function render()
     {
         $template = $this->template;
         $template->setFile(__DIR__ . '/EditAddressControl.latte');
-
-
         $template->render();
     }
 

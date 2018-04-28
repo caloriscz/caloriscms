@@ -22,7 +22,7 @@ class ChangePasswordControl extends Control
      * Form: User fills in e-mail address to send e-mail with a password generator link
      * @return string
      */
-    protected function createComponentChangePasswordForm()
+    protected function createComponentChangePasswordForm(): string
     {
         $form = new BootstrapUIForm();
         $form->setTranslator($this->presenter->translator);
@@ -37,7 +37,11 @@ class ChangePasswordControl extends Control
         return $form;
     }
 
-    protected function changePasswordFormSucceeded(BootstrapUIForm $form)
+    /**
+     * @param BootstrapUIForm $form
+     * @throws \Nette\Application\AbortException
+     */
+    protected function changePasswordFormSucceeded(BootstrapUIForm $form): void
     {
         $ppwd = $form->values->password1;
         $ppwd2 = $form->values->password2;
@@ -55,7 +59,7 @@ class ChangePasswordControl extends Control
 
         setcookie('calpwd', $passwordEncrypted, time() + time() + 60 * 60 * 24 * 30, '/');
 
-        $this->presenter->redirect(this);
+        $this->presenter->redirect('this');
     }
 
     public function render()

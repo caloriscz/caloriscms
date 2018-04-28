@@ -19,8 +19,9 @@ class InsertContactControl extends Control
 
     /**
      * Insert contact
+     * @return BootstrapUIForm
      */
-    protected function createComponentInsertForm()
+    protected function createComponentInsertForm(): BootstrapUIForm
     {
         $form = new BootstrapUIForm();
         $form->setTranslator($this->presenter->translator);
@@ -28,7 +29,7 @@ class InsertContactControl extends Control
         $form->getElementPrototype()->role = 'form';
         $form->getElementPrototype()->autocomplete = 'off';
         $form->addHidden('pages_id', $this->getParameter('id'));
-        $form->addRadioList('type', 'Osoba nebo organizace', array(0 => ' osoby', 1 => ' organizace'));
+        $form->addRadioList('type', 'Osoba nebo organizace', [0 => ' osoby', 1 => ' organizace']);
         $form->addText('title', 'dictionary.main.Title')
             ->setRequired($this->presenter->translator->translate('messages.pages.NameThePage'));
 
@@ -43,12 +44,16 @@ class InsertContactControl extends Control
         return $form;
     }
 
-    public function insertFormSucceeded(BootstrapUIForm $form)
+    /**
+     * @param BootstrapUIForm $form
+     * @throws \Nette\Application\AbortException
+     */
+    public function insertFormSucceeded(BootstrapUIForm $form): void
     {
-        $arr = array(
+        $arr = [
             'users_id' => null,
             'type' => $form->values->type,
-        );
+        ];
 
         if ($form->values->type === 0) {
             $arr['name'] = $form->values->title;

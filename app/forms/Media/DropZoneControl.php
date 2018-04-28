@@ -22,8 +22,10 @@ class DropZoneControl extends Control
 
     /**
      * Dropzone file upload
+     * @param $id
+     * @return BootstrapUIForm
      */
-    public function createComponentDropForm($id)
+    public function createComponentDropForm($id): BootstrapUIForm
     {
         $type = 0;
 
@@ -51,7 +53,10 @@ class DropZoneControl extends Control
         return $form;
     }
 
-    public function dropFormSucceeded(BootstrapUIForm $form)
+    /**
+     * @param BootstrapUIForm $form
+     */
+    public function dropFormSucceeded(BootstrapUIForm $form): void
     {
         if (!empty($_FILES)) {
             $ds = DIRECTORY_SEPARATOR;
@@ -63,10 +68,9 @@ class DropZoneControl extends Control
             $tempFile = $_FILES['file']['tmp_name'];
             $realFile = $_FILES['file']['name'];
             $targetPath = APP_DIR . $ds . $storeFolder . $ds;
-
             $targetFile = $targetPath . $_FILES['file']['name'];
 
-            move_uploaded_file($tempFile, $targetFile) or die('ddfgf');
+            move_uploaded_file($tempFile, $targetFile);
 
             $fileSize = filesize($targetFile);
 
