@@ -11,38 +11,51 @@ use Caloriscz\Page\PageDocumentControl;
 use Caloriscz\Page\PageSlugControl;
 use Caloriscz\Page\PageTitleControl;
 use Caloriscz\Utilities\PagingControl;
+use Kdyby\Doctrine\EntityManager;
+use Kdyby\Translation\Translator;
 use Nette;
+use Nette\Application\UI\Presenter;
+use Nette\Database\Context;
+use Nette\Http\IRequest;
+use Nette\Mail\IMailer;
+
 
 /**
  * Base presenter for all application presenters.
+ * @package App\FrontModule\Presenters
+ * @property-read \Nette\Bridges\ApplicationLatte\Template|\stdClass $template
  */
-class BasePresenter extends Nette\Application\UI\Presenter
+abstract class BasePresenter extends Presenter
 {
-    /** @var Nette\Database\Context */
+    /** @var Context */
     public $database;
 
-    /** @var \Kdyby\Doctrine\EntityManager */
+    /** @var EntityManager */
     public $em;
 
     /** @persistent */
     public $locale;
 
-    /** @var \Kdyby\Translation\Translator @inject */
+    /** @var Translator @inject */
     public $translator;
 
-    /** @var \Nette\Mail\IMailer @inject */
+    /** @var IMailer @inject */
     public $mailer;
 
-    /** @var Nette\Http\IRequest @inject */
+    /** @var IRequest @inject */
     public $request;
 
-    public function __construct(Nette\Database\Context $database, \Nette\Mail\IMailer $mailer)
+    public function __construct(Context $database, IMailer $mailer)
     {
         $this->database = $database;
         $this->mailer = $mailer;
     }
 
-    protected function createTemplate($class = NULL)
+    /**
+     * @param null $class
+     * @return Nette\Application\UI\ITemplate
+     */
+    protected function createTemplate($class = null)
     {
         $template = parent::createTemplate($class);
         $template->addFilter(NULL, '\Filters::common');
@@ -85,15 +98,15 @@ class BasePresenter extends Nette\Application\UI\Presenter
         // Secret password mode
         $secret = $this->request->getCookie('secretx');
 
-        if ($this->template->settings['site_cookie_whitelist'] != '') {
+        if ($this->template->settings['site_cookie_whitelist'] !== '') {
             if ($this->template->settings["site_cookie_whitelist"] != $secret) {
                 if ($_GET["secretx"] == $this->template->settings["site_cookie_whitelist"]) {
                     setcookie("secretx", $this->template->settings["site_cookie_whitelist"], time() + 3600000);
                 } else {
-                    if (empty($this->template->settings["maintenance_message"])) {
+                    if (empty($this->template->settings['maintenance_message'])) {
                         include_once('.maintenance.php');
                     } else {
-                        echo $this->template->settings["maintenance_message"];
+                        echo $this->template->settings['maintenance_message'];
                     }
                     exit();
                 }
@@ -101,8 +114,8 @@ class BasePresenter extends Nette\Application\UI\Presenter
         }
 
         // Arguments for language switch box
-        $parametres = $this->getParameters(TRUE);
-        unset($parametres["locale"]);
+        $parametres = $this->getParameters(true);
+        unset($parametres['locale']);
         $this->template->args = $parametres;
 
         $this->template->langSelected = $this->translator->getLocale();
@@ -114,15 +127,15 @@ class BasePresenter extends Nette\Application\UI\Presenter
 
         try {
             if ($this->user->isLoggedIn()) {
-                $this->template->isLoggedIn = TRUE;
+                $this->template->isLoggedIn = true;
 
-                $this->template->member = $this->database->table("users")
+                $this->template->member = $this->database->table('users')
                     ->get($this->user->getId());
             } else {
-                $this->template->isLoggedIn = FALSE;
+                $this->template->isLoggedIn = false;
             }
         } catch (\Exception $e) {
-            $this->template->isLoggedIn = FALSE;
+            $this->template->isLoggedIn = false;
         }
 
         $this->template->appDir = APP_DIR;
@@ -132,57 +145,90 @@ class BasePresenter extends Nette\Application\UI\Presenter
 
     }
 
-    protected function createComponentPaging()
+    /**
+     * @return PagingControl
+     */
+    protected function createComponentPaging(): PagingControl
     {
         return new PagingControl;
     }
 
-    protected function createComponentNavigation()
+    /**
+     * @return NavigationControl
+     */
+    protected function createComponentNavigation(): NavigationControl
     {
         return new NavigationControl($this->database);
     }
 
-    protected function createComponentContact()
+    /**
+     * @return \ContactControl
+     */
+    protected function createComponentContact(): \ContactControl
     {
         return new \ContactControl($this->database);
     }
 
-    protected function createComponentAdvancedSearch()
+    /**
+     * @return AdvancedSearchControl
+     */
+    protected function createComponentAdvancedSearch(): AdvancedSearchControl
     {
         return new AdvancedSearchControl($this->database);
     }
 
-    protected function createComponentHead()
+    /**
+     * @return HeadControl
+     */
+    protected function createComponentHead(): HeadControl
     {
         return new HeadControl($this->database);
     }
 
-    protected function createComponentPageTitle()
+    /**
+     * @return PageTitleControl
+     */
+    protected function createComponentPageTitle(): PageTitleControl
     {
         return new PageTitleControl($this->database);
     }
 
-    protected function createComponentPageDocument()
+    /**
+     * @return PageDocumentControl
+     */
+    protected function createComponentPageDocument(): PageDocumentControl
     {
         return new PageDocumentControl($this->database);
     }
 
-    protected function createComponentPageSlug()
+    /**
+     * @return PageSlugControl
+     */
+    protected function createComponentPageSlug(): PageSlugControl
     {
         return new PageSlugControl($this->database);
     }
 
-    protected function createComponentAdminBar()
+    /**
+     * @return AdminBarControl
+     */
+    protected function createComponentAdminBar(): AdminBarControl
     {
         return new AdminBarControl($this->database);
     }
 
-    protected function createComponentMenu()
+    /**
+     * @return MenuControl
+     */
+    protected function createComponentMenu(): MenuControl
     {
         return new MenuControl($this->database);
     }
 
-    protected function createComponentFooter()
+    /**
+     * @return FooterControl
+     */
+    protected function createComponentFooter(): FooterControl
     {
         return new FooterControl($this->database);
     }
@@ -190,11 +236,11 @@ class BasePresenter extends Nette\Application\UI\Presenter
     /**
      * Content editable snippets
      */
-    public function handleSnippet()
+    public function handleSnippet(): void
     {
-        $this->database->table('snippets')->get($this->getParameter('snippetId'))->update(array(
+        $this->database->table('snippets')->get($this->getParameter('snippetId'))->update([
             'content' => $this->getParameter('text')
-        ));
+        ]);
         exit();
 
     }
@@ -202,11 +248,11 @@ class BasePresenter extends Nette\Application\UI\Presenter
     /**
      * Content editable page title
      */
-    public function handlePagetitle()
+    public function handlePagetitle(): void
     {
-        $this->database->table('pages')->where('id', $this->getParameter('editorId'))->update(array(
+        $this->database->table('pages')->where('id', $this->getParameter('editorId'))->update([
             'title' => $this->getParameter('text')
-        ));
+        ]);
         exit();
 
     }

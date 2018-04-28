@@ -37,11 +37,12 @@ class SavePathsControl extends Control
     /**
      * Edit setting for path
      * @param BootstrapUIForm $form
+     * @throws \Nette\Application\AbortException
      */
-    public function editSettingsSucceeded(BootstrapUIForm $form)
+    public function editSettingsSucceeded(BootstrapUIForm $form): void
     {
         if ('' === $form->values->path->name) {
-            $this->presenter->redirect(this, array('id' => null));
+            $this->presenter->redirect('this', ['id' => null]);
         }
 
         if (file_exists($_FILES['path']['tmp_name']) || is_uploaded_file($_FILES['path']['tmp_name'])) {
@@ -60,7 +61,7 @@ class SavePathsControl extends Control
 
         }
 
-        $this->redirect('this', array("id" => null));
+        $this->redirect('this', ["id" => null]);
     }
 
     public function render($item)

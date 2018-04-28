@@ -71,11 +71,11 @@ class EditControl extends Control
      */
     public function editFormSucceeded(BootstrapUIForm $form): void
     {
-        $this->database->table('users')->get($this->presenter->user->getId())->update(array(
+        $this->database->table('users')->get($this->presenter->user->getId())->update([
             'name' => $form->values->name,
             'email' => $form->values->email,
             'adminbar_enabled' => $form->values->adminbar,
-        ));
+        ]);
 
         $this->presenter->response->setCookie('language_admin', $form->values->language, '180 days');
     }

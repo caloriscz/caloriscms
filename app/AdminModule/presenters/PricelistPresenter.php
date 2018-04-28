@@ -5,8 +5,7 @@ namespace App\AdminModule\Presenters;
 use Caloriscz\Pricelist\CategoryControl;
 use Caloriscz\Pricelist\EditItemControl;
 use Caloriscz\Pricelist\NewItemControl;
-use Joseki\Application\Responses\PdfResponse;
-use Latte\Engine;
+use Nette\Application\AbortException;
 use Nette\Forms\BootstrapUIForm;
 use Nette\Forms\Form;
 
@@ -16,17 +15,26 @@ use Nette\Forms\Form;
 class PricelistPresenter extends BasePresenter
 {
 
-    protected function createComponentPricelistCategory()
+    /**
+     * @return CategoryControl
+     */
+    protected function createComponentPricelistCategory(): CategoryControl
     {
         return new CategoryControl($this->database);
     }
 
-    protected function createComponentPricelistNewItem()
+    /**
+     * @return NewItemControl
+     */
+    protected function createComponentPricelistNewItem(): NewItemControl
     {
         return new NewItemControl($this->database);
     }
 
-    protected function createComponentPricelistEditItem()
+    /**
+     * @return EditItemControl
+     */
+    protected function createComponentPricelistEditItem(): EditItemControl
     {
         return new EditItemControl($this->database);
     }
@@ -60,7 +68,11 @@ class PricelistPresenter extends BasePresenter
         return $form;
     }
 
-    public function insertDayFormSucceeded(BootstrapUIForm $form)
+    /**
+     * @param BootstrapUIForm $form
+     * @throws AbortException
+     */
+    public function insertDayFormSucceeded(BootstrapUIForm $form): void
     {
         $id = $this->database->table('pricelist_dates')->insert([
             'day' => $form->values->day,
@@ -71,6 +83,7 @@ class PricelistPresenter extends BasePresenter
 
     /**
      * Menu Insert
+     * @return mixed
      */
     protected function createComponentInsertDailyForm()
     {
@@ -88,32 +101,38 @@ class PricelistPresenter extends BasePresenter
             ->addRule(Form::INTEGER, 'Zadávajte pouze čísla')
             ->setAttribute('style', 'width: 50px; text-align: right;');
 
-        $form->setDefaults(array(
+        $form->setDefaults([
             'day' => $this->getParameter('day'),
-        ));
+        ]);
 
         $form->addSubmit('submitm', 'dictionary.main.Insert');
 
-        $form->onSuccess[] = $this->insertDailyFormSucceeded;
+        $form->onSuccess[] = [$this, 'insertDailyFormSucceeded'];
         return $form;
     }
 
-    public function insertDailyFormSucceeded(\Nette\Forms\BootstrapUIForm $form)
+    /**
+     * @param BootstrapUIForm $form
+     * @throws AbortException
+     */
+    public function insertDailyFormSucceeded(BootstrapUIForm $form): void
     {
-        $this->database->table('pricelist_daily')->insert(array(
+        $this->database->table('pricelist_daily')->insert([
             'title' => $form->values->title,
             'pricelist_categories_id' => $form->values->category,
             'price' => $form->values->price,
             'pricelist_dates_id' => $form->values->day,
-        ));
+        ]);
 
         $this->redirect(':Admin:Pricelist:daily', ['day' => $form->values->day]);
     }
 
     /**
      * Delete food
+     * @param $id
+     * @throws AbortException
      */
-    public function handleDelete($id)
+    public function handleDelete($id): void
     {
         $this->database->table('pricelist')->get($id)->delete();
 
@@ -122,8 +141,11 @@ class PricelistPresenter extends BasePresenter
 
     /**
      * Delete daily food
+     * @param $id
+     * @param $day
+     * @throws AbortException
      */
-    public function handleDeleteDaily($id, $day)
+    public function handleDeleteDaily($id, $day): void
     {
         $this->database->table('pricelist_daily')->get($id)->delete();
 
@@ -132,15 +154,23 @@ class PricelistPresenter extends BasePresenter
 
     /**
      * Delete daily food
+     * @param $id
+     * @throws AbortException
      */
-    public function handleDeleteDay($id)
+    public function handleDeleteDay($id): void
     {
         $this->database->table('pricelist_dates')->where(['id' => $id])->delete();
 
         $this->redirect(':Admin:Pricelist:days');
     }
 
-    public function handleUp($id, $sorted, $category)
+    /**
+     * @param $id
+     * @param $sorted
+     * @param $category
+     * @throws AbortException
+     */
+    public function handleUp($id, $sorted, $category): void
     {
         $sortDb = $this->database->table('pricelist')->where([
             'sorted > ?' => $sorted,
@@ -156,7 +186,13 @@ class PricelistPresenter extends BasePresenter
         $this->redirect(':Admin:Pricelist:default', ['id' => null]);
     }
 
-    public function handleDown($id, $sorted, $category)
+    /**
+     * @param $id
+     * @param $sorted
+     * @param $category
+     * @throws AbortException
+     */
+    public function handleDown($id, $sorted, $category): void
     {
         $sortDb = $this->database->table('pricelist')->where([
             'sorted < ?' => $sorted,
@@ -172,7 +208,7 @@ class PricelistPresenter extends BasePresenter
         $this->redirect(':Admin:Pricelist:default', ['id' => null]);
     }
 
-    public function renderDefault()
+    public function renderDefault(): void
     {
         $this->template->database = $this->database;
 

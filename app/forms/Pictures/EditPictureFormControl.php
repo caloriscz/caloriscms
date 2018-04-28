@@ -19,8 +19,9 @@ class EditPictureFormControl extends Control
 
     /**
      * Edit file information
+     * @return BootstrapUIForm
      */
-    protected function createComponentEditForm()
+    protected function createComponentEditForm(): BootstrapUIForm
     {
         $image = $this->database->table('pictures')->get($this->getPresenter()->getParameter('id'));
 
@@ -47,7 +48,11 @@ class EditPictureFormControl extends Control
         return $form;
     }
 
-    public function editFormSucceeded(BootstrapUIForm $form)
+    /**
+     * @param BootstrapUIForm $form
+     * @throws \Nette\Application\AbortException
+     */
+    public function editFormSucceeded(BootstrapUIForm $form): void
     {
         $this->database->table('pictures')
             ->get($form->values->id)->update([
@@ -55,9 +60,9 @@ class EditPictureFormControl extends Control
                 'description' => $form->values->description,
             ]);
 
-        $this->getPresenter()->redirect('this', array(
+        $this->getPresenter()->redirect('this', [
             'id' => $form->values->id,
-        ));
+        ]);
     }
 
     public function render()

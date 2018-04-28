@@ -7,7 +7,7 @@ namespace App\FrontModule\Presenters;
  */
 class PricelistPresenter extends BasePresenter
 {
-    public function renderDefault()
+    public function renderDefault(): void
     {
         $this->template->menu = $this->database->table('pricelist')
             ->select('pricelist.id, pricelist.pricelist_categories_id, pricelist.title AS amenu, '
@@ -15,7 +15,7 @@ class PricelistPresenter extends BasePresenter
             ->order('pricelist_categories_id, pricelist.sorted DESC');
     }
 
-    public function renderDaily()
+    public function renderDaily(): void
     {
         $dayDb = $this->database->table('pricelist_dates')->where(['day' => date('Y-m-d')]);
 

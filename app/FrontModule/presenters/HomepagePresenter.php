@@ -10,18 +10,15 @@ use Caloriscz\Page\HomepageControl;
  */
 class HomepagePresenter extends BasePresenter
 {
-
-    protected function startup()
-    {
-        parent::startup();
-    }
-
-    protected function createComponentHomepage()
+    /**
+     * @return HomepageControl
+     */
+    protected function createComponentHomepage(): HomepageControl
     {
         return new HomepageControl($this->database);
     }
 
-    public function renderDefault()
+    public function renderDefault(): void
     {
         $this->template->page = $this->database->table('pages')->get(1);
     }

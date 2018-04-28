@@ -9,7 +9,10 @@ use Caloriscz\Blog\BlogListControl;
  */
 class PagesPresenter extends BasePresenter
 {
-    protected function createComponentBlogList()
+    /**
+     * @return BlogListControl
+     */
+    protected function createComponentBlogList(): BlogListControl
     {
         return new BlogListControl($this->database);
     }

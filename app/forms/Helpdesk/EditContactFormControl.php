@@ -11,6 +11,10 @@ class EditContactFormControl extends Control
     /** @var \Nette\Database\Context */
     public $database;
 
+    /**
+     * EditContactFormControl constructor.
+     * @param Context $database
+     */
     public function __construct(Context $database)
     {
         $this->database = $database;
@@ -18,8 +22,9 @@ class EditContactFormControl extends Control
 
     /**
      * Edit helpdesk
+     * @return BootstrapUIForm
      */
-    public function createComponentEditForm()
+    public function createComponentEditForm(): BootstrapUIForm
     {
         $form = new BootstrapUIForm();
         $form->setTranslator($this->presenter->translator);
@@ -36,12 +41,12 @@ class EditContactFormControl extends Control
 
         $helpdesk = $this->database->table('helpdesk')->get($this->presenter->getParameter('id'));
 
-        $form->setDefaults(array(
+        $form->setDefaults([
             'helpdesk_id' => $helpdesk->id,
             'title' => $helpdesk->title,
             'description' => $helpdesk->description,
             'fill_phone' => $helpdesk->fill_phone,
-        ));
+        ]);
 
         $form->addSubmit('submitm', 'dictionary.main.Save');
 
@@ -49,16 +54,20 @@ class EditContactFormControl extends Control
         return $form;
     }
 
-    public function editFormSucceeded(BootstrapUIForm $form)
+    /**
+     * @param BootstrapUIForm $form
+     * @throws \Nette\Application\AbortException
+     */
+    public function editFormSucceeded(BootstrapUIForm $form): void
     {
         $this->database->table('helpdesk')->get($form->values->helpdesk_id)
-            ->update(array(
+            ->update([
                 'title' => $form->values->title,
                 'description' => $form->values->description,
                 'fill_phone' => $form->values->fill_phone,
-            ));
+            ]);
 
-        $this->presenter->redirect('this', array('id' => $form->values->helpdesk_id));
+        $this->presenter->redirect('this', ['id' => $form->values->helpdesk_id]);
     }
 
     public function render()

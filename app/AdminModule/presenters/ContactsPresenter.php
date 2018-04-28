@@ -23,17 +23,10 @@ use Nette,
 class ContactsPresenter extends BasePresenter
 {
 
-    protected function startup()
-    {
-        parent::startup();
-
-        $this->template->page = $this->database->table('pages')->get($this->getParameter('id'));
-    }
-
     /**
      * @return EditContactControl
      */
-    protected function createComponentEditContact()
+    protected function createComponentEditContact(): EditContactControl
     {
         $control = new EditContactControl($this->database);
         $control->onSave[] = function ($pages_id, $error = null) {
@@ -41,53 +34,53 @@ class ContactsPresenter extends BasePresenter
                 $this->flashMessage($this->translator->translate('messages.sign.fillInEmail'), 'error');
             }
 
-            $this->redirect('this', array('id' => $pages_id));
+            $this->redirect('this', ['id' => $pages_id]);
         };
 
         return $control;
     }
 
-    protected function createComponentInsertContact()
+    protected function createComponentInsertContact(): InsertContactControl
     {
         return new InsertContactControl($this->database);
     }
 
-    protected function createComponentInsertHour()
+    protected function createComponentInsertHour(): InsertHourControl
     {
         return new InsertHourControl($this->database);
     }
 
-    protected function createComponentInsertCommunication()
+    protected function createComponentInsertCommunication(): InsertCommunicationControl
     {
         return new InsertCommunicationControl($this->database);
     }
 
-    protected function createComponentLoadVat()
+    protected function createComponentLoadVat(): LoadVatControl
     {
         return new LoadVatControl($this->database);
     }
 
-    protected function createComponentContactGrid()
+    protected function createComponentContactGrid(): ContactGridControl
     {
         return new ContactGridControl($this->database);
     }
 
-    protected function createComponentCommunicationGrid()
+    protected function createComponentCommunicationGrid(): CommunicationGridControl
     {
         return new CommunicationGridControl($this->database);
     }
 
-    protected function createComponentCategoryEdit()
+    protected function createComponentCategoryEdit(): EditCategoryControl
     {
         return new EditCategoryControl($this->database);
     }
 
-    protected function createComponentCategoryInsert()
+    protected function createComponentCategoryInsert(): InsertCategoryControl
     {
         return new InsertCategoryControl($this->database);
     }
 
-    protected function createComponentContactCategories()
+    protected function createComponentContactCategories(): InsertContactCategoryControl
     {
         return new InsertContactCategoryControl($this->database);
     }
@@ -101,7 +94,7 @@ class ContactsPresenter extends BasePresenter
     {
         $this->database->table('contacts_openinghours')->get($this->getParameter('hour'))->delete();
 
-        $this->redirect(':Admin:Contacts:detailOpeningHours', array('id' => $id));
+        $this->redirect(':Admin:Contacts:detailOpeningHours', ['id' => $id]);
     }
 
     /**
@@ -158,7 +151,7 @@ class ContactsPresenter extends BasePresenter
             $this->database->table('contacts_categories')->where(['id' => $sort->id])->update(['sorted' => $sorted]);
         }
 
-        $this->presenter->redirect(this, ['id' => null]);
+        $this->presenter->redirect('this', ['id' => null]);
     }
 
     /**
@@ -169,7 +162,7 @@ class ContactsPresenter extends BasePresenter
         $this->database->table('contacts_categories');
     }
 
-    public function renderDefault()
+    public function renderDefault(): void
     {
         $contactsDb = $this->database->table('contacts')->order('name');
 

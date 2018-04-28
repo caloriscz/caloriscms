@@ -48,11 +48,14 @@ class File
      * Set file name
      * @param $file
      */
-    public function setFile($file)
+    public function setFile($file): void
     {
         $this->file = $file;
     }
 
+    /**
+     * @return mixed
+     */
     public function getFile()
     {
         return $this->file;
@@ -67,19 +70,22 @@ class File
             $this->type = $type;
         }
 
+    /**
+     * @return mixed
+     */
     public function getType() {
         return $this->type;
     }
 
-    public function create()
+    public function create(): void
     {
-        $this->database->table('media')->insert(array(
+        $this->database->table('media')->insert([
             'name' => $this->getFile(),
             'pages_id' => $this->getPageId(),
             'filesize' => filesize(APP_DIR . '/'. $this->path . '/' . $this->getPageId() . '/' . $this->getFile()),
             'file_type' => $this->getType(),
             'date_created' => date('Y-m-d H:i:s'),
-        ));
+        ]);
     }
 
 }

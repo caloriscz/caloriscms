@@ -57,7 +57,7 @@ class InsertHourControl extends Control
     {
         if (strlen($form->values->hourstext) < 1) {
             $this->getPresenter()->flashMessage('Vložte hodiny od-do nebo nějakou informaci', 'error');
-            $this->getPresenter()->redirect(this, array("id" => $form->values->id));
+            $this->getPresenter()->redirect('this', ["id" => $form->values->id]);
         }
     }
 
@@ -67,13 +67,13 @@ class InsertHourControl extends Control
      */
     public function insertFormSucceeded(BootstrapUIForm $form): void
     {
-        $this->database->table('contacts_openinghours')->insert(array(
+        $this->database->table('contacts_openinghours')->insert([
             'day' => $form->values->day,
             'hourstext' => $form->values->hourstext,
             'contacts_id' => $form->values->contact_id,
-        ));
+        ]);
 
-        $this->getPresenter()->redirect(this, ['id' => $form->values->contact_id]);
+        $this->getPresenter()->redirect('this', ['id' => $form->values->contact_id]);
     }
 
 

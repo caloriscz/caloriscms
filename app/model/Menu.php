@@ -9,6 +9,8 @@
 namespace App\Model;
 
 use Nette\Database\Context;
+use Nette\Database\Table\ActiveRow;
+use Nette\Database\Table\IRow;
 
 /**
  * Get category name
@@ -28,7 +30,7 @@ class Menu
     /**
      * Get name of the category
      * @param $category
-     * @return bool|mixed|\Nette\Database\Table\ActiveRow|\Nette\Database\Table\IRow
+     * @return bool|mixed|ActiveRow|IRow
      */
     public function getName($category)
     {
@@ -55,13 +57,14 @@ class Menu
 
     /**
      * Get published Categories as an array
-     * @return aray of categories with id
+     * @return array
      */
-    public function getAllWithSubs()
+    public function getAllWithSubs(): array
     {
-        $category = $this->database->table('menu')->where('parent_id', NULL)->order('title');
+        $categoryDb = $this->database->table('menu')->where('parent_id', null)->order('title');
+        $category = [];
 
-        foreach ($category as $categories) {
+        foreach ($categoryDb as $categories) {
             $catsSubs = $categoryDbSub = $this->database->table('menu')->where('parent_id', $categories->id)->order('sorted, title');
 
             if ($catsSubs->count() > 0) {
@@ -84,16 +87,16 @@ class Menu
      * @param null $arr
      * @return array|null
      */
-    public function getBreadcrumb($id, $arr = NULL)
+    public function getbreadcrumb($id, $arr = null)
     {
         if ($id === null) {
-            return array_reverse($arr, TRUE);
+            return array_reverse($arr, true);
         } else {
             $catDb = $this->database->table('menu')->get($id);
 
             if ($catDb) {
                 $arr[$catDb->ref('slug', 'slug_id')->title] = $catDb->title;
-                return $this->getBreadcrumb($catDb->parent_id, $arr);
+                return $this->getbreadcrumb($catDb->parent_id, $arr);
             } else {
                 return $arr;
             }

@@ -37,48 +37,72 @@ class PagesPresenter extends BasePresenter
         $control = new PageListControl($this->database);
         $control->setView($view);
         $control->onSave[] = function ($type) {
-            $this->redirect('this', array('type' => $type));
+            $this->redirect('this', ['type' => $type]);
         };
 
         return $control;
     }
 
-    protected function createComponentPageFilterRelated()
+    /**
+     * @return FilterFormControl
+     */
+    protected function createComponentPageFilterRelated(): FilterFormControl
     {
         return new FilterFormControl($this->database);
     }
 
-    protected function createComponentInsertPageForm()
+    /**
+     * @return InsertFormControl
+     */
+    protected function createComponentInsertPageForm(): InsertFormControl
     {
         return new InsertFormControl($this->database, $this->em);
     }
 
-    protected function createComponentLangSelector()
+    /**
+     * @return \LangSelectorControl
+     */
+    protected function createComponentLangSelector(): \LangSelectorControl
     {
         return new \LangSelectorControl($this->em);
     }
 
-    protected function createComponentImageEditForm()
+    /**
+     * @return ImageEditFormControl
+     */
+    protected function createComponentImageEditForm(): ImageEditFormControl
     {
         return new ImageEditFormControl($this->database);
     }
 
-    protected function createComponentDropZoneMedia()
+    /**
+     * @return DropZoneMediaControl
+     */
+    protected function createComponentDropZoneMedia(): DropZoneMediaControl
     {
         return new DropZoneMediaControl($this->database);
     }
 
-    protected function createComponentDropZonePictures()
+    /**
+     * @return DropZonePicturesControl
+     */
+    protected function createComponentDropZonePictures(): DropZonePicturesControl
     {
         return new DropZonePicturesControl($this->database);
     }
 
-    public function createComponentImageBrowser()
+    /**
+     * @return ImageBrowserControl
+     */
+    public function createComponentImageBrowser(): ImageBrowserControl
     {
         return new ImageBrowserControl($this->database);
     }
 
-    public function createComponentEditorSettings()
+    /**
+     * @return EditorSettingsControl
+     */
+    public function createComponentEditorSettings(): EditorSettingsControl
     {
         $control = new EditorSettingsControl($this->database, $this->em);
         $control->onSave[] = function (array $querystring, string $error = null) {
@@ -99,7 +123,7 @@ class PagesPresenter extends BasePresenter
      * @param $public
      * @throws \Nette\Application\AbortException
      */
-    protected function handleChangeState($identifier, $public)
+    protected function handleChangeState($identifier, $public): void
     {
         $idState = 0;
 
@@ -117,7 +141,7 @@ class PagesPresenter extends BasePresenter
      * @param $id
      * @throws \Nette\Application\AbortException
      */
-    public function handleDeleteRelated($id)
+    public function handleDeleteRelated($id): void
     {
         $this->database->table('pages_related')->get($id)->delete();
         $this->redirect(':Admin:Pages:detailRelated', ['id' => $this->getParameter('item')]);
@@ -137,7 +161,7 @@ class PagesPresenter extends BasePresenter
      * @param $id
      * @throws \Nette\Application\AbortException
      */
-    public function handleInsertRelated($id)
+    public function handleInsertRelated($id): void
     {
         $this->database->table('pages_related')->insert([
             'pages_id' => $this->getParameter('item'),
@@ -146,46 +170,49 @@ class PagesPresenter extends BasePresenter
         $this->redirect(':Admin:Pages:detailRelated', ['id' => $this->getParameter('item')]);
     }
 
-    public function handleView()
+    /**
+     * @throws \Nette\Application\AbortException
+     */
+    public function handleView(): void
     {
         $this->response->setCookie('view', $this->getParameter('view'), '180 days');
 
         $this->redirect(':Admin:Pages:default', ['type' => $this->getParameter('type'), 'view' => $this->getParameter('view')]);
     }
 
-    public function renderDefault()
+    public function renderDefault(): void
     {
         $this->template->view = $this->request->getCookie('view');
     }
 
-    public function renderDetail()
+    public function renderDetail(): void
     {
         $this->template->pages = $this->database->table('pages')->get($this->getParameter('id'));
     }
 
-    public function renderDetailImages()
+    public function renderDetailImages(): void
     {
         $this->template->pages = $this->database->table('pages')->get($this->getParameter('id'));
     }
 
-    public function renderSettings()
+    public function renderSettings(): void
     {
         $this->template->pages = $this->database->table('pages')->get($this->getParameter('id'));
     }
 
-    public function renderImagesDetail()
+    public function renderImagesDetail(): void
     {
         $this->template->page = $this->database->table('pages')->get($this->getParameter('id'));
     }
 
-    public function renderDetailFiles()
+    public function renderDetailFiles(): void
     {
         $this->template->page = $this->database->table('pages')->get($this->getParameter('id'));
         $this->template->files = $this->database->table('media')
             ->where(['pages_id' => $this->getParameter('id'), 'file_type' => 0]);
     }
 
-    public function renderDetailRelated()
+    public function renderDetailRelated(): void
     {
         $src = $this->getParameter('src');
 

@@ -2,6 +2,7 @@
 
 namespace Caloriscz\Members;
 
+use Nette\Application\AbortException;
 use Nette\Application\UI\Control;
 use Nette\Database\Context;
 use Nette\Utils\Html;
@@ -19,10 +20,15 @@ class MemberGridControl extends Control
         $this->database = $database;
     }
 
-    protected function createComponentMemberGrid($name)
+    /**
+     * @param $name
+     * @throws \Nette\InvalidStateException
+     */
+    protected function createComponentMemberGrid($name): void
     {
 
-        $grid = new DataGrid($this, $name);
+        $grid = new DataGrid();
+        $this->addComponent($grid, $name);
 
         if ($this->getPresenter()->id === null) {
             $contacts = $this->database->table('users');
@@ -37,7 +43,7 @@ class MemberGridControl extends Control
 
             $grid->addColumnLink('name', 'dictionary.main.Title')
                 ->setRenderer(function ($item) {
-                    $url = Html::el('a')->href($this->getPresenter()->link('edit', array("id" => $item->id)))
+                    $url = Html::el('a')->href($this->getPresenter()->link('edit', ["id" => $item->id]))
                         ->setText($item->username);
                     return $url;
                 })
@@ -56,9 +62,7 @@ class MemberGridControl extends Control
                 ->setSortable();
             $grid->addColumnText('date_created', $this->getPresenter()->translator->translate('dictionary.main.Date'))
                 ->setRenderer(function ($item) {
-                    $date = date('j. n. Y', strtotime($item->date_created));
-
-                    return $date;
+                    return date('j. n. Y', strtotime($item->date_created));
                 })
                 ->setSortable();
         } catch (\Exception $e) {
@@ -68,23 +72,24 @@ class MemberGridControl extends Control
 
     /**
      * User delete
+     * @throws AbortException
      */
-    public function handleDelete($id)
+    public function handleDelete($id): void
     {
         if (!$this->getPresenter()->template->member->users_roles->members) {
             $this->flashMessage($this->getPresenter()->translator->translate('messages.members.PermissionDenied'), 'error');
             $this->redirect('this', ['id' => null]);
         }
 
-        for ($a = 0; $a < count($id); $a++) {
+        for ($a = 0, $aMax = \count($id); $a < $aMax; $a++) {
             $member = $this->database->table('users')->get($id[$a]);
 
             if ($member->username === 'admin') {
                 $this->flashMessage('Nemůžete smazat účet administratora', 'error');
-                $this->redirect(':Admin:Members:default', array('id' => null));
+                $this->redirect(':Admin:Members:default', ['id' => null]);
             } elseif ($member->id === $this->getPresenter()->user->getId()) {
                 $this->flashMessage('Nemůžete smazat vlastní účet', 'error');
-                $this->redirect(':Admin:Members:default', array('id' => null));
+                $this->redirect(':Admin:Members:default', ['id' => null]);
             }
 
             $this->database->table('users')->get($id[$a])->delete();
@@ -93,7 +98,7 @@ class MemberGridControl extends Control
         $this->redirect('this', ['id' => null]);
     }
 
-    public function render()
+    public function render(): void
     {
         $this->template->setFile(__DIR__ . '/MemberGridControl.latte');
         $this->template->render();

@@ -18,8 +18,11 @@ class InsertLanguageControl extends Control
         $this->database = $database;
     }
 
-    /* Insert new language */
-    protected function createComponentInsertForm()
+    /**
+     * Insert new language
+     * @return BootstrapUIForm
+     */
+    protected function createComponentInsertForm(): BootstrapUIForm
     {
         $form = new BootstrapUIForm();
         $form->setTranslator($this->presenter->translator);
@@ -38,27 +41,34 @@ class InsertLanguageControl extends Control
         return $form;
     }
 
-    public function permissionValidated()
+    /**
+     * @throws \Nette\Application\AbortException
+     */
+    public function permissionValidated(): void
     {
         if ($this->presenter->template->member->users_roles->settings === 0) {
             $this->presenter->flashMessage('Nemáte oprávnění k této akci', 'error');
-            $this->presenter->redirect(this);
+            $this->presenter->redirect('this');
         }
     }
 
-    public function insertFormSucceeded(BootstrapUIForm $form)
+    /**
+     * @param BootstrapUIForm $form
+     * @throws \Nette\Application\AbortException
+     */
+    public function insertFormSucceeded(BootstrapUIForm $form): void
     {
         $langExists = $this->database->table('languages')->where('title = ? OR code = ?',
             $form->values->language, $form->values->code);
 
         if ($langExists->count() > 0) {
             $this->presenter->flashMessage('Název jazyka nebo kód již existuje', 'error');
-            $this->presenter->redirect(this);
+            $this->presenter->redirect('this');
         } else {
-            $this->database->table('languages')->insert(array(
+            $this->database->table('languages')->insert([
                 'title' => $form->values->language,
                 'code' => $form->values->code,
-            ));
+            ]);
 
             $this->presenter->redirect(this);
         }

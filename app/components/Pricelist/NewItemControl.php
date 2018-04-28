@@ -20,8 +20,9 @@ class NewItemControl extends Control
 
     /**
      * Menu Insert
+     * @return BootstrapUIForm
      */
-    protected function createComponentInsertForm()
+    protected function createComponentInsertForm(): BootstrapUIForm
     {
         $category = $this->database->table('pricelist_categories')->order('id')->fetchPairs('id', 'title');
         $form = new BootstrapUIForm();
@@ -49,7 +50,7 @@ class NewItemControl extends Control
      * @param BootstrapUIForm $form
      * @throws \Nette\Application\AbortException
      */
-    public function insertFormSucceeded(BootstrapUIForm $form)
+    public function insertFormSucceeded(BootstrapUIForm $form): void
     {
         $max = $this->database->table('pricelist')->max('sorted') + 1;
 
@@ -69,7 +70,7 @@ class NewItemControl extends Control
         $template = $this->getTemplate();
 
         $getParams = $this->getParameters();
-        unset($getParams["page"]);
+        unset($getParams['page']);
         $template->args = $getParams;
 
         $template->setFile(__DIR__ . '/NewItemControl.latte');

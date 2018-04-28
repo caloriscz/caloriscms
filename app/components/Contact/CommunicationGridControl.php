@@ -16,28 +16,37 @@ class CommunicationGridControl extends Control
         $this->database = $database;
     }
 
-    public function createComponentCommunicationGrid($name)
+    /**
+     * @param $name
+     * @throws \Nette\InvalidStateException
+     */
+    public function createComponentCommunicationGrid($name): void
     {
-        $grid = new DataGrid($this, $name);
+        $grid = new DataGrid();
+        $this->addComponent($grid, $name);
 
         $dbCommunications = $this->database->table('contacts_communication')
             ->where(['contacts_id' => $this->presenter->getParameter('id')]);
 
         $grid->setDataSource($dbCommunications);
-        $grid->setItemsPerPageList(array(20));
+        $grid->setItemsPerPageList([20]);
         $grid->addGroupAction('dictionary.main.Delete')->onSelect[] = [$this, 'handleDeleteCommunication'];
         $grid->addColumnText('communication_type', 'Typ');
         $grid->addColumnText('communication_value', 'Hodnota');
         $grid->setTranslator($this->presenter->translator);
     }
 
-    public function handleDeleteCommunication($id)
+    /**
+     * @param $id
+     * @throws \Nette\Application\AbortException
+     */
+    public function handleDeleteCommunication($id): void
     {
-        for ($a = 0; $a < count($id); $a++) {
+        for ($a = 0, $aMax = count($id); $a < $aMax; $a++) {
             $contacts = $this->database->table('contacts_communication')->get($id);
             $contactsId = $contacts->contacts_id;
             $contacts->delete();
-            $this->getPresenter()->redirect(this, array('id' => $contactsId));
+            $this->getPresenter()->redirect(this, ['id' => $contactsId]);
         }
     }
 

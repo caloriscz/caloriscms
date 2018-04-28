@@ -28,7 +28,7 @@ class CategoryControl extends Control
      * @param $id
      * @throws \Nette\Application\AbortException
      */
-    public function handleGeneratePdf($id)
+    public function handleGeneratePdf($id): void
     {
         $file = substr(APP_DIR, 0, -4) . '/app/AdminModule/templates/Pricelist';
 
@@ -57,7 +57,7 @@ class CategoryControl extends Control
      * Insert category
      * @return BootstrapUIForm
      */
-    protected function createComponentInsertCategoryForm()
+    protected function createComponentInsertCategoryForm(): BootstrapUIForm
     {
         $form = new BootstrapUIForm();
         $form->setTranslator($this->presenter->translator);
@@ -81,7 +81,7 @@ class CategoryControl extends Control
      * @param BootstrapUIForm $form
      * @throws \Nette\Application\AbortException
      */
-    public function validateCategoryFormSucceeded(BootstrapUIForm $form)
+    public function validateCategoryFormSucceeded(BootstrapUIForm $form): void
     {
         $redirectTo = $this->presenter->getName();
 
@@ -105,7 +105,7 @@ class CategoryControl extends Control
      * @param BootstrapUIForm $form
      * @throws \Nette\Application\AbortException
      */
-    public function insertCategoryFormSucceeded(BootstrapUIForm $form)
+    public function insertCategoryFormSucceeded(BootstrapUIForm $form): void
     {
         $this->database->table('pricelist_categories')->insert([
             'title' => $form->values->title,

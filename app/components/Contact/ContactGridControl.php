@@ -2,6 +2,8 @@
 
 namespace Caloriscz\Contact;
 
+use Exception;
+use Nette\Application\AbortException;
 use Nette\Application\UI\Control;
 use Nette\Database\Context;
 use Nette\Utils\Html;
@@ -10,7 +12,7 @@ use Ublaboo\DataGrid\DataGrid;
 class ContactGridControl extends Control
 {
 
-    /** @var \Nette\Database\Context */
+    /** @var Context */
     public $database;
 
     public function __construct(Context $database)
@@ -23,10 +25,13 @@ class ContactGridControl extends Control
     /**
      * Ubladoo datagrid
      * @param $name
+     * @throws \Nette\InvalidStateException
      */
-    protected function createComponentContactsGrid($name)
+    protected function createComponentContactsGrid($name): void
     {
-        $grid = new DataGrid($this, $name);
+        $grid = new DataGrid();
+        $this->addComponent($grid, $name);
+
 
         if ($this->getPresenter()->id === null) {
             $contacts = $this->database->table('contacts');
@@ -40,9 +45,9 @@ class ContactGridControl extends Control
 
             $grid->addColumnLink('name', 'dictionary.main.Title')
                 ->setRenderer(function ($item) {
-                    if (strlen($item->name) === 0 && strlen($item->company) === 0) {
+                    if ('' === $item->name && '' === $item->company) {
                         $name = 'nemá název';
-                    } elseif (strlen($item->name) === 0) {
+                    } elseif ('' === $item->name) {
                         $name = $item->company;
                     } else {
                         $name = $item->name;
@@ -65,7 +70,7 @@ class ContactGridControl extends Control
             $grid->addColumnText('street', $this->getPresenter()->translator->translate('dictionary.main.Address'))
                 ->setRenderer(function ($item) {
                     $address = $item->street . ', ' . $item->zip . ' ' . $item->city;
-                    if (strlen($address) > 2) {
+                    if (\strlen($address) > 2) {
                         $addressText = $address;
                     } else {
                         $addressText = null;
@@ -74,7 +79,7 @@ class ContactGridControl extends Control
                 })
                 ->setSortable();
             $grid->addFilterText('street', 'dictionary.main.Street');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             echo 'Grid error';
         }
 
@@ -84,17 +89,18 @@ class ContactGridControl extends Control
     /**
      * Delete contact with all other tables and related page
      * @param $id
+     * @throws AbortException
      */
-    public function handleDelete($id)
+    public function handleDelete($id): void
     {
-        for ($a = 0; $a < count($id); $a++) {
+        for ($a = 0, $aMax = \count($id); $a < $aMax; $a++) {
             $this->database->table('contacts')->get($id[$a])->delete();
         }
 
-        $this->presenter->redirect(this, array('id' => null));
+        $this->presenter->redirect('this', ['id' => null]);
     }
 
-    public function render()
+    public function render(): void
     {
         $template = $this->template;
         $template->setFile(__DIR__ . '/ContactGridControl.latte');

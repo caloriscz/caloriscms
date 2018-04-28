@@ -10,7 +10,7 @@ use Nette\Utils\Paginator;
 class MediaPresenter extends BasePresenter
 {
 
-    public function renderAlbum()
+    public function renderAlbum(): void
     {
         $arr = [
             'pages_types_id' => 6,
@@ -28,7 +28,7 @@ class MediaPresenter extends BasePresenter
         $this->template->gallery = $gallery->order('title')->limit($paginator->getLength(), $paginator->getOffset());
     }
 
-    public function renderAlbumWithDescription()
+    public function renderAlbumWithDescription(): void
     {
         $cols = ['pages_id' => $this->getParameter('page_id')];
 
@@ -46,7 +46,7 @@ class MediaPresenter extends BasePresenter
         $this->template->args = $this->getParameters();
     }
 
-    public function renderFolder()
+    public function renderFolder(): void
     {
         $arr = [
             'pages_types_id' => 8,
@@ -64,7 +64,7 @@ class MediaPresenter extends BasePresenter
         $this->template->gallery = $gallery->order('title')->limit($paginator->getLength(), $paginator->getOffset());
     }
 
-    public function renderFolderList()
+    public function renderFolderList(): void
     {
         $cols = ['pages_id' => $this->getParameter('page_id')];
 

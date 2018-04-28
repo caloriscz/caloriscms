@@ -70,16 +70,16 @@ class EditItemControl extends Control
      */
     public function editFormSucceeded(BootstrapUIForm $form)
     {
-        $this->database->table("pricelist")->where([
-            "id" => $form->values->id,
+        $this->database->table('pricelist')->where([
+            'id' => $form->values->id,
         ])->update([
-            "title" => $form->values->title,
-            "description" => $form->values->description,
-            "price" => $form->values->price,
-            "price_info" => $form->values->price_info,
+            'title' => $form->values->title,
+            'description' => $form->values->description,
+            'price' => $form->values->price,
+            'price_info' => $form->values->price_info,
         ]);
 
-        $this->presenter->redirect(":Admin:Pricelist:menuedit", ["id" => $form->values->id]);
+        $this->presenter->redirect(':Admin:Pricelist:menuedit', ['id' => $form->values->id]);
     }
 
 

@@ -17,7 +17,10 @@ class SignPresenter extends BasePresenter
     /** @persistent */
     public $backlink = '';
 
-    protected function createComponentLostPass()
+    /**
+     * @return LostPassControl
+     */
+    protected function createComponentLostPass(): LostPassControl
     {
         $control = new LostPassControl($this->database);
         $control->onSave[] = function ($message) {
@@ -33,22 +36,34 @@ class SignPresenter extends BasePresenter
         return $control;
     }
 
-    protected function createComponentResetPass()
+    /**
+     * @return ResetPassControl
+     */
+    protected function createComponentResetPass(): ResetPassControl
     {
         return new ResetPassControl($this->database);
     }
 
-    protected function createComponentVerify()
+    /**
+     * @return VerifyAccountControl
+     */
+    protected function createComponentVerify(): VerifyAccountControl
     {
         return new VerifyAccountControl($this->database);
     }
 
-    protected function createComponentSignIn()
+    /**
+     * @return SignInControl
+     */
+    protected function createComponentSignIn(): SignInControl
     {
         return new SignInControl($this->database);
     }
 
-    protected function createComponentSignUp()
+    /**
+     * @return SignUpControl
+     */
+    protected function createComponentSignUp(): SignUpControl
     {
         $control = new SignUpControl($this->database);
         $control->onSave[] = function ($redir, $message, $messageType) {
@@ -60,7 +75,10 @@ class SignPresenter extends BasePresenter
         return $control;
     }
 
-    public function actionOut()
+    /**
+     * @throws \Nette\Application\AbortException
+     */
+    public function actionOut(): void
     {
         $this->getUser()->logout();
 
@@ -68,14 +86,17 @@ class SignPresenter extends BasePresenter
         $this->redirect('in');
     }
 
-    public function renderIn()
+    public function renderIn(): void
     {
         if ($this->getParameter('msg') === 1) {
             $this->template->msg = true;
         }
     }
 
-    public function renderResetpass()
+    /**
+     *
+     */
+    public function renderResetpass(): void
     {
         $activation = $this->database->table('users')->where([
             'email' => $this->getParameter('email'),

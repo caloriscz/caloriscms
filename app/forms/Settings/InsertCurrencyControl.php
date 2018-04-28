@@ -17,7 +17,10 @@ class InsertCurrencyControl extends Control
         $this->database = $database;
     }
 
-    protected function createComponentInsertForm()
+    /**
+     * @return BootstrapUIForm
+     */
+    protected function createComponentInsertForm(): BootstrapUIForm
     {
         $form = new BootstrapUIForm();
         $form->setTranslator($this->presenter->translator);
@@ -35,7 +38,10 @@ class InsertCurrencyControl extends Control
         return $form;
     }
 
-    public function permissionValidated()
+    /**
+     * @throws \Nette\Application\AbortException
+     */
+    public function permissionValidated(): void
     {
         if ($this->presenter->template->member->users_roles->settings === 0) {
             $this->flashMessage('Nemáte oprávnění k této akci', 'error');
@@ -43,7 +49,11 @@ class InsertCurrencyControl extends Control
         }
     }
 
-    public function insertFormSucceeded(BootstrapUIForm $form)
+    /**
+     * @param BootstrapUIForm $form
+     * @throws \Nette\Application\AbortException
+     */
+    public function insertFormSucceeded(BootstrapUIForm $form): void
     {
         $exists = $this->database->table('currencies')->where('title = ? OR code = ? OR symbol = ?',
             $form->values->title, $form->values->code, $form->values->symbol);

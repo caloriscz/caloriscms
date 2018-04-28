@@ -16,7 +16,10 @@ class InsertCountryControl extends Control
         $this->database = $database;
     }
 
-    protected function createComponentInsertForm()
+    /**
+     * @return BootstrapUIForm
+     */
+    protected function createComponentInsertForm(): BootstrapUIForm
     {
         $form = new BootstrapUIForm();
         $form->setTranslator($this->presenter->translator);
@@ -35,7 +38,10 @@ class InsertCountryControl extends Control
         return $form;
     }
 
-    public function permissionValidated()
+    /**
+     * @throws \Nette\Application\AbortException
+     */
+    public function permissionValidated(): void
     {
         if ($this->presenter->template->member->users_roles->settings == 0) {
             $this->flashMessage('Nemáte oprávnění k této akci', 'error');
@@ -44,7 +50,11 @@ class InsertCountryControl extends Control
     }
 
 
-    public function insertFormSucceeded(BootstrapUIForm $form)
+    /**
+     * @param BootstrapUIForm $form
+     * @throws \Nette\Application\AbortException
+     */
+    public function insertFormSucceeded(BootstrapUIForm $form): void
     {
         $exists = $this->database->table('countries')->where('title_cs = ? OR title_en = ?',
             $form->values->country_cs, $form->values->country_en);
@@ -53,10 +63,10 @@ class InsertCountryControl extends Control
             $this->flashMessage('Země už je v seznamu', 'error');
             $this->redirect(this);
         } else {
-            $this->database->table('countries')->insert(array(
+            $this->database->table('countries')->insert([
                 'title_cs' => $form->values->country_cs,
                 'title_en' => $form->values->country_en,
-            ));
+            ]);
 
             $this->redirect('this');
         }

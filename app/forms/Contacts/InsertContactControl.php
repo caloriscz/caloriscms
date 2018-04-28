@@ -33,9 +33,9 @@ class InsertContactControl extends Control
         $form->addText('title', 'dictionary.main.Title')
             ->setRequired($this->presenter->translator->translate('messages.pages.NameThePage'));
 
-        $form->setDefaults(array(
+        $form->setDefaults([
             'type' => 0
-        ));
+        ]);
 
         $form->addSubmit('submitm', 'dictionary.main.CreateNewContact')
             ->setAttribute('class', 'btn btn-success');

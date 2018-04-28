@@ -8,7 +8,7 @@ use Nette\Database\Context;
 class FileListControl extends Control
 {
 
-    /** @var \Nette\Database\Context */
+    /** @var Context */
     public $database;
 
     public function __construct(Context $database)
@@ -24,7 +24,7 @@ class FileListControl extends Control
     public function render()
     {
         $this->template->setFile(__DIR__ . '/FileListControl.latte');
-        $this->template->folders = $this->database->table("pages")->where(array("pages_id" => 6));
+        $this->template->folders = $this->database->table('pages')->where(['pages_id' => 6]);
         $this->template->render();
     }
 

@@ -23,7 +23,7 @@ class InsertCarouselControl extends Control
      * Edit category
      * @return BootstrapUIForm
      */
-    protected function createComponentInsertForm()
+    protected function createComponentInsertForm(): BootstrapUIForm
     {
         $form = new BootstrapUIForm();
         $form->setTranslator($this->getPresenter()->translator);
@@ -44,7 +44,11 @@ class InsertCarouselControl extends Control
         return $form;
     }
 
-    public function insertFormSucceeded(BootstrapUIForm $form)
+    /**
+     * @param BootstrapUIForm $form
+     * @throws \Nette\Application\AbortException
+     */
+    public function insertFormSucceeded(BootstrapUIForm $form): void
     {
         $image = $form->values->the_file->name;
 
@@ -70,7 +74,7 @@ class InsertCarouselControl extends Control
         $this->database->table('carousel')->insert($arr);
 
 
-        $this->redirect('this', array('carousel_id' => $form->values->carousel_id));
+        $this->redirect('this', ['carousel_id' => $form->values->carousel_id]);
     }
 
     public function render()

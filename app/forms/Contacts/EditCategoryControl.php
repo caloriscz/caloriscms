@@ -63,7 +63,7 @@ class EditCategoryControl extends Control
                 'parent_id' => $form->values->parent,
             ]);
 
-        $this->presenter->redirect('this', array('id' => $form->values->id));
+        $this->presenter->redirect('this', ['id' => $form->values->id]);
     }
 
     public function render(): void

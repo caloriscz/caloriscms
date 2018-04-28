@@ -12,7 +12,7 @@ class EventsPresenter extends BasePresenter
 
     protected function createComponentSignEvent()
     {
-        return new SignEventControl($this->database);;
+        return new SignEventControl($this->database);
     }
 
     public function renderDefault()

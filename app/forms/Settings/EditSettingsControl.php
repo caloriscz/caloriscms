@@ -17,7 +17,10 @@ class EditSettingsControl extends Control
         $this->database = $database;
     }
 
-    protected function createComponentEditSettingsForm()
+    /**
+     * @return BootstrapUIForm
+     */
+    protected function createComponentEditSettingsForm(): BootstrapUIForm
     {
         $form = new BootstrapUIForm();
         $form->getElementPrototype()->class = 'form-horizontal';
@@ -40,7 +43,11 @@ class EditSettingsControl extends Control
         return $form;
     }
 
-    public function permissionValidated(BootstrapUIForm $form)
+    /**
+     * @param BootstrapUIForm $form
+     * @throws \Nette\Application\AbortException
+     */
+    public function permissionValidated(BootstrapUIForm $form): void
     {
         if ($this->presenter->template->member->users_roles->settings === 0) {
             $this->presenter->flashMessage('Nemáte oprávnění k této akci', 'error');
@@ -48,7 +55,11 @@ class EditSettingsControl extends Control
         }
     }
 
-    public function editSettingsSucceeded(BootstrapUIForm $form)
+    /**
+     * @param BootstrapUIForm $form
+     * @throws \Nette\Application\AbortException
+     */
+    public function editSettingsSucceeded(BootstrapUIForm $form): void
     {
         $values = $form->getHttpData($form::DATA_TEXT); // get value from html input
 

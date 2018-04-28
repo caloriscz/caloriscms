@@ -31,19 +31,16 @@ class Filter
     /**
      * Fulltext
      */
-    public function setText()
+    public function setText(): void
     {
-        if ($_GET["src"] == '') {
-            $this->search = false;
-        } else {
-            $this->search = $_GET["src"];
-        }
+        $this->search = $_GET["src"] == '' ? false : $_GET["src"];
     }
 
     /**
      * Options
+     * @param bool $options
      */
-    public function setOptions($options = false)
+    public function setOptions($options = false): void
     {
         if ($options === true) {
             $this->settings = $options;
@@ -52,10 +49,11 @@ class Filter
 
     /**
      * Order
+     * @param $order
      */
-    public function order($order)
+    public function order($order): void
     {
-        if ($order == '') {
+        if ($order === '') {
             $order = 'na';
         }
 
@@ -77,10 +75,11 @@ class Filter
 
     /**
      * Set manufacturer
+     * @param $listManufacturers
      */
-    public function setManufacturer($listManufacturers)
+    public function setManufacturer($listManufacturers): void
     {
-        if (strlen($listManufacturers) > 1) {
+        if (\strlen($listManufacturers) > 1) {
             $this->manufacturers = $listManufacturers;
         } else {
             $this->manufacturers = false;
@@ -89,10 +88,11 @@ class Filter
 
     /**
      * Set size
+     * @param $size
      */
-    public function setSize($size)
+    public function setSize($size): void
     {
-        if (strlen($size) > 0) {
+        if (\strlen($size) > 0) {
             $this->size = $size;
         } else {
             $this->size = false;
@@ -101,12 +101,13 @@ class Filter
 
     /**
      * Set categories
+     * @param $category
      */
-    public function setCategories($category)
+    public function setCategories($category): void
     {
-        if (is_array($category)) {
+        if (\is_array($category)) {
             $keys = array_keys($category);
-            $this->category = implode(",", $keys);
+            $this->category = implode(',', $keys);
         } elseif ($category === '') {
             $this->category = false;
         } else {
@@ -119,9 +120,9 @@ class Filter
      * @param string $user
      * @param int $type
      */
-    public function setUser($user = '', $type = 0)
+    public function setUser($user = '', $type = 0): void
     {
-        if (strlen($user) > 0) {
+        if (\strlen($user) > 0) {
 
             if ($type === 0) {
                 $this->userf = $user;
@@ -140,11 +141,15 @@ class Filter
         }
     }
 
-    public function stringize($arr)
+    /**
+     * @param $arr
+     * @return array
+     */
+    public function stringize($arr): array
     {
-        if (is_array($arr)) {
+        if (\is_array($arr)) {
             foreach ($arr as $val) {
-                $arrNew[] = "'" . $val . "'";
+                $arrNew[] = '\'' . $val . '\'';
             }
         }
 
@@ -164,7 +169,7 @@ class Filter
         } elseif ($priceFrom === null && $priceTo !== null) {
             $this->price = true;
             $columns[':store.price <= ?'] = $priceTo;
-        } elseif ($priceFrom !== null && $priceTo == null) {
+        } elseif ($priceFrom !== null && $priceTo === null) {
             $this->price = true;
             $columns[':store.price >= ?'] = $priceFrom;
         } else {
@@ -181,9 +186,8 @@ class Filter
     /**
      * Add other columns
      * @param $arr
-     * @return null
      */
-    public function setColumns($arr): void
+    public function setColumns($arr)
     {
         $columns = null;
 
@@ -203,7 +207,7 @@ class Filter
      */
     public function setParametres($param)
     {
-        if (count($param) > 0) {
+        if (\count($param) > 0) {
             foreach ($param as $pmKey => $pmValue) {
                 if (0 === strpos($pmKey, 'pm_')) {
                     $pmKeyPart = explode('_', $pmKey);
@@ -238,7 +242,7 @@ class Filter
             }
         }
 
-        if (count($arr) > 0) {
+        if (\count($arr) > 0) {
             $paramQuery = $this->connect->whereOr($arr)->having("COUNT(:params.pages_id) = ?", count($arr));
         }
 

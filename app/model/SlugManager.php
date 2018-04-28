@@ -71,9 +71,10 @@ class SlugManager
     /**
      * @return array
      */
-    public function getLocale()
+    public function getLocale(): array
     {
         $languages = $this->translator->getAvailableLocales();
+        $iLocale  = [];
 
         foreach ($languages as $itemL) {
             $result = explode('_', $itemL);

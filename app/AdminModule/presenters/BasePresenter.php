@@ -6,36 +6,44 @@ use App\Forms\Pages\EditorControl;
 use Caloriscz\Menus\Admin\MainMenuControl;
 use Caloriscz\Menus\PageTopMenuControl;
 use Caloriscz\Utilities\PagingControl;
+use Kdyby\Doctrine\EntityManager;
+use Kdyby\Translation\Translator;
 use Nette;
+use Nette\Application\UI\Presenter;
+use Nette\Database\Context;
+use Nette\Http\IRequest;
+use Nette\Http\IResponse;
+use Nette\Mail\IMailer;
+use Nette\Security\IUserStorage;
 
 /**
  * @property-read \Nette\Bridges\ApplicationLatte\Template|\stdClass $template
  */
-abstract class BasePresenter extends Nette\Application\UI\Presenter
+abstract class BasePresenter extends Presenter
 {
 
-    /** @var Nette\Database\Context */
+    /** @var Context */
     public $database;
 
-    /** @var \Kdyby\Doctrine\EntityManager @inject */
+    /** @var EntityManager @inject */
     public $em;
 
     /** @persistent */
     public $locale;
 
-    /** @var \Kdyby\Translation\Translator @inject */
+    /** @var Translator @inject */
     public $translator;
 
     /** @persistent */
     public $id;
 
-    /** @var \Nette\Mail\IMailer @inject */
+    /** @var IMailer @inject */
     public $mailer;
 
-    /** @var Nette\Http\IRequest @inject */
+    /** @var IRequest @inject */
     public $request;
 
-    /** @var Nette\Http\IResponse @inject */
+    /** @var IResponse @inject */
     public $response;
 
     /** @var string @persistent */
@@ -44,7 +52,7 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
     /** @persistent */
     public $backlink = '';
 
-    public function __construct(Nette\Database\Context $database, Nette\Mail\IMailer $mailer)
+    public function __construct(Context $database, IMailer $mailer)
     {
         parent::__construct();
         $this->database = $database;
@@ -57,11 +65,10 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
      * @param $id
      * @throws Nette\Application\AbortException
      */
-    public function handleOperations($operation, $id)
+    public function handleOperations($operation, $id): void
     {
         if ($id) {
-            $row = implode(', ', $id);
-            $this->flashMessage("Process operation '$operation' for row with id: $row...");
+            $this->flashMessage('Process operation \'$operation\' for row with id: $row...');
         } else {
             $this->flashMessage('No rows selected.', 'error');
         }
@@ -105,7 +112,7 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
 
             if ($this->user->isLoggedIn()) {
             } else {
-                if ($this->user->logoutReason === Nette\Security\IUserStorage::INACTIVITY) {
+                if ($this->user->logoutReason === IUserStorage::INACTIVITY) {
                     $this->flashMessage($this->translator->translate('messages.sign.youWereLoggedIn'), 'note');
                 }
                 $this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);

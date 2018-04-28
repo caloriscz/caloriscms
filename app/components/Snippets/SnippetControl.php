@@ -4,6 +4,10 @@ namespace Caloriscz\Snippets;
 use Nette\Application\UI\Control;
 use Nette\Database\Context;
 
+/**
+ * Class SnippetControl
+ * @package Caloriscz\Snippets
+ */
 class SnippetControl extends Control
 {
 
@@ -21,9 +25,9 @@ class SnippetControl extends Control
         $template->page = $this->database->table('snippets')->get($snippetId);
 
         if ($this->presenter->translator->getLocale() === $this->presenter->translator->getDefaultLocale()) {
-            $snippet = $template->page->content;
+            $snippet = $this->template->page->content;
         } else {
-            $snippet = $template->page->{'content_' . $this->presenter->translator->getLocale()};
+            $snippet = $this->template->page->{'content_' . $this->presenter->translator->getLocale()};
         }
 
         $template->snippet = $snippet;

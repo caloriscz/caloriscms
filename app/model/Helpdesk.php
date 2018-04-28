@@ -138,7 +138,7 @@ class Helpdesk
      * @param $params
      * @param $log
      */
-    private function fillEmail($email, $subject, $body, $templateId, $params, $log)
+    private function fillEmail($email, $subject, $body, $templateId, $params, $log): void
     {
         $latte = new Engine();
         $latte->setLoader(new StringLoader());
@@ -148,7 +148,7 @@ class Helpdesk
         $mail = new Message();
         $mail->setFrom($this->getSettings()['contacts:email:hq']);
         $mail->addTo($email);
-        $mail->setHTMLBody($emailMessage);
+        $mail->setHtmlBody($emailMessage);
         $this->mailer->send($mail);
 
         if ($log) {
@@ -166,11 +166,9 @@ class Helpdesk
     public function renderBody($subjectContent, $bodyContent, $templateId)
     {
         $templateBody = $this->database->table('helpdesk_templates')->get($templateId)->document;
-
         $headParse = str_replace('%TITLE%', $subjectContent, $templateBody);
-        $bodyParse = str_replace('%CONTENT%', $bodyContent, $headParse);
 
-        return $bodyParse;
+        return str_replace('%CONTENT%', $bodyContent, $headParse);
     }
 
     /**
@@ -181,13 +179,13 @@ class Helpdesk
     public function log($email, $emailMessage)
     {
 
-        $this->database->table('helpdesk_messages')->insert(array(
+        $this->database->table('helpdesk_messages')->insert([
             'message' => $emailMessage,
             'helpdesk_id' => $this->getId(),
             'email' => $email,
             'ipaddress' => $this->getParams()['ipaddress'],
             'date_created' => $this->getParams()['time'],
-        ));
+        ]);
     }
 
 }

@@ -26,37 +26,58 @@ class ProfilePresenter extends BasePresenter
         }
     }
 
+    /**
+     * @return ChangePortraitControl
+     */
     protected function createComponentProfileChangePortrait()
     {
         return new ChangePortraitControl($this->database);
     }
 
+    /**
+     * @return ProfileMenuControl
+     */
     protected function createComponentProfileMenu()
     {
         return new ProfileMenuControl($this->database);
     }
 
+    /**
+     * @return ChangePasswordControl
+     */
     protected function createComponentProfileChangePassword()
     {
         return new ChangePasswordControl($this->database);
     }
 
+    /**
+     * @return EditFrontProfileControl
+     */
     protected function createComponentProfileEdit()
     {
         return new EditFrontProfileControl($this->database);
     }
 
+    /**
+     * @return InsertAddressControl
+     */
     protected function createComponentProfileInsertAddress()
     {
         return new InsertAddressControl($this->database);
     }
 
+    /**
+     * @return EditAddressControl
+     */
     protected function createComponentProfileEditAddress()
     {
         return new EditAddressControl($this->database);
     }
 
-    public function handleDeletePortrait()
+    /**
+     * @throws \Nette\Application\AbortException
+     */
+    public function handleDeletePortrait(): void
     {
         $idfFolder = substr(__DIR__, 0, -27) . '/www';
 

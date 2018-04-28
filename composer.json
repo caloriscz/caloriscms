@@ -13,7 +13,7 @@
         }
     ],
     "require": {
-        "php": ">= 5.6.0",
+        "php": ">= 7.1",
         "nette/application": "~2.4",
         "nette/caching": "~2.4",
         "nette/bootstrap": "~2.4",
@@ -30,8 +30,11 @@
         "nette/mail": "~2.4",
         "joseki/pdf-response": "dev-master",
         "h4kuna/ares": "dev-master",
-        "ezyang/htmlpurifier": "v4.7.0",
+        "ezyang/htmlpurifier": "~4.10",
         "studio-42/elfinder": "2.1.16",
-        "ublaboo/datagrid": "v5.1.2"
+        "ublaboo/datagrid": "~5.5"
+    },
+    "require-dev": {
+        "roave/security-advisories": "dev-master"
     }
 }

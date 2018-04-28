@@ -16,16 +16,13 @@ class Filters extends \Nette\Object
         $date = new \DateTime();
         $date->setDate(date('Y', strtotime($s)), date('m', strtotime($s)), date('d', strtotime($s)));
         $interval = $date->diff(new \DateTime('now'));
-        $daysAgo = $interval->format('%a days');
 
-        return $daysAgo;
+        return $interval->format('%a days');
     }
 
     public static function round($s, $nr = 2)
     {
-        $rounding = round($s, $nr);
-
-        return $rounding;
+        return round($s, $nr);
     }
 
     public static function toMins($s)
@@ -43,9 +40,7 @@ class Filters extends \Nette\Object
 
     public static function toBaseName($s)
     {
-        $basename = basename($s);
-
-        return $basename;
+        return basename($s);
     }
 
     public static function dateDiff($s, $t)
@@ -59,21 +54,21 @@ class Filters extends \Nette\Object
 
     public static function numericday($s)
     {
-        $names = array(
+        $names = [
             1 => 'dictionary.days.Monday',
             2 => 'dictionary.days.Tuesday',
             3 => 'dictionary.days.Wednesday',
             4 => 'dictionary.days.Thursday',
             5 => 'dictionary.days.Friday',
             6 => 'dictionary.days.Saturday',
-            7 => 'dictionary.days.Sunday');
+            7 => 'dictionary.days.Sunday'];
 
         return $names[$s];
     }
 
     public static function numericmonth($s)
     {
-        $nazvy = array(
+        $nazvy = [
             1 => 'dictionary.months.January',
             2 => 'dictionary.months.February',
             3 => 'dictionary.months.March',
@@ -86,7 +81,7 @@ class Filters extends \Nette\Object
             10 => 'dictionary.months.October',
             11 => 'dictionary.months.November',
             12 => 'dictionary.months.December',
-        );
+        ];
 
         return $nazvy[$s];
     }

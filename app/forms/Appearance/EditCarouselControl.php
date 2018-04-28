@@ -43,13 +43,13 @@ class EditCarouselControl extends Control
         $form->addSubmit('submitm', 'dictionary.main.Save');
 
 
-        $arr = array(
+        $arr = [
             'carousel_id' => $carousel->id,
             'title' => $carousel->title,
             'description' => $carousel->description,
             'visible' => $carousel->visible,
             'uri' => $carousel->uri,
-        );
+        ];
 
         $form->setDefaults(array_filter($arr));
 
@@ -57,16 +57,20 @@ class EditCarouselControl extends Control
         return $form;
     }
 
-    public function editFormSucceeded(BootstrapUIForm $form)
+    /**
+     * @param BootstrapUIForm $form
+     * @throws \Nette\Application\AbortException
+     */
+    public function editFormSucceeded(BootstrapUIForm $form): void
     {
         $image = $form->values->the_file->name;
 
-        $arr = array(
+        $arr = [
             'title' => $form->values->title,
             'description' => $form->values->description,
             'uri' => $form->values->uri,
             'visible' => $form->values->visible,
-        );
+        ];
 
         if ($form->values->the_file->error === 0) {
             $arr['image'] = $image;
@@ -83,7 +87,7 @@ class EditCarouselControl extends Control
         $this->database->table('carousel')->get($form->values->carousel_id)->update($arr);
 
 
-        $this->redirect('this', array('carousel_id' => $form->values->carousel_id));
+        $this->redirect('this', ['carousel_id' => $form->values->carousel_id]);
     }
 
     public function render()

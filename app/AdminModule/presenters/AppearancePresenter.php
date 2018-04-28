@@ -13,27 +13,27 @@ use Caloriscz\Appearance\CarouselManagerControl;
 class AppearancePresenter extends BasePresenter
 {
 
-    protected function createComponentEditFormCarousel()
+    protected function createComponentEditFormCarousel(): EditCarouselControl
     {
         return new EditCarouselControl($this->database);
     }
 
-    protected function createComponentInsertFormCarousel()
+    protected function createComponentInsertFormCarousel(): InsertCarouselControl
     {
         return new InsertCarouselControl($this->database);
     }
 
-    protected function createComponentSavePaths()
+    protected function createComponentSavePaths(): SavePathsControl
     {
         return new SavePathsControl($this->database);
     }
 
-    protected function createComponentCarouselManager()
+    protected function createComponentCarouselManager(): CarouselManagerControl
     {
         return new CarouselManagerControl($this->em);
     }
 
-    public function renderDefault()
+    public function renderDefault(): void
     {
         $arr = [
             'settings_categories_id' => 20,
@@ -43,7 +43,7 @@ class AppearancePresenter extends BasePresenter
         $this->template->settingsDb = $this->database->table('settings')->where($arr);
     }
 
-    public function renderCarouselDetail()
+    public function renderCarouselDetail(): void
     {
         if ($this->getParameter('id')) {
             $this->template->carouselId = $this->getParameter('id');
