@@ -2,6 +2,7 @@
 
 namespace Caloriscz\Pricelist;
 
+use Nette\Application\AbortException;
 use Nette\Application\UI\Control;
 use Nette\Database\Context;
 use Nette\Forms\BootstrapUIForm;
@@ -24,22 +25,38 @@ class NewItemControl extends Control
      */
     protected function createComponentInsertForm(): BootstrapUIForm
     {
-        $category = $this->database->table('pricelist_categories')->order('id')->fetchPairs('id', 'title');
         $form = new BootstrapUIForm();
         $form->setTranslator($this->presenter->translator);
         $form->getElementPrototype()->class = 'form-horizontal';
         $form->getElementPrototype()->role = 'form';
         $form->getElementPrototype()->autocomplete = 'off';
 
+        $form->addHidden('list');
         $form->addText('title', 'dictionary.main.Title')
             ->setRequired(true)
             ->addRule(Form::MIN_LENGTH, 'Zadávejte delší text', 1);
-        $form->addSelect('category', 'dictionary.main.Categories', $category)
-            ->setAttribute('class', 'form-control');
         $form->addText('price', 'Cena')
             ->setRequired(true)
             ->addRule(Form::INTEGER, 'Zadávejte pouze čísla')
-            ->setAttribute('style', 'width: 80px; text-align: right;');
+            ->setAttribute('class', 'form-control')
+            ->setAttribute('style', 'width: 120px; text-align: right;');
+
+        $categories = $this->database->table('pricelist_categories')
+            ->where(['pricelist_lists_id' => $this->presenter->getParameter('pricelist')])
+            ->order('id')->fetchPairs('id', 'title');
+
+        $form->addSelect('category', 'dictionary.main.Categories')->setItems($categories)->setAttribute('class', 'form-control');;
+
+        $pricelist = 1;
+
+        if ($this->getParameter('pricelist')) {
+            $pricelist = $this->presenter->getParameter('pricelist');
+        }
+
+        $form->setDefaults([
+            'list' => $pricelist
+        ]);
+
         $form->addSubmit('submitm', 'dictionary.main.Insert');
 
         $form->onSuccess[] = [$this, 'insertFormSucceeded'];
@@ -47,17 +64,17 @@ class NewItemControl extends Control
     }
 
     /**
-     * @param BootstrapUIForm $form
-     * @throws \Nette\Application\AbortException
+     * @param Form $form
+     * @throws AbortException
      */
-    public function insertFormSucceeded(BootstrapUIForm $form): void
+    public function insertFormSucceeded(Form $form, $values): void
     {
         $max = $this->database->table('pricelist')->max('sorted') + 1;
 
         $id = $this->database->table('pricelist')->insert([
-            'title' => $form->values->title,
-            'pricelist_categories_id' => $form->values->category,
-            'price' => $form->values->price,
+            'title' => $values['title'],
+            'pricelist_categories_id' => $form->getHttpData($form::DATA_TEXT, 'category'), // category in select empty, FFS
+            'price' => $values['price'],
             'sorted' => $max,
         ]);
 

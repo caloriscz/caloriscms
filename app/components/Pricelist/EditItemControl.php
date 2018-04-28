@@ -39,13 +39,15 @@ class EditItemControl extends Control
         $form->getElementPrototype()->autocomplete = 'off';
         $form->addHidden('id');
         $form->addText('title', 'Výkon')
+            ->setRequired(true)
             ->addRule(Form::MIN_LENGTH, 'Zadávajte delší text', 1);
         $form->addTextArea('description', 'Popis')
-            ->addRule(Form::MIN_LENGTH, 'Zadávajte delší text', 1)
             ->setHtmlId('wysiwyg-sm');
         $form->addText('price', 'Cena')
+            ->setRequired(true)
             ->addRule(Form::INTEGER, 'Zadávajte pouze čísla')
-            ->setAttribute('style', 'width: 80px; text-align: right;');
+            ->setAttribute('class', 'form-control')
+            ->setAttribute('style', 'width: 120px; text-align: right;');
         $form->addText('price_info'
             . '', 'Info za cenou');
 

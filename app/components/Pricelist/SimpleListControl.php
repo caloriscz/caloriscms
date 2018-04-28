@@ -2,13 +2,15 @@
 
 namespace Caloriscz\Pricelist;
 
+use Joseki\Application\Responses\InvalidArgumentException;
 use Joseki\Application\Responses\PdfResponse;
 use Latte\Engine;
+use Nette\Application\AbortException;
 use Nette\Application\UI\Control;
 use Nette\Database\Context;
 use Nette\Forms\BootstrapUIForm;
 
-class CategoryControl extends Control
+class SimpleListControl extends Control
 {
 
     /** @var Context */
@@ -26,7 +28,8 @@ class CategoryControl extends Control
     /**
      * Generate PDF
      * @param $id
-     * @throws \Nette\Application\AbortException
+     * @throws InvalidArgumentException
+     * @throws AbortException
      */
     public function handleGeneratePdf($id): void
     {
@@ -79,7 +82,7 @@ class CategoryControl extends Control
 
     /**
      * @param BootstrapUIForm $form
-     * @throws \Nette\Application\AbortException
+     * @throws AbortException
      */
     public function validateCategoryFormSucceeded(BootstrapUIForm $form): void
     {
@@ -95,7 +98,7 @@ class CategoryControl extends Control
             $this->redirect(':' . $redirectTo . ':default', ['id' => null]);
         }
 
-        if ($form->values->title == '') {
+        if ($form->values->title === '') {
             $this->flashMessage($this->translator->translate('messages.sign.categoryMustHaveSomeName'), 'error');
             $this->redirect(':' . $redirectTo . ':default', ['id' => null]);
         }
@@ -103,7 +106,7 @@ class CategoryControl extends Control
 
     /**
      * @param BootstrapUIForm $form
-     * @throws \Nette\Application\AbortException
+     * @throws AbortException
      */
     public function insertCategoryFormSucceeded(BootstrapUIForm $form): void
     {
@@ -115,7 +118,7 @@ class CategoryControl extends Control
         $this->presenter->redirect('this');
     }
 
-    public function render()
+    public function render(): void
     {
         $template = $this->getTemplate();
         $categoryId = null;
@@ -124,7 +127,7 @@ class CategoryControl extends Control
         unset($getParams['page']);
         $template->args = $getParams;
 
-        $template->setFile(__DIR__ . '/CategoryControl.latte');
+        $template->setFile(__DIR__ . '/SimpleListControl.latte');
 
         if ($this->presenter->getParameter('id')) {
             $categoryId = $this->presenter->getParameter('id');

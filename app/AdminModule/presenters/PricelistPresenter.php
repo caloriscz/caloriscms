@@ -2,9 +2,11 @@
 
 namespace App\AdminModule\Presenters;
 
-use Caloriscz\Pricelist\CategoryControl;
+use App\Forms\Pricelist\PricelistCategoryEditControl;
 use Caloriscz\Pricelist\EditItemControl;
 use Caloriscz\Pricelist\NewItemControl;
+use Caloriscz\Pricelist\PricelistListEditControl;
+use Caloriscz\Pricelist\SimpleListControl;
 use Nette\Application\AbortException;
 use Nette\Forms\BootstrapUIForm;
 use Nette\Forms\Form;
@@ -15,38 +17,40 @@ use Nette\Forms\Form;
 class PricelistPresenter extends BasePresenter
 {
 
-    /**
-     * @return CategoryControl
-     */
-    protected function createComponentPricelistCategory(): CategoryControl
+    protected function createComponentPricelistCategory(): SimpleListControl
     {
-        return new CategoryControl($this->database);
+        return new SimpleListControl($this->database);
     }
 
-    /**
-     * @return NewItemControl
-     */
     protected function createComponentPricelistNewItem(): NewItemControl
     {
         return new NewItemControl($this->database);
     }
 
-    /**
-     * @return EditItemControl
-     */
     protected function createComponentPricelistEditItem(): EditItemControl
     {
         return new EditItemControl($this->database);
     }
 
+    protected function createComponentPricelistListEdit(): PricelistListEditControl
+    {
+        return new PricelistListEditControl($this->database);
+    }
+
+    protected function createComponentPricelistCategoryEdit(): PricelistCategoryEditControl
+    {
+        return new PricelistCategoryEditControl($this->database);
+    }
+
     /**
      * Menu Insert Day
+     * @return BootstrapUIForm
      */
-    protected function createComponentInsertDayForm()
+    protected function createComponentInsertDayForm(): BootstrapUIForm
     {
         for ($d = 0; $d < 30; $d++) {
-            $dateExists = $this->database->table('pricelist_dates')->where(array(
-                'day' => date('Y-m-d', mktime(0, 0, 0, date('m'), date('d') + $d, date('Y')))));
+            $dateExists = $this->database->table('pricelist_dates')->where([
+                'day' => date('Y-m-d', mktime(0, 0, 0, date('m'), date('d') + $d, date('Y')))]);
 
             if ($dateExists->count() === 0) {
                 $dates[date('Y-m-d', mktime(0, 0, 0, date('m'), date('d') + $d, date('Y')))] = date('j.n. Y', mktime(0, 0, 0, date('m'), date('d') + $d, date('Y')));
@@ -64,7 +68,7 @@ class PricelistPresenter extends BasePresenter
             ->setAttribute('style', 'width: 120px;');
         $form->addSubmit('submitm', 'Přidat');
 
-        $form->onSuccess[] = $this->insertDayFormSucceeded;
+        $form->onSuccess[] = [$this, 'insertDayFormSucceeded'];
         return $form;
     }
 
@@ -88,16 +92,23 @@ class PricelistPresenter extends BasePresenter
     protected function createComponentInsertDailyForm()
     {
         $category = $this->database->table('pricelist_categories')->order('id')->fetchPairs('id', 'title');
-        $form = $this->baseFormFactory->createUI();
+
+        $form = new BootstrapUIForm();
+        $form->setTranslator($this->presenter->translator);
+        $form->getElementPrototype()->class = 'form-horizontal';
+        $form->getElementPrototype()->role = 'form';
+        $form->getElementPrototype()->autocomplete = 'off';
 
         $form->addHidden('day');
-        $form->addTextarea('title', 'dictionary.main.Title')
+        $form->addTextArea('title', 'dictionary.main.Title')
+            ->setRequired(true)
             ->setHtmlId('wysiwyg-sm')
             ->setAttribute('class', 'form-control')
             ->addRule(Form::MIN_LENGTH, 'Zadávejte delší text', 1);
         $form->addSelect('category', 'Kategorie', $category)
             ->setAttribute('class', 'form-control');
         $form->addText('price', 'dictionary.main.Price')
+            ->setRequired(true)
             ->addRule(Form::INTEGER, 'Zadávajte pouze čísla')
             ->setAttribute('style', 'width: 50px; text-align: right;');
 
@@ -210,25 +221,31 @@ class PricelistPresenter extends BasePresenter
 
     public function renderDefault(): void
     {
-        $this->template->database = $this->database;
+        $pricelist = 1;
 
+        if ($this->getParameter('pricelist')) {
+            $pricelist = $this->getParameter('pricelist');
+        }
+
+        $this->template->database = $this->database;
         $this->template->pricelist = $this->database->table('pricelist')
             ->select('pricelist.id, pricelist.pricelist_categories_id, pricelist.title AS amenu, pricelist.sorted, pricelist.price, pricelist_categories.title')
+            ->where(['pricelist_lists_id' => $pricelist])
             ->order('pricelist_categories_id, sorted DESC');
     }
 
-    public function renderDays()
+    public function renderDays(): void
     {
         $this->template->days = $this->database->table('pricelist_dates')->order('day');
     }
 
-    public function renderDaily()
+    public function renderDaily(): void
     {
 
         $this->template->menu = $this->database->table('pricelist_daily')
-            ->select('pricelist_daily.id, pricelist_daily.pricelist_dates_id, pricelist_daily.categories_id, '
+            ->select('pricelist_daily.id, pricelist_daily.pricelist_dates_id, pricelist_daily.pricelist_categories_id, '
                 . 'pricelist_daily.title AS amenu, pricelist_daily.price, pricelist_categories.title')
             ->where(['pricelist_daily.pricelist_dates_id' => $this->getParameter('day')])
-            ->order('categories_id');
+            ->order('pricelist_categories_id');
     }
 }

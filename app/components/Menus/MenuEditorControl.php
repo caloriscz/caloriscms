@@ -74,7 +74,7 @@ class MenuEditorControl extends Control
 
     /**
      * Resort images in order to enjoy sorting images from one :)
-     * @throws \Exception
+     * @throws \Throwable
      */
     public function handleSort()
     {

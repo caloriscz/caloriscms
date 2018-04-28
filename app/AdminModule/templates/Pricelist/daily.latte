@@ -1,32 +1,52 @@
 {block #titles}{_dictionary.main.Pricelist}{/block}
 {block content}
 
-<br />
-    {control insertDailyForm}
+<ol class="breadcrumb">
+    <li class="breadcrumb-item">Home</li>
+    <li class="breadcrumb-item"><a href="/admin/">Admin</a></li>
+    <li class="breadcrumb-item">{_dictionary.main.Pricelist}</li>
+    <li class="breadcrumb-item">Den</li>
+</ol>
 
-<div class="row-fluid">
-    <div class="col-md-offset-1 col-md-10">
-        <h1>{_dictionary.main.Pricelist}</h1>
-        {var $category = 0}
-        <table class="table">
-            {foreach $menu as $item}
+<div class="container-fluid">
+    <div class="animated fadeIn">
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="card">
+                    <div class="card-header">Vložit menu</div>
+                    <div class="card-block">
+                        {control insertDailyForm}
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-9">
+                <div class="card">
+                    <div class="card-header">Detail</div>
+                    <div class="card-block">
+                        {var $category = 0}
+                        <table class="table">
+                            {foreach $menu as $item}
 
-                {if $category != $item->categories_id}
-                    <tr>
-                        <td colspan="3">
-                            <strong>{$item->categories->title|nl2br}</strong>
-                        </td>
-                    </tr>
-                {else}
-                {/if}
+                                {if $category != $item->categories_id}
+                                    <tr>
+                                        <td colspan="3">
+                                            <strong>{$item->categories->title|nl2br}</strong>
+                                        </td>
+                                    </tr>
+                                {else}
+                                {/if}
 
-                <tr>
-                    <td><a n:href="deleteDaily!, id => $item->id, day => $item->pricelist_dates_id" onclick="return confirm('Opravdu smazat?')"><i class="fa fa-times font-red"></i></a></td>
-                    <td>{$item->amenu|noescape}</td>
-                    <td class="text-right">{$item->price},- Kč</td>
-                </tr>
-                {var $category = $item->categories_id}
-            {/foreach}
-        </table>
+                                <tr>
+                                    <td><a n:href="deleteDaily!, id => $item->id, day => $item->pricelist_dates_id" onclick="return confirm('Opravdu smazat?')"><i class="fa fa-times font-red"></i></a></td>
+                                    <td>{$item->amenu|noescape}</td>
+                                    <td class="text-right">{$item->price},- Kč</td>
+                                </tr>
+                                {var $category = $item->categories_id}
+                            {/foreach}
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>

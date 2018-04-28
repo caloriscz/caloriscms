@@ -5,19 +5,26 @@
     <li class="breadcrumb-item">Home</li>
     <li class="breadcrumb-item"><a href="/admin/">Admin</a></li>
     <li class="breadcrumb-item">{_dictionary.main.Pricelist}</li>
-    <li class="breadcrumb-item">Detail</li>
+    <li class="breadcrumb-item">Editace menu</li>
 </ol>
 
 
 <div class="container-fluid">
     <div class="animated fadeIn">
         <div class="row">
-
-            <div class="col-lg-9">
+            <div class="col-lg-6">
                 <div class="card">
                     <div class="card-header">Detail</div>
                     <div class="card-block">
-                        {control pricelistEditItem}
+                        {control pricelistListEdit}
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-header">Kategorie</div>
+                    <div class="card-block">
+                        {control pricelistCategoryEdit}
                     </div>
                 </div>
             </div>
