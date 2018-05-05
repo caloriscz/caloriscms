@@ -271,12 +271,13 @@ CREATE TABLE `pages` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
 
 INSERT INTO `pages` (`id`, `slug`, `title`, `document`, `preview`, `pages_id`, `users_id`, `public`, `metadesc`, `metakeys`, `date_created`, `date_published`, `pages_types_id`, `pages_templates_id`, `sorted`, `editable`, `recommended`, `sitemap`) VALUES
-  (1, '', 'Úvodní stránka', '', NULL, NULL, 1, 1, '', '', NULL, NULL, 9, 4, 17, 1, 0, 1),
-  (2, 'kontakt', 'Kontakt', NULL, NULL, NULL, NULL, 1, '', '', NULL, NULL, 9, 5, 19, 0, 0, 1),
-  (3, 'blog', 'Blog', '', NULL, NULL, 1, 1, '', '', NULL, NULL, 9, 2, 21, 0, 0, 1),
-  (4, 'galerie', 'Galerie', '', NULL, NULL, 1, 1, '', '', NULL, NULL, 9, 2, 1, 0, 0, 1),
-  (4, 'udalosti', 'Události', '', NULL, NULL, 1, 1, '', '', NULL, NULL, 9, 10, 1, 0, 0, 1),
-  (5, 'dokumenty', 'Dokumenty', '', NULL, NULL, 1, 1, '', '', NULL, NULL, 9, 2, 1, 0, 0, 1);
+  (1, NULL, 'Úvodní stránka', '', NULL, NULL, 1, 1, '', '', NULL, NULL, 9, 4, 1, 1, 0, 1),
+  (2, 'kontakt', 'Kontakt', NULL, NULL, NULL, NULL, 1, '', '', NULL, NULL, 9, 5, 2, 0, 0, 1),
+  (3, 'blog', 'Blog', '', NULL, NULL, 1, 1, '', '', NULL, NULL, 9, 2, 3, 0, 0, 1),
+  (4, 'galerie', 'Galerie', '', NULL, NULL, 1, 1, '', '', NULL, NULL, 9, 2, 4, 0, 0, 1),
+  (5, 'udalosti', 'Události', '', NULL, NULL, 1, 1, '', '', NULL, NULL, 9, 10, 5, 0, 0, 1),
+  (6, 'dokumenty', 'Dokumenty', '', NULL, NULL, 1, 1, '', '', NULL, NULL, 9, 2, 6, 0, 0, 1),
+  (9, 'cenik', 'Ceník', NULL, NULL, 1, 1, 1, '', '', NULL, NULL, 9, 11, 7, 0, 0, 1);
 
 CREATE TABLE `pages_related` (
   `id` int(11) NOT NULL,
@@ -303,7 +304,8 @@ INSERT INTO `pages_templates` (`id`, `pages_types_id`, `template`, `title`, `tit
   (7, NULL, 'Front:Media:album', 'Základní galerie', 'Basic gallery view'),
   (8, NULL, 'Front:Media:folder', 'Seznam složek dokumentů', 'List of document folders'),
   (9, NULL, 'Front:Media:folderList', 'Seznam dokumentů dané složky', 'List of documents of given folder'),
-  (10, NULL, 'Front:Events:detail', 'Seznam událostí', 'List of events');
+  (10, NULL, 'Front:Events:detail', 'Seznam událostí', 'List of events')
+  (11, NULL, 'Front:Pricelist:default', 'Ceníky', 'Seznam a zobrazení všech ceníků');
 
 CREATE TABLE `pages_types` (
   `id` int(11) NOT NULL,

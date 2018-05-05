@@ -1,22 +1,41 @@
-{block #titles}{_dictionary.main.Pricelist}{/block}
+{block #titles}{control pageTitle $page}{/block}
 {block content}
+{var $category = ''}
 
-<div class="heading-mobile">
-    <div class="container heading heading-content">
-        <h1>Ceník</h1>
+<div class="heading">
+    <div class="container">
+        <h1>{control pageTitle $page}: {$listActive->title}</h1>
     </div>
 </div>
 
-<div class="container white content padded-top padded-btm nase-stranky">
+<div class="container mt-5 white content">
     <div class="row">
-        <div class="col-md-8">
+        <div class="col-md-3">
+            <ul class="nav flex-column nav-pills text-left">
+                {foreach $lists as $list}
+                    <li class="nav-item">
+                        <a href="{control pageSlug $page->id}?menu={$list->id}" class="nav-link{if $list->id == $menuId} active{/if}">{$list->title}</a>
+                    </li>
+                {/foreach}
+
+                <div class="card bg-light mt-5 mb-3" style="max-width: 18rem;">
+                    <div class="card-header">Ceník v PDF</div>
+                    <div class="card-body text-center">
+                        <p class="card-title">Stáhněte si ceník v PDF souboru</p>
+                        <p class="card-text">
+                            <a href="" class="btn btn-info"><i class="fa fa-file-pdf-o"></i> Stáhnout jako PDF</a>
+                        </p>
+                    </div>
+                </div>
+            </ul>
+        </div>
+        <div class="col-md-9">
 
             <table class="table" id="dailyMenuTable">
                 {foreach $menu as $item}
-
-                    {if $category != $item->categories_id}
+                    {if $category != $item->pricelist_categories_id}
                         <tr>
-                            <td colspan="2" class="typeDailyMenu">
+                            <td colspan="2" class="text-left">
                                 <strong>{$item->pricelist_categories->title}</strong>
                                 {if strlen($item->pricelist_categories->description) > 0}
                                     <br/><em>* {$item->pricelist_categories->description}</em>
@@ -26,24 +45,22 @@
                     {else}
                     {/if}
                     <tr>
-                        <td class="dailyMenuText">
+                        <td class="text-left">
                             <div>
                             <span>
                                 {$item->amenu}<br>
-                                {$item->description|noescape}
+                                <span class="text-info">{$item->description|noescape}</span>
                             </span>
                             </div>
                         </td>
-                        <td class="dailyMenuText text-right" style="vertical-align: top; width: 95px; padding-left: 0;">
-                            {if $item->price > 0}{$item->price},- {$settings['store:currency:symbol']}{/if}
+                        <td class="text-nowrap text-right">
+                            {if $item->price > 0}{$item->price},- {$currency->symbol}{/if}
                         </td>
                     </tr>
 
                     {var $category = $item->pricelist_categories_id}
                 {/foreach}
             </table>
-
         </div>
     </div>
 </div>
-<br/>
