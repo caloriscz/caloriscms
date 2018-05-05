@@ -28,6 +28,8 @@ class PricelistListEditControl extends Control
      */
     protected function createComponentEditForm(): BootstrapUIForm
     {
+        $currencyList = $this->database->table('currencies')->fetchPairs('id', 'title');
+
         $form = new BootstrapUIForm();
         $form->setTranslator($this->presenter->translator);
         $form->getElementPrototype()->class = 'form-horizontal';
@@ -40,6 +42,8 @@ class PricelistListEditControl extends Control
             ->addRule(Form::MIN_LENGTH, 'Zadávejte delší text', 1);
         $form->addTextArea('description', 'Popisek')
             ->setAttribute('class', 'form-control');
+        $form->addSelect('currency', 'Měna', $currencyList)
+        ->setAttribute('class', 'form-control');
 
         $pricelist = $this->database->table('pricelist_lists')->get($this->presenter->getParameter('pricelist'));
 
@@ -47,7 +51,8 @@ class PricelistListEditControl extends Control
             $form->setDefaults([
                 'pricelist' => $pricelist->id,
                 'title' => $pricelist->title,
-                'description' => $pricelist->description
+                'description' => $pricelist->description,
+                'currency' => $pricelist->currencies_id
             ]);
         }
 

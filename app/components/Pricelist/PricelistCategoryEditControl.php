@@ -61,6 +61,7 @@ class PricelistCategoryEditControl extends Control
 
         $this->database->table('pricelist_categories')->get($this->getPresenter()->getParameter('node_id'))->update([
             'title' => $this->getPresenter()->getParameter('text'),
+            'pricelist_lists_id' => $this->getPresenter()->getParameter('pricelist'),
         ]);
 
         exit();

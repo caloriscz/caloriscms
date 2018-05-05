@@ -318,13 +318,13 @@ $(document).ready(function () {
             url: '/admin/pricelist/menu'
         });
     }).on('create_node.jstree', function (e, data) {
+        console.log('renaming');
         $.ajax({
             data: 'do=pricelistCategoryEdit-create&node_id=' + data.node.parent.substring(3) + '&text=' + data.text,
             datatype: 'json',
             type: 'GET',
             url: '/admin/pricelist/menu',
             success: function (output) {
-
                 var output = JSON.parse(output);
 
                 data.instance.set_id(data.node.id, 'j1_' + output.id);
@@ -332,8 +332,10 @@ $(document).ready(function () {
             }
         });
     }).on('rename_node.jstree', function (e, data) {
+        var pricelist = getParameterByName('pricelist');
+
         $.ajax({
-            data: 'do=pricelistCategoryEdit-rename&node_id=' + data.node.id.substring(3) + '&text=' + data.text,
+            data: 'do=pricelistCategoryEdit-rename&node_id=' + data.node.id.substring(3) + '&text=' + data.text + '&pricelist=' + pricelist,
             type: 'GET',
             url: '/admin/pricelist/menu'
         });
@@ -414,3 +416,14 @@ $(function () {
         }
     });
 });
+
+// Get querystring value
+function getParameterByName(name, url) {
+    if (!url) url = window.location.href;
+    name = name.replace(/[\[\]]/g, "\\$&");
+    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+        results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, " "));
+}

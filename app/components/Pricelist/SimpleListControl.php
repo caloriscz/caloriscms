@@ -27,16 +27,18 @@ class SimpleListControl extends Control
 
     /**
      * Generate PDF
-     * @param $id
      * @throws InvalidArgumentException
      * @throws AbortException
      */
-    public function handleGeneratePdf($id): void
+    public function handleGeneratePdf(): void
     {
+        $id = $this->getParameter('pricelist');
+
         $file = substr(APP_DIR, 0, -4) . '/app/AdminModule/templates/Pricelist';
 
         $pricelist = $this->database->table('pricelist')
             ->select('pricelist.id, pricelist.pricelist_categories_id, pricelist.title AS amenu, pricelist.sorted, pricelist.price, pricelist_categories.title')
+            ->where(['pricelist_categories.pricelist_lists_id' => $id])
             ->order('pricelist_categories_id, sorted DESC');
 
         $params = [
@@ -51,7 +53,7 @@ class SimpleListControl extends Control
         $pdf->documentTitle = 'Ceník';
 
         $pdf->setSaveMode(PdfResponse::INLINE);
-        $pdf->save(APP_DIR . '/files/pdf/', 'ivt-' . '.pdf');
+        $pdf->save(APP_DIR . '/files/pdf/', 'cenik-' . $id . '.pdf');
         $pdf->setSaveMode(PdfResponse::DOWNLOAD); //default behavior
         $this->presenter->sendResponse($pdf);
     }

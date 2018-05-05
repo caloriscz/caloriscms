@@ -848,6 +848,13 @@ CREATE TABLE IF NOT EXISTS `pricelist_dates` (
   `day` date NOT NULL
 ) ENGINE=InnoDB;
 
+CREATE TABLE `pricelist_lists` (
+  `id` int(11) NOT NULL,
+  `title` varchar(30) COLLATE utf8_czech_ci NOT NULL,
+  `currencies_id` int(11) DEFAULT NULL,
+  `description` text COLLATE utf8_czech_ci,
+  `class` varchar(60) CHARACTER SET latin1 DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
 
 ALTER TABLE `pricelist`
   ADD PRIMARY KEY (`id`),
@@ -865,6 +872,17 @@ ALTER TABLE `pricelist_daily`
 
 ALTER TABLE `pricelist_dates`
   ADD PRIMARY KEY (`id`);
+
+ALTER TABLE `pricelist_lists`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `currencies_id` (`currencies_id`);
+
+ALTER TABLE `pricelist_lists`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+
+ALTER TABLE `pricelist_lists`
+  ADD CONSTRAINT `pricelist_lists_ibfk_1` FOREIGN KEY (`currencies_id`) REFERENCES `currencies` (`id`) ON DELETE SET NULL ON UPDATE SET NULL;
+COMMIT;
 
 
 ALTER TABLE `pricelist`
