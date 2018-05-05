@@ -155,7 +155,7 @@ $(document).ready(function () {
 
 });
 
-/* JSTree  ----- */
+/* JSTree  Menus ----- */
 $(document).ready(function () {
     $('.tree').jstree({
         "icons": true,
@@ -251,10 +251,105 @@ $(document).ready(function () {
             document.location.href = this;
         }
     );
-
-
 });
 
+/* JSTree  Pricelist categories ----- */
+$(document).ready(function () {
+    $('.tree-pricelist').jstree({
+        "icons": true,
+        "core": {
+            "check_callback": true
+        },
+        "contextmenu": {
+            "items": function () {
+                return {
+                    "Create": {
+                        "label": "Vytvořit",
+                        "action": function (data) {
+                            var ref = $.jstree.reference(data.reference);
+                            sel = ref.get_selected();
+                            if (!sel.length) {
+                                return false;
+                            }
+                            sel = sel[0];
+                            sel = ref.create_node(sel, {"type": "file"});
+                            if (sel) {
+                                ref.edit(sel);
+                            }
+
+                        }
+                    },
+                    "Rename": {
+                        "label": "Přejmenovat",
+                        "action": function (data) {
+                            var inst = $.jstree.reference(data.reference);
+                            obj = inst.get_node(data.reference);
+                            inst.edit(obj);
+                        }
+                    },
+                    "Delete": {
+                        "label": "Smazat",
+                        "action": function (data) {
+                            var ref = $.jstree.reference(data.reference),
+                                sel = ref.get_selected();
+                            if (!sel.length) {
+                                return false;
+                            }
+                            ref.delete_node(sel);
+
+                        }
+                    }
+                };
+            }
+        }
+        ,
+        "plugins": ["dnd", "crrm", "contextmenu"]
+    }).bind("move_node.jstree", function (e, data) {
+        $.ajax({
+            data: 'do=pricelistCategoryEdit-sort&id_from=' + data.node.id.substring(3) + '&id_to=' + data.parent.substring(3) + '&id=' +
+            data.node.id.substring(3) + '&position_old=' + data.old_position + '&position=' + data.position,
+            type: 'GET',
+            url: '/admin/pricelist/menu'
+        });
+    }).on('delete_node.jstree', function (e, data) {
+        $.ajax({
+            data: 'do=pricelistCategoryEdit-delete&node_id=' + data.node.id.substring(3),
+            type: 'GET',
+            url: '/admin/pricelist/menu'
+        });
+    }).on('create_node.jstree', function (e, data) {
+        $.ajax({
+            data: 'do=pricelistCategoryEdit-create&node_id=' + data.node.parent.substring(3) + '&text=' + data.text,
+            datatype: 'json',
+            type: 'GET',
+            url: '/admin/pricelist/menu',
+            success: function (output) {
+
+                var output = JSON.parse(output);
+
+                data.instance.set_id(data.node.id, 'j1_' + output.id);
+                data.node.a_attr.id = 'j1_' + output.id + '_anchor';
+            }
+        });
+    }).on('rename_node.jstree', function (e, data) {
+        $.ajax({
+            data: 'do=pricelistCategoryEdit-rename&node_id=' + data.node.id.substring(3) + '&text=' + data.text,
+            type: 'GET',
+            url: '/admin/pricelist/menu'
+        });
+    });
+
+    $('.tree-pricelist').on('ready.jstree', function () {
+        $(".tree").jstree("open_all");
+    });
+
+
+    $(".tree-pricelist li").on("click", "a",
+        function () {
+            document.location.href = this;
+        }
+    );
+});
 
 /* Sortable ----- */
 $(function () {

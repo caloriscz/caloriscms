@@ -39,7 +39,7 @@ class PricelistPresenter extends BasePresenter
 
     protected function createComponentPricelistCategoryEdit(): PricelistCategoryEditControl
     {
-        return new PricelistCategoryEditControl($this->database);
+        return new PricelistCategoryEditControl($this->database, $this->em);
     }
 
     /**

@@ -220,6 +220,6 @@ class PagesPresenter extends BasePresenter
             ->where(['title LIKE ?' => '%' . $src . '%'])->limit(20);
         $this->template->related = $this->database->table('pages_related')
             ->where(['pages_id' => $this->getParameter('id')]);
-        $this->template->catalogue = $this->database->table('pages')->get($this->getParameter('id'));
+        $this->template->pages = $this->database->table('pages')->get($this->getParameter('id'));
     }
 }

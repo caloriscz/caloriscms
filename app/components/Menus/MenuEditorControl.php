@@ -3,9 +3,7 @@
 namespace Caloriscz\Menus;
 
 use App\Forms\Menu\InsertMenuControl;
-use App\Model\Menu;
 use Kdyby\Doctrine\EntityManager;
-use Nette\Application\AbortException;
 use Nette\Application\UI\Control;
 use Nette\Database\Context;
 use Tracy\Debugger;
