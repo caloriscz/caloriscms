@@ -2,18 +2,17 @@
 
 namespace Caloriscz\Menus\Admin;
 
-use App\Model\Entity\PagesTypes;
-use Kdyby\Doctrine\EntityManager;
 use Nette\Application\UI\Control;
+use Nette\Database\Context;
 
 class MainMenuControl extends Control
 {
-    /** @var EntityManager @inject */
-    public $em;
+    /** @var Context @inject */
+    public $database;
 
-    public function __construct(EntityManager $em)
+    public function __construct(Context $database)
     {
-        $this->em = $em;
+        $this->database = $database;
     }
 
     public function render()
@@ -23,8 +22,7 @@ class MainMenuControl extends Control
         }
 
         $this->template->settings = $this->getPresenter()->template->settings;
-        $pageTypes = $this->em->getRepository(PagesTypes::class);
-        $this->template->pageTypes = $pageTypes->findAll();
+        $this->template->pageTypes = $this->database->table('pages_types');
 
         $this->template->setFile(__DIR__ . '/MainMenuControl.latte');
         $this->template->render();

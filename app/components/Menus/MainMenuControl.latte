@@ -12,14 +12,14 @@
 </li>
 {foreach $pageTypes as $type}
     <li class="nav-item">
-        <a href="/admin/{$type->getAdminLink()}" class="nav-link">
-            <i class="fa {$type->getIcon()} fa-fw"></i> {$type->getContentType()}
+        <a href="/admin/{$type->admin_link}" class="nav-link">
+            <i class="fa {$type->icon} fa-fw"></i> {$type->content_type}
         </a>
     </li>
 {/foreach}
 <li class="nav-item">
     <a href="/admin/pages" class="nav-link">
-        <i class="fa {$type->getIcon()} fa-page"></i> Všechny stránky
+        <i class="fa {$type->icon} fa-page"></i> Všechny stránky
     </a>
 </li>
 <li class="nav-item">

@@ -8,7 +8,7 @@ use Nette\Database\Context;
 class MenuControl extends Control
 {
 
-    /** @var \Nette\Database\Context */
+    /** @var Context */
     public $database;
 
     public function __construct(Context $database)
@@ -19,11 +19,12 @@ class MenuControl extends Control
     /**
      * @param null $id
      */
-    public function render($id = null)
+    public function render($id = null): void
     {
+        $presetId = null;
         $template = $this->getTemplate();
-        $template->langSuffix = '';
         $template->langPrefix = '';
+        $template->langSuffix = '';
 
         $menus = $this->database->table('menu_menus')->get($id);
 
@@ -36,12 +37,18 @@ class MenuControl extends Control
 
         $template->active = strtok($_SERVER['REQUEST_URI'], '?');
 
-        $arr['parent_id'] = null;
+        $presetDbId = $this->database->table('menu')->where(['parent_id' => null, 'menu_menus_id' => $id]);
+
+        if ($presetDbId->count() > 0) {
+            $presetId = $presetDbId->fetch()->id;
+        }
+
+        $arr['parent_id'] = $presetId;
         $arr['menu_menus_id'] = $id;
 
         $template->id = $id;
         $template->class = $menus->class;
-        $template->categories = $this->database->table('menu')->where($arr)->order('sorted DESC');
+        $template->categories = $this->database->table('menu')->where($arr)->order('sorted ASC');
         $template->render();
     }
 

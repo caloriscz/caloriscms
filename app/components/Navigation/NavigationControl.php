@@ -18,22 +18,22 @@ class NavigationControl extends Control
         $this->database = $database;
     }
 
-    protected function createComponentSearch()
+    protected function createComponentSearch(): SearchControl
     {
         return new SearchControl($this->database);
     }
 
-    protected function createComponentNavbarMenu()
+    protected function createComponentNavbarMenu(): NavbarMenuControl
     {
         return new NavbarMenuControl($this->database);
     }
 
-    protected function createComponentMenu()
+    protected function createComponentMenu(): MenuControl
     {
         return new MenuControl($this->database);
     }
 
-    public function render()
+    public function render(): void
     {
         $template = $this->getTemplate();
         $template->settings = $this->presenter->template->settings;

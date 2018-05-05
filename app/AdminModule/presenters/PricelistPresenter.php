@@ -248,4 +248,9 @@ class PricelistPresenter extends BasePresenter
             ->where(['pricelist_daily.pricelist_dates_id' => $this->getParameter('day')])
             ->order('pricelist_categories_id');
     }
+
+    public function renderMenu(): void
+    {
+        $this->template->pricelistId = $this->getParameter('id');
+    }
 }

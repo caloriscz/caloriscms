@@ -163,7 +163,7 @@ abstract class BasePresenter extends Presenter
      */
     protected function createComponentMainMenu(): MainMenuControl
     {
-        return new MainMenuControl($this->em);
+        return new MainMenuControl($this->database);
     }
 
     /**
