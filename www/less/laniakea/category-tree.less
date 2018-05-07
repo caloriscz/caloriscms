@@ -1,18 +1,18 @@
-.tree li, .tree-pricelist li {
+.tree li, .tree-pricelist li, .tree-links li {
   list-style-type: none;
   margin: 0;
   padding: 10px 5px 0 5px;
   position: relative
 }
 
-.tree-pricelist li::before, .tree-pricelist li::after, .tree-pricelist li::before, .tree-pricelist li::after {
+.tree li::before, .tree li::after, .tree-pricelist li::before, .tree-pricelist li::after, .tree-links li::before, .tree-links li::after {
   content: '';
   left: -20px;
   position: absolute;
   right: auto
 }
 
-.tree li::before,.tree-pricelist li::before {
+.tree li::before,.tree-pricelist li::before,.tree-links li::before {
   border-left: 1px solid #999;
   bottom: 50px;
   height: 100%;
@@ -20,14 +20,14 @@
   width: 1px
 }
 
-.tree li::after, .tree-pricelist li::after {
+.tree li::after, .tree-pricelist li::after, .tree-links li::after {
   border-top: 1px solid #999;
   height: 20px;
   top: 25px;
   width: 25px
 }
 
-.tree li span, .tree-pricelist li span  {
+.tree li span, .tree-pricelist li span, .tree-links li span  {
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
   border: 1px solid #999;
@@ -37,19 +37,20 @@
   text-decoration: none;
 }
 
-.tree li.parent_li > span, .tree-pricelist li.parent_li > span {
+.tree li.parent_li > span, .tree-pricelist li.parent_li > span, .tree-links li.parent_li > span {
   cursor: pointer;
 }
 
-.tree > ul > li::before, .tree > ul > li::after, .tree-pricelist > ul > li::before, .tree-pricelist > ul > li::after {
+.tree > ul > li::before, .tree > ul > li::after, .tree-pricelist > ul > li::before, .tree-pricelist > ul > li::after, .tree-links > ul > li::before, .tree-links > ul > li::after {
   border: 0;
 }
 
-.tree li:last-child::before, .tree-pricelist li:last-child::before {
+.tree li:last-child::before, .tree-pricelist li:last-child::before, .tree-links li:last-child::before {
   height: 30px;
 }
 
-.tree li.parent_li > span:hover, .tree li.parent_li > span:hover + ul li span, .tree-pricelist li.parent_li > span:hover, .tree-pricelist li.parent_li > span:hover + ul li span {
+.tree li.parent_li > span:hover, .tree li.parent_li > span:hover + ul li span, .tree-pricelist li.parent_li > span:hover, .tree-pricelist li.parent_li > span:hover + ul li span,
+.tree-links li.parent_li > span:hover, .tree-links li.parent_li > span:hover + ul li span {
   background: #eee;
   border: 1px solid #94a0b4;
   color: #000;

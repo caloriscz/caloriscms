@@ -75,7 +75,7 @@ class CategoryPanelControl extends Control
             'parent_id' => $form->values->parent_id,
         ]);
 
-        $this->presenter->redirect(this);
+        $this->presenter->redirect('this');
     }
 
     /**
@@ -94,8 +94,13 @@ class CategoryPanelControl extends Control
         $template->setFile(__DIR__ . '/CategoryPanelControl.latte');
 
         $template->id = $id;
+        $template->database = $this->database;
         $template->idActive = $this->presenter->getParameter('id');
-        $template->menu = $this->database->table('links_categories')->where('parent_id', $id);
+
+        $arr['parent_id'] = null;
+        $template->menu = $this->database->table('links_categories')->where($arr);
+
+
         $template->render();
     }
 

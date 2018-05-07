@@ -1,11 +1,46 @@
 {block #titles}Odkazy - {$link->title}{/block}
 {block content}
 
-<h1 class="page-header">Odkaz: {$link->title}</h1>
+<ol class="breadcrumb">
+    <li class="breadcrumb-item">Home</li>
+    <li class="breadcrumb-item"><a href="/admin">Admin</a></li>
+    <li class="breadcrumb-item"><a href="/admin/links">{_dictionary.main.Links}</a></li>
+    <li class="breadcrumb-item active">{$link->title}</li>
+</ol>
 
-{control editForm}
-{var $id = $presenter->getParameter('id')}
-{if file_exists($appDir.'/links/'.$id.'.jpg')}
-    <img src="{$baseUri}/links/{$id}.jpg" style="max-width: 250px;" /><br />
-    <a n:href="deleteImage!, $id" class="btn btn-danger" onclick="return confirm('Opravdu smazat?')">Smazat obrázek</a>
-{/if}
+
+<div class="container-fluid">
+    <div class="animated fadeIn">
+        <div class="row">
+            <div class="col-lg-9">
+                <div class="card">
+                    <div class="card-header">Úprava odkazu</div>
+                    <div class="card-block">
+                        {control editForm}
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="card">
+                    <div class="card-header">Vyberte obrázek</div>
+                    <div class="card-block">
+
+                        {var $id = $presenter->getParameter('id')}
+                        {if file_exists($appDir.'/links-media/link-'.$id.'.jpg')}
+                            <img src="{$baseUri}/links-media/link-{$id}.jpg" style="max-width: 250px;"/>
+
+                            <div class="mt-2">
+                                <a n:href="deleteImage!, $id" class="btn btn-danger"
+                                                              onclick="return confirm('Opravdu smazat?')">
+                                    Smazat obrázek
+                                </a>
+                            </div>
+                        {else}
+                            obrázek není
+                        {/if}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

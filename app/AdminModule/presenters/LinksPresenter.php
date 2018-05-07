@@ -4,6 +4,7 @@ namespace App\AdminModule\Presenters;
 
 use App\Model\IO;
 use Caloriscz\Links\LinkForms\CategoryPanelControl;
+use Nette\Application\AbortException;
 use Nette\Forms\BootstrapUIForm;
 use Nette\Utils\Random;
 use Nette\Utils\Strings;
@@ -14,12 +15,14 @@ use Nette\Utils\Strings;
 class LinksPresenter extends BasePresenter
 {
 
+    /**
+     * @throws AbortException
+     */
     protected function startup()
     {
         parent::startup();
 
-        $this->template->link = $this->database->table('links')
-            ->get($this->getParameter('id'));
+        $this->template->link = $this->database->table('links')->get($this->getParameter('id'));
     }
 
     /**
@@ -27,7 +30,6 @@ class LinksPresenter extends BasePresenter
      */
     protected function createComponentCategoryPanel(): CategoryPanelControl
     {
-
         return new CategoryPanelControl($this->database);
     }
 
@@ -48,9 +50,9 @@ class LinksPresenter extends BasePresenter
     }
 
     /**
-     * @throws \Nette\Application\AbortException
+     * @throws AbortException
      */
-    public function insertFormSucceeded()
+    public function insertFormSucceeded(): void
     {
         $id = $this->database->table('links')
             ->insert([
@@ -63,9 +65,9 @@ class LinksPresenter extends BasePresenter
     /**
      * Delete contact
      * @param $id
-     * @throws \Nette\Application\AbortException
+     * @throws AbortException
      */
-    public function handleDelete($id)
+    public function handleDelete($id): void
     {
         $this->database->table('links')->get($id)->delete();
 
@@ -76,7 +78,7 @@ class LinksPresenter extends BasePresenter
      * Edit contact
      * @return BootstrapUIForm
      */
-    function createComponentEditForm()
+    protected function createComponentEditForm(): BootstrapUIForm
     {
         $categories = $this->database->table('links_categories')->order('title')->fetchPairs('id', 'title');
 
@@ -111,9 +113,9 @@ class LinksPresenter extends BasePresenter
 
     /**
      * @param BootstrapUIForm $form
-     * @throws \Nette\Application\AbortException
+     * @throws AbortException
      */
-    function editFormSucceeded(BootstrapUIForm $form)
+    public function editFormSucceeded(BootstrapUIForm $form): void
     {
         $this->database->table('links')
             ->where([
@@ -126,33 +128,37 @@ class LinksPresenter extends BasePresenter
                 'description' => $form->values->description,
             ]);
 
-        $uid = Strings::padLeft($form->values->id, 6, '0');
+        IO::directoryMake(APP_DIR . '/links-media');
 
-        if (file_exists(APP_DIR . '/links/' . $uid . '.jpg') && is_uploaded_file($_FILES['the_file']['tmp_name'])) {
-            IO::remove(APP_DIR . '/links/' . $uid . '.jpg');
+        if (file_exists(APP_DIR . '/links-media/link-' . $form->values->id . '.jpg') && is_uploaded_file($_FILES['the_file']['tmp_name'])) {
+            IO::remove(APP_DIR . '/links-media/link-' . $form->values->id . '.jpg');
         }
-        
-        IO::upload(APP_DIR . '/links', $uid . '.jpg', 0644);
 
-        $this->redirect(':Admin:Links:detail', ['id' => $form->values->id]);
+        try {
+        IO::upload(APP_DIR . '/links-media', 'link-' . $form->values->id . '.jpg');
+        } catch (\Exception $e) {
+            echo $e->getMessage();
+        }
+
+        $this->redirect('this', ['id' => $form->values->id]);
     }
 
     /**
      * @param $id
-     * @throws \Nette\Application\AbortException
+     * @throws AbortException
      */
-    function handleDeleteImage($id)
+    public function handleDeleteImage($id): void
     {
-        IO::remove(APP_DIR . '/links/' . Strings::padLeft($id, 6, '0') . '.jpg');
+        IO::remove(APP_DIR . '/links-media/link-' . $id. '.jpg');
         $this->redirect(':Admin:Links:detail', ['id' => $id, 'rnd' => Random::generate(4)]);
     }
 
     /**
      * Delete group
      * @param $id
-     * @throws \Nette\Application\AbortException
+     * @throws AbortException
      */
-    function handleDeleteCategory($id)
+    public function handleDeleteCategory($id): void
     {
         if ($id === 1) {
             $this->flashMessage($this->translator->translate('messages.sign.CantDeleteMainGroup'), 'error');
