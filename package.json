@@ -7,9 +7,9 @@
     "test": "tests"
   },
   "dependencies": {
-    "bootstrap": "^4.0.0",
-    "bower": "^1.8.2",
-    "flatpickr": "^4.2.4",
+    "bootstrap": "^4.1.1",
+    "bower": "^1.8.4",
+    "flatpickr": "^4.4.6",
     "fullcalendar": "^3.9.0",
     "gulp": "^3.9.1",
     "gulp-concat": "^2.6.1",
@@ -18,11 +18,11 @@
     "jquery-ui": "^1.12.1",
     "jquery-ui-dist": "^1.12.1",
     "jstree": "^3.3.5",
-    "moment": "^2.20.1",
+    "moment": "^2.22.1",
     "pace": "0.0.4",
-    "popper.js": "^1.13.0",
-    "summernote": "^0.8.9",
-    "tether": "^1.4.3"
+    "popper.js": "^1.14.3",
+    "summernote": "^0.8.10",
+    "tether": "^1.4.4"
   },
   "devDependencies": {},
   "scripts": {

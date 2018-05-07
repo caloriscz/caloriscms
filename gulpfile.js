@@ -9,6 +9,7 @@ gulp.task("scripts-a", function () {
         './node_modules/bootstrap/dist/js/bootstrap.js',
         './bower_components/dropzone/dist/min/dropzone.min.js',
         './node_modules/summernote/dist/summernote.min.js',
+        './node_modules/summernote/dist/summernote-bs4.min.js',
         './node_modules/summernote/lang/summernote-cs-CZ.js',
         './node_modules/jquery-ui-dist/jquery-ui.min.js',
         './bower_components/elfinder/js/elfinder.min.js',
@@ -24,7 +25,7 @@ gulp.task("scripts-a", function () {
         './node_modules/jstree/dist/jstree.min.js',
         './node_modules/moment/min/moment.min.js',
         './bower_components/fullcalendar/dist/fullcalendar.min.js',
-        './bower_components/fullcalendar/dist/lang/YOUR_LANGUAGE.js'
+        './bower_components/fullcalendar/dist/lang/cs.js'
     ])
         .pipe(concat('all-back.js'))
         .pipe(gulp.dest('./www/js/'));

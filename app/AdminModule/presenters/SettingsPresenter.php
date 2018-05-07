@@ -7,6 +7,7 @@ use App\Forms\Settings\InsertCountryControl;
 use App\Forms\Settings\InsertCurrencyControl;
 use App\Forms\Settings\InsertLanguageControl;
 use Caloriscz\Settings\SettingsCategoriesControl;
+use Nette\Application\AbortException;
 
 /**
  * Settings presenter.
@@ -14,49 +15,34 @@ use Caloriscz\Settings\SettingsCategoriesControl;
 class SettingsPresenter extends BasePresenter
 {
 
-    /**
-     * @return EditSettingsControl
-     */
-    protected function createComponentEditSettings()
+    protected function createComponentEditSettings(): EditSettingsControl
     {
         return new EditSettingsControl($this->database);
     }
 
-    /**
-     * @return InsertLanguageControl
-     */
-    protected function createComponentInsertLanguage()
+    protected function createComponentInsertLanguage(): InsertLanguageControl
     {
         return new InsertLanguageControl($this->database);
     }
 
-    /**
-     * @return InsertCountryControl
-     */
-    protected function createComponentInsertCountry()
+    protected function createComponentInsertCountry(): InsertCountryControl
     {
         return new InsertCountryControl($this->database);
     }
 
-    /**
-     * @return InsertCurrencyControl
-     */
-    protected function createComponentInsertCurrency()
+    protected function createComponentInsertCurrency(): InsertCurrencyControl
     {
         return new InsertCurrencyControl($this->database);
     }
 
-    /**
-     * @return SettingsCategoriesControl
-     */
-    protected function createComponentSettingsCategories()
+    protected function createComponentSettingsCategories(): SettingsCategoriesControl
     {
         return new SettingsCategoriesControl($this->database);
     }
 
     /**
      * @param $id
-     * @throws \Nette\Application\AbortException
+     * @throws AbortException
      */
     public function handleInstall($id)
     {
@@ -83,9 +69,9 @@ class SettingsPresenter extends BasePresenter
 
     /**
      * @param $id
-     * @throws \Nette\Application\AbortException
+     * @throws AbortException
      */
-    public function handleMakeDefault($id)
+    public function handleMakeDefault($id): void
     {
         if ($this->template->member->users_roles->settings === 0) {
             $this->database->query('UPDATE languages SET `default` = NULL');
@@ -97,9 +83,9 @@ class SettingsPresenter extends BasePresenter
 
     /**
      * @param $id
-     * @throws \Nette\Application\AbortException
+     * @throws AbortException
      */
-    public function handleMakeDefaultCurrency($id)
+    public function handleMakeDefaultCurrency($id): void
     {
         if ($this->template->member->users_roles->settings === 0) {
             $this->database->query('UPDATE currencies SET `used` = NULL');
@@ -111,9 +97,9 @@ class SettingsPresenter extends BasePresenter
 
     /**
      * @param $id
-     * @throws \Nette\Application\AbortException
+     * @throws AbortException
      */
-    public function handleToggle($id)
+    public function handleToggle($id): void
     {
         if ($this->template->member->users_roles->settings === 0) {
             $toggle = $this->database->table('languages')->get($id);
@@ -128,9 +114,9 @@ class SettingsPresenter extends BasePresenter
 
     /**
      * @param $id
-     * @throws \Nette\Application\AbortException
+     * @throws AbortException
      */
-    public function handleToggleCountry($id)
+    public function handleToggleCountry($id): void
     {
         if ($this->template->member->users_roles->settings === 0) {
             $toggle = $this->database->table('countries')->get($id);
@@ -151,7 +137,7 @@ class SettingsPresenter extends BasePresenter
      * @param $lang
      * @return string
      */
-    public function checkColumn($table, $column, $type, $lang)
+    public function checkColumn($table, $column, $type, $lang): string
     {
         $pages_title = $this->database->query('SHOW COLUMNS FROM `' . $table . '` LIKE ?', $column . '_' . $lang)->getRowCount();
 
@@ -165,37 +151,37 @@ class SettingsPresenter extends BasePresenter
         return $message . '<br>';
     }
 
-    public function renderGlobal()
+    public function renderGlobal(): void
     {
         $this->template->categoryId = null;
     }
 
-    public function renderLanguages()
+    public function renderLanguages(): void
     {
         $this->template->languages = $this->database->table('languages');
     }
 
-    public function renderCountries()
+    public function renderCountries(): void
     {
         $this->template->countries = $this->database->table('countries');
     }
 
-    public function renderCurrencies()
+    public function renderCurrencies(): void
     {
         $this->template->currencies = $this->database->table('currencies');
     }
 
-    public function renderPageTypes()
+    public function renderPageTypes(): void
     {
         $this->template->pagesTypes = $this->database->table('pages_types');
     }
 
-    public function renderPageTemplates()
+    public function renderPageTemplates(): void
     {
         $this->template->pagesTemplates = $this->database->table('pages_templates');
     }
 
-    public function renderUserRoles()
+    public function renderUserRoles(): void
     {
         $this->template->usersRoles = $this->database->table('users_roles');
     }

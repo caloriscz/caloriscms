@@ -7,7 +7,6 @@ use Caloriscz\Links\LinkForms\CategoryPanelControl;
 use Nette\Application\AbortException;
 use Nette\Forms\BootstrapUIForm;
 use Nette\Utils\Random;
-use Nette\Utils\Strings;
 
 /**
  * Link management with categories
@@ -93,13 +92,12 @@ class LinksPresenter extends BasePresenter
         $form->addSelect('category', 'dictionary.main.Category', $categories)
             ->setAttribute('class', 'form-control');
         $form->addTextArea('description', 'dictionary.main.Description')
-            ->setAttribute('class', 'form-control')
-            ->setHtmlId('wysiwyg');
+            ->setAttribute('class', 'form-control summernote');
         $form->addUpload('the_file', 'Vyberte obrázek (nepovinné)');
         $form->setDefaults([
             'title' => $this->template->link->title,
             'url' => $this->template->link->url,
-            'category' => $this->template->link->links_categories_id,
+            //'category' => $this->template->link->links_categories_id,
             'description' => $this->template->link->description,
             'id' => $this->getParameter('id'),
         ]);

@@ -1,38 +1,27 @@
 {var $name = $presenter->getView()}
-<div class="panel panel-default">
-    <div class="panel-heading">
-        Kategorie
-        <button type="button" class="btn btn-default pull-right btn-xs" data-toggle="modal" data-target="#catModal">
-            Vložit kategorii
-        </button>
-    </div>
-    <div class="panel-body">
-        {var $name = $presenter->getView()}
-        <div id="sorter-ids" class="hidden"
-             data-images="{foreach $menu as $itemS}{$itemS->id}{sep},{/sep}{/foreach}"></div>
-        <div class="tree-links">
-            {var $category = 0}
-            {var $counter = 2}
-            {block #menu}
-                <ul>
-                    {foreach $menu as $item}
-                        <li id="j1_{$item->id}">
-                            <a id="j1_{$item->id}_anchor"
-                               href="{plink ':Admin:Links:default', id => $item->id}">{$item->title}</a>
+<div id="sorter-ids" class="hidden"
+     data-images="{foreach $menu as $itemS}{$itemS->id}{sep},{/sep}{/foreach}"></div>
+<div class="tree-links">
+    {var $category = 0}
+    {var $counter = 2}
+    {block #menu}
+        <ul>
+            {foreach $menu as $item}
+                <li id="j1_{$item->id}">
+                    <a id="j1_{$item->id}_anchor"
+                       href="{plink ':Admin:Links:default', id => $item->id}">{$item->title}</a>
 
-                            {var $categoryCount = $database->table('links_categories')->where('parent_id', $item->parent_id)->count()}
-                            {if $category != $item->parent_id}
-                                {var $counter = 1}
-                            {/if}
-                            {php $selection = $item->related('links_categories','parent_id')->order('sorted')}
-                            {if $selection->count() > 0}
-                                {include #menu, menu => $selection}
-                            {/if}
-                            {var $category = $item->parent_id}
-                        </li>
-                    {/foreach}
-                </ul>
-            {/block}
-        </div>
-    </div>
+                    {var $categoryCount = $database->table('links_categories')->where('parent_id', $item->parent_id)->count()}
+                    {if $category != $item->parent_id}
+                        {var $counter = 1}
+                    {/if}
+                    {php $selection = $item->related('links_categories','parent_id')->order('sorted')}
+                    {if $selection->count() > 0}
+                        {include #menu, menu => $selection}
+                    {/if}
+                    {var $category = $item->parent_id}
+                </li>
+            {/foreach}
+        </ul>
+    {/block}
 </div>
