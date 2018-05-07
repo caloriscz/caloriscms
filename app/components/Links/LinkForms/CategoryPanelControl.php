@@ -5,6 +5,7 @@ namespace Caloriscz\Links\LinkForms;
 use Nette\Application\UI\Control;
 use Nette\Database\Context;
 use Nette\Forms\BootstrapUIForm;
+use Tracy\Debugger;
 
 class CategoryPanelControl extends Control
 {
@@ -12,70 +13,92 @@ class CategoryPanelControl extends Control
     /** @var Context */
     public $database;
 
+    /**
+     * CategoryPanelControl constructor.
+     * @param Context $database
+     */
     public function __construct(Context $database)
     {
         $this->database = $database;
     }
 
     /**
+     * Delete category
+     */
+    public function handleDelete(): void
+    {
+        $this->database->table('links_categories')->get($this->getPresenter()->getParameter('node_id'))->delete();
+        exit();
+    }
+
+    /**
      * Insert category
      */
-    protected function createComponentInsertCategoryForm()
+    public function handleCreate(): void
     {
-        $form = new BootstrapUIForm();
-        $form->setTranslator($this->presenter->translator);
-        $form->getElementPrototype()->class = 'form-horizontal';
-        $form->getElementPrototype()->role = 'form';
-        $form->getElementPrototype()->autocomplete = 'off';
+        $node = $this->database->table('links_categories')->insert([
+            'title' => 'New node',
+            'parent_id' => $this->getPresenter()->getParameter('node_id'),
+            'sorted' => 1000000,
+        ]);
 
-        $form->addHidden('parent_id');
-        $form->addHidden('type');
-        $form->addText('title', 'dictionary.main.title')
-                ->setAttribute('class', 'form-control');
-        $form->addSubmit('submitm', 'dictionary.main.insert')
-                ->setAttribute('class', 'btn btn-primary');
+        $nodeArr['id'] = $node->id;
 
-        $form->onSuccess[] = [$this, 'insertCategoryFormSucceeded'];
-        $form->onValidate[] = [$this, 'validateCategoryFormSucceeded'];
-        return $form;
+        echo json_encode($nodeArr);
+        exit();
     }
 
     /**
-     * @param BootstrapUIForm $form
-     * @throws \Nette\Application\AbortException
+     * Rename category
      */
-    public function validateCategoryFormSucceeded(BootstrapUIForm $form): void
+    public function handleRename(): void
     {
-        $redirectTo = $this->presenter->getName();
-
-        $category = $this->database->table('links_categories')->where([
-            'parent_id' => $form->values->parent_id,
-            'title' => $form->values->title,
+        $this->database->table('links_categories')->get($this->getPresenter()->getParameter('node_id'))->update([
+            'title' => $this->getPresenter()->getParameter('text')
         ]);
 
-        if ($category->count() > 0) {
-            $this->flashMessage($this->translator->translate('messages.sign.categoryAlreadyExists'), 'error');
-            $this->redirect(':' . $redirectTo . ':default', ['id' => null]);
-        }
-
-        if ($form->values->title === '') {
-            $this->flashMessage($this->translator->translate('messages.sign.categoryMustHaveSomeName'), 'error');
-            $this->redirect(':' . $redirectTo . ':default', ['id' => null]);
-        }
+        exit();
     }
 
     /**
-     * @param BootstrapUIForm $form
-     * @throws \Nette\Application\AbortException
+     * Resort images in order to enjoy sorting images from one :)
+     * @throws \Throwable
      */
-    public function insertCategoryFormSucceeded(BootstrapUIForm $form): void
+    public function handleSort()
     {
-        $this->database->table('links_categories')->insert([
-            'title' => $form->values->title,
-            'parent_id' => $form->values->parent_id,
-        ]);
+        $updateSorter = $this->em->getConnection()->prepare('SET @i = 1000;UPDATE `links_categories` SET `sorted` = @i:=@i+2 ORDER BY `sorted` ASC');
+        $updateSorter->execute();
+        $updateSorter->closeCursor();
+        $arr['parent_id'] = null;
+        $arr['sorted'] = null;
 
-        $this->presenter->redirect('this');
+        $idTo = $this->getPresenter()->getParameter('id_to');
+
+        if ($idTo === '') {
+            $idTo = null;
+        }
+
+        if ($this->getPresenter()->getParameter('id_from') !== $idTo) {
+            $arr['parent_id'] = $idTo;
+        }
+
+        $menui = $this->database->table('links_categories')->where([
+            'parent_id' => $idTo
+        ])
+            ->order('sorted')->limit(1, $this->getPresenter()->getParameter('position'));
+
+        if ($menui->count() > 0) {
+            if ($this->getPresenter()->getParameter('position') === 0) {
+                $arr['sorted'] = ($menui->fetch()->sorted - 1);
+            } else {
+                $arr['sorted'] = ($menui->fetch()->sorted + 1);
+            }
+        }
+
+        $arr = array_filter($arr, '\strlen');
+
+        $this->database->table('links_categories')->get($this->getPresenter()->getParameter('id_from'))->update($arr);
+        exit();
     }
 
     /**

@@ -130,12 +130,7 @@ class LinksPresenter extends BasePresenter
 
         if (file_exists(APP_DIR . '/links-media/link-' . $form->values->id . '.jpg') && is_uploaded_file($_FILES['the_file']['tmp_name'])) {
             IO::remove(APP_DIR . '/links-media/link-' . $form->values->id . '.jpg');
-        }
-
-        try {
-        IO::upload(APP_DIR . '/links-media', 'link-' . $form->values->id . '.jpg');
-        } catch (\Exception $e) {
-            echo $e->getMessage();
+            IO::upload(APP_DIR . '/links-media', 'link-' . $form->values->id . '.jpg');
         }
 
         $this->redirect('this', ['id' => $form->values->id]);

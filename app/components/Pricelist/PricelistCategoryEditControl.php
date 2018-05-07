@@ -28,10 +28,7 @@ class PricelistCategoryEditControl extends Control
      */
     public function handleDelete()
     {
-        Debugger::barDump($this->getPresenter()->getParameter('node_id'));
-
         $this->database->table('pricelist_categories')->get($this->getPresenter()->getParameter('node_id'))->delete();
-
         exit();
     }
 

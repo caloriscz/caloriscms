@@ -405,24 +405,24 @@ $(document).ready(function () {
         "plugins": ["dnd", "crrm", "contextmenu"]
     }).bind("move_node.jstree", function (e, data) {
         $.ajax({
-            data: 'do=pricelistCategoryEdit-sort&id_from=' + data.node.id.substring(3) + '&id_to=' + data.parent.substring(3) + '&id=' +
+            data: 'do=categoryPanel-sort&id_from=' + data.node.id.substring(3) + '&id_to=' + data.parent.substring(3) + '&id=' +
             data.node.id.substring(3) + '&position_old=' + data.old_position + '&position=' + data.position,
             type: 'GET',
-            url: '/admin/pricelist/menu'
+            url: '/admin/links/default'
         });
     }).on('delete_node.jstree', function (e, data) {
         $.ajax({
-            data: 'do=pricelistCategoryEdit-delete&node_id=' + data.node.id.substring(3),
+            data: 'do=categoryPanel-delete&node_id=' + data.node.id.substring(3),
             type: 'GET',
-            url: '/admin/pricelist/menu'
+            url: '/admin/links/default'
         });
     }).on('create_node.jstree', function (e, data) {
         console.log('renaming');
         $.ajax({
-            data: 'do=pricelistCategoryEdit-create&node_id=' + data.node.parent.substring(3) + '&text=' + data.text,
+            data: 'do=categoryPanel-create&node_id=' + data.node.parent.substring(3) + '&text=' + data.text,
             datatype: 'json',
             type: 'GET',
-            url: '/admin/pricelist/menu',
+            url: '/admin/links/default',
             success: function (output) {
                 var output = JSON.parse(output);
 
@@ -431,12 +431,10 @@ $(document).ready(function () {
             }
         });
     }).on('rename_node.jstree', function (e, data) {
-        var pricelist = getParameterByName('pricelist');
-
         $.ajax({
-            data: 'do=pricelistCategoryEdit-rename&node_id=' + data.node.id.substring(3) + '&text=' + data.text + '&pricelist=' + pricelist,
+            data: 'do=categoryPanel-rename&node_id=' + data.node.id.substring(3) + '&text=' + data.text,
             type: 'GET',
-            url: '/admin/pricelist/menu'
+            url: '/admin/links/default'
         });
     });
 
