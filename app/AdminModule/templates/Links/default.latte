@@ -27,20 +27,17 @@
                     <div class="card-block">
                         <table class="table table-striped">
                             <tr>
-                                <th class="col-1"></th>
+                                <th>Titulek</th>
                                 <th>Kategorie</th>
-                                <th class="hidden-xs">Titulek</th>
                             </tr>
                             {foreach $links as $item}
                                 <tr>
-                                    <td class="col-1">
+                                    <td>
                                         <a n:href="delete!, id => $item->id" class="btn"
                                                                              onclick="return confirm('Opravdu smazat odkaz?')"
                                                                              role="button">
                                             <i class="fa fa-times text-danger"></i>
-                                        </a>
-                                    </td>
-                                    <td>
+                                        </a>&nbsp;
                                         <a n:href=":Admin:Links:detail id => $item->id">
                                             {if $item->title}{$item->title}{else}<em>nemá jméno</em>{/if}
                                         </a>

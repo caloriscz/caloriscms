@@ -1,0 +1,52 @@
+{block #titles}{_dictionary.main.Settings}{/block}
+{block content}
+
+<ol class="breadcrumb">
+    <li class="breadcrumb-item">Home</li>
+    <li class="breadcrumb-item"><a href="/admin/">Admin</a></li>
+    <li class="breadcrumb-item active"><a href="/admin/settings/">{_dictionary.main.Settings}</a></li>
+</ol>
+
+<div class="container-fluid">
+    <div class="animated fadeIn">
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fa fa-align-justify"></i> Kategorie
+                        <a n:href=":Admin:Settings:global, id => null"
+                                class="btn btn-default btn-xs pull-right">Všechny kategorie</a>
+                    </div>
+                    <div class="card-block">
+                        {control settingsCategories $categoryId}
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fa fa-align-justify"></i> {_admin.settings.whenUsedInTemplate}</div>
+                    <div class="card-block text-left">
+                        <pre>
+                            <span n:syntax="off">{$settings['site:currency:code']}</span>
+                        </pre>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-9">
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fa fa-align-justify"></i> Seznam souborů
+                    </div>
+                    <div class="card-block">
+
+                        {if $member->users_roles->settings}
+                            {control editSettings}
+                        {else}
+                            <p>Nemáte oprávnění k zobrazení této stránky</p>
+                        {/if}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
