@@ -2,15 +2,16 @@
 namespace App\Forms\Contacts;
 
 use Nette\Application\UI\Control;
+use Nette\Database\Context;
 use Nette\Forms\BootstrapUIForm;
 
 class InsertCommunicationControl extends Control
 {
 
-    /** @var \Nette\Database\Context */
+    /** @var Context */
     public $database;
 
-    public function __construct(\Nette\Database\Context $database)
+    public function __construct(Context $database)
     {
         $this->database = $database;
     }
@@ -18,7 +19,7 @@ class InsertCommunicationControl extends Control
     /**
      * Insert communication
      */
-    protected function createComponentInsertForm()
+    protected function createComponentInsertForm(): BootstrapUIForm
     {
         $types = [
             'E-mail' => 'E-mail', 'Telefon, domácí' => 'Telefon, domácí',
@@ -59,7 +60,7 @@ class InsertCommunicationControl extends Control
                 'communication_value' => $form->values->type_value,
             ]);
 
-        $this->presenter->redirect(this, ['id' => $form->values->id]);
+        $this->presenter->redirect('this', ['id' => $form->values->id]);
     }
 
     public function render()

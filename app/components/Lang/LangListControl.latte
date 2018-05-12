@@ -1,0 +1,11 @@
+<ul class="nav flex-column">
+    {foreach $menu as $item}
+        <li class="nav-item">
+            <a href="{plink ':Admin:Lang:default', (expand) $args, id => $item->id}" class="nav-link">
+                {if $idActive == $item->id}
+                <strong>{/if}{$item->title}{if $idActive == $item->id}</strong>
+                {/if}
+            </a>
+        </li>
+    {/foreach}
+</ul>

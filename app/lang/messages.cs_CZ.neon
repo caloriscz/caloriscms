@@ -49,7 +49,6 @@ sign:
 error:
     invalidTypeOfImage: "Neplatný typ obrázku"
     CannotBeDeleted: "Nelze smazat"
-    CannotBeDeletedUsedInOrders: "Nelze smazat. Je používáno v objednávkách. Můeže jej však skrýt"
     CantDeleteMainGroup: "Nemůžete vymazat hlavní skupinu"
     categoryAlreadyExists: "Kategorie tohoto jména již existuje"
     categoryMustHaveSomeName: "Kategorie musí mít nějaký název"
@@ -58,7 +57,6 @@ error:
     fillInMessage: "Vyplňte zprávu"
     MustAgreeWithConditions: "Musíte souhlasit s obchodními podmínkami, abyste mohli dokončit objednávku"
     NoItemsBoughtYet: "Zatím jste nekoupili žádné zboží"
-    NoItemsInCart: "Nemáte žádné položky v košíku"
     noPermissionForAdmin: "Nemáte oprávnění vstoupit do administrace"
     NotFound: "Nebylo nalezeno"
     youWereLoggedIn: "Byli jste odhlášeni"

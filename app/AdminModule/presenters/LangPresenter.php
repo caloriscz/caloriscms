@@ -2,12 +2,8 @@
 
 namespace App\AdminModule\Presenters;
 
-use App\Forms\Settings\EditSettingsControl;
-use App\Forms\Settings\InsertCountryControl;
-use App\Forms\Settings\InsertCurrencyControl;
-use App\Forms\Settings\InsertLanguageControl;
-use Caloriscz\Settings\SettingsCategoriesControl;
-use Nette\Application\AbortException;
+use App\Forms\Lang\EditKeysControl;
+use Caloriscz\Lang\LangListControl;
 
 /**
  * Language presenter.
@@ -15,14 +11,14 @@ use Nette\Application\AbortException;
 class LangPresenter extends BasePresenter
 {
 
-    protected function createComponentEditSettings(): EditSettingsControl
+    protected function createComponentEditKeys(): EditKeysControl
     {
-        return new EditSettingsControl($this->database);
+        return new EditKeysControl($this->database);
     }
 
-    protected function createComponentSettingsCategories(): SettingsCategoriesControl
+    protected function createComponentLangList(): LangListControl
     {
-        return new SettingsCategoriesControl($this->database);
+        return new LangListControl($this->database);
     }
 
     public function renderDefault(): void

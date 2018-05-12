@@ -1,6 +1,7 @@
 <?php
 namespace App\Forms\Media;
 
+use Nette\Application\AbortException;
 use Nette\Application\UI\Control;
 use Nette\Database\Context;
 use Nette\Forms\BootstrapUIForm;
@@ -52,7 +53,7 @@ class ImageEditFormControl extends Control
 
     /**
      * @param BootstrapUIForm $form
-     * @throws \Nette\Application\AbortException
+     * @throws AbortException
      */
     public function editFormSucceeded(BootstrapUIForm $form): void
     {
@@ -62,7 +63,7 @@ class ImageEditFormControl extends Control
                 'detail_view' => $form->values->detail_view,
             ]);
 
-        $this->getPresenter()->redirect(this, [
+        $this->getPresenter()->redirect('this', [
             'id' => $form->values->page_id,
             'image' => $form->values->image_id,
         ]);

@@ -12,17 +12,17 @@ use Nette\Utils\Paginator;
 class HelpdeskPresenter extends BasePresenter
 {
 
-    protected function createComponentEditHelpdeskEmailSettings()
+    protected function createComponentEditHelpdeskEmailSettings(): EditHelpdeskEmailSettingsControl
     {
         $control = new EditHelpdeskEmailSettingsControl($this->database);
         $control->onSave[] = function ($helpdeskId) {
-            $this->redirect(this, array('id' => $helpdeskId));
+            $this->redirect('this', array('id' => $helpdeskId));
         };
 
         return $control;
     }
 
-    protected function createComponentEditMailTemplate()
+    protected function createComponentEditMailTemplate(): EditMailTemplateControl
     {
         return new EditMailTemplateControl($this->database);
     }

@@ -7,6 +7,7 @@ use App\Forms\Sign\ResetPassControl;
 use App\Forms\Sign\SignInControl;
 use App\Forms\Sign\SignUpControl;
 use Caloriscz\Sign\VerifyAccountControl;
+use Nette\Application\AbortException;
 
 /**
  * Sign in/out presenters.
@@ -30,7 +31,7 @@ class SignPresenter extends BasePresenter
                 $this->flashMessage('Informace o zapomenutém hesle odeslány', 'success');
             }
 
-            $this->redirect(this);
+            $this->redirect('this');
         };
 
         return $control;
@@ -76,7 +77,7 @@ class SignPresenter extends BasePresenter
     }
 
     /**
-     * @throws \Nette\Application\AbortException
+     * @throws AbortException
      */
     public function actionOut(): void
     {

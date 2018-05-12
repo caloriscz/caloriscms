@@ -137,7 +137,7 @@ class SignUpControl extends Control
         if ($msg !== 1) {
             unset($formVal['pwd'], $formVal['pwd2'], $formVal['confirmation']);
 
-            $this->getPresenter()->redirect(this, $formVal);
+            $this->getPresenter()->redirect('this', $formVal);
         }
     }
 

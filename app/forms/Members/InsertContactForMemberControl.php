@@ -72,7 +72,7 @@ class InsertContactForMemberControl extends Control
         $this->database->table('contacts')
             ->insert($arr);
 
-        $this->presenter->redirect(this, ['id' => $form->values->page]);
+        $this->presenter->redirect('this', ['id' => $form->values->page]);
     }
 
     public function render()
