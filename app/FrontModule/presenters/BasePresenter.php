@@ -145,89 +145,56 @@ abstract class BasePresenter extends Presenter
 
     }
 
-    /**
-     * @return PagingControl
-     */
     protected function createComponentPaging(): PagingControl
     {
         return new PagingControl;
     }
 
-    /**
-     * @return NavigationControl
-     */
     protected function createComponentNavigation(): NavigationControl
     {
         return new NavigationControl($this->database);
     }
 
-    /**
-     * @return \ContactControl
-     */
     protected function createComponentContact(): \ContactControl
     {
         return new \ContactControl($this->database);
     }
 
-    /**
-     * @return AdvancedSearchControl
-     */
     protected function createComponentAdvancedSearch(): AdvancedSearchControl
     {
         return new AdvancedSearchControl($this->database);
     }
 
-    /**
-     * @return HeadControl
-     */
     protected function createComponentHead(): HeadControl
     {
         return new HeadControl($this->database);
     }
 
-    /**
-     * @return PageTitleControl
-     */
     protected function createComponentPageTitle(): PageTitleControl
     {
         return new PageTitleControl($this->database);
     }
 
-    /**
-     * @return PageDocumentControl
-     */
     protected function createComponentPageDocument(): PageDocumentControl
     {
         return new PageDocumentControl($this->database);
     }
 
-    /**
-     * @return PageSlugControl
-     */
     protected function createComponentPageSlug(): PageSlugControl
     {
         return new PageSlugControl($this->database);
     }
 
-    /**
-     * @return AdminBarControl
-     */
     protected function createComponentAdminBar(): AdminBarControl
     {
         return new AdminBarControl($this->database);
     }
 
-    /**
-     * @return MenuControl
-     */
     protected function createComponentMenu(): MenuControl
     {
         return new MenuControl($this->database);
     }
 
-    /**
-     * @return FooterControl
-     */
     protected function createComponentFooter(): FooterControl
     {
         return new FooterControl($this->database);

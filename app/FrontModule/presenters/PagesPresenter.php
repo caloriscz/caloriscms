@@ -2,6 +2,7 @@
 
 namespace App\FrontModule\Presenters;
 
+use App\Model\Filter;
 use Caloriscz\Blog\BlogListControl;
 
 /**
@@ -22,6 +23,31 @@ class PagesPresenter extends BasePresenter
         parent::startup();
 
         $this->template->page = $this->database->table('pages')->get($this->getParameter('page_id'));
+
+    }
+
+    /**
+     * Search page
+     */
+    public function renderSearch()
+    {
+        $filter = new Filter($this->database);
+        $filter->setText($this->getParameter("s"));
+        $filter->setOrder($this->getParameter("o"));
+        $filter->setOptions($this->template->settings);
+        //$filter->setCategories($category);
+
+        $assembleSQL = $filter->assemble();
+
+        $paginator = new \Nette\Utils\Paginator;
+        $paginator->setItemCount($assembleSQL->count("*"));
+        $paginator->setItemsPerPage(20);
+        $paginator->setPage($this->getParameter("page"));
+
+        $this->template->categoryArr = $this->getParameters();
+        $this->template->search = $assembleSQL->order("pages.id");
+        $this->template->paginator = $paginator;
+        $this->template->productsArr = $assembleSQL->limit($paginator->getLength(), $paginator->getOffset());
 
     }
 

@@ -1,19 +1,13 @@
 <?php
 
-/*
- * Caloris Store
- * @copyright 2006-2015 Petr Karásek (http://caloris.cz)
- * @license http://www.gnu.org/licenses/gpl-3.0.html GNU GPL3
- */
-
-namespace App\Model\Store;
+namespace App\Model;
 
 use Nette\Database\Context;
-use \Nette\Database\SqlLiteral;
 use Nette\Database\Table\Selection;
 
 /**
  * Get list of filtered products
+ * @property null getColumns
  * @author Petr Karásek
  */
 class Filter
@@ -22,18 +16,26 @@ class Filter
     /** @var Context */
     private $database;
 
+    public $category;
+    public $connect;
+    public $columns;
+    public $search;
+    public $settings;
+    public $order;
+
     public function __construct(Context $database)
     {
         $this->database = $database;
-        $this->connect = $this->database->table("pages");
+        $this->connect = $this->database->table('pages');
     }
 
     /**
-     * Fulltext
+     * Fulltext search, asearch string from get or post
+     * @param string $searchString
      */
-    public function setText(): void
+    public function setText(?string $searchString): void
     {
-        $this->search = $_GET["src"] == '' ? false : $_GET["src"];
+        $this->search = $searchString === '' ? false : $searchString;
     }
 
     /**
@@ -51,52 +53,27 @@ class Filter
      * Order
      * @param $order
      */
-    public function order($order): void
+    public function setOrder($order): void
     {
-        if ($order === '') {
-            $order = 'na';
-        }
-
         $arr = [
-            'pa' => '`price` ASC',
-            'pd' => '`price` DESC',
             'na' => '`title` ASC',
             'nd' => '`title` DESC',
             'da' => '`date_published` ASC',
             'dd' => '`date_published` DESC',
-            'sa' => '`stock`.`amount_sold` ASC',
-            'sd' => '`stock`.`amount_sold` DESC',
             'oa' => '`sorted` ASC',
             'od' => '`sorted` DESC'
         ];
 
+        if (empty($order)) {
+            $order = 'na';
+        }
+
         $this->order = $arr[$order];
     }
 
-    /**
-     * Set manufacturer
-     * @param $listManufacturers
-     */
-    public function setManufacturer($listManufacturers): void
+    public function getOrder()
     {
-        if (\strlen($listManufacturers) > 1) {
-            $this->manufacturers = $listManufacturers;
-        } else {
-            $this->manufacturers = false;
-        }
-    }
-
-    /**
-     * Set size
-     * @param $size
-     */
-    public function setSize($size): void
-    {
-        if (\strlen($size) > 0) {
-            $this->size = $size;
-        } else {
-            $this->size = false;
-        }
+        return $this->order;
     }
 
     /**
@@ -116,32 +93,6 @@ class Filter
     }
 
     /**
-     * Set user
-     * @param string $user
-     * @param int $type
-     */
-    public function setUser($user = '', $type = 0): void
-    {
-        if (\strlen($user) > 0) {
-
-            if ($type === 0) {
-                $this->userf = $user;
-                $userDb = $this->database->table('users')->where(['username' => $user]);
-
-                if ($userDb->count() > 0) {
-                    $this->userf = $userDb->fetch()->id;
-                } else {
-                    $this->userf = false;
-                }
-            } else {
-                $this->userf = $user;
-            }
-        } else {
-            $this->userf = false;
-        }
-    }
-
-    /**
      * @param $arr
      * @return array
      */
@@ -156,36 +107,11 @@ class Filter
         return $arrNew;
     }
 
-    /**
-     * Set price
-     * @param null $priceFrom
-     * @param null $priceTo
-     * @return mixed
-     */
-    public function setPrice($priceFrom = null, $priceTo = null)
-    {
-        if ($priceFrom === '' && $priceTo === '') {
-            $this->price = false;
-        } elseif ($priceFrom === null && $priceTo !== null) {
-            $this->price = true;
-            $columns[':store.price <= ?'] = $priceTo;
-        } elseif ($priceFrom !== null && $priceTo === null) {
-            $this->price = true;
-            $columns[':store.price >= ?'] = $priceFrom;
-        } else {
-            $this->price = true;
-            $columns[':store.price >= ?'] = $priceFrom;
-            $columns[':store.price <= ?'] = $priceTo;
-        }
-
-        $this->getPrice = $columns;
-
-        return $this->getPrice;
-    }
 
     /**
      * Add other columns
      * @param $arr
+     * @return mixed
      */
     public function setColumns($arr)
     {
@@ -197,59 +123,12 @@ class Filter
 
         $this->getColumns = $columns;
 
-        return $this->getColumns;
+        $this->columns =  $this->getColumns;
     }
 
-    /**
-     * et parametres from check list of parametres
-     * @param $param
-     * @return static
-     */
-    public function setParametres($param)
+    public function getColumns()
     {
-        if (\count($param) > 0) {
-            foreach ($param as $pmKey => $pmValue) {
-                if (0 === strpos($pmKey, 'pm_')) {
-                    $pmKeyPart = explode('_', $pmKey);
-
-                    if ($pmKeyPart[2] === 'range') {
-                        $rangeArr = explode('*', urldecode($pmValue));
-
-                        $sqlKey = ':params.param_id = ' . $pmKeyPart[1] . ' AND :params.paramvalue BETWEEN ?';
-                        $sqlValue = $rangeArr[0] . ' AND ' . $rangeArr[1];
-
-                        unset($rangeArr);
-                    } elseif ($pmKeyPart[2] === 'text') {
-                        $rangeArr = explode('*', urldecode($pmValue));
-
-                        $sqlKey = ':params.param_id = ' . $pmKeyPart[1] . ' AND :params.paramvalue = ?';
-                        $sqlValue = '"' . $rangeArr[0] . '"';
-
-                        unset($rangeArr);
-                    } else {
-                        $subParams = explode('*', urldecode($pmValue));
-
-                        foreach ($subParams as $s) {
-                            $paramsIn = '"' . $s . '", ';
-                        }
-
-                        $sqlKey = ':params.param_id = ' . $pmKeyPart[1] . ' AND :params.paramvalue IN (?)';
-                        $sqlValue = substr($paramsIn, 0, -2);
-                    }
-
-                    $arr[$sqlKey] = new SqlLiteral($sqlValue);
-                }
-            }
-        }
-
-        if (\count($arr) > 0) {
-            $paramQuery = $this->connect->whereOr($arr)->having("COUNT(:params.pages_id) = ?", count($arr));
-        }
-
-        $this->getParametres = true;
-        $this->paramQuery = $paramQuery;
-
-        return $this->paramQuery;
+        return $this->columns;
     }
 
     /**
@@ -257,40 +136,8 @@ class Filter
      */
     public function assemble(): Selection
     {
-        $columns["pages.pages_types_id"] = 4;
-
-        if ($this->category !== false) {
-            $columns[':store_category.category_pages_id'] = $this->category;
-        }
-
-        if ($this->manufacturers !== false) {
-            $columns['contacts.company LIKE ?'] = '%' . $this->manufacturers . '%';
-            $columns['contacts.contacts_categories_id'] = 6;
-        }
-
-        if ($this->size !== false) {
-            $columns['size LIKE ?'] = '%' . $this->size . '%';
-        }
-
-        if ($this->userf !== false) {
-            $columns['users_id'] = $this->userf;
-        }
-
-        if ($this->price === true) {
-            $columns = array_merge((array)$columns, (array)$this->getPrice);
-        }
-
-        $this->connect->select(':store.id, pages.id, pages.slug, pages.title AS title, pages.slug AS slugtitle, pages.preview, 
-            pages.date_created, pages.document, pages.date_published, pages.recommended, pages.public '
-            /*. ', :stock.amount, SUM(:stock.amount) AS sumstock '*/
-            . ', :store.price, :params.param_id, :params.paramvalue, '
-            . ':store_prices.store_price_id, :store_prices.price AS storeprice, '
-            . 'pages.sorted, pages.pages_types_id');
-
-        /* if not added, store_category may be referenced with category_pages_id; only when category is used */
-        if ($this->category !== false) {
-            $this->connect->where(':store_category.pages_id = pages.id');
-        }
+        $this->connect->select('pages.id, pages.slug, pages.title AS title, pages.slug AS slugtitle, pages.preview, 
+            pages.date_created, pages.document, pages.date_published, pages.recommended, pages.public, pages.pages_types_id');
 
         $this->connect->group('pages.title, pages.document');
 
@@ -298,19 +145,13 @@ class Filter
             $this->connect->where("pages.title LIKE ? OR pages.document LIKE ?", "%" . $this->search . "%", "%" . $this->search . "%");
         }
 
-        if (count($columns) > 0) {
-            $this->connect->where((array)$this->getColumns);
+        if (\count($this->getColumns()) > 0) {
+            $this->connect->where((array) $this->getColumns());
         }
 
-        if (count($columns) > 0) {
-            $this->connect->where($columns);
-        }
-
-        $this->getParametres;
-
-        if ($this->order === null) {
+        if (null === $this->getOrder()) {
         } else {
-            $this->connect->order($this->order);
+            $this->connect->order($this->getOrder());
         }
 
         return $this->connect;

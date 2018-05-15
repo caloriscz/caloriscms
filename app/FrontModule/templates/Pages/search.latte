@@ -1,0 +1,24 @@
+{var $slugArray["title"] = "Search"}
+{block content}
+
+<div class="heading">
+    <div class="container">
+        <h1>{control pageTitle $page}</h1>
+    </div>
+</div>
+
+<div class="container white content text-left">
+    <div class="col-12">
+        {foreach $search as $item}
+            <div class="row">
+                <h5><a href="/{$item->slug}">{$item->title}</a></h5>
+                <p>{$item->document|striptags}</p>
+                <hr>
+            </div>
+        {/foreach}
+
+        <div class="text-center">
+            {control paging, $args, $paginator}
+        </div>
+    </div>
+</div>
