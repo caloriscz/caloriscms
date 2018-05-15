@@ -20,17 +20,21 @@
                     </div>
                 </div>
 
+                {if $presenter->getParameter('id')}
                 <div class="card">
                     <div class="card-header">
                         <i class="fa fa-align-justify"></i> Vygenerovat jazykové soubory
                     </div>
                     <div class="card-block text-center">
-                        <a href="" class="btn btn-success btn-lg">Generovat</a>
+                        <a n:href="generate! id => $presenter->getParameter('id')" class="btn btn-success btn-lg">Generovat</a>
                     </div>
                 </div>
+                {/if}
             </div>
             <div class="col-lg-9">
+                {if $presenter->getParameter('id')}
                 {control editKeys}
+                {/if}
             </div>
         </div>
     </div>

@@ -50,7 +50,7 @@ class EditKeysControl extends Control
      */
     public function permissionValidated(): void
     {
-        if ($this->presenter->template->member->users_roles->settings === 0) {
+        if (0 === $this->presenter->template->member->users_roles->settings) {
             $this->presenter->flashMessage('Nemáte oprávnění k této akci', 'error');
             $this->presenter->redirect('this');
         }
@@ -102,6 +102,7 @@ class EditKeysControl extends Control
     }
 
     /**
+     * @param BootstrapUIForm $form
      * @throws AbortException
      */
     public function insertSucceeded(BootstrapUIForm $form): void
@@ -134,7 +135,7 @@ class EditKeysControl extends Control
      * @param $id
      * @throws AbortException
      */
-    public function handleDelete($id)
+    public function handleDelete($id): void
     {
         $this->database->table('lang_keys')->get($id)->delete();
         $this->presenter->redirect('this', ['id' => $this->presenter->getParameter('id')]);
