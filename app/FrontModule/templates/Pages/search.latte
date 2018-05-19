@@ -1,4 +1,4 @@
-{var $slugArray["title"] = "Search"}
+{var $slugArray["title"] = "Hledání"}
 {block content}
 
 <div class="heading">
@@ -7,18 +7,18 @@
     </div>
 </div>
 
-<div class="container white content text-left">
-    <div class="col-12">
-        {foreach $search as $item}
-            <div class="row">
+<div class="container white content text-left d-block">
+    {foreach $search as $item}
+        <div class="row">
+            <div class="col-12">
                 <h5><a href="/{$item->slug}">{$item->title}</a></h5>
                 <p>{$item->document|striptags}</p>
                 <hr>
             </div>
-        {/foreach}
-
-        <div class="text-center">
-            {control paging, $args, $paginator}
         </div>
+    {/foreach}
+
+    <div class="text-center">
+        {control paging, $args, $paginator}
     </div>
 </div>

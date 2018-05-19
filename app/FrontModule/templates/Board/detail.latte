@@ -1,60 +1,70 @@
 {var $slugArray["title"] = "Board"}
 {block content}
 
-<div class="container heading">
-    <h1>Forum</h1>
+<div class="heading">
+    <div class="container">
+        <h1>Reagovat</h1>
+    </div>
 </div>
 
-<div class="container white padded-top padded-btm">
-    <div class="col-md-4">
-        <h2>Reagovat</h2>
-        {control answerForm}
-    </div>
-    <div class="col-md-8">
-        <div class="row">
+<div class="container mt-5 text-left">
+    <div class="row">
+        <div class="col-md-4">
+            <h2>Odpovědět na zprávu</h2>
+            {control answerForm}
+        </div>
+        <div class="col-md-8">
+            <div class="row">
 
-            {foreach $flashes as $flash}
-                <div class="modal fade" id="myModal">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                <h4 class="modal-title">Zpráva</h4>
-                            </div>
-                            <div class="modal-body">
-                                <div class="flash {$flash->type}">{$flash->message}</div>
-                            </div>
-                            <div class="modal-footer">
-                                <span id="timer" data-notice="Toto okno se zavře za "></span>
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Zavřít</button>
+                {foreach $flashes as $flash}
+                    <div class="modal fade" id="myModal">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                                aria-hidden="true">&times;</span></button>
+                                    <h4 class="modal-title">Zpráva</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="flash {$flash->type}">{$flash->message}</div>
+                                </div>
+                                <div class="modal-footer">
+                                    <span id="timer" data-notice="Toto okno se zavře za "></span>
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">Zavřít</button>
+                                </div>
                             </div>
                         </div>
                     </div>
+
+                    <div class="flash {$flash->type} flash-js">
+                        <br/>{$flash->message}<br/>
+                    </div>
+                {/foreach}
+
+                <div class="card w-100">
+                    <div class="card-header">
+                        {$message->subject} <span class="float-right">{$message->date_created|date:'j. n. Y H:i'}
+                    </div>
+                    <div class="card-body">
+                        <p class="author">od: <strong>{$message->author}</strong></p>
+                        <p>{$message->body}</p>
+                        {if $canEdit}<p><a n:href="deleteQuestion!, id => $message->id" class="btn btn-danger btn-sm">Smazat
+                                celé vlákno</a></p>{/if}
+                    </div>
                 </div>
 
-                <div class="flash {$flash->type} flash-js">
-                    <br />{$flash->message}<br />
-                </div>
-            {/foreach}
-
-            <div class="well">
-                <p class="subject">
-                    {$message->subject} <span class="pull-right">{$message->date_created|date:'j. n. Y H:i'}
-                    </span></p>
-                <p class="author">od: <strong>{$message->author}</strong></p>
-                <p>{$message->body}</p>
-                {if $canEdit}<p><a n:href="deleteQuestion!, id => $message->id" class="btn btn-danger btn-sm">Smazat celé vlákno</a></p>{/if}
-            </div>
-
-            {foreach $board as $item}
-                <div class="well">
-                    <p class="subject">{$item->subject} <span class="pull-right">{$item->date_created|date:'j. n. Y H:i'}
+                {foreach $board as $item}
+                    <div class="well">
+                        <p class="subject">{$item->subject} <span
+                                    class="pull-right">{$item->date_created|date:'j. n. Y H:i'}
                         </span></p>
-                    <p class="author">od: <strong>{$item->author}</strong></p>
-                    <p>{$item->body}</p>
-                    {if $canEdit}<p><a n:href="deleteAnswer!, id => $item->id, thread => $message->id" class="btn btn-danger btn-sm">Smazat tuto zprávu</a></p>{/if}
-                </div>
-            {/foreach}
+                        <p class="author">od: <strong>{$item->author}</strong></p>
+                        <p>{$item->body}</p>
+                        {if $canEdit}<p><a n:href="deleteAnswer!, id => $item->id, thread => $message->id"
+                                    class="btn btn-danger btn-sm">Smazat tuto zprávu</a></p>{/if}
+                    </div>
+                {/foreach}
+            </div>
         </div>
     </div>
 </div>

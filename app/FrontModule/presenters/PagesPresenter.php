@@ -35,13 +35,12 @@ class PagesPresenter extends BasePresenter
         $filter->setText($this->getParameter("s"));
         $filter->setOrder($this->getParameter("o"));
         $filter->setOptions($this->template->settings);
-        //$filter->setCategories($category);
 
         $assembleSQL = $filter->assemble();
 
         $paginator = new \Nette\Utils\Paginator;
         $paginator->setItemCount($assembleSQL->count("*"));
-        $paginator->setItemsPerPage(20);
+        $paginator->setItemsPerPage(5);
         $paginator->setPage($this->getParameter("page"));
 
         $this->template->categoryArr = $this->getParameters();

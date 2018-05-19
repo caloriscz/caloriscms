@@ -1,0 +1,83 @@
+{var $slugArray["title"] = "Board"}
+{block content}
+
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="/admin/">Home</a></li>
+    <li class="breadcrumb-item active">Board</li>
+</ol>
+
+{foreach $flashes as $flash}
+    <div class="modal fade" id="myModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Zavřít">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">{$flash->type}</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="flash {$flash->type}">{$flash->message}</div>
+                </div>
+                <div class="modal-footer">
+                    <span id="timer" data-notice="Toto okno se zavře za "></span>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Zavřít</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="flash {$flash->type} flash-js"><br/>{$flash->message}<br/></div>
+{/foreach}
+
+<div class="container-fluid">
+    <div class="animated fadeIn">
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="card">
+                    <div class="card-header">
+                        Vložit novou zprávu
+                    </div>
+                    <div class="card-block">
+                        {control questionForm}
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-lg-9">
+                <div class="card">
+                    <div class="card-header">
+
+                    </div>
+                    <div class="card-block">
+                        {foreach $board as $item}
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">
+                                        <a n:href=":Admin:Board:detail, id => $item->id">{$item->subject}</a>
+                                        <span class="pull-right">{$item->date_created|date:'j. n. Y H:i'}</span>
+                                    </h5>
+                                    <p>od: <strong>{$item->author}</strong></p>
+                                    <p>
+                                        počet odpovědí:
+                                        <strong>{var $counter =$database->table('board')->where('parent_id', $item->id)->count()}
+                                            {if $counter == 0}nezodpovězena{else}{$counter}{/if}
+                                        </strong>
+                                    </p>
+                                    <p>{$item->body}</p>
+                                    <p>
+                                        <a n:href="deleteQuestion!, id => $item->id" class="btn btn-danger btn-sm">Smazat
+                                            vlákno</a>
+                                    </p>
+                                </div>
+                            </div>
+                        {/foreach}
+                    </div>
+                    <div class="card-footer">
+                        {control paging, $args, $paginator}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

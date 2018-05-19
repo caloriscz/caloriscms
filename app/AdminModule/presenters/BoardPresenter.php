@@ -1,12 +1,10 @@
 <?php
 
-namespace App\FrontModule\Presenters;
+namespace App\AdminModule\Presenters;
 use App\Model\Arrays;
-use Nette\Application\AbortException;
 use Nette\Forms\BootstrapUIForm;
 use Nette\Forms\Form;
 use Nette\Utils\Paginator;
-use Nette\Utils\Validators;
 
 /**
  * Board presenter.
@@ -17,7 +15,7 @@ class BoardPresenter extends BasePresenter
     /**
      * Insert question request
      */
-    function createComponentQuestionForm()
+    protected function createComponentQuestionForm()
     {
         $form = new BootstrapUIForm();
         $form->setTranslator($this->translator);
@@ -67,9 +65,9 @@ class BoardPresenter extends BasePresenter
 
     /**
      * @param BootstrapUIForm $form
-     * @throws AbortException
+     * @throws \Nette\Application\AbortException
      */
-    function questionFormValidated(BootstrapUIForm $form)
+    public function questionFormValidated(BootstrapUIForm $form)
     {
         $cols = [
             'name' => $form->values->name,
@@ -82,13 +80,13 @@ class BoardPresenter extends BasePresenter
         if (strlen($form->values->name) !== strlen(strip_tags($form->values->name))) {
             unset($cols['name']);
             $this->flashMessage('Jméno obsahuje nepovolené znaky (adresa, odkaz)', 'error');
-            $this->redirect(':Front:Board:default', $cols);
+            $this->redirect(':Admin:Board:default', $cols);
         }
 
         if (strlen($form->values->message) !== strlen(strip_tags($form->values->message))) {
             unset($cols['message']);
             $this->flashMessage('Zpráva obsahuje nepovolené znaky (adresa, odkaz)', 'error');
-            $this->redirect(':Front:Board:default', $cols);
+            $this->redirect(':Admin:Board:default', $cols);
         }
 
         $blacklist = $this->database->table('blacklist')->fetchPairs('id', 'title');
@@ -97,47 +95,47 @@ class BoardPresenter extends BasePresenter
         } else {
             unset($cols['message']);
             $this->flashMessage('Zpráva obsahuje nepovolená slova', 'error');
-            $this->redirect(':Front:Board:default', $cols);
+            $this->redirect(':Admin:Board:default', $cols);
         }
 
         if (Arrays::strpos($form->values->subject, $blacklist) === null) {
         } else {
             unset($cols['subject']);
             $this->flashMessage('Předmět obsahuje nepovolená slova', 'error');
-            $this->redirect(':Front:Board:default', $cols);
+            $this->redirect(':Admin:Board:default', $cols);
         }
 
         if (Arrays::strpos($form->values->name, $blacklist) === null) {
         } else {
             unset($cols['name']);
             $this->flashMessage('Jméno obsahuje nepovolená slova', 'error');
-            $this->redirect(':Front:Board:default', $cols);
+            $this->redirect(':Admin:Board:default', $cols);
         }
 
 
         if (strlen($form->values->name) < 1) {
             unset($cols['name']);
             $this->flashMessage('Vyplňte Vaše skutečné jméno', 'error');
-            $this->redirect(':Front:Board:default', $cols);
+            $this->redirect(':Admin:Board:default', $cols);
         }
 
-        if (strlen($form->values->email) > 0 && false === Validators::isEmail($form->values->email)) {
+        if (strlen($form->values->email) > 0 && \Nette\Utils\Validators::isEmail($form->values->email) === false) {
             $this->flashMessage('Vyplňte pravý mail', 'error');
-            $this->redirect(':Front:Board:default', $cols);
+            $this->redirect(':Admin:Board:default', $cols);
         }
 
         if (strlen($form->values->message) < 2) {
             unset($cols['message']);
             $this->flashMessage('Vyplňte zprávu', 'error');
-            $this->redirect(':Front:Board:default', $cols);
+            $this->redirect(':Admin:Board:default', $cols);
         }
     }
 
     /**
      * @param BootstrapUIForm $form
-     * @throws AbortException
+     * @throws \Nette\Application\AbortException
      */
-    function questionFormSucceeded(BootstrapUIForm $form)
+    public function questionFormSucceeded(BootstrapUIForm $form)
     {
         $arrData = [
             'subject' => $form->values->subject,
@@ -152,7 +150,7 @@ class BoardPresenter extends BasePresenter
             ->insert($arrData);
 
         $this->flashMessage('Zpráva odeslána', 'note');
-        $this->redirect('this');
+        $this->redirect(':Admin:Board:default');
     }
 
     /**
@@ -173,11 +171,13 @@ class BoardPresenter extends BasePresenter
         $form->addText('email')
             ->setAttribute('placeholder', 'messages.helpdesk.email')
             ->setAttribute('class', 'input-change')
+            ->setOption('description', 1)
             ->addCondition(Form::FILLED)
             ->addRule(Form::EMAIL, 'Zadejte platný email.');
         $form->addText('phone')
             ->setAttribute('placeholder', 'messages.helpdesk.phone')
-            ->setAttribute('class', 'input-change');
+            ->setAttribute('class', 'input-change')
+            ->setOption('description', 1);
         $form->addTextArea('message')
             ->setAttribute('placeholder', 'messages.helpdesk.message')
             ->setAttribute('style', 'height: 250px;')
@@ -201,7 +201,7 @@ class BoardPresenter extends BasePresenter
 
     /**
      * @param BootstrapUIForm $form
-     * @throws AbortException
+     * @throws \Nette\Application\AbortException
      */
     public function answerFormValidated(BootstrapUIForm $form)
     {
@@ -216,13 +216,19 @@ class BoardPresenter extends BasePresenter
         if (strlen($form->values->name) !== strlen(strip_tags($form->values->name))) {
             unset($cols['name']);
             $this->flashMessage('Název obsahuje nepovolené znaky (adresa, odkaz)', 'error');
-            $this->redirect(':Front:Board:detail', $cols);
+            $this->redirect(':Admin:Board:detail', $cols);
+        }
+
+        if (strlen($form->values->subject) !== strlen(strip_tags($form->values->subject))) {
+            unset($cols['subject']);
+            $this->flashMessage('Předmět obsahuje nepovolené znaky (adresa, odkaz)', 'error');
+            $this->redirect(':Admin:Board:detail', $cols);
         }
 
         if (strlen($form->values->message) !== strlen(strip_tags($form->values->message))) {
             unset($cols['message']);
             $this->flashMessage('Zpráva obsahuje nepovolené znaky (adresa, odkaz)', 'error');
-            $this->redirect(':Front:Board:detail', $cols);
+            $this->redirect(':Admin:Board:detail', $cols);
         }
 
         $blacklist = $this->database->table('blacklist')->fetchPairs('id', 'title');
@@ -231,35 +237,39 @@ class BoardPresenter extends BasePresenter
         } else {
             unset($cols['message']);
             $this->flashMessage('Zpráva obsahuje nepovolená slova', 'error');
-            $this->redirect(':Front:Board:detail', $cols);
+            $this->redirect(':Admin:Board:detail', $cols);
         }
 
         if (Arrays::strpos($form->values->name, $blacklist) === null) {
         } else {
             unset($cols['name']);
             $this->flashMessage('Jméno obsahuje nepovolená slova', 'error');
-            $this->redirect(':Front:Board:detail', $cols);
+            $this->redirect(':Admin:Board:detail', $cols);
         }
 
 
         if (strlen($form->values->name) < 1) {
             unset($cols['name']);
             $this->flashMessage('Vyplňte Vaše skutečné jméno', 'error');
-            $this->redirect(':Front:Board:detail', $cols);
+            $this->redirect(':Admin:Board:detail', $cols);
         }
 
-        if (strlen($form->values->email) > 0 && Validators::isEmail($form->values->email) === false) {
+        if (strlen($form->values->email) > 0 && \Nette\Utils\Validators::isEmail($form->values->email) === false) {
             $this->flashMessage('Vyplňte pravý mail', 'error');
-            $this->redirect(':Front:Board:detail', $cols);
+            $this->redirect(':Admin:Board:detail', $cols);
         }
 
         if (strlen($form->values->message) < 2) {
             unset($cols['message']);
             $this->flashMessage('Vyplňte zprávu', 'error');
-            $this->redirect(':Front:Board:detail', $cols);
+            $this->redirect(':Admin:Board:detail', $cols);
         }
     }
 
+    /**
+     * @param BootstrapUIForm $form
+     * @throws \Nette\Application\AbortException
+     */
     public function answerFormSucceeded(BootstrapUIForm $form)
     {
         $arrData = [
@@ -275,30 +285,29 @@ class BoardPresenter extends BasePresenter
             ->insert($arrData);
 
         $this->flashMessage('Zpráva odeslána', 'note');
-        $this->redirect(':Front:Board:detail', ['id' => $form->values->parent]);
+        $this->redirect(':Admin:Board:detail', ['id' => $form->values->parent]);
     }
 
     /**
      * Delete question
-     * @param $id
-     * @throws AbortException
+     * @throws \Nette\Application\AbortException
      */
     public function handleDeleteQuestion($id)
     {
         $this->database->table('board')->where('id = ? OR parent_id = ?', $id, $id)->delete();
 
-        $this->redirect(':Front:Board:default');
+        $this->redirect(':Admin:Board:default');
     }
 
     /**
      * Delete answer
-     * @throws AbortException
+     * @throws \Nette\Application\AbortException
      */
     public function handleDeleteAnswer($id, $thread)
     {
         $this->database->table('board')->get($id)->delete();
 
-        $this->redirect(':Front:Board:detail', ['id' => $thread]);
+        $this->redirect(':Admin:Board:detail', ['id' => $thread]);
     }
 
     public function renderDefault()
@@ -313,6 +322,7 @@ class BoardPresenter extends BasePresenter
         $paginator->setPage($this->getParameter('page'));
         $this->template->board = $board->limit($paginator->getLength(), $paginator->getOffset());
 
+        $this->template->args = $this->getParameters();
         $this->template->paginator = $paginator;
         $this->template->canEdit = false;
         $this->template->database = $this->database;

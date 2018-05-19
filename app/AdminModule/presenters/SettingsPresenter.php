@@ -151,6 +151,11 @@ class SettingsPresenter extends BasePresenter
         return $message . '<br>';
     }
 
+    public function renderBlacklist(): void
+    {
+        $this->template->blacklist = $this->database->table('blacklist')->order('title');
+    }
+
     public function renderGlobal(): void
     {
         $this->template->categoryId = null;
