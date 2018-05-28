@@ -1,6 +1,6 @@
 <?php
 
-class Filters extends \Nette\Object
+class Filters extends Object
 {
     public static function common($filter, $value)
     {

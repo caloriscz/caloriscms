@@ -514,6 +514,14 @@ $(function () {
     });
 });
 
+
+/* FullCalendar ----- */
+$(function () {
+    $('#calendar').fullCalendar({
+        // put your options and callbacks here
+    })
+});
+
 // Get querystring value
 function getParameterByName(name, url) {
     if (!url) url = window.location.href;

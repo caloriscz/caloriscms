@@ -26,13 +26,13 @@
         {var $pageTitle = 'Všechny stránky'}
     {/if}
     <li class="breadcrumb-menu d-md-down-none">
-        <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
-
+        <div class="btn-group" role="group">
             {if $page->pages_types_id == 3}
                 {if $view != 'detail' && $name != 'Admin:Events'}
                     <a href="/admin/events/detail/{$id}" class="btn btn-secondary">
                         <i class="fa fa-calendar fa-fw"></i> {_dictionary.main.Event}
                     </a>
+
                 {/if}
             {/if}
 
@@ -70,13 +70,13 @@
                 <a href="/admin/pages/detail/{$id}" class="btn btn-secondary">{_dictionary.main.Page}</a>
             {/if}
             {if $page->pages_types->enable_images && $view != 'detailImages'}
-                <a href="/admin/pages/detail-images/{$id}" class="btn btn-secondary">{_dictionary.main.Images}</a>
+                <a href="/admin/pages/detail-images/{$id}" class="btn btn-secondary">{_dictionary.main.images|firstUpper}</a>
             {/if}
             {if $page->pages_types->enable_files && $view != 'detailFiles'}
-                <a href="/admin/pages/detail-files/{$id}" class="btn btn-secondary">{_dictionary.main.Files}</a>
+                <a href="/admin/pages/detail-files/{$id}" class="btn btn-secondary">{_dictionary.main.files|firstUpper}</a>
             {/if}
             {if $page->pages_types->enable_related && $view != 'detailRelated'}
-                <a href="/admin/pages/detail-related/{$id}" class="btn btn-secondary">Související příspěvky</a>
+                <a href="/admin/pages/detail-related/{$id}" class="btn btn-secondary">{_dictionary.main.related|firstUpper}</a>
             {/if}
             <a href="/admin/pages/settings/{$id}" class="btn btn-secondary">Nastavení</a>
 

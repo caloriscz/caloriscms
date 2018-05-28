@@ -1,39 +1,57 @@
 {block #titles}Registrovaní{/block}
 {block content}
 
-{control pageTopMenu}
+<ol class="breadcrumb">
+    <li class="breadcrumb-item">Home</li>
+    <li class="breadcrumb-item"><a href="/admin/">Admin</a></li>
+    <li class="breadcrumb-item"><a href="/admin/pages/default?type={$page->pages_types_id}">Události</a></li>
+    <li class="breadcrumb-item">
+        <a href="/admin/pages/detail/{$page->id}?type={$page->pages_types_id}">{$page->title}</a>
+    </li>
+    <li class="breadcrumb-item active">Registrovaní</li>
 
-<h1 class="page-header">{$page->title}</h1>
+    {control pageTopMenu}
+</ol>
 
-<h2 style="font-size: 1.00em; font-weight: bold;">Registrovaní na {$event->date_event|date:'j. n. Y H:i'}</h2>
-
-<div class="row">
-    <div class="col-lg-8">
-        <table class="table">
-            <tr>
-                <th></th>
-                <th>{_dictionary.main.Name}</th>
-                <th>{_dictionary.main.Phone}</th>
-                <th>{_dictionary.main.Email}</th>
-                <th>{_dictionary.main.Notes}</th>
-            </tr>
-            {foreach $signed as $item}
-                <tr>
-                    <td class="col-xs-1">
-                        <a n:href="deleteSigned! id => $item->id, page => $presenter->getParameter('id')"><i
-                                    class="fa fa-times font-red"></i></a>
-                    </td>
-                    <td class="col-xs-3">{$item->name}</td>
-                    <td class="col-xs-3">{$item->phone}</td>
-                    <td>{$item->email}</td>
-                    <td>{$item->note}</td>
-                </tr>
-            {/foreach}
-        </table>
-    </div>
-    <div class="col-lg-4">
-        <h3>Přidat ručně</h3>
-
-        {control eventSign}
+<div class="container-fluid">
+    <div class="animated fadeIn">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-header">Přidat manuálně</div>
+                    <div class="card-block">
+                        {control eventSign}
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-header">Seznam přihlášených</div>
+                    <div class="card-block">
+                        <table class="table">
+                            <tr>
+                                <th></th>
+                                <th>{_dictionary.main.Name}</th>
+                                <th>{_dictionary.main.Phone}</th>
+                                <th>{_dictionary.main.Email}</th>
+                                <th>{_dictionary.main.Notes}</th>
+                            </tr>
+                            {foreach $signed as $item}
+                                <tr>
+                                    <td class="col-xs-1">
+                                        <a n:href="deleteSigned! id => $item->id, page => $presenter->getParameter('id')"><i
+                                                    class="fa fa-times font-red"></i></a>
+                                    </td>
+                                    <td class="col-xs-3">{$item->name}</td>
+                                    <td class="col-xs-3">{$item->phone}</td>
+                                    <td>{$item->email}</td>
+                                    <td>{$item->note}</td>
+                                </tr>
+                            {/foreach}
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>

@@ -9,6 +9,8 @@ use Caloriscz\Utilities\PagingControl;
 use Kdyby\Doctrine\EntityManager;
 use Kdyby\Translation\Translator;
 use Nette;
+use Nette\Application\AbortException;
+use Nette\Application\UI\ITemplate;
 use Nette\Application\UI\Presenter;
 use Nette\Database\Context;
 use Nette\Http\IRequest;
@@ -63,7 +65,7 @@ abstract class BasePresenter extends Presenter
      * Common handler for grid operations
      * @param $operation
      * @param $id
-     * @throws Nette\Application\AbortException
+     * @throws AbortException
      */
     public function handleOperations($operation, $id): void
     {
@@ -82,7 +84,7 @@ abstract class BasePresenter extends Presenter
 
     /**
      * @param null $class
-     * @return Nette\Application\UI\ITemplate
+     * @return ITemplate
      */
     protected function createTemplate($class = null)
     {
@@ -93,7 +95,7 @@ abstract class BasePresenter extends Presenter
     }
 
     /**
-     * @throws Nette\Application\AbortException
+     * @throws AbortException
      */
     protected function startup()
     {

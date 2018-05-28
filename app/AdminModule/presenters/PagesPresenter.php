@@ -13,6 +13,7 @@ use Caloriscz\Media\ImageBrowserControl;
 use Caloriscz\Page\BlockControl;
 use Caloriscz\Page\FileListControl;
 use Caloriscz\Page\PageListControl;
+use Nette\Application\AbortException;
 
 /**
  * Pages presenter.
@@ -121,7 +122,7 @@ class PagesPresenter extends BasePresenter
      * Changes public state
      * @param $identifier
      * @param $public
-     * @throws \Nette\Application\AbortException
+     * @throws AbortException
      */
     protected function handleChangeState($identifier, $public): void
     {
@@ -139,7 +140,7 @@ class PagesPresenter extends BasePresenter
     /**
      * Deletes related page
      * @param $id
-     * @throws \Nette\Application\AbortException
+     * @throws AbortException
      */
     public function handleDeleteRelated($id): void
     {
@@ -159,7 +160,7 @@ class PagesPresenter extends BasePresenter
     /**
      * Insert related page
      * @param $id
-     * @throws \Nette\Application\AbortException
+     * @throws AbortException
      */
     public function handleInsertRelated($id): void
     {
@@ -171,7 +172,7 @@ class PagesPresenter extends BasePresenter
     }
 
     /**
-     * @throws \Nette\Application\AbortException
+     * @throws AbortException
      */
     public function handleView(): void
     {

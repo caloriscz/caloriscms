@@ -238,3 +238,5 @@ main:
 	Weight: "Weight"
 	ZIP: "ZIP"
 	Links: "Links"
+	related: "related"
+	files: "files"

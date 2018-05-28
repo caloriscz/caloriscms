@@ -24,8 +24,8 @@ gulp.task("scripts-a", function () {
         './node_modules/flatpickr/dist/l10n/cs.js',
         './node_modules/jstree/dist/jstree.min.js',
         './node_modules/moment/min/moment.min.js',
-        './bower_components/fullcalendar/dist/fullcalendar.min.js',
-        './bower_components/fullcalendar/dist/lang/cs.js'
+        './node_modules/fullcalendar/dist/fullcalendar.min.js',
+        './node_modules/fullcalendar/dist/lang/cs.js'
     ])
         .pipe(concat('all-back.js'))
         .pipe(gulp.dest('./www/js/'));

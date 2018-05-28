@@ -1,17 +1,20 @@
 <?php
 namespace Caloriscz\Events;
 
+use Caloriscz\Page\PageSlugControl;
+use Nette\Application\AbortException;
 use Nette\Application\UI\Control;
-use Nette\Forms\BootstrapPHForm;
+use Nette\Database\Context;
+use Nette\Forms\BootstrapUIForm;
 use Nette\Utils\Validators;
 
 class SignEventControl extends Control
 {
 
-    /** @var \Nette\Database\Context */
+    /** @var Context */
     public $database;
 
-    public function __construct(\Nette\Database\Context $database)
+    public function __construct(Context $database)
     {
         $this->database = $database;
     }
@@ -21,7 +24,7 @@ class SignEventControl extends Control
      */
     function createComponentSignForm()
     {
-        $form = new BootstrapPHForm();
+        $form = new BootstrapUIForm();
         $form->setTranslator($this->presenter->translator);
         $form->getElementPrototype()->class = 'form-horizontal';
         $form->getElementPrototype()->role = 'form';
@@ -39,10 +42,10 @@ class SignEventControl extends Control
             ->setAttribute('placeholder', 'dictionary.main.Phone');
         $form->addTextArea('message')->setAttribute('class', 'form-control');
 
-        $form->setDefaults(array(
+        $form->setDefaults([
             'page_id' => $this->presenter->getParameter('id'),
             'event' => $this->presenter->getParameter('event')
-        ));
+        ]);
 
         $form->addSubmit('submitm', 'dictionary.main.Insert')
             ->setAttribute('class', 'btn btn-success');
@@ -52,37 +55,41 @@ class SignEventControl extends Control
         return $form;
     }
 
-    function signFormValidated(BootstrapPHForm $form)
+    /**
+     * @param BootstrapUIForm $form
+     * @throws AbortException
+     */
+    function signFormValidated(BootstrapUIForm $form)
     {
         $event = $this->database->table('events')->get($form->values->event);
 
         if (strlen($form->values->name) < 2) {
             $this->presenter->flashMessage('Vyplňte jméno', 'error');
-            $this->presenter->redirect(this, array('id' => $event->pages_id, 'event' => $event->id));
+            $this->presenter->redirect('this', ['id' => $event->pages_id, 'event' => $event->id]);
         }
 
         if (false === Validators::isEmail($form->values->email)) {
             $this->presenter->flashMessage('Vyplňte e-mail', 'error');
-            $this->presenter->redirect(this, array('id' => $event->pages_id, 'event' => $event->id));
+            $this->presenter->redirect('this', ['id' => $event->pages_id, 'event' => $event->id]);
         }
 
-        $eventSigned = $this->database->table('events_signed')->where(array(
+        $eventSigned = $this->database->table('events_signed')->where([
             'email' => $form->values->email,
             'events_id' => $event->id,
-        ));
+        ]);
 
         if ($eventSigned->count() > 0) {
             $this->presenter->flashMessage('Tento e-mail už byl použit při registraci', 'error');
-            $this->presenter->redirect(this, array('id' => $event->pages_id, 'event' => $event->id));
+            $this->presenter->redirect('this', ['id' => $event->pages_id, 'event' => $event->id]);
         }
 
     }
 
     /**
-     * @param BootstrapPHForm $form
-     * @throws \Nette\Application\AbortException
+     * @param BootstrapUIForm $form
+     * @throws AbortException
      */
-    function signFormSucceeded(BootstrapPHForm $form)
+    function signFormSucceeded(BootstrapUIForm $form)
     {
         $event = $this->database->table('events')->get($form->values->event);
 
@@ -103,7 +110,7 @@ class SignEventControl extends Control
 
     protected function createComponentPageSlug()
     {
-        $control = new \Caloriscz\Page\PageSlugControl($this->database);
+        $control = new PageSlugControl($this->database);
         return $control;
     }
 
