@@ -1,5 +1,3 @@
-{var $view = $presenter->getView()}
-{var $name = $presenter->getName()}
 {var $id = $presenter->getParameter('id')}
 <br>
 {if $page}
@@ -28,11 +26,10 @@
     <li class="breadcrumb-menu d-md-down-none">
         <div class="btn-group" role="group">
             {if $page->pages_types_id == 3}
-                {if $view != 'detail' && $name != 'Admin:Events'}
+                {if $view != 'detail' || $name != 'Admin:Events'}
                     <a href="/admin/events/detail/{$id}" class="btn btn-secondary">
                         <i class="fa fa-calendar fa-fw"></i> {_dictionary.main.Event}
                     </a>
-
                 {/if}
             {/if}
 

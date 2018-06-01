@@ -80,6 +80,10 @@ class EditEventControl extends Control
         return $form;
     }
 
+    /**
+     * @param BootstrapUIForm $form
+     * @throws \Nette\Application\AbortException
+     */
     function editEventFormSucceeded(BootstrapUIForm $form)
     {
         $values = $form->getHttpData($form::DATA_TEXT);
@@ -110,7 +114,7 @@ class EditEventControl extends Control
             }
         }
 
-        $arr = array(
+        $arr = [
             'date_event' => $dateEvent,
             'date_event_end' => $dateEventEnd,
             'all_day' => $form->values->allday,
@@ -118,7 +122,7 @@ class EditEventControl extends Control
             'capacity' => $form->values->capacity,
             'capacity_start' => $form->values->capacity_start,
             'time_range' => $form->values->time_range,
-        );
+        ];
 
         if ($form->values->contact) {
             $arr['contacts_id'] = $form->values->contact;
@@ -127,7 +131,7 @@ class EditEventControl extends Control
         $this->database->table('events')->get($form->values->event_id)
             ->update($arr);
 
-        $this->presenter->redirect(':Admin:Events:detail', array('id' => $form->values->id));
+        $this->presenter->redirect(':Admin:Events:detail', ['id' => $form->values->id]);
     }
 
     public function render($item)

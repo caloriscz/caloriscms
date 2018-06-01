@@ -24,6 +24,7 @@ class MenuListControl extends Control
 
     /**
      * Delete menu
+     * @throws \Nette\Application\AbortException
      */
     public function handleDelete()
     {

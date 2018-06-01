@@ -1,49 +1,49 @@
-<div class="modal-body">
-{form insertEventForm}
+<form n:name="insertEventForm">
     <div class="form-group">
-        <div class="col-md-offset-3 col-sm-9">{input allday}</div>
+        <input n:name="allday">&nbsp;{_dictionary.main.AllDayEvent}
     </div>
     <div class="form-group">
-        <label class="col-sm-3 control-label">od</label>
-        <div class="col-sm-9">{input date_event, style => 'width: 110px; display: inline;'}
-            {input hour_event, style => 'width: 80px; display: inline;'}
-            {input minute_event, style => 'width: 80px; display: inline;'}
+        <label for="event_start" class="col-sm-3 control-label">Od</label>
+        <div class="col-sm-9">
+            <input n:name="date_event" style="width: 80px; display: inline;" class="form-control datepicker"
+                                       id="event_start">
+            <input n:name="hour_event" style="width: 80px; display: inline" class="form-control text-right"
+                                       id="event_hour">
+            <input n:name="minute_event" style="width: 80px; display: inline" class="form-control text-right"
+                                         id="event_minute">
         </div>
     </div>
     <div class="form-group">
-        <label class="col-sm-3 control-label">do</label>
+        <label for="event_end_date" class="col-sm-3 control-label">{_dictionary.main.DateEventEnded}</label>
         <div class="col-sm-9">
-            {input date_event_end, style => 'width: 110px; display: inline;'}
+            <input n:name="date_event_end" style="width: 110px; display: inline;" class="form-control datepicker"
+                                           id="event_end_date">
             {input hour_event_end, style => 'width: 80px; display: inline;'}
             {input minute_event_end, style => 'width: 80px; display: inline;'}
         </div>
     </div>
     <div class="form-group">
-        <label class="col-sm-3 control-label">{label price /}</label>
-        <div class="col-sm-9">{input price}</div>
+        <label class="col-sm-3 control-label">{_'dictionary.main.Price'}</label>
+        <div class="col-sm-9"><input n:name="price" class="form-control"></div>
     </div>
     <div class="form-group">
-        <label class="col-sm-3 control-label">{label time_range /}</label>
-        <div class="col-sm-9">{input time_range}</div>
+        <label class="col-sm-3 control-label">Rozsah (hod.)</label>
+        <div class="col-sm-9"><input n:name="time_range" class="form-control"></div>
     </div>
-    <div class="form-group">
-        <label class="col-sm-3 control-label">{label capacity /}</label>
-        <div class="col-sm-9">{input capacity}</div>
-    </div>
-    <div class="form-group">
-        <label class="col-sm-3 control-label">{label capacity_start /}</label>
-        <div class="col-sm-9">{input capacity_start}</div>
+    <div class="form-row">
+        <div class="col-6">
+            <label>Kapacita</label>
+            <input n:name="capacity" class="form-control">
+        </div>
+        <div class="col-6">
+            <label>Kapacita (přidat)</label>
+            <input n:name="capacity_start" class="form-control">
+        </div>
     </div>
     <div class="form-group">
         <label class="col-sm-3 control-label">{label contact /}</label>
         <div class="col-sm-9">{input contact}</div>
     </div>
 
-</div>
-<div class="modal-footer">
-    <button type="button" class="btn btn-default" data-dismiss="modal">
-        {_dictionary.main.close|firstUpper}
-    </button>
-    {input submitm}
-    {/form}
-</div>
+    <button n:name="submitm" type="submit" class="btn btn-success" data-dismiss="modal">{_dictionary.main.Save}</button>
+</form>

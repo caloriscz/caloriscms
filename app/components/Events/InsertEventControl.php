@@ -35,20 +35,10 @@ class InsertEventControl extends Control
         $form->getElementPrototype()->autocomplete = 'off';
         $form->addHidden('id');
         $form->addHidden('event_id');
-        $form->addText('date_event', 'dictionary.main.DateEventStarted')
-            ->setAttribute('class', 'form-control datepicker')
-            ->setHtmlId('event_start');
-        $form->addSelect('hour_event', '', $hours)
-            ->setAttribute('class', 'form-control text-right')
-            ->setHtmlId('event_hour')
-            ->setTranslator(null);
-        $form->addSelect('minute_event', '', $minutes)
-            ->setAttribute('class', 'form-control text-right')
-            ->setHtmlId('event_minute')
-            ->setTranslator(null);
-        $form->addText('date_event_end', 'dictionary.main.DateEventEnded')
-            ->setAttribute('class', 'form-control datepicker')
-            ->setHtmlId('event_end_date');
+        $form->addText('date_event');
+        $form->addSelect('hour_event', '', $hours);
+        $form->addSelect('minute_event', '', $minutes);
+        $form->addText('date_event_end');
         $form->addSelect('hour_event_end', '', $hours)
             ->setAttribute('class', 'form-control text-right')
             ->setHtmlId('event_end_hour')
@@ -57,25 +47,20 @@ class InsertEventControl extends Control
             ->setAttribute('class', 'form-control text-right')
             ->setHtmlId('event_end_minute')
             ->setTranslator(null);
-        $form->addText('price', 'dictionary.main.Price')
-            ->setAttribute('class', 'form-control');
+        $form->addText('price');
         $form->addSelect('contact', 'dictionary.main.Place', $contacts)
             ->setAttribute('class', 'form-control');
-        $form->addText('time_range', 'Rozsah')
-            ->setAttribute('class', 'form-control');
-        $form->addText('capacity', 'Kapacita')
-            ->setAttribute('class', 'form-control');
-        $form->addText('capacity_start', 'Kapacita (přidat)')
-            ->setAttribute('class', 'form-control');
-        $form->addCheckbox('allday', 'dictionary.main.AllDayEvent');
+        $form->addText('time_range');
+        $form->addText('capacity');
+        $form->addText('capacity_start');
+        $form->addCheckbox('allday');
 
-        $form->setDefaults(array(
+        $form->setDefaults([
             'event_id' => $this->presenter->getParameter('id'),
             'capacity_start' => 0,
-        ));
+        ]);
 
-        $form->addSubmit('submitm', 'dictionary.main.Save')
-            ->setAttribute('class', 'btn btn-success btn');
+        $form->addSubmit('submitm');
 
         $form->onSuccess[] = [$this, 'insertEventFormSucceeded'];
         return $form;

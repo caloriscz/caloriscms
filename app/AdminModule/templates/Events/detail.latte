@@ -19,31 +19,13 @@
                 <div class="card">
                     <div class="card-header">Přidat událost</div>
                     <div class="card-block">
-                        <button type="button" class="btn btn-success btn-sm" data-toggle="modal"
-                                data-target="#myModalInsert">Přidat událost
-                        </button>
-
-                        <div class="modal fade" id="myModalInsert" tabindex="-1" role="dialog"
-                             aria-labelledby="myModalLabel">
-
-                            <div class="modal-dialog" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                        <h4 class="modal-title" id="myModalLabel">Přidat událost</h4>
-                                    </div>
-                                    {control insertEventForm}
-                                </div>
-                            </div>
-                        </div>
+                        {control insertEventForm}
                     </div>
                 </div>
             </div>
             <div class="col-lg-9">
                 <div class="card">
-                    <div class="card-header">Title</div>
+                    <div class="card-header">Seznam termínů</div>
                     <div class="card-block">
 
                         <table class="table table-striped">
@@ -51,7 +33,7 @@
                                 <th class="col-xs-1"></th>
                                 <th class="col-xs-1"></th>
                                 <th class="col-xs-1"></th>
-                                <th>{_dictionary.main.DateEventStarted}</th>
+                                <th>Začátek</th>
                                 <th>{_dictionary.main.DateEventEnded}</th>
                                 <th>{_dictionary.main.Place}</th>
                                 <th class="text-right">Naplněno/Kapacita</th>

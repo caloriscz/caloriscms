@@ -19,6 +19,10 @@ class PageTopMenuControl extends Control
     {
         $template = $this->getTemplate();
         $template->page = $this->database->table('pages')->get($this->presenter->getParameter('id'));
+
+        $template->name = $this->presenter->getName();
+        $template->view = $this->presenter->getView();
+
         $template->setFile(__DIR__ . '/PageTopMenuControl.latte');
         $template->render();
     }
