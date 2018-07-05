@@ -1,6 +1,7 @@
 <?php
 namespace Caloriscz\Members;
 
+use Nette\Application\AbortException;
 use Nette\Application\UI\Control;
 use Nette\Database\Context;
 use Nette\Forms\BootstrapUIForm;
@@ -34,30 +35,10 @@ class EditEventControl extends Control
             ->setAttribute('class', 'form-control datepicker')
             ->setAttribute('style', 'width: 110px; display: inline;')
             ->setHtmlId('event_start');
-        $form->addSelect('hour_event')
-            ->setAttribute('class', 'form-control text-right')
-            ->setAttribute('style', 'width: 80px; display: inline;')
-            ->setHtmlId('event_hour')
-            ->setTranslator(null);
-        $form->addSelect('minute_event')
-            ->setAttribute('class', 'form-control text-right')
-            ->setAttribute('style', 'width: 80px; display: inline;')
-            ->setHtmlId('event_minute')
-            ->setTranslator(null);
         $form->addText('date_event_end', 'dictionary.main.DateEventEnded')
             ->setAttribute('class', 'form-control datepicker')
             ->setAttribute('style', 'width: 110px; display: inline;')
             ->setHtmlId('event_end_date');
-        $form->addSelect('hour_event_end')
-            ->setAttribute('class', 'form-control text-right')
-            ->setAttribute('style', 'width: 80px; display: inline;')
-            ->setHtmlId('event_end_hour')
-            ->setTranslator(null);
-        $form->addSelect('minute_event_end')
-            ->setAttribute('class', 'form-control text-right')
-            ->setAttribute('style', 'width: 80px; display: inline;')
-            ->setHtmlId('event_end_minute')
-            ->setTranslator(null);
         $form->addText('price', 'dictionary.main.Price')
             ->setAttribute('class', 'form-control');
         $form->addText('contact', 'dictionary.main.Place')
@@ -72,51 +53,23 @@ class EditEventControl extends Control
         $form->addSubmit('submitm', 'dictionary.main.Save')
             ->setAttribute('class', 'btn btn-success btn');
 
-        $form->setDefaults(array(
+        $form->setDefaults([
             'id' => $page->id,
-        ));
+        ]);
 
-        $form->onSuccess[] = $this->editEventFormSucceeded;
+        $form->onSuccess[] = [$this, 'editEventFormSucceeded'];
         return $form;
     }
 
     /**
      * @param BootstrapUIForm $form
-     * @throws \Nette\Application\AbortException
+     * @throws AbortException
      */
     function editEventFormSucceeded(BootstrapUIForm $form)
     {
-        $values = $form->getHttpData($form::DATA_TEXT);
-
-        $date_start = \DateTime::createFromFormat('j. n. Y', $form->values->date_event);
-        $date1 = $date_start->format('Y-m-d');
-
-        $date_start = \DateTime::createFromFormat('j. n. Y', $form->values->date_event_end);
-        $date2 = $date_start->format('Y-m-d');
-
-        if ($form->values->date_event == '') {
-            $dateEvent = null;
-        } else {
-            if ($form->values->allday) {
-                $dateEvent = $date1 . ' 00:00:00';
-            } else {
-                $dateEvent = $date1 . ' ' . $values['hour_event'] . ':' . $values['minute_event'];
-            }
-        }
-
-        if ($form->values->date_event_end === '') {
-            $dateEventEnd = null;
-        } else {
-            if ($form->values->allday) {
-                $dateEventEnd = $date2 . ' 23:55:00';
-            } else {
-                $dateEventEnd = $date2 . ' ' . $values['hour_event_end'] . ':' . $values['minute_event_end'];
-            }
-        }
-
         $arr = [
-            'date_event' => $dateEvent,
-            'date_event_end' => $dateEventEnd,
+            'date_event' =>  $form->values->date_event,
+            'date_event_end' =>  $form->values->date_event_end,
             'all_day' => $form->values->allday,
             'price' => $form->values->price,
             'capacity' => $form->values->capacity,
@@ -136,7 +89,7 @@ class EditEventControl extends Control
 
     public function render($item)
     {
-        $template = $this->template;
+        $template = $this->getTemplate();
         $template->item = $item;
         $template->setFile(__DIR__ . '/EditEventControl.latte');
 

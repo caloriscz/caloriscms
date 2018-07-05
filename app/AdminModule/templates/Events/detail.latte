@@ -73,7 +73,7 @@
                                         /{$item->capacity}
                                     </td>
                                     <td class="text-right">{$item->time_range}</td>
-                                    <td class="text-right">{$item->price} {$settings['store:currency:symbol']}</td>
+                                    <td class="text-right">{$item->price} {$settings['site:currency']}</td>
                                     <td>
                                         <a n:href="deleteDate! id => $item->id, event => $item->pages_id"
                                                 class="btn btn-danger btn-sm">{_dictionary.main.Delete}</a>

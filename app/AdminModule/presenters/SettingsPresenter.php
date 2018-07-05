@@ -2,10 +2,12 @@
 
 namespace App\AdminModule\Presenters;
 
+use App\Forms\Settings\InsertBlackListControl;
 use App\Forms\Settings\EditSettingsControl;
 use App\Forms\Settings\InsertCountryControl;
 use App\Forms\Settings\InsertCurrencyControl;
 use App\Forms\Settings\InsertLanguageControl;
+use Caloriscz\Settings\BlackListControl;
 use Caloriscz\Settings\SettingsCategoriesControl;
 use Nette\Application\AbortException;
 
@@ -38,6 +40,16 @@ class SettingsPresenter extends BasePresenter
     protected function createComponentSettingsCategories(): SettingsCategoriesControl
     {
         return new SettingsCategoriesControl($this->database);
+    }
+
+    protected function createComponentInsertBlackList(): InsertBlackListControl
+    {
+        return new InsertBlackListControl($this->database);
+    }
+
+    protected function createComponentBlackList(): BlackListControl
+    {
+        return new BlackListControl($this->database);
     }
 
     /**
@@ -151,10 +163,6 @@ class SettingsPresenter extends BasePresenter
         return $message . '<br>';
     }
 
-    public function renderBlacklist(): void
-    {
-        $this->template->blacklist = $this->database->table('blacklist')->order('title');
-    }
 
     public function renderGlobal(): void
     {

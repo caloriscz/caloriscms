@@ -15,36 +15,12 @@
                 <label class="col-sm-3 control-label">od</label>
                 <div class="col-sm-9">
                     {input date_event, value => date('j. n. Y', strtotime($item->date_event)), style => 'width: 110px; display: inline;'}
-                    <select name="hour_event" class="form-control"
-                            style="width: 80px; display: inline;">
-                        {foreach $hours as $hour}
-                            <option value="{$hour}" {if $hour == date('H', strtotime($item->date_event))} selected{/if}>{$hour}</option>
-                        {/foreach}
-                    </select>
-                    <select name="minute_event" class="form-control"
-                            style="width: 80px; display: inline;">
-                        {foreach $minutes as $minute}
-                            <option value="{$minute}" {if $minute == date('i', strtotime($item->date_event))} selected{/if}>{$minute}</option>
-                        {/foreach}
-                    </select>
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-sm-3 control-label">do</label>
                 <div class="col-sm-9">
                     {input date_event_end, value => date('j. n. Y', strtotime($item->date_event_end)), style => 'width: 110px; display: inline;'}
-                    <select name="hour_event_end" class="form-control"
-                            style="width: 80px; display: inline;">
-                        {foreach $hours as $hour}
-                            <option value="{$hour}" {if $hour == date('H', strtotime($item->date_event_end))} selected{/if}>{$hour}</option>
-                        {/foreach}
-                    </select>
-                    <select name="minute_event_end" class="form-control"
-                            style="width: 80px; display: inline;">
-                        {foreach $minutes as $minute}
-                            <option value="{$minute}" {if $minute == date('i', strtotime($item->date_event_end))} selected{/if}>{$minute}</option>
-                        {/foreach}
-                    </select>
                 </div>
             </div>
             <div class="form-group">
@@ -66,19 +42,12 @@
             <div class="form-group">
                 <label class="col-sm-3 control-label">{label contact /}</label>
                 <div class="col-sm-9">
-                    <select name="contact" class="form-control">
-                        {foreach $contacts as $contact}
-                            <option value="{$contact->id}" {if $contact->id == $item->contacts_id} selected{/if}>{$contact->company}</option>
-                        {/foreach}
-                    </select>
+                    <select n:name="contact" class="form-control"></select>
                 </div>
             </div>
 
         </div>
         <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">
-                {_dictionary.main.close|firstUpper}
-            </button>
             {input submitm}
         </div>
 </form>

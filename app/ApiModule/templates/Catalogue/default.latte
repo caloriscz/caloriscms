@@ -7,7 +7,7 @@
         {var $imagePath = ''}
     {/if}
     {
-    "price": "{$item->price} {$settings['store:currency:symbol']}",
+    "price": "{$item->price} {$settings['site:currency']}",
     "value": "{$item->title}",
     "slug": "{$item->slug->title}",
     "image": "{$imagePath}"

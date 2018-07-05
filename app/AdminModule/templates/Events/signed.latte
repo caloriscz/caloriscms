@@ -16,7 +16,7 @@
 <div class="container-fluid">
     <div class="animated fadeIn">
         <div class="row">
-            <div class="col-lg-6">
+            <div class="col-lg-3">
                 <div class="card">
                     <div class="card-header">Přidat manuálně</div>
                     <div class="card-block">
@@ -24,9 +24,9 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-6">
+            <div class="col-lg-9">
                 <div class="card">
-                    <div class="card-header">Seznam přihlášených</div>
+                    <div class="card-header">Seznam registrovaných</div>
                     <div class="card-block">
                         <table class="table">
                             <tr>
@@ -40,7 +40,7 @@
                                 <tr>
                                     <td class="col-xs-1">
                                         <a n:href="deleteSigned! id => $item->id, page => $presenter->getParameter('id')"><i
-                                                    class="fa fa-times font-red"></i></a>
+                                                    class="fa fa-times text-danger"></i></a>
                                     </td>
                                     <td class="col-xs-3">{$item->name}</td>
                                     <td class="col-xs-3">{$item->phone}</td>

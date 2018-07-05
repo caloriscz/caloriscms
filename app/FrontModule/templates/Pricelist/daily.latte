@@ -24,7 +24,7 @@
                 {/if}
                 <tr>
                     <td class="dailyMenuText dotLeaders"><div><span>{$item->amenu|noescape}</span></div></td>
-                    <td class="dailyMenuText text-right" style="vertical-align: bottom; width: 65px; padding-left: 0;">{$item->price},- {$settings['store:currency:symbol']}</td>
+                    <td class="dailyMenuText text-right" style="vertical-align: bottom; width: 65px; padding-left: 0;">{$item->price},- {$settings['site:currency']}</td>
                 </tr>
                 {var $category = $item->categories_id}
             {/foreach}

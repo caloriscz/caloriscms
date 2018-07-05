@@ -12,7 +12,10 @@
         <div class="row">
             <div class="col-lg-3">
                 <div class="card">
-
+                    <div class="card-header">Přidat spojení</div>
+                    <div class="card-block">
+                        {control insertBlackList}
+                    </div>
                 </div>
             </div>
             <div class="col-lg-9">
@@ -21,16 +24,7 @@
                         <i class="fa fa-align-justify"></i> Seznam zakázaných slov a slovních spojení
                     </div>
                     <div class="card-block">
-                        <table class="table">
-                            <tr>
-                                <th>Název</th>
-                            </tr>
-                        {foreach $blacklist as $item}
-                            <tr>
-                                <td>{$item->title}</td>
-                            </tr>
-                        {/foreach}
-                        </table>
+                        {control blackList}
                     </div>
                 </div>
             </div>

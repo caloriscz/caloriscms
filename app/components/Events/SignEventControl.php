@@ -34,13 +34,10 @@ class SignEventControl extends Control
         $form->addHidden('event');
         $form->addHidden('pages_id');
         $form->addRadioList('selection');
-        $form->addText('name')
-            ->setAttribute('placeholder', 'messages.helpdesk.name');
-        $form->addText('email')
-            ->setAttribute('placeholder', 'messages.helpdesk.email');
-        $form->addText('phone')
-            ->setAttribute('placeholder', 'dictionary.main.Phone');
-        $form->addTextArea('message')->setAttribute('class', 'form-control');
+        $form->addText('name')->setAttribute('placeholder', 'messages.helpdesk.name');
+        $form->addText('email');
+        $form->addText('phone');
+        $form->addTextArea('message');
 
         $form->setDefaults([
             'page_id' => $this->presenter->getParameter('id'),
@@ -116,14 +113,7 @@ class SignEventControl extends Control
 
     public function render()
     {
-        $template = $this->template;
-        $template->events = $this->database->table('events')->where(array(
-            'pages_id' => $this->presenter->getParameter('page_id'),
-            'date_event > ?' => date('Y-m-d 12:00:00')
-        ));
-
-        $template->database = $this->database;
-
+        $template = $this->getTemplate();
         $template->setFile(__DIR__ . '/SignEventControl.latte');
 
         $template->render();
