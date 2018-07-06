@@ -7,6 +7,7 @@
  */
 
 namespace App\Model;
+
 use Latte\Engine;
 use Latte\Loaders\StringLoader;
 use Nette\Database\Context;
@@ -115,6 +116,7 @@ class Helpdesk
         $emails = $info->related('helpdesk_emails', 'helpdesk_id');
         $templateId = 1;
         $email = $this->getEmail();
+        $send = true;
 
         foreach ($emails as $item) {
             if ($item->email !== null) {
@@ -125,8 +127,10 @@ class Helpdesk
                 $templateId = $item->helpdesk_templates_id;
             }
 
-            $this->fillEmail($email, $item->subject, $item->body, $templateId, $this->getParams(), $item->log);
+            $send = $this->fillEmail($email, $item->subject, $item->body, $templateId, $this->getParams(), $item->log);
         }
+
+        return $send;
     }
 
     /**
@@ -137,23 +141,33 @@ class Helpdesk
      * @param $templateId
      * @param $params
      * @param $log
+     * @return bool
      */
-    private function fillEmail($email, $subject, $body, $templateId, $params, $log): void
+    private function fillEmail($email, $subject, $body, $templateId, $params, $log): bool
     {
         $latte = new Engine();
         $latte->setLoader(new StringLoader());
 
         $emailMessage = $latte->renderToString($this->renderBody($subject, $body, $templateId), $params);
 
-        $mail = new Message();
-        $mail->setFrom($this->getSettings()['contacts:email:hq']);
-        $mail->addTo($email);
-        $mail->setHtmlBody($emailMessage);
-        $this->mailer->send($mail);
+        try {
+            $mail = new Message();
+            $mail->setFrom($this->getSettings()['contacts:email:hq']);
+            $mail->addTo($email);
+            $mail->setHtmlBody($emailMessage);
+            $this->mailer->send($mail);
+            $status = 1;
+            $send = true;
+        } catch (\Exception $e) {
+            $status = 2;
+            $send = false;
+        }
 
         if ($log) {
-            $this->log($email, $emailMessage);
+            $this->log($email, $emailMessage, $status);
         }
+
+        return $send;
     }
 
     /**
@@ -176,8 +190,9 @@ class Helpdesk
      * @param $email
      * @param $emailMessage
      */
-    public function log($email, $emailMessage)
+    public function log($email, $emailMessage, $status)
     {
+
 
         $this->database->table('helpdesk_messages')->insert([
             'message' => $emailMessage,
@@ -185,6 +200,7 @@ class Helpdesk
             'email' => $email,
             'ipaddress' => $this->getParams()['ipaddress'],
             'date_created' => $this->getParams()['time'],
+            'status' => $status,
         ]);
     }
 

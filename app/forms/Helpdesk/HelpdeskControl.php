@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Forms\Helpdesk;
 
 use App\Model\Helpdesk;
@@ -33,7 +34,6 @@ class HelpdeskControl extends Control
         if ($helpdesk->fill_phone > 0) {
             $form->addText('phone');
         }
-
 
         $form->addTextArea('message');
 
@@ -70,6 +70,26 @@ class HelpdeskControl extends Control
             $this->presenter->flashMessage($this->presenter->translator->translate('messages.sign.fillInMessage'), 'error');
             $this->presenter->redirect(':Front:Contact:default');
         }
+
+        // Validate by black list
+        $blacklistDb = $this->database->table('blacklist')->fetchAll('title');
+
+        foreach ($blacklistDb as $item) {
+            if (strpos(strtolower($form->values->message), strtolower($item->title)) !== false) {
+                $rings = true;
+            }
+
+            if (strpos(strtolower($form->values->name), strtolower($item->title)) !== false) {
+                $rings = true;
+            }
+        }
+
+        $helpdesk = $this->database->table('helpdesk')->get(1);
+
+        if ($helpdesk->blacklist === 1 && isset($rings) && $rings) {
+            $this->presenter->flashMessage('Zpráva obsahuje neplatné znaky', 'info');
+            $this->presenter->redirect(':Front:Contact:default');
+        }
     }
 
     /**
@@ -93,9 +113,14 @@ class HelpdeskControl extends Control
         $helpdesk->setEmail($form->values->email);
         $helpdesk->setSettings($this->presenter->template->settings);
         $helpdesk->setParams($params);
-        $helpdesk->send();
+        $send = $helpdesk->send();
 
-        $this->presenter->flashMessage($this->presenter->translator->translate('messages.sign.thanksForMessage'), "error");
+        if ($send) {
+            $this->presenter->flashMessage($this->presenter->translator->translate('messages.sign.thanksForMessage'), "success");
+        } else {
+            $this->presenter->flashMessage($this->presenter->translator->translate('E-mail nebyl odeslán'), "error");
+        }
+
         $this->presenter->redirect('this');
     }
 

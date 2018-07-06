@@ -38,12 +38,14 @@ class EditHelpdeskEmailSettingsControl extends Control
         $form->addSelect('helpdesk_templates_id', 'Šablona', $templates->fetchPairs('id', 'title'))
         ->setAttribute('class', 'form-control');
         $form->addCheckbox('log', ' Ukládat e-maily do databáze');
+        $form->addCheckbox('blacklist', ' Zapnout antispam');
         $form->addSubmit('submitm', 'dictionary.main.Save');
 
         $form->setDefaults([
             'helpdesk_email_id' => $this->presenter->getParameter('id'),
             'email' => $helpdeskEmailsDb->email,
             'helpdesk_templates_id' => $helpdeskEmailsDb->helpdesk_templates_id,
+            'blacklist' => $helpdeskEmailsDb->blacklist,
             'log' => $helpdeskEmailsDb->log,
         ]);
 
@@ -56,11 +58,12 @@ class EditHelpdeskEmailSettingsControl extends Control
      */
     public function editFormSucceeded(BootstrapUIForm $form): void
     {
-        $this->database->table('helpdesk_emails')->get($form->values->helpdesk_email_id)->update(array(
+        $this->database->table('helpdesk_emails')->get($form->values->helpdesk_email_id)->update([
             'helpdesk_templates_id' => $form->values->helpdesk_templates_id,
             'email' => $form->values->email,
             'log' => $form->values->log,
-        ));
+            'blacklist' => $form->values->blacklist
+        ]);
 
         $this->onSave($form->values->helpdesk_email_id);
     }

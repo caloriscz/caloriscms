@@ -10,6 +10,10 @@
 
         </div>
         <div class="col-md-6">
+            {foreach $flashes as $flash}
+                <div class="flash {$flash->type}">{$flash->message}</div>
+            {/foreach}
+
             {control helpdesk}
         </div>
     </div>

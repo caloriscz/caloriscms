@@ -39,7 +39,7 @@
                                         <td class="text-right">
                                             <a n:href="deleteTemplate!, id => $itemd->id"
                                                     onclick="return confirm('Opravdu smazat?')">
-                                                <i class="fa fa-times font-red"></i>
+                                                <i class="fa fa-times text-danger"></i>
                                             </a>
                                         </td>
                                     </tr>
@@ -70,7 +70,7 @@
                                     <td class="text-right">
                                         <a n:href="delete!, id => $item->id, helpdesk => $item->helpdesk_id"
                                                 onclick="return confirm('Opravdu smazat?')">
-                                            <i class="fa fa-times font-red"></i></a>
+                                            <i class="fa fa-times text-danger"></i></a>
                                         <a n:href=":Admin:Helpdesk:detail, id => $item->id"><i
                                                     class="fa fa-plus"></i></a>
                                     </td>

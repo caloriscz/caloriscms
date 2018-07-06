@@ -4,6 +4,7 @@ namespace App\AdminModule\Presenters;
 
 use App\Forms\Helpdesk\EditHelpdeskEmailSettingsControl;
 use App\Forms\Helpdesk\EditMailTemplateControl;
+use Nette\Application\AbortException;
 use Nette\Utils\Paginator;
 
 /**
@@ -16,7 +17,7 @@ class HelpdeskPresenter extends BasePresenter
     {
         $control = new EditHelpdeskEmailSettingsControl($this->database);
         $control->onSave[] = function ($helpdeskId) {
-            $this->redirect('this', array('id' => $helpdeskId));
+            $this->redirect('this', ['id' => $helpdeskId]);
         };
 
         return $control;
@@ -30,19 +31,19 @@ class HelpdeskPresenter extends BasePresenter
     /**
      * Delete message
      * @param $identifier
-     * @throws \Nette\Application\AbortException
+     * @throws AbortException
      */
     public function handleDelete($identifier)
     {
         $this->database->table('helpdesk_messages')->get($identifier)->delete();
 
-        $this->redirect('this', array('id' => $this->getParameter('helpdesk')));
+        $this->redirect('this', ['id' => $this->getParameter('helpdesk')]);
     }
 
     /**
      * Delete template
      * @param $identifier
-     * @throws \Nette\Application\AbortException
+     * @throws AbortException
      */
     public function handleDeleteTemplate($identifier)
     {
