@@ -22,7 +22,7 @@ class EditMailTemplateControl extends Control
      */
     public function createComponentEditForm()
     {
-        $emailDb = $this->database->table('helpdesk_emails')->get($this->presenter->getParameter('id'));
+        $emailDb = $this->database->table('helpdesk')->get($this->presenter->getParameter('id'));
 
         $form = new BootstrapUIForm();
         $form->getElementPrototype()->class = 'form-horizontal';
@@ -53,7 +53,7 @@ class EditMailTemplateControl extends Control
      */
     public function editFormSucceeded(BootstrapUIForm $form): void
     {
-        $this->database->table('helpdesk_emails')->get($form->values->id)
+        $this->database->table('helpdesk')->get($form->values->id)
             ->update([
                 'subject' => $form->values->subject,
                 'body' => $form->values->body,

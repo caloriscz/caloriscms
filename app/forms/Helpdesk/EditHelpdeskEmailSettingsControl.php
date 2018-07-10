@@ -33,7 +33,7 @@ class EditHelpdeskEmailSettingsControl extends Control
         $helpdeskEmailsDb = $this->database->table('helpdesk')->get($this->presenter->getParameter('id'));
         $templates = $this->database->table('helpdesk_templates');
 
-        $form->addHidden('helpdesk_email_id');
+        $form->addHidden('helpdesk_id');
         $form->addText('email', 'dictionary.main.Email');
         $form->addSelect('helpdesk_templates_id', 'Šablona', $templates->fetchPairs('id', 'title'))
         ->setAttribute('class', 'form-control');
@@ -58,7 +58,7 @@ class EditHelpdeskEmailSettingsControl extends Control
      */
     public function editFormSucceeded(BootstrapUIForm $form): void
     {
-        $this->database->table('helpdesk_emails')->get($form->values->helpdesk_email_id)->update([
+        $this->database->table('helpdesk')->get($form->values->helpdesk_id)->update([
             'helpdesk_templates_id' => $form->values->helpdesk_templates_id,
             'email' => $form->values->email,
             'log' => $form->values->log,

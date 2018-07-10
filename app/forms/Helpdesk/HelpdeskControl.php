@@ -104,6 +104,8 @@ class HelpdeskControl extends Control
             'message' => $form->values->message,
         ];
 
+
+        // Helpdesk - send to admin
         $helpdesk = new Helpdesk($this->database, $this->presenter->mailer);
         $helpdesk->setId(1);
         $helpdesk->setEmail($form->values->email);

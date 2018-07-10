@@ -113,22 +113,19 @@ class Helpdesk
     public function send()
     {
         $info = $this->getInfo();
-        $emails = $info->related('helpdesk_emails', 'helpdesk_id');
         $templateId = 1;
         $email = $this->getEmail();
         $send = true;
 
-        foreach ($emails as $item) {
-            if ($item->email !== null) {
-                $email = $item->email;
-            }
-
-            if ($item->helpdesk_templates_id) {
-                $templateId = $item->helpdesk_templates_id;
-            }
-
-            $send = $this->fillEmail($email, $item->subject, $item->body, $templateId, $this->getParams(), $item->log);
+        if ($info->email !== null) {
+            $email = $info->email;
         }
+
+        if ($info->helpdesk_templates_id) {
+            $templateId = $info->helpdesk_templates_id;
+        }
+
+        $send = $this->fillEmail($email, $info->subject, $info->body, $templateId, $this->getParams(), $info->log);
 
         return $send;
     }
