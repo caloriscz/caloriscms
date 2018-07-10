@@ -30,7 +30,7 @@ class EditHelpdeskEmailSettingsControl extends Control
         $form->getElementPrototype()->class = 'form-horizontal';
         $form->getElementPrototype()->role = 'form';
 
-        $helpdeskEmailsDb = $this->database->table('helpdesk_emails')->get($this->presenter->getParameter('id'));
+        $helpdeskEmailsDb = $this->database->table('helpdesk')->get($this->presenter->getParameter('id'));
         $templates = $this->database->table('helpdesk_templates');
 
         $form->addHidden('helpdesk_email_id');

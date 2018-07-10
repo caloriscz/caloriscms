@@ -11,77 +11,27 @@
     <div class="animated fadeIn">
         <div class="row">
             <div class="col-lg-3">
-                <div class="card">
-                    <div class="card-header">E-mailové šablony</div>
-                    <div class="card-block">
-                        <nav class="nav flex-column">
-                            {foreach $helpdesk as $items}
-                                <a n:href=":Admin:Helpdesk:default, id => $items->id"
-                                        class="nav-link {if $items->id == $presenter->getParameter('id')}active{/if}">
-                                    {$items->title}
-                                </a>
-                            {/foreach}
-                        </nav>
-                    </div>
-                </div>
+
             </div>
             <div class="col-lg-9">
                 <div class="card">
-                    <div class="card-header">Šablony</div>
-                    <div class="card-block">
-                        {if $templates->count() > 0}
-                            <table class="table">
-                                {foreach $templates as $itemd}
-                                    <tr>
-                                        <td>
-                                            <a n:href=":Admin:Helpdesk:emails, id => $itemd->id">{$itemd->template}</a>
-                                        </td>
-                                        <td class="text-right">
-                                            <a n:href="deleteTemplate!, id => $itemd->id"
-                                                    onclick="return confirm('Opravdu smazat?')">
-                                                <i class="fa fa-times text-danger"></i>
-                                            </a>
-                                        </td>
-                                    </tr>
-                                {/foreach}
-                            </table>
-                        {/if}
-                    </div>
-                </div>
-
-                <div class="card">
-                    <div class="card-header">E-maily</div>
+                    <div class="card-header">E-mailové šablony</div>
                     <div class="card-block">
                         <table class="table">
-                            <thead>
-                            <tr>
-                                <th>{_dictionary.main.Email}</th>
-                                <th>{_dictionary.main.date|firstUpper}</th>
-                                <th></th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {foreach $messages as $item}
+                            {foreach $helpdesk as $items}
                                 <tr>
-                                    <td class="w-25">
-                                        <a n:href=":Admin:Helpdesk:detail, id => $item->id">{$item->email}</a>
+                                    <td>
+                                        <a n:href=":Admin:Helpdesk:emails, id => $items->id"
+                                                class="nav-link {if $items->id == $presenter->getParameter('id')}active{/if}">
+                                            {$items->title}
+                                        </a>
                                     </td>
-                                    <td>{$item->date_created|date:'j. n. Y H:i'}</td>
-                                    <td class="text-right">
-                                        <a n:href="delete!, id => $item->id, helpdesk => $item->helpdesk_id"
-                                                onclick="return confirm('Opravdu smazat?')">
-                                            <i class="fa fa-times text-danger"></i></a>
-                                        <a n:href=":Admin:Helpdesk:detail, id => $item->id"><i
-                                                    class="fa fa-plus"></i></a>
+                                    <td>
+                                        {$items->description}
                                     </td>
                                 </tr>
                             {/foreach}
-                            </tbody>
                         </table>
-
-                        <div class="text-center">
-                            {control paging, $args, $paginator}
-                        </div>
                     </div>
                 </div>
             </div>

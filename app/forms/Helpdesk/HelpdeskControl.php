@@ -30,11 +30,7 @@ class HelpdeskControl extends Control
         $form->getElementPrototype()->autocomplete = 'off';
         $form->addText('name');
         $form->addText('email');
-
-        if ($helpdesk->fill_phone > 0) {
-            $form->addText('phone');
-        }
-
+        $form->addText('phone');
         $form->addTextArea('message');
 
         $form->setDefaults([

@@ -26,6 +26,42 @@
                         {control editMailTemplate}
                     </div>
                 </div>
+
+                <div class="card">
+                    <div class="card-header">E-maily</div>
+                    <div class="card-block">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>{_dictionary.main.Email}</th>
+                                <th>{_dictionary.main.date|firstUpper}</th>
+                                <th></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {foreach $messages as $item}
+                                <tr>
+                                    <td class="w-25">
+                                        <a n:href=":Admin:Helpdesk:detail, id => $item->id">{$item->email}</a>
+                                    </td>
+                                    <td>{$item->date_created|date:'j. n. Y H:i'}</td>
+                                    <td class="text-right">
+                                        <a n:href="delete!, id => $item->id, helpdesk => $item->helpdesk_id"
+                                                onclick="return confirm('Opravdu smazat?')">
+                                            <i class="fa fa-times text-danger"></i></a>
+                                        <a n:href=":Admin:Helpdesk:detail, id => $item->id"><i
+                                                    class="fa fa-plus"></i></a>
+                                    </td>
+                                </tr>
+                            {/foreach}
+                            </tbody>
+                        </table>
+
+                        <div class="text-center">
+                            {control paging, $args, $paginator}
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

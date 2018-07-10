@@ -47,15 +47,19 @@ class HelpdeskPresenter extends BasePresenter
      */
     public function handleDeleteTemplate($identifier)
     {
-        $this->database->table('helpdesk_emails')->get($identifier)->delete();
+        $this->database->table('helpdesk')->get($identifier)->delete();
 
         $this->redirect(':Admin:Helpdesk:default', ['id' => $this->getParameter('helpdesk')]);
     }
 
     public function renderDefault()
     {
-        $this->template->helpdesk = $this->database->table('helpdesk');
-        $this->template->templates = $this->database->table('helpdesk_emails')->where('helpdesk_id', $this->getParameter('id'));
+        $this->template->helpdesk = $this->database->table('helpdesk')->order('title');
+    }
+
+    public function renderEmails()
+    {
+        $this->template->templates = $this->database->table('helpdesk')->get($this->getParameter('id'));
 
         if (!$this->getParameter('id')) {
             $helpdeskId = null;
