@@ -110,7 +110,6 @@ class IO
 
         if (!file_exists($pathConvert)) {
             $oldUmask = umask(0);
-            Debugger::barDump($pathConvert);
             mkdir($pathConvert, $chmod);
             umask($oldUmask);
         }

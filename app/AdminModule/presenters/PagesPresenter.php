@@ -7,10 +7,8 @@ use App\Forms\Pages\EditorSettingsControl;
 use App\Forms\Pictures\DropZoneControl as DropZonePicturesControl;
 use App\Forms\Media\ImageEditFormControl;
 use App\Forms\Pages\FilterFormControl;
-use App\Model\IO;
 use Apps\Forms\Pages\InsertFormControl;
 use Caloriscz\Media\ImageBrowserControl;
-use Caloriscz\Page\BlockControl;
 use Caloriscz\Page\FileListControl;
 use Caloriscz\Page\PageListControl;
 use Nette\Application\AbortException;
@@ -57,7 +55,7 @@ class PagesPresenter extends BasePresenter
      */
     protected function createComponentInsertPageForm(): InsertFormControl
     {
-        return new InsertFormControl($this->database, $this->em);
+        return new InsertFormControl($this->database);
     }
 
     /**

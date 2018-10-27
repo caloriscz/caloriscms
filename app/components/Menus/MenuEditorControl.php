@@ -32,10 +32,7 @@ class MenuEditorControl extends Control
      */
     public function handleDelete()
     {
-        Debugger::barDump($this->getPresenter()->getParameter('node_id'));
-
         $this->database->table('menu')->get($this->getPresenter()->getParameter('node_id'))->delete();
-
         exit();
     }
 
@@ -61,8 +58,6 @@ class MenuEditorControl extends Control
      */
     public function handleRename()
     {
-        Debugger::barDump($this->getPresenter()->getParameter('node_id'));
-
         $this->database->table('menu')->get($this->getPresenter()->getParameter('node_id'))->update([
             'title' => $this->getPresenter()->getParameter('text'),
         ]);

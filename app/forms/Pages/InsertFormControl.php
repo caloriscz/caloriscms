@@ -3,8 +3,6 @@
 namespace Apps\Forms\Pages;
 
 use App\Model\Document;
-use App\Model\IO;
-use Kdyby\Doctrine\EntityManager;
 use Nette\Application\UI\Control;
 use Nette\Database\Context;
 use Nette\Forms\BootstrapUIForm;
@@ -15,13 +13,9 @@ class InsertFormControl extends Control
     /** @var Context */
     public $database;
 
-    /** @var EntityManager @inject */
-    public $em;
-
-    public function __construct(Context $database, EntityManager $em)
+    public function __construct(Context $database)
     {
         $this->database = $database;
-        $this->em = $em;
     }
 
     protected function createComponentInsertForm(): BootstrapUIForm

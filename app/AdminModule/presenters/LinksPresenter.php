@@ -130,8 +130,9 @@ class LinksPresenter extends BasePresenter
 
         if (file_exists(APP_DIR . '/links-media/link-' . $form->values->id . '.jpg') && is_uploaded_file($_FILES['the_file']['tmp_name'])) {
             IO::remove(APP_DIR . '/links-media/link-' . $form->values->id . '.jpg');
-            IO::upload(APP_DIR . '/links-media', 'link-' . $form->values->id . '.jpg');
         }
+
+        IO::upload(APP_DIR . '/links-media', 'link-' . $form->values->id . '.jpg');
 
         $this->redirect('this', ['id' => $form->values->id]);
     }
@@ -159,9 +160,7 @@ class LinksPresenter extends BasePresenter
         }
 
         $this->database->table('links')->where(['links_categories_id' => $id])->update(['links_categories_id' => 1]);
-
         $this->database->table('links_categories')->get($id)->delete();
-
         $this->redirect(':Admin:Links:categories');
     }
 

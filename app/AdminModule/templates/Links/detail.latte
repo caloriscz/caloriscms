@@ -27,7 +27,8 @@
 
                         {var $id = $presenter->getParameter('id')}
                         {if file_exists($appDir.'/links-media/link-'.$id.'.jpg')}
-                            <img src="{$baseUri}/links-media/link-{$id}.jpg" style="max-width: 250px;"/>
+                            {var $today = date('H:i:s')}
+                            <img src="{$baseUri}/links-media/link-{$id}.jpg?{$today}" style="max-width: 250px;">
 
                             <div class="mt-2">
                                 <a n:href="deleteImage!, $id" class="btn btn-danger"

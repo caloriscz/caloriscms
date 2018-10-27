@@ -54,8 +54,6 @@ class PricelistCategoryEditControl extends Control
      */
     public function handleRename()
     {
-        Debugger::barDump($this->getPresenter()->getParameter('node_id'));
-
         $this->database->table('pricelist_categories')->get($this->getPresenter()->getParameter('node_id'))->update([
             'title' => $this->getPresenter()->getParameter('text'),
             'pricelist_lists_id' => $this->getPresenter()->getParameter('pricelist'),
