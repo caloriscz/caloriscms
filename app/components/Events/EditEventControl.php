@@ -1,4 +1,5 @@
 <?php
+
 namespace Caloriscz\Members;
 
 use Nette\Application\AbortException;
@@ -22,7 +23,8 @@ class EditEventControl extends Control
      */
     function createComponentEditEventForm()
     {
-        $page = $this->database->table('pages')->get($this->presenter->getParameter('id'));
+        $event = $this->database->table('events')->get($this->getPresenter()->getParameter('id'));
+
 
         $form = new BootstrapUIForm();
         $form->setTranslator($this->presenter->translator);
@@ -54,7 +56,8 @@ class EditEventControl extends Control
             ->setAttribute('class', 'btn btn-success btn');
 
         $form->setDefaults([
-            'id' => $page->id,
+            'id' => $event->pages_id,
+            'event_id' => $event->id,
         ]);
 
         $form->onSuccess[] = [$this, 'editEventFormSucceeded'];
@@ -68,8 +71,8 @@ class EditEventControl extends Control
     function editEventFormSucceeded(BootstrapUIForm $form)
     {
         $arr = [
-            'date_event' =>  $form->values->date_event,
-            'date_event_end' =>  $form->values->date_event_end,
+            'date_event' => $form->values->date_event,
+            'date_event_end' => $form->values->date_event_end,
             'all_day' => $form->values->allday,
             'price' => $form->values->price,
             'capacity' => $form->values->capacity,
@@ -90,7 +93,7 @@ class EditEventControl extends Control
     public function render($item)
     {
         $template = $this->getTemplate();
-        $template->item = $item;
+        $template->event = $this->database->table('events')->get($this->getPresenter()->getParameter('id'));
         $template->setFile(__DIR__ . '/EditEventControl.latte');
 
         $template->render();

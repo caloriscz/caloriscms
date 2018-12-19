@@ -51,7 +51,7 @@ class EventsPresenter extends BasePresenter
     {
         return new ImageEditControl($this->database);
     }
-    
+
     protected function createComponentEventSign()
     {
         return new SignEventControl($this->database);
@@ -204,6 +204,18 @@ class EventsPresenter extends BasePresenter
         $this->template->paginator = $paginator;
         $this->template->args = $this->getParameters();
         $this->template->viewtype = $this->request->getCookie('viewtype');
+    }
+
+    public function renderEdit(): void
+    {
+        $this->template->page = $this->database->table('pages')->get($this->getParameter('id'));
+        $this->template->event = $this->getParameter('id');
+
+        $this->template->events = $this->database->table('pages')
+            ->select(':events.id, pages.id, pages.title, pages.pages_types_id, :events.date_event, :events.date_event_end, 
+            :events.all_day, :events.contact, public, DATEDIFF(NOW(), 
+            :events.date_event) AS diffDate')
+            ->where('pages_types_id = 3 AND events.id = ?', $this->getParameter('id'));
     }
 
     public function renderDetail(): void

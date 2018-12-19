@@ -1,53 +1,44 @@
 <form n:name="editEventForm" class="form-horizontal" role="form">
-    {input event_id, value => $item->id}
-    <div class="modal-content">
-        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-            <h4 class="modal-title" id="myModalLabelEdit">Upravit událost</h4>
+    <div class="form-group">
+        <div class="col-md-offset-3 col-sm-9">{input allday, value => $event->all_day}</div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">od</label>
+        <div class="col-sm-9">
+            {input date_event, value => date('j. n. Y', strtotime($event->date_event)), style => 'width: 110px; display: inline;'}
         </div>
-        <div class="modal-body">
-            <div class="form-group">
-                <div class="col-md-offset-3 col-sm-9">{input allday, value => $item->all_day}</div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">od</label>
-                <div class="col-sm-9">
-                    {input date_event, value => date('j. n. Y', strtotime($item->date_event)), style => 'width: 110px; display: inline;'}
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">do</label>
-                <div class="col-sm-9">
-                    {input date_event_end, value => date('j. n. Y', strtotime($item->date_event_end)), style => 'width: 110px; display: inline;'}
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">{label  price /}</label>
-                <div class="col-sm-9">{input price, value => $item->price}</div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">{label  time_range /}</label>
-                <div class="col-sm-9">{input time_range, value => $item->time_range}</div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">{label  capacity /}</label>
-                <div class="col-sm-9">{input capacity, value => $item->capacity}</div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">{label  capacity_start /}</label>
-                <div class="col-sm-9">{input capacity_start, value => $item->capacity_start}</div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">{label contact /}</label>
-                <div class="col-sm-9">
-                    <select n:name="contact" class="form-control"></select>
-                </div>
-            </div>
-
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">do</label>
+        <div class="col-sm-9">
+            {input date_event_end, value => date('j. n. Y', strtotime($event->date_event_end)), style => 'width: 110px; display: inline;'}
         </div>
-        <div class="modal-footer">
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">{label  price /}</label>
+        <div class="col-sm-9">{input price, value => $event->price}</div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">{label  time_range /}</label>
+        <div class="col-sm-9">{input time_range, value => $event->time_range}</div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">{label  capacity /}</label>
+        <div class="col-sm-9">{input capacity, value => $event->capacity}</div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">{label  capacity_start /}</label>
+        <div class="col-sm-9">{input capacity_start, value => $event->capacity_start}</div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">{label contact /}</label>
+        <div class="col-sm-9">
+            <select n:name="contact" class="form-control"></select>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-9 col-lg-offset-3">
             {input submitm}
         </div>
+    </div>
 </form>

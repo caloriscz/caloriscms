@@ -50,7 +50,7 @@ class EditContactControl extends Control
         $form->addText('vatin');
         $form->addText('vatid');
         $form->addText('banking_account');
-        $form->addText('dateofbirth');
+        $form->addText('dateOfBirth');
         $form->addTextArea('notes');
 
         $contact = $this->database->table('contacts')->get($this->getPresenter()->getParameter('id'));
@@ -69,10 +69,10 @@ class EditContactControl extends Control
             'zip' => $contact->zip,
             'city' => $contact->city,
             'banking_account' => $contact->banking_account,
+            'dateOfBirth' => $contact->date_of_birth,
             'vatin' => $contact->vatin,
             'vatid' => $contact->vatid,
             'notes' => $contact->notes,
-            'dateofbirth' => $contact->date_of_birth,
         ];
 
         $form->setDefaults($arr);
@@ -99,6 +99,12 @@ class EditContactControl extends Control
      */
     public function editFormSucceeded(BootstrapUIForm $form): void
     {
+        if ('' === $form->values->dateOfBirth) {
+            $dateOfBirth = null;
+        } else {
+            $dateOfBirth = $form->values->dateOfBirth;
+        }
+
         $this->database->table('contacts')
             ->where(['id' => $form->values->contact_id])
             ->update([
@@ -116,7 +122,7 @@ class EditContactControl extends Control
                 'vatin' => $form->values->vatin,
                 'vatid' => $form->values->vatid,
                 'banking_account' => $form->values->banking_account,
-                'date_of_birth' => $form->values->dateofbirth,
+                'date_of_birth' => $dateOfBirth,
                 'notes' => $form->values->notes,
             ]);
 

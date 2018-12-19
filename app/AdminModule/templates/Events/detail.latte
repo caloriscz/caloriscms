@@ -45,17 +45,9 @@
                             {foreach $events as $item}
                                 <tr>
                                     <td>
-                                        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal"
-                                                data-target="#myModal{$item->id}">
+                                        <a n:href=":Admin:Events:edit, id => $item->id" class="btn btn-primary btn-sm">
                                             {_dictionary.main.edit|firstUpper}
-                                        </button>
-
-                                        <div class="modal fade" id="myModal{$item->id}" tabindex="-1" role="dialog"
-                                             aria-labelledby="myModalLabelEdit">
-                                            <div class="modal-dialog" role="document">
-                                                {control editEventForm, $item}
-                                            </div>
-                                        </div>
+                                        </a>
                                     </td>
                                     <td>
                                         <a n:href=":Admin:Events:signed, id => $item->pages_id, event => $item->id"
