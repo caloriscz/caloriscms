@@ -1,7 +1,9 @@
 <?php
 
-class Filters extends Object
+class Filters
 {
+    use \Nette\SmartObject;
+
     public static function common($filter, $value)
     {
         if (method_exists(__CLASS__, $filter)) {
