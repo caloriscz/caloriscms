@@ -23,7 +23,18 @@ class NavbarMenuControl extends Control
 
         $template->id = $id;
         $template->style = $style;
-        $template->categories = $this->database->table('menu')->where('parent_id', $id);
+
+        // load menu info from menu_menus
+        $template->menu = $this->database->table('menu_menus')->get($id);
+
+        if ($template->menu) {
+            $template->class = $template->menu->class;
+            $template->categories = $this->database->table('menu')->where('parent_id', $id);
+        } else {
+
+        }
+
+
         $template->render();
     }
 
