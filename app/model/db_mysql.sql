@@ -866,9 +866,9 @@ INSERT INTO `settings` (`id`, `settings_categories_id`, `setkey`, `setvalue`, `d
                                                                                                                                                    (65, 12, 'members_signup_message', '0', 'Možnost napsat zprávu při registraci', 'Option to write message in signup', 'boolean', 1),
                                                                                                                                                    (66, 12, 'members_signup_conditions_agree', '0', 'Souhlasit s podmínkami zaškrtávací tlačítko', 'Agree with conditions box', 'boolean', 1),
                                                                                                                                                    (67, 12, 'members_signup_conditions_link', '', 'Odkaz na soubor nebo stránku s podmínkami', 'Link to a file or page with terms and conditions', NULL, 1),
-                                                                                                                                                   (68, NULL, 'media_thumb_dir', 'tn', 'Adresář pro náhledy', 'Directory for thumbnails', NULL, 1),
-                                                                                                                                                   (69, NULL, 'media_thumb_width', '300', 'Šířka náhledu', 'Width of thumbnail', NULL, 1),
-                                                                                                                                                   (70, NULL, 'media_thumb_height', '200', 'Výška náhledu', 'Height of thumbnail', NULL, 1);
+                                                                                                                                                   (68, 23, 'media_thumb_dir', 'tn', 'Adresář pro náhledy', 'Directory for thumbnails', NULL, 1),
+                                                                                                                                                   (69, 23, 'media_thumb_width', '300', 'Šířka náhledu', 'Width of thumbnail', NULL, 1),
+                                                                                                                                                   (70, 23, 'media_thumb_height', '200', 'Výška náhledu', 'Height of thumbnail', NULL, 1);
 
 CREATE TABLE `settings_categories` (
   `id` int(11) NOT NULL,
@@ -878,15 +878,19 @@ CREATE TABLE `settings_categories` (
   `sorted` int(11) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
 
+
 INSERT INTO `settings_categories` (`id`, `parent_id`, `description`, `title`, `sorted`) VALUES
+                                                                                               (3, NULL, NULL, 'Šablony', 146),
                                                                                                (10, NULL, NULL, 'Základní nastavení', 146),
                                                                                                (12, NULL, NULL, 'Členové', 148),
                                                                                                (15, NULL, NULL, 'Blog', 154),
-                                                                                               (16, NULL, NULL, 'Kontakty', 166),
+                                                                                               (16, 3, NULL, 'Kontakty', 166),
                                                                                                (17, NULL, NULL, 'Služby', 176),
                                                                                                (20, NULL, NULL, 'Vzhled', 154),
                                                                                                (21, 20, NULL, 'Carousel', 155),
-                                                                                               (23, NULL, '', 'Media', 0);
+                                                                                               (23, NULL, '', 'Media', 0),
+                                                                                               (24, 3, NULL, 'Homepage', 166);
+
 
 CREATE TABLE `snippets` (
   `id` int(11) NOT NULL,

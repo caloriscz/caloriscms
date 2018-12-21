@@ -141,7 +141,6 @@ class SettingsPresenter extends BasePresenter
         $this->redirect(':Admin:Settings:countries');
     }
 
-
     /**
      * @param $table
      * @param $column
@@ -163,10 +162,9 @@ class SettingsPresenter extends BasePresenter
         return $message . '<br>';
     }
 
-
     public function renderGlobal(): void
     {
-        $this->template->categoryId = null;
+        $this->template->categoryId = $this->getParameter('id');
     }
 
     public function renderLanguages(): void

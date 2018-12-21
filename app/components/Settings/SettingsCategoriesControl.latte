@@ -2,7 +2,7 @@
     <ul>
         {foreach $menu as $item}
             <li><span>
-                        <a href="{plink ':Admin:Settings:default', (expand) $args, id => $item->id}">
+                        <a href="{plink ':Admin:Settings:global', (expand) $args, id => $item->id}">
                             {if $idActive == $item->id}
                             <strong>{/if}{$item->title}{if $idActive == $item->id}</strong>
                             {/if}

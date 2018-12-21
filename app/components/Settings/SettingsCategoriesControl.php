@@ -17,7 +17,7 @@ class SettingsCategoriesControl extends Control
     }
 
     /**
-     * 
+     *
      * @param type $id
      * @param type $type Specifies type of category: store, media, blog, menu etc. Some categories have special needs
      */
