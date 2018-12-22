@@ -608,15 +608,12 @@ CREATE TABLE `menu` (
   `title` varchar(80) COLLATE utf8_czech_ci NOT NULL,
   `pages_id` int(11) DEFAULT NULL,
   `url` varchar(200) COLLATE utf8_czech_ci DEFAULT NULL,
-  `url_en` varchar(200) COLLATE utf8_czech_ci DEFAULT NULL,
-  `sorted` int(11) NOT NULL DEFAULT '0',
-  `title_en` varchar(80) COLLATE utf8_czech_ci DEFAULT NULL,
-  `description_en` text COLLATE utf8_czech_ci
+  `sorted` int(11) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
 
-INSERT INTO `menu` (`id`, `parent_id`, `menu_menus_id`, `description`, `title`, `pages_id`, `url`, `url_en`, `sorted`, `title_en`, `description_en`) VALUES
-                                                                                                                                                            (1, NULL, 1, 'Hlavní menu/Main menu', 'Top', NULL, '', NULL, 1028, NULL, NULL),
-                                                                                                                                                            (2, NULL, 2, NULL, 'Bottom', NULL, 'http://caloris.cz', 'http://caloris.cz/en', 1004, 'Caloris', NULL);
+INSERT INTO `menu` (`id`, `parent_id`, `menu_menus_id`, `description`, `title`, `pages_id`, `url`, `sorted`) VALUES
+                                                                                                                                                            (1, NULL, 1, 'Hlavní menu/Main menu', 'Top', NULL, '', 1028),
+                                                                                                                                                            (2, NULL, 2, NULL, 'Bottom', NULL, '', 1004);
 
 CREATE TABLE `menu_menus` (
   `id` int(11) NOT NULL,
@@ -648,23 +645,17 @@ CREATE TABLE `pages` (
   `sorted` int(11) NOT NULL DEFAULT '0',
   `editable` int(11) NOT NULL DEFAULT '1',
   `recommended` tinyint(4) DEFAULT '0',
-  `sitemap` tinyint(4) NOT NULL DEFAULT '1',
-  `title_en` varchar(250) COLLATE utf8_czech_ci DEFAULT NULL,
-  `slug_en` varchar(250) COLLATE utf8_czech_ci DEFAULT NULL,
-  `document_en` text COLLATE utf8_czech_ci,
-  `preview_en` varchar(250) COLLATE utf8_czech_ci DEFAULT NULL,
-  `metakeys_en` varchar(150) COLLATE utf8_czech_ci DEFAULT NULL,
-  `metadesc_en` varchar(200) COLLATE utf8_czech_ci DEFAULT NULL
+  `sitemap` tinyint(4) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
 
-INSERT INTO `pages` (`id`, `slug`, `title`, `document`, `preview`, `pages_id`, `users_id`, `public`, `metadesc`, `metakeys`, `date_created`, `date_published`, `pages_types_id`, `pages_templates_id`, `sorted`, `editable`, `recommended`, `sitemap`, `title_en`, `slug_en`, `document_en`, `preview_en`, `metakeys_en`, `metadesc_en`) VALUES
-                                                                                                                                                                                                                                                                                                                                                (1, '', 'Homepage', NULL, NULL, NULL, 1, 1, '', '', NULL, NULL, 9, 4, 77, 1, 0, 1, NULL, NULL, NULL, NULL, NULL, NULL),
-                                                                                                                                                                                                                                                                                                                                                (2, 'kontakt', 'Kontakt', NULL, NULL, NULL, NULL, 1, '', '', NULL, NULL, 9, 5, 79, 0, 0, 1, NULL, 'contact', NULL, NULL, NULL, NULL),
-                                                                                                                                                                                                                                                                                                                                                (3, 'blog', 'Blog', '', NULL, NULL, 1, 1, '', '', NULL, NULL, 9, 2, 81, 0, 0, 1, NULL, 'blog', NULL, NULL, NULL, NULL),
-                                                                                                                                                                                                                                                                                                                                                (4, 'galerie', 'Galerie', '', NULL, NULL, 1, 1, '', '', NULL, NULL, 9, 7, 71, 0, 0, 1, NULL, 'gallery', NULL, NULL, NULL, NULL),
-                                                                                                                                                                                                                                                                                                                                                (5, 'udalosti', 'Události', '', NULL, 1, 1, 1, '', '', NULL, NULL, 9, 10, 73, 0, 0, 1, 'Events', 'events', NULL, NULL, NULL, NULL),
-                                                                                                                                                                                                                                                                                                                                                (6, 'dokumenty', 'Dokumenty', '', NULL, NULL, 1, 1, '', '', NULL, NULL, 9, 8, 75, 0, 0, 1, NULL, 'documents', NULL, NULL, NULL, NULL),
-                                                                                                                                                                                                                                                                                                                                                (7, 'cenik', 'Ceník', NULL, NULL, 1, 1, 1, '', '', NULL, NULL, 9, 11, 800, 0, 0, 1, NULL, 'pricelist', NULL, NULL, NULL, NULL);
+INSERT INTO `pages` (`id`, `slug`, `title`, `document`, `preview`, `pages_id`, `users_id`, `public`, `metadesc`, `metakeys`, `date_created`, `date_published`, `pages_types_id`, `pages_templates_id`, `sorted`, `editable`, `recommended`, `sitemap`) VALUES
+                                                                                                                                                                                                                                                                                                                                                (1, '', 'Homepage', NULL, NULL, NULL, 1, 1, '', '', NULL, NULL, 9, 4, 77, 1, 0, 1),
+                                                                                                                                                                                                                                                                                                                                                (2, 'kontakt', 'Kontakt', NULL, NULL, NULL, NULL, 1, '', '', NULL, NULL, 9, 5, 79, 0, 0, 1),
+                                                                                                                                                                                                                                                                                                                                                (3, 'blog', 'Blog', '', NULL, NULL, 1, 1, '', '', NULL, NULL, 9, 2, 81, 0, 0, 1),
+                                                                                                                                                                                                                                                                                                                                                (4, 'galerie', 'Galerie', '', NULL, NULL, 1, 1, '', '', NULL, NULL, 9, 7, 71, 0, 0, 1),
+                                                                                                                                                                                                                                                                                                                                                (5, 'udalosti', 'Události', '', NULL, 1, 1, 1, '', '', NULL, NULL, 9, 10, 73, 0, 0, 1),
+                                                                                                                                                                                                                                                                                                                                                (6, 'dokumenty', 'Dokumenty', '', NULL, NULL, 1, 1, '', '', NULL, NULL, 9, 8, 75, 0, 0, 1),
+                                                                                                                                                                                                                                                                                                                                                (7, 'cenik', 'Ceník', NULL, NULL, 1, 1, 1, '', '', NULL, NULL, 9, 11, 800, 0, 0, 1);
 
 CREATE TABLE `pages_related` (
   `id` int(11) NOT NULL,
@@ -897,8 +888,7 @@ INSERT INTO `settings_categories` (`id`, `parent_id`, `description`, `title`, `t
 CREATE TABLE `snippets` (
   `id` int(11) NOT NULL,
   `keyword` varchar(80) COLLATE utf8_czech_ci NOT NULL,
-  `content` text COLLATE utf8_czech_ci,
-  `content_en` text COLLATE utf8_czech_ci
+  `content` text COLLATE utf8_czech_ci
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
 
 CREATE TABLE `test` (

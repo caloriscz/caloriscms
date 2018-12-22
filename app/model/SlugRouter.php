@@ -1,4 +1,5 @@
 <?php
+
 namespace App;
 
 use Model\SlugManager;
@@ -35,7 +36,20 @@ class SlugRouter implements Nette\Application\IRouter
         if ($path !== '') {
             $parts = explode($url->scriptPath, $path, 4);
 
-            if (\in_array($parts[0], $this->slugManager->getLocale(), true)) {
+            if (\in_array($parts[0], $this->slugManager->getLocale(), true) && count($parts) === 1) {
+                $params['locale'] = $parts[0];
+                $lang = $parts[0];
+
+                $parts = array_values($parts);
+
+                if (\count($parts) === 2) {
+                    $slugName = $parts[1];
+                    $params['prefix'] = $parts[0];
+                } else {
+                    $slugName = $parts[0];
+                    $params['prefix'] = null;
+                }
+            } elseif (\in_array($parts[0], $this->slugManager->getLocale(), true)) {
                 $params['locale'] = $parts[0];
                 $lang = $parts[0];
                 unset($parts[0]);
@@ -46,6 +60,7 @@ class SlugRouter implements Nette\Application\IRouter
                     $params['prefix'] = $parts[0];
                 } else {
                     $slugName = $parts[0];
+                    $params['prefix'] = null;
                 }
             } else if (\count($parts) === 2) {
                 $slugName = $parts[1];
