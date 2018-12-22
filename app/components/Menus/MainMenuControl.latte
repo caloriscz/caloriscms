@@ -87,14 +87,14 @@
     </li>
 {/if}
 
-<li class="nav-item nav-dropdown">
+<li class="nav-item nav-dropdown {if $presenter->getName() == 'Admin:Files' || $presenter->getName() == 'Admin:Appearance'} open{/if}">
     <a class="nav-link nav-dropdown-toggle" href="#"><i class="fa fa-image fa-fw"></i> Vzhled</a>
     <ul class="nav-dropdown-items">
         <li class="nav-item">
             <a class="nav-link" href="/admin/files">{_dictionary.main.PageGraphics}</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="/admin/appearance">Cesty k obrázkům</a>
+            <a class="nav-link" href="/admin/appearance/default">Cesty k obrázkům</a>
         </li>
         <li class="nav-item">
             <a class="nav-link" href="/admin/appearance/carousel">Carousel</a>

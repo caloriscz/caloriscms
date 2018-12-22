@@ -22,7 +22,7 @@ class MenuEditorControl extends Control
         $this->em = $em;
     }
 
-    protected function createComponentMenuInsert()
+    protected function createComponentMenuInsert(): InsertMenuControl
     {
         return new InsertMenuControl($this->database);
     }
@@ -30,7 +30,7 @@ class MenuEditorControl extends Control
     /**
      * Delete category
      */
-    public function handleDelete()
+    public function handleDelete(): void
     {
         $this->database->table('menu')->get($this->getPresenter()->getParameter('node_id'))->delete();
         exit();
@@ -39,11 +39,12 @@ class MenuEditorControl extends Control
     /**
      * Insert category
      */
-    public function handleCreate()
+    public function handleCreate(): void
     {
         $node = $this->database->table('menu')->insert([
             'title' => 'New node',
             'parent_id' => $this->getPresenter()->getParameter('node_id'),
+            'menu_menus_id' => $this->getPresenter()->getParameter('menu'),
             'sorted' => 1000000,
         ]);
 
@@ -56,7 +57,7 @@ class MenuEditorControl extends Control
     /**
      * Rename category
      */
-    public function handleRename()
+    public function handleRename(): void
     {
         $this->database->table('menu')->get($this->getPresenter()->getParameter('node_id'))->update([
             'title' => $this->getPresenter()->getParameter('text'),
@@ -69,15 +70,13 @@ class MenuEditorControl extends Control
      * Resort images in order to enjoy sorting images from one :)
      * @throws \Throwable
      */
-    public function handleSort()
+    public function handleSort(): void
     {
         $updateSorter = $this->em->getConnection()->prepare('SET @i = 1000;UPDATE `menu` SET `sorted` = @i:=@i+2 ORDER BY `sorted` ASC');
         $updateSorter->execute();
         $updateSorter->closeCursor();
         $arr['parent_id'] = null;
         $arr['sorted'] = null;
-
-        $content = [];
 
         $idTo = $this->getPresenter()->getParameter('id_to');
 
@@ -91,11 +90,10 @@ class MenuEditorControl extends Control
 
         $menui = $this->database->table('menu')->where([
             'parent_id' => $idTo
-        ])
-            ->order('sorted')->limit(1, ($this->getPresenter()->getParameter('position')));
+        ])->order('sorted')->limit(1, $this->getPresenter()->getParameter('position'));
 
         if ($menui->count() > 0) {
-            if ($this->getPresenter()->getParameter('position') == 0) {
+            if ($this->getPresenter()->getParameter('position') === 0) {
                 $arr['sorted'] = ($menui->fetch()->sorted - 1);
             } else {
                 $arr['sorted'] = ($menui->fetch()->sorted + 1);
@@ -108,7 +106,7 @@ class MenuEditorControl extends Control
         exit();
     }
 
-    public function render()
+    public function render(): void
     {
         $template = $this->getTemplate();
         $categoryId = null;

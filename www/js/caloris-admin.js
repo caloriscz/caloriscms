@@ -220,7 +220,7 @@ $(document).ready(function () {
         });
     }).on('create_node.jstree', function (e, data) {
         $.ajax({
-            data: 'do=menuEditor-create&node_id=' + data.node.parent.substring(3) + '&text=' + data.text,
+            data: 'do=menuEditor-create&node_id=' + data.node.parent.substring(3) + '&menu=' + getParameterByName('menu') + '&text=' + data.text,
             datatype: 'json',
             type: 'GET',
             url: '/admin/menu/default',
@@ -234,7 +234,7 @@ $(document).ready(function () {
         });
     }).on('rename_node.jstree', function (e, data) {
         $.ajax({
-            data: 'do=menuEditor-rename&node_id=' + data.node.id.substring(3) + '&text=' + data.text,
+            data: 'do=menuEditor-rename&node_id=' + data.node.id.substring(3) + '&menu=' + getParameterByName('menu') + '&text=' + data.text,
             type: 'GET',
             url: '/admin/menu/default'
         });
@@ -452,7 +452,6 @@ $(document).ready(function () {
 
 /* Sortable ----- */
 $(function () {
-
     $("#sortable").sortable({
         update: function (event, ui) {
             var data = $(this).sortable('serialize');
@@ -474,7 +473,7 @@ $(function () {
     $(".login-panel input[type='text']").focus();
 });
 
-/*Ace plugin with Emmett support ---- */
+/* Ace plugin with Emmett support ---- */
 $(function () {
     if ($('pre#document').length > 0) {
         var editor = ace.edit("document");
@@ -517,9 +516,7 @@ $(function () {
 
 /* FullCalendar ----- */
 $(function () {
-    $('#calendar').fullCalendar({
-        // put your options and callbacks here
-    })
+    $('#calendar').fullCalendar({})
 });
 
 // Get querystring value
