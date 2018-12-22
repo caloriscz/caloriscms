@@ -14,10 +14,27 @@
 
         <div class="collapse navbar-collapse" id="navbarsExampleDefault">
             {control navbarMenu 1}
-            <form action="/pages/search" class="form-inline my-2 my-lg-0">
-                <input class="form-control mr-sm-2" type="text" name="s" placeholder="Hledat" aria-label="Hledat">
-                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Hledat</button>
-            </form>
+            {if $settings['navigation_search_position_top']}
+                <form action="/pages/search" class="form-inline my-2 my-lg-0">
+                    <input class="form-control mr-sm-2" type="text" name="s" placeholder="Hledat" aria-label="Hledat">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Hledat</button>
+                </form>
+            {/if}
+
+            <div class="dropdown">
+                <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu2"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">EN</button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                    <a href="{link changeLocale!, en}" class="dropdown-item">en</a>
+                </div>
+            </div>
+
+            <ul class="nav navbar-right">
+                <li{if $langSelected == 'cs'} class="active"{/if}>
+                    <a href="{plink "this", locale => 'cs', (expand)$args}">cs</a></li>
+                <li{if $langSelected == 'en'} class="active"{/if}>
+                    <a href="{plink "this", locale => 'en', (expand)$args}">en</a></li>
+            </ul>
         </div>
     </div>
 </nav>

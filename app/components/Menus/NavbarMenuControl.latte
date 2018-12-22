@@ -4,7 +4,7 @@
 
         {if $dbSubs->count() == 0}
             <li class="nav-item">
-                <a href="{$rowCategories->url}"
+                <a href="{if $needsPrefix}/{$langSelected}{$rowCategories->{'url_'.$langSelected}}{else}{$rowCategories->url}{/if}"
                    class="nav-link {if $rowCategories->id == $presenter->getParameter('page_id')}active{/if}">
                     {if file_exists($appDir . '/images/menu/icons/' . $rowCategories->id . '.png')}
                         <span class="image-thumb">
@@ -12,12 +12,18 @@
                         </span>
                     {/if}
 
-                    <span class="title">{$rowCategories->title|noescape}</span>
+                    <span class="title">
+                        {if $needsPrefix}
+                            {$rowCategories->{'title_'.$langSelected}|noescape}
+                        {else}
+                            {$rowCategories->title|noescape}
+                        {/if}
+                    </span>
                 </a>
             </li>
         {else}
             <li class="nav-item dropdown">
-                <a href="{$rowCategories->url}"
+                <a href="{if $needsPrefix}/{$langSelected}{$rowCategories->{'url_'.$langSelected}}{else}{$rowCategories->url}{/if}"
                    class="nav-link dropdown-toggle
                      {if $rowCategories->id == $presenter->getParameter('page_id')}active{/if}"
                    data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
@@ -28,7 +34,13 @@
                         </span>
                     {/if}
 
-                    <span class="title">{$rowCategories->title|noescape}</span>
+                    <span class="title">
+                      {if $needsPrefix}
+                          {$rowCategories->{'title_'.$langSelected}|noescape}
+                      {else}
+                          {$rowCategories->title|noescape}
+                      {/if}
+                    </span>
                 </a>
 
                 {foreach $dbSubs as $rowCategoriesSub}
@@ -42,8 +54,14 @@
                         {var $sublinkActive = ' '}
                     {/if}
 
-                    <a href="{$rowCategoriesSub->url}" class="dropdown-item">
-                        <span>{$rowCategoriesSub->title}</span>
+                    <a href="{if $needsPrefix}/{$langSelected}{$rowCategoriesSub->{'url_'.$langSelected}}{else}{$rowCategoriesSub->url}{/if}" class="dropdown-item">
+                        <span>
+                          {if $needsPrefix}
+                              {$rowCategoriesSub->{'title_'.$langSelected}|noescape}
+                          {else}
+                              {$rowCategoriesSub->title|noescape}
+                          {/if}
+                        </span>
                     </a>
 
                     {if $iterator->isLast()}

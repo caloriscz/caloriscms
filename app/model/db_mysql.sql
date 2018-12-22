@@ -216,7 +216,7 @@ CREATE TABLE `languages` (
 
 INSERT INTO `languages` (`id`, `code`, `title`, `used`, `default`) VALUES
                                                                           (1, 'cs', 'čeština', 1, 1),
-                                                                          (2, 'en', 'English', 1, NULL);
+                                                                          (2, 'en', 'English', 0, NULL);
 
 CREATE TABLE `lang_keys` (
   `id` int(11) NOT NULL,
@@ -868,7 +868,8 @@ INSERT INTO `settings` (`id`, `settings_categories_id`, `setkey`, `setvalue`, `d
                                                                                                                                                    (67, 12, 'members_signup_conditions_link', '', 'Odkaz na soubor nebo stránku s podmínkami', 'Link to a file or page with terms and conditions', NULL, 1),
                                                                                                                                                    (68, 23, 'media_thumb_dir', 'tn', 'Adresář pro náhledy', 'Directory for thumbnails', NULL, 1),
                                                                                                                                                    (69, 23, 'media_thumb_width', '300', 'Šířka náhledu', 'Width of thumbnail', NULL, 1),
-                                                                                                                                                   (70, 23, 'media_thumb_height', '200', 'Výška náhledu', 'Height of thumbnail', NULL, 1);
+                                                                                                                                                   (70, 23, 'media_thumb_height', '200', 'Výška náhledu', 'Height of thumbnail', NULL, 1),
+                                                                                                                                                   (71, 25, 'navigation_search_position_top', '1', 'Zobrazit vyhledávacáí políčko v horní navigaci', 'Height of thumbnail', 'boolean', '1');
 
 CREATE TABLE `settings_categories` (
   `id` int(11) NOT NULL,
@@ -879,17 +880,18 @@ CREATE TABLE `settings_categories` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
 
 
-INSERT INTO `settings_categories` (`id`, `parent_id`, `description`, `title`, `sorted`) VALUES
-                                                                                               (3, NULL, NULL, 'Šablony', 146),
-                                                                                               (10, NULL, NULL, 'Základní nastavení', 146),
-                                                                                               (12, NULL, NULL, 'Členové', 148),
-                                                                                               (15, NULL, NULL, 'Blog', 154),
-                                                                                               (16, 3, NULL, 'Kontakty', 166),
-                                                                                               (17, NULL, NULL, 'Služby', 176),
-                                                                                               (20, NULL, NULL, 'Vzhled', 154),
-                                                                                               (21, 20, NULL, 'Carousel', 155),
-                                                                                               (23, NULL, '', 'Media', 0),
-                                                                                               (24, 3, NULL, 'Homepage', 166);
+INSERT INTO `settings_categories` (`id`, `parent_id`, `description`, `title`, `title_en`, `sorted`) VALUES
+                                                                                                           (3, NULL, NULL, 'Šablony', 'Templates', 166),
+                                                                                                           (10, NULL, NULL, 'Základní nastavení', 'Basic', 146),
+                                                                                                           (12, NULL, NULL, 'Členové', 'Members', 148),
+                                                                                                           (15, NULL, NULL, 'Blog', 'Blog', 154),
+                                                                                                           (16, 3, NULL, 'Kontakty', 'Contacts', 165),
+                                                                                                           (17, NULL, NULL, 'Služby', 'Services', 176),
+                                                                                                           (20, NULL, NULL, 'Vzhled', 'Appearance', 154),
+                                                                                                           (21, 20, NULL, 'Carousel', 'Carousel', 155),
+                                                                                                           (23, NULL, '', 'Media', 'Media', 0),
+                                                                                                           (24, 3, NULL, 'Homepage', 'Homepage', 167),
+                                                                                                           (25, NULL, NULL, 'Navigace', 'Navigation', 170);
 
 
 CREATE TABLE `snippets` (

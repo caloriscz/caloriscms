@@ -47,15 +47,12 @@ class SlugRouter implements Nette\Application\IRouter
                 } else {
                     $slugName = $parts[0];
                 }
-
+            } else if (\count($parts) === 2) {
+                $slugName = $parts[1];
+                $params['prefix'] = $parts[0];
             } else {
-                if (\count($parts) === 2) {
-                    $slugName = $parts[1];
-                    $params['prefix'] = $parts[0];
-                } else {
-                    $slugName = $parts[0];
-                    $params['prefix'] = null;
-                }
+                $slugName = $parts[0];
+                $params['prefix'] = null;
             }
 
             //get row by slug

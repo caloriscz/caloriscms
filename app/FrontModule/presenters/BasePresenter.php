@@ -1,4 +1,5 @@
 <?php
+
 namespace App\FrontModule\Presenters;
 
 use App\Forms\Pages\AdvancedSearchControl;
@@ -11,6 +12,7 @@ use Caloriscz\Page\PageDocumentControl;
 use Caloriscz\Page\PageSlugControl;
 use Caloriscz\Page\PageTitleControl;
 use Caloriscz\Utilities\PagingControl;
+use ContactControl;
 use Kdyby\Doctrine\EntityManager;
 use Kdyby\Translation\Translator;
 use Nette;
@@ -58,7 +60,7 @@ abstract class BasePresenter extends Presenter
     protected function createTemplate($class = null)
     {
         $template = parent::createTemplate($class);
-        $template->addFilter(NULL, '\Filters::common');
+        $template->addFilter(null, '\Filters::common');
 
         return $template;
     }
@@ -84,8 +86,7 @@ abstract class BasePresenter extends Presenter
         // IP mode
         $ip = explode(';', $this->template->settings['site_ip_whitelist']);
 
-        if (strlen($this->template->settings['site_ip_whitelist']) < 4 || in_array($_SERVER['REMOTE_ADDR'], $ip, true)) {
-        } else {
+        if (strlen($this->template->settings['site_ip_whitelist']) >= 4 && !in_array($_SERVER['REMOTE_ADDR'], $ip, true)) {
             if (empty($this->template->settings['maintenance_message'])) {
                 include_once('.maintenance.php');
             } else {
@@ -99,9 +100,9 @@ abstract class BasePresenter extends Presenter
         $secret = $this->request->getCookie('secretx');
 
         if ($this->template->settings['site_cookie_whitelist'] !== '') {
-            if ($this->template->settings["site_cookie_whitelist"] != $secret) {
-                if ($_GET["secretx"] == $this->template->settings["site_cookie_whitelist"]) {
-                    setcookie("secretx", $this->template->settings["site_cookie_whitelist"], time() + 3600000);
+            if ($this->template->settings['site_cookie_whitelist'] !== $secret) {
+                if ($_GET['secretx'] === $this->template->settings['site_cookie_whitelist']) {
+                    setcookie('secretx', $this->template->settings['site_cookie_whitelist'], time() + 3600000);
                 } else {
                     if (empty($this->template->settings['maintenance_message'])) {
                         include_once('.maintenance.php');
@@ -121,7 +122,7 @@ abstract class BasePresenter extends Presenter
         $this->template->langSelected = $this->translator->getLocale();
         $this->template->langDefault = $this->translator->getDefaultLocale();
 
-        if ($this->translator->getLocale() != $this->translator->getDefaultLocale()) {
+        if ($this->translator->getLocale() !== $this->translator->getDefaultLocale()) {
             $this->template->langSuffix = '_' . $this->translator->getLocale();
         }
 
@@ -129,8 +130,7 @@ abstract class BasePresenter extends Presenter
             if ($this->user->isLoggedIn()) {
                 $this->template->isLoggedIn = true;
 
-                $this->template->member = $this->database->table('users')
-                    ->get($this->user->getId());
+                $this->template->member = $this->database->table('users')->get($this->user->getId());
             } else {
                 $this->template->isLoggedIn = false;
             }
@@ -141,8 +141,6 @@ abstract class BasePresenter extends Presenter
         $this->template->appDir = APP_DIR;
         $this->template->languageSelected = $this->translator->getLocale();
         $this->template->slugArray = [];
-
-
     }
 
     protected function createComponentPaging(): PagingControl
@@ -155,9 +153,9 @@ abstract class BasePresenter extends Presenter
         return new NavigationControl($this->database);
     }
 
-    protected function createComponentContact(): \ContactControl
+    protected function createComponentContact(): ContactControl
     {
-        return new \ContactControl($this->database);
+        return new ContactControl($this->database);
     }
 
     protected function createComponentAdvancedSearch(): AdvancedSearchControl
@@ -209,7 +207,6 @@ abstract class BasePresenter extends Presenter
             'content' => $this->getParameter('text')
         ]);
         exit();
-
     }
 
     /**
@@ -221,6 +218,5 @@ abstract class BasePresenter extends Presenter
             'title' => $this->getParameter('text')
         ]);
         exit();
-
     }
 }

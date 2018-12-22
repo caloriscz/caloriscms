@@ -33,6 +33,12 @@ class NavigationControl extends Control
         return new MenuControl($this->database);
     }
 
+    public function handleChangeLocale($locale): void
+    {
+        $this->presenter->translator->setLocale($locale);
+        $this->presenter->redirect('this');
+    }
+
     public function render(): void
     {
         $template = $this->getTemplate();

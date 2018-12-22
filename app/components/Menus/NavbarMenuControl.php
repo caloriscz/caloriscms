@@ -1,4 +1,5 @@
 <?php
+
 namespace Caloriscz\Menus;
 
 use Nette\Application\UI\Control;
@@ -24,12 +25,23 @@ class NavbarMenuControl extends Control
         $template->id = $id;
         $template->style = $style;
 
+        // Language support > 1 = multilanguage else only one langauge
+        $template->languages = $this->database->table('languages')->where('default = 1 AND code = ?', $this->presenter->translator->getLocale());
+
+        if ($template->languages->count() === 0) {
+            $template->needsPrefix = true;
+        } else {
+            $template->needsPrefix = false;
+        }
+
+        $template->langSelected = $this->presenter->translator->getLocale();
+
         // load menu info from menu_menus
         $template->menu = $this->database->table('menu_menus')->get($id);
 
         if ($template->menu) {
             $template->class = $template->menu->class;
-            $template->categories = $this->database->table('menu')->where('parent_id', $id);
+            $template->categories = $this->database->table('menu')->where( ['parent_id' => $id]);
         } else {
 
         }
