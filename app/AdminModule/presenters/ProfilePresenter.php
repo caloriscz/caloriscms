@@ -11,11 +11,11 @@ use Apps\Forms\Profile\EditControl;
  */
 class ProfilePresenter extends BasePresenter
 {
-    protected function createComponentEditProfile()
+    protected function createComponentEditProfile(): EditControl
     {
         $control = new EditControl($this->database);
         $control->onSave[] = function ($error = false) {
-            if ($error != false) {
+            if ($error !== false) {
                 $this->flashMessage($error, 'error');
             }
 
@@ -25,7 +25,7 @@ class ProfilePresenter extends BasePresenter
         return $control;
     }
 
-    protected function createComponentProfileChangePassword()
+    protected function createComponentProfileChangePassword(): ChangePasswordControl
     {
         return new ChangePasswordControl($this->database);
     }

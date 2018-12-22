@@ -4,7 +4,6 @@ namespace Caloriscz\Navigation;
 
 use Nette\Application\UI\Control;
 use Nette\Database\Context;
-use Nette\Forms\BootstrapUIForm;
 
 class AdminBarControl extends Control
 {

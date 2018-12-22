@@ -2,6 +2,7 @@
 
 namespace App\Forms\Profile;
 
+use DateTime;
 use Nette\Application\UI\Control;
 use Nette\Database\Context;
 use Nette\Forms\BootstrapUIForm;
@@ -20,9 +21,8 @@ class ChangePasswordControl extends Control
 
     /**
      * Form: User fills in e-mail address to send e-mail with a password generator link
-     * @return string
      */
-    protected function createComponentChangePasswordForm(): string
+    protected function createComponentChangePasswordForm(): BootstrapUIForm
     {
         $form = new BootstrapUIForm();
         $form->setTranslator($this->presenter->translator);
@@ -51,13 +51,12 @@ class ChangePasswordControl extends Control
             $this->presenter->flashMessage('Hesla se neshodují');
         }
 
-        $this->database->table('users')->where([
-            'id' => $this->presenter->user->getId(),
-        ])->update([
-            'password' => $passwordEncrypted,
-        ]);
+        $this->database->table('users')->where(['id' => $this->presenter->user->getId()])->update(
+            ['password' => $passwordEncrypted]
+        );
 
-        setcookie('calpwd', $passwordEncrypted, time() + time() + 60 * 60 * 24 * 30, '/');
+        $date = new Datetime('+1 month');
+        setcookie('calpwd', $passwordEncrypted, $date->format('C'), '/');
 
         $this->presenter->redirect('this');
     }
@@ -67,5 +66,14 @@ class ChangePasswordControl extends Control
         $template = $this->getTemplate();
         $template->setFile(__DIR__ . '/ChangePasswordControl.latte');
         $template->render();
+    }
+
+    /**
+     * Forces control to repaint.
+     * @return void
+     */
+    function redrawControl()
+    {
+        // TODO: Implement redrawControl() method.
     }
 }
