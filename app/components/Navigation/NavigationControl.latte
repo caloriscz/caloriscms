@@ -22,19 +22,18 @@
             {/if}
 
             <div class="dropdown">
-                <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu2"
-                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">EN</button>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                    <a href="{link changeLocale!, en}" class="dropdown-item">en</a>
-                </div>
+                {if $langSelected != false}
+                    <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu2"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{$langSelected->code}
+                    </button>
+                {/if}
+                {foreach $languages as $language}
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                        <a href="{link changeLocale!, locale => $language->code}"
+                           class="dropdown-item">{$language->code}</a>
+                    </div>
+                {/foreach}
             </div>
-
-            <ul class="nav navbar-right">
-                <li{if $langSelected == 'cs'} class="active"{/if}>
-                    <a href="{plink "this", locale => 'cs', (expand)$args}">cs</a></li>
-                <li{if $langSelected == 'en'} class="active"{/if}>
-                    <a href="{plink "this", locale => 'en', (expand)$args}">en</a></li>
-            </ul>
         </div>
     </div>
 </nav>

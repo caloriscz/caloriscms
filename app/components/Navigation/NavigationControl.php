@@ -36,14 +36,32 @@ class NavigationControl extends Control
     public function handleChangeLocale($locale): void
     {
         $this->presenter->translator->setLocale($locale);
-        $this->presenter->redirect('this');
+
+        // Language support > 1 = multilanguage else only one langauge
+        $languages = $this->database->table('languages')->where('default = 1 AND code = ?', $this->presenter->translator->getLocale());
+
+        if ($languages->count() === 0) {
+            $this->presenter->redirectUrl('/' . $locale);
+        } else {
+            $this->presenter->redirectUrl('/');
+        }
     }
 
     public function render(): void
     {
         $template = $this->getTemplate();
         $template->settings = $this->presenter->template->settings;
-        $template->langSelected = $this->presenter->translator->getLocale();
+
+        $languageSelected = $this->database->table('languages')->where('used = 1 AND code = ', $this->presenter->translator->getLocale());
+
+        if ($languageSelected->count() > 0) {
+            $template->langSelected = $languageSelected->fetch();
+        } else {
+            $template->langSelected = false;
+        }
+
+
+        $template->languages = $this->database->table('languages')->where('used = 1 AND NOT code = ', $this->presenter->translator->getLocale());
         $template->user = $this->presenter->user;
 
         if (isset($this->presenter->template->member)) {
@@ -53,5 +71,14 @@ class NavigationControl extends Control
         $template->args = $this->presenter->getParameters(true);
         $template->setFile(__DIR__ . '/NavigationControl.latte');
         $template->render();
+    }
+
+    /**
+     * Forces control to repaint.
+     * @return void
+     */
+    function redrawControl()
+    {
+        // TODO: Implement redrawControl() method.
     }
 }

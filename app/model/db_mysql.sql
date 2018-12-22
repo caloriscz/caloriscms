@@ -891,11 +891,6 @@ CREATE TABLE `snippets` (
   `content` text COLLATE utf8_czech_ci
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
 
-CREATE TABLE `test` (
-  `id` int(11) NOT NULL,
-  `title` varchar(100) COLLATE utf8_czech_ci DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
-
 CREATE TABLE `users` (
   `id` int(11) NOT NULL,
   `username` char(40) CHARACTER SET latin1 NOT NULL,
