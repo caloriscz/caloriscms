@@ -4,6 +4,7 @@ namespace App\AdminModule\Presenters;
 
 use App\Forms\Menu\EditMenuControl;
 use App\Forms\Menu\InsertMenuControl;
+use App\Forms\Menu\InsertMenuMenusControl;
 use App\Forms\Menu\MenuMenusEditControl;
 use App\Forms\Menu\UpdateImagesControl;
 use App\Model\IO;
@@ -27,8 +28,13 @@ class MenuPresenter extends BasePresenter
     }
 
     protected function createComponentMenuInsert(): InsertMenuControl
+{
+    return new InsertMenuControl($this->database);
+}
+
+    protected function createComponentMenuMenusInsert(): InsertMenuMenusControl
     {
-        return new InsertMenuControl($this->database);
+        return new InsertMenuMenusControl($this->database);
     }
 
     protected function createComponentMenuEdit(): EditMenuControl

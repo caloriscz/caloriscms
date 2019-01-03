@@ -13,7 +13,7 @@
 <div class="container-fluid">
     <div class="animated fadeIn">
         <div class="row">
-            <div class="col-lg-3">
+            <div class="col-lg-4">
                 <div class="card">
                     <div class="card-header">
                         <strong>Seznam menu</strong>
@@ -24,17 +24,25 @@
                 </div>
                 <div class="card">
                     <div class="card-header">
-                        <strong>Vložit menu</strong>
+                        <strong>Vložit nové menu</strong>
+                    </div>
+                    <div class="card-block">
+                        {control menuMenusInsert}
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <strong>Vložit položku do menu</strong>
                     </div>
                     <div class="card-block">
                         {control menuInsert}
                     </div>
                 </div>
             </div>
-            <div class="col-lg-9">
+            <div class="col-lg-8">
                 <div class="card">
                     <div class="card-header">
-                        <strong>Menu</strong>
+                        <strong>Strom</strong>
                     </div>
                     <div class="card-block">
                         {if $presenter->getParameter('id')}

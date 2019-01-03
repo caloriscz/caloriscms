@@ -17,7 +17,7 @@ class MenuListControl extends Control
         $this->database = $database;
     }
 
-    protected function createComponentMenuInsert()
+    protected function createComponentMenuInsert(): InsertMenuControl
     {
         return new InsertMenuControl($this->database);
     }
@@ -26,14 +26,14 @@ class MenuListControl extends Control
      * Delete menu
      * @throws \Nette\Application\AbortException
      */
-    public function handleDelete()
+    public function handleDelete(): void
     {
         $this->database->table('menu_menus')->get($this->getPresenter()->getParameter('id'))->delete();
 
         $this->getPresenter()->redirect('this');
     }
 
-    public function render()
+    public function render(): void
     {
         $template = $this->getTemplate();
         $template->menu = $this->database->table('menu_menus')->order('title');

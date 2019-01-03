@@ -93,9 +93,13 @@ class MenuEditorControl extends Control
         ])->order('sorted')->limit(1, $this->getPresenter()->getParameter('position'));
 
         if ($menui->count() > 0) {
+                Debugger::barDump($this->getPresenter()->getParameter('position'));
+
             if ($this->getPresenter()->getParameter('position') === 0) {
+                Debugger::barDump('2');
                 $arr['sorted'] = ($menui->fetch()->sorted - 1);
             } else {
+                Debugger::barDump('3');
                 $arr['sorted'] = ($menui->fetch()->sorted + 1);
             }
         }

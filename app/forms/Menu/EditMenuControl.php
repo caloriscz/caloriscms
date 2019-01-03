@@ -26,7 +26,7 @@ class EditMenuControl extends Control
     {
         $pages = new Page($this->database);
         $categoryAll = new Menu($this->database);
-        $category = $this->database->table("menu")->get($this->presenter->getParameter("id"));
+        $category = $this->database->table('menu')->get($this->presenter->getParameter('id'));
         $categories = $categoryAll->getAll();
         unset($categories[$category->id]);
 
@@ -64,7 +64,11 @@ class EditMenuControl extends Control
         return $form;
     }
 
-    public function editFormSucceeded(BootstrapUIForm $form)
+    /**
+     * @param BootstrapUIForm $form
+     * @throws \Nette\Application\AbortException
+     */
+    public function editFormSucceeded(BootstrapUIForm $form): void
     {
         $this->database->table('menu')->get($form->values->id)
             ->update([
@@ -78,7 +82,7 @@ class EditMenuControl extends Control
         $this->presenter->redirect('this', ['id' => $form->values->id]);
     }
 
-    public function render()
+    public function render(): void
     {
         $template = $this->getTemplate();
         $template->languages = $this->database->table('languages')->where('default', null);
