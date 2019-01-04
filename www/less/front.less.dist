@@ -1,0 +1,25 @@
+@import 'caloris-front';
+
+body, wrapper {
+  min-height:100vh;
+}
+
+.page {
+  flex:1;
+  padding: 3rem 1.5rem 0rem 1.5rem;
+  text-align: center;
+}
+
+footer {
+  
+  background-color: #e3f2fd;
+  
+  a {
+    color: #212529;
+  }
+}
+
+//Bs4 menu hover
+.dropdown:hover>.dropdown-menu {
+  display: block;
+}

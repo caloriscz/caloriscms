@@ -1,1 +1,5 @@
-<div contenteditable="true" data-snippet="{$snippetId}">{$snippet|noescape}</div>
+{if $enabled}
+    <div contenteditable="true" data-snippet="{$snippetId}">{$snippet|noescape}</div>
+{else}
+    {$snippet|noescape}
+{/if}

@@ -25,7 +25,6 @@ class EditFormControl extends Control
 
         $snippet = $this->database->table('snippets')->get($this->getPresenter()->getParameter('id'));
 
-        $form->addHidden('page_id');
         $form->addHidden('snippet_id');
         $form->addHidden('pages_id');
         $form->addHidden('l');
@@ -41,8 +40,7 @@ class EditFormControl extends Control
             $arr['l'] = $this->getPresenter()->getParameter('l');
         }
 
-        $arr['page_id'] = $this->getPresenter()->getParameter('id');
-        $arr['snippet_id'] = $this->getPresenter()->getParameter('snippet');
+        $arr['snippet_id'] = $this->presenter->getParameter('id');
 
         $form->setDefaults($arr);
 
@@ -72,8 +70,9 @@ class EditFormControl extends Control
             'content' . $langSuffix => $content,
         ]);
 
-        $this->getPresenter()->redirect('this', [
-            'id' => $form->values->page_id,
+
+        $this->presenter->redirect('this', [
+            'id' => $form->values->snippet_id,
             'snippet' => $form->values->snippet_id,
             'l' => $form->values->l
         ]);

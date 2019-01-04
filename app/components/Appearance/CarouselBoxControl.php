@@ -12,12 +12,10 @@ class CarouselBoxControl extends Control
 
     public function __construct(Context $database)
     {
-        parent::__construct();
-
         $this->database = $database;
     }
 
-    public function render()
+    public function render(): void
     {
         $this->template->settings = $this->presenter->template->settings;
         $this->template->carousel = $this->database->table('carousel')->where(['visible' => 1])->order('sorted');

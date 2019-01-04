@@ -1,25 +1,43 @@
 @import 'caloris-front';
 
 body, wrapper {
-  min-height:100vh;
+  min-height: 100vh;
 }
 
 .page {
-  flex:1;
-  padding: 3rem 1.5rem 0rem 1.5rem;
+  flex: 1;
+  padding: 3rem 1.5rem 0 0;
   text-align: center;
 }
 
 footer {
-  
+
   background-color: #e3f2fd;
-  
+
   a {
     color: #212529;
   }
 }
 
 //Bs4 menu hover
-.dropdown:hover>.dropdown-menu {
+.dropdown:hover > .dropdown-menu {
   display: block;
+}
+
+// Homepage
+.claim {
+  background: url(../images/claim_bg_1900px.jpg) no-repeat center top;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 274px;
+
+  div {
+    color: #ffffff;
+    font-size: 3rem;
+  }
+}
+
+.menu-portfolio {
+  border: 1px solid red;
 }
