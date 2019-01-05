@@ -7,8 +7,20 @@
         scrolling: false
     });
 
-    /* Laniakea: Alternative image on hover */
-    $('.img-hovered').hover(sourceSwap, sourceSwap);
+    /* Alternative image on hover */
+    $('.img-hovered').hover(function () {
+            var source = $(this).attr('src');
+            $(this).attr('src', $(this).data('alt-src'));
+            $(this).data('alt-src', source);
+            return sourceSwap;
+        }, function () {
+            var source = $(this).data('alt-src');
+
+            $(this).data('alt-src', $(this).attr('src'));
+            $(this).attr('src', source);
+            return sourceSwap;
+        }
+    );
 
 })(jQuery);
 
@@ -34,13 +46,3 @@ $('body').on('focus', '[contenteditable]', function (e) {
         });
     }
 });
-
-
-
-/* Functions */
-var sourceSwap = function () {
-    var $this = $(this);
-    var newSource = $this.data('alt-src');
-    $this.data('alt-src', $this.attr('src'));
-    $this.attr('src', newSource);
-}
