@@ -624,8 +624,8 @@ CREATE TABLE `menu_menus` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
 
 INSERT INTO `menu_menus` (`id`, `title`, `description`, `type`, `class`) VALUES
-                                                                                (1, 'Top', 'Menu pro horní navigaci', 'TopMenu', 'navbar-nav mr-auto'),
-                                                                                (2, 'Bottom', 'Jednoduché menu pro spodní navigaci', 'SimpleMenu', 'nav flex-column');
+                                                                                (1, 'Top', 'Menu pro horní navigaci', 'Menu', 'navbar-nav mr-auto'),
+                                                                                (2, 'Bottom', 'Jednoduché menu pro spodní navigaci', 'BadgesMenu', 'nav flex-column');
 
 CREATE TABLE `pages` (
   `id` int(11) NOT NULL,
@@ -851,8 +851,8 @@ INSERT INTO `settings` (`id`, `settings_categories_id`, `setkey`, `setvalue`, `d
                                                                                                                                                    (46, 17, 'social:twitter:account', '', 'Účet na Twitteru', 'Twitter account', NULL, 1),
                                                                                                                                                    (60, 20, 'appearance:paths:logo', '', 'Obrázek loga ve vysokém rozlišení a barvě', 'Image of logo in high resolution and color', 'local_path', 0),
                                                                                                                                                    (61, 20, 'appearance:paths:favicon:ico', 'favicon.ico', 'Favicon s příponou ico', 'Favicon with ico suffix', 'local_path', 0),
-                                                                                                                                                   (62, 21, 'appearance:carousel:directions', '0', 'Zobrazit indikátory (levá a pravá šipka)', 'Show indicators (left and right arrow)', 'boolean', 1),
-                                                                                                                                                   (63, 21, 'appearance:carousel:indicators', '0', 'Zobrazit menu', 'Show menu', 'boolean', 1),
+                                                                                                                                                   (62, 21, 'appearance_carousel_directions', '0', 'Zobrazit indikátory (levá a pravá šipka)', 'Show indicators (left and right arrow)', 'boolean', 1),
+                                                                                                                                                   (63, 21, 'appearance_carousel_indicators', '0', 'Zobrazit menu', 'Show menu', 'boolean', 1),
                                                                                                                                                    (64, 12, 'members_username_as_email', '0', 'Použít e-mail jako uživatelské jméno', 'Use e-mail as username', 'boolean', 1),
                                                                                                                                                    (65, 12, 'members_signup_message', '0', 'Možnost napsat zprávu při registraci', 'Option to write message in signup', 'boolean', 1),
                                                                                                                                                    (66, 12, 'members_signup_conditions_agree', '0', 'Souhlasit s podmínkami zaškrtávací tlačítko', 'Agree with conditions box', 'boolean', 1),
@@ -861,7 +861,8 @@ INSERT INTO `settings` (`id`, `settings_categories_id`, `setkey`, `setvalue`, `d
                                                                                                                                                    (69, 23, 'media_thumb_width', '300', 'Šířka náhledu', 'Width of thumbnail', NULL, 1),
                                                                                                                                                    (70, 23, 'media_thumb_height', '200', 'Výška náhledu', 'Height of thumbnail', NULL, 1),
                                                                                                                                                    (71, 25, 'navigation_search_position_top', '1', 'Zobrazit vyhledávacáí políčko v horní navigaci', 'Height of thumbnail', 'boolean', '1'),
-                                                                                                                                                   (72, '16', 'homepage_template', 'Homepage', 'Soubor s vybranou šablonou', 'File with chosen template', '', '1');
+                                                                                                                                                   (72, 16, 'homepage_template', 'Homepage', 'Soubor s vybranou šablonou', 'File with chosen template', '', '1'),
+                                                                                                                                                   (73, 21, 'appearance_carousel_caption', '1', 'Zobrazit titulek k položce', 'Show item title', 'boolean', '1');
 
 CREATE TABLE `settings_categories` (
   `id` int(11) NOT NULL,

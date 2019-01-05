@@ -1,11 +1,11 @@
 <div id="carousel-example-generic" class="carousel slide carousel-fade" data-ride="carousel">
-    {if $settings['appearance:carousel:indicators']}
+    {if $settings['appearance_carousel_indicators']}
         <ol class="carousel-indicators">
             {var $i = 0}
             {foreach $carousel as $item}
                 {var $i = $i + 1}
                 <li data-target="#carousel-example-generic" data-slide-to="{$i}"
-                    {if $iterator->first} class="active"{/if}></li>
+                        {if $iterator->first} class="active"{/if}></li>
             {/foreach}
         </ol>
     {/if}
@@ -15,14 +15,16 @@
                 <a href="{$item->uri}">
                     <img src="/images/carousel/{$item->image}" class="d-block w-100">
                 </a>
-                <div class="carousel-caption">
-                    {$item->title}
-                </div>
+                {if $settings['appearance_carousel_caption']}
+                    <div class="carousel-caption">
+                        {$item->title}
+                    </div>
+                {/if}
             </div>
         {/foreach}
     </div>
 
-    {if $settings['appearance:carousel:directions']}
+    {if $settings['appearance_carousel_directions']}
         <a class="carousel-control-prev" href="#carousel-example-generic" role="button" data-slide="prev">
             <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
             <span class="sr-only">Previous</span>
