@@ -8,7 +8,9 @@
     <li class="breadcrumb-item active"><a href="/admin/menu/detail-images/{$presenter->getParameter('id')}">Detail</a></li>
     <li class="breadcrumb-menu">
         <div class="btn-group" role="group">
-            <a class="btn" href="./"><i class="icon-picture"></i> &nbsp;Obrázky</a>
+            <a class="btn" href="/admin/menu/detail-images/{$presenter->getParameter('id')}"><i class="icon-picture"></i> &nbsp;
+                {_dictionary.main.images|firstUpper}
+            </a>
         </div>
     </li>
 </ol>

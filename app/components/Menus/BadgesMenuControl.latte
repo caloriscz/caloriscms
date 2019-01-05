@@ -1,0 +1,21 @@
+<div class="{$class}">
+    {foreach $categories as $row}
+        <div class="portfolio-item">
+            <div class="portfolio-item-image">
+                <a href={$langPrefix.$row->{'url'.$langSuffix}}"">
+                    <img src="/images/menu/{$row->id}.png" data-alt-src="/images/menu/{$row->id}_h.png" class="img-hovered" alt="">
+                </a>
+            </div>
+            <p class="portfolio-item-title">
+                <a href="{$langPrefix.$row->{'url'.$langSuffix}}">
+                    {var $title = 'title'.$langSuffix}
+                    <span>{$row->{$title}}</span>
+                </a>
+            </p>
+            <p class="portfolio-item-description">
+                {var $description = 'description'.$langSuffix}
+                <span>{$row->{$description}}</span>
+            </p>
+        </div>
+    {/foreach}
+</div>

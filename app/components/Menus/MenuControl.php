@@ -33,7 +33,7 @@ class MenuControl extends Control
             $template->langPrefix = '/' . $this->presenter->translator->getLocale();
         }
 
-        $template->setFile(__DIR__ . '/MenuControl.latte');
+        $template->setFile(__DIR__ . '/' . $menus->type . 'Control.latte');
 
         $template->active = strtok($_SERVER['REQUEST_URI'], '?');
 
