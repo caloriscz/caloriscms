@@ -69,7 +69,7 @@ class NavigationControl extends Control
         }
 
         $template->args = $this->presenter->getParameters(true);
-        $template->setFile(__DIR__ . '/NavigationControl.latte');
+        $template->setFile(__DIR__ . '/' . $template->settings['navigation_template'] . 'Control.latte');
         $template->render();
     }
 

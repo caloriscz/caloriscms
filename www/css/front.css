@@ -1350,8 +1350,12 @@ wrapper {
 }
 .page {
   flex: 1;
-  padding: 3rem 1.5rem 0rem 1.5rem;
+  padding: 0;
   text-align: center;
+}
+ul.nav.ml-auto.tpa li a {
+  color: #000000;
+  text-transform: uppercase;
 }
 footer {
   background-color: #e3f2fd;
@@ -1359,6 +1363,74 @@ footer {
 footer a {
   color: #212529;
 }
+.carousel-portfolio-box {
+  position: relative;
+}
 .dropdown:hover > .dropdown-menu {
   display: block;
+}
+#carousel-example-generic {
+  position: relative;
+  z-index: 1;
+}
+footer {
+  background-color: #f0f0f0;
+  color: #4d4d4d !important;
+}
+.claim {
+  background: url(../images/claim_bg_1900px.jpg) no-repeat center top;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 274px;
+}
+.claim div {
+  color: #ffffff;
+  font-size: 3rem;
+}
+.portfolio {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: -295px;
+}
+.portfolio > div {
+  list-style-type: none;
+  z-index: 1000;
+}
+.portfolio > div p.portfolio-item-title a {
+  color: white;
+  font-size: 1.40rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+.portfolio > div p.portfolio-item-description {
+  margin-top: 40px;
+}
+.portfolio > div p.portfolio-item-description a {
+  color: #4d4d4d;
+  font-size: 1.25rem;
+}
+.services {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 30px;
+}
+.services > div {
+  list-style-type: none;
+}
+.services > div p.services-item-title {
+  margin-top: 10px;
+}
+.services > div p.services-item-title a {
+  color: #000000;
+  font-size: 1.60rem;
+}
+.services > div p.servies-item-description {
+  margin-top: 40px;
+}
+.services > div p.servies-item-description a {
+  color: #4d4d4d;
+  font-size: 1.25rem;
 }

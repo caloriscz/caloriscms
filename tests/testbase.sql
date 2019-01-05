@@ -862,7 +862,9 @@ INSERT INTO `settings` (`id`, `settings_categories_id`, `setkey`, `setvalue`, `d
                                                                                                                                                    (70, 23, 'media_thumb_height', '200', 'Výška náhledu', 'Height of thumbnail', NULL, 1),
                                                                                                                                                    (71, 25, 'navigation_search_position_top', '1', 'Zobrazit vyhledávacáí políčko v horní navigaci', 'Height of thumbnail', 'boolean', '1'),
                                                                                                                                                    (72, 16, 'homepage_template', 'Homepage', 'Soubor s vybranou šablonou', 'File with chosen template', '', '1'),
-                                                                                                                                                   (73, 21, 'appearance_carousel_caption', '1', 'Zobrazit titulek k položce', 'Show item title', 'boolean', '1');
+                                                                                                                                                   (73, 21, 'appearance_carousel_caption', '1', 'Zobrazit titulek k položce', 'Show item title', 'boolean', '1'),
+                                                                                                                                                   (74, 25, 'navigation_footer_template', 'Footer', 'Soubor s vybranou šablonou pro patičku', 'File with chosen template for footer', '', '1'),
+                                                                                                                                                   (75, 25, 'navigation_template', 'Navigation', 'Soubor s vybranou šablonou pro hlavičku', 'File with chosen template for header', '', '1');
 
 CREATE TABLE `settings_categories` (
   `id` int(11) NOT NULL,

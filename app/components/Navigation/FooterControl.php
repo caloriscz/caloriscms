@@ -15,30 +15,30 @@ class FooterControl extends Control
 
     public function __construct(Context $database)
     {
-        parent::__construct();
         $this->database = $database;
     }
 
-    protected function createComponentSocialFacebook()
+    protected function createComponentSocialFacebook(): FacebookControl
     {
         return new FacebookControl();
     }
 
-    protected function createComponentNewsletterForm()
+    protected function createComponentNewsletterForm(): NewsletterFormControl
     {
         return new NewsletterFormControl($this->database);
     }
 
-    protected function createComponentMenu()
+    protected function createComponentMenu(): MenuControl
     {
         return new MenuControl($this->database);
     }
 
-    public function render()
+    public function render(): void
     {
-        $this->template->settings = $this->presenter->template->settings;
-        $this->template->setFile(__DIR__ . '/FooterControl.latte');
-        $this->template->render();
+        $template = $this->getTemplate();
+        $template->settings = $this->presenter->template->settings;
+        $template->setFile(__DIR__ . '/' . $template->settings['navigation_footer_template'] . 'Control.latte');
+        $template->render();
     }
 
 }
