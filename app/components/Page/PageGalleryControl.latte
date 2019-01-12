@@ -1,0 +1,11 @@
+<div class="container">
+    <div class="cal-gallery card-deck">
+        {foreach $pictures as $picture}
+            <div class="card">
+                <div class="image-cover">
+                    <img src="/pictures/{$picture->pages_id}/tn/{$picture->name}">
+                </div>
+            </div>
+        {/foreach}
+    </div>
+</div>

@@ -16,9 +16,11 @@ class PageTitleControl extends Control
         $this->database = $database;
     }
 
-    public function render($page)
+    public function render($page): void
     {
-        $this->template->page = $page;
+        $template = $this->getTemplate();
+
+        $template->page = $page;
 
         if ($page) {
             if ($this->getPresenter()->translator->getLocale() === $this->getPresenter()->translator->getDefaultLocale()) {
@@ -27,15 +29,15 @@ class PageTitleControl extends Control
                 $title = $page->{'title_' . $this->getPresenter()->translator->getLocale()};
             }
 
-            $this->template->title = $title;
-            $this->template->pageId = $page->id;
+            $template->title = $title;
+            $template->pageId = $page->id;
         } else {
-            $this->template->title = null;
-            $this->template->pageId = '';
+            $template->title = null;
+            $template->pageId = '';
         }
 
-        $this->template->setFile(__DIR__ . '/PageTitleControl.latte');
-        $this->template->render();
+        $template->setFile(__DIR__ . '/PageTitleControl.latte');
+        $template->render();
     }
 
 }

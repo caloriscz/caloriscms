@@ -37,6 +37,12 @@ class PageControl extends Control
         return new PageTitleControl($this->database);
     }
 
+    protected function createComponentPageGallery(): PageGalleryControl
+    {
+        return new PageGalleryControl($this->database);
+    }
+
+
     protected function createComponentPageDocument(): PageDocumentControl
     {
         return new PageDocumentControl($this->database);
