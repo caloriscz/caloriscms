@@ -3,7 +3,6 @@
 namespace App\FrontModule\Presenters;
 
 use App\Model\Filter;
-use Caloriscz\Blog\BlogListControl;
 use Caloriscz\Page\PageControl;
 
 /**
@@ -29,7 +28,7 @@ class PagesPresenter extends BasePresenter
     /**
      * Search page
      */
-    public function renderSearch()
+    public function renderSearch(): void
     {
         $filter = new Filter($this->database);
         $filter->setText($this->getParameter("s"));

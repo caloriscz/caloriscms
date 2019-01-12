@@ -1,22 +1,17 @@
 <?php
 
 namespace App\FrontModule\Presenters;
-use App\Forms\Helpdesk\HelpdeskControl;
 
+
+use Caloriscz\Page\ContactControl;
 
 /**
  * Contact presenter.
  */
 class ContactPresenter extends BasePresenter
 {
-    protected function createComponentHelpdesk()
+    protected function createComponentPageContact(): ContactControl
     {
-        return new HelpdeskControl($this->database);
+        return new ContactControl($this->database);
     }
-
-    public function renderDefault()
-    {
-        $this->template->page = $this->database->table('pages')->get(2);
-    }
-
 }

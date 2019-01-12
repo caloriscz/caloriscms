@@ -865,7 +865,8 @@ INSERT INTO `settings` (`id`, `settings_categories_id`, `setkey`, `setvalue`, `d
                                                                                                                                                    (73, 21, 'appearance_carousel_caption', '1', 'Zobrazit titulek k položce', 'Show item title', 'boolean', 1),
                                                                                                                                                    (74, 25, 'navigation_footer_template', 'Footer', 'Soubor s vybranou šablonou pro patičku', 'File with chosen template for footer', '', 1),
                                                                                                                                                    (75, 25, 'navigation_template', 'Navigation', 'Soubor s vybranou šablonou pro hlavičku', 'File with chosen template for header', '', 1),
-                                                                                                                                                   (76, 26, 'pages_template', 'Page', 'Soubor s vybranou šablonou pro běžné stránky', 'File with chosen template for pages', '', 1);
+                                                                                                                                                   (76, 26, 'pages_template', 'Page', 'Soubor s vybranou šablonou pro běžné stránky', 'File with chosen template for pages', '', 1),
+                                                                                                                                                   (77, 16, 'contacts_template', 'Contact', 'Soubor s vybranou šablonou pro stránku kontaktů', 'File with chosen template for Contacts', '', 1);
 
 CREATE TABLE `settings_categories` (
   `id` int(11) NOT NULL,

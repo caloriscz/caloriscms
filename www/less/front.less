@@ -7,7 +7,20 @@ body, wrapper {
 .page {
   flex: 1;
   padding: 0;
-  text-align: center;
+  text-align: left;
+  line-height: 1.7;
+
+  h1 {
+    font-weight: bold;
+    font-size: 2rem;
+    text-transform: uppercase;
+  }
+
+  .content {
+    @media (min-width: 768px) {
+      padding: 0;
+    }
+  }
 }
 
 // Navigation
@@ -122,5 +135,43 @@ footer {
       }
     }
 
+  }
+}
+
+// Aiplane
+table.table.tech-params {
+  margin-top: 40px;
+
+  tbody tr {
+    &:nth-child(even) {
+      background-color: #e6e6e6;
+    }
+
+    td {
+      &:first-child {
+        text-align: left;
+      }
+
+      &:nth-child(2), &:nth-child(3) {
+        border-left: 2px solid #ffffff;
+      }
+    }
+
+    &:first-child {
+      td {
+        &:first-child {
+          background-color: #4d4d4d;
+          color: #ffffff;
+          text-transform: capitalize;
+        }
+
+        &:nth-child(2), &:nth-child(3) {
+          border-left: 2px solid #ffffff;
+          background-color: #808080;
+          color: #ffffff;
+          text-transform: capitalize;
+        }
+      }
+    }
   }
 }
