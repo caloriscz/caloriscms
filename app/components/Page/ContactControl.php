@@ -45,6 +45,10 @@ class ContactControl extends Control
         // Choose template according to Settings
         $settings = $this->getPresenter()->template->settings;
         $template->page = $this->database->table('pages')->get(2);
+
+        // Main contact
+        $template->contact = $this->database->table('contacts')->get($settings['contacts:residency:contacts_id']);
+
         $template->setFile(__DIR__ . '/' . $settings['contacts_template'] . 'Control.latte');
         $template->render();
     }
