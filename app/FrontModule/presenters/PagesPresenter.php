@@ -4,19 +4,19 @@ namespace App\FrontModule\Presenters;
 
 use App\Model\Filter;
 use Caloriscz\Blog\BlogListControl;
+use Caloriscz\Page\PageControl;
 
 /**
  * Displays pages with page_type = 0
  */
 class PagesPresenter extends BasePresenter
 {
-    /**
-     * @return BlogListControl
-     */
-    protected function createComponentBlogList(): BlogListControl
+
+    protected function createComponentPage(): PageControl
     {
-        return new BlogListControl($this->database);
+        return new PageControl($this->database);
     }
+
 
     protected function startup()
     {

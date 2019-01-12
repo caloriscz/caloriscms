@@ -860,11 +860,12 @@ INSERT INTO `settings` (`id`, `settings_categories_id`, `setkey`, `setvalue`, `d
                                                                                                                                                    (68, 23, 'media_thumb_dir', 'tn', 'Adresář pro náhledy', 'Directory for thumbnails', NULL, 1),
                                                                                                                                                    (69, 23, 'media_thumb_width', '300', 'Šířka náhledu', 'Width of thumbnail', NULL, 1),
                                                                                                                                                    (70, 23, 'media_thumb_height', '200', 'Výška náhledu', 'Height of thumbnail', NULL, 1),
-                                                                                                                                                   (71, 25, 'navigation_search_position_top', '1', 'Zobrazit vyhledávací políčko v horní navigaci', 'Height of thumbnail', 'boolean', '1'),
-                                                                                                                                                   (72, 16, 'homepage_template', 'Homepage', 'Soubor s vybranou šablonou', 'File with chosen template', '', '1'),
-                                                                                                                                                   (73, 21, 'appearance_carousel_caption', '1', 'Zobrazit titulek k položce', 'Show item title', 'boolean', '1'),
-                                                                                                                                                   (74, 25, 'navigation_footer_template', 'Footer', 'Soubor s vybranou šablonou pro patičku', 'File with chosen template for footer', '', '1'),
-                                                                                                                                                   (75, 25, 'navigation_template', 'Navigation', 'Soubor s vybranou šablonou pro hlavičku', 'File with chosen template for header', '', '1');
+                                                                                                                                                   (71, 25, 'navigation_search_position_top', '1', 'Zobrazit vyhledávací políčko v horní navigaci', 'Height of thumbnail', 'boolean', 1),
+                                                                                                                                                   (72, 16, 'homepage_template', 'Homepage', 'Soubor s vybranou šablonou', 'File with chosen template', '', 1),
+                                                                                                                                                   (73, 21, 'appearance_carousel_caption', '1', 'Zobrazit titulek k položce', 'Show item title', 'boolean', 1),
+                                                                                                                                                   (74, 25, 'navigation_footer_template', 'Footer', 'Soubor s vybranou šablonou pro patičku', 'File with chosen template for footer', '', 1),
+                                                                                                                                                   (75, 25, 'navigation_template', 'Navigation', 'Soubor s vybranou šablonou pro hlavičku', 'File with chosen template for header', '', 1),
+                                                                                                                                                   (76, 26, 'pages_template', 'Page', 'Soubor s vybranou šablonou pro běžné stránky', 'File with chosen template for pages', '', 1);
 
 CREATE TABLE `settings_categories` (
   `id` int(11) NOT NULL,
@@ -886,7 +887,8 @@ INSERT INTO `settings_categories` (`id`, `parent_id`, `description`, `title`, `t
                                                                                                            (21, 20, NULL, 'Carousel', 'Carousel', 155),
                                                                                                            (23, NULL, '', 'Media', 'Media', 0),
                                                                                                            (24, 3, NULL, 'Homepage', 'Homepage', 167),
-                                                                                                           (25, NULL, NULL, 'Navigace', 'Navigation', 170);
+                                                                                                           (25, NULL, NULL, 'Navigace', 'Navigation', 170),
+                                                                                                           (26 ,3, 'Pages presenter pages', 'Stránky', 'Pages', 167);
 
 
 CREATE TABLE `snippets` (
