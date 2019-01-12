@@ -568,6 +568,16 @@ CREATE TABLE `links` (
   `description` text CHARACTER SET latin1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
 
+
+INSERT INTO `links_categories` (
+    `id` ,
+    `parent_id` ,
+    `description` ,
+    `title` ,
+    `sorted`
+    )
+VALUES (1, NULL , NULL , 'Odkazy', '1');
+
 CREATE TABLE `links_categories` (
   `id` int(11) NOT NULL,
   `parent_id` int(11) DEFAULT NULL,
@@ -655,7 +665,8 @@ INSERT INTO `pages` (`id`, `slug`, `title`, `document`, `preview`, `pages_id`, `
                                                                                                                                                                                                                                                                                                                                                 (4, 'galerie', 'Galerie', '', NULL, NULL, 1, 1, '', '', NULL, NULL, 9, 7, 71, 0, 0, 1),
                                                                                                                                                                                                                                                                                                                                                 (5, 'udalosti', 'Události', '', NULL, 1, 1, 1, '', '', NULL, NULL, 9, 10, 73, 0, 0, 1),
                                                                                                                                                                                                                                                                                                                                                 (6, 'dokumenty', 'Dokumenty', '', NULL, NULL, 1, 1, '', '', NULL, NULL, 9, 8, 75, 0, 0, 1),
-                                                                                                                                                                                                                                                                                                                                                (7, 'cenik', 'Ceník', NULL, NULL, 1, 1, 1, '', '', NULL, NULL, 9, 11, 800, 0, 0, 1);
+                                                                                                                                                                                                                                                                                                                                                (7, 'cenik', 'Ceník', NULL, NULL, 1, 1, 1, '', '', NULL, NULL, 9, 11, 795, 0, 0, 1),
+                                                                                                                                                                                                                                                                                                                                                (8, 'odkazy', 'Odkazy', NULL, NULL, 1, 1, 1, '', '', NULL, NULL, 9, 12, 800, 0, 0, 1);
 
 CREATE TABLE `pages_related` (
   `id` int(11) NOT NULL,
@@ -683,7 +694,8 @@ INSERT INTO `pages_templates` (`id`, `pages_types_id`, `template`, `title`, `tit
                                                                                                (8, NULL, 'Front:Media:folder', 'Seznam složek dokumentů', 'List of document folders'),
                                                                                                (9, NULL, 'Front:Media:folderList', 'Seznam dokumentů dané složky', 'List of documents of given folder'),
                                                                                                (10, NULL, 'Front:Events:detail', 'Seznam událostí', 'List of events'),
-                                                                                               (11, NULL, 'Front:Pricelist:default', 'Ceníky', 'Seznam a zobrazení všech ceníků');
+                                                                                               (11, NULL, 'Front:Pricelist:default', 'Ceníky', 'Seznam a zobrazení všech ceníků'),
+                                                                                               (12, NULL , 'Front:Links:default', 'Odkazy', 'Links');
 
 CREATE TABLE `pages_types` (
   `id` int(11) NOT NULL,

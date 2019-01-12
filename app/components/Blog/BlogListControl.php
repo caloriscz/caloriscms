@@ -17,14 +17,15 @@ class BlogListControl extends Control
         $this->database = $database;
     }
 
-    protected function createComponentPaging()
+    protected function createComponentPaging(): PagingControl
     {
         return new PagingControl();
     }
 
-    public function render()
+    public function render(): void
     {
-        $template = $this->template;
+        $template = $this->getTemplate();
+        $template->settings = $this->getPresenter()->template->settings;
 
         $blog = $this->database->table('pages')->where([
             'date_published <= ?' => date('Y-m-d H:i:s'),

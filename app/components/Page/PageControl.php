@@ -55,7 +55,7 @@ class PageControl extends Control
 
     public function render(): void
     {
-        // Choose tempalte according to Settings
+        // Choose template according to Settings
         $settings = $this->getPresenter()->template->settings;
 
         $this->template->page = $this->presenter->template->page;

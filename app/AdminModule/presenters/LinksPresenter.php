@@ -14,9 +14,6 @@ use Nette\Utils\Random;
 class LinksPresenter extends BasePresenter
 {
 
-    /**
-     * @throws AbortException
-     */
     protected function startup()
     {
         parent::startup();
@@ -35,7 +32,7 @@ class LinksPresenter extends BasePresenter
     /**
      * Insert contact
      */
-    public function createComponentInsertForm()
+    public function createComponentInsertForm(): BootstrapUIForm
     {
         $form = new BootstrapUIForm();
         $form->setTranslator($this->translator);
@@ -126,13 +123,15 @@ class LinksPresenter extends BasePresenter
                 'description' => $form->values->description,
             ]);
 
-        IO::directoryMake(APP_DIR . '/links-media');
+        if ($_FILES['the_file']['size'] > 0) {
+            IO::directoryMake(APP_DIR . '/links-media');
 
-        if (file_exists(APP_DIR . '/links-media/link-' . $form->values->id . '.jpg') && is_uploaded_file($_FILES['the_file']['tmp_name'])) {
-            IO::remove(APP_DIR . '/links-media/link-' . $form->values->id . '.jpg');
+            if (file_exists(APP_DIR . '/links-media/link-' . $form->values->id . '.jpg') && is_uploaded_file($_FILES['the_file']['tmp_name'])) {
+                IO::remove(APP_DIR . '/links-media/link-' . $form->values->id . '.jpg');
+            }
+
+            IO::upload(APP_DIR . '/links-media', 'link-' . $form->values->id . '.jpg');
         }
-
-        IO::upload(APP_DIR . '/links-media', 'link-' . $form->values->id . '.jpg');
 
         $this->redirect('this', ['id' => $form->values->id]);
     }
@@ -143,7 +142,7 @@ class LinksPresenter extends BasePresenter
      */
     public function handleDeleteImage($id): void
     {
-        IO::remove(APP_DIR . '/links-media/link-' . $id. '.jpg');
+        IO::remove(APP_DIR . '/links-media/link-' . $id . '.jpg');
         $this->redirect(':Admin:Links:detail', ['id' => $id, 'rnd' => Random::generate(4)]);
     }
 
@@ -164,7 +163,7 @@ class LinksPresenter extends BasePresenter
         $this->redirect(':Admin:Links:categories');
     }
 
-    public function renderDefault()
+    public function renderDefault(): void
     {
         $this->template->categoryId = $this->getParameter('id');
 
@@ -177,7 +176,7 @@ class LinksPresenter extends BasePresenter
         }
     }
 
-    public function renderCategories()
+    public function renderCategories(): void
     {
         $this->template->categories = $this->database->table('links_categories')->order('category');
     }
