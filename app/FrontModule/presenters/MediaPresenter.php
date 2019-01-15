@@ -2,6 +2,7 @@
 
 namespace App\FrontModule\Presenters;
 
+use Caloriscz\Media\PageGalleryControl;
 use Nette\Utils\Paginator;
 
 /**
@@ -9,6 +10,11 @@ use Nette\Utils\Paginator;
  */
 class MediaPresenter extends BasePresenter
 {
+
+    public function createComponentPageGallery(): PageGalleryControl
+    {
+        return new PageGalleryControl($this->database);
+    }
 
     public function renderAlbum(): void
     {

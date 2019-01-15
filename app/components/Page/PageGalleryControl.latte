@@ -1,11 +1,16 @@
-<div class="container">
-    <div class="cal-gallery card-deck">
-        {foreach $pictures as $picture}
-            <div class="card">
-                <div class="image-cover">
-                    <img src="/pictures/{$picture->pages_id}/tn/{$picture->name}">
+{if $pictures->count() > 0}
+<div class="row">
+    <h2>Photos</h2>
+    <div class="container">
+        <div class="cal-gallery card-deck">
+            {foreach $pictures as $picture}
+                <div class="card">
+                    <div class="image-cover">
+                        <img src="/pictures/{$picture->pages_id}/tn/{$picture->name}">
+                    </div>
                 </div>
-            </div>
-        {/foreach}
+            {/foreach}
+        </div>
     </div>
+    {/if}
 </div>

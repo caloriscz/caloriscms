@@ -1,0 +1,9 @@
+<div class="row">
+    {foreach $pages as $item}
+        <div class="col-4 mb-3" style="max-height: 160px; text-align: center;">
+            <a href="/pictures/{$item->pages_id}/{$item->name}">
+                <img src="/pictures/{$item->pages_id}/tn/{$item->name}" style="max-height: 150px; max-width: 240px;">
+            </a>
+        </div>
+    {/foreach}
+</div>

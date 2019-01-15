@@ -10,12 +10,12 @@ use Nette\Utils\Paginator;
 class EventsPresenter extends BasePresenter
 {
 
-    protected function createComponentSignEvent()
+    protected function createComponentSignEvent(): SignEventControl
     {
         return new SignEventControl($this->database);
     }
 
-    public function renderDefault()
+    public function renderDefault(): void
     {
         $type = 1;
 

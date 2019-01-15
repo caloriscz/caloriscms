@@ -13,7 +13,7 @@ class LinksPresenter extends BasePresenter
         parent::startup();
     }
 
-    public function renderDefault()
+    public function renderDefault(): void
     {
         $this->template->categories = $this->database->table('links_categories')
                 ->where('parent_id', null)
