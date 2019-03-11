@@ -54,15 +54,7 @@ class SignPresenter extends BasePresenter
      */
     protected function createComponentSignIn(): SignInControl
     {
-        $control = new SignInControl($this->database);
-
-        $logger = new Logger($this->database);
-        $logger->setEvent('Uživatel přihlášen');
-        $logger->setDescription('');
-        $logger->setUser($this->user->getId());
-        $logger->save();
-
-        return $control;
+        return new SignInControl($this->database);
     }
 
     /**

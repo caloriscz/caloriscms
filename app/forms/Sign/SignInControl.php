@@ -4,6 +4,7 @@ namespace App\Forms\Sign;
 
 use App\Model\MemberModel;
 use Nette\Application\UI\Control;
+use Nette\Database\Context;
 use Nette\Database\SqlLiteral;
 use Nette\Forms\BootstrapUIForm;
 use Nette\Security\AuthenticationException;
@@ -11,10 +12,14 @@ use Nette\Security\AuthenticationException;
 class SignInControl extends Control
 {
 
-    /** @var \Nette\Database\Context */
+    /** @var Context */
     public $database;
 
-    public function __construct(\Nette\Database\Context $database)
+    /**
+     * SignInControl constructor.
+     * @param Context $database
+     */
+    public function __construct(Context $database)
     {
         $this->database = $database;
     }
@@ -44,23 +49,9 @@ class SignInControl extends Control
     /**
      * @param $form
      * @param $values
-     * @throws \Nette\Application\AbortException
      */
-    public function signInFormSucceeded($form, $values)
+    public function signInFormSucceeded($form, $values): void
     {
-        $member = new MemberModel($this->database);
-        $blocked = $member->getState($form->values->username);
-        $typeUrl = 'Front';
-
-        if ($blocked === false) {
-            $this->getPresenter()->flashMessage('Musíte nejdříve ověřit váš účet', 'error');
-            $this->getPresenter()->redirect(':Front:Sign:in');
-        }
-
-        if ($form->values->type === 'admin') {
-            $typeUrl = 'Admin';
-        }
-
         try {
             $this->getPresenter()->getUser()->login($values->username, $values->password);
 
@@ -69,7 +60,7 @@ class SignInControl extends Control
                 $roleCheck = $this->database->table('users_roles')->get($role[0]);
 
                 if ($roleCheck && $roleCheck->sign === 0) {
-                    $this->getPresenter()->flashMessage($this->getPresenter()->translator->translate('messages.sign.no-access'), 'error');
+                    $this->getPresenter()->flashMessage('Nemáte přístup', 'error');
                     $this->getPresenter()->redirect(':Admin:Sign:in');
                 } else {
                     $this->database->table('users')->get($this->getPresenter()->user->getId())->update(['date_visited' => date('Y-m-d H:i:s')]);
@@ -81,24 +72,20 @@ class SignInControl extends Control
                 'login_success' => new SqlLiteral('login_success + 1')
             ]);
 
-            $this->getPresenter()->redirect(':' . $typeUrl . ':Homepage:default');
+            $this->getPresenter()->redirect(':Admin:Homepage:default');
         } catch (AuthenticationException $e) {
             $this->database->table('users')->where(['username' => $values->username])->update([
                 'login_error' => new SqlLiteral('login_error')
             ]);
 
             $this->getPresenter()->flashMessage('Nesprávné heslo', 'error');
-            $this->getPresenter()->redirect(':' . $typeUrl . ':Sign:in');
+            $this->getPresenter()->redirect(':Admin:Sign:in');
         }
     }
 
     public function render($type = 'front')
     {
-        $templateName = 'SignInAdminControl';
-
-        if ($type === 'front') {
-            $templateName = 'SignInFrontControl';
-        }
+        $templateName = 'SignInControl';
 
         $this->template->type = $type;
         $this->template->setFile(__DIR__ . '/' . $templateName . '.latte');
