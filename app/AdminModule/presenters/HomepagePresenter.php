@@ -11,7 +11,7 @@ use Caloriscz\Utilities\ElfinderControl;
  */
 class HomepagePresenter extends BasePresenter
 {
-    protected function createComponentElfinder()
+    protected function createComponentElfinder(): ElfinderControl
     {
         return new ElfinderControl();
     }

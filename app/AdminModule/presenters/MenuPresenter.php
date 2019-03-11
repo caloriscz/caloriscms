@@ -57,7 +57,7 @@ class MenuPresenter extends BasePresenter
      * @param $identifier
      * @throws AbortException
      */
-    public function handleDeleteImage($identifier)
+    public function handleDeleteImage($identifier): void
     {
         $type = $this->getParameter('type');
 
@@ -66,12 +66,12 @@ class MenuPresenter extends BasePresenter
         $this->redirect(':Admin:Menu:detail', ['id' => $identifier]);
     }
 
-    public function renderDetail()
+    public function renderDetail(): void
     {
         $this->template->menu = $this->database->table('menu')->get($this->getParameter('id'));
     }
 
-    public function renderMenu()
+    public function renderMenu(): void
     {
         $this->template->menu = $this->database->table('menu_menus')->get($this->getParameter('id'));
     }

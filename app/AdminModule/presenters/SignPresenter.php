@@ -19,15 +19,15 @@ class SignPresenter extends BasePresenter
     protected function startup()
     {
         parent::startup();
-        $this->template->signed = FALSE;
+        $this->template->signed = false;
     }
 
-    protected function createComponentResetPass()
+    protected function createComponentResetPass(): ResetPassControl
     {
         return new ResetPassControl($this->database);
     }
 
-    protected function createComponentLostPass()
+    protected function createComponentLostPass(): LostPassControl
     {
         $control = new LostPassControl($this->database);
         $control->onSave[] = function ($message) {
@@ -37,7 +37,7 @@ class SignPresenter extends BasePresenter
                 $this->flashMessage('Informace o zapomenutém hesle odeslány', 'success');
             }
 
-            $this->redirect(this);
+            $this->redirect('this');
         };
 
         $logger = new Logger($this->database);
@@ -52,7 +52,7 @@ class SignPresenter extends BasePresenter
     /**
      * @return SignInControl
      */
-    protected function createComponentSignIn()
+    protected function createComponentSignIn(): SignInControl
     {
         $control = new SignInControl($this->database);
 
@@ -68,15 +68,15 @@ class SignPresenter extends BasePresenter
     /**
      * Logs out user
      */
-    public function actionOut()
+    public function actionOut(): void
     {
         $this->getUser()->logout();
-        $this->flashMessage($this->translator->translate('messages.sign.logged-out'), 'note');
+        $this->flashMessage($this->translator->translate('Odhlášen'), 'note');
         $this->redirect('in');
 
     }
 
-    public function renderResetpass()
+    public function renderResetpass(): void
     {
         $this->template->activationValid = false;
 

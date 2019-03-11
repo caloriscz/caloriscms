@@ -1,5 +1,6 @@
 <?php
 declare(strict_types=1);
+
 namespace App\AdminModule\Presenters;
 
 use App\Forms\Pages\EditorControl;
@@ -137,11 +138,7 @@ abstract class BasePresenter extends Presenter
         $this->template->langSelected = $this->translator->getLocale();
 
         // Set language from cookie
-        if ($this->request->getCookie('langugage_admin') === '') {
-            $this->translator->setLocale($this->translator->getDefaultLocale());
-        } else {
-            $this->translator->setLocale($this->request->getCookie('language_admin'));
-        }
+        $this->translator->setLocale($this->translator->getDefaultLocale());
     }
 
     /**

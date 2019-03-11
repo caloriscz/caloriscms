@@ -140,12 +140,8 @@ CREATE TABLE `helpdesk` (
 INSERT INTO `helpdesk` (`id`, `title`, `description`, `blacklist`, `email`, `subject`, `body`, `helpdesk_templates_id`, `log`) VALUES
                                                                                                                                       (1, 'Kontaktní formulář', 'Tento formulář slouží Vašim zákazníkům, aby vás mohli kontaktovat ohledně jejich otázek nebo potávek.', 1, 'caloris@caloris.cz', 'Poptávka', '<br>                    {$name}<br>                    {$phone}<br>                    {$email}<br>                    <br><br>                    {$message}<br>                    {$time}<br>                    {$ipaddress}                </td>            </tr>        </tbody></table>', 1, 0),
                                                                                                                                       (2, 'Kontaktní formulář - admin', 'Poptávkový formulář - verze pro administraci', 1, NULL, 'Poptávka od návštěvníka', '                   Děkujeme za Vaši zprávu. Budeme Vás brzy kontaktovat.                    <br>                    {$name}<br>                    {$phone}<br>                    {$email}<br>                    <br><br>                    {$message}<br>                </td>            </tr>        </tbody></table>    ', 1, 0),
-                                                                                                                                      (3, 'Registrační formulář', 'Formulář pro přihlášení jako člen', 0, NULL, 'Nový účet', '<p>Dobrý den,</p>        Ověření účtu <a href=\"{$settings[\'site:url:base\']}/sign/verify?user={$username}&amp;code={$activationCode}&amp;do=verifyForm-submit\">            {$settings[\'site:url:base\']}/sign/verify?user={$username}&amp;code={$activationCode}&amp;do=verify-check</a>        <br>        <br>        V případě, že máte jakékoliv otázky, neváhejte se nás zeptat na tomto e-mailu.', 1, 0),
                                                                                                                                       (4, 'Odeslání hesla pro existujícího uživatele', 'Tímto formulářem bude existujícímu uživateli odesláno nové heslo. Pozor. Pokaždé, když formulář odešlete, bude heslo změněno a odesláno.', 0, NULL, 'Vytvoření nového hesla', '                    <br /><br />\r\n                    Bylo Vám vytvořeno nové heslo. Zde jsou údaje nutné k přihlášení\r\n                    <br /><br />\r\n                    uživatelské jméno: {$username}<br />\r\n                    heslo: {$password}<br />\r\n                    <br /><br />\r\n                    Přihlašte se: <a href=\"{$settings[\'site:url:base\']}/sign/in\">{$settings[\'site:url:base\']}/sign/in</a>', 1, 0),
                                                                                                                                       (5, 'Vytvoření účtu z administrace', 'Vytvoření nového uživatelského účtu z administrace', 0, NULL, 'Nový e-mail', '                    Your account was successfully created. You can now log in.\r\n                    <br /><br />\r\n                    user name: {$username}<br />\r\n                    password: {$password}<br />\r\n                    <br /><br />\r\n                    Log in: <a href=\"{$settings[\'site:url:base\']}/admin\">{$settings[\'site:url:base\']}/admin</a>', 1, 0),
-                                                                                                                                      (11, 'Zapomenuté heslo', 'Odeslání zapomenutého hesla', 0, NULL, 'Informace o novém hesle', 'Na základě Vaší žádosti Vám posíláme odkaz na obnovení hesla.\r\n<br /><br />\r\nK vytvoření nového hesla klikněte na odkaz níže:\r\n<br />\r\n<a href=\"{$settings[\'site:url:base\']}/sign/resetpass/?code={$code}&email={$email}\">\r\n    {$settings[\'site:url:base\']}/sign/resetpass/?code={$code}&email={$email}\r\n</a>\r\n<br /><br />\r\n<strong><a href=\"{$settings[\'site:url:base\']}\">{$settings[\'site:title\']}</a></strong>\r\n', 1, 0),
-                                                                                                                                      (12, 'Registrační formulář ověřený administrátorem', 'Formulář pro registraci, která bude ověřena správou stránek', 0, NULL, 'Nový účet - bude potvrzeno', '<p>Dobrý den,</p>\r\n\r\n        Po ověření administrací {$settings[\'site:title\']} Vám bude zaslána zpráva a Vy se můžete přihlásit.\r\n        <br />\r\n        <br />\r\n        V případě, že máte jakékoliv otázky, neváhejte se nás zeptat na tomto e-mailu.', 1, 0),
-                                                                                                                                      (13, 'Registrační formulář ověřený administrátorem - potvrzovací část', 'Formulář pro registraci, která bude ověřena správou stránek', 0, NULL, 'Nový účet pro potvrzení', '<p>Dobrý den,</p>\r\n\r\n        Po ověření administrací {$settings[\'site:title\']} Vám bude zaslána zpráva a Vy se můžete přihlásit.\r\n        <br />\r\n        <br />\r\n        V případě, že máte jakékoliv otázky, neváhejte se nás zeptat na tomto e-mailu.', 1, 0),
                                                                                                                                       (14, 'Zapomenuté heslo: administrace', 'Odeslání zapomenutého hesla pro členy administrace', 0, NULL, 'Informace o novém hesle', 'Na základě Vaší žádosti Vám posíláme odkaz na obnovení hesla.\r\n<br /><br />\r\nK vytvoření nového hesla klikněte na odkaz níže:\r\n<br />\r\n<a href=\"{$settings[\'site:url:base\']}/admin/sign/resetpass/?code={$code}&email={$email}\">\r\n    {$settings[\'site:url:base\']}/admin/sign/resetpass/?code={$code}&email={$email}\r\n</a>\r\n<br /><br />\r\n<strong><a href=\"{$settings[\'site:url:base\']}\">{$settings[\'site:title\']}</a></strong>\r\n', 1, 0);
 
 CREATE TABLE `helpdesk_messages` (
@@ -179,345 +175,6 @@ CREATE TABLE `languages` (
 INSERT INTO `languages` (`id`, `code`, `title`, `used`, `default`) VALUES
                                                                           (1, 'cs', 'čeština', 1, 1),
                                                                           (2, 'en', 'English', 0, NULL);
-
-CREATE TABLE `lang_keys` (
-  `id` int(11) NOT NULL,
-  `lang_list_id` int(11) DEFAULT NULL,
-  `directory` varchar(50) CHARACTER SET utf8 COLLATE utf8_czech_ci NOT NULL,
-  `path` varchar(100) CHARACTER SET utf8 COLLATE utf8_czech_ci NOT NULL,
-  `value_cs` text CHARACTER SET utf8 COLLATE utf8_czech_ci,
-  `value_en` text CHARACTER SET utf8 COLLATE utf8_czech_ci
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
-INSERT INTO `lang_keys` (`id`, `lang_list_id`, `directory`, `path`, `value_cs`, `value_en`) VALUES
-                                                                                                   (1, 1, 'navigation', 'categories', 'Kategorie', 'Categories'),
-                                                                                                   (2, 1, 'navigation', 'catalogue', 'Katalog', 'Catalogue'),
-                                                                                                   (3, 1, 'navigation', 'files', 'Soubory', 'Files'),
-                                                                                                   (4, 1, 'navigation', 'homepage', 'Homepage', 'Homepage'),
-                                                                                                   (5, 1, 'navigation', 'logout', 'Odhlásit', 'Log out'),
-                                                                                                   (6, 1, 'navigation', 'members', 'Členové', 'Members'),
-                                                                                                   (7, 1, 'navigation', 'pages', 'Stránky', 'Pages'),
-                                                                                                   (8, 1, 'navigation', 'myprofile', 'Můj profil', 'My profile'),
-                                                                                                   (9, 1, 'homepage', 'welcome', 'Vítejte', 'Welcome'),
-                                                                                                   (10, 1, 'catalogue', 'deletereallymessage', 'Opravdu smazat tento parametr?', 'Do you really want to delete this parameter?'),
-                                                                                                   (11, 1, 'catalogue', 'ListOfBrands', 'Seznam značek', 'List of brands'),
-                                                                                                   (12, 1, 'catalogue', 'ProductCatalogue', 'Katalog výrobků', 'Product catalogue'),
-                                                                                                   (13, 1, 'catalogue', 'ProductGallery', 'Galerie výrobku', 'Product gallery'),
-                                                                                                   (14, 1, 'categories', 'NothingRelated', 'Nemá propojenou kategorii', 'Nothing related'),
-                                                                                                   (15, 1, 'categories', 'PageSelectedManually', 'Stránka zvolena manuálně', 'Page selected manually'),
-                                                                                                   (16, 1, 'categories', 'RelatedCategory', 'Navazující kategorie', 'Related category'),
-                                                                                                   (17, 1, 'categories', 'SelectPage', 'Vybrat stránku', 'Select page'),
-                                                                                                   (18, 1, 'pages', 'name', 'Název', 'Name'),
-                                                                                                   (19, 1, 'files', 'choosefile', 'Vyberte soubor', 'Choose file'),
-                                                                                                   (20, 1, 'files', 'filemanager', 'Souborový manažer', 'File Manager'),
-                                                                                                   (21, 1, 'files', 'filename', 'Název souboru', 'File name'),
-                                                                                                   (22, 1, 'files', 'listoffiles', 'Seznam souborů', 'List of files'),
-                                                                                                   (23, 1, 'files', 'sizeinkb', 'Velikost (in kB)', 'Size (in kB)'),
-                                                                                                   (24, 1, 'files', 'thumbnail', 'Náhled', 'Thumbnail'),
-                                                                                                   (25, 1, 'files', 'upload', 'Nahrát', 'Upload'),
-                                                                                                   (26, 1, 'settings', 'whenUsedInTemplate', 'Při použití v šabloně', 'When used in template'),
-                                                                                                   (27, 2, 'days', 'Monday', 'Pondělí', 'Monday'),
-                                                                                                   (28, 2, 'days', 'Tuesday', 'Úterý', 'Tuesday'),
-                                                                                                   (29, 2, 'days', 'Wednesday', 'Středa', 'Wednesday'),
-                                                                                                   (30, 2, 'days', 'Thursday', 'Čtvrtek', 'Thursday'),
-                                                                                                   (31, 2, 'days', 'Friday', 'Pátek', 'Friday'),
-                                                                                                   (32, 2, 'days', 'Saturday', 'Sobota', 'Saturday'),
-                                                                                                   (33, 2, 'days', 'Sunday', 'Neděle', 'Sunday'),
-                                                                                                   (35, 2, 'months', 'January', 'Leden', 'January'),
-                                                                                                   (36, 2, 'months', 'February', 'Únor', 'February'),
-                                                                                                   (38, 2, 'months', 'April', 'Duben', 'April'),
-                                                                                                   (39, 2, 'months', 'May', 'Květen', 'May'),
-                                                                                                   (40, 2, 'months', 'June', 'Červen', 'June'),
-                                                                                                   (41, 2, 'months', 'July', 'Červenec', 'July'),
-                                                                                                   (42, 2, 'months', 'August', 'Srpen', 'August'),
-                                                                                                   (43, 2, 'months', 'September', 'Září', 'September'),
-                                                                                                   (44, 2, 'months', 'October', 'Říjen', 'October'),
-                                                                                                   (45, 2, 'months', 'November', 'Listopad', 'November'),
-                                                                                                   (46, 2, 'months', 'December', 'Prosinec', 'December'),
-                                                                                                   (47, 2, 'sorting', 'new', 'od nejnovějšího', 'by newest'),
-                                                                                                   (48, 2, 'sorting', 'old', 'od nejstaršího', 'by oldest'),
-                                                                                                   (49, 2, 'sorting', 'cheap', 'od nejlevnějšího', 'by price (lowest)'),
-                                                                                                   (50, 2, 'sorting', 'expensive', 'od nejdražšího', 'by price (highest)'),
-                                                                                                   (51, 2, 'sorting', 'az', 'A - Z', 'A - Z'),
-                                                                                                   (52, 2, 'sorting', 'za', 'Z - A', 'Z - A'),
-                                                                                                   (53, 2, 'main', 'address', 'adresa', 'address'),
-                                                                                                   (54, 2, 'main', 'Address', 'Adresa', 'Address'),
-                                                                                                   (55, 2, 'main', 'addresses', 'adresy', 'addresses'),
-                                                                                                   (56, 2, 'main', 'AddToCart', 'Do košíku', 'Add to Cart'),
-                                                                                                   (57, 2, 'main', 'AllDayEvent', 'Celodenní událost', 'All day event'),
-                                                                                                   (58, 2, 'main', 'amount', 'množství', 'amount'),
-                                                                                                   (59, 2, 'main', 'Amount', 'Množství', 'Amount'),
-                                                                                                   (60, 2, 'main', 'Appearance', 'Vzhled', 'Appearance'),
-                                                                                                   (61, 2, 'main', 'BillingAddress', 'Fakturační adresa', 'Billing address'),
-                                                                                                   (62, 2, 'main', 'blog', 'blog', 'blog'),
-                                                                                                   (64, 2, 'main', 'Blog', 'Blog', 'Blog'),
-                                                                                                   (65, 2, 'main', 'Bonus', 'Bonus', 'Bonus'),
-                                                                                                   (66, 2, 'main', 'Brand', 'Značka', 'Brand'),
-                                                                                                   (67, 2, 'main', 'brand', 'značka', 'brand'),
-                                                                                                   (68, 2, 'main', 'brands', 'značky', 'brands'),
-                                                                                                   (69, 2, 'main', 'Calendar', 'Kalendář', 'Calendar'),
-                                                                                                   (70, 2, 'main', 'cart', 'košík', 'cart'),
-                                                                                                   (71, 2, 'main', 'Cart', 'Košík', 'Cart'),
-                                                                                                   (72, 2, 'main', 'catalogue', 'katalog', 'catalogue'),
-                                                                                                   (73, 2, 'main', 'Catalogue', 'Katalog', 'Catalogue'),
-                                                                                                   (74, 2, 'main', 'categories', 'kategorie', 'categories'),
-                                                                                                   (75, 2, 'main', 'category', 'kategorie', 'category'),
-                                                                                                   (76, 2, 'main', 'Category', 'Kategorie', 'Category'),
-                                                                                                   (77, 2, 'main', 'Categories', 'Kategorie', 'Categories'),
-                                                                                                   (78, 2, 'main', 'Change', 'Změnit', 'Change'),
-                                                                                                   (79, 2, 'main', 'ChangeStatistics', 'Změnit statistiky', 'Change Statistics'),
-                                                                                                   (80, 2, 'main', 'choose', 'vybrat', 'choose'),
-                                                                                                   (81, 2, 'main', 'Choose', 'Vybrat', 'Choose'),
-                                                                                                   (82, 2, 'main', 'ChooseAGift', 'Vyberte si dárek', 'Choose a gift'),
-                                                                                                   (83, 2, 'main', 'city', 'město', 'city'),
-                                                                                                   (84, 2, 'main', 'City', 'Město', 'City'),
-                                                                                                   (85, 2, 'main', 'close', 'město', 'close'),
-                                                                                                   (86, 2, 'main', 'Close', 'Město', 'Close'),
-                                                                                                   (87, 2, 'main', 'Company', 'Společnost', 'Company'),
-                                                                                                   (88, 2, 'main', 'CompanyInformation', 'Informace o společnosti', 'Company Information'),
-                                                                                                   (89, 2, 'main', 'Confirm', 'Potvrdit', 'Confirm'),
-                                                                                                   (90, 2, 'main', 'concept', 'koncept', 'concept'),
-                                                                                                   (91, 2, 'main', 'contact', 'kontakt', 'contact'),
-                                                                                                   (92, 2, 'main', 'Contact', 'Kontakt', 'Contact'),
-                                                                                                   (93, 2, 'main', 'ContactInformation', 'Kontaktní informace', 'ContactInformation'),
-                                                                                                   (94, 2, 'main', 'contacts', 'kontakty', 'contacts'),
-                                                                                                   (95, 2, 'main', 'Contacts', 'Kontakty', 'Contacts'),
-                                                                                                   (96, 2, 'main', 'continue', 'pokračovat', 'continue'),
-                                                                                                   (97, 2, 'main', 'Continue', 'Pokračovat', 'Continue'),
-                                                                                                   (98, 2, 'main', 'ContinueShopping', 'Pokračujte v nákupu', 'Continue shopping'),
-                                                                                                   (99, 2, 'main', 'Create', 'Vytvořit', 'Create'),
-                                                                                                   (100, 2, 'main', 'created', 'vytvořeno', 'created'),
-                                                                                                   (101, 2, 'main', 'CreateNewAccount', 'Založit nový účet', 'Create new account'),
-                                                                                                   (102, 2, 'main', 'CreateNewContact', 'Vytvoř nový kontakt', 'Create new contact'),
-                                                                                                   (103, 2, 'main', 'daily', 'denní', 'daily'),
-                                                                                                   (104, 2, 'main', 'date', 'datum', 'date'),
-                                                                                                   (105, 2, 'main', 'Date', 'Datum', 'Date'),
-                                                                                                   (107, 2, 'main', 'DateEventEnded', 'Ukončení', 'Event end'),
-                                                                                                   (108, 2, 'main', 'DayOfTheWeek', 'Den v týdnu', 'Day of the Week'),
-                                                                                                   (109, 2, 'main', 'delete', 'smazat', 'delete'),
-                                                                                                   (110, 2, 'main', 'Delete', 'Smazat', 'Delete'),
-                                                                                                   (111, 2, 'main', 'DeliveryAddress', 'Doručovací adresa', 'Delivery Address'),
-                                                                                                   (112, 2, 'main', 'description', 'popisek', 'description'),
-                                                                                                   (113, 2, 'main', 'Description', 'Popisek', 'Description'),
-                                                                                                   (114, 2, 'main', 'detail', 'detail', 'detail'),
-                                                                                                   (115, 2, 'main', 'Detail', 'Detail', 'Detail'),
-                                                                                                   (116, 2, 'main', 'disabled', 'povolen', 'disabled'),
-                                                                                                   (117, 2, 'main', 'DoAction', 'Proveď', 'Do'),
-                                                                                                   (118, 2, 'main', 'document', 'dokument', 'document'),
-                                                                                                   (119, 2, 'main', 'Document', 'Document', 'Document'),
-                                                                                                   (120, 2, 'main', 'documents', 'dokumenty', 'documents'),
-                                                                                                   (121, 2, 'main', 'Documents', 'Dokumenty', 'Documents'),
-                                                                                                   (122, 2, 'main', 'edit', 'upravit', 'edit'),
-                                                                                                   (123, 2, 'main', 'Edit', 'Upravit', 'Edit'),
-                                                                                                   (124, 2, 'main', 'email', 'e-mail', 'e-mail'),
-                                                                                                   (125, 2, 'main', 'Email', 'E-mail', 'E-mail'),
-                                                                                                   (126, 2, 'main', 'E-mails', 'E-maily', 'E-mails'),
-                                                                                                   (127, 2, 'main', 'enabled', 'povolen', 'enabled'),
-                                                                                                   (128, 2, 'main', 'Event', 'Událost', 'Event'),
-                                                                                                   (130, 2, 'main', 'ForgottenPassword', 'Zapomenuté heslo', 'Forgotten password'),
-                                                                                                   (131, 2, 'main', 'file', 'soubor', 'file'),
-                                                                                                   (132, 2, 'main', 'File', 'Soubor', 'File'),
-                                                                                                   (133, 2, 'main', 'FileType', 'Typ souboru', 'File type'),
-                                                                                                   (134, 2, 'main', 'Files', 'Soubory', 'Files'),
-                                                                                                   (135, 2, 'main', 'from', 'z', 'from'),
-                                                                                                   (136, 2, 'main', 'FullDescription', 'Celý popisek', 'Full description'),
-                                                                                                   (137, 2, 'main', 'gallery', 'galerie', 'gallery'),
-                                                                                                   (138, 2, 'main', 'Gallery', 'Galerie', 'Gallery'),
-                                                                                                   (139, 2, 'main', 'Galleries', 'Galerie', 'Galleries'),
-                                                                                                   (140, 2, 'main', 'group', 'skupina', 'group'),
-                                                                                                   (141, 2, 'main', 'Group', 'Skupina', 'Group'),
-                                                                                                   (142, 2, 'main', 'GroupActions', 'Vícenásobné akce', 'Group actions'),
-                                                                                                   (143, 2, 'main', 'groups', 'skupiny', 'groups'),
-                                                                                                   (144, 2, 'main', 'Helpdesk', 'Helpdesk', 'Helpdesk'),
-                                                                                                   (145, 2, 'main', 'Icon', 'Ikona', 'Icon'),
-                                                                                                   (146, 2, 'main', 'Icons', 'Ikony', 'Icons'),
-                                                                                                   (147, 2, 'main', 'Image', 'Obrázek', 'Image'),
-                                                                                                   (148, 2, 'main', 'images', 'obrázky', 'images'),
-                                                                                                   (149, 2, 'main', 'insert', 'vložit', 'insert'),
-                                                                                                   (150, 2, 'main', 'Insert', 'Vložit', 'Insert'),
-                                                                                                   (151, 2, 'main', 'InsertCategory', 'Vložit kategorii', 'Insert category'),
-                                                                                                   (152, 2, 'main', 'InsertCity', 'Zadejte město', 'Insert city'),
-                                                                                                   (153, 2, 'main', 'InsertEmail', 'Zadejte e-mail', 'Insert e-mail'),
-                                                                                                   (154, 2, 'main', 'InsertFile', 'Vložit soubor', 'Insert file'),
-                                                                                                   (155, 2, 'main', 'InsertImage', 'Vložit obrázek', 'Insert image'),
-                                                                                                   (156, 2, 'main', 'Insert name', 'Vloži jméno', 'Insert name'),
-                                                                                                   (157, 2, 'main', 'InsertPhone', 'Zadejte telefon', 'Insert phone'),
-                                                                                                   (158, 2, 'main', 'InsertProduct', 'Vložit produkt', 'Insert product'),
-                                                                                                   (159, 2, 'main', 'InsertVatIn', 'Zadejte IČO', 'Insert VAT identifier'),
-                                                                                                   (160, 2, 'main', 'InsertVatId', 'Zadejte DIČ', 'Insert VAT ID'),
-                                                                                                   (161, 2, 'main', 'InsertZip', 'Vložte PSČ', 'Insert ZIP'),
-                                                                                                   (162, 2, 'main', 'IPAddress', 'IP adresa', 'IP address'),
-                                                                                                   (163, 2, 'main', 'Items', 'Položky', 'Items'),
-                                                                                                   (164, 2, 'main', 'links', 'odkazů', 'links'),
-                                                                                                   (165, 2, 'main', 'ListOfBrands', 'Seznam značek', 'List of Brands'),
-                                                                                                   (166, 2, 'main', 'login', 'přihlásit', 'login'),
-                                                                                                   (167, 2, 'main', 'LoggingIn', 'Přihlášení', 'Logging In'),
-                                                                                                   (168, 2, 'main', 'Login', 'Přihlásit', 'Login'),
-                                                                                                   (169, 2, 'main', 'logout', 'odhlásit', 'logout'),
-                                                                                                   (170, 2, 'main', 'media', 'media', 'media'),
-                                                                                                   (171, 2, 'main', 'Media', 'Media', 'Media'),
-                                                                                                   (172, 2, 'main', 'MetaTags', 'Meta značky', 'Meta tags'),
-                                                                                                   (173, 2, 'main', 'MetaKeys', 'Meta značky', 'Meta keys'),
-                                                                                                   (174, 2, 'main', 'MetaDesc', 'Meta popisky', 'Meta descriptions'),
-                                                                                                   (175, 2, 'main', 'member', 'člen', 'member'),
-                                                                                                   (176, 2, 'main', 'Member', 'Člen', 'member'),
-                                                                                                   (177, 2, 'main', 'members', 'členové', 'members'),
-                                                                                                   (178, 2, 'main', 'Members', 'Členové', 'Members'),
-                                                                                                   (179, 2, 'main', 'message', 'zpráva', 'message'),
-                                                                                                   (180, 2, 'main', 'Message', 'Zpráva', 'message'),
-                                                                                                   (181, 2, 'main', 'monthly', 'měsíčně', 'monthly'),
-                                                                                                   (182, 2, 'main', 'MoreImages', 'Více obrázků', 'More images'),
-                                                                                                   (183, 2, 'main', 'name', 'jméno', 'name'),
-                                                                                                   (184, 2, 'main', 'Name', 'Jméno', 'Name'),
-                                                                                                   (185, 2, 'main', 'NewContact', 'Nový kontakt', 'New contact'),
-                                                                                                   (186, 2, 'main', 'NewPage', 'Nová stránka', 'New page'),
-                                                                                                   (187, 2, 'main', 'next', 'další', 'next'),
-                                                                                                   (188, 2, 'main', 'Next', 'Další', 'next'),
-                                                                                                   (189, 2, 'main', 'Notes', 'Poznámky', 'Notes'),
-                                                                                                   (190, 2, 'main', 'NoName', 'Nemá název', 'No name'),
-                                                                                                   (191, 2, 'main', 'open', 'otevřít', 'open'),
-                                                                                                   (192, 2, 'main', 'OpeningHours', 'Otevírací hodiny', 'Opening Hours'),
-                                                                                                   (193, 2, 'main', 'Page', 'Stránka', 'Page'),
-                                                                                                   (194, 2, 'main', 'PageGraphics', 'Grafika na stránce', 'Page Graphics'),
-                                                                                                   (195, 2, 'main', 'PagePreview', 'Náhled stránky', 'Page Preview'),
-                                                                                                   (196, 2, 'main', 'parameter', 'parametr', 'parameter'),
-                                                                                                   (197, 2, 'main', 'parametres', 'parametry', 'parametres'),
-                                                                                                   (198, 2, 'main', 'Parameter', 'Parametr', 'Parameter'),
-                                                                                                   (199, 2, 'main', 'Parametres', 'Parametry', 'Parametres'),
-                                                                                                   (200, 2, 'main', 'Password', 'Heslo', 'Password'),
-                                                                                                   (201, 2, 'main', 'phone', 'telefon', 'phone'),
-                                                                                                   (202, 2, 'main', 'Phone', 'Telefon', 'Phone'),
-                                                                                                   (203, 2, 'main', 'Place', 'Místo', 'Place'),
-                                                                                                   (204, 2, 'main', 'Post', 'Pozice', 'Post'),
-                                                                                                   (205, 2, 'main', 'Preview', 'Náhled', 'Preview'),
-                                                                                                   (206, 2, 'main', 'previous', 'předchozí', 'previous'),
-                                                                                                   (207, 2, 'main', 'Previous', 'Předchozí', 'Previous'),
-                                                                                                   (208, 2, 'main', 'price', 'cena', 'price'),
-                                                                                                   (209, 2, 'main', 'Price', 'Cena', 'Price'),
-                                                                                                   (211, 2, 'main', 'ProceedToCheckout', 'Pokračovat k pokladně', 'Proceed to checkout'),
-                                                                                                   (212, 2, 'main', 'ProductTitle', 'Název produktu', 'Product title'),
-                                                                                                   (213, 2, 'main', 'profile', 'profil', 'profile'),
-                                                                                                   (214, 2, 'main', 'published', 'publikováno', 'published'),
-                                                                                                   (215, 2, 'main', 'PublishedForm', ' publikováno', ' published'),
-                                                                                                   (216, 2, 'main', 'publishingDate', 'Datum publikování', 'Publishing date'),
-                                                                                                   (217, 2, 'main', 'RelatedProducts', 'Související produkty', 'Related Products'),
-                                                                                                   (218, 2, 'main', 'ResetFilter', 'Vynulovat filtr', 'Reset filter'),
-                                                                                                   (219, 2, 'main', 'Remove', 'Odstranit', 'Remove'),
-                                                                                                   (220, 2, 'main', 'Role', 'Role', 'Role'),
-                                                                                                   (221, 2, 'main', 'Sales', 'Prodeje', 'Sales'),
-                                                                                                   (222, 2, 'main', 'save', 'uložit', 'save'),
-                                                                                                   (223, 2, 'main', 'Save', 'Uložit', 'Save'),
-                                                                                                   (224, 2, 'main', 'search', 'hledat', 'search'),
-                                                                                                   (225, 2, 'main', 'Search', 'Hledat', 'Search'),
-                                                                                                   (226, 2, 'main', 'Send', 'Odeslat', 'Send'),
-                                                                                                   (227, 2, 'main', 'settings', 'nastavení', 'settings'),
-                                                                                                   (228, 2, 'main', 'Settings', 'Nastavení', 'Settings'),
-                                                                                                   (229, 2, 'main', 'Shipping', 'Poštovné', 'Shipping'),
-                                                                                                   (230, 2, 'main', 'ShippingAndPayment', 'Poštovné a platba', 'ShippingAndPayment'),
-                                                                                                   (231, 2, 'main', 'show', 'ukázat', 'show'),
-                                                                                                   (232, 2, 'main', 'Show', 'Ukázat', 'Show'),
-                                                                                                   (233, 2, 'main', 'shortDescription', 'Krátký popisek', 'Short description'),
-                                                                                                   (234, 2, 'main', 'SignUp', 'Registrace', 'Sign Up'),
-                                                                                                   (235, 2, 'main', 'signup', 'registrace', 'signup'),
-                                                                                                   (236, 2, 'main', 'size', 'velikost', 'size'),
-                                                                                                   (237, 2, 'main', 'Size', 'Velikost', 'Size'),
-                                                                                                   (238, 2, 'main', 'Slug', 'Trvalý odkaz', 'Slug'),
-                                                                                                   (239, 2, 'main', 'Snippets', 'Ústřižky', 'Snippets'),
-                                                                                                   (240, 2, 'main', 'Sort', 'Seřadit', 'Sort'),
-                                                                                                   (241, 2, 'main', 'state', 'stav', 'state'),
-                                                                                                   (242, 2, 'main', 'State', 'Stav', 'State'),
-                                                                                                   (243, 2, 'main', 'stock', 'zásoby', 'stock'),
-                                                                                                   (244, 2, 'main', 'Store', 'Obchod', 'Store'),
-                                                                                                   (245, 2, 'main', 'street', 'ulice', 'street'),
-                                                                                                   (246, 2, 'main', 'Street', 'Ulice', 'Street'),
-                                                                                                   (247, 2, 'main', 'Subject', 'Předmět', 'Subject'),
-                                                                                                   (248, 2, 'main', 'SummaryAndOrderCompletion', 'Shrnutí a dokončení objednávky', 'Summary and Order Completion'),
-                                                                                                   (249, 2, 'main', 'title', 'název', 'title'),
-                                                                                                   (250, 2, 'main', 'Title', 'Název', 'Title'),
-                                                                                                   (251, 2, 'main', 'total', 'celkem', 'total'),
-                                                                                                   (252, 2, 'main', 'Total', 'Celkem', 'Total'),
-                                                                                                   (253, 2, 'main', 'User', 'Uživatel', 'User'),
-                                                                                                   (254, 2, 'main', 'UserName', 'Uživatelské jméno', 'User Name'),
-                                                                                                   (255, 2, 'main', 'URL', 'URL', 'URL'),
-                                                                                                   (256, 2, 'main', 'value', 'hodnota', 'value'),
-                                                                                                   (257, 2, 'main', 'Value', 'Hodnota', 'Value'),
-                                                                                                   (258, 2, 'main', 'view', 'pohled', 'view'),
-                                                                                                   (259, 2, 'main', 'VAT', 'DPH', 'VAT'),
-                                                                                                   (260, 2, 'main', 'VatId', 'DIČ', 'VAT ID'),
-                                                                                                   (261, 2, 'main', 'VatIn', 'IČ', 'Identification Number'),
-                                                                                                   (262, 2, 'main', 'View', 'Prohlédnout', 'View'),
-                                                                                                   (263, 2, 'main', 'VisitTheWeb', 'Navštivte web', 'Visit the web'),
-                                                                                                   (264, 2, 'main', 'Weight', 'Hmotnost', 'Weight'),
-                                                                                                   (265, 2, 'main', 'ZIP', 'PSČ', 'ZIP'),
-                                                                                                   (266, 2, '', '', '', ''),
-                                                                                                   (268, 3, 'navigation', 'about', 'O nás', 'About us'),
-                                                                                                   (269, 3, 'helpdesk', 'name', 'Jméno', 'Name'),
-                                                                                                   (270, 3, 'helpdesk', 'email', 'E-mail', 'E-mail'),
-                                                                                                   (271, 3, 'helpdesk', 'phone', 'Telefon', 'Phone'),
-                                                                                                   (272, 3, 'helpdesk', 'message', 'Zpráva', 'Message'),
-                                                                                                   (273, 3, 'helpdesk', 'request', 'Poptávka', 'Request'),
-                                                                                                   (274, 3, 'helpdesk', 'send', 'Odeslat', 'Send'),
-                                                                                                   (275, 3, 'members', 'sendLoginEmail', 'odeslat e-mail s přihlašovacími informacemi', 'send e-mail with login information'),
-                                                                                                   (276, 3, 'members', 'memberAlreadyExists', 'Člen již existuje', 'Member already exists'),
-                                                                                                   (277, 3, 'members', 'emailAlreadyExists', 'Člen s tímto e-mailem již existuje', 'Member with this e-mail already exists'),
-                                                                                                   (278, 3, 'members', 'invalidEmailFormat', 'Napište správný formát e-mailu', 'Enter correct e-mail'),
-                                                                                                   (279, 3, 'members', 'PermissionDenied', 'Nemáte oprávnění', 'Permission denied'),
-                                                                                                   (280, 3, 'pages', 'NameThePage', 'Zadejte název stránky', 'Name the page'),
-                                                                                                   (281, 3, 'sign', 'agreeWithConditions', 'Souhlasím s podmínkami', 'I agree with terms and conditions'),
-                                                                                                   (282, 3, 'sign', 'descriptionSymbolsEnabled', 'Povoleny jsou pouze znaky a-z, 0-9 (pouze malá písmena)', 'Only a-z, 0-9 characters allowed'),
-                                                                                                   (283, 3, 'sign', 'emailAlreadyExists', 'E-mail již existuje', 'E-mail already exists'),
-                                                                                                   (284, 3, 'sign', 'emailNotSent', 'E-mail nebyl odeslán', 'E-mail not sent'),
-                                                                                                   (285, 3, 'sign', 'enterEmailForCheck', 'Zadejte prosím heslo ještě jednou pro kontrolu', 'Please enter your password again'),
-                                                                                                   (286, 3, 'sign', 'enterUserNameMinimum', 'Zvolte uživatelské jméno s alespoň %d znaky', 'Choose a user name with at least %d characters'),
-                                                                                                   (287, 3, 'sign', 'enterUsernameMaximum', 'Zvolte uživatelské jméno s nejvýše %d znaky', 'Choose a user name with a maximum of %d characters'),
-                                                                                                   (288, 3, 'sign', 'enterPasswordMinimum', 'Zvolte heslo s alespoň %d znaky', 'Choose a password with at least %d characters'),
-                                                                                                   (289, 3, 'sign', 'enterPasswordMaximum', 'Zvolte heslo s nejvýše %d znaky', 'Choose a password with at least %d characters'),
-                                                                                                   (290, 3, 'sign', 'enterValidEmail', 'Zadejte platný e-mail', 'Enter valid e-mail'),
-                                                                                                   (291, 3, 'sign', 'enterValidName', 'Zadejte jméno', 'Enter valid name'),
-                                                                                                   (292, 3, 'sign', 'enterValidStreet', 'Zadejte ulici', 'Enter street'),
-                                                                                                   (293, 3, 'sign', 'enterValidCity', 'Zadejte město', 'Enter valid city'),
-                                                                                                   (294, 3, 'sign', 'enterValidPassword', 'Zadejte platné heslo', 'Enter valid password'),
-                                                                                                   (295, 3, 'sign', 'enterValidUserName', 'Zadejte platné uživatelské jméno', 'Enter valid user name'),
-                                                                                                   (296, 3, 'sign', 'enterValidZip', 'Zadejte PSČ', 'Enter PSČ'),
-                                                                                                   (297, 3, 'sign', 'fillInEmail', 'Vyplňte e-mail', 'You need to log in'),
-                                                                                                   (298, 3, 'sign', 'invalidLogin', 'Musíte se přihlásit', 'Invalid login'),
-                                                                                                   (299, 3, 'sign', 'logged-out', 'Byli jste odhlášeni', 'You were logged out'),
-                                                                                                   (300, 3, 'sign', 'mustAgreeConditions', 'Pro pokračování zaškrtněte Souhlasím s podmínkami', 'To continue check the I agree to terms'),
-                                                                                                   (301, 3, 'sign', 'newsletterCheck', 'Chci odebírat zprávy?', 'I want to subscribe to news'),
-                                                                                                   (302, 3, 'sign', 'no-access', 'Nemáte oprávnění vstupu do administrace', 'You are not allowed to enter administration'),
-                                                                                                   (303, 3, 'sign', 'NotFound', 'Nenalezeno', 'Not Found'),
-                                                                                                   (304, 3, 'sign', 'passwords-not-same', 'Hesla se neshodují', 'Passwords are not same'),
-                                                                                                   (305, 3, 'sign', 'signupSuccessfulCanLogin', 'Vaše registrace proběhla úspěšně. Po ověření se můžete přihlásit.', 'Your registration was successful. After e-mail verification, you can sign.'),
-                                                                                                   (306, 3, 'sign', 'signupSuccessfulLoginWhenVerified', 'Registrace byla dokončena. Po ověření Vám bude zaslán e-mail, po kterém se můžete přihlásit', 'Sign up successfuly completed. you will receive e-mail when verified and you can then sign'),
-                                                                                                   (307, 3, 'sign', 'thanksForMessage', 'Děkujeme a Vaši zprávu', 'Děkujeme za Vaši zprávu'),
-                                                                                                   (308, 3, 'sign', 'userNameAlreadyExists', 'Uživatelské jméno již existuje', 'User name already exists'),
-                                                                                                   (309, 3, 'error', 'invalidTypeOfImage', 'Neplatný typ obrázku', 'Invalid type of image'),
-                                                                                                   (310, 3, 'error', 'CannotBeDeleted', 'Nelze smazat', 'Cannot be deleted'),
-                                                                                                   (311, 3, 'error', 'CantDeleteMainGroup', 'Nemůžete vymazat hlavní skupinu', 'You can\'t delete main group'),
-                                                                                                   (312, 3, 'error', 'categoryAlreadyExists', 'Kategorie tohoto jména již existuje', 'Category with this name already exists'),
-                                                                                                   (313, 3, 'error', 'categoryMustHaveSomeName', 'Kategorie musí mít nějaký název', 'Category must have some name'),
-                                                                                                   (314, 3, 'error', 'fillInName', 'Vyplňte Vaše skutečné jméno', 'Fill in your name'),
-                                                                                                   (315, 3, 'error', 'fillInEmail', 'Vyplňte e-mail', 'Fill in your e-mail'),
-                                                                                                   (316, 3, 'error', 'fillInMessage', 'Vyplňte zprávu', 'Fill in your message'),
-                                                                                                   (317, 3, 'error', 'MustAgreeWithConditions', 'Musíte souhlasit s obchodními podmínkami, abyste mohli dokončit objednávku', 'You must agree with conditions to finish the order'),
-                                                                                                   (318, 3, 'error', 'NoItemsBoughtYet', 'Zatím jste nekoupili žádné zboží', 'You haven\'t bought any items'),
-                                                                                                   (319, 3, 'error', 'noPermissionForAdmin', 'Nemáte oprávnění vstoupit do administrace', 'You don\'t have permission to enter admnistration'),
-                                                                                                   (320, 3, 'error', 'NotFound', 'Nebylo nalezeno', 'Not found'),
-                                                                                                   (321, 3, 'error', 'youWereLoggedIn', 'Byli jste odhlášen', 'You were logged in'),
-                                                                                                   (322, 2, 'main', 'Links', 'Odkazy', 'Links'),
-                                                                                                   (323, 2, 'main', 'related', 'související', 'related'),
-                                                                                                   (324, 2, 'main', 'files', 'Soubory', 'files');
-
-CREATE TABLE `lang_list` (
-  `id` int(11) NOT NULL,
-  `title` varchar(20) CHARACTER SET utf8 COLLATE utf8_czech_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
-INSERT INTO `lang_list` (`id`, `title`) VALUES
-                                               (1, 'admin'),
-                                               (2, 'dictionary'),
-                                               (3, 'messages'),
-                                               (4, 'ublaboo_datagrid');
 
 CREATE TABLE `links` (
   `id` int(11) NOT NULL,
@@ -688,29 +345,6 @@ INSERT INTO `pages_widgets` (`id`, `title`, `description`, `pages_id`, `sorted`)
                                                                                         (7, 'Carousel', 'Rotující obrázky', 1, 0),
                                                                                         (8, 'Seznam kontaktů', 'Seznam všech kontaktů s stelefonem a e-mailem', 2, 0);
 
-CREATE TABLE `param` (
-  `id` int(11) NOT NULL,
-  `param` varchar(80) COLLATE utf8_czech_ci NOT NULL,
-  `param_en` varchar(80) COLLATE utf8_czech_ci NOT NULL,
-  `description` text COLLATE utf8_czech_ci,
-  `prefix` varchar(40) COLLATE utf8_czech_ci DEFAULT NULL COMMENT 'Will be automatically filled before value',
-  `suffix` varchar(40) COLLATE utf8_czech_ci DEFAULT NULL COMMENT 'Will be automatically filled after value',
-  `preset` varchar(80) COLLATE utf8_czech_ci DEFAULT NULL COMMENT 'Value in preset will be autofilled',
-  `ignore_front` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'Hide in parametres in presentations',
-  `ignore_admin` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'Hide in admin params view',
-  `type_front` varchar(40) COLLATE utf8_czech_ci NOT NULL DEFAULT 'radio' COMMENT 'Display type of parametre form: select, radio etc.',
-  `sorted` int(11) DEFAULT '0' COMMENT 'You can sort params',
-  `block_class` varchar(60) COLLATE utf8_czech_ci DEFAULT '0' COMMENT 'Add classes for the parameter block',
-  `replace_param` varchar(250) COLLATE utf8_czech_ci DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
-
-CREATE TABLE `params` (
-  `id` int(11) NOT NULL,
-  `pages_id` int(11) NOT NULL,
-  `param_id` int(11) NOT NULL,
-  `paramvalue` varchar(120) COLLATE utf8_czech_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
-
 CREATE TABLE `pictures` (
   `id` int(11) NOT NULL,
   `name` varchar(140) COLLATE utf8_czech_ci NOT NULL,
@@ -870,13 +504,6 @@ ALTER TABLE `helpdesk_templates`
 ALTER TABLE `languages`
   ADD PRIMARY KEY (`id`);
 
-ALTER TABLE `lang_keys`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `lang_list_id` (`lang_list_id`);
-
-ALTER TABLE `lang_list`
-  ADD PRIMARY KEY (`id`);
-
 ALTER TABLE `links`
   ADD PRIMARY KEY (`id`),
   ADD KEY `links_category_id` (`links_categories_id`);
@@ -924,14 +551,6 @@ ALTER TABLE `pages_types`
 ALTER TABLE `pages_widgets`
   ADD PRIMARY KEY (`id`),
   ADD KEY `pages_id` (`pages_id`);
-
-ALTER TABLE `param`
-  ADD PRIMARY KEY (`id`);
-
-ALTER TABLE `params`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `store_id` (`pages_id`),
-  ADD KEY `store_param_id` (`param_id`);
 
 ALTER TABLE `pictures`
   ADD PRIMARY KEY (`id`),
@@ -984,12 +603,6 @@ ALTER TABLE `helpdesk_messages`
 ALTER TABLE `languages`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
-ALTER TABLE `lang_keys`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=325;
-
-ALTER TABLE `lang_list`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
-
 ALTER TABLE `links`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
@@ -1019,12 +632,6 @@ ALTER TABLE `pages_types`
 
 ALTER TABLE `pages_widgets`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
-
-ALTER TABLE `param`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
-ALTER TABLE `params`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 ALTER TABLE `pictures`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=156;
@@ -1056,9 +663,6 @@ ALTER TABLE `helpdesk`
 
 ALTER TABLE `helpdesk_messages`
   ADD CONSTRAINT `helpdesk_messages_ibfk_3` FOREIGN KEY (`helpdesk_id`) REFERENCES `helpdesk` (`id`) ON DELETE SET NULL ON UPDATE SET NULL;
-
-ALTER TABLE `lang_keys`
-  ADD CONSTRAINT `lang_keys_ibfk_1` FOREIGN KEY (`lang_list_id`) REFERENCES `lang_list` (`id`) ON DELETE SET NULL ON UPDATE SET NULL;
 
 ALTER TABLE `links`
   ADD CONSTRAINT `links_ibfk_1` FOREIGN KEY (`links_categories_id`) REFERENCES `links_categories` (`id`) ON DELETE SET NULL ON UPDATE SET NULL;
@@ -1094,10 +698,6 @@ ALTER TABLE `pages_types`
 ALTER TABLE `pages_widgets`
   ADD CONSTRAINT `pages_widgets_ibfk_1` FOREIGN KEY (`pages_id`) REFERENCES `pages` (`id`) ON DELETE SET NULL ON UPDATE SET NULL;
 
-ALTER TABLE `params`
-  ADD CONSTRAINT `params_ibfk_3` FOREIGN KEY (`pages_id`) REFERENCES `pages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `params_ibfk_4` FOREIGN KEY (`param_id`) REFERENCES `param` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
 ALTER TABLE `users`
-  ADD CONSTRAINT `users_ibfk_1` FOREIGN KEY (`users_roles_id`) REFERENCES `users_roles` (`id`) ON DELETE SET NULL ON UPDATE SET NULL,
+  ADD CONSTRAINT `users_ibfk_1` FOREIGN KEY (`users_roles_id`) REFERENCES `users_roles` (`id`) ON DELETE SET NULL ON UPDATE SET NULL;
 COMMIT;
