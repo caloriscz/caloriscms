@@ -39,18 +39,6 @@ INSERT INTO `blacklist` (`id`, `title`) VALUES
                                                (28, 'valium'),
                                                (29, 'weight');
 
-CREATE TABLE `board` (
-  `id` int(11) NOT NULL,
-  `parent_id` int(11) DEFAULT NULL,
-  `author` varchar(80) COLLATE utf8_czech_ci NOT NULL,
-  `email` varchar(150) COLLATE utf8_czech_ci DEFAULT NULL,
-  `subject` text COLLATE utf8_czech_ci NOT NULL,
-  `body` text COLLATE utf8_czech_ci,
-  `date_created` datetime DEFAULT NULL,
-  `show` smallint(6) NOT NULL DEFAULT '0',
-  `ipaddress` varchar(32) COLLATE utf8_czech_ci DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
-
 CREATE TABLE `carousel` (
   `id` int(11) NOT NULL,
   `title` varchar(80) COLLATE utf8_czech_ci DEFAULT NULL,
@@ -137,32 +125,6 @@ INSERT INTO `currencies` (`id`, `title`, `code`, `symbol`, `used`) VALUES
                                                                           (2, 'Euro', 'EUR', '€', NULL),
                                                                           (3, 'Americký dolar', 'USD', '$', 0);
 
-CREATE TABLE `events` (
-  `id` int(11) NOT NULL,
-  `date_event` datetime DEFAULT NULL,
-  `date_event_end` datetime DEFAULT NULL,
-  `all_day` tinyint(1) NOT NULL DEFAULT '1',
-  `show` tinyint(1) NOT NULL DEFAULT '0',
-  `pages_id` int(11) DEFAULT NULL,
-  `contacts_id` int(11) DEFAULT NULL,
-  `capacity` int(11) NOT NULL DEFAULT '0',
-  `capacity_start` int(11) NOT NULL DEFAULT '0',
-  `capacity_filled` int(11) NOT NULL DEFAULT '0',
-  `price` int(11) DEFAULT NULL,
-  `time_range` int(11) DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
-
-CREATE TABLE `events_signed` (
-  `id` int(11) NOT NULL,
-  `name` varchar(150) COLLATE utf8_czech_ci NOT NULL,
-  `email` varchar(150) COLLATE utf8_czech_ci NOT NULL,
-  `phone` varchar(30) COLLATE utf8_czech_ci DEFAULT NULL,
-  `note` text COLLATE utf8_czech_ci,
-  `events_id` int(11) NOT NULL,
-  `ipaddress` varchar(15) COLLATE utf8_czech_ci NOT NULL,
-  `date_created` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
-
 CREATE TABLE `helpdesk` (
   `id` int(11) NOT NULL,
   `title` varchar(100) COLLATE utf8_czech_ci NOT NULL,
@@ -203,7 +165,7 @@ CREATE TABLE `helpdesk_templates` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
 
 INSERT INTO `helpdesk_templates` (`id`, `title`, `document`) VALUES
-                                                                    (1, 'Basic', '<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\"\\r\\n        \"http://www.w3.org/TR/html4/loose.dtd\">\\r\\n<html lang=\"cs\">\\r\\n<head>\\r\\n    <meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">\\r\\n    <title>%TITLE%</title>\\r\\n    <style n:syntax=\"off\">\\r\\n        * {\\r\\n            font-family: Arial;\\r\\n        }\\r\\n\\r\\n        .text-right {\\r\\n            text-align: right;\\r\\n        }\\r\\n    </style>\\r\\n</head>\\r\\n<body bgcolor=\"#ffffff\" topmargin=\"0\" leftmargin=\"0\" marginheight=\"0\" marginwidth=\"0\"\\r\\n      style=\"width:100% !important; text-align: center; font-family: Arial sans-serif;\">\\r\\n\\r\\n<table style=\"width: 800px; margin: 0 auto 0 auto; font-family: Arial sans-serif;\">\\r\\n    <tr>\\r\\n        <td colspan=\"2\" style=\"color: white; vertical-align: middle; background-color: #8e8e8e;\\r\\n                    font-size: 1.82em; height: 60px; border-bottom: 4px solid #0064b4; font-weight: bold; padding-left: 20px;\">\\r\\n{$settings[\'site:title\']} - TEST\\r\\n        </td>\\r\\n    </tr>\\r\\n    <tr>\\r\\n        <td style=\"text-align: left;\">\\r\\n%CONTENT%\\r\\n</td>\\r\\n    </tr>\\r\\n</table>\\r\\n\\r\\n</body>\\r\\n</html>'),
+                                                                    (1, 'Basic', '<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\"\\r\\n        \"http://www.w3.org/TR/html4/loose.dtd\">\\r\\n<html lang=\"cs\">\\r\\n<head>\\r\\n    <meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">\\r\\n    <title>%TITLE%</title>\\r\\n    <style n:syntax=\"off\">\\r\\n        * {\\r\\n            font-family: Arial;\\r\\n        }\\r\\n\\r\\n        .text-right {\\r\\n            text-align: right;\\r\\n        }\\r\\n    </style>\\r\\n</head>\\r\\n<body bgcolor=\"#ffffff\" topmargin=\"0\" leftmargin=\"0\" marginheight=\"0\" marginwidth=\"0\"\\r\\n      style=\"width:100% !important; text-align: center; font-family: Arial sans-serif;\">\\r\\n\\r\\n<table style=\"width: 800px; margin: 0 auto 0 auto; font-family: Arial sans-serif;\">\\r\\n    <tr>\\r\\n        <td colspan=\"2\" style=\"color: white; vertical-align: middle; background-color: #8e8e8e;\\r\\n                    font-size: 1.82em; height: 60px; border-bottom: 4px solid #0064b4; font-weight: bold; padding-left: 20px;\">\\r\\n{$settings[\'site:title\']}\\r\\n        </td>\\r\\n    </tr>\\r\\n    <tr>\\r\\n        <td style=\"text-align: left;\">\\r\\n%CONTENT%\\r\\n</td>\\r\\n    </tr>\\r\\n</table>\\r\\n\\r\\n</body>\\r\\n</html>'),
                                                                     (2, 'Ink', '<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\r\n<html xmlns=\"http://www.w3.org/1999/xhtml\">\r\n\r\n<head>\r\n  <!-- The character set should be utf-8 -->\r\n  <meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">\r\n  <meta name=\"viewport\" content=\"width=device-width\">\r\n  <!-- Link to the email\'s CSS, which will be inlined into the email -->\r\n<title>%TITLE%</title>\r\n\r\n</head>\r\n\r\n<body style=\"-moz-box-sizing: border-box; -ms-text-size-adjust: 100%; -webkit-box-sizing: border-box; -webkit-text-size-adjust: 100%; Margin: 0; box-sizing: border-box; color: #0a0a0a; font-family: Helvetica, Arial, sans-serif; font-size: 16px; font-weight: normal; line-height: 1.3; margin: 0; min-width: 100%; padding: 0; text-align: left; width: 100% !important;\">\r\n  <style>\r\n    @media only screen {\r\n      html {\r\n        min-height: 100%;\r\n        background: #f3f3f3;\r\n      }\r\n    }\r\n    \r\n    @media only screen and (max-width: 596px) {\r\n      .small-float-center {\r\n        margin: 0 auto !important;\r\n        float: none !important;\r\n        text-align: center !important;\r\n      }\r\n      .small-text-center {\r\n        text-align: center !important;\r\n      }\r\n      .small-text-left {\r\n        text-align: left !important;\r\n      }\r\n      .small-text-right {\r\n        text-align: right !important;\r\n      }\r\n    }\r\n    \r\n    @media only screen and (max-width: 596px) {\r\n      .hide-for-large {\r\n        display: block !important;\r\n        width: auto !important;\r\n        overflow: visible !important;\r\n        max-height: none !important;\r\n        font-size: inherit !important;\r\n        line-height: inherit !important;\r\n      }\r\n    }\r\n    \r\n    @media only screen and (max-width: 596px) {\r\n      table.body table.container .hide-for-large,\r\n      table.body table.container .row.hide-for-large {\r\n        display: table !important;\r\n        width: 100% !important;\r\n      }\r\n    }\r\n    \r\n    @media only screen and (max-width: 596px) {\r\n      table.body table.container .callout-inner.hide-for-large {\r\n        display: table-cell !important;\r\n        width: 100% !important;\r\n      }\r\n    }\r\n    \r\n    @media only screen and (max-width: 596px) {\r\n      table.body table.container .show-for-large {\r\n        display: none !important;\r\n        width: 0;\r\n        mso-hide: all;\r\n        overflow: hidden;\r\n      }\r\n    }\r\n    \r\n    @media only screen and (max-width: 596px) {\r\n      table.body img {\r\n        width: auto;\r\n        height: auto;\r\n      }\r\n      table.body center {\r\n        min-width: 0 !important;\r\n      }\r\n      table.body .container {\r\n        width: 95% !important;\r\n      }\r\n      table.body .columns,\r\n      table.body .column {\r\n        height: auto !important;\r\n        -moz-box-sizing: border-box;\r\n        -webkit-box-sizing: border-box;\r\n        box-sizing: border-box;\r\n        padding-left: 16px !important;\r\n        padding-right: 16px !important;\r\n      }\r\n      table.body .columns .column,\r\n      table.body .columns .columns,\r\n      table.body .column .column,\r\n      table.body .column .columns {\r\n        padding-left: 0 !important;\r\n        padding-right: 0 !important;\r\n      }\r\n      table.body .collapse .columns,\r\n      table.body .collapse .column {\r\n        padding-left: 0 !important;\r\n        padding-right: 0 !important;\r\n      }\r\n      td.small-1,\r\n      th.small-1 {\r\n        display: inline-block !important;\r\n        width: 8.33333% !important;\r\n      }\r\n      td.small-2,\r\n      th.small-2 {\r\n        display: inline-block !important;\r\n        width: 16.66667% !important;\r\n      }\r\n      td.small-3,\r\n      th.small-3 {\r\n        display: inline-block !important;\r\n        width: 25% !important;\r\n      }\r\n      td.small-4,\r\n      th.small-4 {\r\n        display: inline-block !important;\r\n        width: 33.33333% !important;\r\n      }\r\n      td.small-5,\r\n      th.small-5 {\r\n        display: inline-block !important;\r\n        width: 41.66667% !important;\r\n      }\r\n      td.small-6,\r\n      th.small-6 {\r\n        display: inline-block !important;\r\n        width: 50% !important;\r\n      }\r\n      td.small-7,\r\n      th.small-7 {\r\n        display: inline-block !important;\r\n        width: 58.33333% !important;\r\n      }\r\n      td.small-8,\r\n      th.small-8 {\r\n        display: inline-block !important;\r\n        width: 66.66667% !important;\r\n      }\r\n      td.small-9,\r\n      th.small-9 {\r\n        display: inline-block !important;\r\n        width: 75% !important;\r\n      }\r\n      td.small-10,\r\n      th.small-10 {\r\n        display: inline-block !important;\r\n        width: 83.33333% !important;\r\n      }\r\n      td.small-11,\r\n      th.small-11 {\r\n        display: inline-block !important;\r\n        width: 91.66667% !important;\r\n      }\r\n      td.small-12,\r\n      th.small-12 {\r\n        display: inline-block !important;\r\n        width: 100% !important;\r\n      }\r\n      .columns td.small-12,\r\n      .column td.small-12,\r\n      .columns th.small-12,\r\n      .column th.small-12 {\r\n        display: block !important;\r\n        width: 100% !important;\r\n      }\r\n      table.body td.small-offset-1,\r\n      table.body th.small-offset-1 {\r\n        margin-left: 8.33333% !important;\r\n        Margin-left: 8.33333% !important;\r\n      }\r\n      table.body td.small-offset-2,\r\n      table.body th.small-offset-2 {\r\n        margin-left: 16.66667% !important;\r\n        Margin-left: 16.66667% !important;\r\n      }\r\n      table.body td.small-offset-3,\r\n      table.body th.small-offset-3 {\r\n        margin-left: 25% !important;\r\n        Margin-left: 25% !important;\r\n      }\r\n      table.body td.small-offset-4,\r\n      table.body th.small-offset-4 {\r\n        margin-left: 33.33333% !important;\r\n        Margin-left: 33.33333% !important;\r\n      }\r\n      table.body td.small-offset-5,\r\n      table.body th.small-offset-5 {\r\n        margin-left: 41.66667% !important;\r\n        Margin-left: 41.66667% !important;\r\n      }\r\n      table.body td.small-offset-6,\r\n      table.body th.small-offset-6 {\r\n        margin-left: 50% !important;\r\n        Margin-left: 50% !important;\r\n      }\r\n      table.body td.small-offset-7,\r\n      table.body th.small-offset-7 {\r\n        margin-left: 58.33333% !important;\r\n        Margin-left: 58.33333% !important;\r\n      }\r\n      table.body td.small-offset-8,\r\n      table.body th.small-offset-8 {\r\n        margin-left: 66.66667% !important;\r\n        Margin-left: 66.66667% !important;\r\n      }\r\n      table.body td.small-offset-9,\r\n      table.body th.small-offset-9 {\r\n        margin-left: 75% !important;\r\n        Margin-left: 75% !important;\r\n      }\r\n      table.body td.small-offset-10,\r\n      table.body th.small-offset-10 {\r\n        margin-left: 83.33333% !important;\r\n        Margin-left: 83.33333% !important;\r\n      }\r\n      table.body td.small-offset-11,\r\n      table.body th.small-offset-11 {\r\n        margin-left: 91.66667% !important;\r\n        Margin-left: 91.66667% !important;\r\n      }\r\n      table.body table.columns td.expander,\r\n      table.body table.columns th.expander {\r\n        display: none !important;\r\n      }\r\n      table.body .right-text-pad,\r\n      table.body .text-pad-right {\r\n        padding-left: 10px !important;\r\n      }\r\n      table.body .left-text-pad,\r\n      table.body .text-pad-left {\r\n        padding-right: 10px !important;\r\n      }\r\n      table.menu {\r\n        width: 100% !important;\r\n      }\r\n      table.menu td,\r\n      table.menu th {\r\n        width: auto !important;\r\n        display: inline-block !important;\r\n      }\r\n      table.menu.vertical td,\r\n      table.menu.vertical th,\r\n      table.menu.small-vertical td,\r\n      table.menu.small-vertical th {\r\n        display: block !important;\r\n      }\r\n      table.menu[align=\"center\"] {\r\n        width: auto !important;\r\n      }\r\n      table.button.small-expand,\r\n      table.button.small-expanded {\r\n        width: 100% !important;\r\n      }\r\n      table.button.small-expand table,\r\n      table.button.small-expanded table {\r\n        width: 100%;\r\n      }\r\n      table.button.small-expand table a,\r\n      table.button.small-expanded table a {\r\n        text-align: center !important;\r\n        width: 100% !important;\r\n        padding-left: 0 !important;\r\n        padding-right: 0 !important;\r\n      }\r\n      table.button.small-expand center,\r\n      table.button.small-expanded center {\r\n        min-width: 0;\r\n      }\r\n    }\r\n  </style>\r\n  <!-- Wrapper for the body of the email -->\r\n  <table class=\"body\" data-made-with-foundation=\"\" style=\"Margin: 0; background: #f3f3f3; border-collapse: collapse; border-spacing: 0; color: #0a0a0a; font-family: Helvetica, Arial, sans-serif; font-size: 16px; font-weight: normal; height: 100%; line-height: 1.3; margin: 0; padding: 0; text-align: left; vertical-align: top; width: 100%;\">\r\n    <tbody>\r\n      <tr style=\"padding: 0; text-align: left; vertical-align: top;\">\r\n        <!-- The class, align, and <center> tag center the container -->\r\n        <td class=\"float-center\" style=\"-moz-hyphens: auto; -webkit-hyphens: auto; Margin: 0 auto; border-collapse: collapse !important; color: #0a0a0a; float: none; font-family: Helvetica, Arial, sans-serif; font-size: 16px; font-weight: normal; hyphens: auto; line-height: 1.3; margin: 0 auto; padding: 0; text-align: center; vertical-align: top; word-wrap: break-word;\"\r\n          valign=\"top\" align=\"center\">\r\n          <center style=\"min-width: 580px; width: 100%;\">\r\n %CONTENT%\r\n          </center>\r\n        </td>\r\n      </tr>\r\n    </tbody>\r\n  </table>\r\n\r\n</body>\r\n\r\n</html>');
 
 CREATE TABLE `languages` (
@@ -352,7 +314,6 @@ INSERT INTO `lang_keys` (`id`, `lang_list_id`, `directory`, `path`, `value_cs`, 
                                                                                                    (126, 2, 'main', 'E-mails', 'E-maily', 'E-mails'),
                                                                                                    (127, 2, 'main', 'enabled', 'povolen', 'enabled'),
                                                                                                    (128, 2, 'main', 'Event', 'Událost', 'Event'),
-                                                                                                   (129, 2, 'main', 'Events', 'Události', 'Events'),
                                                                                                    (130, 2, 'main', 'ForgottenPassword', 'Zapomenuté heslo', 'Forgotten password'),
                                                                                                    (131, 2, 'main', 'file', 'soubor', 'file'),
                                                                                                    (132, 2, 'main', 'File', 'Soubor', 'File'),
@@ -433,7 +394,6 @@ INSERT INTO `lang_keys` (`id`, `lang_list_id`, `directory`, `path`, `value_cs`, 
                                                                                                    (207, 2, 'main', 'Previous', 'Předchozí', 'Previous'),
                                                                                                    (208, 2, 'main', 'price', 'cena', 'price'),
                                                                                                    (209, 2, 'main', 'Price', 'Cena', 'Price'),
-                                                                                                   (210, 2, 'main', 'Pricelist', 'Ceník', 'Pricelist'),
                                                                                                    (211, 2, 'main', 'ProceedToCheckout', 'Pokračovat k pokladně', 'Proceed to checkout'),
                                                                                                    (212, 2, 'main', 'ProductTitle', 'Název produktu', 'Product title'),
                                                                                                    (213, 2, 'main', 'profile', 'profil', 'profile'),
@@ -490,7 +450,6 @@ INSERT INTO `lang_keys` (`id`, `lang_list_id`, `directory`, `path`, `value_cs`, 
                                                                                                    (264, 2, 'main', 'Weight', 'Hmotnost', 'Weight'),
                                                                                                    (265, 2, 'main', 'ZIP', 'PSČ', 'ZIP'),
                                                                                                    (266, 2, '', '', '', ''),
-                                                                                                   (267, 3, 'events', 'DateWasNotSet', 'Datum dosud nebylo stanoveno', 'Date was not set yet'),
                                                                                                    (268, 3, 'navigation', 'about', 'O nás', 'About us'),
                                                                                                    (269, 3, 'helpdesk', 'name', 'Jméno', 'Name'),
                                                                                                    (270, 3, 'helpdesk', 'email', 'E-mail', 'E-mail'),
@@ -584,16 +543,6 @@ CREATE TABLE `links_categories` (
   `description` text COLLATE utf8_czech_ci,
   `title` varchar(80) COLLATE utf8_czech_ci NOT NULL,
   `sorted` int(11) NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
-
-CREATE TABLE `logger` (
-  `id` int(11) NOT NULL,
-  `event` varchar(200) COLLATE utf8_czech_ci NOT NULL,
-  `description` text COLLATE utf8_czech_ci,
-  `users_id` int(11) DEFAULT NULL,
-  `pages_id` int(11) DEFAULT NULL,
-  `date_created` datetime DEFAULT NULL,
-  `event_types_id` int(11) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
 
 CREATE TABLE `media` (
@@ -694,7 +643,6 @@ INSERT INTO `pages_templates` (`id`, `pages_types_id`, `template`, `title`, `tit
                                                                                                (8, NULL, 'Front:Media:folder', 'Seznam složek dokumentů', 'List of document folders'),
                                                                                                (9, NULL, 'Front:Media:folderList', 'Seznam dokumentů dané složky', 'List of documents of given folder'),
                                                                                                (10, NULL, 'Front:Events:detail', 'Seznam událostí', 'List of events'),
-                                                                                               (11, NULL, 'Front:Pricelist:default', 'Ceníky', 'Seznam a zobrazení všech ceníků'),
                                                                                                (12, NULL , 'Front:Links:default', 'Odkazy', 'Links');
 
 CREATE TABLE `pages_types` (
@@ -717,7 +665,7 @@ CREATE TABLE `pages_types` (
 INSERT INTO `pages_types` (`id`, `content_type`, `presenter`, `action`, `prefix`, `admin_enabled`, `admin_link`, `icon`, `enable_snippets`, `enable_images`, `enable_files`, `enable_related`, `pages_id`, `pages_templates_id`) VALUES
                                                                                                                                                                                                                                         (1, 'Stránky', 'Front:Pages', 'default', '', 1, 'pages/?type=1', 'fa-files-o', 0, 1, 1, 1, 1, 3),
                                                                                                                                                                                                                                         (2, 'Aktuality', 'Front:Blog', 'detail', 'blog', 1, 'pages/?type=2', 'fa-newspaper-o', 1, 1, 1, 1, 3, 6),
-                                                                                                                                                                                                                                        (3, 'Události', 'Front:Events', 'default', '', 1, 'pages/?type=3', 'fa-calendar-o', 0, 1, 1, 1, 4, 1),
+                                                                                                                                                                                                                                        (2, 'Aktuality', 'Front:Blog', 'detail', 'blog', 1, 'pages/?type=2', 'fa-newspaper-o', 1, 1, 1, 1, 3, 6),
                                                                                                                                                                                                                                         (6, 'Galerie', 'Front:Media', 'album', '', 1, 'pages/?type=6', 'fa-file-image-o', 0, 1, 1, 1, 4, 1),
                                                                                                                                                                                                                                         (8, 'Dokumenty', 'Front:Media', 'folder', '', 1, 'pages?type=8', 'fa-files-o', 1, 1, 1, 1, 6, 9),
                                                                                                                                                                                                                                         (9, 'Šablony', '', 'default', '', 1, 'pages?type=9', 'fa-th', 1, 1, 1, 1, 5, 10);
@@ -777,46 +725,6 @@ CREATE TABLE `pictures` (
   `main_file` tinyint(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
 
-CREATE TABLE `pricelist` (
-  `id` int(11) NOT NULL,
-  `pricelist_categories_id` int(11) DEFAULT NULL,
-  `title` varchar(400) COLLATE utf8_czech_ci NOT NULL,
-  `description` text COLLATE utf8_czech_ci,
-  `price` double NOT NULL,
-  `price_info` varchar(80) COLLATE utf8_czech_ci DEFAULT NULL,
-  `sorted` int(11) NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
-
-CREATE TABLE `pricelist_categories` (
-  `id` int(11) NOT NULL,
-  `pricelist_lists_id` int(11) DEFAULT NULL,
-  `parent_id` int(11) DEFAULT NULL,
-  `description` text COLLATE utf8_czech_ci,
-  `title` varchar(80) COLLATE utf8_czech_ci NOT NULL,
-  `sorted` int(11) NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
-
-CREATE TABLE `pricelist_daily` (
-  `id` int(11) NOT NULL,
-  `pricelist_categories_id` int(11) DEFAULT NULL,
-  `title` text CHARACTER SET latin1 NOT NULL,
-  `pricelist_dates_id` int(11) NOT NULL,
-  `price` double NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
-
-CREATE TABLE `pricelist_dates` (
-  `id` int(11) NOT NULL,
-  `day` date NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
-
-CREATE TABLE `pricelist_lists` (
-  `id` int(11) NOT NULL,
-  `title` varchar(30) COLLATE utf8_czech_ci NOT NULL,
-  `currencies_id` int(11) DEFAULT NULL,
-  `description` text COLLATE utf8_czech_ci,
-  `class` varchar(60) CHARACTER SET latin1 DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
-
 CREATE TABLE `settings` (
   `id` int(11) NOT NULL,
   `settings_categories_id` int(11) DEFAULT NULL,
@@ -837,7 +745,6 @@ INSERT INTO `settings` (`id`, `settings_categories_id`, `setkey`, `setvalue`, `d
                                                                                                                                                    (6, 15, 'blog_fblike', '1', 'Přidá sdílecí tlačítko na Facebook, pokud je zadán FB účet', 'Adds sharing button for Facebook, if FB account specified', 'boolean', 1),
                                                                                                                                                    (21, 16, 'contacts:email:hq', '', 'Vaše e-mailová adresa', 'Your e-mail address', NULL, 1),
                                                                                                                                                    (22, 16, 'contacts:email:techSupport', '', 'Technická podpora', 'Technical support', NULL, 1),
-                                                                                                                                                   (23, 16, 'contacts:email:order', '', 'E-mail pro odesílání objednávky', 'E-mail for sending orders', NULL, 1),
                                                                                                                                                    (24, 16, 'contacts:smartForm:enabled', '0', 'Povolit doplňování SmartForm', 'SmartForm address autosuggest enabled', 'boolean', 1),
                                                                                                                                                    (25, 16, 'contacts:smartForm:clientId', '', 'Klientský kód SmartForm', 'SmartForm client code', '', 1),
                                                                                                                                                    (26, 16, 'contacts:residency:contacts_id', '', 'Kontaktní informace o sídlu', 'Headquarters contact information', 'table:contacts;column:name', 1),
@@ -967,10 +874,6 @@ INSERT INTO `users_roles` (`id`, `title`, `sign`, `appearance`, `helpdesk`, `set
 ALTER TABLE `blacklist`
   ADD PRIMARY KEY (`id`);
 
-ALTER TABLE `board`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `parent_id` (`parent_id`);
-
 ALTER TABLE `carousel`
   ADD PRIMARY KEY (`id`);
 
@@ -998,15 +901,6 @@ ALTER TABLE `countries`
 
 ALTER TABLE `currencies`
   ADD PRIMARY KEY (`id`);
-
-ALTER TABLE `events`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `pages_id` (`pages_id`),
-  ADD KEY `contacts_id` (`contacts_id`);
-
-ALTER TABLE `events_signed`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `events_id` (`events_id`);
 
 ALTER TABLE `helpdesk`
   ADD PRIMARY KEY (`id`),
@@ -1037,9 +931,6 @@ ALTER TABLE `links`
 ALTER TABLE `links_categories`
   ADD PRIMARY KEY (`id`),
   ADD KEY `parent_id` (`parent_id`);
-
-ALTER TABLE `logger`
-  ADD PRIMARY KEY (`id`);
 
 ALTER TABLE `media`
   ADD PRIMARY KEY (`id`),
@@ -1093,28 +984,6 @@ ALTER TABLE `pictures`
   ADD PRIMARY KEY (`id`),
   ADD KEY `albums_id` (`pages_id`);
 
-ALTER TABLE `pricelist`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `pricelist_categories_id` (`pricelist_categories_id`);
-
-ALTER TABLE `pricelist_categories`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `parent_id` (`parent_id`),
-  ADD KEY `pricelist_lists_id` (`pricelist_lists_id`);
-
-ALTER TABLE `pricelist_daily`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `pricelist_categories_id` (`pricelist_categories_id`),
-  ADD KEY `pricelist_dates_id` (`pricelist_dates_id`),
-  ADD KEY `pricelist_dates_id_2` (`pricelist_dates_id`);
-
-ALTER TABLE `pricelist_dates`
-  ADD PRIMARY KEY (`id`);
-
-ALTER TABLE `pricelist_lists`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `currencies_id` (`currencies_id`);
-
 ALTER TABLE `settings`
   ADD PRIMARY KEY (`id`),
   ADD KEY `categories_id` (`settings_categories_id`);
@@ -1124,9 +993,6 @@ ALTER TABLE `settings_categories`
   ADD KEY `parent_id` (`parent_id`);
 
 ALTER TABLE `snippets`
-  ADD PRIMARY KEY (`id`);
-
-ALTER TABLE `test`
   ADD PRIMARY KEY (`id`);
 
 ALTER TABLE `users`
@@ -1143,9 +1009,6 @@ ALTER TABLE `users_roles`
 
 ALTER TABLE `blacklist`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
-
-ALTER TABLE `board`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 ALTER TABLE `carousel`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
@@ -1168,12 +1031,6 @@ ALTER TABLE `countries`
 ALTER TABLE `currencies`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
-ALTER TABLE `events`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
-
-ALTER TABLE `events_signed`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
 ALTER TABLE `helpdesk`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
@@ -1194,9 +1051,6 @@ ALTER TABLE `links`
 
 ALTER TABLE `links_categories`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
-
-ALTER TABLE `logger`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=86;
 
 ALTER TABLE `media`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
@@ -1231,21 +1085,6 @@ ALTER TABLE `params`
 ALTER TABLE `pictures`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=156;
 
-ALTER TABLE `pricelist`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
-
-ALTER TABLE `pricelist_categories`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
-
-ALTER TABLE `pricelist_daily`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
-ALTER TABLE `pricelist_dates`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
-
-ALTER TABLE `pricelist_lists`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
-
 ALTER TABLE `settings`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=71;
 
@@ -1254,9 +1093,6 @@ ALTER TABLE `settings_categories`
 
 ALTER TABLE `snippets`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
-
-ALTER TABLE `test`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 ALTER TABLE `users`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
@@ -1276,13 +1112,6 @@ ALTER TABLE `contacts`
 
 ALTER TABLE `contacts_openinghours`
   ADD CONSTRAINT `contacts_openinghours_ibfk_1` FOREIGN KEY (`contacts_id`) REFERENCES `contacts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
-ALTER TABLE `events`
-  ADD CONSTRAINT `events_ibfk_1` FOREIGN KEY (`pages_id`) REFERENCES `pages` (`id`) ON DELETE SET NULL ON UPDATE SET NULL,
-  ADD CONSTRAINT `events_ibfk_2` FOREIGN KEY (`contacts_id`) REFERENCES `contacts` (`id`) ON DELETE SET NULL ON UPDATE SET NULL;
-
-ALTER TABLE `events_signed`
-  ADD CONSTRAINT `events_signed_ibfk_1` FOREIGN KEY (`events_id`) REFERENCES `events` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 ALTER TABLE `helpdesk`
   ADD CONSTRAINT `helpdesk_ibfk_1` FOREIGN KEY (`helpdesk_templates_id`) REFERENCES `helpdesk_templates` (`id`) ON DELETE SET NULL ON UPDATE SET NULL;
@@ -1330,20 +1159,6 @@ ALTER TABLE `pages_widgets`
 ALTER TABLE `params`
   ADD CONSTRAINT `params_ibfk_3` FOREIGN KEY (`pages_id`) REFERENCES `pages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `params_ibfk_4` FOREIGN KEY (`param_id`) REFERENCES `param` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
-ALTER TABLE `pricelist`
-  ADD CONSTRAINT `pricelist_ibfk_1` FOREIGN KEY (`pricelist_categories_id`) REFERENCES `pricelist_categories` (`id`) ON DELETE SET NULL ON UPDATE SET NULL;
-
-ALTER TABLE `pricelist_categories`
-  ADD CONSTRAINT `pricelist_categories_ibfk_1` FOREIGN KEY (`parent_id`) REFERENCES `pricelist_categories` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `pricelist_categories_ibfk_2` FOREIGN KEY (`pricelist_lists_id`) REFERENCES `pricelist_lists` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
-ALTER TABLE `pricelist_daily`
-  ADD CONSTRAINT `pricelist_daily_ibfk_1` FOREIGN KEY (`pricelist_dates_id`) REFERENCES `pricelist_dates` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `pricelist_daily_ibfk_2` FOREIGN KEY (`pricelist_categories_id`) REFERENCES `pricelist_categories` (`id`) ON DELETE SET NULL ON UPDATE SET NULL;
-
-ALTER TABLE `pricelist_lists`
-  ADD CONSTRAINT `pricelist_lists_ibfk_1` FOREIGN KEY (`currencies_id`) REFERENCES `currencies` (`id`) ON DELETE SET NULL ON UPDATE SET NULL;
 
 ALTER TABLE `settings`
   ADD CONSTRAINT `settings_ibfk_1` FOREIGN KEY (`settings_categories_id`) REFERENCES `settings_categories` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;

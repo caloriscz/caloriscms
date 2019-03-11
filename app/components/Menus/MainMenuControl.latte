@@ -5,7 +5,7 @@
 {/if}
 
 <li class="nav-item">
-    <a class="nav-link" href="/admin"><i class="icon-speedometer"></i> {_admin.navigation.homepage}</a>
+    <a class="nav-link" href="/admin"><i class="icon-speedometer"></i> Homepage</a>
 </li>
 <li class="nav-item">
     <a class="nav-link" href="/admin/menu"><i class="icon-menu"></i> Menu</a>
@@ -24,13 +24,13 @@
 </li>
 <li class="nav-item">
     <a class="nav-link" href="/admin/contacts">
-        <i class="fa fa-database fa-fw"></i> {_dictionary.main.contacts|firstUpper}
+        <i class="fa fa-database fa-fw"></i> Kontakty
     </a>
 </li>
 
 <li class="nav-item">
     <a class="nav-link" href="/admin/snippets">
-        <i class="fa fa-bookmark-o fa-fw"></i> {_dictionary.main.Snippets}
+        <i class="fa fa-bookmark-o fa-fw"></i> Snippets
     </a>
 </li>
 <li class="nav-item">
@@ -39,24 +39,19 @@
     </a>
 </li>
 <li class="nav-item">
-    <a class="nav-link" href="/admin/pricelist">
-        <i class="fa fa-usd fa-fw"></i> Ceník
-    </a>
-</li>
-<li class="nav-item">
     <a class="nav-link" href="/admin/members">
-        <i class="fa fa-users fa-fw"></i> {_admin.navigation.members}
+        <i class="fa fa-users fa-fw"></i> Uživatelé
     </a>
 </li>
 <li class="nav-item">
     <a class="nav-link" href="/admin/helpdesk">
-        <i class="fa fa-life-ring fa-fw"></i> {_dictionary.main.Helpdesk}
+        <i class="fa fa-life-ring fa-fw"></i> Helpdesk
     </a>
 </li>
 {if $admin}
     <li class="nav-item nav-dropdown {if $presenter->getName() == 'Admin:Settings'} open{/if}">
         <a class="nav-link nav-dropdown-toggle" href="#">
-            <i class="fa fa-gear fa-fw"></i> {_dictionary.main.settings|firstUpper}
+            <i class="fa fa-gear fa-fw"></i> Nastavení
         </a>
         <ul class="nav-dropdown-items">
             <li class="nav-item">
@@ -100,14 +95,4 @@
             <a class="nav-link" href="/admin/appearance/carousel">Carousel</a>
         </li>
     </ul>
-</li>
-<li class="nav-item">
-    <a class="nav-link" href="/admin/lang">
-        <i class="fa fa-exchange fa-fw"></i> Překlady
-    </a>
-</li>
-<li class="nav-item">
-    <a class="nav-link" href="/admin/board">
-        <i class="fa fa-commenting-o fa-fw"></i> Board
-    </a>
 </li>
