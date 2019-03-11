@@ -90,8 +90,6 @@ class PageListControl extends Control
             $template->setFile(__DIR__ . '/PageListTreeControl.latte');
         } elseif ($this->getView() === 'gallery') {
             $template->setFile(__DIR__ . '/PageListGalleryControl.latte');
-        } elseif ($this->getView() === 'calendar') {
-            $template->setFile(__DIR__ . '/PageListSimpleControl.latte');
         } else {
             $template->setFile(__DIR__ . '/PageListSimpleControl.latte');
         }

@@ -5,6 +5,7 @@ namespace Caloriscz\Members;
 use Nette\Application\AbortException;
 use Nette\Application\UI\Control;
 use Nette\Database\Context;
+use Nette\InvalidStateException;
 use Nette\Utils\Html;
 use Ublaboo\DataGrid\DataGrid;
 
@@ -22,7 +23,8 @@ class MemberGridControl extends Control
 
     /**
      * @param $name
-     * @throws \Nette\InvalidStateException
+     * @throws InvalidStateException
+     * @throws \Exception
      */
     protected function createComponentMemberGrid($name): void
     {
@@ -41,16 +43,16 @@ class MemberGridControl extends Control
             $grid->setDataSource($contacts);
             $grid->addGroupAction('Delete')->onSelect[] = [$this, 'handleDelete'];
 
-            $grid->addColumnLink('name', 'dictionary.main.Title')
+            $grid->addColumnLink('name', 'Uživatel')
                 ->setRenderer(function ($item) {
-                    $url = Html::el('a')->href($this->getPresenter()->link('edit', ["id" => $item->id]))
+                    $url = Html::el('a')->href($this->getPresenter()->link('edit', ['id' => $item->id]))
                         ->setText($item->username);
                     return $url;
                 })
                 ->setSortable();
-            $grid->addColumnText('email', $this->getPresenter()->translator->translate('dictionary.main.Email'))
+            $grid->addColumnText('email', 'E-mail')
                 ->setSortable();
-            $grid->addColumnText('state', $this->getPresenter()->translator->translate('dictionary.main.State'))->setRenderer(function ($item) {
+            $grid->addColumnText('state', 'Stav')->setRenderer(function ($item) {
                 $text = 'dictionary.main.disabled';
 
                 if ($item->date_created === 1) {
@@ -60,7 +62,7 @@ class MemberGridControl extends Control
                 return $this->getPresenter()->translator->translate($text);
             })
                 ->setSortable();
-            $grid->addColumnText('date_created', $this->getPresenter()->translator->translate('dictionary.main.Date'))
+            $grid->addColumnText('date_created', $this->getPresenter()->translator->translate('Datum'))
                 ->setRenderer(function ($item) {
                     return date('j. n. Y', strtotime($item->date_created));
                 })
@@ -72,7 +74,6 @@ class MemberGridControl extends Control
 
     /**
      * User delete
-     * @throws AbortException
      */
     public function handleDelete($id): void
     {

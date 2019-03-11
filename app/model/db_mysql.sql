@@ -274,13 +274,6 @@ INSERT INTO `pages` (`id`, `slug`, `title`, `document`, `preview`, `pages_id`, `
                                                                                                                                                                                                                                                                                                                                                 (7, 'cenik', 'Ceník', NULL, NULL, 1, 1, 1, '', '', NULL, NULL, 9, 11, 795, 0, 0, 1),
                                                                                                                                                                                                                                                                                                                                                 (8, 'odkazy', 'Odkazy', NULL, NULL, 1, 1, 1, '', '', NULL, NULL, 9, 12, 800, 0, 0, 1);
 
-CREATE TABLE `pages_related` (
-  `id` int(11) NOT NULL,
-  `pages_id` int(11) NOT NULL,
-  `related_pages_id` int(11) DEFAULT NULL,
-  `description` varchar(120) COLLATE utf8_czech_ci DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
-
 CREATE TABLE `pages_templates` (
   `id` int(11) NOT NULL,
   `pages_types_id` int(11) DEFAULT NULL,
@@ -314,18 +307,17 @@ CREATE TABLE `pages_types` (
   `enable_snippets` tinyint(1) NOT NULL DEFAULT '1',
   `enable_images` tinyint(1) NOT NULL DEFAULT '1',
   `enable_files` tinyint(1) NOT NULL DEFAULT '1',
-  `enable_related` tinyint(1) NOT NULL DEFAULT '1',
   `pages_id` int(11) DEFAULT NULL COMMENT 'Initial page id for this page type',
   `pages_templates_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
 
-INSERT INTO `pages_types` (`id`, `content_type`, `presenter`, `action`, `prefix`, `admin_enabled`, `admin_link`, `icon`, `enable_snippets`, `enable_images`, `enable_files`, `enable_related`, `pages_id`, `pages_templates_id`) VALUES
-                                                                                                                                                                                                                                        (1, 'Stránky', 'Front:Pages', 'default', '', 1, 'pages/?type=1', 'fa-files-o', 0, 1, 1, 1, 1, 3),
-                                                                                                                                                                                                                                        (2, 'Aktuality', 'Front:Blog', 'detail', 'blog', 1, 'pages/?type=2', 'fa-newspaper-o', 1, 1, 1, 1, 3, 6),
-                                                                                                                                                                                                                                        (2, 'Aktuality', 'Front:Blog', 'detail', 'blog', 1, 'pages/?type=2', 'fa-newspaper-o', 1, 1, 1, 1, 3, 6),
-                                                                                                                                                                                                                                        (6, 'Galerie', 'Front:Media', 'album', '', 1, 'pages/?type=6', 'fa-file-image-o', 0, 1, 1, 1, 4, 1),
-                                                                                                                                                                                                                                        (8, 'Dokumenty', 'Front:Media', 'folder', '', 1, 'pages?type=8', 'fa-files-o', 1, 1, 1, 1, 6, 9),
-                                                                                                                                                                                                                                        (9, 'Šablony', '', 'default', '', 1, 'pages?type=9', 'fa-th', 1, 1, 1, 1, 5, 10);
+INSERT INTO `pages_types` (`id`, `content_type`, `presenter`, `action`, `prefix`, `admin_enabled`, `admin_link`, `icon`, `enable_snippets`, `enable_images`, `enable_files`, `pages_id`, `pages_templates_id`) VALUES
+                                                                                                                                                                                                                                        (1, 'Stránky', 'Front:Pages', 'default', '', 1, 'pages/?type=1', 'fa-files-o', 0, 1, 1, 1, 3),
+                                                                                                                                                                                                                                        (2, 'Aktuality', 'Front:Blog', 'detail', 'blog', 1, 'pages/?type=2', 'fa-newspaper-o', 1, 1, 1, 3, 6),
+                                                                                                                                                                                                                                        (2, 'Aktuality', 'Front:Blog', 'detail', 'blog', 1, 'pages/?type=2', 'fa-newspaper-o', 1, 1, 1, 3, 6),
+                                                                                                                                                                                                                                        (6, 'Galerie', 'Front:Media', 'album', '', 1, 'pages/?type=6', 'fa-file-image-o', 0, 1, 1, 4, 1),
+                                                                                                                                                                                                                                        (8, 'Dokumenty', 'Front:Media', 'folder', '', 1, 'pages?type=8', 'fa-files-o', 1, 1, 1, 6, 9),
+                                                                                                                                                                                                                                        (9, 'Šablony', '', 'default', '', 1, 'pages?type=9', 'fa-th', 1, 1, 1, 5, 10);
 
 CREATE TABLE `pages_widgets` (
   `id` int(11) NOT NULL,
@@ -532,13 +524,6 @@ ALTER TABLE `pages`
   ADD KEY `content_type` (`pages_types_id`),
   ADD KEY `pages_ibfk_7` (`pages_templates_id`);
 
-ALTER TABLE `pages_related`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `store_id` (`pages_id`,`related_pages_id`),
-  ADD KEY `related_store_id` (`related_pages_id`),
-  ADD KEY `blog_id` (`pages_id`),
-  ADD KEY `related_blog_id` (`related_pages_id`);
-
 ALTER TABLE `pages_templates`
   ADD PRIMARY KEY (`id`),
   ADD KEY `pages_types_id` (`pages_types_id`);
@@ -621,9 +606,6 @@ ALTER TABLE `menu_menus`
 ALTER TABLE `pages`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=128;
 
-ALTER TABLE `pages_related`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
 ALTER TABLE `pages_templates`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
@@ -683,10 +665,6 @@ ALTER TABLE `pages`
   ADD CONSTRAINT `pages_ibfk_5` FOREIGN KEY (`pages_id`) REFERENCES `pages` (`id`) ON DELETE SET NULL ON UPDATE SET NULL,
   ADD CONSTRAINT `pages_ibfk_6` FOREIGN KEY (`pages_types_id`) REFERENCES `pages_types` (`id`) ON DELETE SET NULL ON UPDATE SET NULL,
   ADD CONSTRAINT `pages_ibfk_7` FOREIGN KEY (`pages_templates_id`) REFERENCES `pages_templates` (`id`) ON DELETE SET NULL ON UPDATE SET NULL;
-
-ALTER TABLE `pages_related`
-  ADD CONSTRAINT `pages_related_ibfk_3` FOREIGN KEY (`pages_id`) REFERENCES `pages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `pages_related_ibfk_4` FOREIGN KEY (`related_pages_id`) REFERENCES `pages` (`id`) ON DELETE SET NULL ON UPDATE SET NULL;
 
 ALTER TABLE `pages_templates`
   ADD CONSTRAINT `pages_templates_ibfk_1` FOREIGN KEY (`pages_types_id`) REFERENCES `pages_types` (`id`) ON DELETE SET NULL ON UPDATE SET NULL;

@@ -135,38 +135,13 @@ class PagesPresenter extends BasePresenter
         $this->redirect('this', ['id' => null]);
     }
 
-    /**
-     * Deletes related page
-     * @param $id
-     * @throws AbortException
-     */
-    public function handleDeleteRelated($id): void
-    {
-        $this->database->table('pages_related')->get($id)->delete();
-        $this->redirect(':Admin:Pages:detailRelated', ['id' => $this->getParameter('item')]);
-    }
-
-    protected function createComponentProductFileList()
+    protected function createComponentProductFileList(): FileListControl
     {
         $control = new FileListControl($this->database);
         $control->onSave[] = function ($pages_id) {
             $this->redirect('this', ['id' => $pages_id]);
         };
         return $control;
-    }
-
-    /**
-     * Insert related page
-     * @param $id
-     * @throws AbortException
-     */
-    public function handleInsertRelated($id): void
-    {
-        $this->database->table('pages_related')->insert([
-            'pages_id' => $this->getParameter('item'),
-            'related_pages_id' => $id
-        ]);
-        $this->redirect(':Admin:Pages:detailRelated', ['id' => $this->getParameter('item')]);
     }
 
     /**
@@ -209,16 +184,5 @@ class PagesPresenter extends BasePresenter
         $this->template->page = $this->database->table('pages')->get($this->getParameter('id'));
         $this->template->files = $this->database->table('media')
             ->where(['pages_id' => $this->getParameter('id'), 'file_type' => 0]);
-    }
-
-    public function renderDetailRelated(): void
-    {
-        $src = $this->getParameter('src');
-
-        $this->template->relatedSearch = $this->database->table('pages')
-            ->where(['title LIKE ?' => '%' . $src . '%'])->limit(20);
-        $this->template->related = $this->database->table('pages_related')
-            ->where(['pages_id' => $this->getParameter('id')]);
-        $this->template->pages = $this->database->table('pages')->get($this->getParameter('id'));
     }
 }

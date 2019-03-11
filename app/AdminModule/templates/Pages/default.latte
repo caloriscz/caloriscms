@@ -16,8 +16,6 @@
                             Nový příspěvek
                         {elseif $type == 1}
                             {_dictionary.main.NewPage}
-                        {elseif $type == 3}
-                            Nová událost
                         {elseif $type == 6}
                             Nová galerie
                         {elseif $type == 8}
@@ -37,14 +35,6 @@
                     <div class="card-header">
                         Stránky {$view}
 
-                        {if $type == 3}
-                        <small class="pull-right font-weight-bold">
-                            <a n:href="view! 'type' => $presenter->getParameter('type'), view => 'calendar'"
-                                    class="btn btn-sm{if $view === 'calendar'} btn-primary{/if}">
-                                <i class="fa fa-calendar"></i> Kalendář
-                            </a>
-                        </small>
-                        {/if}
                         <small class="pull-right font-weight-bold">
                             <a n:href="view! 'type' => $presenter->getParameter('type'), view => 'tree'"
                                     class="btn btn-sm{if $view === 'tree'} btn-primary{/if}"><i class="fa fa-tree"></i> Strom

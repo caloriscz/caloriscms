@@ -7,9 +7,6 @@
     {elseif $page->pages_types->id == 2}
         {var $pageRoot = 'pages?type=2'}
         {var $pageTitle = 'Všechny aktuality'}
-    {elseif $page->pages_types->id == 3}
-        {var $pageRoot = 'events'}
-        {var $pageTitle = 'Všechny události'}
     {elseif $page->pages_types->id == 4}
         {var $pageRoot = 'catalogue'}
         {var $pageTitle = 'Celý katalog'}
@@ -25,14 +22,6 @@
     {/if}
     <li class="breadcrumb-menu d-md-down-none">
         <div class="btn-group" role="group">
-            {if $page->pages_types_id == 3}
-                {if $view != 'detail' || $name != 'Admin:Events'}
-                    <a href="/admin/events/detail/{$id}" class="btn btn-secondary">
-                        <i class="fa fa-calendar fa-fw"></i> {_dictionary.main.Event}
-                    </a>
-                {/if}
-            {/if}
-
             {if $page->pages_types_id == 4}
                 {if $view != 'product' && $name != 'Admin:Product'}
                     <a href="/admin/product/product/{$id}" class="btn btn-secondary">Produkt</a>
@@ -71,9 +60,6 @@
             {/if}
             {if $page->pages_types->enable_files && $view != 'detailFiles'}
                 <a href="/admin/pages/detail-files/{$id}" class="btn btn-secondary">{_dictionary.main.files|firstUpper}</a>
-            {/if}
-            {if $page->pages_types->enable_related && $view != 'detailRelated'}
-                <a href="/admin/pages/detail-related/{$id}" class="btn btn-secondary">{_dictionary.main.related|firstUpper}</a>
             {/if}
             <a href="/admin/pages/settings/{$id}" class="btn btn-secondary">Nastavení</a>
 
