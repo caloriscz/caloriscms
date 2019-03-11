@@ -5,7 +5,6 @@ namespace App\AdminModule\Presenters;
 use App\Forms\Sign\LostPassControl;
 use App\Forms\Sign\ResetPassControl;
 use App\Forms\Sign\SignInControl;
-use App\Model\Logger;
 use Nette;
 
 /**
@@ -39,12 +38,6 @@ class SignPresenter extends BasePresenter
 
             $this->redirect('this');
         };
-
-        $logger = new Logger($this->database);
-        $logger->setEvent('Uživatel v administraci si nechal zaslat heslo');
-        $logger->setDescription("");
-        $logger->setUser($this->user->getId());
-        $logger->save();
 
         return $control;
     }
