@@ -29,13 +29,13 @@ class EditSettingsControl extends Control
 
         $form->addHidden('category_id');
         $form->addHidden('setkey');
-        $form->addText('setvalue', 'dictionary.main.Description');
+        $form->addText('setvalue', 'Popisek');
 
         $arr = array_filter(['category_id' => $this->presenter->getParameter('id')]);
 
         $form->setDefaults($arr);
 
-        $form->addSubmit('send', 'dictionary.main.Save')
+        $form->addSubmit('send', 'Uložit')
             ->setAttribute('class', 'btn btn-success');
 
         $form->onSuccess[] = [$this, 'editSettingsSucceeded'];
@@ -45,7 +45,6 @@ class EditSettingsControl extends Control
 
     /**
      * @param BootstrapUIForm $form
-     * @throws \Nette\Application\AbortException
      */
     public function permissionValidated(BootstrapUIForm $form): void
     {
@@ -57,7 +56,6 @@ class EditSettingsControl extends Control
 
     /**
      * @param BootstrapUIForm $form
-     * @throws \Nette\Application\AbortException
      */
     public function editSettingsSucceeded(BootstrapUIForm $form): void
     {
@@ -83,12 +81,10 @@ class EditSettingsControl extends Control
         if (!$this->presenter->getParameter('id')) {
             $arr = [
                 'admin_editable' => 1,
-                'settings_categories_id' => 10,
             ];
         } else {
             $arr = [
                 'admin_editable' => 1,
-                'settings_categories_id' => $this->presenter->getParameter('id'),
             ];
         }
 
@@ -97,7 +93,6 @@ class EditSettingsControl extends Control
         $template->settingsDb = $this->database->table('settings')
             ->where($arr);
         $template->setFile(__DIR__ . '/EditSettingsControl.latte');
-
         $template->render();
     }
 

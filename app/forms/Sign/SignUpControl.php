@@ -191,17 +191,11 @@ class SignUpControl extends Control
             $this->database->table('contacts')->get($contactId)->update(['order' => $contactId]);
         }
 
-        if ($form->values->vatin) {
-            $ares = new Ares();
-            $aresArr = $ares->loadData($form->values->vatin)->toArray();
-        }
-
         $params = [
             'username' => $form->values->username,
             'activationCode' => $activationCode,
             'settings' => $this->getPresenter()->template->settings,
-            'form' => $form,
-            'aresArr' => $aresArr,
+            'form' => $form
         ];
 
         try {

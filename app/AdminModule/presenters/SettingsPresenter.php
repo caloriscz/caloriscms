@@ -8,7 +8,6 @@ use App\Forms\Settings\InsertCountryControl;
 use App\Forms\Settings\InsertCurrencyControl;
 use App\Forms\Settings\InsertLanguageControl;
 use Caloriscz\Settings\BlackListControl;
-use Caloriscz\Settings\SettingsCategoriesControl;
 use Nette\Application\AbortException;
 
 /**
@@ -37,11 +36,6 @@ class SettingsPresenter extends BasePresenter
         return new InsertCurrencyControl($this->database);
     }
 
-    protected function createComponentSettingsCategories(): SettingsCategoriesControl
-    {
-        return new SettingsCategoriesControl($this->database);
-    }
-
     protected function createComponentInsertBlackList(): InsertBlackListControl
     {
         return new InsertBlackListControl($this->database);
@@ -56,7 +50,7 @@ class SettingsPresenter extends BasePresenter
      * @param $id
      * @throws AbortException
      */
-    public function handleInstall($id)
+    public function handleInstall($id): void
     {
         $default = $this->database->table('languages')->where('default = 1');
 

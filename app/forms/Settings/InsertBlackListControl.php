@@ -68,9 +68,6 @@ class InsertBlackListControl extends Control
 
         $this->template->setFile(__DIR__ . '/InsertBlackListControl.latte');
 
-        $this->template->id = $id;
-        $this->template->idActive = $this->presenter->getParameter('id');
-        $this->template->menu = $this->database->table('settings_categories')->where('parent_id', null);
         $this->template->render();
     }
 

@@ -36,7 +36,6 @@ class AppearancePresenter extends BasePresenter
     public function renderDefault(): void
     {
         $arr = [
-            'settings_categories_id' => 20,
             'type' => 'local_path',
         ];
 

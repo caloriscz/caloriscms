@@ -60,7 +60,7 @@
                 <label class="col-sm-3 control-label required">{_dictionary.main.Street}</label>
 
                 <div class="col-sm-8">
-                    <input type="text" n:name="street" maxlength="200" class="smartform-street-and-number form-control">
+                    <input type="text" n:name="street" maxlength="200" class="form-control">
                 </div>
             </div>
 
@@ -68,7 +68,7 @@
                 <label class="col-sm-3 control-label required">{_dictionary.main.ZIP}</label>
 
                 <div class="col-sm-8">
-                    <input type="text" n:name="zip" maxlength="20" class="smartform-city form-control">
+                    <input type="text" n:name="zip" maxlength="20" class="form-control">
                 </div>
             </div>
 
@@ -76,7 +76,7 @@
                 <label class="col-sm-3 control-label required">{_dictionary.main.City}</label>
 
                 <div class="col-sm-8">
-                    <input type="text" n:name="city" maxlength="80" class="smartform-zip form-control">
+                    <input type="text" n:name="city" maxlength="80" class="form-control">
                 </div>
             </div>
 
@@ -114,16 +114,6 @@
         </fieldset>
     {/if}
 
-    {if $settings['members_signup_message']}
-        <div class="form-group">
-            <label class="col-sm-3 control-label">{_dictionary.main.Message}</label>
-
-            <div class="col-sm-8">
-                <textarea n:name="message" class="form-control"></textarea>
-            </div>
-        </div>
-    {/if}
-
     <div class="form-group">
         <div class="col-sm-offset-3 col-sm-8">
             <label>
@@ -132,21 +122,6 @@
         </div>
     </div>
 
-
-    {if $settings['members_signup_conditions_agree']}
-        <div class="form-group required">
-            <div class="col-sm-offset-3 col-sm-8">
-                <label>
-                    <input type="checkbox" n:name="confirmation">
-                    {if strlen($settings['members_signup_conditions_link']) > 1}
-                        <a href="members_signup_conditions_link">{_messages.sign.agreeWithConditions}</a>
-                    {else}
-                        {_messages.sign.agreeWithConditions}
-                    {/if}
-                </label>
-            </div>
-        </div>
-    {/if}
 
     <div class="form-group">
         <div class="col-sm-offset-3 col-sm-8">

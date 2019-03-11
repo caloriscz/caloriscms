@@ -727,7 +727,6 @@ CREATE TABLE `pictures` (
 
 CREATE TABLE `settings` (
   `id` int(11) NOT NULL,
-  `settings_categories_id` int(11) DEFAULT NULL,
   `setkey` varchar(40) COLLATE utf8_czech_ci NOT NULL,
   `setvalue` varchar(120) COLLATE utf8_czech_ci NOT NULL,
   `description_cs` varchar(150) COLLATE utf8_czech_ci DEFAULT NULL,
@@ -735,79 +734,46 @@ CREATE TABLE `settings` (
   `admin_editable` tinyint(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
 
-INSERT INTO `settings` (`id`, `settings_categories_id`, `setkey`, `setvalue`, `description_cs`, `type`, `admin_editable`) VALUES
-                                                                                                                                                   (1, 15, 'blog:short:showPreview', '1', 'Zobrazovat zkrácenou verzi článku v krátké verzi blogu.', 'boolean', 1),
-                                                                                                                                                   (2, 15, 'blog:short:showAuthor', '0', 'Zobrazovat autora', 'boolean', 1),
-                                                                                                                                                   (3, 15, 'blog:short:showImage', '0', 'Zobrazovat náhled obrázku', 'boolean', 1),
-                                                                                                                                                   (4, 15, 'blog:short:showDate', '0', 'Zobrazovat datum vydání', 'boolean', 1),
-                                                                                                                                                   (5, 15, 'blog:preview:length', '350', 'Délka náhledového textu (0 znamená nezkrácený text)', 'numeric', 1),
-                                                                                                                                                   (6, 15, 'blog_fblike', '1', 'Přidá sdílecí tlačítko na Facebook, pokud je zadán FB účet', 'boolean', 1),
-                                                                                                                                                   (21, 16, 'contacts:email:hq', '', 'Vaše e-mailová adresa', NULL, 1),
-                                                                                                                                                   (22, 16, 'contacts:email:techSupport', '', 'Technická podpora', NULL, 1),
-                                                                                                                                                   (24, 16, 'contacts:smartForm:enabled', '0', 'Povolit doplňování SmartForm', 'boolean', 1),
-                                                                                                                                                   (25, 16, 'contacts:smartForm:clientId', '', 'Klientský kód SmartForm', '', 1),
-                                                                                                                                                   (26, 16, 'contacts:residency:contacts_id', '', 'Kontaktní informace o sídlu', 'table:contacts;column:name', 1),
-                                                                                                                                                   (28, 12, 'members:group:categoryId', '', 'Identifikátor uživatelské kategorie', NULL, 1),
-                                                                                                                                                   (29, 12, 'members:signup:contactEnabled', '', 'Kontaktní informace v registračním formuláři', 'boolean', 1),
-                                                                                                                                                   (30, 12, 'members:signup:companyEnabled', '', 'Firemní informace v registračním formuláři', 'boolean', 1),
-                                                                                                                                                   (31, 12, 'members:signup:confirmByAdmin', '', 'Registrace uživatele musí být potvrzena administrátorem.', 'boolean', 1),
-                                                                                                                                                   (32, 10, 'site:admin:adminBarEnabled', '1', 'Navigace administrace v prezentaci', 'boolean', 1),
-                                                                                                                                                   (33, 10, 'site:currency', '1', 'Měna stránky', 'table:currencies;column:title', 1),
-                                                                                                                                                   (34, 10, 'site:editor:type', 'summernote', 'Který editor bude vybrán. V současnosti Summernote nebo Ace', '', 0),
-                                                                                                                                                   (35, 10, 'site:vat:payee', '1', 'Plátce DPH', 'boolean', 1),
-                                                                                                                                                   (36, 10, 'site:title', '', 'Název stránky', NULL, 1),
-                                                                                                                                                   (37, 10, 'site:url:base', '', 'URL adresa', NULL, 1),
-                                                                                                                                                   (38, 10, 'maintenance_enabled', '0', 'Stránka v módu údržby', 'boolean', 1),
-                                                                                                                                                   (39, 10, 'maintenance_message', 'Stránka je v módu údržby', 'Informace o údržbě pro návštěvníka', NULL, 1),
-                                                                                                                                                   (40, 10, 'site_ip_whitelist', '', 'Adresy povolené pro zobrazení obsahu. Oddělujte středníkem', NULL, 1),
-                                                                                                                                                   (41, 10, 'site_cookie_whitelist', '', 'Heslo v cookie nutné pro zobrazení obsahu. Vkládá se pomocí querystringu (secretx=pwd)', NULL, 1),
-                                                                                                                                                   (42, 17, 'social:ga_code', '', 'Kód Google Analytics', NULL, 1),
-                                                                                                                                                   (43, 17, 'social:fb:enabled', '0', 'Povoleno zobrazování Facebooku', 'boolean', 1),
-                                                                                                                                                   (44, 17, 'social:fb:type', 'page', 'Typ: účet nebo stránka', NULL, 1),
-                                                                                                                                                   (45, 17, 'social:fb:url', '', 'Adresa stránky nebo účtu včetně http', NULL, 1),
-                                                                                                                                                   (46, 17, 'social:twitter:account', '', 'Účet na Twitteru', NULL, 1),
-                                                                                                                                                   (60, 20, 'appearance:paths:logo', '', 'Obrázek loga ve vysokém rozlišení a barvě', 'local_path', 0),
-                                                                                                                                                   (61, 20, 'appearance:paths:favicon:ico', 'favicon.ico', 'Favicon s příponou ico', 'local_path', 0),
-                                                                                                                                                   (62, 21, 'appearance_carousel_directions', '0', 'Zobrazit indikátory (levá a pravá šipka)', 'boolean', 1),
-                                                                                                                                                   (63, 21, 'appearance_carousel_indicators', '0', 'Zobrazit menu', 'boolean', 1),
-                                                                                                                                                   (64, 12, 'members_username_as_email', '0', 'Použít e-mail jako uživatelské jméno', 'boolean', 1),
-                                                                                                                                                   (65, 12, 'members_signup_message', '0', 'Možnost napsat zprávu při registraci', 'boolean', 1),
-                                                                                                                                                   (66, 12, 'members_signup_conditions_agree', '0', 'Souhlasit s podmínkami zaškrtávací tlačítko', 'boolean', 1),
-                                                                                                                                                   (67, 12, 'members_signup_conditions_link', '', 'Odkaz na soubor nebo stránku s podmínkami', NULL, 1),
-                                                                                                                                                   (68, 23, 'media_thumb_dir', 'tn', 'Adresář pro náhledy', NULL, 1),
-                                                                                                                                                   (69, 23, 'media_thumb_width', '300', 'Šířka náhledu', NULL, 1),
-                                                                                                                                                   (70, 23, 'media_thumb_height', '200', 'Výška náhledu', NULL, 1),
-                                                                                                                                                   (71, 25, 'navigation_search_position_top', '1', 'Zobrazit vyhledávací políčko v horní navigaci', 'boolean', 1),
-                                                                                                                                                   (72, 16, 'homepage_template', 'Homepage', 'Soubor s vybranou šablonou', '', 1),
-                                                                                                                                                   (73, 21, 'appearance_carousel_caption', '1', 'Zobrazit titulek k položce', 'boolean', 1),
-                                                                                                                                                   (74, 25, 'navigation_footer_template', 'Footer', 'Soubor s vybranou šablonou pro patičku', '', 1),
-                                                                                                                                                   (75, 25, 'navigation_template', 'Navigation', 'Soubor s vybranou šablonou pro hlavičku', '', 1),
-                                                                                                                                                   (76, 26, 'pages_template', 'Page', 'Soubor s vybranou šablonou pro běžné stránky', '', 1),
-                                                                                                                                                   (77, 16, 'contacts_template', 'Contact', 'Soubor s vybranou šablonou pro stránku kontaktů', '', 1);
-
-CREATE TABLE `settings_categories` (
-  `id` int(11) NOT NULL,
-  `parent_id` int(11) DEFAULT NULL,
-  `description` text COLLATE utf8_czech_ci,
-  `title` varchar(80) COLLATE utf8_czech_ci NOT NULL,
-  `sorted` int(11) NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
-
-
-INSERT INTO `settings_categories` (`id`, `parent_id`, `description`, `title`, `sorted`) VALUES
-                                                                                                           (3, NULL, NULL, 'Šablony', 166),
-                                                                                                           (10, NULL, NULL, 'Základní nastavení', 146),
-                                                                                                           (12, NULL, NULL, 'Členové', 148),
-                                                                                                           (15, NULL, NULL, 'Blog', 154),
-                                                                                                           (16, 3, NULL, 'Kontakty', 165),
-                                                                                                           (17, NULL, NULL, 'Služby', 176),
-                                                                                                           (20, NULL, NULL, 'Vzhled', 154),
-                                                                                                           (21, 20, NULL, 'Carousel', 155),
-                                                                                                           (23, NULL, '', 'Media', 0),
-                                                                                                           (24, 3, NULL, 'Homepage', 167),
-                                                                                                           (25, NULL, NULL, 'Navigace', 170),
-                                                                                                           (26 ,3, 'Pages presenter pages', 'Pages', 167);
-
+INSERT INTO `settings` (`id`, `setkey`, `setvalue`, `description_cs`, `type`, `admin_editable`) VALUES
+                                                                                                                                                   (1, 'blog:short:showPreview', '1', 'Zobrazovat zkrácenou verzi článku v krátké verzi blogu.', 'boolean', 1),
+                                                                                                                                                   (2, 'blog:short:showAuthor', '0', 'Zobrazovat autora', 'boolean', 1),
+                                                                                                                                                   (3, 'blog:short:showImage', '0', 'Zobrazovat náhled obrázku', 'boolean', 1),
+                                                                                                                                                   (4, 'blog:short:showDate', '0', 'Zobrazovat datum vydání', 'boolean', 1),
+                                                                                                                                                   (5, 'blog:preview:length', '350', 'Délka náhledového textu (0 znamená nezkrácený text)', 'numeric', 1),
+                                                                                                                                                   (6, 'blog_fblike', '1', 'Přidá sdílecí tlačítko na Facebook, pokud je zadán FB účet', 'boolean', 1),
+                                                                                                                                                   (21, 'contacts:email:hq', '', 'Vaše e-mailová adresa', NULL, 1),
+                                                                                                                                                   (26, 'contacts:residency:contacts_id', '', 'Kontaktní informace o sídlu', 'table:contacts;column:name', 1),
+                                                                                                                                                   (29, 'members:signup:contactEnabled', '', 'Kontaktní informace v registračním formuláři', 'boolean', 1),
+                                                                                                                                                   (30, 'members:signup:companyEnabled', '', 'Firemní informace v registračním formuláři', 'boolean', 1),
+                                                                                                                                                   (31, 'members:signup:confirmByAdmin', '', 'Registrace uživatele musí být potvrzena administrátorem.', 'boolean', 1),
+                                                                                                                                                   (32, 'site:admin:adminBarEnabled', '1', 'Navigace administrace v prezentaci', 'boolean', 1),
+                                                                                                                                                   (33, 'site:currency', '1', 'Měna stránky', 'table:currencies;column:title', 1),
+                                                                                                                                                   (34, 'site:editor:type', 'summernote', 'Který editor bude vybrán. V současnosti Summernote nebo Ace', '', 0),
+                                                                                                                                                   (36, 'site:title', '', 'Název stránky', NULL, 1),
+                                                                                                                                                   (37, 'site:url:base', '', 'URL adresa', NULL, 1),
+                                                                                                                                                   (38, 'maintenance_enabled', '0', 'Stránka v módu údržby', 'boolean', 1),
+                                                                                                                                                   (39, 'maintenance_message', 'Stránka je v módu údržby', 'Informace o údržbě pro návštěvníka', NULL, 1),
+                                                                                                                                                   (40, 'site_ip_whitelist', '', 'Adresy povolené pro zobrazení obsahu. Oddělujte středníkem', NULL, 1),
+                                                                                                                                                   (41, 'site_cookie_whitelist', '', 'Heslo v cookie nutné pro zobrazení obsahu. Vkládá se pomocí querystringu (secretx=pwd)', NULL, 1),
+                                                                                                                                                   (42, 'social:ga_code', '', 'Kód Google Analytics', NULL, 1),
+                                                                                                                                                   (43, 'social:fb:enabled', '0', 'Povoleno zobrazování Facebooku', 'boolean', 1),
+                                                                                                                                                   (44, 'social:fb:type', 'page', 'Typ: účet nebo stránka', NULL, 1),
+                                                                                                                                                   (45, 'social:fb:url', '', 'Adresa stránky nebo účtu včetně http', NULL, 1),
+                                                                                                                                                   (60, 'appearance:paths:logo', '', 'Obrázek loga ve vysokém rozlišení a barvě', 'local_path', 0),
+                                                                                                                                                   (61, 'appearance:paths:favicon:ico', 'favicon.ico', 'Favicon s příponou ico', 'local_path', 0),
+                                                                                                                                                   (62, 'appearance_carousel_directions', '0', 'Zobrazit indikátory (levá a pravá šipka)', 'boolean', 1),
+                                                                                                                                                   (63, 'appearance_carousel_indicators', '0', 'Zobrazit menu', 'boolean', 1),
+                                                                                                                                                   (64, 'members_username_as_email', '0', 'Použít e-mail jako uživatelské jméno', 'boolean', 1),
+                                                                                                                                                   (68, 'media_thumb_dir', 'tn', 'Adresář pro náhledy', NULL, 1),
+                                                                                                                                                   (69, 'media_thumb_width', '300', 'Šířka náhledu', NULL, 1),
+                                                                                                                                                   (70, 'media_thumb_height', '200', 'Výška náhledu', NULL, 1),
+                                                                                                                                                   (71, 'navigation_search_position_top', '1', 'Zobrazit vyhledávací políčko v horní navigaci', 'boolean', 1),
+                                                                                                                                                   (72, 'homepage_template', 'Homepage', 'Soubor s vybranou šablonou', '', 1),
+                                                                                                                                                   (73, 'appearance_carousel_caption', '1', 'Zobrazit titulek k položce', 'boolean', 1),
+                                                                                                                                                   (74, 'navigation_footer_template', 'Footer', 'Soubor s vybranou šablonou pro patičku', '', 1),
+                                                                                                                                                   (75, 'navigation_template', 'Navigation', 'Soubor s vybranou šablonou pro hlavičku', '', 1),
+                                                                                                                                                   (76, 'pages_template', 'Page', 'Soubor s vybranou šablonou pro běžné stránky', '', 1),
+                                                                                                                                                   (77, 'contacts_template', 'Contact', 'Soubor s vybranou šablonou pro stránku kontaktů', '', 1);
 
 CREATE TABLE `snippets` (
   `id` int(11) NOT NULL,
@@ -972,12 +938,7 @@ ALTER TABLE `pictures`
   ADD KEY `albums_id` (`pages_id`);
 
 ALTER TABLE `settings`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `categories_id` (`settings_categories_id`);
-
-ALTER TABLE `settings_categories`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `parent_id` (`parent_id`);
+  ADD PRIMARY KEY (`id`);
 
 ALTER TABLE `snippets`
   ADD PRIMARY KEY (`id`);
@@ -1071,9 +1032,6 @@ ALTER TABLE `pictures`
 ALTER TABLE `settings`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=71;
 
-ALTER TABLE `settings_categories`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
-
 ALTER TABLE `snippets`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
@@ -1139,9 +1097,6 @@ ALTER TABLE `pages_widgets`
 ALTER TABLE `params`
   ADD CONSTRAINT `params_ibfk_3` FOREIGN KEY (`pages_id`) REFERENCES `pages` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `params_ibfk_4` FOREIGN KEY (`param_id`) REFERENCES `param` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
-
-ALTER TABLE `settings`
-  ADD CONSTRAINT `settings_ibfk_1` FOREIGN KEY (`settings_categories_id`) REFERENCES `settings_categories` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 ALTER TABLE `users`
   ADD CONSTRAINT `users_ibfk_1` FOREIGN KEY (`users_roles_id`) REFERENCES `users_roles` (`id`) ON DELETE SET NULL ON UPDATE SET NULL,

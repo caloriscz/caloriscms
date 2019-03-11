@@ -31,12 +31,3 @@
         ga('send', 'pageview');
     </script>
 {/if}
-
-{if $settings['contacts:smartForm:enabled'] && strlen($settings['contacts:smartForm:clientId']) >= 10}
-    <script type="text/javascript" src="http://smartform.cz/api/v1/smartform.js"></script>
-    <script>
-        smartform.beforeInit = function () {
-            smartform.setClientId({$settings['contacts:smartForm:clientId']});
-        }
-    </script>
-{/if}
