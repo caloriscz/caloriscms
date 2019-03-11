@@ -112,19 +112,6 @@ INSERT INTO `countries` (`id`, `title_cs`, `title_en`, `show`) VALUES
                                                                       (1, 'Česká Republika', 'Czech Republic', 1),
                                                                       (2, 'Slovensko', 'Slovakia', 0);
 
-CREATE TABLE `currencies` (
-  `id` int(11) NOT NULL,
-  `title` varchar(60) COLLATE utf8_czech_ci DEFAULT NULL,
-  `code` varchar(8) COLLATE utf8_czech_ci DEFAULT NULL,
-  `symbol` varchar(20) COLLATE utf8_czech_ci DEFAULT NULL,
-  `used` tinyint(1) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
-
-INSERT INTO `currencies` (`id`, `title`, `code`, `symbol`, `used`) VALUES
-                                                                          (1, 'Česká koruna', 'CZK', 'Kč', 1),
-                                                                          (2, 'Euro', 'EUR', '€', NULL),
-                                                                          (3, 'Americký dolar', 'USD', '$', 0);
-
 CREATE TABLE `helpdesk` (
   `id` int(11) NOT NULL,
   `title` varchar(100) COLLATE utf8_czech_ci NOT NULL,
@@ -260,40 +247,38 @@ CREATE TABLE `pages` (
   `pages_templates_id` int(11) DEFAULT NULL,
   `sorted` int(11) NOT NULL DEFAULT '0',
   `editable` int(11) NOT NULL DEFAULT '1',
-  `recommended` tinyint(4) DEFAULT '0',
   `sitemap` tinyint(4) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
 
-INSERT INTO `pages` (`id`, `slug`, `title`, `document`, `preview`, `pages_id`, `users_id`, `public`, `metadesc`, `metakeys`, `date_created`, `date_published`, `pages_types_id`, `pages_templates_id`, `sorted`, `editable`, `recommended`, `sitemap`) VALUES
-                                                                                                                                                                                                                                                                                                                                                (1, '', 'Homepage', NULL, NULL, NULL, 1, 1, '', '', NULL, NULL, 9, 4, 77, 1, 0, 1),
-                                                                                                                                                                                                                                                                                                                                                (2, 'kontakt', 'Kontakt', NULL, NULL, NULL, NULL, 1, '', '', NULL, NULL, 9, 5, 79, 0, 0, 1),
-                                                                                                                                                                                                                                                                                                                                                (3, 'blog', 'Blog', '', NULL, NULL, 1, 1, '', '', NULL, NULL, 9, 2, 81, 0, 0, 1),
-                                                                                                                                                                                                                                                                                                                                                (4, 'galerie', 'Galerie', '', NULL, NULL, 1, 1, '', '', NULL, NULL, 9, 7, 71, 0, 0, 1),
-                                                                                                                                                                                                                                                                                                                                                (5, 'udalosti', 'Události', '', NULL, 1, 1, 1, '', '', NULL, NULL, 9, 10, 73, 0, 0, 1),
-                                                                                                                                                                                                                                                                                                                                                (6, 'dokumenty', 'Dokumenty', '', NULL, NULL, 1, 1, '', '', NULL, NULL, 9, 8, 75, 0, 0, 1),
-                                                                                                                                                                                                                                                                                                                                                (7, 'cenik', 'Ceník', NULL, NULL, 1, 1, 1, '', '', NULL, NULL, 9, 11, 795, 0, 0, 1),
-                                                                                                                                                                                                                                                                                                                                                (8, 'odkazy', 'Odkazy', NULL, NULL, 1, 1, 1, '', '', NULL, NULL, 9, 12, 800, 0, 0, 1);
+INSERT INTO `pages` (`id`, `slug`, `title`, `document`, `preview`, `pages_id`, `users_id`, `public`, `metadesc`, `metakeys`, `date_created`, `date_published`, `pages_types_id`, `pages_templates_id`, `sorted`, `editable`, `sitemap`) VALUES
+                                                                                                                                                                                                                                                                                                                                                (1, '', 'Homepage', NULL, NULL, NULL, 1, 1, '', '', NULL, NULL, 9, 4, 77, 1, 1),
+                                                                                                                                                                                                                                                                                                                                                (2, 'kontakt', 'Kontakt', NULL, NULL, NULL, NULL, 1, '', '', NULL, NULL, 9, 5, 79, 0, 1),
+                                                                                                                                                                                                                                                                                                                                                (3, 'blog', 'Blog', '', NULL, NULL, 1, 1, '', '', NULL, NULL, 9, 2, 81, 0, 1),
+                                                                                                                                                                                                                                                                                                                                                (4, 'galerie', 'Galerie', '', NULL, NULL, 1, 1, '', '', NULL, NULL, 9, 7, 71, 0, 1),
+                                                                                                                                                                                                                                                                                                                                                (5, 'udalosti', 'Události', '', NULL, 1, 1, 1, '', '', NULL, NULL, 9, 10, 73, 0, 1),
+                                                                                                                                                                                                                                                                                                                                                (6, 'dokumenty', 'Dokumenty', '', NULL, NULL, 1, 1, '', '', NULL, NULL, 9, 8, 75, 0, 1),
+                                                                                                                                                                                                                                                                                                                                                (7, 'cenik', 'Ceník', NULL, NULL, 1, 1, 1, '', '', NULL, NULL, 9, 11, 795, 0, 1),
+                                                                                                                                                                                                                                                                                                                                                (8, 'odkazy', 'Odkazy', NULL, NULL, 1, 1, 1, '', '', NULL, NULL, 9, 12, 800, 0, 1);
 
 CREATE TABLE `pages_templates` (
   `id` int(11) NOT NULL,
   `pages_types_id` int(11) DEFAULT NULL,
   `template` varchar(250) COLLATE utf8_czech_ci NOT NULL,
-  `title` varchar(80) COLLATE utf8_czech_ci DEFAULT NULL,
-  `title_en` varchar(250) COLLATE utf8_czech_ci DEFAULT NULL
+  `title` varchar(80) COLLATE utf8_czech_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
 
-INSERT INTO `pages_templates` (`id`, `pages_types_id`, `template`, `title`, `title_en`) VALUES
-                                                                                               (1, NULL, 'Front:Media:albumWithDescription', 'Galerie s náhledy obrázků s podporou Lightboxu', 'Album with description'),
-                                                                                               (2, NULL, 'Front:Pages:blogList', 'Seznam příspěvků', 'List of articles'),
-                                                                                               (3, NULL, 'Front:Pages:default', 'Základní typ stránky', 'Basic type of page'),
-                                                                                               (4, NULL, 'Front:Homepage:default', 'Homepage', 'Homepage'),
-                                                                                               (5, NULL, 'Front:Contact:default', 'Kontaktní stránka s kontaktním formulářem', 'Contact page with contact/request form'),
-                                                                                               (6, NULL, 'Front:Pages:blogDetail', 'Detail příspěvu', 'Article page'),
-                                                                                               (7, NULL, 'Front:Media:album', 'Základní galerie', 'Basic gallery view'),
-                                                                                               (8, NULL, 'Front:Media:folder', 'Seznam složek dokumentů', 'List of document folders'),
-                                                                                               (9, NULL, 'Front:Media:folderList', 'Seznam dokumentů dané složky', 'List of documents of given folder'),
-                                                                                               (10, NULL, 'Front:Events:detail', 'Seznam událostí', 'List of events'),
-                                                                                               (12, NULL , 'Front:Links:default', 'Odkazy', 'Links');
+INSERT INTO `pages_templates` (`id`, `pages_types_id`, `template`, `title`) VALUES
+                                                                                               (1, NULL, 'Front:Media:albumWithDescription', 'Galerie s náhledy obrázků s podporou Lightboxu'),
+                                                                                               (2, NULL, 'Front:Pages:blogList', 'Seznam příspěvků'),
+                                                                                               (3, NULL, 'Front:Pages:default', 'Základní typ stránky'),
+                                                                                                (4, NULL, 'Front:Homepage:default', 'Homepage'),
+                                                                                                (5, NULL, 'Front:Contact:default', 'Kontaktní stránka s kontaktním formulářem'),
+                                                                                                (6, NULL, 'Front:Pages:blogDetail', 'Detail příspěvu'),
+                                                                                                (7, NULL, 'Front:Media:album', 'Základní galerie'),
+                                                                                                (8, NULL, 'Front:Media:folder', 'Seznam složek dokumentů'),
+                                                                                                (9, NULL, 'Front:Media:folderList', 'Seznam dokumentů dané složky'),
+                                                                                                (10, NULL, 'Front:Events:detail', 'Seznam událostí'),
+                                                                                               (12, NULL , 'Front:Links:default', 'Odkazy');
 
 CREATE TABLE `pages_types` (
   `id` int(11) NOT NULL,
@@ -373,7 +358,6 @@ INSERT INTO `settings` (`id`, `setkey`, `setvalue`, `description_cs`, `type`, `a
                                                                                                                                                    (30, 'members:signup:companyEnabled', '', 'Firemní informace v registračním formuláři', 'boolean', 1),
                                                                                                                                                    (31, 'members:signup:confirmByAdmin', '', 'Registrace uživatele musí být potvrzena administrátorem.', 'boolean', 1),
                                                                                                                                                    (32, 'site:admin:adminBarEnabled', '1', 'Navigace administrace v prezentaci', 'boolean', 1),
-                                                                                                                                                   (33, 'site:currency', '1', 'Měna stránky', 'table:currencies;column:title', 1),
                                                                                                                                                    (34, 'site:editor:type', 'summernote', 'Který editor bude vybrán. V současnosti Summernote nebo Ace', '', 0),
                                                                                                                                                    (36, 'site:title', '', 'Název stránky', NULL, 1),
                                                                                                                                                    (37, 'site:url:base', '', 'URL adresa', NULL, 1),
@@ -478,9 +462,6 @@ ALTER TABLE `contacts_openinghours`
 ALTER TABLE `countries`
   ADD PRIMARY KEY (`id`);
 
-ALTER TABLE `currencies`
-  ADD PRIMARY KEY (`id`);
-
 ALTER TABLE `helpdesk`
   ADD PRIMARY KEY (`id`),
   ADD KEY `helpdesk_templates_id` (`helpdesk_templates_id`),
@@ -575,9 +556,6 @@ ALTER TABLE `contacts_openinghours`
 
 ALTER TABLE `countries`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
-
-ALTER TABLE `currencies`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 ALTER TABLE `helpdesk`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
