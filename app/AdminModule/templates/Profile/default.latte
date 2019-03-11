@@ -1,10 +1,9 @@
-{block #titles}{_dictionary.main.profile|firstUpper}{/block}
+{block #titles}Profil uživatele{/block}
 {block content}
 
 <ol class="breadcrumb">
     <li class="breadcrumb-item"><a href="/admin/">Home</a></li>
-    <li class="breadcrumb-item"><a href="/admin/settings/">{_dictionary.main.Settings}</a></li>
-    <li class="breadcrumb-item" class="active"><a href="/admin/profile/">{_dictionary.main.profile|firstUpper}</a></li>
+    <li class="breadcrumb-item active"><a href="/admin/profile/">Profil uživatele</a></li>
 </ol>
 
 <div class="container-fluid">
@@ -22,7 +21,7 @@
             </div>
             <div class="col-lg-6">
                 <div class="card">
-                    <div class="card-header">{_store.profile.PasswordChange}</div>
+                    <div class="card-header">Změna hesla</div>
                     <div class="card-block">
                         {if $isLoggedIn}
                             {control profileChangePassword}

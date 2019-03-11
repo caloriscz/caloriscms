@@ -168,10 +168,6 @@ class SignUpControl extends Control
             'date_created' => date('Y-m-d H:i:s')
         ];
 
-        if ($this->getPresenter()->template->settings['members:groups:enabled']) {
-            $arr['users_categories_id'] = $form->values->group;
-        }
-
         $userId = $this->database->table('users')->insert($arr);
 
         if ($this->getPresenter()->template->settings['members:signup:contactEnabled']) {

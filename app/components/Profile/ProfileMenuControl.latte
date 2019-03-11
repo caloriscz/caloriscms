@@ -1,7 +1,0 @@
-{var $temp = $presenter->getView()}
-<nav class="nav flex-column text-left">
-    <a href="/profile" class="nav-link {if $temp == "default"} disabled{/if}">{_store.order.ContactInformation}</a>
-    <a href="/profile/image" class="nav-link {if $temp == "image"} disabled{/if}">{_store.profile.ProfileImage}</a>
-    <a href="/profile/password" class="nav-link {if $temp == "password"} disabled{/if}">{_store.profile.PasswordChange}</a>
-    <a href="/profile/addresses" class="nav-link {if $temp == "addresses"} disabled{/if}">{_dictionary.main.addresses|firstUpper}</a>
-</nav>

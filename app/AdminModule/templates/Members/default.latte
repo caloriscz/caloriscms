@@ -1,10 +1,9 @@
-{block #titles}{_dictionary.main.Members}{/block}
+{block #titles}Uživatelé{/block}
 {block content}
 
 <ol class="breadcrumb">
-    <li class="breadcrumb-item">Home</li>
     <li class="breadcrumb-item"><a href="/admin/">Admin</a></li>
-    <li class="breadcrumb-item"><a href="/admin/members/">{_dictionary.main.Members}</a></li>
+    <li class="breadcrumb-item">Uživatelé</li>
 </ol>
 
 {foreach $flashes as $flash}
@@ -20,24 +19,10 @@
         <div class="row">
             <div class="col-lg-3">
                 <div class="card">
-                    <div class="card-header">Kategorie</div>
-                    <div class="card-block">
-                        {control memberCategories}
-                    </div>
-                </div>
-
-                <div class="card">
-                    <div class="card-header">Kategorie</div>
+                    <div class="card-header">Nový účet</div>
                     <div class="card-block">
                         {if $member->users_roles->members}
-                            <div class="panel panel-default">
-                                <div class="panel-heading">
-                                    {_dictionary.main.CreateNewAccount}
-                                </div>
-                                <div class="panel-body">
-                                    {control insertMember}
-                                </div>
-                            </div>
+                            {control insertMember}
                         {/if}
                     </div>
                 </div>

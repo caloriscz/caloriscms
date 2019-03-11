@@ -83,16 +83,6 @@
         </fieldset>
     {/if}
 
-    {if $settings['members:groups:enabled']}
-        <div class="form-group required">
-            <label class="col-sm-3 control-label required">{_dictionary.main.Group}</label>
-
-            <div class="col-sm-8">
-                <select n:name="group" class="form-control"></select>
-            </div>
-        </div>
-    {/if}
-
     {if $settings['members:signup:companyEnabled']}
         <fieldset>
             <legend>{_dictionary.main.CompanyInformation}</legend>

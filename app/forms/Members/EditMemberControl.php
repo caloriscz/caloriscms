@@ -31,7 +31,6 @@ class EditMemberControl extends Control
 
         $form->addHidden('id');
         $form->addRadioList('sex', 'Pohlaví', [1 => ' žena', 2 => ' muž']);
-        $form->addRadioList('newsletter', 'Odebírat newsletter', [1 => ' ano', 2 => ' ne']);
         $form->addRadioList('state', 'Stav účtu', [1 => ' povolen', 2 => ' blokován']);
 
         $roles = $this->database->table('users_roles')->fetchPairs('id', 'title');
@@ -41,17 +40,8 @@ class EditMemberControl extends Control
                 ->setAttribute('class', 'form-control');
         }
 
-        if ($this->presenter->template->settings['members:groups:enabled']) {
-            $groups = $this->database->table('users_categories')->fetchPairs('id', 'title');
-
-            $form->addSelect('group', 'Skupina', $groups)
-                ->setAttribute('class', 'form-control');
-        }
-
         $arr = [
             'id' => $this->presenter->getParameter('id'),
-            'sex' => $user->sex,
-            'newsletter' => $user->newsletter,
             'state' => $user->state,
             'role' => $user->role,
             'group' => $user->categories_id,
@@ -93,10 +83,6 @@ class EditMemberControl extends Control
 
         if ($this->presenter->template->member->username) {
             $arr['users_roles_id'] = $form->values->role;
-        }
-
-        if ($this->presenter->template->settings['members:groups:enabled']) {
-            $arr['categories_id'] = $form->values->group;
         }
 
         $this->database->table('users')->where(['id' => $form->values->id])->update($arr);
