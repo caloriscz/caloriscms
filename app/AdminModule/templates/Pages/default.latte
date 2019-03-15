@@ -1,8 +1,8 @@
-{block #titles}{_admin.navigation.pages|firstUpper}{/block}
+{block #titles}Stránky{/block}
 {block content}
 
 <ol class="breadcrumb">
-    <li class="breadcrumb-item"><a href="/admin/">Home</a></li>
+    <li class="breadcrumb-item"><a href="/admin/">Admin</a></li>
     <li class="breadcrumb-item active"><a href="/admin/pages/">Stránky</a></li>
 </ol>
 
@@ -15,7 +15,7 @@
                         {if $type == 2}
                             Nový příspěvek
                         {elseif $type == 1}
-                            {_dictionary.main.NewPage}
+                            Nová stránka
                         {elseif $type == 6}
                             Nová galerie
                         {elseif $type == 8}
@@ -33,8 +33,7 @@
             <div class="col-lg-9">
                 <div class="card">
                     <div class="card-header">
-                        Stránky {$view}
-
+                        Stránky
                         <small class="pull-right font-weight-bold">
                             <a n:href="view! 'type' => $presenter->getParameter('type'), view => 'tree'"
                                     class="btn btn-sm{if $view === 'tree'} btn-primary{/if}"><i class="fa fa-tree"></i> Strom

@@ -90,7 +90,7 @@ class ContactsPresenter extends BasePresenter
      * @param $id
      * @throws Nette\Application\AbortException
      */
-    public function handleDeleteHour($id)
+    public function handleDeleteHour($id): void
     {
         $this->database->table('contacts_openinghours')->get($this->getParameter('hour'))->delete();
 
@@ -106,7 +106,7 @@ class ContactsPresenter extends BasePresenter
     {
         $category = new Model\Category($this->database);
 
-        $this->database->table('categories')->where('id', $category->getSubIds($id))->delete();
+        $this->database->table('contacts_categories')->where('id', $category->getSubIds($id))->delete();
 
         $this->redirect(':Admin:Categories:default');
     }
@@ -118,18 +118,18 @@ class ContactsPresenter extends BasePresenter
      */
     public function handleUp($id, $sorted): void
     {
-        $sortDb = $this->database->table('categories')->where([
+        $sortDb = $this->database->table('contacts_categories')->where([
             'sorted > ?' => $sorted,
             'parent_id' => $this->getParameter('category')
         ])->order('sorted')->limit(1);
         $sort = $sortDb->fetch();
 
         if ($sortDb->count() > 0) {
-            $this->database->table('categories')->where(['id' => $id])->update(['sorted' => $sort->sorted]);
-            $this->database->table('categories')->where(['id' => $sort->id])->update(['sorted' => $sorted]);
+            $this->database->table('contacts_categories')->where(['id' => $id])->update(['sorted' => $sort->sorted]);
+            $this->database->table('contacts_categories')->where(['id' => $sort->id])->update(['sorted' => $sorted]);
         }
 
-        $this->redirect(':Admin:Categories:default', ['id' => null]);
+        $this->redirect(':Admin:Contacts:default', ['id' => null]);
     }
 
     /**

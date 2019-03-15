@@ -33,7 +33,7 @@ class HelpdeskPresenter extends BasePresenter
      * @param $identifier
      * @throws AbortException
      */
-    public function handleDelete($identifier)
+    public function handleDelete($identifier): void
     {
         $this->database->table('helpdesk_messages')->get($identifier)->delete();
 
@@ -45,19 +45,19 @@ class HelpdeskPresenter extends BasePresenter
      * @param $identifier
      * @throws AbortException
      */
-    public function handleDeleteTemplate($identifier)
+    public function handleDeleteTemplate($identifier): void
     {
         $this->database->table('helpdesk')->get($identifier)->delete();
 
         $this->redirect(':Admin:Helpdesk:default', ['id' => $this->getParameter('helpdesk')]);
     }
 
-    public function renderDefault()
+    public function renderDefault(): void
     {
         $this->template->helpdesk = $this->database->table('helpdesk')->order('title');
     }
 
-    public function renderEmails()
+    public function renderEmails(): void
     {
         $this->template->templates = $this->database->table('helpdesk')->get($this->getParameter('id'));
 
@@ -81,7 +81,7 @@ class HelpdeskPresenter extends BasePresenter
         $this->template->args = $this->getParameters();
     }
 
-    public function renderDetail()
+    public function renderDetail(): void
     {
         $this->template->helpdesk = $this->database->table('helpdesk')->get($this->getParameter('id'));
         $this->template->message = $this->database->table('helpdesk_messages')->get($this->getParameter('id'));

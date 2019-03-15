@@ -1,6 +1,0 @@
-{foreach $page->related('params', 'pages_id') as $item}
-    <tr>
-        <td>{$item->param->{'param'.$langSuffix}}</td>
-        <td>{$item->param->prefix}{$item->paramvalue}{$item->param->suffix}</td>
-    </tr>
-{/foreach}

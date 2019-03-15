@@ -1,1 +1,21 @@
-{control contactsGrid}
+<table class="table table-striped">
+    {foreach $contacts as $contact}
+        <tr>
+            <td>
+                <a href="{link delete!, id => $contact->id}"
+                   onclick="return confirm('Opravdu smazat?')" class="text-danger">
+                    <i class="fa fa-times font-red"></i>
+                </a>
+            </td>
+            <td><a href="{plink ':Admin:Contacts:detail', id => $contact->id}">{$contact->name}</a></td>
+            <td>{$contact->contacts_categories->title}</td>
+            <td>{$contact->email}</td>
+            <td>{$contact->phone}</td>
+            <td>{$contact->vatin}</td>
+        </tr>
+    {/foreach}
+</table>
+
+<div class="text-center">
+    {control paging, $args, $paginator}
+</div>

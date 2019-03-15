@@ -23,24 +23,24 @@ class FilesPresenter extends BasePresenter
      * Delete file
      * @throws \Nette\Application\AbortException
      */
-    public function handleDelete()
+    public function handleDelete(): void
     {
         Model\IO::remove(APP_DIR . '/images/' . $this->getParameter('path'));
 
         $this->redirect('this');
     }
 
-    public function renderDefault()
+    public function renderDefault(): void
     {
         $this->template->files = Finder::findFiles('')->in(APP_DIR . '/images');
     }
 
-    protected function createComponentEditFile()
+    protected function createComponentEditFile(): EditFileControl
     {
         return new EditFileControl($this->database);
     }
 
-    protected function createComponentEditPicture()
+    protected function createComponentEditPicture(): EditPictureFormControl
     {
         return new EditPictureFormControl($this->database);
     }
@@ -66,7 +66,7 @@ class FilesPresenter extends BasePresenter
         }
     }
 
-    public function renderDetailFile()
+    public function renderDetailFile(): void
     {
         $this->template->file = $this->database->table('media')->get($this->getParameter('id'));
     }

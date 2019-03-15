@@ -25,7 +25,7 @@ class PagesPresenter extends BasePresenter
         $this->template->type = $this->getParameter('type');
     }
 
-    protected function createComponentPageList()
+    protected function createComponentPageList(): PageListControl
     {
         $view = 'simple';
 
@@ -156,7 +156,11 @@ class PagesPresenter extends BasePresenter
 
     public function renderDefault(): void
     {
-        $this->template->view = $this->request->getCookie('view');
+        if ($this->request->getCookie('view') !== null) {
+            $this->template->view = $this->request->getCookie('view');
+        } else {
+            $this->template->view = 'simple';
+        }
     }
 
     public function renderDetail(): void

@@ -81,11 +81,10 @@ CREATE TABLE `contacts_categories` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
 
 INSERT INTO `contacts_categories` (`id`, `parent_id`, `description`, `title`, `sorted`) VALUES
-                                                                                               (1, NULL, '', 'Členové', 60),
-                                                                                               (2, NULL, NULL, 'Kontakty na stránce', 45),
-                                                                                               (3, NULL, NULL, 'Newsletter', 153),
-                                                                                               (4, NULL, NULL, 'Místa pro události', 4),
-                                                                                               (5, NULL, NULL, 'Proč další', 5);
+                                                                                               (1, NULL, '', 'Členové', 1),
+                                                                                               (2, NULL, NULL, 'Kontakty na stránce', 2),
+                                                                                               (3, NULL, NULL, 'Newsletter', 3),
+                                                                                               (4, NULL, NULL, 'Proč další', 4);
 
 CREATE TABLE `contacts_communication` (
   `id` int(11) NOT NULL,
