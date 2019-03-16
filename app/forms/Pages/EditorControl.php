@@ -37,7 +37,7 @@ class EditorControl extends Control
         $this->htmlPurifier = new \HTMLPurifier($config);
     }
 
-    protected function createComponentLangSelector()
+    protected function createComponentLangSelector(): \LangSelectorControl
     {
         return new \LangSelectorControl($this->em);
     }

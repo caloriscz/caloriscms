@@ -1,4 +1,4 @@
-{block #titles}{_dictionary.main.members|firstUpper}: {$members->username}{/block}
+{block #titles}Uživatel: {$members->username}{/block}
 {block content}
 
 <ol class="breadcrumb">
@@ -11,9 +11,9 @@
 {if $presenter->getParameter('pdd') != ''}
     <div class="col-md-12">
         <div class="alert alert-warning alert-dismissable">
-            {_dictionary.main.Address}: {$settings['site:url:base']}/sign/in<br/>
-            {_dictionary.main.Member}: {$members->username}<br/>
-            {_dictionary.main.Password}: {$presenter->getParameter('pdd')}
+            Adresa: {$settings['site:url:base']}/sign/in<br/>
+            Uživatel: {$members->username}<br/>
+            Heslo: {$presenter->getParameter('pdd')}
         </div>
     </div>
 {else}
@@ -50,16 +50,20 @@
                         <div class="card-block">
                             <table class="table table-bordered table-condensed">
                                 <tr>
-                                    <td class="col-md-1">{_dictionary.main.member|firstUpper}</td>
+                                    <td class="col-md-1">Uživatel</td>
                                     <td>{$members->username}</td>
                                 </tr>
                                 <tr>
-                                    <td class="col-md-1">{_dictionary.main.email|firstUpper}</td>
+                                    <td class="col-md-1">E-mail</td>
                                     <td>{$members->email}</td>
                                 </tr>
                                 <tr>
-                                    <td class="col-md-1">{_dictionary.main.created|firstUpper}</td>
+                                    <td class="col-md-1">Vytvořeno</td>
                                     <td>{$members->date_created|date:'j. n. Y'}</td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-1">Naposledy navštíveno</td>
+                                    <td>{$members->date_visited|date:'j. n. Y'}</td>
                                 </tr>
                             </table>
                         </div>
@@ -72,7 +76,7 @@
                                 {if $membersRelated->count() > 0}
                                     {foreach $membersRelated as $item}
                                         <tr>
-                                            <td class="col-xs-1">
+                                            <td>
                                                 <a n:href="deleteContact!, id => $item->id, contact => $members->id"
                                                         onclick="return confirm('Opravdu smazat?')">
                                                     <i class="fa fa-times font-red"></i>

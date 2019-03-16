@@ -1,4 +1,4 @@
-{block #titles}{_dictionary.main.categories|firstUpper}{/block}
+{block #titles}Kategorie kontaktů{/block}
 {block content}
 {var $category = 0}
 {var $counter = 2}
@@ -6,8 +6,8 @@
 <ol class="breadcrumb">
     <li class="breadcrumb-item">Home</li>
     <li class="breadcrumb-item"><a href="/admin/">Admin</a></li>
-    <li class="breadcrumb-item active"><a href="/admin/contacts">{_dictionary.main.Contacts}</a></li>
-    <li class="breadcrumb-item active"><a href="/admin/contacts/categories">{_dictionary.main.categories|firstUpper}</a>
+    <li class="breadcrumb-item active"><a href="/admin/contacts">Kontakty</a></li>
+    <li class="breadcrumb-item active"><a href="/admin/contacts/{$presenter->getParameter('id')}/categories">Kategorie</a>
     </li>
 </ol>
 

@@ -1,4 +1,4 @@
-{block #titles}{_dictionary.main.Contacts} - {_dictionary.main.OpeningHours}{/block}
+{block #titles}Kontakty - Otvírací doba{/block}
 {block content}
 
 
@@ -6,23 +6,21 @@
     <li class="breadcrumb-item">Home</li>
     <li class="breadcrumb-item"><a href="/admin/">Admin</a></li>
     <li class="breadcrumb-item"><a href="/admin/contacts">Kontakty</a></li>
-    <li class="breadcrumb-item">Detail</li>
-    <li class="breadcrumb-item active"><a
-                href="/admin/contacts/detail-opening-hours/{$presenter->getParameter('id')}">{_dictionary.main.OpeningHours}</a>
-    </li>
+    <li class="breadcrumb-item"><a href="/admin/contacts/{$presenter->getParameter('id')}">Detail</a></li>
+    <li class="breadcrumb-item active">Otevírací doba</li>
 
     <li class="breadcrumb-menu d-md-down-none">
         <div class="btn-group" role="group">
-            <a href="/admin/contacts/detail/{$presenter->getParameter('id')}" class="btn btn-secondary">Detail</a>
-            <a href="/admin/contacts/detail-communications/{$presenter->getParameter('id')}" class="btn btn-secondary">Komunikace</a>
+            <a href="/admin/contacts/detail/{$presenter->getParameter('id')}" class="btn btn-sm">Detail</a>
+            <a href="/admin/contacts/detail-communications/{$presenter->getParameter('id')}" class="btn btn-sm">Komunikace</a>
         </div>
     </li>
 </ol>
 
 {foreach $flashes as $flash}
-    <br/>
+    <br>
     <div class="flash {$flash->type}">{$flash->message}</div>
-    <br/>
+    <br>
 {/foreach}
 
 <div class="container-fluid">
@@ -38,7 +36,7 @@
             </div>
             <div class="col-lg-9">
                 <div class="card">
-                    <div class="card-header">{_dictionary.main.OpeningHours}</div>
+                    <div class="card-header">Otevírací hodiny</div>
                     <div class="card-block">
                         <table class="table">
                             <tbody>
@@ -49,7 +47,8 @@
                                     <td>{$open->hourstext}</td>
                                     <td class="text-right">
                                         <a n:href="deleteHour! id => $open->contacts_id, hour => $open->id">
-                                            <i class="fa fa-times font-red"></i></a>
+                                            <i class="fa fa-times font-red"></i>
+                                        </a>
                                     </td>
                                 </tr>
                             {/foreach}

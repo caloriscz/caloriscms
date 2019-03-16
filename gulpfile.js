@@ -17,8 +17,6 @@ gulp.task("scripts-a", function () {
         './bower_components/jquery-colorbox/jquery.colorbox-min.js',
         './bower_components/nette-forms/src/assets/netteForms.js',
         './bower_components/nette.ajax.js/nette.ajax.js',
-        './bower_components/ublaboo-datagrid/assets/dist/datagrid.min.js',
-        './node_modules/moment/moment.min.js',
         './node_modules/flatpickr/dist/flatpickr.js',
         './node_modules/flatpickr/dist/l10n/cs.js',
         './node_modules/jstree/dist/jstree.min.js',

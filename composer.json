@@ -33,7 +33,6 @@
     "nette/mail": "~2.4",
     "ezyang/htmlpurifier": "~4.10",
     "studio-42/elfinder": "2.1.16",
-    "ublaboo/datagrid": "~5.5",
     "ext-json": "*"
   }
 }

@@ -3,13 +3,9 @@
 namespace Caloriscz\Members;
 
 use Caloriscz\Utilities\PagingControl;
-use Nette\Application\AbortException;
 use Nette\Application\UI\Control;
 use Nette\Database\Context;
-use Nette\InvalidStateException;
-use Nette\Utils\Html;
 use Nette\Utils\Paginator;
-use Ublaboo\DataGrid\DataGrid;
 
 class MemberGridControl extends Control
 {
@@ -33,7 +29,7 @@ class MemberGridControl extends Control
     public function handleDelete($id): void
     {
         if (!$this->getPresenter()->template->member->users_roles->members) {
-            $this->flashMessage($this->getPresenter()->translator->translate('messages.members.PermissionDenied'), 'error');
+            $this->flashMessage('Nemáte oprávnění', 'error');
             $this->redirect('this', ['id' => null]);
         }
 

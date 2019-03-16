@@ -2,19 +2,19 @@
 
 namespace App\ApiModule\Presenters;
 
-use Nette,
-    App\Model;
+use Nette\Application\UI\Presenter;
+use Nette\Database\Context;
 
 /**
  * Base presenter for all application presenters.
  */
-abstract class BasePresenter extends Nette\Application\UI\Presenter
+abstract class BasePresenter extends Presenter
 {
 
-    /** @var Nette\Database\Context */
+    /** @var Context */
     public $database;
 
-    public function __construct(\Nette\Database\Context $database)
+    public function __construct(Context $database)
     {
         $this->database = $database;
     }
@@ -23,7 +23,7 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
     {
         parent::startup();
 
-        $memberDb = $this->database->table("users")->where("username", $this->getParameter("id"));
+        $memberDb = $this->database->table('users')->where('username', $this->getParameter('id'));
 
         if ($memberDb->count() > 0) {
             $this->template->memberDb = $memberDb->fetch();
@@ -31,7 +31,7 @@ abstract class BasePresenter extends Nette\Application\UI\Presenter
             $this->template->memberDb = FALSE;
         }
 
-        $this->template->settings = $this->database->table("settings")->fetchPairs("setkey", "setvalue");
+        $this->template->settings = $this->database->table('settings')->fetchPairs('setkey', 'setvalue');
     }
 
 }

@@ -140,14 +140,6 @@ class ContactsPresenter extends BasePresenter
         $this->template->hours = $this->database->table('contacts_openinghours')->where('contacts_id', $this->getParameter('id'));
     }
 
-    public function renderCommunications(): void
-    {
-        $this->template->page = $this->database->table('pages')->get($this->getParameter('id'));
-        $this->template->communications = $this->database->table('contacts_communications')->where([
-            'contacts_id' => $this->getParameter('id')
-        ]);
-    }
-
     public function renderCategories(): void
     {
         $categoryId = null;

@@ -35,7 +35,6 @@ class LinksPresenter extends BasePresenter
     public function createComponentInsertForm(): BootstrapUIForm
     {
         $form = new BootstrapUIForm();
-        $form->setTranslator($this->translator);
         $form->getElementPrototype()->class = 'form-horizontal';
 
         $form->addSubmit('submitm', 'Vytvořit nový odkaz')

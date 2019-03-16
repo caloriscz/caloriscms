@@ -7,9 +7,6 @@
     {elseif $page->pages_types->id == 2}
         {var $pageRoot = 'pages?type=2'}
         {var $pageTitle = 'Všechny aktuality'}
-    {elseif $page->pages_types->id == 4}
-        {var $pageRoot = 'catalogue'}
-        {var $pageTitle = 'Celý katalog'}
     {elseif $page->pages_types->id == 5}
         {var $pageRoot = 'contacts'}
         {var $pageTitle = 'Všechny kontakty'}
@@ -22,48 +19,31 @@
     {/if}
     <li class="breadcrumb-menu d-md-down-none">
         <div class="btn-group" role="group">
-            {if $page->pages_types_id == 4}
-                {if $view != 'product' && $name != 'Admin:Product'}
-                    <a href="/admin/product/product/{$id}" class="btn btn-secondary">Produkt</a>
-                {/if}>
-
-                {if $view != 'params' && $name != 'Admin:Product'}
-                    <a href="/admin/product/params/{$id}" class="btn btn-secondary">{_dictionary.main.Parametres}</a>
-                {/if}>
-                {if $view != 'stock' && $name != 'Admin:Product'}
-                    <a href="/admin/product/stock/{$id}"
-                       class="btn btn-secondary">{_dictionary.main.stock|firstUpper}</a>
-                {/if}>
-            {/if}
-
             {if $page->pages_types_id == 5}
                 {if $view != 'detail' && $name != 'Admin:Contacts'}
                     <a href="/admin/contacts/detail/{$id}" class="btn btn-secondary">Kontakt</a>
                 {/if}
-                {if $view != 'detailCommunications'}
-                    <a href="/admin/contacts/detail-communications/{$id}" class="btn btn-secondary">Komunikace</a>
-                {/if}
                 {if $view != 'detailOpeningHours'}
                     <a href="/admin/contacts/detail-opening-hours/{$id}"
-                       class="btn btn-secondary">{_dictionary.main.OpeningHours}</a>
+                       class="btn btn-secondary">Otevírací doba</a>
                 {/if}
                 {if $userEdit}
-                    <a href="/admin/members/edit/{$id}" class="btn btn-secondary">{_dictionary.main.Member}</a>
+                    <a href="/admin/members/edit/{$id}" class="btn btn-secondary">Uživatel</a>
                 {/if}
             {/if}
 
             {if $view != 'detail' && $name != 'Admin:Pages'}
-                <a href="/admin/pages/detail/{$id}" class="btn btn-secondary">{_dictionary.main.Page}</a>
+                <a href="/admin/pages/detail/{$id}" class="btn btn-secondary">Stránky</a>
             {/if}
             {if $page->pages_types->enable_images && $view != 'detailImages'}
-                <a href="/admin/pages/detail-images/{$id}" class="btn btn-secondary">{_dictionary.main.images|firstUpper}</a>
+                <a href="/admin/pages/detail-images/{$id}" class="btn btn-secondary">Obrázky</a>
             {/if}
             {if $page->pages_types->enable_files && $view != 'detailFiles'}
-                <a href="/admin/pages/detail-files/{$id}" class="btn btn-secondary">{_dictionary.main.files|firstUpper}</a>
+                <a href="/admin/pages/detail-files/{$id}" class="btn btn-secondary">Soubory</a>
             {/if}
             <a href="/admin/pages/settings/{$id}" class="btn btn-secondary">Nastavení</a>
 
-            <a href="/{$page->slug}" class="btn btn-secondary" target="_blank">{_dictionary.main.Preview}</a>
+            <a href="/{$page->slug}" class="btn btn-secondary" target="_blank">Náhled</a>
         </div>
     </li>
 {/if}

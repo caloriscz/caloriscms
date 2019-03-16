@@ -20,19 +20,18 @@ class EditFileControl extends Control
     /**
      * Edit file information
      */
-    protected function createComponentEditForm()
+    protected function createComponentEditForm(): BootstrapUIForm
     {
         $image = $this->database->table('media')->get($this->getPresenter()->getParameter('id'));
 
         $form = new BootstrapUIForm();
-        $form->setTranslator($this->getPresenter()->translator);
         $form->getElementPrototype()->class = 'form-horizontal';
         $form->getElementPrototype()->role = 'form';
         $form->getElementPrototype()->autocomplete = 'off';
 
         $form->addHidden('id');
-        $form->addText('title', 'dictionary.main.Title');
-        $form->addTextArea('description', 'dictionary.main.Description')
+        $form->addText('title', 'Název');
+        $form->addTextArea('description', 'Popisek')
             ->setAttribute('style', 'height: 200px;')
             ->setAttribute('class', 'form-control');
         $form->setDefaults([
@@ -43,11 +42,15 @@ class EditFileControl extends Control
 
         $form->addSubmit('send', 'dictionary.main.Save');
 
-        $form->onSuccess[] = [$this, "editFormSucceeded"];
+        $form->onSuccess[] = [$this, 'editFormSucceeded'];
         return $form;
     }
 
-    public function editFormSucceeded(BootstrapUIForm $form)
+    /**
+     * @param BootstrapUIForm $form
+     * @throws \Nette\Application\AbortException
+     */
+    public function editFormSucceeded(BootstrapUIForm $form): void
     {
         $this->database->table('media')
             ->get($form->values->id)->update([
@@ -55,12 +58,10 @@ class EditFileControl extends Control
                 'description' => $form->values->description,
             ]);
 
-        $this->getPresenter()->redirect('this', [
-            'id' => $form->values->id,
-        ]);
+        $this->getPresenter()->redirect('this', ['id' => $form->values->id]);
     }
 
-    public function render()
+    public function render(): void
     {
         $template = $this->getTemplate();
         $template->setFile(__DIR__ . '/EditFileFormControl.latte');

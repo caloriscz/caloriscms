@@ -30,19 +30,17 @@ class LostPassControl extends Control
     protected function createComponentSendForm(): BootstrapUIForm
     {
         $form = new BootstrapUIForm();
-        $form->setTranslator($this->presenter->translator);
-        $form->getElementPrototype()->autocomplete = 'off';
 
         $form->addHidden('layer');
-        $form->addText('email', 'dictionary.main.Email');
-        $form->addSubmit('submitm', 'dictionary.main.Send');
+        $form->addText('email', 'E-mail');
+        $form->addSubmit('submitm', 'Odeslat');
 
         $form->onSuccess[] = [$this, 'sendFormSucceeded'];
         $form->onValidate[] = [$this, 'sendFormValidated'];
         return $form;
     }
 
-    public function sendFormValidated(BootstrapUIForm $form)
+    public function sendFormValidated(BootstrapUIForm $form): void
     {
         if (!Validators::isEmail($form->values->email)) {
             $this->onSave('Adresa je neplatná');
@@ -53,7 +51,7 @@ class LostPassControl extends Control
         }
     }
 
-    public function sendFormSucceeded(BootstrapUIForm $form)
+    public function sendFormSucceeded(BootstrapUIForm $form): void
     {
         $passwordGenerate = Random::generate(12, '987654321zyxwvutsrqponmlkjihgfedcba');
 

@@ -29,12 +29,12 @@ class MembersPresenter extends BasePresenter
         return $control;
     }
 
-    protected function createComponentEditMember()
+    protected function createComponentEditMember(): EditMemberControl
     {
         return new EditMemberControl($this->database);
     }
 
-    protected function createComponentInsertMember()
+    protected function createComponentInsertMember(): InsertMemberControl
     {
         $control = new InsertMemberControl($this->database);
         $control->onSave[] = function ($message, $userId) {
@@ -51,26 +51,22 @@ class MembersPresenter extends BasePresenter
         return $control;
     }
 
-    protected function createComponentInsertContactForMember()
+    protected function createComponentInsertContactForMember(): InsertContactForMemberControl
     {
         return new InsertContactForMemberControl($this->database);
     }
     
-    protected function createComponentMemberGrid()
+    protected function createComponentMemberGrid(): MemberGridControl
     {
         return new MemberGridControl($this->database);
-    }
-    
-    protected function createComponentMemberCategories()
-    {
-        return new MemberCategoriesControl($this->database);
     }
 
     /**
      * Contact for user delete
      * @param $id
+     * @throws \Nette\Application\AbortException
      */
-    public function handleDeleteContact($id)
+    public function handleDeleteContact($id): void
     {
         if (!$this->template->member->users_roles->members) {
             $this->flashMessage($this->translator->translate('messages.members.PermissionDenied'), 'error');
@@ -80,7 +76,7 @@ class MembersPresenter extends BasePresenter
         $this->redirect(':Admin:Members:edit', ['id' => $this->getParameter('contact')]);
     }
 
-    public function renderEdit()
+    public function renderEdit(): void
     {
         $this->template->members = $this->database->table('users')->get($this->getParameter('id'));
         $this->template->role = $this->user->getRoles();

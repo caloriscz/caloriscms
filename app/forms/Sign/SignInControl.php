@@ -27,19 +27,16 @@ class SignInControl extends Control
     protected function createComponentSignInForm(): BootstrapUIForm
     {
         $form = new BootstrapUIForm();
-        $form->setTranslator($this->getPresenter()->translator);
         $form->getElementPrototype()->class = 'form-horizontal';
-        $form->getElementPrototype()->role = 'form';
-        $form->getElementPrototype()->autocomplete = 'off';
 
         $form->addHidden('type');
-        $form->addText('username', 'dictionary.main.User')
+        $form->addText('username', 'Uživatel')
             ->setRequired('Vložte uživatelské jméno.');
 
-        $form->addPassword('password', 'dictionary.main.Password')
+        $form->addPassword('password', 'Heslo')
             ->setRequired('Vložte heslo.');
 
-        $form->addSubmit('send', 'dictionary.main.login')
+        $form->addSubmit('send', 'Přihlásit se')
             ->setAttribute('class', 'btn btn-success');
 
         $form->onSuccess[] = [$this, 'signInFormSucceeded'];
@@ -49,6 +46,7 @@ class SignInControl extends Control
     /**
      * @param $form
      * @param $values
+     * @throws \Nette\Application\AbortException
      */
     public function signInFormSucceeded($form, $values): void
     {

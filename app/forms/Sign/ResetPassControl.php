@@ -25,13 +25,11 @@ class ResetPassControl extends Control
     protected function createComponentResetForm(): BootstrapUIForm
     {
         $form = new BootstrapUIForm();
-        $form->setTranslator($this->getPresenter()->translator);
-        $form->getElementPrototype()->autocomplete = 'off';
         $form->addHidden('email');
         $form->addHidden('code');
         $form->addPassword('password', 'Nové heslo');
         $form->addPassword('password2', 'Zopakujte nové heslo');
-        $form->addSubmit('name', 'dictionary.main.Change');
+        $form->addSubmit('name', 'Změnit');
         $form->setDefaults([
             'email' => $this->getPresenter()->getParameter('email'),
             'code' => $this->getPresenter()->getParameter('code'),

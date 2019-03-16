@@ -25,7 +25,7 @@ use Nette\Security\IUserStorage;
 abstract class BasePresenter extends Presenter
 {
 
-    /** @var Context */
+    /** @var Context*/
     public $database;
 
     /** @var EntityManager @inject */

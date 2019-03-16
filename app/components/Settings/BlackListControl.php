@@ -28,7 +28,7 @@ class BlackListControl extends Control
         $this->presenter->redirect('this', ['id' => $this->presenter->getParameter('id')]);
     }
 
-    protected function createComponentPaging()
+    protected function createComponentPaging(): PagingControl
     {
         return new PagingControl();
     }

@@ -85,13 +85,6 @@ INSERT INTO `contacts_categories` (`id`, `parent_id`, `description`, `title`, `s
                                                                                                (3, NULL, NULL, 'Newsletter', 3),
                                                                                                (4, NULL, NULL, 'Proč další', 4);
 
-CREATE TABLE `contacts_communication` (
-  `id` int(11) NOT NULL,
-  `contacts_id` int(11) NOT NULL,
-  `communication_type` varchar(80) COLLATE utf8_czech_ci NOT NULL,
-  `communication_value` varchar(250) COLLATE utf8_czech_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
-
 CREATE TABLE `contacts_openinghours` (
   `id` int(11) NOT NULL,
   `day` smallint(6) NOT NULL,
@@ -443,10 +436,6 @@ ALTER TABLE `contacts_categories`
   ADD PRIMARY KEY (`id`),
   ADD KEY `parent_id` (`parent_id`);
 
-ALTER TABLE `contacts_communication`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `contacts_id` (`contacts_id`);
-
 ALTER TABLE `contacts_openinghours`
   ADD PRIMARY KEY (`id`),
   ADD KEY `contacts_id` (`contacts_id`);
@@ -539,9 +528,6 @@ ALTER TABLE `contacts`
 
 ALTER TABLE `contacts_categories`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
-
-ALTER TABLE `contacts_communication`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 ALTER TABLE `contacts_openinghours`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;

@@ -17,7 +17,7 @@ class AdvancedSearchControl extends Control
         $this->database = $database;
     }
 
-    protected function createComponentSearchForm()
+    protected function createComponentSearchForm(): BootstrapUIForm
     {
         $form = new BootstrapUIForm();
         $form->setTranslator($this->presenter->translator->domain('dictionary.main'));
@@ -43,7 +43,7 @@ class AdvancedSearchControl extends Control
         return $form;
     }
 
-    public function searchFormSucceeded(BootstrapUIForm $form)
+    public function searchFormSucceeded(BootstrapUIForm $form): void
     {
         $values = $form->getValues(true);
 

@@ -20,7 +20,6 @@ class InsertBlackListControl extends Control
     protected function createComponentInsertForm(): BootstrapUIForm
     {
         $form = new BootstrapUIForm();
-        $form->setTranslator($this->presenter->translator);
 
         if ($this->presenter->getParameter('type') === '') {
             $pageType = 9;
@@ -35,7 +34,7 @@ class InsertBlackListControl extends Control
             'section' => $pageType,
         ]);
 
-        $form->addSubmit('submit', 'dictionary.main.Create');
+        $form->addSubmit('submit', 'Vytvořit');
 
         $form->onSuccess[] = [$this, 'insertFormSucceeded'];
 
@@ -58,7 +57,7 @@ class InsertBlackListControl extends Control
      * @param type $id
      * @param type $type Insert blaclist word or sentence
      */
-    public function render($id = null, $type = null)
+    public function render($id = null, $type = null): void
     {
         $this->template->type = $type;
 

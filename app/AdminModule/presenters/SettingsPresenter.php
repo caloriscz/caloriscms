@@ -31,11 +31,6 @@ class SettingsPresenter extends BasePresenter
         return new InsertCountryControl($this->database);
     }
 
-    protected function createComponentInsertCurrency(): InsertCurrencyControl
-    {
-        return new InsertCurrencyControl($this->database);
-    }
-
     protected function createComponentInsertBlackList(): InsertBlackListControl
     {
         return new InsertBlackListControl($this->database);
@@ -169,11 +164,6 @@ class SettingsPresenter extends BasePresenter
     public function renderCountries(): void
     {
         $this->template->countries = $this->database->table('countries');
-    }
-
-    public function renderCurrencies(): void
-    {
-        $this->template->currencies = $this->database->table('currencies');
     }
 
     public function renderPageTypes(): void

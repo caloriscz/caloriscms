@@ -22,7 +22,6 @@
     "jquery-ui": "^1.12.1",
     "dropzone": "^4.3.0",
     "bootstrap-datepicker": "^1.6.4",
-    "ublaboo-datagrid": "^5.4.1",
     "PACE": "pace#^1.0.2",
     "nette": "^2.0.11",
     "nette-forms": "^2.4.4",
