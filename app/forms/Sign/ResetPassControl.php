@@ -22,7 +22,7 @@ class ResetPassControl extends Control
     /**
      * Form: Resets passwords in database, user fill in new password
      */
-    public function createComponentResetForm(): BootstrapUIForm
+    protected function createComponentResetForm(): BootstrapUIForm
     {
         $form = new BootstrapUIForm();
         $form->setTranslator($this->getPresenter()->translator);

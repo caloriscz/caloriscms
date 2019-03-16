@@ -29,7 +29,7 @@ class InsertMemberControl extends Control
      * Insert new user
      * @return BootstrapUIForm
      */
-    public function createComponentInsertForm(): BootstrapUIForm
+    protected function createComponentInsertForm(): BootstrapUIForm
     {
         $roles = $this->database->table('users_roles')->fetchPairs('id', 'title');
         $form = new BootstrapUIForm();

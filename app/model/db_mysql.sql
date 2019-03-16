@@ -76,8 +76,7 @@ CREATE TABLE `contacts_categories` (
   `id` int(11) NOT NULL,
   `parent_id` int(11) DEFAULT NULL,
   `description` text COLLATE utf8_czech_ci,
-  `title` varchar(80) COLLATE utf8_czech_ci NOT NULL,
-  `sorted` int(11) NOT NULL DEFAULT '0'
+  `title` varchar(80) COLLATE utf8_czech_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
 
 INSERT INTO `contacts_categories` (`id`, `parent_id`, `description`, `title`, `sorted`) VALUES
@@ -396,15 +395,14 @@ CREATE TABLE `users` (
   `date_visited` datetime DEFAULT NULL,
   `state` int(11) NOT NULL DEFAULT '0',
   `activation` char(40) CHARACTER SET latin1 DEFAULT NULL,
-  `type` int(11) NOT NULL DEFAULT '1',
   `users_roles_id` int(11) DEFAULT '0',
   `login_error` int(11) NOT NULL DEFAULT '0',
   `login_success` int(11) NOT NULL DEFAULT '0',
   `adminbar_enabled` smallint(6) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
 
-INSERT INTO `users` (`id`, `username`, `email`, `name`, `password`, `date_created`, `date_visited`, `state`, `activation`, `type`, `users_roles_id`, `login_error`, `login_success`, `adminbar_enabled`) VALUES
-                                                                                                                                                                                                                                                            (1, 'admin', '', '', '$2y$10$DLhMCsYpbB.xHJ501e.xMOvhneiT1U6YypGAcOna/V2kzIGZOwxla', NULL, '', 1, 'smx5anwed2dr', 1, 1, 5, 35, 0);
+INSERT INTO `users` (`id`, `username`, `email`, `name`, `password`, `date_created`, `date_visited`, `state`, `activation`, `users_roles_id`, `login_error`, `login_success`, `adminbar_enabled`) VALUES
+                                                                                                                                                                                                                                                            (1, 'admin', '', '', '$2y$10$DLhMCsYpbB.xHJ501e.xMOvhneiT1U6YypGAcOna/V2kzIGZOwxla', NULL, '', 1, 'smx5anwed2dr', 1, 0, 0, 0);
 
 CREATE TABLE `users_roles` (
   `id` int(11) NOT NULL,
@@ -425,8 +423,7 @@ CREATE TABLE `users_roles` (
 INSERT INTO `users_roles` (`id`, `title`, `sign`, `appearance`, `helpdesk`, `settings`, `settings_permissions`, `members`, `pages`, `pictures`, `media`, `menu`, `contacts`) VALUES
                                                                                                                                                                                     (1, 'Admin', 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1),
                                                                                                                                                                                     (2, 'Super User', 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1),
-                                                                                                                                                                                    (3, 'Editor', 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1),
-                                                                                                                                                                                    (4, 'Site User', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+                                                                                                                                                                                    (3, 'Editor', 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1);
 
 
 ALTER TABLE `blacklist`

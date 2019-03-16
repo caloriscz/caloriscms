@@ -27,7 +27,7 @@ class LostPassControl extends Control
      * Form: User fills in e-mail address to send e-mail with a password generator link
      * @return BootstrapUIForm
      */
-    public function createComponentSendForm(): BootstrapUIForm
+    protected function createComponentSendForm(): BootstrapUIForm
     {
         $form = new BootstrapUIForm();
         $form->setTranslator($this->presenter->translator);

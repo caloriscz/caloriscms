@@ -22,7 +22,7 @@ class ImageUploadControl extends Control
     /**
      * File Upload
      */
-    public function createComponentUploadFilesForm()
+    protected function createComponentUploadFilesForm()
     {
         $form = new BootstrapUIForm();
         $form->setTranslator($this->presenter->translator);
@@ -85,7 +85,7 @@ class ImageUploadControl extends Control
      * Image Upload
      * @return BootstrapUIForm
      */
-    public function createComponentUploadForm(): BootstrapUIForm
+    protected function createComponentUploadForm(): BootstrapUIForm
     {
         $form = new BootstrapUIForm();
         $form->setTranslator($this->presenter->translator);

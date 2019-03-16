@@ -46,7 +46,7 @@ class EditorControl extends Control
      * Edit page content
      * @return BootstrapUIForm
      */
-    public function createComponentEditForm(): BootstrapUIForm
+    protected function createComponentEditForm(): BootstrapUIForm
     {
         $pages = $this->database->table('pages')->get($this->getPresenter()->getParameter('id'));
         $form = new BootstrapUIForm();

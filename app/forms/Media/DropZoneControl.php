@@ -25,7 +25,7 @@ class DropZoneControl extends Control
      * @param $id
      * @return BootstrapUIForm
      */
-    public function createComponentDropForm($id): BootstrapUIForm
+    protected function createComponentDropForm($id): BootstrapUIForm
     {
         $type = 0;
 

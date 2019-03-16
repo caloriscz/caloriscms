@@ -37,7 +37,7 @@ class EditorSettingsControl extends Control
     /**
      * Edit page content
      */
-    public function createComponentEditForm(): BootstrapUIForm
+    protected function createComponentEditForm(): BootstrapUIForm
     {
         $pages = $this->database->table('pages')->get($this->getPresenter()->getParameter('id'));
 

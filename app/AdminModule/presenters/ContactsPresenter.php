@@ -113,49 +113,6 @@ class ContactsPresenter extends BasePresenter
 
     /**
      * @param $id
-     * @param $sorted
-     * @throws Nette\Application\AbortException
-     */
-    public function handleUp($id, $sorted): void
-    {
-        $sortDb = $this->database->table('contacts_categories')->where([
-            'sorted > ?' => $sorted,
-            'parent_id' => $this->getParameter('category')
-        ])->order('sorted')->limit(1);
-        $sort = $sortDb->fetch();
-
-        if ($sortDb->count() > 0) {
-            $this->database->table('contacts_categories')->where(['id' => $id])->update(['sorted' => $sort->sorted]);
-            $this->database->table('contacts_categories')->where(['id' => $sort->id])->update(['sorted' => $sorted]);
-        }
-
-        $this->redirect(':Admin:Contacts:default', ['id' => null]);
-    }
-
-    /**
-     * @param $id
-     * @param $sorted
-     * @param $category
-     * @throws Nette\Application\AbortException
-     */
-    public function handleDown($id, $sorted, $category): void
-    {
-        $sortDb = $this->database->table('contacts_categories')->where([
-            'sorted < ?' => $sorted,
-            'parent_id' => $category
-        ])->order('sorted DESC')->limit(1);
-        $sort = $sortDb->fetch();
-
-        if ($sortDb->count() > 0) {
-            $this->database->table('contacts_categories')->where(['id' => $id])->update(['sorted' => $sort->sorted]);
-            $this->database->table('contacts_categories')->where(['id' => $sort->id])->update(['sorted' => $sorted]);
-        }
-
-        $this->presenter->redirect('this', ['id' => null]);
-    }
-
-    /**
-     * @param $id
      */
     public function handleDelete($id): void
     {

@@ -16,7 +16,7 @@ class DropUploadControl extends Control
         $this->database = $database;
     }
 
-    public function createComponentDropUploadForm()
+    protected function createComponentDropUploadForm()
     {
         $form = new BootstrapUIForm();
         $form->setTranslator($this->presenter->translator);

@@ -24,7 +24,7 @@ class EditContactFormControl extends Control
      * Edit helpdesk
      * @return BootstrapUIForm
      */
-    public function createComponentEditForm(): BootstrapUIForm
+    protected function createComponentEditForm(): BootstrapUIForm
     {
         $form = new BootstrapUIForm();
         $form->setTranslator($this->presenter->translator);
