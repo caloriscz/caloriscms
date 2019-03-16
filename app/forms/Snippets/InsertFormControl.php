@@ -27,7 +27,7 @@ class InsertFormControl extends Control
         $form->getElementPrototype()->class = 'form-horizontal';
 
         $form->addHidden('id')->setAttribute('class', 'form-control');
-        $form->addText('title', 'dictionary.main.Title');
+        $form->addText('title', 'Název');
 
         $form->setDefaults(['id' => $this->getPresenter()->getParameter('id')]);
 

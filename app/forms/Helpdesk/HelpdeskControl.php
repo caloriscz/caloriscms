@@ -49,17 +49,17 @@ class HelpdeskControl extends Control
     public function sendFormValidated(BootstrapUIForm $form): void
     {
         if (strlen($form->values->name) < 2) {
-            $this->presenter->flashMessage($this->presenter->translator->translate('messages.sign.fillInName'), 'error');
+            $this->presenter->flashMessage('Vyplňte jméno', 'error');
             $this->presenter->redirect(':Front:Contact:default');
         }
 
         if (Validators::isEmail($form->values->email) === false) {
-            $this->presenter->flashMessage($this->presenter->translator->translate('messages.sign.fillInEmail'), 'error');
+            $this->presenter->flashMessage('Vyplňte e-mail', 'error');
             $this->presenter->redirect(':Front:Contact:default');
         }
 
         if (strlen($form->values->message) < 2) {
-            $this->presenter->flashMessage($this->presenter->translator->translate('messages.sign.fillInMessage'), 'error');
+            $this->presenter->flashMessage('Vyplňte zprávu', 'error');
             $this->presenter->redirect(':Front:Contact:default');
         }
 

@@ -22,15 +22,12 @@ class InsertCountryControl extends Control
     protected function createComponentInsertForm(): BootstrapUIForm
     {
         $form = new BootstrapUIForm();
-        $form->setTranslator($this->presenter->translator);
         $form->getElementPrototype()->class = 'form-horizontal';
-        $form->getElementPrototype()->role = 'form';
-        $form->getElementPrototype()->autocomplete = 'off';
 
         $form->addText('country_cs', 'Země (česky)');
         $form->addText('country_en', 'Země (anglicky)');
 
-        $form->addSubmit('send', 'dictionary.main.Save')
+        $form->addSubmit('send', 'Uložit')
             ->setAttribute('class', 'btn btn-success');
 
         $form->onSuccess[] = [$this, 'insertFormSucceeded'];

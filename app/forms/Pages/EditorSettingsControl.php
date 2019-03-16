@@ -94,7 +94,7 @@ class EditorSettingsControl extends Control
 
         $form->onSuccess[] = [$this, 'editFormSucceeded'];
         $form->onValidate[] = [$this, 'permissionFormValidated'];
-        $form->addSubmit('submit', 'dictionary.main.Save')
+        $form->addSubmit('submit', 'Uložit')
             ->setHtmlId('formxins');
 
         return $form;

@@ -13,7 +13,7 @@ class Filters
         }
     }
 
-    public static function ago($s)
+    public static function ago($s): string
     {
         $date = new \DateTime();
         $date->setDate(date('Y', strtotime($s)), date('m', strtotime($s)), date('d', strtotime($s)));
@@ -22,12 +22,12 @@ class Filters
         return $interval->format('%a days');
     }
 
-    public static function round($s, $nr = 2)
+    public static function round($s, $nr = 2): float
     {
         return round($s, $nr);
     }
 
-    public static function toMins($s)
+    public static function toMins($s): string
     {
         if ($s < 60 && $s > 0) {
             $duration = '0:' . $s . '.';
@@ -40,12 +40,12 @@ class Filters
         return $duration;
     }
 
-    public static function toBaseName($s)
+    public static function toBaseName($s): string
     {
         return basename($s);
     }
 
-    public static function dateDiff($s, $t)
+    public static function dateDiff($s, $t): string
     {
         $datetime1 = date_create($s);
         $datetime2 = date_create($t);
@@ -57,13 +57,13 @@ class Filters
     public static function numericday($s)
     {
         $names = [
-            1 => 'dictionary.days.Monday',
-            2 => 'dictionary.days.Tuesday',
-            3 => 'dictionary.days.Wednesday',
-            4 => 'dictionary.days.Thursday',
-            5 => 'dictionary.days.Friday',
-            6 => 'dictionary.days.Saturday',
-            7 => 'dictionary.days.Sunday'];
+            1 => 'Pondělí',
+            2 => 'Úterý',
+            3 => 'Středa',
+            4 => 'Čtvrtek',
+            5 => 'Pátek',
+            6 => 'Sobota',
+            7 => 'Neděle'];
 
         return $names[$s];
     }
@@ -71,18 +71,18 @@ class Filters
     public static function numericmonth($s)
     {
         $nazvy = [
-            1 => 'dictionary.months.January',
-            2 => 'dictionary.months.February',
-            3 => 'dictionary.months.March',
-            4 => 'dictionary.months.April',
-            5 => 'dictionary.months.May',
-            6 => 'dictionary.months.June',
-            7 => 'dictionary.months.July',
-            8 => 'dictionary.months.August',
-            9 => 'dictionary.months.September',
-            10 => 'dictionary.months.October',
-            11 => 'dictionary.months.November',
-            12 => 'dictionary.months.December',
+            1 => 'Leden',
+            2 => 'Únor',
+            3 => 'Březen',
+            4 => 'Duben',
+            5 => 'Květen',
+            6 => 'Červen',
+            7 => 'Červenec',
+            8 => 'Srpen',
+            9 => 'Září',
+            10 => 'Říjen',
+            11 => 'Listopad',
+            12 => 'Prosinec',
         ];
 
         return $nazvy[$s];
