@@ -3,7 +3,6 @@
 namespace App\Forms\Pages;
 
 use App\Model\Document;
-use Kdyby\Doctrine\EntityManager;
 use Nette\Application\UI\Control;
 use Nette\Database\Context;
 use Nette\Forms\BootstrapUIForm;

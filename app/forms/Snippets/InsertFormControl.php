@@ -2,7 +2,6 @@
 
 namespace App\Forms\Snippets;
 
-use Kdyby\Doctrine\EntityManager;
 use Nette\Application\UI\Control;
 use Nette\Database\Context;
 use Nette\Forms\BootstrapUIForm;

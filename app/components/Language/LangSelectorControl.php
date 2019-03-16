@@ -1,6 +1,5 @@
 <?php
 
-use Kdyby\Doctrine\EntityManager;
 use Nette\Application\UI\Control;
 use Nette\Database\Context;
 
@@ -11,12 +10,12 @@ use Nette\Database\Context;
 class LangSelectorControl extends Control
 {
 
-    /** @var EntityManager @inject */
+    /** @var Context */
     public $database;
 
     /**
      * LangSelectorControl constructor.
-     * @param EntityManager $em
+     * @param Context $em
      */
     public function __construct(Context $database)
     {

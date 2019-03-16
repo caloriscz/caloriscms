@@ -13,7 +13,6 @@ use Caloriscz\Page\PageSlugControl;
 use Caloriscz\Page\PageTitleControl;
 use Caloriscz\Utilities\PagingControl;
 use ContactControl;
-use Kdyby\Doctrine\EntityManager;
 use Kdyby\Translation\Translator;
 use Nette;
 use Nette\Application\UI\Presenter;

@@ -3,10 +3,8 @@
 namespace Caloriscz\Menus;
 
 use App\Forms\Menu\InsertMenuControl;
-use Kdyby\Doctrine\EntityManager;
 use Nette\Application\UI\Control;
 use Nette\Database\Context;
-use Tracy\Debugger;
 
 class MenuEditorControl extends Control
 {
