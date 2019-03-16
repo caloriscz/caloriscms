@@ -149,7 +149,7 @@ abstract class BasePresenter extends Presenter
      */
     protected function createComponentEditor(): EditorControl
     {
-        return new EditorControl($this->database, $this->em);
+        return new EditorControl($this->database);
     }
 
     /**
