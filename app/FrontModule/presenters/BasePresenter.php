@@ -32,9 +32,6 @@ abstract class BasePresenter extends Presenter
     /** @var Context */
     public $database;
 
-    /** @var EntityManager */
-    public $em;
-
     /** @persistent */
     public $locale;
 

@@ -15,23 +15,19 @@ class EditorSettingsControl extends Control
     /** @var Context */
     public $database;
 
-    /** @var EntityManager @inject */
-    public $em;
-
     public $onSave;
 
-    public function __construct(Context $database, EntityManager $em)
+    public function __construct(Context $database)
     {
         $this->database = $database;
-        $this->em = $em;
 
         $config = \HTMLPurifier_Config::createDefault();
         $this->htmlPurifier = new \HTMLPurifier($config);
     }
 
-    protected function createComponentLangSelector()
+    protected function createComponentLangSelector(): \LangSelectorControl
     {
-        return new \LangSelectorControl($this->em);
+        return new \LangSelectorControl($this->database);
     }
 
     /**
@@ -112,7 +108,7 @@ class EditorSettingsControl extends Control
         }
     }
 
-    public function editFormSucceeded(BootstrapUIForm $form)
+    public function editFormSucceeded(BootstrapUIForm $form): void
     {
         $values = $form->getHttpData($form::DATA_TEXT); // get value from html input
 
@@ -127,7 +123,7 @@ class EditorSettingsControl extends Control
         $this->onSave(['id' => $form->values->id, 'l' => $form->values->l]);
     }
 
-    public function handlePublic()
+    public function handlePublic(): void
     {
         $page = $this->database->table('pages')->get($this->getPresenter()->getParameter('id'));
         $show = 1;

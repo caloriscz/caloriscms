@@ -26,13 +26,12 @@
     "latte/latte": "~2.4",
     "tracy/tracy": "~2.4",
     "kdyby/translation": "dev-master",
-    "kdyby/annotations": "^2.4",
-    "kdyby/doctrine": "^3.2",
     "kdyby/events": "^3.1",
     "nette/forms": "~2.4",
     "nette/mail": "~2.4",
     "ezyang/htmlpurifier": "~4.10",
     "studio-42/elfinder": "2.1.16",
-    "ext-json": "*"
+    "ext-json": "*",
+    "kdyby/console": "^2.7"
   }
 }

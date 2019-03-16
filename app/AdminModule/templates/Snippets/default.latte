@@ -1,10 +1,9 @@
-{block #titles}{_dictionary.main.Snippets}{/block}
+{block #titles}Snippets{/block}
 {block content}
 
 <ol class="breadcrumb">
-    <li class="breadcrumb-item">Home</li>
-    <li class="breadcrumb-item"><a href="#">Admin</a></li>
-    <li class="breadcrumb-item active">{_dictionary.main.Snippets}</li>
+    <li class="breadcrumb-item"><a href="/admin">Admin</a></li>
+    <li class="breadcrumb-item active">Snippets</li>
 </ol>
 
 <div class="container-fluid">
@@ -36,15 +35,15 @@
                         {foreach $snippets as $item}
                             <tr>
                                 <td class="col-1">
-                                    <a n:href="delete!, id => $item->getId()" class="btn btn-default btn-xs" role="button"
-                                            onclick="return confirm('{_admin.catalogue.deletereallymessage}')">
+                                    <a n:href="delete!, id => $item->id" class="btn btn-default btn-xs" role="button"
+                                            onclick="return confirm('Opravdu smazat?')">
                                         <i class="fa fa-times text-danger"></i>
                                     </a>
                                 </td>
                                 <td class="col-8">
-                                    <a n:href=":Admin:Snippets:detail, id => $item->getId()">{$item->getKeyword()}</a>
+                                    <a n:href=":Admin:Snippets:detail, id => $item->getId()">{$item->keyword}</a>
                                 </td>
-                                <td class="col-3">[snippet="{$item->getId()}"]</td>
+                                <td class="col-3">[snippet="{$item->id}"]</td>
                             </tr>
                         {/foreach}
                     </table>

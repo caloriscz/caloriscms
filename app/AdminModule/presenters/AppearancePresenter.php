@@ -30,7 +30,7 @@ class AppearancePresenter extends BasePresenter
 
     protected function createComponentCarouselManager(): CarouselManagerControl
     {
-        return new CarouselManagerControl($this->em);
+        return new CarouselManagerControl($this->database);
     }
 
     public function renderDefault(): void

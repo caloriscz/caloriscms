@@ -2,20 +2,20 @@
     <p>
         Jazykové mutace:
         {foreach $languages as $item}
-            {if $item->getDefault()}
+            {if $item->default}
                 {var $code = null}
             {else}
-                {var $code = $item->getCode()}
+                {var $code = $item->code}
             {/if}
 
-            {if $langSelected == $item->getCode()}
+            {if $langSelected == $item->code}
                 {var $active = " btn-primary"}
-            {elseif $langSelected == '' && $item->getDefault() == 1}
+            {elseif $langSelected == '' && $item->default == 1}
                 {var $active = " btn-primary"}
             {else}
                 {var $active = ""}
             {/if}
-            <a href="{plink this, id => $id, (expand) $arr, l => $code}" class="btn{$active}">{$item->getTitle()}</a>
+            <a href="{plink this, id => $id, (expand) $arr, l => $code}" class="btn{$active}">{$item->title}</a>
         {/foreach}
     </p>
 {/if}

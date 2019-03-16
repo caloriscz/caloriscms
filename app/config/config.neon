@@ -25,7 +25,6 @@ services:
 	- App\Model\Category
 	- App\RouterFactory
 	- Model\SlugManager
-	- {class: Doctrine\ORM\Tools\Console\Command\GenerateEntitiesCommand, tags: [kdyby.console.command]}
 	router: @App\RouterFactory::createRouter
 	cacheClear:
 		class: App\Console\CacheClearCommand
@@ -38,8 +37,6 @@ extensions:
     translation: Kdyby\Translation\DI\TranslationExtension
     console: Kdyby\Console\DI\ConsoleExtension
     events: Kdyby\Events\DI\EventsExtension
-    annotations: Kdyby\Annotations\DI\AnnotationsExtension
-    doctrine: Kdyby\Doctrine\DI\OrmExtension
 
 translation:
     default: cs

@@ -47,34 +47,7 @@ class Category
         }
     }
 
-    /**
-     * Get breadcrumb ids
-     * @param $id
-     * @param null $arr
-     * @return array|null
-     */
-    public function getSubIds($id, $arr = null): ?array
-    {
-        $catDb = $this->database->table('categories')->where('parent_id', $id);
-
-        if (!is_array($arr)) {
-            $arr[] = (int)$id;
-        }
-
-        if ($catDb->count() > 0) {
-            foreach ($catDb as $value) {
-                $arrs[] = $value->id;
-                $arr[] = $value->id;
-            }
-
-            return $this->getSubIds($arrs, $arr);
-        } else {
-            asort($arr);
-            return $arr;
-        }
-    }
-
-    /**
+        /**
      * Create new category
      * @param $title
      * @param $parent

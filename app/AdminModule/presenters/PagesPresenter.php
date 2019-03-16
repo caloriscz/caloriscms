@@ -63,7 +63,7 @@ class PagesPresenter extends BasePresenter
      */
     protected function createComponentLangSelector(): \LangSelectorControl
     {
-        return new \LangSelectorControl($this->em);
+        return new \LangSelectorControl($this->database);
     }
 
     /**
@@ -103,7 +103,7 @@ class PagesPresenter extends BasePresenter
      */
     public function createComponentEditorSettings(): EditorSettingsControl
     {
-        $control = new EditorSettingsControl($this->database, $this->em);
+        $control = new EditorSettingsControl($this->database);
         $control->onSave[] = function (array $querystring, string $error = null) {
 
             if ($error) {

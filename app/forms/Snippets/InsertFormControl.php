@@ -13,14 +13,10 @@ class InsertFormControl extends Control
     /** @var Context */
     public $database;
 
-    /** @var EntityManager @inject */
-    public $em;
-
-    public function __construct(Context $database, EntityManager $em)
+    public function __construct(Context $database)
     {
         parent::__construct();
         $this->database = $database;
-        $this->em = $em;
     }
 
     /**
@@ -29,17 +25,14 @@ class InsertFormControl extends Control
     public function createComponentInsertForm(): BootstrapUIForm
     {
         $form = new BootstrapUIForm();
-        $form->setTranslator($this->presenter->translator);
         $form->getElementPrototype()->class = 'form-horizontal';
-        $form->getElementPrototype()->role = 'form';
-        $form->getElementPrototype()->autocomplete = 'off';
 
         $form->addHidden('id')->setAttribute('class', 'form-control');
         $form->addText('title', 'dictionary.main.Title');
 
         $form->setDefaults(['id' => $this->getPresenter()->getParameter('id')]);
 
-        $form->addSubmit('submit', 'dictionary.main.Create')->setHtmlId('formxins');
+        $form->addSubmit('submit', 'Vytvořit')->setHtmlId('formxins');
 
         $form->onSuccess[] = [$this, 'insertFormSucceeded'];
         $form->onValidate[] = [$this, 'permissionValidated'];

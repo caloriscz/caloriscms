@@ -13,13 +13,9 @@ class MenuEditorControl extends Control
     /** @var Context */
     public $database;
 
-    /** @var EntityManager */
-    public $em;
-
-    public function __construct(Context $database, EntityManager $em)
+    public function __construct(Context $database)
     {
         $this->database = $database;
-        $this->em = $em;
     }
 
     protected function createComponentMenuInsert(): InsertMenuControl
@@ -72,9 +68,7 @@ class MenuEditorControl extends Control
      */
     public function handleSort(): void
     {
-        $updateSorter = $this->em->getConnection()->prepare('SET @i = 1000;UPDATE `menu` SET `sorted` = @i:=@i+2 ORDER BY `sorted` ASC');
-        $updateSorter->execute();
-        $updateSorter->closeCursor();
+        $this->database->query('SET @i = 1000;UPDATE `menu` SET `sorted` = @i:=@i+2 ORDER BY `sorted` ASC');
         $arr['parent_id'] = null;
         $arr['sorted'] = null;
 
@@ -93,13 +87,9 @@ class MenuEditorControl extends Control
         ])->order('sorted')->limit(1, $this->getPresenter()->getParameter('position'));
 
         if ($menui->count() > 0) {
-                Debugger::barDump($this->getPresenter()->getParameter('position'));
-
             if ($this->getPresenter()->getParameter('position') === 0) {
-                Debugger::barDump('2');
                 $arr['sorted'] = ($menui->fetch()->sorted - 1);
             } else {
-                Debugger::barDump('3');
                 $arr['sorted'] = ($menui->fetch()->sorted + 1);
             }
         }

@@ -2,72 +2,51 @@
 
 namespace Caloriscz\Appearance;
 
-use App\Model\Entity\Carousel;
 use App\Model\IO;
-use Doctrine\DBAL\DBALException;
-use Doctrine\ORM\ORMException;
-use Kdyby\Doctrine\EntityManager;
 use Nette\Application\UI\Control;
-use Tracy\Debugger;
+use Nette\Database\Context;
 
 class CarouselManagerControl extends Control
 {
 
-    /** @var EntityManager @inject */
-    public $em;
+    /** @var Context */
+    public $database;
 
-    public function __construct(EntityManager $em)
+    public function __construct(Context $database)
     {
         parent::__construct();
 
-        $this->em = $em;
+        $this->database = $database;
     }
 
     /**
      * Resort images in order to enjoy sorting images from one :)
      * @throws \Exception
      */
-    public function handleImages()
+    public function handleImages(): void
     {
-        $updateSorter = $this->em->getConnection()->prepare('SET @i = 1000;UPDATE `carousel` SET `sorted` = @i:=@i+2 ORDER BY `sorted` ASC');
-        $updateSorter->execute();
-        $updateSorter->closeCursor();
-
-        try {
-            $arrSorted = explode(',', $this->presenter->getParameter('sortable'));
-            $arrIds = explode(',', $this->presenter->getParameter('ids'));
-
-            for ($a = 0; $a < count($arrSorted); $a++) {
-                $this->em->getReference(Carousel::class, $arrSorted[$a])->setSorted($a);
-            }
-
-            $this->em->flush();
-        } catch (ORMException $e) {
-            exit();
-        }
-
+        $updateSorter = $this->database->query('SET @i = 1000;UPDATE `carousel` SET `sorted` = @i:=@i+2 ORDER BY `sorted` ASC');
         exit();
     }
 
-    public function handleDelete($id)
+    public function handleDelete($id): void
     {
-        for ($a = 0; $a < count($id); $a++) {
-            $carousel = $this->em->find(Carousel::class, $id);
-            $image = $carousel->getImage();
+        for ($a = 0, $aMax = count($id); $a < $aMax; $a++) {
+            $carousel = $this->database->table('carousel')->get($id);
+            $image = $carousel->image;
 
-            $this->em->remove($carousel);
+            $this->database->table($carousel)->get($id)->delete();
 
             IO::remove(APP_DIR . '/images/carousel/' . $image);
             unset($image);
-            $this->em->flush();
         }
 
         $this->redirect('this', ['id' => null]);
     }
 
-    public function render()
+    public function render(): void
     {
-        $this->template->carousel = $this->em->getRepository(Carousel::class)->findBy([], ['sorted' => 'ASC']);
+        $this->template->carousel = $this->database->table('carousel')->order('sortedASC');
         $this->template->setFile(__DIR__ . '/CarouselManagerControl.latte');
         $this->template->render();
     }

@@ -19,7 +19,7 @@ class MenuPresenter extends BasePresenter
 {
     protected function createComponentMenuEditor(): MenuEditorControl
     {
-        return new MenuEditorControl($this->database, $this->em);
+        return new MenuEditorControl($this->database);
     }
 
     protected function createComponentMenuList(): MenuListControl

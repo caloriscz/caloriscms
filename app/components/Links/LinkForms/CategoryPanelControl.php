@@ -64,11 +64,9 @@ class CategoryPanelControl extends Control
      * Resort images in order to enjoy sorting images from one :)
      * @throws \Throwable
      */
-    public function handleSort()
+    public function handleSort(): void
     {
-        $updateSorter = $this->em->getConnection()->prepare('SET @i = 1000;UPDATE `links_categories` SET `sorted` = @i:=@i+2 ORDER BY `sorted` ASC');
-        $updateSorter->execute();
-        $updateSorter->closeCursor();
+        $updateSorter = $this->database->query('SET @i = 1000;UPDATE `links_categories` SET `sorted` = @i:=@i+2 ORDER BY `sorted` ASC');
         $arr['parent_id'] = null;
         $arr['sorted'] = null;
 
@@ -84,8 +82,7 @@ class CategoryPanelControl extends Control
 
         $menui = $this->database->table('links_categories')->where([
             'parent_id' => $idTo
-        ])
-            ->order('sorted')->limit(1, $this->getPresenter()->getParameter('position'));
+        ])->order('sorted')->limit(1, $this->getPresenter()->getParameter('position'));
 
         if ($menui->count() > 0) {
             if ($this->getPresenter()->getParameter('position') === 0) {
