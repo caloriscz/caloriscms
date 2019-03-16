@@ -23,7 +23,7 @@ class ImageBrowserControl extends Control
 
     }
 
-    protected function createComponentPaging()
+    protected function createComponentPaging(): PagingControl
     {
         return new PagingControl();
     }
@@ -34,7 +34,7 @@ class ImageBrowserControl extends Control
      * @param $type
      * @throws \Nette\Application\AbortException
      */
-    public function handleDelete($id, $type)
+    public function handleDelete($id): void
     {
         $imageDb = $this->database->table('pictures')->get($id);
 
@@ -52,7 +52,7 @@ class ImageBrowserControl extends Control
     /**
      * Set image as main  image
      */
-    public function handleSetMain()
+    public function handleSetMain(): void
     {
         // Set all other media images in this folder as 0
         $this->database->table('pictures')->where(['pages_id' => $this->getParameter('id')])

@@ -15,7 +15,7 @@ class SideCatControl extends Control
         $this->database = $database;
     }
 
-    public function render($style = 'sidemenu', $templateFile = 'SideCatControl', $id = null)
+    public function render($style = 'sidemenu', $templateFile = 'SideCatControl', $id = null): void
     {
         $template = $this->getTemplate();
         $template->setFile(__DIR__ . 'SideCatControl.php/' . $templateFile . '.latte');

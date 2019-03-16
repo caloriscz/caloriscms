@@ -27,14 +27,11 @@ class EditContactFormControl extends Control
     protected function createComponentEditForm(): BootstrapUIForm
     {
         $form = new BootstrapUIForm();
-        $form->setTranslator($this->presenter->translator);
         $form->getElementPrototype()->class = 'form-horizontal';
-        $form->getElementPrototype()->role = 'form';
-        $form->getElementPrototype()->autocomplete = 'off';
 
         $form->addHidden('helpdesk_id');
-        $form->addText('title', 'dictionary.main.Title');
-        $form->addTextArea('description', 'dictionary.main.Description')
+        $form->addText('title', 'Název');
+        $form->addTextArea('description', 'Popisek')
             ->setAttribute('class', 'form-control')
             ->setAttribute('style', 'height: 200px;');
         $form->addCheckbox('fill_phone');
@@ -70,7 +67,7 @@ class EditContactFormControl extends Control
         $this->presenter->redirect('this', ['id' => $form->values->helpdesk_id]);
     }
 
-    public function render()
+    public function render(): void
     {
         $template = $this->getTemplate();
         $template->setFile(__DIR__ . '/EditContactFormControl.latte');

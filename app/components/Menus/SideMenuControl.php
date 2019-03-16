@@ -15,7 +15,7 @@ class SideMenuControl extends Control
         $this->database = $database;
     }
 
-    public function render($id, $style = 'sidemenu')
+    public function render($id, $style = 'sidemenu'): void
     {
         $template = $this->getTemplate();
         

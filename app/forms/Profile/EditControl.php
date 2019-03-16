@@ -30,19 +30,15 @@ class EditControl extends Control
     protected function createComponentEditForm(): BootstrapUIForm
     {
         $form = new BootstrapUIForm();
-        $form->setTranslator($this->presenter->translator);
-        $form->getElementPrototype()->autocomplete = 'off';
 
         $form->addText('email');
         $form->addText('name');
         $form->addCheckbox('adminbar')
             ->setDefaultValue($this->presenter->template->member->adminbar_enabled);
-        $form->addSelect('language', '', ['cs' => 'česky', 'en' => 'English']);
 
         $form->setDefaults([
             'name' => $this->presenter->template->member->name,
-            'email' => $this->presenter->template->member->email,
-            'language' => $this->presenter->request->getCookie('language_admin')
+            'email' => $this->presenter->template->member->email
         ]);
 
         $form->addSubmit('submit');
@@ -52,7 +48,7 @@ class EditControl extends Control
         return $form;
     }
 
-    public function validateFormSucceeded(BootstrapUIForm $form)
+    public function validateFormSucceeded(BootstrapUIForm $form): void
     {
         if (Validators::isEmail($form->values->email) === false) {
             $this->onSave('E-mail je povinný');
@@ -76,11 +72,9 @@ class EditControl extends Control
             'email' => $form->values->email,
             'adminbar_enabled' => $form->values->adminbar,
         ]);
-
-        $this->presenter->response->setCookie('language_admin', $form->values->language, '180 days');
     }
 
-    public function render()
+    public function render(): void
     {
         $template = $this->template;
         $template->member = $this->presenter->template->member->username;

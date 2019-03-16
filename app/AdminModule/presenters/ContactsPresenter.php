@@ -5,13 +5,9 @@ namespace App\AdminModule\Presenters;
 use App\Forms\Contacts\EditCategoryControl;
 use App\Forms\Contacts\EditContactControl;
 use App\Forms\Contacts\InsertCategoryControl;
-use App\Forms\Contacts\InsertCommunicationControl;
 use App\Forms\Contacts\InsertContactCategoryControl;
 use App\Forms\Contacts\InsertContactControl;
 use App\Forms\Contacts\InsertHourControl;
-use App\Forms\Contacts\LoadVatControl;
-use Apps\Forms\Profile\EditControl;
-use Caloriscz\Contact\CommunicationGridControl;
 use Caloriscz\Contact\ContactGridControl;
 use Nette,
     App\Model;
@@ -31,7 +27,7 @@ class ContactsPresenter extends BasePresenter
         $control = new EditContactControl($this->database);
         $control->onSave[] = function ($pages_id, $error = null) {
             if ($error === 1) {
-                $this->flashMessage($this->translator->translate('messages.sign.fillInEmail'), 'error');
+                $this->flashMessage('Vyplňte e-mail', 'error');
             }
 
             $this->redirect('this', ['id' => $pages_id]);
@@ -50,24 +46,9 @@ class ContactsPresenter extends BasePresenter
         return new InsertHourControl($this->database);
     }
 
-    protected function createComponentInsertCommunication(): InsertCommunicationControl
-    {
-        return new InsertCommunicationControl($this->database);
-    }
-
-    protected function createComponentLoadVat(): LoadVatControl
-    {
-        return new LoadVatControl($this->database);
-    }
-
     protected function createComponentContactGrid(): ContactGridControl
     {
         return new ContactGridControl($this->database);
-    }
-
-    protected function createComponentCommunicationGrid(): CommunicationGridControl
-    {
-        return new CommunicationGridControl($this->database);
     }
 
     protected function createComponentCategoryEdit(): EditCategoryControl

@@ -2,9 +2,6 @@
 
 namespace App\ApiModule\Presenters;
 
-use Nette,
-    App\Model;
-
 /**
  * Homepage presenter.
  */
@@ -16,11 +13,11 @@ class HomepagePresenter extends BasePresenter
         parent::startup();
 
         if ($this->user->isLoggedIn()) {
-            $this->template->isLoggedIn = TRUE;
+            $this->template->isLoggedIn = true;
 
-            $this->template->member = $this->database->table("users")->get($this->user->getId());
+            $this->template->member = $this->database->table('users')->get($this->user->getId());
 
-            if ($this->template->member->username != 'admin') {
+            if ($this->template->member->username !== 'admin') {
                 die('alone');
             }
         } else {
@@ -28,7 +25,7 @@ class HomepagePresenter extends BasePresenter
         }
     }
 
-    public function renderdefault()
+    public function renderdefault(): void
     {
         $this->template->channel = 'channel';
         $this->template->items = 'item';

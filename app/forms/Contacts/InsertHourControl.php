@@ -21,16 +21,14 @@ class InsertHourControl extends Control
     /**
      * Insert hour
      */
-    protected function createComponentInsertForm()
+    protected function createComponentInsertForm(): BootstrapUIForm
     {
         $form = new BootstrapUIForm();
-        $form->setTranslator($this->presenter->translator);
-        $form->getElementPrototype()->role = 'form';
-        $form->getElementPrototype()->autocomplete = 'off';
+        $form->getElementPrototype()->class = 'form-horizontal';
+
         $form->addHidden('contact_id');
-        $form->addSelect('day', 'dictionary.main.DayOfTheWeek', [
-            1 => 'dictionary.days.Monday', 2 => 'dictionary.days.Tuesday', 3 => 'dictionary.days.Wednesday',
-            4 => 'dictionary.days.Thursday', 5 => 'dictionary.days.Friday', 6 => 'dictionary.days.Saturday', 7 => 'dictionary.days.Sunday'])
+        $form->addSelect('day', 'Den v  týdnu', [
+            1 => 'Pondělí', 2 => 'Úterý', 3 => 'Středa', 4 => 'Čtvrtek', 5 => 'Pátek', 6 => 'Sobota', 7 => 'Neděle'])
             ->setAttribute('class', 'form-control');
         $form->addText('hourstext', 'Hodiny (např. 14.00-20.00, jen objednaní)')
             ->setRequired('Vložte hodiny od-do nebo nějakou informaci');
@@ -41,7 +39,7 @@ class InsertHourControl extends Control
             'contact_id' => $contact->id,
         ]);
 
-        $form->addSubmit('submitm', 'dictionary.main.Insert')
+        $form->addSubmit('submitm', 'Vložit')
             ->setAttribute('class', 'btn btn-success');
 
         $form->onSuccess[] = [$this, 'insertFormSucceeded'];

@@ -15,7 +15,7 @@ class LangSelectorControl extends Control
 
     /**
      * LangSelectorControl constructor.
-     * @param Context $em
+     * @param Context $database
      */
     public function __construct(Context $database)
     {

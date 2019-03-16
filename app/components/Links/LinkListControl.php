@@ -17,7 +17,7 @@ class LinkListControl extends Control
 
     }
 
-    public function render($id)
+    public function render($id): void
     {
         $template = $this->getTemplate();
         $template->settings = $this->presenter->template->settings;

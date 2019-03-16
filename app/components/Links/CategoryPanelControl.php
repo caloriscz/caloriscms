@@ -1,6 +1,6 @@
 <?php
 
-namespace Caloriscz\Links\LinkForms;
+namespace Caloriscz\Links;
 
 use Nette\Application\UI\Control;
 use Nette\Database\Context;
@@ -66,7 +66,7 @@ class CategoryPanelControl extends Control
      */
     public function handleSort(): void
     {
-        $updateSorter = $this->database->query('SET @i = 1000;UPDATE `links_categories` SET `sorted` = @i:=@i+2 ORDER BY `sorted` ASC');
+        $this->database->query('SET @i = 1000;UPDATE `links_categories` SET `sorted` = @i:=@i+2 ORDER BY `sorted` ASC');
         $arr['parent_id'] = null;
         $arr['sorted'] = null;
 
@@ -102,7 +102,7 @@ class CategoryPanelControl extends Control
      * @param null $id
      * @param null $type
      */
-    public function render($id = null, $type = null)
+    public function render($id = null, $type = null): void
     {
         $template = $this->getTemplate();
         $template->type = $type;

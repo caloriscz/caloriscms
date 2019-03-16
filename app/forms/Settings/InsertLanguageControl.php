@@ -25,15 +25,12 @@ class InsertLanguageControl extends Control
     protected function createComponentInsertForm(): BootstrapUIForm
     {
         $form = new BootstrapUIForm();
-        $form->setTranslator($this->presenter->translator);
         $form->getElementPrototype()->class = 'form-horizontal';
-        $form->getElementPrototype()->role = 'form';
-        $form->getElementPrototype()->autocomplete = 'off';
 
         $form->addText('language', 'Jazyk');
         $form->addText('code', 'Kód');
 
-        $form->addSubmit('send', 'dictionary.main.Save')
+        $form->addSubmit('send', 'Uložit')
             ->setAttribute('class', 'btn btn-success');
 
         $form->onSuccess[] = [$this, 'insertFormSucceeded'];
@@ -70,11 +67,11 @@ class InsertLanguageControl extends Control
                 'code' => $form->values->code,
             ]);
 
-            $this->presenter->redirect(this);
+            $this->presenter->redirect('this');
         }
     }
 
-    public function render()
+    public function render(): void
     {
         $template = $this->template;
         $template->setFile(__DIR__ . '/InsertLanguageControl.latte');

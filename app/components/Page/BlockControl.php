@@ -16,7 +16,7 @@ class BlockControl extends Control
         $this->database = $database;
     }
 
-    public function render()
+    public function render(): void
     {
         $template = $this->getTemplate();
         $template->settings = $this->presenter->template->settings;

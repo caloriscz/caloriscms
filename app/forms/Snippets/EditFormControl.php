@@ -18,10 +18,9 @@ class EditFormControl extends Control
     /**
      * Edit page content
      */
-    public function createComponentEditSnippetForm()
+    public function createComponentEditSnippetForm(): BootstrapUIForm
     {
         $form = new BootstrapUIForm();
-        $form->setTranslator($this->getPresenter()->translator);
 
         $snippet = $this->database->table('snippets')->get($this->getPresenter()->getParameter('id'));
 
@@ -46,7 +45,7 @@ class EditFormControl extends Control
 
         $form->onSuccess[] = [$this, 'editSnippetFormSucceeded'];
 
-        $form->addSubmit('submitm', 'dictionary.main.Save')
+        $form->addSubmit('submitm', 'Uložit')
             ->setAttribute('class', 'btn btn-success')
             ->setHtmlId('formxins');
 

@@ -28,7 +28,6 @@ class InsertCategoryControl extends Control
     protected function createComponentInsertForm(): BootstrapUIForm
     {
         $form = new BootstrapUIForm();
-        $form->setTranslator($this->presenter->translator);
 
         $form->addHidden('parent');
         $form->addText('title');
@@ -51,12 +50,12 @@ class InsertCategoryControl extends Control
         ]);
 
         if ($category->count() > 0) {
-            $this->presenter->flashMessage($this->presenter->translator->translate('messages.sign.categoryAlreadyExists'), 'error');
+            $this->presenter->flashMessage('Kategorie již existuje', 'error');
             $this->presenter->redirect('this');
         }
 
         if ($form->values->title === '') {
-            $this->presenter->flashMessage($this->translator->translate('messages.sign.categoryMustHaveSomeName'), 'error');
+            $this->presenter->flashMessage('Kategorie musí mít název', 'error');
             $this->presenter->redirect('this');
         }
     }

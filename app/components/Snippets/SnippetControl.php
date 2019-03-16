@@ -20,7 +20,7 @@ class SnippetControl extends Control
         $this->database = $database;
     }
 
-    public function render($snippetId)
+    public function render($snippetId): void
     {
         $template = $this->getTemplate();
         $template->settings = $this->presenter->template->settings;

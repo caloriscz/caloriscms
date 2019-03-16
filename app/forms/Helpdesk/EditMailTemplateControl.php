@@ -20,15 +20,14 @@ class EditMailTemplateControl extends Control
      * E-mail template edit
      * @return BootstrapUIForm
      */
-    public function createComponentEditForm()
+    public function createComponentEditForm(): BootstrapUIForm
     {
         $emailDb = $this->database->table('helpdesk')->get($this->presenter->getParameter('id'));
 
         $form = new BootstrapUIForm();
         $form->getElementPrototype()->class = 'form-horizontal';
         $form->getElementPrototype()->id = 'search-form';
-        $form->getElementPrototype()->role = 'form';
-        $form->getElementPrototype()->autocomplete = 'off';
+
 
         $form->addHidden('id');
         $form->addText('subject');
@@ -62,7 +61,7 @@ class EditMailTemplateControl extends Control
         $this->presenter->redirect('this', ['id' => $form->values->id]);
     }
 
-    public function render()
+    public function render(): void
     {
         $template = $this->getTemplate();
         $template->setFile(__DIR__ . '/EditMailTemplateControl.latte');

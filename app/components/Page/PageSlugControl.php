@@ -15,7 +15,7 @@ class PageSlugControl extends Control
         $this->database = $database;
     }
 
-    public function render($pageId)
+    public function render($pageId): void
     {
         $page = $this->database->table('pages')->get($pageId);
 

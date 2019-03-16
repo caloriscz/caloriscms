@@ -27,20 +27,17 @@ class UpdateImagesControl extends Control
     protected function createComponentUpdateImagesForm(): BootstrapUIForm
     {
         $form = new BootstrapUIForm();
-        $form->setTranslator($this->presenter->translator);
         $form->getElementPrototype()->class = 'form-horizontal';
-        $form->getElementPrototype()->role = 'form';
-        $form->getElementPrototype()->autocomplete = 'off';
 
         $form->addHidden('menu_id');
-        $form->addUpload('the_file', 'dictionary.main.Image');
+        $form->addUpload('the_file', 'Obrázek');
         $form->addUpload('the_file_2', 'Obrázek (hover)');
         $form->addUpload('the_file_3', 'Aktivní obrázek');
         $form->addUpload('the_file_4', 'Aktivní obrázek (hover)');
 
         $form->setDefaults(['menu_id' => $this->presenter->getParameter('id')]);
 
-        $form->addSubmit('submitm', 'dictionary.main.Save');
+        $form->addSubmit('submitm', 'Uložit');
 
         $form->onSuccess[] = [$this, 'updateImagesFormSucceeded'];
         return $form;

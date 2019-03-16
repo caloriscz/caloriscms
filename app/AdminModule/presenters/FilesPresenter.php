@@ -14,7 +14,7 @@ use Nette\Utils\Finder;
 class FilesPresenter extends BasePresenter
 {
 
-    protected function createComponentDropUploadFiles()
+    protected function createComponentDropUploadFiles(): DropUploadControl
     {
         return new DropUploadControl($this->database);
     }
@@ -45,7 +45,7 @@ class FilesPresenter extends BasePresenter
         return new EditPictureFormControl($this->database);
     }
 
-    public function renderDetailPicture()
+    public function renderDetailPicture(): void
     {
         $this->template->file = $this->database->table('pictures')->get($this->getParameter('id'));
 

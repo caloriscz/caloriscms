@@ -2,10 +2,9 @@
 {block content}
 
 <ol class="breadcrumb">
-    <li class="breadcrumb-item">Home</li>
     <li class="breadcrumb-item"><a href="/admin/">Admin</a></li>
     <li class="breadcrumb-item"><a href="/admin/settings/">Helpdesk</a></li>
-    <li class="breadcrumb-item" class="active">Nastavení e-mailů</li>
+    <li class="breadcrumb-item active">Nastavení e-mailů</li>
 </ol>
 
 <div class="container-fluid">
@@ -13,10 +12,8 @@
         <div class="row">
             <div class="col-lg-3">
                 <div class="card">
-                    <div class="card-header">{_dictionary.main.Settings}</div>
-                    <div class="card-block">
-                        {control editHelpdeskEmailSettings}
-                    </div>
+                    <div class="card-header">Nastavení</div>
+                    <div class="card-block">{control editHelpdeskEmailSettings}</div>
                 </div>
             </div>
             <div class="col-lg-9">
@@ -33,8 +30,8 @@
                         <table class="table">
                             <thead>
                             <tr>
-                                <th>{_dictionary.main.Email}</th>
-                                <th>{_dictionary.main.date|firstUpper}</th>
+                                <th>E-mail</th>
+                                <th>Datum</th>
                                 <th></th>
                             </tr>
                             </thead>

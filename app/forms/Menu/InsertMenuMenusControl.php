@@ -19,19 +19,16 @@ class InsertMenuMenusControl extends Control
         $this->database = $database;
     }
 
-    protected function createComponentInsertForm()
+    protected function createComponentInsertForm(): BootstrapUIForm
     {
         $form = new BootstrapUIForm();
-        $form->setTranslator($this->presenter->translator);
         $form->getElementPrototype()->class = 'form-horizontal';
-        $form->getElementPrototype()->role = 'form';
-        $form->getElementPrototype()->autocomplete = 'off';
 
-        $form->addText('title', 'dictionary.main.Title')
+        $form->addText('title', 'Název')
             ->setAttribute('class', 'form-control');
-        $form->addTextArea('description', 'dictionary.main.Description')
+        $form->addTextArea('description', 'Popisek')
             ->setAttribute('class', 'form-control');
-        $form->addSubmit('submitm', 'dictionary.main.Insert')
+        $form->addSubmit('submitm', 'Vložit')
             ->setAttribute('class', 'btn btn-primary');
 
         $form->onValidate[] = [$this, 'validateFormSucceeded'];
@@ -53,12 +50,12 @@ class InsertMenuMenusControl extends Control
         $category = $this->database->table('menu_menus')->where($arr);
 
         if ($category->count() > 0) {
-            $this->presenter->flashMessage($this->presenter->translator->translate('messages.sign.categoryAlreadyExists'), 'error');
+            $this->presenter->flashMessage('Kategorie již existuje', 'error');
             $this->presenter->redirect('this');
         }
 
         if ($form->values->title === '') {
-            $this->presenter->flashMessage($this->presenter->translator->translate('messages.sign.categoryMustHaveSomeName'), 'error');
+            $this->presenter->flashMessage('Kategorie musí mít název', 'error');
             $this->presenter->redirect('this');
         }
     }

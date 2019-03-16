@@ -71,7 +71,7 @@ abstract class BasePresenter extends Presenter
         // Maintenance mode
         if ($this->template->settings['maintenance_enabled']) {
             if (empty($this->template->settings['maintenance_message'])) {
-                include_once('.maintenance.php');
+                include_once '.maintenance.php';
             } else {
                 echo $this->template->settings['maintenance_message'];
             }
@@ -84,7 +84,7 @@ abstract class BasePresenter extends Presenter
 
         if (strlen($this->template->settings['site_ip_whitelist']) >= 4 && !in_array($_SERVER['REMOTE_ADDR'], $ip, true)) {
             if (empty($this->template->settings['maintenance_message'])) {
-                include_once('.maintenance.php');
+                include_once '.maintenance.php';
             } else {
                 echo $this->template->settings['maintenance_message'];
             }

@@ -43,7 +43,7 @@ class ResetPassControl extends Control
      * @param BootstrapUIForm $form
      * @throws AbortException
      */
-    public function resetFormSucceeded(BootstrapUIForm $form)
+    public function resetFormSucceeded(BootstrapUIForm $form): void
     {
         $email = $form->values->email;
         $emailExistsDb = $this->database->table('users')->where([
@@ -57,9 +57,7 @@ class ResetPassControl extends Control
             $msg = 'Hesla se neshodují';
         } else {
             $msg = 'Vytvořili jste nové heslo. Můžete se přihlásit.';
-            $this->database->table('users')->where([
-                'email' => $email,
-            ])->update([
+            $this->database->table('users')->where(['email' => $email])->update([
                 'activation' => NULL,
                 'password' => Passwords::hash($form->getValues()->password),
             ]);
@@ -69,7 +67,7 @@ class ResetPassControl extends Control
         $this->getPresenter()->redirect('Sign:in');
     }
 
-    public function render(string $layer = 'front')
+    public function render(string $layer = 'front'): void
     {
         $template = $this->getTemplate();
         $template->setFile(__DIR__ . '/ResetPassControl.latte');

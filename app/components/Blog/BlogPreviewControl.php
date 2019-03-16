@@ -15,7 +15,7 @@ class BlogPreviewControl extends Control
         $this->database = $database;
     }
 
-    public function render($limit = 3)
+    public function render($limit = 3): void
     {
         $template = $this->template;
         $template->setFile(__DIR__ . '/BlogPreviewControl.latte');

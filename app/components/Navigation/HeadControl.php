@@ -18,7 +18,7 @@ class HeadControl extends Control
         $this->database = $database;
     }
 
-    public function render($slugArray)
+    public function render($slugArray): void
     {
         $page = $this->presenter->template->page;
         $this->template->page = $page;

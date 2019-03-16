@@ -11,12 +11,9 @@ use Nette,
 class SitemapPresenter extends BasePresenter
 {
 
-    function renderDefault()
+    public function renderDefault(): void
     {
-        $this->template->pages = $this->database->table("pages")->where(array(
-            "public" => 1,
-            "sitemap" => 1,
-        ));
+        $this->template->pages = $this->database->table('pages')->where(['public' => 1, 'sitemap' => 1]);
     }
 
 }

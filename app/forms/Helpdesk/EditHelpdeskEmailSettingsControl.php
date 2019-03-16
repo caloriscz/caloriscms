@@ -26,15 +26,13 @@ class EditHelpdeskEmailSettingsControl extends Control
     protected function createComponentEditForm(): BootstrapUIForm
     {
         $form = new BootstrapUIForm();
-        $form->setTranslator($this->presenter->translator);
         $form->getElementPrototype()->class = 'form-horizontal';
-        $form->getElementPrototype()->role = 'form';
 
         $helpdeskEmailsDb = $this->database->table('helpdesk')->get($this->presenter->getParameter('id'));
         $templates = $this->database->table('helpdesk_templates');
 
         $form->addHidden('helpdesk_id');
-        $form->addText('email', 'dictionary.main.Email');
+        $form->addText('email', 'E-mail');
         $form->addSelect('helpdesk_templates_id', 'Šablona', $templates->fetchPairs('id', 'title'))
         ->setAttribute('class', 'form-control');
         $form->addCheckbox('log', ' Ukládat e-maily do databáze');
@@ -68,7 +66,7 @@ class EditHelpdeskEmailSettingsControl extends Control
         $this->onSave($form->values->helpdesk_email_id);
     }
 
-    public function render()
+    public function render(): void
     {
         $template = $this->getTemplate();
         $template->setFile(__DIR__ . '/EditHelpdeskEmailSettingsControl.latte');

@@ -24,7 +24,7 @@ class MenuMenusEditControl extends Control
      */
     protected function createComponentEditForm(): BootstrapUIForm
     {
-        $menuMenus = $this->database->table("menu_menus")->get($this->presenter->getParameter("id"));
+        $menuMenus = $this->database->table('menu_menus')->get($this->presenter->getParameter('id'));
 
         $form = new BootstrapUIForm();
         $form->addHidden('id');

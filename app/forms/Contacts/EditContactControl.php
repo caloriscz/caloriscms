@@ -33,7 +33,6 @@ class EditContactControl extends Control
         $pages = $this->database->table('pages')->fetchPairs('id', 'title');
 
         $form = new BootstrapUIForm();
-        $form->setTranslator($this->presenter->translator);
         $form->addHidden('contact_id');
         $form->addSelect('pages_id', '', $pages);
         $form->addText('name');
@@ -129,7 +128,7 @@ class EditContactControl extends Control
         $this->onSave($form->values->contact_id);
     }
 
-    public function render()
+    public function render(): void
     {
         $this->template->setFile(__DIR__ . '/EditContactControl.latte');
         $this->template->render();

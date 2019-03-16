@@ -18,6 +18,9 @@ use Nette\Application\AbortException;
  */
 class PagesPresenter extends BasePresenter
 {
+    /**
+     * @throws AbortException
+     */
     public function startup()
     {
         parent::startup();

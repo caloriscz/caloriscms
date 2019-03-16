@@ -514,11 +514,6 @@ $(function () {
 });
 
 
-/* FullCalendar ----- */
-$(function () {
-    $('#calendar').fullCalendar({})
-});
-
 // Get querystring value
 function getParameterByName(name, url) {
     if (!url) url = window.location.href;

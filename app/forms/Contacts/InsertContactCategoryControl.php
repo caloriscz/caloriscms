@@ -23,19 +23,16 @@ class InsertContactCategoryControl extends Control
      * Insert contact category
      * @return BootstrapUIForm
      */
-    protected function createComponentInsertCategoryForm()
+    protected function createComponentInsertCategoryForm(): BootstrapUIForm
     {
         $form = new BootstrapUIForm();
-        $form->setTranslator($this->presenter->translator);
         $form->getElementPrototype()->class = 'form-horizontal';
-        $form->getElementPrototype()->role = 'form';
-        $form->getElementPrototype()->autocomplete = 'off';
 
         $form->addHidden('parent_id');
         $form->addHidden('type');
-        $form->addText('title', 'dictionary.main.title')
+        $form->addText('title', 'Název')
             ->setAttribute('class', 'form-control');
-        $form->addSubmit('submitm', 'dictionary.main.insert')
+        $form->addSubmit('submitm', 'Vložit')
             ->setAttribute('class', 'btn btn-primary');
 
         $form->onSuccess[] = [$this, 'insertCategoryFormSucceeded'];
@@ -57,12 +54,12 @@ class InsertContactCategoryControl extends Control
         ]);
 
         if ($category->count() > 0) {
-            $this->flashMessage($this->translator->translate('messages.sign.categoryAlreadyExists'), 'error');
+            $this->flashMessage('Kategorie již existuje', 'error');
             $this->redirect(':' . $redirectTo . ':default', ['id' => null]);
         }
 
         if ($form->values->title === '') {
-            $this->flashMessage($this->translator->translate('messages.sign.categoryMustHaveSomeName'), 'error');
+            $this->flashMessage('Kategorie musí mít název', 'error');
             $this->redirect(':' . $redirectTo . ':default', ['id' => null]);
         }
     }

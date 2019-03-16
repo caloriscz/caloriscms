@@ -15,7 +15,7 @@ class MainMenuControl extends Control
         $this->database = $database;
     }
 
-    public function render()
+    public function render(): void
     {
         if (isset($this->getPresenter()->template->member)) {
             $this->template->member = $this->getPresenter()->template->member;

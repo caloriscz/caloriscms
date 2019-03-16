@@ -19,15 +19,11 @@ class HelpdeskControl extends Control
         $this->database = $database;
     }
 
-    protected function createComponentSendForm()
+    protected function createComponentSendForm(): BootstrapUIForm
     {
-        $helpdesk = $this->database->table('helpdesk')->get(1);
-
         $form = new BootstrapUIForm();
-        $form->setTranslator($this->presenter->translator);
         $form->getElementPrototype()->class = 'form-horizontal';
-        $form->getElementPrototype()->role = 'form';
-        $form->getElementPrototype()->autocomplete = 'off';
+
         $form->addText('name');
         $form->addText('email');
         $form->addText('phone');
@@ -71,11 +67,11 @@ class HelpdeskControl extends Control
         $blacklistDb = $this->database->table('blacklist')->fetchAll('title');
 
         foreach ($blacklistDb as $item) {
-            if (strpos(strtolower($form->values->message), strtolower($item->title)) !== false) {
+            if (stripos($form->values->message, $item->title) !== false) {
                 $rings = true;
             }
 
-            if (strpos(strtolower($form->values->name), strtolower($item->title)) !== false) {
+            if (stripos($form->values->name, $item->title) !== false) {
                 $rings = true;
             }
         }
@@ -114,9 +110,9 @@ class HelpdeskControl extends Control
         $send = $helpdesk->send();
 
         if ($send) {
-            $this->presenter->flashMessage($this->presenter->translator->translate('messages.sign.thanksForMessage'), "success");
+            $this->presenter->flashMessage('Děkujeme za zprávu', 'success');
         } else {
-            $this->presenter->flashMessage($this->presenter->translator->translate('E-mail nebyl odeslán'), "error");
+            $this->presenter->flashMessage('E-mail nebyl odeslán', 'error');
         }
 
         $this->presenter->redirect('this');

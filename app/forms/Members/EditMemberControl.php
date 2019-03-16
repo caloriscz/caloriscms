@@ -24,8 +24,8 @@ class EditMemberControl extends Control
     {
         $form = new BootstrapUIForm();
         $form->getElementPrototype()->class = 'form-horizontal';
-        $form->getElementPrototype()->role = 'form';
-        $form->getElementPrototype()->autocomplete = 'off';
+
+
         $user = $this->database->table('users')->get($this->presenter->getParameter('id'));
 
         $form->addHidden('id');

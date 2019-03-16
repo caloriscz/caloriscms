@@ -26,15 +26,14 @@ class SendLoginControl extends Control
     /**
      * Send member login information
      */
-    protected function createComponentSendLoginForm()
+    protected function createComponentSendLoginForm(): BootstrapUIForm
     {
         $form = new BootstrapUIForm();
-        $form->setTranslator($this->getPresenter()->translator);
         $form->getElementPrototype()->class = 'form-horizontal';
-        $form->getElementPrototype()->role = 'form';
-        $form->getElementPrototype()->autocomplete = 'off';
+
+
         $form->addHidden('contact_id');
-        $form->addCheckbox('sendmail', '\xC2\xA0' . 'Odeslat e-mail s přihlašovacími informacemi')
+        $form->addCheckbox('sendmail', ' Odeslat e-mail s přihlašovacími informacemi')
             ->setValue(0);
 
         $form->setDefaults([
@@ -47,7 +46,7 @@ class SendLoginControl extends Control
         return $form;
     }
 
-    public function sendLoginFormSucceeded(BootstrapUIForm $form)
+    public function sendLoginFormSucceeded(BootstrapUIForm $form): void
     {
         $pwd = Random::generate(10);
         $pwdEncrypted = Passwords::hash($pwd);
@@ -77,7 +76,7 @@ class SendLoginControl extends Control
         $this->onSave($form->values->contact_id, $pwd);
     }
 
-    public function render()
+    public function render(): void
     {
         $this->template->setFile(__DIR__ . '/SendLoginControl.latte');
         $this->template->render();

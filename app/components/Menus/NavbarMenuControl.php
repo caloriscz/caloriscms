@@ -16,7 +16,7 @@ class NavbarMenuControl extends Control
         $this->database = $database;
     }
 
-    public function render($id, $style = 'navbar')
+    public function render($id, $style = 'navbar'): void
     {
         $template = $this->getTemplate();
         $template->appDir = APP_DIR;

@@ -22,18 +22,16 @@ class ImageUploadControl extends Control
     /**
      * File Upload
      */
-    protected function createComponentUploadFilesForm()
+    protected function createComponentUploadFilesForm(): BootstrapUIForm
     {
         $form = new BootstrapUIForm();
-        $form->setTranslator($this->presenter->translator);
         $form->getElementPrototype()->class = 'form-horizontal';
-        $form->getElementPrototype()->role = 'form';
-        $form->getElementPrototype()->autocomplete = 'off';
+
         $form->addHidden('id');
-        $form->addUpload('the_file', 'dictionary.main.InsertFile');
-        $form->addTextArea('description', 'dictionary.main.Description')
+        $form->addUpload('the_file', 'Vložit odstrávek');
+        $form->addTextArea('description', 'Popisek')
             ->setAttribute('class', 'form-control');
-        $form->addSubmit('send', 'dictionary.main.Insert');
+        $form->addSubmit('send', 'Vložit');
 
         $form->setDefaults([
             'id' => $this->presenter->getParameter('id'),
@@ -88,18 +86,15 @@ class ImageUploadControl extends Control
     protected function createComponentUploadForm(): BootstrapUIForm
     {
         $form = new BootstrapUIForm();
-        $form->setTranslator($this->presenter->translator);
         $form->getElementPrototype()->class = 'form-horizontal';
-        $form->getElementPrototype()->role = 'form';
-        $form->getElementPrototype()->autocomplete = 'off';
         $imageTypes = ['image/png', 'image/jpeg', 'image/jpg', 'image/gif'];
 
         $form->addHidden('id');
-        $form->addUpload('the_file', 'dictionary.main.InsertImage')
-            ->addRule(Form::MIME_TYPE, 'messages.error.invalidTypeOfMessage', $imageTypes);
-        $form->addTextArea('description', 'dictionary.main.Description')
+        $form->addUpload('the_file', 'Vložit obrázek')
+            ->addRule(Form::MIME_TYPE, 'Neplatný typ', $imageTypes);
+        $form->addTextArea('description', 'Popisek')
             ->setAttribute('class', 'form-control');
-        $form->addSubmit('send', 'dictionary.main.Image');
+        $form->addSubmit('send', 'Obrázek');
 
         $form->setDefaults([
             'id' => $this->presenter->getParameter('id'),
@@ -156,7 +151,7 @@ class ImageUploadControl extends Control
         ]);
     }
 
-    public function render($id = 0)
+    public function render($id = 0): void
     {
         $this->template->id = $id;
         $template = $this->template;

@@ -25,13 +25,10 @@ class ChangePasswordControl extends Control
     protected function createComponentChangePasswordForm(): BootstrapUIForm
     {
         $form = new BootstrapUIForm();
-        $form->setTranslator($this->presenter->translator);
         $form->getElementPrototype()->class = 'form-horizontal';
-        $form->getElementPrototype()->role = 'form';
-        $form->getElementPrototype()->autocomplete = 'off';
-        $form->addPassword('password1', 'dictionary.main.Password');
+        $form->addPassword('password1', 'Heslo');
         $form->addPassword('password2', 'Znovu napište heslo');
-        $form->addSubmit('name', 'dictionary.main.Change');
+        $form->addSubmit('name', 'Změnit');
 
         $form->onSuccess[] = [$this, 'changePasswordFormSucceeded'];
         return $form;
@@ -72,7 +69,7 @@ class ChangePasswordControl extends Control
      * Forces control to repaint.
      * @return void
      */
-    function redrawControl()
+    public function redrawControl()
     {
         // TODO: Implement redrawControl() method.
     }

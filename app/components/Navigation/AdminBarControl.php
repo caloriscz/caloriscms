@@ -20,7 +20,7 @@ class AdminBarControl extends Control
     /**
      * Specifies type of category: store, media, blog, menu etc. Some categories have special needs
      */
-    public function render()
+    public function render(): void
     {
         $template = $this->getTemplate();
         $template->settings = $this->presenter->template->settings;

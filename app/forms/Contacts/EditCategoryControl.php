@@ -26,18 +26,14 @@ class EditCategoryControl extends Control
         unset($categories[$category->id]);
 
         $form = new BootstrapUIForm();
-        $form->setTranslator($this->presenter->translator);
         $form->getElementPrototype()->class = 'form-horizontal';
-        $form->getElementPrototype()->role = 'form';
-        $form->getElementPrototype()->autocomplete = 'off';
 
         $form->addHidden('id');
-        $form->addText('title', 'dictionary.main.Title');
+        $form->addText('title', 'Název');
         $form->addSelect('parent', 'Nadřazená kategorie', $categories)
-            ->setPrompt('admin.categories.NothingRelated')
             ->setAttribute('class', 'form-control');
-        $form->addText('url', 'dictionary.main.URL');
-        $form->addSubmit('submitm', 'dictionary.main.Save');
+        $form->addText('url', 'Odkaz');
+        $form->addSubmit('submitm', 'Uložit');
 
         $arr = [
             'id' => $category->id,

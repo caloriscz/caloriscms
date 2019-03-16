@@ -24,7 +24,7 @@ class PageListControl extends Control
         $this->database = $database;
     }
 
-    protected function createComponentMenuInsert()
+    protected function createComponentMenuInsert(): InsertMenuControl
     {
         return new InsertMenuControl($this->database);
     }
@@ -33,7 +33,7 @@ class PageListControl extends Control
      * Delete page
      * @param $id
      */
-    public function handleDelete($id)
+    public function handleDelete($id): void
     {
         $doc = new Document($this->database);
         $doc->delete($id);
@@ -45,7 +45,7 @@ class PageListControl extends Control
     /**
      * Change to public or private - private pages are not show to visitor
      */
-    public function handlePublic()
+    public function handlePublic(): void
     {
         $show = 1;
         $page = $this->database->table('pages')->get($this->getParameter('id'));
@@ -80,7 +80,7 @@ class PageListControl extends Control
     }
 
 
-    public function render(?int $type = null)
+    public function render(?int $type = null): void
     {
         $template = $this->getTemplate();
         $template->category = null;

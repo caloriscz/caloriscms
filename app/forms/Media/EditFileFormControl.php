@@ -5,7 +5,7 @@ use Nette\Application\UI\Control;
 use Nette\Database\Context;
 use Nette\Forms\BootstrapUIForm;
 
-class EditFileControl extends Control
+class EditFileFormControl extends Control
 {
 
     /** @var Context */
@@ -26,8 +26,7 @@ class EditFileControl extends Control
 
         $form = new BootstrapUIForm();
         $form->getElementPrototype()->class = 'form-horizontal';
-        $form->getElementPrototype()->role = 'form';
-        $form->getElementPrototype()->autocomplete = 'off';
+
 
         $form->addHidden('id');
         $form->addText('title', 'Název');
@@ -40,7 +39,7 @@ class EditFileControl extends Control
             'description' => $image->description,
         ]);
 
-        $form->addSubmit('send', 'dictionary.main.Save');
+        $form->addSubmit('send', 'Uložit');
 
         $form->onSuccess[] = [$this, 'editFormSucceeded'];
         return $form;

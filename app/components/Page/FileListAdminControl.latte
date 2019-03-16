@@ -2,7 +2,7 @@
 {foreach $page as $item}
     <tr>
         <td class="col-xs-1">
-            <a href="{link deleteFile!, id => $item->id, name => $item->pages_id}" class="text-danger" onclick="return confirm('{_admin.catalogue.deletereallymessage}')">
+            <a href="{link deleteFile!, id => $item->id, name => $item->pages_id}" class="text-danger" onclick="return confirm('Opravdu smazat')">
                 <i class="fa fa-times"></i>
             </a>
             <a href="{plink ':Admin:Files:detailFile', id => $item->id}" class="btn btn-default btn-xs">

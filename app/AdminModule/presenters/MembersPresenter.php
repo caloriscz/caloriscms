@@ -7,7 +7,6 @@ use App\Forms\Members\EditMemberControl;
 use App\Forms\Members\InsertContactForMemberControl;
 use App\Forms\Members\InsertMemberControl;
 use Caloriscz\Members\MemberGridControl;
-use Caloriscz\Members\MemberCategoriesControl;
 
 /**
  * Members (aka Users) presenter
@@ -15,7 +14,7 @@ use Caloriscz\Members\MemberCategoriesControl;
  */
 class MembersPresenter extends BasePresenter
 {
-    protected function createComponentSendLogin()
+    protected function createComponentSendLogin(): SendLoginControl
     {
         $control = new SendLoginControl($this->database);
         $control->onSave[] = function ($contactId, $pwd) {
@@ -39,7 +38,7 @@ class MembersPresenter extends BasePresenter
         $control = new InsertMemberControl($this->database);
         $control->onSave[] = function ($message, $userId) {
             if ($message) {
-                $this->flashMessage($this->translator->translate($message), 'error');
+                $this->flashMessage($message, 'error');
                 $code = ':Admin:Members:default';
             } else {
                 $code = ':Admin:Members:edit';
@@ -69,7 +68,7 @@ class MembersPresenter extends BasePresenter
     public function handleDeleteContact($id): void
     {
         if (!$this->template->member->users_roles->members) {
-            $this->flashMessage($this->translator->translate('messages.members.PermissionDenied'), 'error');
+            $this->flashMessage('Nemáte oprávnění', 'error');
             $this->redirect(':Admin:Members:edit', ['id' => $this->getParameter('contact')]);
         }
 

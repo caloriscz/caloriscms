@@ -63,7 +63,7 @@ class InsertFormControl extends Control
         $this->getPresenter()->redirect('this');
     }
 
-    public function render()
+    public function render(): void
     {
         $this->template->setFile(__DIR__ . '/InsertFormControl.latte');
         $this->template->render();

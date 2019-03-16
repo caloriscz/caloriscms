@@ -26,14 +26,11 @@ class EditPictureFormControl extends Control
         $image = $this->database->table('pictures')->get($this->getPresenter()->getParameter('id'));
 
         $form = new BootstrapUIForm();
-        $form->setTranslator($this->getPresenter()->translator);
         $form->getElementPrototype()->class = 'form-horizontal';
-        $form->getElementPrototype()->role = 'form';
-        $form->getElementPrototype()->autocomplete = 'off';
 
         $form->addHidden('id');
-        $form->addText('title', 'dictionary.main.Title');
-        $form->addTextArea('description', 'dictionary.main.Description')
+        $form->addText('title', 'Název');
+        $form->addTextArea('description', 'Popisek')
             ->setAttribute('style', 'height: 200px;')
             ->setAttribute('class', 'form-control');
         $form->setDefaults([
@@ -42,7 +39,7 @@ class EditPictureFormControl extends Control
             'description' => $image->description,
         ]);
 
-        $form->addSubmit('send', 'dictionary.main.Save');
+        $form->addSubmit('send', 'Uložit');
 
         $form->onSuccess[] = [$this, 'editFormSucceeded'];
         return $form;
@@ -65,7 +62,7 @@ class EditPictureFormControl extends Control
         ]);
     }
 
-    public function render()
+    public function render(): void
     {
         $this->template->setFile(__DIR__ . '/EditPictureFormControl.latte');
         $this->template->render();

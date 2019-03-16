@@ -2,10 +2,9 @@
 {block content}
 
 <ol class="breadcrumb">
-    <li class="breadcrumb-item">Home</li>
     <li class="breadcrumb-item"><a href="/admin/">Admin</a></li>
     <li class="breadcrumb-item"><a href="/admin/settings/">Helpdesk</a></li>
-    <li class="breadcrumb-item" class="active">E-maily</li>
+    <li class="breadcrumb-item active">E-maily</li>
 </ol>
 
 <div class="container-fluid">
@@ -16,21 +15,21 @@
                     <div class="card-header">
                         {$message->email} <a n:href="delete!, id => $message->id"
                                 onclick="return confirm('Opravdu smazat?')"
-                                class="btn btn-danger btn-sm pull-right">{_dictionary.main.Delete}</a>
+                                class="btn btn-danger btn-sm pull-right">Smazat</a>
 
                     </div>
                     <div class="card-block">
                         <table class="table table-striped">
                             <tr>
-                                <td class="col-xs-3">{_dictionary.main.date|firstUpper}</td>
+                                <td class="col-xs-3">Datum</td>
                                 <td>{$message->date_created|date:'j. n. Y H:i'}</td>
                             </tr>
                             <tr>
-                                <td>{_dictionary.main.Email}</td>
+                                <td>E-mail</td>
                                 <td>{$message->email}</td>
                             </tr>
                             <tr>
-                                <td>{_dictionary.main.IPAddress}</td>
+                                <td>IP adresa</td>
                                 <td>{$message->ipaddress}</td>
                             </tr>
                         </table>
@@ -39,7 +38,7 @@
             </div>
             <div class="col-lg-9">
                 <div class="card">
-                    <div class="card-header">{_dictionary.main.Email}</div>
+                    <div class="card-header">E-mail</div>
                     <div class="card-block">
                         <div style="width: 100%; height: 500px;" frameborder="0">
                             {$message->message|noescape}

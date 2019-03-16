@@ -73,7 +73,7 @@ class LostPassControl extends Control
         $this->onSave(false);
     }
 
-    public function render($layer = 'front')
+    public function render($layer = 'front'): void
     {
         $this->template->setFile(__DIR__ . '/LostPassControl.latte');
         $this->template->layer = $layer;

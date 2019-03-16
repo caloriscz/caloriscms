@@ -5,7 +5,6 @@ namespace App\AdminModule\Presenters;
 use App\Forms\Settings\InsertBlackListControl;
 use App\Forms\Settings\EditSettingsControl;
 use App\Forms\Settings\InsertCountryControl;
-use App\Forms\Settings\InsertCurrencyControl;
 use App\Forms\Settings\InsertLanguageControl;
 use Caloriscz\Settings\BlackListControl;
 use Nette\Application\AbortException;
@@ -80,20 +79,6 @@ class SettingsPresenter extends BasePresenter
         }
 
         $this->redirect('this');
-    }
-
-    /**
-     * @param $id
-     * @throws AbortException
-     */
-    public function handleMakeDefaultCurrency($id): void
-    {
-        if ($this->template->member->users_roles->settings === 0) {
-            $this->database->query('UPDATE currencies SET `used` = NULL');
-            $this->database->table('currencies')->get($id)->update(['used' => 1]);
-        }
-
-        $this->redirect(':Admin:Settings:languages');
     }
 
     /**

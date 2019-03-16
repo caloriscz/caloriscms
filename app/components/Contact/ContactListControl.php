@@ -16,7 +16,7 @@ class ContactListControl extends Control
         $this->database = $database;
     }
 
-    public function render()
+    public function render(): void
     {
         $this->template->setFile(__DIR__ . '/ContactListControl.latte');
         $this->template->contacts = $this->database->table('contacts')->where('categories_id', 9)->order('order ASC');

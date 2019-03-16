@@ -32,6 +32,7 @@
     "ezyang/htmlpurifier": "~4.10",
     "studio-42/elfinder": "2.1.16",
     "ext-json": "*",
-    "kdyby/console": "^2.7"
+    "kdyby/console": "^2.7",
+    "ext-fileinfo": "*"
   }
 }

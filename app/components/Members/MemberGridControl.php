@@ -23,8 +23,11 @@ class MemberGridControl extends Control
     {
         return new PagingControl();
     }
+
     /**
      * User delete
+     * @param $id
+     * @throws \Nette\Application\AbortException
      */
     public function handleDelete($id): void
     {

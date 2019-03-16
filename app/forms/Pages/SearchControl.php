@@ -21,7 +21,7 @@ class SearchControl extends Control
     /**
      * Filter
      */
-    protected function createComponentSearchTopForm()
+    protected function createComponentSearchTopForm(): BootstrapUIForm
     {
         $form = new BootstrapUIForm();
         $form->setMethod('GET');
@@ -41,16 +41,16 @@ class SearchControl extends Control
             $form->setDefaults(['idr' => $this->getParameter('id')]);
         }
 
-        $form->addSubmit('submitm', 'dictionary.main.Search')
+        $form->addSubmit('submitm', 'Hledat')
             ->setAttribute('class', 'btn btn-info btn-lg')
-            ->setAttribute('placeholder', 'dictionary.main.Search');
+            ->setAttribute('placeholder', 'Hledat');
 
 
         $form->onSuccess[] = [$this, 'searchTopFormSucceeded'];
         return $form;
     }
 
-    public function searchTopFormSucceeded(BootstrapUIForm $form)
+    public function searchTopFormSucceeded(BootstrapUIForm $form): void
     {
         $values = $form->getValues(true);
         unset($values['do'], $values['action'], $values['idr']);
@@ -58,7 +58,7 @@ class SearchControl extends Control
         $this->presenter->redirect('this', $values);
     }
 
-    public function render()
+    public function render(): void
     {
         $this->template->isLoggedIn = $this->presenter->template->isLoggedIn;
         $this->template->settings = $this->presenter->template->settings;

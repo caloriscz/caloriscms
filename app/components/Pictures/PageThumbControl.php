@@ -22,7 +22,7 @@ class PageThumbControl extends Control
     /**
      * Delete page
      */
-    public function handleDelete($id)
+    public function handleDelete($id): void
     {
         $doc = new Document($this->database);
         $doc->delete($id);
@@ -31,7 +31,7 @@ class PageThumbControl extends Control
         $this->onSave($this->getParameter('type'));
     }
 
-    public function handlePublic()
+    public function handlePublic(): void
     {
         $page = $this->database->table('pages')->get($this->getParameter('id'));
 
@@ -46,7 +46,7 @@ class PageThumbControl extends Control
         $this->onSave($this->getParameter('type'));
     }
 
-    public function render($type, $id = '')
+    public function render($type, $id = ''): void
     {
         $template = $this->getTemplate();
         $template->setFile(__DIR__ . '/PageThumbControl.latte');

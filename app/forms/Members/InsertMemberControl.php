@@ -33,23 +33,22 @@ class InsertMemberControl extends Control
     {
         $roles = $this->database->table('users_roles')->fetchPairs('id', 'title');
         $form = new BootstrapUIForm();
-        $form->setTranslator($this->presenter->translator);
+
         $form->getElementPrototype()->class = 'form-horizontal';
-        $form->getElementPrototype()->role = 'form';
-        $form->getElementPrototype()->autocomplete = 'off';
-        $form->addText('username', 'dictionary.main.Member')
+
+        $form->addText('username', 'Uživatel')
             ->setRequired(false)
             ->addRule(Form::MIN_LENGTH, 'Uživatelské jméno musí mít aspoň %d znaků', 3);
-        $form->addText('email', 'dictionary.main.Email');
+        $form->addText('email', 'E-mail');
 
         if ($this->presenter->template->member->username === 'admin') {
-            $form->addSelect('role', 'dictionary.main.Role', $roles)
+            $form->addSelect('role', 'Uživatelská role', $roles)
                 ->setAttribute('class', 'form-control');
         }
-        $form->addCheckbox('sendmail', 'messages.members.sendLoginEmail')
+        $form->addCheckbox('sendmail', 'Odeslat přihlašovací e-mail')
             ->setValue(1);
 
-        $form->addSubmit('submitm', 'dictionary.main.Create')->setAttribute('class', 'btn btn-success');
+        $form->addSubmit('submitm', 'Vytvořit')->setAttribute('class', 'btn btn-success');
         $form->onSuccess[] = [$this, 'insertFormSucceeded'];
         $form->onValidate[] = [$this, 'insertFormValidated'];
 
@@ -66,15 +65,15 @@ class InsertMemberControl extends Control
         $emailExists = $member->getEmail($form->values->email);
 
         if (!$this->getPresenter()->template->member->users_roles->members) {
-            $this->onSave('messages.members.PermissionDenied');
+            $this->onSave('Nemáte oprávnění');
         }
 
         if (Validators::isEmail($form->values->email) === false) {
-            $this->onSave('messages.members.invalidEmailFormat', false);
+            $this->onSave('Zadejte platnou e-mailovou adresu', false);
         } elseif ($emailExists > 0) {
-            $this->onSave('messages.members.emailAlreadyExists', false);
+            $this->onSave('E-mail již existuje', false);
         } elseif ($userExists > 0) {
-            $this->onSave('messages.members.memberAlreadyExists', false);
+            $this->onSave('Uživatel již existuje', false);
         }
     }
 
@@ -113,7 +112,7 @@ class InsertMemberControl extends Control
         $this->onSave(false, $userId);
     }
 
-    public function render()
+    public function render(): void
     {
         $this->template->setFile(__DIR__ . '/InsertMemberControl.latte');
         $this->template->render();

@@ -16,13 +16,10 @@ class DropUploadControl extends Control
         $this->database = $database;
     }
 
-    protected function createComponentDropUploadForm()
+    protected function createComponentDropUploadForm(): BootstrapUIForm
     {
         $form = new BootstrapUIForm();
-        $form->setTranslator($this->presenter->translator);
         $form->getElementPrototype()->class = 'form-horizontal';
-        $form->getElementPrototype()->role = 'form';
-        $form->getElementPrototype()->autocomplete = 'off';
 
         $form->getElementPrototype()->class = 'form-horizontal dropzone';
         $form->addUpload('file_upload')
@@ -32,7 +29,7 @@ class DropUploadControl extends Control
         return $form;
     }
 
-    public function dropUploadFormSucceeded()
+    public function dropUploadFormSucceeded(): void
     {
         if (!empty($_FILES)) {
             $ds = DIRECTORY_SEPARATOR;
@@ -50,7 +47,7 @@ class DropUploadControl extends Control
         }
     }
 
-    public function render()
+    public function render(): void
     {
         $template = $this->getTemplate();
         $template->setFile(__DIR__ . '/DropUploadControl.latte');

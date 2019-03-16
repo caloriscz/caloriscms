@@ -21,14 +21,13 @@ class SavePathsControl extends Control
     /**
      * Settings save
      */
-    protected function createComponentEditForm()
+    protected function createComponentEditForm(): BootstrapUIForm
     {
         $form = new BootstrapUIForm();
-        $form->setTranslator($this->getPresenter()->translator);
 
         $form->addHidden('path_id');
-        $form->addUpload('path', 'dictionary.main.Image');
-        $form->addSubmit('send', 'dictionary.main.Save');
+        $form->addUpload('path', 'Obrázek');
+        $form->addSubmit('send', 'Uložit');
 
         $form->onSuccess[] = [$this, 'editSettingsSucceeded'];
         return $form;
@@ -64,7 +63,7 @@ class SavePathsControl extends Control
         $this->redirect('this', ["id" => null]);
     }
 
-    public function render($item)
+    public function render($item): void
     {
         $this->template->item = $item;
         $this->template->appDir = $this->presenter->template->appDir;

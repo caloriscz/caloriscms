@@ -1,8 +1,8 @@
-{block #titles}{_dictionary.main.File} - {$file->name}{/block}
+{block #titles}Soubor - {$file->name}{/block}
 {block content}
 
 <ol class="breadcrumb">
-    <li class="breadcrumb-item"><a href="/admin/">Homepage</a></li>
+    <li class="breadcrumb-item"><a href="/admin/">Admin</a></li>
     <li class="breadcrumb-item active"><a href="/admin/media/albums">Galerie</a></li>
     <li class="breadcrumb-item active"><a href="/admin/media/albums">{_dictionary.main.File} - {$file->name}</a></li>
 </ol>
@@ -16,11 +16,11 @@
                     <div class="card-block">
                         <table class="table">
                             <tr>
-                                <td>{_dictionary.main.File}</a></td>
+                                <td>Soubor</a></td>
                                 <td><a href="/media/{$file->pages_id}/{$file->name}">{$file->name}</a></td>
                             </tr>
                             <tr>
-                                <td>{_dictionary.main.Size}</td>
+                                <td>Velikost</td>
                                 <td>{$file->filesize}</td>
                             </tr>
                         </table>

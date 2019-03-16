@@ -28,8 +28,8 @@ class FilterFormControl extends Control
         $form->getElementPrototype()->autocomplete = 'off';
 
         $form->addHidden('id');
-        $form->addText('src', 'dictionary.main.Title');
-        $form->addSubmit('submitm', 'dictionary.main.Search');
+        $form->addText('src', 'Název');
+        $form->addSubmit('submitm', 'Hledání');
 
         $form->setDefaults([
             'id' => $this->getParameter('id')
@@ -51,7 +51,7 @@ class FilterFormControl extends Control
         ]);
     }
 
-    public function render()
+    public function render(): void
     {
         $template = $this->getTemplate();
         $template->setFile(__DIR__ . '/FilterFormControl.latte');

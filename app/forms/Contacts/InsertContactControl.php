@@ -24,20 +24,16 @@ class InsertContactControl extends Control
     protected function createComponentInsertForm(): BootstrapUIForm
     {
         $form = new BootstrapUIForm();
-        $form->setTranslator($this->presenter->translator);
         $form->getElementPrototype()->class = 'form-horizontal';
-        $form->getElementPrototype()->role = 'form';
-        $form->getElementPrototype()->autocomplete = 'off';
+
         $form->addHidden('pages_id', $this->getParameter('id'));
         $form->addRadioList('type', 'Osoba nebo organizace', [0 => ' osoby', 1 => ' organizace']);
-        $form->addText('title', 'dictionary.main.Title')
-            ->setRequired($this->presenter->translator->translate('messages.pages.NameThePage'));
+        $form->addText('title', 'Název')
+            ->setRequired('Zadejte název');
 
-        $form->setDefaults([
-            'type' => 0
-        ]);
+        $form->setDefaults(['type' => 0]);
 
-        $form->addSubmit('submitm', 'dictionary.main.CreateNewContact')
+        $form->addSubmit('submitm', 'Vytvořit nový kontakt')
             ->setAttribute('class', 'btn btn-success');
 
         $form->onSuccess[] = [$this, 'insertFormSucceeded'];
@@ -66,7 +62,7 @@ class InsertContactControl extends Control
         $this->presenter->redirect(':Admin:Contacts:detail', ['id' => $id]);
     }
 
-    public function render()
+    public function render(): void
     {
         $this->template->setFile(__DIR__ . '/InsertContactControl.latte');
         $this->template->render();

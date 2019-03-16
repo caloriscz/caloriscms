@@ -34,10 +34,7 @@ class DropZoneControl extends Control
         }
 
         $form = new BootstrapUIForm();
-        $form->setTranslator($this->getPresenter()->translator);
-        $form->getElementPrototype()->class = 'form-horizontal';
-        $form->getElementPrototype()->role = 'form';
-        $form->getElementPrototype()->autocomplete = 'off';
+
         $form->getElementPrototype()->class = 'form-horizontal dropzone';
         $form->addHidden('pages_id');
         $form->addHidden('type');
@@ -95,7 +92,7 @@ class DropZoneControl extends Control
         exit();
     }
 
-    public function render()
+    public function render(): void
     {
         $template = $this->getTemplate();
         $template->settings = $this->getPresenter()->template->settings;

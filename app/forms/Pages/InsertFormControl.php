@@ -21,7 +21,6 @@ class InsertFormControl extends Control
     protected function createComponentInsertForm(): BootstrapUIForm
     {
         $form = new BootstrapUIForm();
-        $form->setTranslator($this->presenter->translator);
 
         if ($this->presenter->getParameter('type') === '') {
             $pageType = 9;
@@ -37,7 +36,7 @@ class InsertFormControl extends Control
             'section' => $pageType,
         ]);
 
-        $form->addSubmit('submit', 'dictionary.main.Create');
+        $form->addSubmit('submit', 'Vytvořit');
 
         $form->onSuccess[] = [$this, 'insertFormSucceeded'];
 

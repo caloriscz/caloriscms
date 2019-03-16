@@ -104,14 +104,13 @@ abstract class BasePresenter extends Presenter
             $roleCheck = $this->database->table('users_roles')->get($role[0]);
 
             if ($roleCheck && $roleCheck->sign === 'guest') {
-                $this->flashMessage($this->translator->translate('messages.sign.invalidLogin'), 'error');
+                $this->flashMessage('Neplatné přihlášení', 'error');
                 $this->redirect(':Admin:Sign:in');
             }
 
-            if ($this->user->isLoggedIn()) {
-            } else {
+            if (!$this->user->isLoggedIn()) {
                 if ($this->user->logoutReason === IUserStorage::INACTIVITY) {
-                    $this->flashMessage($this->translator->translate('messages.sign.youWereLoggedIn'), 'note');
+                    $this->flashMessage('Byli jste odhlášeni', 'note');
                 }
                 $this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);
             }

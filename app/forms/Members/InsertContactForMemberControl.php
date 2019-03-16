@@ -28,11 +28,11 @@ class InsertContactForMemberControl extends Control
         $memberTable = $this->database->table('users')->get($this->presenter->getParameter('id'));
 
         $form = new BootstrapUIForm();
-        $form->setTranslator($this->presenter->translator);
-        $form->getElementPrototype()->role = 'form';
+
+
         $form->addHidden('user');
         $form->addHidden('page');
-        $form->addSubmit('submitm', 'dictionary.main.Create')
+        $form->addSubmit('submitm', 'Vytvořit')
             ->setAttribute('class', 'btn btn-success btn-sm');
         $form->setDefaults([
             'page' => $this->presenter->getParameter('id'),
@@ -63,7 +63,6 @@ class InsertContactForMemberControl extends Control
     public function insertFormSucceeded(BootstrapUIForm $form): void
     {
         $arr = [
-            'pages_id' => $page,
             'type' => 1,
             'name' => 'contact-' . $form->values->user,
             'users_id' => $form->values->user,

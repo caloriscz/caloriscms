@@ -16,7 +16,7 @@ class PageBreadcrumbsControl extends Control
         $this->database = $database;
     }
 
-    public function render()
+    public function render(): void
     {
         $template = $this->getTemplate();
         $breadcrumb = new Category($this->database);

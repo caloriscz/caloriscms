@@ -5,8 +5,7 @@
                 <li><span><i class="fa fa-folder"></i></span>
                     <a href="/admin/pages/detail/{$item->id}">{$item->title}</a>
 
-                    <button type="button" class="btn btn-default btn-sm"
-                            class="btn btn-default btn-sm tool-tip" data-toggle="modal"
+                    <button type="button" class="btn btn-default btn-sm tool-tip" data-toggle="modal"
                             data-target="#catModal{$item->id}" title="Přidat podkategorii">
                         <i class="fa fa-plus"></i>
                     </button>
@@ -40,7 +39,7 @@
                                 <div class="modal-body">
                                     {control menuInsert, $item->id}
                                     <button type="button" class="btn btn-default"
-                                            data-dismiss="modal">{_dictionary.main.close|firstUpper}</button>
+                                            data-dismiss="modal">Zavřít</button>
 
                                 </div>
                             </div>

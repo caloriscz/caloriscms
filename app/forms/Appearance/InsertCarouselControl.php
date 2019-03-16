@@ -26,19 +26,17 @@ class InsertCarouselControl extends Control
     protected function createComponentInsertForm(): BootstrapUIForm
     {
         $form = new BootstrapUIForm();
-        $form->setTranslator($this->getPresenter()->translator);
         $form->getElementPrototype()->class = 'form-horizontal';
-        $form->getElementPrototype()->role = 'form';
-        $form->getElementPrototype()->autocomplete = 'off';
+
         $form->addHidden('carousel_id');
-        $form->addText('title', 'dictionary.main.Title');
-        $form->addTextArea('description', 'dictionary.main.Description')
+        $form->addText('title', 'Název');
+        $form->addTextArea('description', 'Popisek')
             ->setAttribute('class', 'form-control')
             ->setAttribute('style', 'max-height: 150px;');
-        $form->addText('uri', 'dictionary.main.URL');
-        $form->addCheckbox('visible', 'dictionary.main.Show');
-        $form->addUpload('the_file', 'dictionary.main.Icon');
-        $form->addSubmit('submitm', 'dictionary.main.Save');
+        $form->addText('uri', 'Odkaz');
+        $form->addCheckbox('visible', 'Zobrazit');
+        $form->addUpload('the_file', 'Ikonka');
+        $form->addSubmit('submitm', 'Uložit');
 
         $form->onSuccess[] = [$this, 'insertFormSucceeded'];
         return $form;
@@ -77,7 +75,7 @@ class InsertCarouselControl extends Control
         $this->redirect('this', ['carousel_id' => $form->values->carousel_id]);
     }
 
-    public function render()
+    public function render(): void
     {
         $this->template->setFile(__DIR__ . '/InsertCarouselControl.latte');
         $this->template->render();

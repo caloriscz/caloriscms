@@ -28,7 +28,7 @@ abstract class BasePresenter extends Presenter
         if ($memberDb->count() > 0) {
             $this->template->memberDb = $memberDb->fetch();
         } else {
-            $this->template->memberDb = FALSE;
+            $this->template->memberDb = false;
         }
 
         $this->template->settings = $this->database->table('settings')->fetchPairs('setkey', 'setvalue');

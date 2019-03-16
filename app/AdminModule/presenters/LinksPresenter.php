@@ -3,7 +3,7 @@
 namespace App\AdminModule\Presenters;
 
 use App\Model\IO;
-use Caloriscz\Links\LinkForms\CategoryPanelControl;
+use Caloriscz\Links\CategoryPanelControl;
 use Nette\Application\AbortException;
 use Nette\Forms\BootstrapUIForm;
 use Nette\Utils\Random;
@@ -14,6 +14,9 @@ use Nette\Utils\Random;
 class LinksPresenter extends BasePresenter
 {
 
+    /**
+     * @throws AbortException
+     */
     protected function startup()
     {
         parent::startup();
@@ -78,16 +81,16 @@ class LinksPresenter extends BasePresenter
         $categories = $this->database->table('links_categories')->order('title')->fetchPairs('id', 'title');
 
         $form = new BootstrapUIForm();
-        $form->setTranslator($this->translator);
         $form->getElementPrototype()->class = 'form-horizontal';
+
         $form->addHidden('id');
-        $form->addText('title', 'dictionary.main.Title')
-            ->setAttribute('placeholder', 'dictionary.main.Title');
-        $form->addText('url', 'dictionary.main.URL')
-            ->setAttribute('placeholder', 'dictionary.main.URL');
-        $form->addSelect('category', 'dictionary.main.Category', $categories)
+        $form->addText('title', 'Název')
+            ->setAttribute('placeholder', 'Název');
+        $form->addText('url', 'Odkaz')
+            ->setAttribute('placeholder', 'Odkaz');
+        $form->addSelect('category', 'Kategorie', $categories)
             ->setAttribute('class', 'form-control');
-        $form->addTextArea('description', 'dictionary.main.Description')
+        $form->addTextArea('description', 'Popisek')
             ->setAttribute('class', 'form-control summernote');
         $form->addUpload('the_file', 'Vyberte obrázek (nepovinné)');
         $form->setDefaults([
@@ -98,7 +101,7 @@ class LinksPresenter extends BasePresenter
             'id' => $this->getParameter('id'),
         ]);
 
-        $form->addSubmit('submitm', 'dictionary.main.Save')
+        $form->addSubmit('submitm', 'Uložit')
             ->setAttribute('class', 'btn btn-primary');
 
         $form->onSuccess[] = [$this, 'editFormSucceeded'];
@@ -152,14 +155,9 @@ class LinksPresenter extends BasePresenter
      */
     public function handleDeleteCategory($id): void
     {
-        if ($id === 1) {
-            $this->flashMessage($this->translator->translate('messages.sign.CantDeleteMainGroup'), 'error');
-            $this->redirect(':Admin:Links:categories');
-        }
-
         $this->database->table('links')->where(['links_categories_id' => $id])->update(['links_categories_id' => 1]);
         $this->database->table('links_categories')->get($id)->delete();
-        $this->redirect(':Admin:Links:categories');
+        $this->redirect('this');
     }
 
     public function renderDefault(): void

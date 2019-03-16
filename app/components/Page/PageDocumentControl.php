@@ -18,7 +18,7 @@ class PageDocumentControl extends Control
     public function parseSnippets($s) {
         preg_match_all("/\[snippet\=\"([0-9]{1,10})\"\]/s", $s, $valsimp, PREG_SET_ORDER);
         if (count($valsimp) > 0) {
-            for ($n = 0, $nMax = count($valsimp); $n < $nMax; $n++) {
+            foreach ($valsimp as $n => $nValue) {
                 $snippet = $this->database->table('snippets')->get($valsimp[$n][1]);
                 if ($snippet) {
                     if ($this->presenter->translator->getLocale() == $this->presenter->translator->getDefaultLocale()) {
@@ -34,7 +34,7 @@ class PageDocumentControl extends Control
         }
         preg_match_all("/\[file\=([0-9]{1,10})\]/s", $s, $valsimp, PREG_SET_ORDER);
         if (count($valsimp) > 0) {
-            for ($n = 0, $nMax = count($valsimp); $n < $nMax; $n++) {
+            foreach ($valsimp as $n => $nValue) {
                 $snippet = $this->database->table("media")->get($valsimp[$n][1]);
                 if ($snippet) {
                     $results = '/media/' . $snippet->pages_id . '/' . $snippet->name;
@@ -47,7 +47,7 @@ class PageDocumentControl extends Control
         return $s;
     }
 
-    public function render($page)
+    public function render($page): void
     {
         $this->template->page = $page;
 

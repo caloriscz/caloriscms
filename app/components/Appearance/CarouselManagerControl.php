@@ -25,7 +25,7 @@ class CarouselManagerControl extends Control
      */
     public function handleImages(): void
     {
-        $updateSorter = $this->database->query('SET @i = 1000;UPDATE `carousel` SET `sorted` = @i:=@i+2 ORDER BY `sorted` ASC');
+        $this->database->query('SET @i = 1000;UPDATE `carousel` SET `sorted` = @i:=@i+2 ORDER BY `sorted` ASC');
         exit();
     }
 

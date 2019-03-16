@@ -24,7 +24,7 @@ class ImageEditFormControl extends Control
     protected function createComponentEditForm(): BootstrapUIForm
     {
         $form = new BootstrapUIForm();
-        $form->setTranslator($this->presenter->translator);
+
         $form->getElementPrototype()->class = 'form-horizontal';
         $form->getElementPrototype()->role = 'form';
         $form->getElementPrototype()->autocomplete = 'off';
@@ -35,9 +35,9 @@ class ImageEditFormControl extends Control
         $form->addHidden('page_id');
         $form->addHidden('name');
         $form->addCheckbox('detail_view', ' Zobrazovat v galerii produktů');
-        $form->addTextArea('description', 'dictionary.main.Description')
+        $form->addTextArea('description', 'Popisek')
             ->setAttribute('class', 'form-control');
-        $form->addSubmit('send', 'dictionary.main.Save');
+        $form->addSubmit('send', 'Uložit');
 
         $form->setDefaults([
             'image_id' => $this->getPresenter()->getParameter('image'),
@@ -69,7 +69,7 @@ class ImageEditFormControl extends Control
         ]);
     }
 
-    public function render()
+    public function render(): void
     {
         $this->template->setFile(__DIR__ . '/ImageEditFormControl.latte');
         $this->template->render();

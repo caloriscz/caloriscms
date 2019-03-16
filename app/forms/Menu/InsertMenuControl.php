@@ -20,10 +20,7 @@ class InsertMenuControl extends Control
     protected function createComponentInsertForm()
     {
         $form = new BootstrapUIForm();
-        $form->setTranslator($this->presenter->translator);
         $form->getElementPrototype()->class = 'form-horizontal';
-        $form->getElementPrototype()->role = 'form';
-        $form->getElementPrototype()->autocomplete = 'off';
 
         $languages = $this->database->table('languages')->where(['default' => null, 'used' => 1]);
 
@@ -33,21 +30,21 @@ class InsertMenuControl extends Control
 
         $form->addHidden('parent');
         $form->addHidden('menu_menus_id');
-        $form->addText('title', 'dictionary.main.Title')
+        $form->addText('title', 'Název')
             ->setAttribute('class', 'form-control');
-        $form->addText('url', 'dictionary.main.URL')
+        $form->addText('url', 'Odkaz')
             ->setAttribute('class', 'form-control');
 
         foreach ($languages as $item) {
             $form->addGroup($item->title);
 
-            $form->addText('title_' . $item->code, 'dictionary.main.Title')
+            $form->addText('title_' . $item->code, 'Název')
                 ->setAttribute('class', 'form-control');
-            $form->addText('url_' . $item->code, 'dictionary.main.URL')
+            $form->addText('url_' . $item->code, 'Odkaz')
                 ->setAttribute('class', 'form-control');
         }
 
-        $form->addSubmit('submitm', 'dictionary.main.Insert')
+        $form->addSubmit('submitm', 'Vložit')
             ->setAttribute('class', 'btn btn-primary');
 
         $form->onSuccess[] = [$this, 'insertFormSucceeded'];
@@ -72,12 +69,12 @@ class InsertMenuControl extends Control
         $category = $this->database->table('menu')->where($arr);
 
         if ($category->count() > 0) {
-            $this->presenter->flashMessage($this->presenter->translator->translate('messages.sign.categoryAlreadyExists'), 'error');
+            $this->presenter->flashMessage('Kategorie již existuje', 'error');
             $this->presenter->redirect('this');
         }
 
         if ($form->values->title === '') {
-            $this->presenter->flashMessage($this->presenter->translator->translate('messages.sign.categoryMustHaveSomeName'), 'error');
+            $this->presenter->flashMessage('Kategorie musí mít název', 'error');
             $this->presenter->redirect('this');
         }
     }
