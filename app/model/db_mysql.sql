@@ -158,19 +158,10 @@ CREATE TABLE `links` (
   `id` int(11) NOT NULL,
   `links_categories_id` int(11) DEFAULT NULL,
   `url` varchar(250) CHARACTER SET latin1 DEFAULT NULL,
-  `title` varchar(250) CHARACTER SET latin1 DEFAULT NULL,
+  `title` varchar(250) COLLATE utf8_czech_ci NOT NULL,
   `description` text CHARACTER SET latin1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
 
-
-INSERT INTO `links_categories` (
-    `id` ,
-    `parent_id` ,
-    `description` ,
-    `title` ,
-    `sorted`
-    )
-VALUES (1, NULL , NULL , 'Odkazy', '1');
 
 CREATE TABLE `links_categories` (
   `id` int(11) NOT NULL,
@@ -179,6 +170,8 @@ CREATE TABLE `links_categories` (
   `title` varchar(80) COLLATE utf8_czech_ci NOT NULL,
   `sorted` int(11) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
+
+INSERT INTO `links_categories` (`id`, `parent_id`, `description`, `title`, `sorted`) VALUES (1, NULL , NULL , 'Odkazy', '1');
 
 CREATE TABLE `media` (
   `id` int(11) NOT NULL,
@@ -246,9 +239,7 @@ INSERT INTO `pages` (`id`, `slug`, `title`, `document`, `preview`, `pages_id`, `
                                                                                                                                                                                                                                                                                                                                                 (2, 'kontakt', 'Kontakt', NULL, NULL, NULL, NULL, 1, '', '', NULL, NULL, 9, 5, 79, 0, 1),
                                                                                                                                                                                                                                                                                                                                                 (3, 'blog', 'Blog', '', NULL, NULL, 1, 1, '', '', NULL, NULL, 9, 2, 81, 0, 1),
                                                                                                                                                                                                                                                                                                                                                 (4, 'galerie', 'Galerie', '', NULL, NULL, 1, 1, '', '', NULL, NULL, 9, 7, 71, 0, 1),
-                                                                                                                                                                                                                                                                                                                                                (5, 'udalosti', 'Události', '', NULL, 1, 1, 1, '', '', NULL, NULL, 9, 10, 73, 0, 1),
                                                                                                                                                                                                                                                                                                                                                 (6, 'dokumenty', 'Dokumenty', '', NULL, NULL, 1, 1, '', '', NULL, NULL, 9, 8, 75, 0, 1),
-                                                                                                                                                                                                                                                                                                                                                (7, 'cenik', 'Ceník', NULL, NULL, 1, 1, 1, '', '', NULL, NULL, 9, 11, 795, 0, 1),
                                                                                                                                                                                                                                                                                                                                                 (8, 'odkazy', 'Odkazy', NULL, NULL, 1, 1, 1, '', '', NULL, NULL, 9, 12, 800, 0, 1);
 
 CREATE TABLE `pages_templates` (
@@ -268,7 +259,6 @@ INSERT INTO `pages_templates` (`id`, `pages_types_id`, `template`, `title`) VALU
                                                                                                 (7, NULL, 'Front:Media:album', 'Základní galerie'),
                                                                                                 (8, NULL, 'Front:Media:folder', 'Seznam složek dokumentů'),
                                                                                                 (9, NULL, 'Front:Media:folderList', 'Seznam dokumentů dané složky'),
-                                                                                                (10, NULL, 'Front:Events:detail', 'Seznam událostí'),
                                                                                                (12, NULL , 'Front:Links:default', 'Odkazy');
 
 CREATE TABLE `pages_types` (
@@ -290,10 +280,9 @@ CREATE TABLE `pages_types` (
 INSERT INTO `pages_types` (`id`, `content_type`, `presenter`, `action`, `prefix`, `admin_enabled`, `admin_link`, `icon`, `enable_snippets`, `enable_images`, `enable_files`, `pages_id`, `pages_templates_id`) VALUES
                                                                                                                                                                                                                                         (1, 'Stránky', 'Front:Pages', 'default', '', 1, 'pages/?type=1', 'fa-files-o', 0, 1, 1, 1, 3),
                                                                                                                                                                                                                                         (2, 'Aktuality', 'Front:Blog', 'detail', 'blog', 1, 'pages/?type=2', 'fa-newspaper-o', 1, 1, 1, 3, 6),
-                                                                                                                                                                                                                                        (2, 'Aktuality', 'Front:Blog', 'detail', 'blog', 1, 'pages/?type=2', 'fa-newspaper-o', 1, 1, 1, 3, 6),
                                                                                                                                                                                                                                         (6, 'Galerie', 'Front:Media', 'album', '', 1, 'pages/?type=6', 'fa-file-image-o', 0, 1, 1, 4, 1),
                                                                                                                                                                                                                                         (8, 'Dokumenty', 'Front:Media', 'folder', '', 1, 'pages?type=8', 'fa-files-o', 1, 1, 1, 6, 9),
-                                                                                                                                                                                                                                        (9, 'Šablony', '', 'default', '', 1, 'pages?type=9', 'fa-th', 1, 1, 1, 5, 10);
+                                                                                                                                                                                                                                        (9, 'Šablony', '', 'default', '', 1, 'pages?type=9', 'fa-th', 1, 1, 1, 1, 3);
 
 CREATE TABLE `pages_widgets` (
   `id` int(11) NOT NULL,
@@ -343,34 +332,34 @@ INSERT INTO `settings` (`id`, `setkey`, `setvalue`, `description_cs`, `type`, `a
                                                                                                                                                    (4, 'blog:short:showDate', '0', 'Zobrazovat datum vydání', 'boolean', 1),
                                                                                                                                                    (5, 'blog:preview:length', '350', 'Délka náhledového textu (0 znamená nezkrácený text)', 'numeric', 1),
                                                                                                                                                    (6, 'blog_fblike', '1', 'Přidá sdílecí tlačítko na Facebook, pokud je zadán FB účet', 'boolean', 1),
-                                                                                                                                                   (21, 'contacts:email:hq', '', 'Vaše e-mailová adresa', NULL, 1),
-                                                                                                                                                   (26, 'contacts:residency:contacts_id', '', 'Kontaktní informace o sídlu', 'table:contacts;column:name', 1),
-                                                                                                                                                   (32, 'site:admin:adminBarEnabled', '1', 'Navigace administrace v prezentaci', 'boolean', 1),
-                                                                                                                                                   (34, 'site:editor:type', 'summernote', 'Který editor bude vybrán. V současnosti Summernote nebo Ace', '', 0),
-                                                                                                                                                   (36, 'site:title', '', 'Název stránky', NULL, 1),
-                                                                                                                                                   (37, 'site:url:base', '', 'URL adresa', NULL, 1),
-                                                                                                                                                   (38, 'maintenance_enabled', '0', 'Stránka v módu údržby', 'boolean', 1),
-                                                                                                                                                   (39, 'maintenance_message', 'Stránka je v módu údržby', 'Informace o údržbě pro návštěvníka', NULL, 1),
-                                                                                                                                                   (40, 'site_ip_whitelist', '', 'Adresy povolené pro zobrazení obsahu. Oddělujte středníkem', NULL, 1),
-                                                                                                                                                   (41, 'site_cookie_whitelist', '', 'Heslo v cookie nutné pro zobrazení obsahu. Vkládá se pomocí querystringu (secretx=pwd)', NULL, 1),
-                                                                                                                                                   (42, 'social:ga_code', '', 'Kód Google Analytics', NULL, 1),
-                                                                                                                                                   (43, 'social:fb:enabled', '0', 'Povoleno zobrazování Facebooku', 'boolean', 1),
-                                                                                                                                                   (44, 'social:fb:type', 'page', 'Typ: účet nebo stránka', NULL, 1),
-                                                                                                                                                   (45, 'social:fb:url', '', 'Adresa stránky nebo účtu včetně http', NULL, 1),
-                                                                                                                                                   (60, 'appearance:paths:logo', '', 'Obrázek loga ve vysokém rozlišení a barvě', 'local_path', 0),
-                                                                                                                                                   (61, 'appearance:paths:favicon:ico', 'favicon.ico', 'Favicon s příponou ico', 'local_path', 0),
-                                                                                                                                                   (62, 'appearance_carousel_directions', '0', 'Zobrazit indikátory (levá a pravá šipka)', 'boolean', 1),
-                                                                                                                                                   (63, 'appearance_carousel_indicators', '0', 'Zobrazit menu', 'boolean', 1),
-                                                                                                                                                   (68, 'media_thumb_dir', 'tn', 'Adresář pro náhledy', NULL, 1),
-                                                                                                                                                   (69, 'media_thumb_width', '300', 'Šířka náhledu', NULL, 1),
-                                                                                                                                                   (70, 'media_thumb_height', '200', 'Výška náhledu', NULL, 1),
-                                                                                                                                                   (71, 'navigation_search_position_top', '1', 'Zobrazit vyhledávací políčko v horní navigaci', 'boolean', 1),
-                                                                                                                                                   (72, 'homepage_template', 'Homepage', 'Soubor s vybranou šablonou', '', 1),
-                                                                                                                                                   (73, 'appearance_carousel_caption', '1', 'Zobrazit titulek k položce', 'boolean', 1),
-                                                                                                                                                   (74, 'navigation_footer_template', 'Footer', 'Soubor s vybranou šablonou pro patičku', '', 1),
-                                                                                                                                                   (75, 'navigation_template', 'Navigation', 'Soubor s vybranou šablonou pro hlavičku', '', 1),
-                                                                                                                                                   (76, 'pages_template', 'Page', 'Soubor s vybranou šablonou pro běžné stránky', '', 1),
-                                                                                                                                                   (77, 'contacts_template', 'Contact', 'Soubor s vybranou šablonou pro stránku kontaktů', '', 1);
+                                                                                                                                                   (7, 'contacts:email:hq', '', 'Vaše e-mailová adresa', NULL, 1),
+                                                                                                                                                   (8, 'contacts:residency:contacts_id', '', 'Kontaktní informace o sídlu', 'table:contacts;column:name', 1),
+                                                                                                                                                   (9, 'site:admin:adminBarEnabled', '1', 'Navigace administrace v prezentaci', 'boolean', 1),
+                                                                                                                                                   (10, 'site:editor:type', 'summernote', 'Který editor bude vybrán. V současnosti Summernote nebo Ace', '', 0),
+                                                                                                                                                   (11, 'site:title', '', 'Název stránky', NULL, 1),
+                                                                                                                                                   (12, 'site:url:base', '', 'URL adresa', NULL, 1),
+                                                                                                                                                   (13, 'maintenance_enabled', '0', 'Stránka v módu údržby', 'boolean', 1),
+                                                                                                                                                   (14, 'maintenance_message', 'Stránka je v módu údržby', 'Informace o údržbě pro návštěvníka', NULL, 1),
+                                                                                                                                                   (15, 'site_ip_whitelist', '', 'Adresy povolené pro zobrazení obsahu. Oddělujte středníkem', NULL, 1),
+                                                                                                                                                   (16, 'site_cookie_whitelist', '', 'Heslo v cookie nutné pro zobrazení obsahu. Vkládá se pomocí querystringu (secretx=pwd)', NULL, 1),
+                                                                                                                                                   (17, 'social:ga_code', '', 'Kód Google Analytics', NULL, 1),
+                                                                                                                                                   (18, 'social:fb:enabled', '0', 'Povoleno zobrazování Facebooku', 'boolean', 1),
+                                                                                                                                                   (19, 'social:fb:type', 'page', 'Typ: účet nebo stránka', NULL, 1),
+                                                                                                                                                   (20, 'social:fb:url', '', 'Adresa stránky nebo účtu včetně http', NULL, 1),
+                                                                                                                                                   (21, 'appearance:paths:logo', '', 'Obrázek loga ve vysokém rozlišení a barvě', 'local_path', 0),
+                                                                                                                                                   (22, 'appearance:paths:favicon:ico', 'favicon.ico', 'Favicon s příponou ico', 'local_path', 0),
+                                                                                                                                                   (23, 'appearance_carousel_directions', '0', 'Zobrazit indikátory (levá a pravá šipka)', 'boolean', 1),
+                                                                                                                                                   (24, 'appearance_carousel_indicators', '0', 'Zobrazit menu', 'boolean', 1),
+                                                                                                                                                   (25, 'media_thumb_dir', 'tn', 'Adresář pro náhledy', NULL, 1),
+                                                                                                                                                   (26, 'media_thumb_width', '300', 'Šířka náhledu', NULL, 1),
+                                                                                                                                                   (27, 'media_thumb_height', '200', 'Výška náhledu', NULL, 1),
+                                                                                                                                                   (28, 'navigation_search_position_top', '1', 'Zobrazit vyhledávací políčko v horní navigaci', 'boolean', 1),
+                                                                                                                                                   (29, 'homepage_template', 'Homepage', 'Soubor s vybranou šablonou', '', 1),
+                                                                                                                                                   (30, 'appearance_carousel_caption', '1', 'Zobrazit titulek k položce', 'boolean', 1),
+                                                                                                                                                   (31, 'navigation_footer_template', 'Footer', 'Soubor s vybranou šablonou pro patičku', '', 1),
+                                                                                                                                                   (32, 'navigation_template', 'Navigation', 'Soubor s vybranou šablonou pro hlavičku', '', 1),
+                                                                                                                                                   (33, 'pages_template', 'Page', 'Soubor s vybranou šablonou pro běžné stránky', '', 1),
+                                                                                                                                                   (34, 'contacts_template', 'Contact', 'Soubor s vybranou šablonou pro stránku kontaktů', '', 1);
 
 CREATE TABLE `snippets` (
   `id` int(11) NOT NULL,
@@ -560,7 +549,7 @@ ALTER TABLE `menu_menus`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 ALTER TABLE `pages`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=128;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 ALTER TABLE `pages_templates`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
@@ -572,26 +561,26 @@ ALTER TABLE `pages_widgets`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 ALTER TABLE `pictures`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=156;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
 
 ALTER TABLE `settings`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=71;
 
 ALTER TABLE `snippets`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
 
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 ALTER TABLE `users_roles`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 
 ALTER TABLE `contacts`
-  ADD CONSTRAINT `contacts_ibfk_2` FOREIGN KEY (`users_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `contacts_ibfk_4` FOREIGN KEY (`countries_id`) REFERENCES `countries` (`id`) ON DELETE SET NULL ON UPDATE SET NULL,
-  ADD CONSTRAINT `contacts_ibfk_5` FOREIGN KEY (`contacts_categories_id`) REFERENCES `contacts_categories` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `contacts_ibfk_6` FOREIGN KEY (`pages_id`) REFERENCES `pages` (`id`) ON DELETE SET NULL ON UPDATE SET NULL;
+  ADD CONSTRAINT `contacts_ibfk_1` FOREIGN KEY (`users_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `contacts_ibfk_2` FOREIGN KEY (`countries_id`) REFERENCES `countries` (`id`) ON DELETE SET NULL ON UPDATE SET NULL,
+  ADD CONSTRAINT `contacts_ibfk_3` FOREIGN KEY (`contacts_categories_id`) REFERENCES `contacts_categories` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `contacts_ibfk_4` FOREIGN KEY (`pages_id`) REFERENCES `pages` (`id`) ON DELETE SET NULL ON UPDATE SET NULL;
 
 ALTER TABLE `contacts_openinghours`
   ADD CONSTRAINT `contacts_openinghours_ibfk_1` FOREIGN KEY (`contacts_id`) REFERENCES `contacts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
@@ -617,10 +606,10 @@ ALTER TABLE `menu`
   ADD CONSTRAINT `menu_ibfk_3` FOREIGN KEY (`menu_menus_id`) REFERENCES `menu_menus` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 ALTER TABLE `pages`
-  ADD CONSTRAINT `pages_ibfk_4` FOREIGN KEY (`users_id`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE SET NULL,
-  ADD CONSTRAINT `pages_ibfk_5` FOREIGN KEY (`pages_id`) REFERENCES `pages` (`id`) ON DELETE SET NULL ON UPDATE SET NULL,
-  ADD CONSTRAINT `pages_ibfk_6` FOREIGN KEY (`pages_types_id`) REFERENCES `pages_types` (`id`) ON DELETE SET NULL ON UPDATE SET NULL,
-  ADD CONSTRAINT `pages_ibfk_7` FOREIGN KEY (`pages_templates_id`) REFERENCES `pages_templates` (`id`) ON DELETE SET NULL ON UPDATE SET NULL;
+  ADD CONSTRAINT `pages_ibfk_1` FOREIGN KEY (`users_id`) REFERENCES `users` (`id`) ON DELETE SET NULL ON UPDATE SET NULL,
+  ADD CONSTRAINT `pages_ibfk_2` FOREIGN KEY (`pages_id`) REFERENCES `pages` (`id`) ON DELETE SET NULL ON UPDATE SET NULL,
+  ADD CONSTRAINT `pages_ibfk_3` FOREIGN KEY (`pages_types_id`) REFERENCES `pages_types` (`id`) ON DELETE SET NULL ON UPDATE SET NULL,
+  ADD CONSTRAINT `pages_ibfk_4` FOREIGN KEY (`pages_templates_id`) REFERENCES `pages_templates` (`id`) ON DELETE SET NULL ON UPDATE SET NULL;
 
 ALTER TABLE `pages_templates`
   ADD CONSTRAINT `pages_templates_ibfk_1` FOREIGN KEY (`pages_types_id`) REFERENCES `pages_types` (`id`) ON DELETE SET NULL ON UPDATE SET NULL;
