@@ -57,7 +57,8 @@ $(document).ready(function () {
     $(function () {
         $("#wysiwyg").summernote({
             width: "95%",
-            height: 500
+            height: 500,
+            lang: 'cs-CZ'
         });
 
         $("#wysiwyg-sm").summernote({
@@ -66,6 +67,7 @@ $(document).ready(function () {
             toolbar: [
                 ['style', ['bold', 'clear']],
             ],
+            lang: 'cs-CZ'
         });
     });
 
@@ -73,7 +75,7 @@ $(document).ready(function () {
     $(function () {
         $('.tree li:has(ul)').addClass('parent_li').find(' > span').attr('title', 'Collapse this branch');
         $('.tree li.parent_li > span').on('click', function (e) {
-            var children = $(this).parent('li.parent_li').find(' > ul > li');
+            let children = $(this).parent('li.parent_li').find(' > ul > li');
             if (children.is(":visible")) {
                 children.hide('fast');
                 $(this).attr('title', 'Expand this branch').find(' > i').addClass('icon-plus-sign').removeClass('icon-minus-sign');
@@ -91,12 +93,14 @@ $(document).ready(function () {
                 // [groupName, [list of button]]
                 ['fullscreen', ['fullscreen']],
             ],
-            height: 500
+            height: 500,
+            lang: 'cs-CZ'
         });
 
         $('#wysiwyg-page').summernote({
             width: "99%",
             height: 500,
+            lang: 'cs-CZ',
             onImageUpload: function (files, editor, welEditable) {
                 //welEditable.focus();
                 sendFile(files[0], editor, welEditable);
@@ -496,6 +500,7 @@ $(function () {
         width: "99%",
         height: 600,
         tabsize: 2,
+        lang: 'cs-CZ',
         toolbar: [
             ['fontsize', ['fontsize']],
             ['color', ['color']],
