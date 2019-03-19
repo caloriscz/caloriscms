@@ -32,6 +32,7 @@ class EditContactControl extends Control
         $groups = $this->database->table('contacts_categories')->fetchPairs('id', 'title');
         $pages = $this->database->table('pages')->fetchPairs('id', 'title');
 
+
         $form = new BootstrapUIForm();
         $form->addHidden('contact_id');
         $form->addSelect('pages_id', '', $pages);
@@ -56,7 +57,7 @@ class EditContactControl extends Control
 
         $arr = [
             'contact_id' => $contact->id,
-            'pages_id' => $contact->id,
+            'pages_id' => $contact->pages_id,
             'name' => $contact->name,
             'company' => $contact->company,
             'post' => $contact->post,
@@ -88,7 +89,7 @@ class EditContactControl extends Control
      */
     public function editFormValidated(BootstrapUIForm $form): void
     {
-        if (Validators::isEmail($form->values->email) === false && strlen($form->values->email) > 0) {
+        if (Validators::isEmail($form->values->email) === false && $form->values->email !== '') {
             $this->onSave($form->values->pages_id, $error = 1);
         }
     }
@@ -104,9 +105,7 @@ class EditContactControl extends Control
             $dateOfBirth = $form->values->dateOfBirth;
         }
 
-        $this->database->table('contacts')
-            ->where(['id' => $form->values->contact_id])
-            ->update([
+        $this->database->table('contacts')->where(['id' => $form->values->contact_id])->update([
                 'name' => $form->values->name,
                 'pages_id' => $form->values->pages_id,
                 'company' => $form->values->company,

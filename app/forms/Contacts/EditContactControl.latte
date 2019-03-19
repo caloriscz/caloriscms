@@ -1,10 +1,18 @@
 <form n:name="editForm" class="form-horizontal" role="form" autocomplete="off">
     <fieldset>
         <div class="form-group row">
+            <label class="col-sm-3 control-label" for="frm-categories_id">Kategorie</label>
+
+            <div class="col-sm-9">
+                <select n:name="categories_id" class="form-control" id="frm-categories_id"></select>
+            </div>
+        </div>
+
+        <div class="form-group row">
             <label class="col-sm-3 control-label" for="frm-name">Jméno</label>
 
             <div class="col-sm-9">
-                <input type="text" n:name="name" placeholder="Společnost" id="frm-name" value="Moje sídlo" class="form-control">
+                <input type="text" n:name="name" placeholder="Společnost" id="frm-name" class="form-control">
             </div>
         </div>
 
@@ -49,13 +57,6 @@
             </div>
         </div>
 
-        <div class="form-group row">
-            <label class="col-sm-3 control-label" for="frm-categories_id">Kategorie</label>
-
-            <div class="col-sm-9">
-                <select n:name="categories_id" class="form-control" id="frm-categories_id"></select>
-            </div>
-        </div>
 
     </fieldset>
     <fieldset>
@@ -81,7 +82,8 @@
             <label class="col-sm-3 control-label" for="frm-editContact-editForm-city">Město</label>
 
             <div class="col-sm-9">
-                <input type="text" n:name="city" placeholder="Město" id="frm-editContact-editForm-city" class="form-control">
+                <input type="text" n:name="city" placeholder="Město" id="frm-editContact-editForm-city"
+                       class="form-control">
             </div>
         </div>
 
@@ -108,14 +110,16 @@
         <div class="form-group row">
             <label class="col-sm-3 control-label" for="frm-banking_account">Bankovní účet</label>
             <div class="col-sm-9">
-                <input type="text" n:name="banking_account" placeholder="Bankovní účet" id="frm-banking_account" class="form-control">
+                <input type="text" n:name="banking_account" placeholder="Bankovní účet" id="frm-banking_account"
+                       class="form-control">
             </div>
         </div>
 
         <div class="form-group row">
             <label class="col-sm-3 control-label" for="frm-dateofbirth">Datum narození</label>
             <div class="col-sm-9">
-                <input type="text" n:name="dateOfBirth" placeholder="Datum narození" id="frm-dateofbirth" class="form-control datepicker-date">
+                <input type="text" n:name="dateOfBirth" placeholder="Datum narození" id="frm-dateofbirth"
+                       class="form-control datepicker-date">
             </div>
         </div>
 
