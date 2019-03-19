@@ -37,9 +37,8 @@ class EditContactControl extends Control
         $form->addHidden('contact_id');
         $form->addSelect('pages_id', '', $pages);
         $form->addText('name');
-        $form->addText('company');
         $form->addText('post');
-        $form->addRadioList('type', '', [0 => ' osoby', 1 => ' organizace']);
+        $form->addRadioList('type', '', [0 => ' osoba', 1 => ' organizace']);
         $form->addText('tpost');
         $form->addText('email');
         $form->addText('phone');
@@ -59,7 +58,6 @@ class EditContactControl extends Control
             'contact_id' => $contact->id,
             'pages_id' => $contact->pages_id,
             'name' => $contact->name,
-            'company' => $contact->company,
             'post' => $contact->post,
             'type' => $contact->type,
             'email' => $contact->email,
@@ -108,7 +106,6 @@ class EditContactControl extends Control
         $this->database->table('contacts')->where(['id' => $form->values->contact_id])->update([
                 'name' => $form->values->name,
                 'pages_id' => $form->values->pages_id,
-                'company' => $form->values->company,
                 'post' => $form->values->post,
                 'type' => $form->values->type,
                 'email' => $form->values->email,

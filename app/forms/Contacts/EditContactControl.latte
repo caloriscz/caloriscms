@@ -9,6 +9,15 @@
         </div>
 
         <div class="form-group row">
+            <label class="col-sm-3 control-label">Osoba nebo organizace</label>
+
+            <div class="col-sm-9">
+                <label><input type="radio" n:name="type" checked value="0"> osoba</label>&nbsp;
+                <label><input type="radio" n:name="type" value="1"> organizace</label>
+            </div>
+        </div>
+
+        <div class="form-group row">
             <label class="col-sm-3 control-label" for="frm-name">Jméno</label>
 
             <div class="col-sm-9">
@@ -17,27 +26,10 @@
         </div>
 
         <div class="form-group row">
-            <label class="col-sm-3 control-label" for="frm-company">Společnost</label>
-
-            <div class="col-sm-9">
-                <input type="text" n:name="company" placeholder="Společnost" id="frm-company" class="form-control">
-            </div>
-        </div>
-
-        <div class="form-group row">
-            <label class="col-sm-3 control-label">Osoba nebo organizace</label>
-
-            <div class="col-sm-9">
-                <label><input type="radio" n:name="type" checked value="0"> osoby</label>&nbsp;
-                <label><input type="radio" n:name="type" value="1"> organizace</label>
-            </div>
-        </div>
-
-        <div class="form-group row">
             <label class="col-sm-3 control-label" for="frm-tpost">Pozice</label>
 
             <div class="col-sm-9">
-                <input type="text" n:name="tpost" placeholder="Pozice" id="frm-tpost" class="form-control">
+                <input type="text" n:name="post" placeholder="Pozice" id="frm-tpost" class="form-control">
             </div>
         </div>
 

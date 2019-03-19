@@ -38,18 +38,22 @@ class ContactControl extends Control
         return new HelpdeskControl($this->database);
     }
 
+    protected function createComponentContact(): \Caloriscz\Contact\ContactControl
+    {
+        return new \Caloriscz\Contact\ContactControl($this->database);
+    }
+
 
     public function render(): void
     {
         $template = $this->getTemplate();
         // Choose template according to Settings
         $settings = $this->getPresenter()->template->settings;
+        $template->settings = $settings;
         $template->page = $this->database->table('pages')->get(2);
 
         // Main contact
-        $template->contact = $this->database->table('contacts')->get($settings['contacts:residency:contacts_id']);
-
-        $template->setFile(__DIR__ . '/' . $settings['contacts_template'] . 'Control.latte');
+        $template->setFile(__DIR__ . '/' . $template->settings['contacts_template'] . 'Control.latte');
         $template->render();
     }
 

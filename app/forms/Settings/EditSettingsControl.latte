@@ -14,6 +14,7 @@
                 {var $column = explode(':', $itemSelect[1])}
                     <select name="set[{$item->setkey}]" class="form-control">
                         {foreach $database->table("$table[1]")->order("$column[1]") as $itemTable}
+                            <option value=""></option>
                             <option value="{$itemTable->id}" {if $itemTable->id == $item->setvalue} selected{/if}>{$itemTable->{"$column[1]"}}</option>
                         {/foreach}
 

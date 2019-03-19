@@ -58,7 +58,6 @@ CREATE TABLE `contacts` (
   `post` varchar(80) COLLATE utf8_czech_ci DEFAULT NULL,
   `notes` text COLLATE utf8_czech_ci,
   `name` varchar(120) COLLATE utf8_czech_ci NOT NULL,
-  `company` varchar(120) COLLATE utf8_czech_ci DEFAULT NULL,
   `street` varchar(120) COLLATE utf8_czech_ci DEFAULT NULL,
   `city` varchar(80) COLLATE utf8_czech_ci DEFAULT NULL,
   `zip` varchar(10) COLLATE utf8_czech_ci DEFAULT NULL,

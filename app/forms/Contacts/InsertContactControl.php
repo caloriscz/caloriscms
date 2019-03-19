@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Forms\Contacts;
 
 use Nette\Application\UI\Control;
@@ -27,7 +28,7 @@ class InsertContactControl extends Control
         $form->getElementPrototype()->class = 'form-horizontal';
 
         $form->addHidden('pages_id', $this->getParameter('id'));
-        $form->addRadioList('type', 'Osoba nebo organizace', [0 => ' osoby', 1 => ' organizace']);
+        $form->addRadioList('type', 'Osoba nebo organizace', [0 => ' osoba', 1 => ' organizace']);
         $form->addText('title', 'Název')
             ->setRequired('Zadejte název');
 
@@ -51,12 +52,7 @@ class InsertContactControl extends Control
             'type' => $form->values->type,
         ];
 
-        if ($form->values->type === 0) {
-            $arr['name'] = $form->values->title;
-        } else {
-            $arr['company'] = $form->values->title;
-        }
-
+        $arr['name'] = $form->values->title;
         $id = $this->database->table('contacts')->insert($arr);
 
         $this->presenter->redirect(':Admin:Contacts:detail', ['id' => $id]);

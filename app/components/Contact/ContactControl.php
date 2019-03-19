@@ -1,5 +1,7 @@
 <?php
 
+namespace Caloriscz\Contact;
+
 use Nette\Application\UI\Control;
 use Nette\Database\Context;
 
