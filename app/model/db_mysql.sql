@@ -198,8 +198,7 @@ CREATE TABLE `menu` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
 
 INSERT INTO `menu` (`id`, `parent_id`, `menu_menus_id`, `description`, `title`, `pages_id`, `url`, `sorted`) VALUES
-                                                                                                                                                            (1, NULL, 1, 'Hlavní menu/Main menu', 'Top', NULL, '', 1028),
-                                                                                                                                                            (2, NULL, 2, NULL, 'Bottom', NULL, '', 1004);
+                                                                                                                                                            (1, NULL, 1, 'Hlavní menu/Main menu', 'Top', NULL, '', 1028);
 
 CREATE TABLE `menu_menus` (
   `id` int(11) NOT NULL,
