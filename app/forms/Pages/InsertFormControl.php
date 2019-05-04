@@ -47,13 +47,22 @@ class InsertFormControl extends Control
     {
         $doc = new Document($this->database);
         $doc->setForm($form->getValues());
+
+        // Set parent page
+        $pageType = $this->database->table('pages_types')->get($form->values->section);
+
+        if ($pageType) {
+            $doc->setParent($pageType->pages_id);
+        }
+
         $doc->setType($form->values->section);
+
         $page = $doc->create($this->presenter->user->getId());
 
         $this->presenter->redirect(':Admin:Pages:detail', ['id' => $page]);
     }
 
-    public function render()
+    public function render(): void
     {
         $template = $this->getTemplate();
         $template->setFile(__DIR__ . '/InsertFormControl.latte');

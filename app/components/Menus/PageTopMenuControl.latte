@@ -1,22 +1,6 @@
 {var $id = $presenter->getParameter('id')}
 <br>
 {if $page}
-    {if $page->pages_types->id == 6 || $page->pages_types_id == 8}
-        {var $pageRoot = 'media?type=' . $page->pages_types_id}
-        {var $pageTitle = 'Všechny stránky'}
-    {elseif $page->pages_types->id == 2}
-        {var $pageRoot = 'pages?type=2'}
-        {var $pageTitle = 'Všechny aktuality'}
-    {elseif $page->pages_types->id == 5}
-        {var $pageRoot = 'contacts'}
-        {var $pageTitle = 'Všechny kontakty'}
-    {elseif $page->pages_types->id == 9}
-        {var $pageRoot = 'pages?type=9'}
-        {var $pageTitle = 'Všechny šablony'}
-    {else}
-        {var $pageRoot = 'pages?type=' . $page->pages_types->id}
-        {var $pageTitle = 'Všechny stránky'}
-    {/if}
     <li class="breadcrumb-menu d-md-down-none">
         <div class="btn-group" role="group">
             {if $page->pages_types_id == 5}

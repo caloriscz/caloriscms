@@ -15,7 +15,7 @@ class PageTopMenuControl extends Control
         $this->database = $database;
     }
 
-    public function render()
+    public function render(): void
     {
         $template = $this->getTemplate();
         $template->page = $this->database->table('pages')->get($this->presenter->getParameter('id'));

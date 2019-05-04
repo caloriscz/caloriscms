@@ -1,9 +1,29 @@
+{if $page->pages_types_id == 2}
+    {var $pageRoot = 'pages?type=2'}
+    {var $pageName = 'Aktuality'}
+{elseif $page->pages_types_id == 5}
+    {var $pageRoot = 'contacts'}
+    {var $pageName = 'Kontakty'}
+{elseif $page->pages_types_id == 6}
+    {var $pageRoot = 'media?type=' . $page->pages_types_id}
+    {var $pageName = 'Galerie'}
+{elseif $page->pages_types->id == 8}
+    {var $pageRoot = 'media?type=' . $page->pages_types_id}
+    {var $pageName = 'Dokumenty'}
+{elseif $page->pages_types->id == 9}
+    {var $pageRoot = 'pages?type=9'}
+    {var $pageName = 'Šablony'}
+{else}
+    {var $pageRoot = 'pages?type=' . $page->pages_types->id}
+    {var $pageName = 'Stránky'}
+{/if}
+
 {block #titles}{$pages->title}{/block}
 {block content}
 
 <ol class="breadcrumb">
     <li class="breadcrumb-item"><a href="/admin/">Admin</a></li>
-    <li class="breadcrumb-item"><a href="/admin/pages/default?type={$pages->pages_types_id}">Stránky</a></li>
+    <li class="breadcrumb-item"><a href="/admin/{$pageRoot}">{$pageName}</a></li>
     <li class="breadcrumb-item active"><a
                 href="/admin/pages/detail/{$pages->id}?type={$pages->pages_types_id}">{$pages->title}</a></li>
 

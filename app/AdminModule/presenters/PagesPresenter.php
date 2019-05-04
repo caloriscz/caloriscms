@@ -26,6 +26,8 @@ class PagesPresenter extends BasePresenter
         parent::startup();
 
         $this->template->type = $this->getParameter('type');
+
+        $this->template->page = $this->database->table('pages')->get($this->getParameter('id'));
     }
 
     protected function createComponentPageList(): PageListControl

@@ -59,7 +59,7 @@ class Document
         return $this->type;
     }
 
-    public function getType()
+    public function getType(): int
     {
         if ($this->type) {
             return $this->type;
@@ -89,7 +89,7 @@ class Document
         return null;
     }
 
-    public function setLanguage($lang = false)
+    public function setLanguage($lang = false): bool
     {
         $this->lang = $lang;
         return $this->lang;
