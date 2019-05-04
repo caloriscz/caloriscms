@@ -2,11 +2,11 @@
 
 namespace App;
 
-use App\Model\SlugManager;
 use Nette,
     Nette\Application\Routers\RouteList,
     Nette\Application\Routers\Route;
 use Model;
+use Nette\Database\Context;
 
 /**
  * Router factory.
@@ -16,10 +16,15 @@ class RouterFactory
     /** @var slugManager */
     private $slugManager;
 
-    /** @var Nette\Database\Context */
+    /** @var Context */
     public $database;
 
-    public function __construct(Nette\Database\Context $database, Model\SlugManager $slugManager)
+    /**
+     * RouterFactory constructor.
+     * @param Context $database
+     * @param Model\SlugManager $slugManager
+     */
+    public function __construct(Context $database, Model\SlugManager $slugManager)
     {
         $this->database = $database;
         $this->slugManager = $slugManager;
@@ -28,7 +33,7 @@ class RouterFactory
     /**
      * @return \Nette\Application\IRouter
      */
-    public function createRouter()
+    public function createRouter(): \Nette\Application\IRouter
     {
         $router = new RouteList();
 

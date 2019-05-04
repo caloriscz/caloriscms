@@ -5,7 +5,7 @@ body, wrapper {
 }
 
 .page {
-  flex:1;
+  flex: 1 0 auto; for .page for sticky footer in IE11
   padding: 3rem 1.5rem 0rem 1.5rem;
   text-align: center;
 }

@@ -1,5 +1,4 @@
 <?php
-
 namespace App\ApiModule\Presenters;
 
 /**
@@ -24,11 +23,4 @@ class HomepagePresenter extends BasePresenter
             die('alone');
         }
     }
-
-    public function renderdefault(): void
-    {
-        $this->template->channel = 'channel';
-        $this->template->items = 'item';
-    }
-
 }
