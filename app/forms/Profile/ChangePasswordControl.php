@@ -38,7 +38,7 @@ class ChangePasswordControl extends Control
      * @param BootstrapUIForm $form
      * @throws \Nette\Application\AbortException
      */
-    protected function changePasswordFormSucceeded(BootstrapUIForm $form): void
+    public function changePasswordFormSucceeded(BootstrapUIForm $form): void
     {
         $ppwd = $form->values->password1;
         $ppwd2 = $form->values->password2;
@@ -53,7 +53,7 @@ class ChangePasswordControl extends Control
         );
 
         $date = new Datetime('+1 month');
-        setcookie('calpwd', $passwordEncrypted, $date->format('C'), '/');
+        setcookie('calpwd', $passwordEncrypted, time() + 15552000, '/');
 
         $this->presenter->redirect('this');
     }
