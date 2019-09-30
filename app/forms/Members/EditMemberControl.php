@@ -40,8 +40,7 @@ class EditMemberControl extends Control
         $arr = [
             'id' => $this->presenter->getParameter('id'),
             'state' => $user->state,
-            'role' => $user->role,
-            'group' => $user->categories_id,
+            'role' => $user->role
         ];
 
         $form->setDefaults(array_filter($arr));

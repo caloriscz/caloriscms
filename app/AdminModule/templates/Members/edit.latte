@@ -76,13 +76,13 @@
                                     {foreach $membersRelated as $item}
                                         <tr>
                                             <td>
-                                                <a n:href="deleteContact!, id => $item->id, contact => $members->id"
+                                                <a n:href="deleteContact! id => $item->id, contact => $members->id"
                                                         onclick="return confirm('Opravdu smazat?')">
                                                     <i class="fa fa-times font-red"></i>
                                                 </a>
                                             </td>
                                             <td>
-                                                <a n:href=":Admin:Contacts:detail, id => $item->pages_id">{$item->name}</a>
+                                                <a n:href=":Admin:Contacts:detail, id => $item->id">{$item->name}</a>
                                             </td>
                                             <td>{$item->street}</td>
                                             <td>{$item->zip}</td>

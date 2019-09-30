@@ -43,12 +43,17 @@ class InsertFormControl extends Control
         return $form;
     }
 
+    /**
+     * Create nwe page
+     * @param BootstrapUIForm $form
+     * @throws \Nette\Application\AbortException
+     */
     public function insertFormSucceeded(BootstrapUIForm $form): void
     {
         $doc = new Document($this->database);
         $doc->setForm($form->getValues());
 
-        // Set parent page
+        // Set parent page for every page type
         $pageType = $this->database->table('pages_types')->get($form->values->section);
 
         if ($pageType) {
