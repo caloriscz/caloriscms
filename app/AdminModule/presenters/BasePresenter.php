@@ -47,35 +47,11 @@ abstract class BasePresenter extends Presenter
     /** @var string @persistent */
     public $ajax = 'on';
 
-    /** @persistent */
-    public $backlink = '';
-
     public function __construct(Context $database, IMailer $mailer)
     {
         parent::__construct();
         $this->database = $database;
         $this->mailer = $mailer;
-    }
-
-    /**
-     * Common handler for grid operations
-     * @param $operation
-     * @param $id
-     * @throws AbortException
-     */
-    public function handleOperations($operation, $id): void
-    {
-        if ($id) {
-            $this->flashMessage('Process operation \'$operation\' for row with id: $row...');
-        } else {
-            $this->flashMessage('No rows selected.', 'error');
-        }
-        if ($this->isAjax()) {
-            isset($this['grid']) && $this['grid']->reload();
-            $this->redrawControl('flashes');
-        } else {
-            $this->redirect($operation, ['idm' => $id]);
-        }
     }
 
     /**

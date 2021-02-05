@@ -86,9 +86,7 @@ class ContactsPresenter extends BasePresenter
     public function handleDeleteCategory($id): void
     {
         $category = new Model\Category($this->database);
-
         $this->database->table('contacts_categories')->where('id', $category->getSubIds($id))->delete();
-
         $this->redirect(':Admin:Categories:default');
     }
 

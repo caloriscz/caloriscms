@@ -73,12 +73,5 @@ class NavigationControl extends Control
         $template->render();
     }
 
-    /**
-     * Forces control to repaint.
-     * @return void
-     */
-    function redrawControl()
-    {
-        // TODO: Implement redrawControl() method.
-    }
+
 }
