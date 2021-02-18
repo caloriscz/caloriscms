@@ -1,79 +1,69 @@
 <?php
+declare(strict_types=1);
 
-namespace App;
+namespace App\Router;
 
-use Nette,
-    Nette\Application\Routers\RouteList,
+use App\SlugRouter;
+use Nette\Application\Routers\RouteList,
     Nette\Application\Routers\Route;
 use Model;
 use Nette\Database\Context;
+use Symfony\Component\Translation\Translator;
 
-/**
- * Router factory.
- */
 class RouterFactory
 {
-    /** @var slugManager */
-    private $slugManager;
+    /** @var Model\SlugManager */
+    private static $slugManager;
 
     /** @var Context */
-    public $database;
+    private $database;
 
-    /**
-     * RouterFactory constructor.
-     * @param Context $database
-     * @param Model\SlugManager $slugManager
-     */
-    public function __construct(Context $database, Model\SlugManager $slugManager)
+    /** @var Translator @inject */
+    public $translator;
+
+    public static function createRouter(Context $database, \Contributte\Translation\Translator $translator): RouteList
     {
-        $this->database = $database;
-        $this->slugManager = $slugManager;
-    }
-
-    /**
-     * @return \Nette\Application\IRouter
-     */
-    public function createRouter(): \Nette\Application\IRouter
-    {
-        $router = new RouteList();
+        $router = new RouteList;
 
 
-        $router[] = new Route('api/<presenter>/<action>/<id>', [
+        $router->addRoute('api/<presenter>/<action>/<id>', [
             'module' => 'Api',
             'presenter' => 'Homepage',
             'action' => 'default',
-            'id' => NULL
+            'id' => null
         ]);
 
-        $router[] = new Route('sitemap.xml', [
+        $router->addRoute('sitemap.xml', [
             'module' => 'Api',
             'presenter' => 'Sitemap',
             'action' => 'default',
-            'id' => NULL
+            'id' => null
         ]);
 
-        $router[] = new Route('admin/[<locale=cs cs|en>/]<presenter>/<action>/<id>', [
+        $router->addRoute('admin/[<locale=cs cs|en>/]<presenter>/<action>/<id>', [
             'module' => 'Admin',
             'presenter' => 'Homepage',
             'action' => 'default',
-            'id' => NULL
+            'id' => null
         ]);
 
         /** Homepage won't work without this router */
-        $router[] = new Route('[<locale=cs cs|en>/]', [
+        $router->addRoute('[<locale=cs cs|en>/]', [
             'module' => 'Front',
             'presenter' => 'Homepage',
             'action' => 'default',
-            'id' => NULL
+            'id' => null
         ]);
 
-        $router[] = new SlugRouter($this->slugManager);
+        $slugRouter = new SlugRouter(new Model\SlugManager($database, $translator));
 
-        $router[] = new Route('[<locale=cs cs|en>/]<presenter>/<action>/<id>', [
+        $router->add($slugRouter);
+
+        $router->addRoute('[<locale=cs cs|en>/]<presenter>/<action>/<id>', [
             'module' => 'Front',
             'presenter' => 'Homepage',
             'action' => 'default',
-            'id' => NULL
+            'id' => null
         ]);
 
         return $router;

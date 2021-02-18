@@ -1,9 +1,3 @@
-#
-# SECURITY WARNING: it is CRITICAL that this file & directory are NOT accessible directly via a web browser!
-#
-# If you don't protect this directory from direct web access, anybody will be able to see your passwords.
-# http://nette.org/security-warning
-#
 parameters:
 
 php:
@@ -16,16 +10,15 @@ application:
 
 session:
 	expiration: 14 days
-	autostart: true
+	auto_start: true
 	savePath: "%tempDir%/sessions"
 
-
 services:
-	- App\Model\Authenticator
+	- App\Model\MyAuthenticator
 	- App\Model\Category
-	- App\RouterFactory
+	- App\Router\RouterFactory
 	- Model\SlugManager
-	router: @App\RouterFactory::createRouter
+	router: App\Router\RouterFactory::createRouter
 	cacheClear:
 		class: App\Console\CacheClearCommand
 		tags: [kdyby.console.command]
@@ -34,13 +27,12 @@ services:
 		tags: [kdyby.console.command]
 
 extensions:
-    translation: Kdyby\Translation\DI\TranslationExtension
-    console: Kdyby\Console\DI\ConsoleExtension
-    events: Kdyby\Events\DI\EventsExtension
+    translation: Contributte\Translation\DI\TranslationExtension
+    console: Contributte\Console\DI\ConsoleExtension(%consoleMode%)
+    events: Contributte\EventDispatcher\DI\EventDispatcherExtension
 
 translation:
-    default: cs
-    fallback: [cs_CZ, cs]
-    whitelist: [cs, en]
-    resolvers:
-        header: off
+    locales:
+        default: cs
+        fallback: [cs_CZ, cs]
+        whitelist: [cs, en]

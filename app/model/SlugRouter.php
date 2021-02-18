@@ -3,15 +3,13 @@
 namespace App;
 
 use Model\SlugManager;
-use Nette;
 use Nette\Application\Request;
-use Nette\Http\IRequest;
-use Nette\Http\Url;
+use Nette\Http\IRequest as HttpRequest;
+use Nette\Http\UrlScript;
 
 
-class SlugRouter implements Nette\Application\IRouter
+class SlugRouter implements \Nette\Routing\Router
 {
-
     /** @var SlugManager */
     private $slugManager;
 
@@ -22,10 +20,9 @@ class SlugRouter implements Nette\Application\IRouter
 
     /**
      * Maps HTTP request to a Request object.
-     * @param IRequest $httpRequest
-     * @return Request|null
+     * @param HttpRequest $httpRequest
      */
-    public function match(IRequest $httpRequest)
+    public function match(HttpRequest $httpRequest): ?array
     {
         // 1) PARSE URL
         $url = $httpRequest->getUrl();
@@ -114,7 +111,21 @@ class SlugRouter implements Nette\Application\IRouter
             }
         }
 
-        return new Request($presenter, $httpRequest->getMethod(), $params, $httpRequest->getPost(), $httpRequest->getFiles(), [Request::SECURED => $httpRequest->isSecured()]);
+
+        $routeFirst = explode(':',  $presenter);
+
+        $routeReturn = [
+            //'module' => $routeFirst[0],
+            'presenter' => $presenter,
+            'method' => $httpRequest->getMethod(),
+            'action' => 'default',
+            'page_id' => 9,
+            $params,
+             //$httpRequest->getPost(), $httpRequest->getFiles(), [Request::SECURED => $httpRequest->isSecured()]
+        ];
+
+
+        return $routeReturn;
 
     }
 
@@ -123,11 +134,10 @@ class SlugRouter implements Nette\Application\IRouter
      *
      * @param Request $appRequest
      * @param Url $refUrl
-     * @return string|NULL
      */
-    public function constructUrl(Request $appRequest, Url $refUrl)
+    public function constructUrl(array $param, UrlScript $refUrl): ?string
     {
-        $params = $appRequest->getParameters();
+        $params = $param->getParameters();
 
         $query = $params;
         unset($query['action'], $query['page_id'], $query['slug'], $query['id'], $query['locale'], $query['prefix']);
@@ -171,7 +181,7 @@ class SlugRouter implements Nette\Application\IRouter
             $prefix = null;
         }
         $url = $refUrl->getScheme() . '://' . $refUrl->getHost() . $refUrl->getPath() . $locale . $prefix . $slug;
-        $params = $appRequest->getParameters();
+        $params = $param->getParameters();
 
         if (isset($params['action']) && $params['action'] !== 'default') {
             $url .= $refUrl->getPath();
@@ -192,7 +202,6 @@ class SlugRouter implements Nette\Application\IRouter
             }
 
             $finalQueryString = substr($queryString, 0, -1);
-
             $url .= $finalQueryString;
         }
 

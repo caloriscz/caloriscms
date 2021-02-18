@@ -2,7 +2,7 @@
 
 namespace Model;
 
-use Kdyby\Translation\Translator;
+use Symfony\Component\Translation\Translator;
 use Nette\Database\Context;
 use Nette\Database\Table\ActiveRow;
 

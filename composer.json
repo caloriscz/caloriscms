@@ -16,24 +16,15 @@
     }
   ],
   "require": {
-    "php": ">= 7.1",
-    "nette/application": "~2.4",
-    "nette/caching": "~2.4",
-    "nette/bootstrap": "~2.4",
-    "nette/database": "~2.4",
-    "nette/robot-loader": "~2.4",
-    "nette/security": "~2.4",
-    "latte/latte": "~2.4",
-    "tracy/tracy": "~2.4",
-    "kdyby/translation": "v2.6.1",
-    "kdyby/events": "^3.1",
-    "nette/forms": "~2.4",
-    "nette/mail": "~2.4",
+    "php": ">= 7.2",
+    "nette/nette": "^3.1",
+    "contributte/translation": "^0.8.3",
+    "contributte/console": "^0.9.0",
+    "contributte/event-dispatcher": "^0.8.0",
+    "tracy/tracy": "^2.8",
     "ezyang/htmlpurifier": "~4.10",
     "studio-42/elfinder": "2.1.16",
     "ext-json": "*",
-    "kdyby/console": "^2.7",
-    "ext-fileinfo": "*",
-    "symfony/service-contracts": "v1.1.9"
+    "ext-fileinfo": "*"
   }
 }

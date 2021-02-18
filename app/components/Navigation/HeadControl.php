@@ -2,9 +2,9 @@
 
 namespace Caloriscz\Navigation;
 
-use Kdyby\Translation\Translator;
 use Nette\Application\UI\Control;
 use Nette\Database\Context;
+use Tracy\Debugger;
 
 class HeadControl extends Control
 {
@@ -14,7 +14,6 @@ class HeadControl extends Control
 
     public function __construct(Context $database)
     {
-        parent::__construct();
         $this->database = $database;
     }
 

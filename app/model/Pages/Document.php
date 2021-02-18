@@ -8,7 +8,7 @@
 
 namespace App\Model;
 
-use Nette\Database\Context;
+use Nette\Database\Explorer;
 use Nette\Utils\ArrayHash;
 use Nette\Utils\Strings;
 
@@ -33,7 +33,7 @@ class Document
     private $type;
     private $formValues;
 
-    public function __construct(Context $database)
+    public function __construct(Explorer $database)
     {
         $this->database = $database;
     }

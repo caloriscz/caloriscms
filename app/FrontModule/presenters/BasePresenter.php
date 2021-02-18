@@ -12,9 +12,7 @@ use Caloriscz\Page\PageDocumentControl;
 use Caloriscz\Page\PageSlugControl;
 use Caloriscz\Page\PageTitleControl;
 use Caloriscz\Utilities\PagingControl;
-use ContactControl;
-use Kdyby\Translation\Translator;
-use Nette;
+use Symfony\Component\Translation\Translator;
 use Nette\Application\UI\Presenter;
 use Nette\Database\Context;
 use Nette\Http\IRequest;
@@ -47,18 +45,6 @@ abstract class BasePresenter extends Presenter
     {
         $this->database = $database;
         $this->mailer = $mailer;
-    }
-
-    /**
-     * @param null $class
-     * @return Nette\Application\UI\ITemplate
-     */
-    protected function createTemplate($class = null)
-    {
-        $template = parent::createTemplate($class);
-        $template->addFilter(null, '\Filters::common');
-
-        return $template;
     }
 
     protected function startup()
@@ -147,11 +133,6 @@ abstract class BasePresenter extends Presenter
     protected function createComponentNavigation(): NavigationControl
     {
         return new NavigationControl($this->database);
-    }
-
-    protected function createComponentContact(): ContactControl
-    {
-        return new ContactControl($this->database);
     }
 
     protected function createComponentAdvancedSearch(): AdvancedSearchControl

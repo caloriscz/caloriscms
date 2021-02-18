@@ -7,9 +7,8 @@ use App\Forms\Pages\EditorControl;
 use Caloriscz\Menus\Admin\MainMenuControl;
 use Caloriscz\Menus\PageTopMenuControl;
 use Caloriscz\Utilities\PagingControl;
-use Kdyby\Translation\Translator;
 use Nette\Application\AbortException;
-use Nette\Application\UI\ITemplate;
+use Symfony\Component\Translation\Translator;
 use Nette\Application\UI\Presenter;
 use Nette\Database\Context;
 use Nette\Http\IRequest;
@@ -23,7 +22,7 @@ use Nette\Security\IUserStorage;
 abstract class BasePresenter extends Presenter
 {
 
-    /** @var Context*/
+    /** @var Context */
     public $database;
 
     /** @persistent */
@@ -54,16 +53,16 @@ abstract class BasePresenter extends Presenter
         $this->mailer = $mailer;
     }
 
-    /**
-     * @param null $class
-     * @return ITemplate
-     */
-    protected function createTemplate($class = null)
+    protected function beforeRender()
     {
-        $template = parent::createTemplate($class);
-        $template->addFilter(null, '\Filters::common');
+        $this->template->addFilter('toBaseName', function ($s): string {
+            return basename($s);
+        });
 
-        return $template;
+        $this->template->addFilter('numericday', function ($s): string {
+            $names = [1 => 'Pondělí', 2 => 'Úterý', 3 => 'Středa', 4 => 'Čtvrtek', 5 => 'Pátek', 6 => 'Sobota', 7 => 'Neděle'];
+            return $names[$s];
+        });
     }
 
     /**

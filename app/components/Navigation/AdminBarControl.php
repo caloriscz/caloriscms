@@ -13,7 +13,6 @@ class AdminBarControl extends Control
 
     public function __construct(Context $database)
     {
-        parent::__construct();
         $this->database = $database;
     }
 
