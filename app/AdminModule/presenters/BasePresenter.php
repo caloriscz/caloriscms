@@ -8,13 +8,13 @@ use Caloriscz\Menus\Admin\MainMenuControl;
 use Caloriscz\Menus\PageTopMenuControl;
 use Caloriscz\Utilities\PagingControl;
 use Nette\Application\AbortException;
+use Nette\Database\Explorer;
 use Symfony\Component\Translation\Translator;
 use Nette\Application\UI\Presenter;
-use Nette\Database\Context;
 use Nette\Http\IRequest;
 use Nette\Http\IResponse;
-use Nette\Mail\IMailer;
-use Nette\Security\IUserStorage;
+use Nette\Mail\Mailer;
+use Nette\Security\UserStorage;
 
 /**
  * @property-read \Nette\Bridges\ApplicationLatte\Template|\stdClass $template
@@ -22,7 +22,7 @@ use Nette\Security\IUserStorage;
 abstract class BasePresenter extends Presenter
 {
 
-    /** @var Context */
+    /** @var Explorer */
     public $database;
 
     /** @persistent */
@@ -34,7 +34,7 @@ abstract class BasePresenter extends Presenter
     /** @persistent */
     public $id;
 
-    /** @var IMailer @inject */
+    /** @var Mailer @inject */
     public $mailer;
 
     /** @var IRequest @inject */
@@ -46,7 +46,7 @@ abstract class BasePresenter extends Presenter
     /** @var string @persistent */
     public $ajax = 'on';
 
-    public function __construct(Context $database, IMailer $mailer)
+    public function __construct(Explorer $database, Mailer $mailer)
     {
         parent::__construct();
         $this->database = $database;
@@ -84,7 +84,7 @@ abstract class BasePresenter extends Presenter
             }
 
             if (!$this->user->isLoggedIn()) {
-                if ($this->user->logoutReason === IUserStorage::INACTIVITY) {
+                if ($this->user->logoutReason === UserStorage::INACTIVITY) {
                     $this->flashMessage('Byli jste odhlášeni', 'note');
                 }
                 $this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);

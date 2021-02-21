@@ -3,15 +3,14 @@
 namespace Caloriscz\Page;
 
 use Nette\Application\UI\Control;
-use Nette\Database\Context;
+use Nette\Database\Explorer;
 
 class PageTitleControl extends Control
 {
 
-    /** @var Context */
-    public $database;
+    public Explorer $database;
 
-    public function __construct(Context $database)
+    public function __construct(Explorer $database)
     {
         $this->database = $database;
     }
@@ -39,5 +38,4 @@ class PageTitleControl extends Control
         $template->setFile(__DIR__ . '/PageTitleControl.latte');
         $template->render();
     }
-
 }

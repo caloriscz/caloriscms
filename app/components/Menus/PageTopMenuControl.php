@@ -2,15 +2,14 @@
 namespace Caloriscz\Menus;
 
 use Nette\Application\UI\Control;
-use Nette\Database\Context;
+use Nette\Database\Explorer;
 
 class PageTopMenuControl extends Control
 {
 
-    /** @var Context */
     public $database;
 
-    public function __construct(Context $database)
+    public function __construct(Explorer $database)
     {
         $this->database = $database;
     }

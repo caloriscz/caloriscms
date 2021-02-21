@@ -6,18 +6,17 @@ use Caloriscz\Utilities\PagingControl;
 use Nette\Application\AbortException;
 use Nette\Application\UI\Control;
 use Nette\Database\Context;
+use Nette\Database\Explorer;
 use Nette\Utils\Paginator;
 
 class ContactGridControl extends Control
 {
 
-    /** @var Context */
+    /** @var Explorer */
     public $database;
 
-    public function __construct(Context $database)
+    public function __construct(Explorer $database)
     {
-        parent::__construct();
-
         $this->database = $database;
     }
 
@@ -34,7 +33,6 @@ class ContactGridControl extends Control
     public function handleDelete($id): void
     {
         $this->database->table('contacts')->get($id)->delete();
-
         $this->presenter->redirect('this');
     }
 
@@ -47,7 +45,7 @@ class ContactGridControl extends Control
         $paginator = new Paginator();
         $paginator->setItemCount($contacts->count('*'));
         $paginator->setItemsPerPage(20);
-        $paginator->setPage($this->presenter->getParameter('page'));
+        $paginator->setPage($this->presenter->getParameter('page') ?? 1);
 
         $template->contacts = $contacts->limit($paginator->getLength(), $paginator->getOffset());
         $template->paginator = $paginator;

@@ -16,6 +16,7 @@ abstract class BasePresenter extends Presenter
 
     public function __construct(Context $database)
     {
+        parent::__construct();
         $this->database = $database;
     }
 

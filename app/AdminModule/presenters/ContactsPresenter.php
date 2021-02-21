@@ -105,7 +105,7 @@ class ContactsPresenter extends BasePresenter
         $paginator = new Nette\Utils\Paginator();
         $paginator->setItemCount($contactsDb->count('*'));
         $paginator->setItemsPerPage(20);
-        $paginator->setPage($this->getParameter('page'));
+        $paginator->setPage($this->getParameter('page') ?? 1);
 
         $this->template->args = $this->getParameters();
         $this->template->paginator = $paginator;

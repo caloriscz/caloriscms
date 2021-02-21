@@ -4,18 +4,17 @@ namespace App\Forms\Appearance;
 
 use App\Model\IO;
 use Nette\Application\UI\Control;
-use Nette\Database\Context;
+use Nette\Database\Explorer;
 use Nette\Forms\BootstrapUIForm;
 
 class InsertCarouselControl extends Control
 {
 
-    /** @var Context */
+    /** @var Explorer */
     public $database;
 
-    public function __construct(Context $database)
+    public function __construct(Explorer $database)
     {
-        parent::__construct();
         $this->database = $database;
     }
 
@@ -48,29 +47,26 @@ class InsertCarouselControl extends Control
      */
     public function insertFormSucceeded(BootstrapUIForm $form): void
     {
-        $image = $form->values->the_file->name;
-
         $arr = [
             'title' => $form->values->title,
             'description' => $form->values->description,
             'uri' => $form->values->uri,
-            'visible' => $form->values->visible,
-            'image' => $form->values->the_file
+            'visible' => $form->values->visible
         ];
 
         if ($form->values->the_file->error === 0) {
-            $arr['image'] = $image;
+            $arr['image'] = $form->values->the_file->name;
 
-            if (file_exists(APP_DIR . '/images/carousel/' . $image)) {
-                IO::remove(APP_DIR . '/images/carousel/' . $image);
-                IO::upload(APP_DIR . '/images/carousel/', $image);
-            } else {
-                IO::upload(APP_DIR . '/images/carousel/', $image);
+            $filePath = APP_DIR . '/images/carousel/' . $arr['image'];
+
+            if (file_exists($filePath)) {
+                IO::remove($filePath);
             }
+
+            IO::upload(APP_DIR . '/images/carousel/', $arr['image']);
         }
 
         $this->database->table('carousel')->insert($arr);
-
 
         $this->redirect('this', ['carousel_id' => $form->values->carousel_id]);
     }

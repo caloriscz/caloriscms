@@ -4,18 +4,16 @@ namespace Caloriscz\Appearance;
 
 use App\Model\IO;
 use Nette\Application\UI\Control;
-use Nette\Database\Context;
+use Nette\Database\Explorer;
 
 class CarouselManagerControl extends Control
 {
 
-    /** @var Context */
+    /** @var Explorer */
     public $database;
 
-    public function __construct(Context $database)
+    public function __construct(Explorer $database)
     {
-        parent::__construct();
-
         $this->database = $database;
     }
 
@@ -46,7 +44,8 @@ class CarouselManagerControl extends Control
 
     public function render(): void
     {
-        $this->template->carousel = $this->database->table('carousel')->order('sortedASC');
+        $this->template->carousel = $this->database->table('carousel')->order('sorted ASC');
+
         $this->template->setFile(__DIR__ . '/CarouselManagerControl.latte');
         $this->template->render();
     }

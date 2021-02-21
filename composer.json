@@ -16,7 +16,7 @@
     }
   ],
   "require": {
-    "php": ">= 7.2",
+    "php": ">= 7.4",
     "nette/nette": "^3.1",
     "contributte/translation": "^0.8.3",
     "contributte/console": "^0.9.0",

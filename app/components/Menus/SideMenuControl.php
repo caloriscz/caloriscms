@@ -2,15 +2,14 @@
 namespace Caloriscz\Menus;
 
 use Nette\Application\UI\Control;
-use Nette\Database\Context;
+use Nette\Database\Explorer;
 
 class SideMenuControl extends Control
 {
 
-    /** @var Context */
-    public $database;
+    public Explorer $database;
 
-    public function __construct(Context $database)
+    public function __construct(Explorer $database)
     {
         $this->database = $database;
     }
@@ -18,9 +17,7 @@ class SideMenuControl extends Control
     public function render($id, $style = 'sidemenu'): void
     {
         $template = $this->getTemplate();
-        
         $template->setFile(__DIR__ . '/SideMenuControl.latte');
-        
         $template->id = $id;
         $template->style = $style;
         $template->categories = $this->database->table('categories')->where('parent_id', $id);

@@ -43,7 +43,7 @@ class IO
      * Remove file or empty directory
      * @param $fileName
      */
-    public static function remove($fileName): void
+    public static function remove(string $fileName): void
     {
         if (file_exists($fileName)) {
 
@@ -59,7 +59,7 @@ class IO
      * Deletes directory with subdirectories and all files
      * @param $path
      */
-    public static function removeDirectory($path, $leaveDir = null): void
+    public static function removeDirectory(string $path, $leaveDir = null): void
     {
         $pathD = $path;
         if (file_exists($path)) {

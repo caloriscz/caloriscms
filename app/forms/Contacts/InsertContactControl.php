@@ -14,7 +14,6 @@ class InsertContactControl extends Control
 
     public function __construct(Context $database)
     {
-        parent::__construct();
         $this->database = $database;
     }
 
@@ -31,11 +30,9 @@ class InsertContactControl extends Control
         $form->addRadioList('type', 'Osoba nebo organizace', [0 => ' osoba', 1 => ' organizace']);
         $form->addText('title', 'Název')
             ->setRequired('Zadejte název');
-
         $form->setDefaults(['type' => 0]);
-
         $form->addSubmit('submitm', 'Vytvořit nový kontakt')
-            ->setAttribute('class', 'btn btn-success');
+            ->setHtmlAttribute('class', 'btn btn-success');
 
         $form->onSuccess[] = [$this, 'insertFormSucceeded'];
         return $form;

@@ -2,18 +2,17 @@
 
 namespace App\Forms\Settings;
 
-use MongoDB\BSON\Type;
+use Nette\Application\AbortException;
 use Nette\Application\UI\Control;
-use Nette\Database\Context;
+use Nette\Database\Explorer;
 use Nette\Forms\BootstrapUIForm;
 
 class InsertBlackListControl extends Control
 {
 
-    /** @var Context */
     public $database;
 
-    public function __construct(Context $database)
+    public function __construct(Explorer $database)
     {
         $this->database = $database;
     }
@@ -44,7 +43,7 @@ class InsertBlackListControl extends Control
 
     /**
      * @param BootstrapUIForm $form
-     * @throws \Nette\Application\AbortException
+     * @throws AbortException
      */
     public function insertFormSucceeded(BootstrapUIForm $form): void
     {

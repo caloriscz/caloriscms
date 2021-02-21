@@ -122,7 +122,7 @@ class PageListControl extends Control
             $paginator = new Paginator();
             $paginator->setItemCount($pages->count('*'));
             $paginator->setItemsPerPage(20);
-            $paginator->setPage($this->presenter->getParameter('page'));
+            $paginator->setPage($this->presenter->getParameter('page') ?? 1);
 
             $template->pages = $pages->limit($paginator->getLength(), $paginator->getOffset());
             $template->paginator = $paginator;

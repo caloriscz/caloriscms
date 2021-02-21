@@ -3,18 +3,14 @@
 namespace App\Forms\Menu;
 
 use Nette\Application\UI\Control;
-use Nette\Database\Context;
-use Nette\Diagnostics\Debugger;
+use Nette\Database\Explorer;
 use Nette\Forms\BootstrapUIForm;
-use Tracy\Bar;
 
 class InsertMenuMenusControl extends Control
 {
+    public Explorer $database;
 
-    /** @var Context */
-    public $database;
-
-    public function __construct(Context $database)
+    public function __construct(Explorer $database)
     {
         $this->database = $database;
     }

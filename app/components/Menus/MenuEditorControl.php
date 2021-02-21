@@ -4,14 +4,13 @@ namespace Caloriscz\Menus;
 
 use App\Forms\Menu\InsertMenuControl;
 use Nette\Application\UI\Control;
-use Nette\Database\Context;
+use Nette\Database\Explorer;
 
 class MenuEditorControl extends Control
 {
-    /** @var Context */
-    public $database;
+    public Explorer $database;
 
-    public function __construct(Context $database)
+    public function __construct(Explorer $database)
     {
         $this->database = $database;
     }

@@ -43,6 +43,7 @@ abstract class BasePresenter extends Presenter
 
     public function __construct(Context $database, IMailer $mailer)
     {
+        parent::__construct();
         $this->database = $database;
         $this->mailer = $mailer;
     }

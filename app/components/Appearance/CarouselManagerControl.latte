@@ -1,16 +1,20 @@
 <div id="sorter-ids" class="hidden"
-     data-images="{foreach $carousel as $itemS}{$itemS->getId()}{sep},{/sep}{/foreach}"></div>
+     data-images="{foreach $carousel as $itemS}{$itemS->id}{sep},{/sep}{/foreach}">
+</div>
 
 <div id="sortable">
     {foreach $carousel as $item}
-        <div class="card sort-item" id="{$item->getId()}">
-            <img src="/images/carousel/{$item->getImage()}" alt="" style="max-height: 135px;">
+        <div class="card sort-item" id="{$item->id}">
+            {if $item->image != null}
+                <img src="/images/carousel/{$item->image}" style="max-height: 135px;">
+            {/if}
             <div class="card-body">
-                <p><strong>{$item->getTitle()}</strong></p>
-                <p class="card-text">{$item->getDescription()}</p>
+                <p><strong>{$item->title}</strong></p>
+                <p class="card-text">{$item->description}</p>
                 <div>
-                    <a href="{link delete! id => $item->getId()}" class="text-danger">smazat položku</a>
-                    <a href="{plink ':Admin:Appearance:carouselDetail' id => $item->getId()}" class="float-right">upravit položku</a>
+                    <a href="{link delete! id => $item->id}" class="btn  btn-danger">smazat položku</a>
+                    <a href="{plink ':Admin:Appearance:carouselDetail' id => $item->id}" class="btn btn-info float-right">upravit
+                        položku</a>
                 </div>
             </div>
         </div>

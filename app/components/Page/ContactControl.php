@@ -5,15 +5,14 @@ namespace Caloriscz\Page;
 use App\Forms\Helpdesk\HelpdeskControl;
 use Caloriscz\Snippets\SnippetControl;
 use Nette\Application\UI\Control;
-use Nette\Database\Context;
+use Nette\Database\Explorer;
 
 class ContactControl extends Control
 {
 
-    /** @var Context */
-    public $database;
+    public Explorer $database;
 
-    public function __construct(Context $database)
+    public function __construct(Explorer $database)
     {
         $this->database = $database;
     }

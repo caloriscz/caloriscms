@@ -90,7 +90,9 @@ class SettingsPresenter extends BasePresenter
         if ($this->template->member->users_roles->settings === 0) {
             $toggle = $this->database->table('languages')->get($id);
 
-            $state = $toggle->used ? 0 : 1;
+            if ($toggle !== null) {
+                $state = $toggle->used ? 0 : 1;
+            }
 
             $this->database->table('languages')->get($id)->update(['used' => $state]);
         }
@@ -107,7 +109,9 @@ class SettingsPresenter extends BasePresenter
         if ($this->template->member->users_roles->settings === 0) {
             $toggle = $this->database->table('countries')->get($id);
 
-            $state = $toggle->show ? 0 : 1;
+            if ($toggle !== null) {
+                $state = $toggle->show ? 0 : 1;
+            }
 
             $this->database->table('countries')->get($id)->update(['show' => $state]);
         }
@@ -129,7 +133,7 @@ class SettingsPresenter extends BasePresenter
         if ($pages_title > 0) {
             $message = 'shows: ' . $column . ' existed before';
         } else {
-            $this->database->query('ALTER TABLE `' . $table . '` ADD `' . $column . '_' . $lang . '` ' . $type);
+            $this->database->query('ALTER TABLE ? ADD `' . $column . '_' . $lang . '` ' . $type, $table);
             $message = 'not shows' . $pages_title;
         }
 

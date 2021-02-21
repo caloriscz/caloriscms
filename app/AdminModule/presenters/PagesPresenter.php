@@ -3,8 +3,8 @@
 namespace App\AdminModule\Presenters;
 
 use App\Forms\Media\DropZoneControl as DropZoneMediaControl;
-use App\Forms\Pages\EditorSettingsControl;
 use App\Forms\Pictures\DropZoneControl as DropZonePicturesControl;
+use App\Forms\Pages\EditorSettingsControl;
 use App\Forms\Media\ImageEditFormControl;
 use App\Forms\Pages\FilterFormControl;
 use Apps\Forms\Pages\InsertFormControl;
@@ -26,7 +26,6 @@ class PagesPresenter extends BasePresenter
         parent::startup();
 
         $this->template->type = $this->getParameter('type');
-
         $this->template->page = $this->database->table('pages')->get($this->getParameter('id'));
     }
 
