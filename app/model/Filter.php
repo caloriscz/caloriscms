@@ -2,7 +2,7 @@
 
 namespace App\Model;
 
-use Nette\Database\Context;
+use Nette\Database\Explorer;
 use Nette\Database\Table\Selection;
 
 /**
@@ -13,8 +13,7 @@ use Nette\Database\Table\Selection;
 class Filter
 {
 
-    /** @var Context */
-    private $database;
+    private Explorer $database;
 
     public $category;
     public $connect;
@@ -23,7 +22,7 @@ class Filter
     public $settings;
     public $order;
 
-    public function __construct(Context $database)
+    public function __construct(Explorer $database)
     {
         $this->database = $database;
         $this->connect = $this->database->table('pages');
@@ -137,7 +136,7 @@ class Filter
     public function assemble(): Selection
     {
         $this->connect->select('pages.id, pages.slug, pages.title AS title, pages.slug AS slugtitle, pages.preview, 
-            pages.date_created, pages.document, pages.date_published, pages.recommended, pages.public, pages.pages_types_id');
+            pages.date_created, pages.document, pages.date_published, pages.public, pages.pages_types_id');
 
         $this->connect->group('pages.title, pages.document');
 
@@ -149,8 +148,7 @@ class Filter
             $this->connect->where((array) $this->getColumns());
         }
 
-        if (null === $this->getOrder()) {
-        } else {
+        if (null !== $this->getOrder()) {
             $this->connect->order($this->getOrder());
         }
 

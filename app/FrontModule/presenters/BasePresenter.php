@@ -14,7 +14,7 @@ use Caloriscz\Page\PageTitleControl;
 use Caloriscz\Utilities\PagingControl;
 use Symfony\Component\Translation\Translator;
 use Nette\Application\UI\Presenter;
-use Nette\Database\Context;
+use Nette\Database\Explorer;
 use Nette\Http\IRequest;
 use Nette\Mail\IMailer;
 
@@ -26,8 +26,7 @@ use Nette\Mail\IMailer;
  */
 abstract class BasePresenter extends Presenter
 {
-    /** @var Context */
-    public $database;
+    public Explorer $database;
 
     /** @persistent */
     public $locale;
@@ -41,7 +40,7 @@ abstract class BasePresenter extends Presenter
     /** @var IRequest @inject */
     public $request;
 
-    public function __construct(Context $database, IMailer $mailer)
+    public function __construct(Explorer $database, IMailer $mailer)
     {
         parent::__construct();
         $this->database = $database;

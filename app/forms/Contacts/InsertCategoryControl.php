@@ -3,20 +3,19 @@ namespace App\Forms\Contacts;
 
 use App\Model\Category;
 use Nette\Application\UI\Control;
-use Nette\Database\Context;
+use Nette\Database\Explorer;
 use Nette\Forms\BootstrapUIForm;
 
 class InsertCategoryControl extends Control
 {
 
-    /** @var Context */
     public $database;
 
     /**
      * InsertCategoryControl constructor.
-     * @param Context $database
+     * @param Explorer $database
      */
-    public function __construct(Context $database)
+    public function __construct(Explorer $database)
     {
         $this->database = $database;
     }

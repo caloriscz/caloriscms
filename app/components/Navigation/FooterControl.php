@@ -1,19 +1,17 @@
 <?php
 namespace Caloriscz\Navigation;
 
-use App\Forms\Contacts\NewsletterFormControl;
 use Caloriscz\Menus\MenuControl;
 use Caloriscz\Social\FacebookControl;
 use Nette\Application\UI\Control;
-use Nette\Database\Context;
+use Nette\Database\Explorer;
 
 class FooterControl extends Control
 {
 
-    /** @var Context */
-    public $database;
+    public Explorer $database;
 
-    public function __construct(Context $database)
+    public function __construct(Explorer $database)
     {
         $this->database = $database;
     }
@@ -21,11 +19,6 @@ class FooterControl extends Control
     protected function createComponentSocialFacebook(): FacebookControl
     {
         return new FacebookControl();
-    }
-
-    protected function createComponentNewsletterForm(): NewsletterFormControl
-    {
-        return new NewsletterFormControl($this->database);
     }
 
     protected function createComponentMenu(): MenuControl

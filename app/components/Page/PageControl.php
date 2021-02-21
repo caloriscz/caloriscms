@@ -5,20 +5,17 @@ namespace Caloriscz\Page;
 use Caloriscz\Appearance\CarouselBoxControl;
 use Caloriscz\Blog\BlogListControl;
 use Caloriscz\Blog\BlogPreviewControl;
-use Caloriscz\Menus\MenuControl;
-use Caloriscz\Menus\NavbarMenuControl;
 use Caloriscz\Snippets\SnippetControl;
 use Nette\Application\UI\Control;
-use Nette\Database\Context;
+use Nette\Database\Explorer;
 use Tracy\Debugger;
 
 class PageControl extends Control
 {
 
-    /** @var Context */
-    public $database;
+    public Explorer $database;
 
-    public function __construct(Context $database)
+    public function __construct(Explorer $database)
     {
         $this->database = $database;
     }

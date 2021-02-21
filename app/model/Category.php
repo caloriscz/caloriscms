@@ -7,7 +7,7 @@
  */
 
 namespace App\Model;
-use Nette\Database\Context;
+use Nette\Database\Explorer;
 
 /**
  * Get category name
@@ -16,14 +16,12 @@ use Nette\Database\Context;
 class Category
 {
 
-    /** @var Context */
-    private $database;
+    private Explorer $database;
 
-    public function __construct(Context $database)
+    public function __construct(Explorer $database)
     {
         $this->database = $database;
     }
-
 
     /**
      * Get breadcrumb navigation in associative array
@@ -35,16 +33,16 @@ class Category
     {
         if ($id === null) {
             return array_reverse($arr, true);
-        } else {
-            $catDb = $this->database->table('pages')->get($id);
-
-            if ($catDb) {
-                $arr[$catDb->id] = $catDb->title;
-                return $this->getPageBreadcrumb($catDb->pages_id, $arr);
-            } else {
-                return $arr;
-            }
         }
+
+        $catDb = $this->database->table('pages')->get($id);
+
+        if ($catDb) {
+            $arr[$catDb->id] = $catDb->title;
+            return $this->getPageBreadcrumb($catDb->pages_id, $arr);
+        }
+
+        return $arr;
     }
 
         /**
@@ -63,8 +61,6 @@ class Category
             'title' => $title,
             'parent_id' => $parent
         ]);
-
-        $this->database->query('UPDATE contacts_categories SET sorted = id WHERE sorted = 0');
     }
 
 }

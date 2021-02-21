@@ -137,7 +137,7 @@ class SlugRouter implements \Nette\Routing\Router
      */
     public function constructUrl(array $param, UrlScript $refUrl): ?string
     {
-        $params = $param->getParameters();
+        $params = $param;
 
         $query = $params;
         unset($query['action'], $query['page_id'], $query['slug'], $query['id'], $query['locale'], $query['prefix']);

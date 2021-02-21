@@ -46,7 +46,7 @@ class PagesPresenter extends BasePresenter
         $paginator = new Paginator;
         $paginator->setItemCount($assembleSQL->count('*'));
         $paginator->setItemsPerPage(5);
-        $paginator->setPage($this->getParameter('page'));
+        $paginator->setPage($this->getParameter('page') ?? 1);
 
         $this->template->categoryArr = $this->getParameters();
         $this->template->search = $assembleSQL->order('pages.id');

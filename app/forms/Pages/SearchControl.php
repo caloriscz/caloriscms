@@ -3,18 +3,16 @@
 namespace App\Forms\Pages;
 
 use Nette\Application\UI\Control;
-use Nette\Database\Context;
+use Nette\Database\Explorer;
 use Nette\Forms\BootstrapUIForm;
 
 class SearchControl extends Control
 {
 
-    /** @var Context */
-    public $database;
+    public Explorer $database;
 
-    public function __construct(Context $database)
+    public function __construct(Explorer $database)
     {
-        parent::__construct();
         $this->database = $database;
     }
 
@@ -29,12 +27,12 @@ class SearchControl extends Control
 
         $form->addHidden('idr');
         $form->addText('src')
-            ->setAttribute('class', 'form-control')
-            ->setAttribute('placeholder', 'Hledat');
+            ->setHtmlAttribute('class', 'form-control')
+            ->setHtmlAttribute('placeholder', 'Hledat');
         $form->addText('priceFrom')
-            ->setAttribute('style', 'width: 50px;');
+            ->setHtmlAttribute('style', 'width: 50px;');
         $form->addText('priceTo')
-            ->setAttribute('style', 'width: 50px;');
+            ->setHtmlAttribute('style', 'width: 50px;');
         $form->addText('brand');
 
         if ($this->getParameter('id')) {

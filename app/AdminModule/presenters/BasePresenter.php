@@ -22,14 +22,13 @@ use Nette\Security\UserStorage;
 abstract class BasePresenter extends Presenter
 {
 
-    /** @var Explorer */
-    public $database;
+    public Explorer $database;
 
     /** @persistent */
     public $locale;
 
     /** @var Translator @inject */
-    public $translator;
+    public Translator $translator;
 
     /** @persistent */
     public $id;

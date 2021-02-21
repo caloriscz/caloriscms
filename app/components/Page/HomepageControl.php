@@ -8,15 +8,15 @@ use Caloriscz\Menus\MenuControl;
 use Caloriscz\Menus\NavbarMenuControl;
 use Caloriscz\Snippets\SnippetControl;
 use Nette\Application\UI\Control;
-use Nette\Database\Context;
+use Nette\Database\Explorer;
 
 class HomepageControl extends Control
 {
 
-    /** @var Context */
+    /** @var Explorer */
     public $database;
 
-    public function __construct(Context $database)
+    public function __construct(Explorer $database)
     {
         $this->database = $database;
     }

@@ -1,7 +1,7 @@
 <?php
 
 use Nette\Application\UI\Control;
-use Nette\Database\Context;
+use Nette\Database\Explorer;
 
 /**
  * List of languages for administration
@@ -10,14 +10,14 @@ use Nette\Database\Context;
 class LangSelectorControl extends Control
 {
 
-    /** @var Context */
+    /** @var Explorer */
     public $database;
 
     /**
      * LangSelectorControl constructor.
-     * @param Context $database
+     * @param Explorer $database
      */
-    public function __construct(Context $database)
+    public function __construct(Explorer $database)
     {
         $this->database = $database;
     }

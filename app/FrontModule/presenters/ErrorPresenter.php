@@ -5,7 +5,7 @@ namespace App\FrontModule\Presenters;
 use Nette,
     Tracy\ILogger;
 use Nette\Application\BadRequestException;
-use Nette\Database\Context;
+use Nette\Database\Explorer;
 
 /**
  * Error presenter.
@@ -19,9 +19,9 @@ class ErrorPresenter extends BasePresenter
     /**
      * ErrorPresenter constructor.
      * @param ILogger $logger
-     * @param Context $database
+     * @param Explorer $database
      */
-    public function __construct(ILogger $logger, Context $database)
+    public function __construct(ILogger $logger, Explorer $database)
     {
         $this->logger = $logger;
         $this->database = $database;

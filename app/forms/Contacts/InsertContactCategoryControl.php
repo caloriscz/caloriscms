@@ -3,18 +3,16 @@
 namespace App\Forms\Contacts;
 
 use App\Model\Category;
-use App\Model\Slug;
 use Nette\Application\UI\Control;
-use Nette\Database\Context;
+use Nette\Database\Explorer;
 use Nette\Forms\BootstrapUIForm;
 
 class InsertContactCategoryControl extends Control
 {
 
-    /** @var \Nette\Database\Context */
-    public $database;
+    public Explorer $database;
 
-    public function __construct(Context $database)
+    public function __construct(Explorer $database)
     {
         $this->database = $database;
     }
@@ -31,9 +29,9 @@ class InsertContactCategoryControl extends Control
         $form->addHidden('parent_id');
         $form->addHidden('type');
         $form->addText('title', 'Název')
-            ->setAttribute('class', 'form-control');
+            ->setHtmlAttribute('class', 'form-control');
         $form->addSubmit('submitm', 'Vložit')
-            ->setAttribute('class', 'btn btn-primary');
+            ->setHtmlAttribute('class', 'btn btn-primary');
 
         $form->onSuccess[] = [$this, 'insertCategoryFormSucceeded'];
         $form->onValidate[] = [$this, 'validateCategoryFormSucceeded'];

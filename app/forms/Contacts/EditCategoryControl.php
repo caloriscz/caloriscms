@@ -2,16 +2,15 @@
 namespace App\Forms\Contacts;
 
 use Nette\Application\UI\Control;
-use Nette\Database\Context;
+use Nette\Database\Explorer;
 use Nette\Forms\BootstrapUIForm;
 
 class EditCategoryControl extends Control
 {
 
-    /** @var Context */
-    public $database;
+    public Explorer $database;
 
-    public function __construct(Context $database)
+    public function __construct(Explorer $database)
     {
         $this->database = $database;
     }
@@ -23,7 +22,10 @@ class EditCategoryControl extends Control
     {
         $category = $this->database->table('pages')->get($this->presenter->getParameter('id'));
         $categories = $this->database->table('pages')->where('pages_types_id', 7)->fetchPairs('id', 'title');
+
+        if ($category === null) {
         unset($categories[$category->id]);
+        }
 
         $form = new BootstrapUIForm();
         $form->getElementPrototype()->class = 'form-horizontal';
@@ -35,11 +37,13 @@ class EditCategoryControl extends Control
         $form->addText('url', 'Odkaz');
         $form->addSubmit('submitm', 'Uložit');
 
-        $arr = [
-            'id' => $category->id,
-            'title' => $category->title,
-            'parent' => $category->pages_id,
-        ];
+        if ($category === null) {
+            $arr = [
+                'id' => $category->id,
+                'title' => $category->title,
+                'parent' => $category->pages_id,
+            ];
+        }
 
         $form->setDefaults(array_filter($arr));
 

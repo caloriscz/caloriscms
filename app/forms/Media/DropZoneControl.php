@@ -2,20 +2,17 @@
 
 namespace App\Forms\Media;
 
-use App\Model\File;
 use App\Model\IO;
-use App\Model\Thumbnail;
 use Nette\Application\UI\Control;
-use Nette\Database\Context;
+use Nette\Database\Explorer;
 use Nette\Forms\BootstrapUIForm;
 
 class DropZoneControl extends Control
 {
 
-    /** @var Context */
-    public $database;
+    public Explorer $database;
 
-    public function __construct(Context $database)
+    public function __construct(Explorer $database)
     {
         $this->database = $database;
     }

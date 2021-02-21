@@ -3,24 +3,23 @@
 namespace Caloriscz\Page;
 
 use Nette\Application\UI\Control;
-use Nette\Database\Context;
+use Nette\Database\Explorer;
 
 class PageGalleryControl extends Control
 {
 
-    /** @var Context */
-    public $database;
+    public Explorer $database;
 
-    public function __construct(Context $database)
+    public function __construct(Explorer $database)
     {
         $this->database = $database;
     }
 
     /**
-     * @param $page page id
+     * @param int $page page id
      * @param int $number If numbe set, result will limit number of images shown
      */
-    public function render($page, int $number = null): void
+    public function render(int $page, int $number = null): void
     {
         $template = $this->getTemplate();
 

@@ -2,15 +2,14 @@
 namespace Caloriscz\Blog;
 
 use Nette\Application\UI\Control;
-use Nette\Database\Context;
+use Nette\Database\Explorer;
 
 class BlogPreviewControl extends Control
 {
 
-    /** @var \Nette\Database\Context */
-    public $database;
+    public Explorer $database;
 
-    public function __construct(Context $database)
+    public function __construct(Explorer $database)
     {
         $this->database = $database;
     }

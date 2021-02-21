@@ -7,19 +7,18 @@ use App\Model\Document;
 use App\Model\IO;
 use Caloriscz\Utilities\PagingControl;
 use Nette\Application\UI\Control;
-use Nette\Database\Context;
+use Nette\Database\Explorer;
 use Nette\Utils\Paginator;
 
 class PageListControl extends Control
 {
 
-    /** @var Context @inject */
-    public $database;
+    public Explorer $database;
 
     public $onSave;
     public $view;
 
-    public function __construct(Context $database)
+    public function __construct(Explorer $database)
     {
         $this->database = $database;
     }
