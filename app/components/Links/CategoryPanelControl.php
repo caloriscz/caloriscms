@@ -3,21 +3,14 @@
 namespace Caloriscz\Links;
 
 use Nette\Application\UI\Control;
-use Nette\Database\Context;
-use Nette\Forms\BootstrapUIForm;
-use Tracy\Debugger;
+use Nette\Database\Explorer;
 
 class CategoryPanelControl extends Control
 {
 
-    /** @var Context */
-    public $database;
+    public Explorer $database;
 
-    /**
-     * CategoryPanelControl constructor.
-     * @param Context $database
-     */
-    public function __construct(Context $database)
+    public function __construct(Explorer $database)
     {
         $this->database = $database;
     }

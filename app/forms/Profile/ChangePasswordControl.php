@@ -4,17 +4,16 @@ namespace App\Forms\Profile;
 
 use DateTime;
 use Nette\Application\UI\Control;
-use Nette\Database\Context;
+use Nette\Database\Explorer;
 use Nette\Forms\BootstrapUIForm;
 use Nette\Security\Passwords;
 
 class ChangePasswordControl extends Control
 {
 
-    /** @var Context */
-    public $database;
+    public Explorer $database;
 
-    public function __construct(Context $database)
+    public function __construct(Explorer $database)
     {
         $this->database = $database;
     }
@@ -52,7 +51,6 @@ class ChangePasswordControl extends Control
             ['password' => $passwordEncrypted]
         );
 
-        $date = new Datetime('+1 month');
         setcookie('calpwd', $passwordEncrypted, time() + 15552000, '/');
 
         $this->presenter->redirect('this');
@@ -63,14 +61,5 @@ class ChangePasswordControl extends Control
         $template = $this->getTemplate();
         $template->setFile(__DIR__ . '/ChangePasswordControl.latte');
         $template->render();
-    }
-
-    /**
-     * Forces control to repaint.
-     * @return void
-     */
-    public function redrawControl()
-    {
-        // TODO: Implement redrawControl() method.
     }
 }

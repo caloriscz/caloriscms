@@ -7,7 +7,7 @@
  */
 
 namespace App\Model;
-use Nette\Database\Context;
+use Nette\Database\Explorer;
 use Nette\Database\Table\ActiveRow;
 use Nette\Database\Table\IRow;
 
@@ -18,10 +18,9 @@ use Nette\Database\Table\IRow;
 class MemberModel
 {
 
-    /** @var Context */
-    public $database;
+    public Explorer $database;
 
-    public function __construct(Context $database)
+    public function __construct(Explorer $database)
     {
         $this->database = $database;
     }
@@ -65,9 +64,7 @@ class MemberModel
             $idf = str_pad(0 + 1, 6, '0', STR_PAD_LEFT);
         }
 
-        $idfComplete = 'MU' . $idf;
-
-        return $idfComplete;
+        return 'MU' . $idf;
     }
 
     /**

@@ -8,9 +8,8 @@
 
 namespace App\Model;
 
-use Nette\Database\Context;
+use Nette\Database\Explorer;
 use Nette\Database\Table\ActiveRow;
-use Nette\Database\Table\IRow;
 
 /**
  * Get category name
@@ -19,10 +18,9 @@ use Nette\Database\Table\IRow;
 class Menu
 {
 
-    /** @var Context */
-    private $database;
+    private Explorer $database;
 
-    public function __construct(Context $database)
+    public function __construct(Explorer $database)
     {
         $this->database = $database;
     }
@@ -30,13 +28,11 @@ class Menu
     /**
      * Get name of the category
      * @param $category
-     * @return bool|mixed|ActiveRow|IRow
+     * @return bool|mixed|ActiveRow
      */
     public function getName($category)
     {
-        $categoryDb = $this->database->table('menu')->get($category);
-
-        return $categoryDb->title;
+        return $this->database->table('menu')->get($category)->title;
     }
 
     /**
@@ -91,16 +87,16 @@ class Menu
     {
         if ($id === null) {
             return array_reverse($arr, true);
-        } else {
-            $catDb = $this->database->table('menu')->get($id);
-
-            if ($catDb) {
-                $arr[$catDb->ref('slug', 'slug_id')->title] = $catDb->title;
-                return $this->getbreadcrumb($catDb->parent_id, $arr);
-            } else {
-                return $arr;
-            }
         }
+
+        $catDb = $this->database->table('menu')->get($id);
+
+        if ($catDb) {
+            $arr[$catDb->ref('slug', 'slug_id')->title] = $catDb->title;
+            return $this->getbreadcrumb($catDb->parent_id, $arr);
+        }
+
+        return $arr;
     }
 
     /**
@@ -124,10 +120,10 @@ class Menu
             }
 
             return $this->getSubIds($arrs, $arr);
-        } else {
-            asort($arr);
-            return $arr;
         }
+
+        asort($arr);
+        return $arr;
     }
 
     /**

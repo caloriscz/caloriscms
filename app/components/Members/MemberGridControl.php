@@ -3,19 +3,18 @@
 namespace Caloriscz\Members;
 
 use Caloriscz\Utilities\PagingControl;
+use Nette\Application\AbortException;
 use Nette\Application\UI\Control;
-use Nette\Database\Context;
+use Nette\Database\Explorer;
 use Nette\Utils\Paginator;
 
 class MemberGridControl extends Control
 {
 
-    /** @var Context */
-    public $database;
+    public Explorer $database;
 
-    public function __construct(Context $database)
+    public function __construct(Explorer $database)
     {
-        parent::__construct();
         $this->database = $database;
     }
 
@@ -27,7 +26,7 @@ class MemberGridControl extends Control
     /**
      * User delete
      * @param $id
-     * @throws \Nette\Application\AbortException
+     * @throws AbortException
      */
     public function handleDelete($id): void
     {
@@ -38,15 +37,17 @@ class MemberGridControl extends Control
 
         $member = $this->database->table('users')->get($id);
 
-        if ($member->username === 'admin') {
-            $this->flashMessage('Nemůžete smazat účet administratora', 'error');
-            $this->redirect(':Admin:Members:default', ['id' => null]);
-        } elseif ($member->id === $this->getPresenter()->user->getId()) {
-            $this->flashMessage('Nemůžete smazat vlastní účet', 'error');
-            $this->redirect(':Admin:Members:default', ['id' => null]);
-        }
+        if ($member === null) {
+            if ($member->username === 'admin') {
+                $this->flashMessage('Nemůžete smazat účet administratora', 'error');
+                $this->redirect(':Admin:Members:default', ['id' => null]);
+            } elseif ($member->id === $this->getPresenter()->user->getId()) {
+                $this->flashMessage('Nemůžete smazat vlastní účet', 'error');
+                $this->redirect(':Admin:Members:default', ['id' => null]);
+            }
 
-        $this->database->table('users')->get($id)->delete();
+            $this->database->table('users')->get($id)->delete();
+        }
 
         $this->redirect('this', ['id' => null]);
     }

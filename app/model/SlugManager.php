@@ -3,21 +3,20 @@
 namespace Model;
 
 use Symfony\Component\Translation\Translator;
-use Nette\Database\Context;
+use Nette\Database\Explorer;
 use Nette\Database\Table\ActiveRow;
 
 
 class SlugManager
 {
 
-    /** @var Context */
-    private $database;
+    private Explorer $database;
 
     /** @var Translator @inject */
     public $translator;
 
 
-    public function __construct(Context $database, Translator $translator)
+    public function __construct(Explorer $database, Translator $translator)
     {
         $this->database = $database;
         $this->translator = $translator;
@@ -29,7 +28,7 @@ class SlugManager
      * @param null $prefix
      * @return false|ActiveRow|null
      */
-    public function getRowBySlug($slug, $lang = null, $prefix = null)
+    public function getRowBySlug(string $slug, ?string $lang = null, ?string $prefix = null)
     {
         if (null !== $lang && $lang !== 'cs') {
             $arr['slug_'. $lang] = $slug;
@@ -62,15 +61,12 @@ class SlugManager
      * @param $id
      * @return false|ActiveRow|null
      */
-    public function getSlugById($id)
+    public function getSlugById(int $id)
     {
         $row = $this->database->table('pages')->get($id);
         return $row ? $row : null;
     }
 
-    /**
-     * @return array
-     */
     public function getLocale(): array
     {
         $languages = $this->translator->getAvailableLocales();

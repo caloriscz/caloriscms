@@ -8,20 +8,20 @@
 
 <div class="container mt-5 text-left">
     <div class="row">
-        {foreach $links as $odkaz}
+        {foreach $links as $link}
             <div class="col-md-6 col-12 mb-5">
-                {var $x = preg_match($youtube, $odkaz->url, $matches)}
+                {var $x = preg_match($youtube, $link->url, $matches)}
                 {if $matches}
-                    {var $videoId = explode('?v=', $odkaz->url)}
+                    {var $videoId = explode('?v=', $link->url)}
                     {var $videoId = $videoId[1]}
                     <div class="embed-responsive embed-responsive-16by9">
                         <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/{$videoId}"
                                 frameborder="0" allowfullscreen></iframe>
                     </div>
                 {else}
-                    <p>{if $odkaz->url}<a href="{$odkaz->url}">{/if}{$odkaz->title}{if $odkaz->url}</a>{/if}</p>
+                    <p>{if $link->url}<a href="{$link->url}">{/if}{$link->title}{if $link->url}</a>{/if}</p>
 
-                    {if $odkaz->description}<p>{$odkaz->description|noescape}</p>{/if}
+                    {if $link->description}<p>{$link->description|noescape}</p>{/if}
                 {/if}
             </div>
         {/foreach}

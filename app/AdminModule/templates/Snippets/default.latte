@@ -1,4 +1,4 @@
-{block #titles}Snippets{/block}
+{block #titles}Snippety{/block}
 {block content}
 
 <ol class="breadcrumb">
@@ -41,7 +41,7 @@
                                     </a>
                                 </td>
                                 <td class="col-8">
-                                    <a n:href=":Admin:Snippets:detail, id => $item->getId()">{$item->keyword}</a>
+                                    <a n:href=":Admin:Snippets:detail, id => $item->id">{$item->keyword}</a>
                                 </td>
                                 <td class="col-3">[snippet="{$item->id}"]</td>
                             </tr>

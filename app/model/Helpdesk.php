@@ -10,8 +10,10 @@ namespace App\Model;
 
 use Latte\Engine;
 use Latte\Loaders\StringLoader;
-use Nette\Database\Context;
-use Nette\Mail\IMailer;
+use Nette\Database\Explorer;
+use Nette\Database\Table\ActiveRow;
+use Nette\Database\Table\IRow;
+use Nette\Mail\Mailer;
 use Nette\Mail\Message;
 
 /**
@@ -21,8 +23,7 @@ use Nette\Mail\Message;
 class Helpdesk
 {
 
-    /** @var \Nette\Database\Context */
-    private $database;
+    private Explorer $database;
 
     private $mailer;
 
@@ -31,7 +32,7 @@ class Helpdesk
     public $params;
     public $email;
 
-    public function __construct(Context $database, IMailer $mailer)
+    public function __construct(Explorer $database, Mailer $mailer)
     {
         $this->database = $database;
         $this->mailer = $mailer;
@@ -98,13 +99,11 @@ class Helpdesk
 
     /**
      * Get information about helpdesk
-     * @return bool|mixed|\Nette\Database\Table\ActiveRow|\Nette\Database\Table\IRow
+     * @return bool|mixed|ActiveRow|IRow
      */
     public function getInfo()
     {
-        $helpdesk = $this->database->table('helpdesk')->get($this->id);
-
-        return $helpdesk;
+        return $this->database->table('helpdesk')->get($this->id);
     }
 
     /**
@@ -177,9 +176,7 @@ class Helpdesk
     public function renderBody($subjectContent, $bodyContent, $templateId)
     {
         $templateBody = $this->database->table('helpdesk_templates')->get($templateId)->document;
-        $headParse = str_replace('%TITLE%', $subjectContent, $templateBody);
-
-        return str_replace('%CONTENT%', $bodyContent, $headParse);
+        return str_replace(['%TITLE%', '%CONTENT%'], [$subjectContent, $bodyContent], $templateBody);
     }
 
     /**
@@ -189,8 +186,6 @@ class Helpdesk
      */
     public function log($email, $emailMessage, $status)
     {
-
-
         $this->database->table('helpdesk_messages')->insert([
             'message' => $emailMessage,
             'helpdesk_id' => $this->getId(),
@@ -200,5 +195,4 @@ class Helpdesk
             'status' => $status,
         ]);
     }
-
 }

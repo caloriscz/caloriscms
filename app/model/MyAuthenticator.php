@@ -17,7 +17,7 @@ class MyAuthenticator implements Nette\Security\Authenticator
     private $database;
     private $passwords;
 
-    public function __construct(Nette\Database\Context $database, Passwords $passwords)
+    public function __construct(Nette\Database\Explorer $database, Passwords $passwords)
     {
         $this->database = $database;
         $this->passwords = $passwords;

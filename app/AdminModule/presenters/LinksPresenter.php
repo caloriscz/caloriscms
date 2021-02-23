@@ -7,6 +7,7 @@ use Caloriscz\Links\CategoryPanelControl;
 use Nette\Application\AbortException;
 use Nette\Forms\BootstrapUIForm;
 use Nette\Utils\Random;
+use Tracy\Debugger;
 
 /**
  * Link management with categories
@@ -41,7 +42,7 @@ class LinksPresenter extends BasePresenter
         $form->getElementPrototype()->class = 'form-horizontal';
 
         $form->addSubmit('submitm', 'Vytvořit nový odkaz')
-            ->setAttribute('class', 'btn btn-success');
+            ->setHtmlAttribute('class', 'btn btn-success');
 
         $form->onSuccess[] = [$this, 'insertFormSucceeded'];
         return $form;
@@ -52,12 +53,14 @@ class LinksPresenter extends BasePresenter
      */
     public function insertFormSucceeded(): void
     {
-        $id = $this->database->table('links')
-            ->insert([
-                'links_categories_id' => null,
-            ]);
+        if (!empty($this->getParameter('id'))) {
+            $category = $this->getParameter('id');
+        } else {
+            $category = null;
+        }
 
-        $this->redirect(':Admin:Links:detail', ['id' => $id]);
+        $link = $this->database->table('links')->insert(['links_categories_id' => $category]);
+        $this->redirect(':Admin:Links:detail', ['id' => $link->id]);
     }
 
     /**
@@ -85,24 +88,24 @@ class LinksPresenter extends BasePresenter
 
         $form->addHidden('id');
         $form->addText('title', 'Název')
-            ->setAttribute('placeholder', 'Název');
+            ->setHtmlAttribute('placeholder', 'Název');
         $form->addText('url', 'Odkaz')
-            ->setAttribute('placeholder', 'Odkaz');
+            ->setHtmlAttribute('placeholder', 'Odkaz');
         $form->addSelect('category', 'Kategorie', $categories)
-            ->setAttribute('class', 'form-control');
+            ->setHtmlAttribute('class', 'form-control');
         $form->addTextArea('description', 'Popisek')
-            ->setAttribute('class', 'form-control summernote');
+            ->setHtmlAttribute('class', 'form-control summernote');
         $form->addUpload('the_file', 'Vyberte obrázek (nepovinné)');
         $form->setDefaults([
             'title' => $this->template->link->title,
             'url' => $this->template->link->url,
-            //'category' => $this->template->link->links_categories_id,
+            'category' => $this->template->link->links_categories_id,
             'description' => $this->template->link->description,
             'id' => $this->getParameter('id'),
         ]);
 
         $form->addSubmit('submitm', 'Uložit')
-            ->setAttribute('class', 'btn btn-primary');
+            ->setHtmlAttribute('class', 'btn btn-primary');
 
         $form->onSuccess[] = [$this, 'editFormSucceeded'];
         return $form;

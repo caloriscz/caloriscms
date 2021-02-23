@@ -10,8 +10,7 @@ use Nette\Http\UrlScript;
 
 class SlugRouter implements \Nette\Routing\Router
 {
-    /** @var SlugManager */
-    private $slugManager;
+    private SlugManager $slugManager;
 
     public function __construct(SlugManager $slugManager)
     {
@@ -123,7 +122,6 @@ class SlugRouter implements \Nette\Routing\Router
             $params,
              //$httpRequest->getPost(), $httpRequest->getFiles(), [Request::SECURED => $httpRequest->isSecured()]
         ];
-
 
         return $routeReturn;
 

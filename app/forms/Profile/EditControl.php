@@ -3,7 +3,7 @@
 namespace Apps\Forms\Profile;
 
 use Nette\Application\UI\Control;
-use Nette\Database\Context;
+use Nette\Database\Explorer;
 use Nette\Forms\BootstrapUIForm;
 use Nette\Utils\Validators;
 
@@ -14,11 +14,10 @@ use Nette\Utils\Validators;
 class EditControl extends Control
 {
 
-    /** @var Context */
-    public $database;
+    public Explorer $database;
     public $onSave;
 
-    public function __construct(Context $database)
+    public function __construct(Explorer $database)
     {
         $this->database = $database;
     }

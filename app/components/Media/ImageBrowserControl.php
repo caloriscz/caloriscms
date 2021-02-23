@@ -73,7 +73,7 @@ class ImageBrowserControl extends Control
         $paginator = new Paginator();
         $paginator->setItemCount($mediaDb->count('*'));
         $paginator->setItemsPerPage(16);
-        $paginator->setPage($this->presenter->getParameter('page'));
+        $paginator->setPage($this->presenter->getParameter('page') ?? 1);
 
         $template->args = $this->presenter->getParameters();
         $template->documents = $mediaDb->order('name');

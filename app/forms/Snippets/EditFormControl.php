@@ -1,16 +1,17 @@
 <?php
 namespace App\Forms\Snippets;
 
+use Nette\Application\AbortException;
 use Nette\Application\UI\Control;
+use Nette\Database\Explorer;
 use Nette\Forms\BootstrapUIForm;
 
 class EditFormControl extends Control
 {
 
-    /** @var \Nette\Database\Context */
-    public $database;
+    public Explorer $database;
 
-    public function __construct(\Nette\Database\Context $database)
+    public function __construct(Explorer $database)
     {
         $this->database = $database;
     }
@@ -28,11 +29,11 @@ class EditFormControl extends Control
         $form->addHidden('pages_id');
         $form->addHidden('l');
         $form->addTextArea('content')
-            ->setAttribute('class', 'form-control')
-            ->setAttribute('height', '250px')
+            ->setHtmlAttribute('class', 'form-control')
+            ->setHtmlAttribute('height', '250px')
             ->setHtmlId('wysiwyg-sm');
 
-        if ($this->getPresenter()->getParameter('l') === null) {
+        if ($this->getPresenter()->getParameter('l') == null) {
             $arr['content'] = $snippet->content;
         } else {
             $arr['content'] = $snippet->{'content_' . $this->getPresenter()->getParameter('l')};
@@ -46,7 +47,7 @@ class EditFormControl extends Control
         $form->onSuccess[] = [$this, 'editSnippetFormSucceeded'];
 
         $form->addSubmit('submitm', 'Uložit')
-            ->setAttribute('class', 'btn btn-success')
+            ->setHtmlAttribute('class', 'btn btn-success')
             ->setHtmlId('formxins');
 
         return $form;
@@ -54,7 +55,7 @@ class EditFormControl extends Control
 
     /**
      * @param BootstrapUIForm $form
-     * @throws \Nette\Application\AbortException
+     * @throws AbortException
      */
     public function editSnippetFormSucceeded(BootstrapUIForm $form): void
     {
