@@ -11,7 +11,6 @@
                     <a id="j1_{$item->id}_anchor"
                        href="{plink ':Admin:Menu:detail', id => $item->id}">{$item->title}</a>
 
-                    {var $categoryCount = $database->table('menu')->where('parent_id', $item->parent_id)->count()}
                     {if $category != $item->parent_id}
                         {var $counter = 1}
                     {/if}

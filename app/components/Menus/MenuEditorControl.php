@@ -5,6 +5,7 @@ namespace Caloriscz\Menus;
 use App\Forms\Menu\InsertMenuControl;
 use Nette\Application\UI\Control;
 use Nette\Database\Explorer;
+use Tracy\Debugger;
 
 class MenuEditorControl extends Control
 {
@@ -79,12 +80,11 @@ class MenuEditorControl extends Control
             $arr['parent_id'] = $idTo;
         }
 
-        $menui = $this->database->table('menu')->where([
-            'parent_id' => $idTo
-        ])->order('sorted')->limit(1, $this->getPresenter()->getParameter('position'));
+        $menui = $this->database->table('menu')->where(['parent_id' => $idTo])
+            ->order('sorted')->limit(1, $this->getPresenter()->getParameter('position'));
 
         if ($menui->count() > 0) {
-            if ($this->getPresenter()->getParameter('position') === 0) {
+            if ($this->getPresenter()->getParameter('position') == 0) {
                 $arr['sorted'] = ($menui->fetch()->sorted - 1);
             } else {
                 $arr['sorted'] = ($menui->fetch()->sorted + 1);
