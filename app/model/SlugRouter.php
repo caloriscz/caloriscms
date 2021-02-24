@@ -6,6 +6,7 @@ use Model\SlugManager;
 use Nette\Application\Request;
 use Nette\Http\IRequest as HttpRequest;
 use Nette\Http\UrlScript;
+use Tracy\Debugger;
 
 
 class SlugRouter implements \Nette\Routing\Router
@@ -110,15 +111,11 @@ class SlugRouter implements \Nette\Routing\Router
             }
         }
 
-
-        $routeFirst = explode(':',  $presenter);
-
         $routeReturn = [
-            //'module' => $routeFirst[0],
             'presenter' => $presenter,
             'method' => $httpRequest->getMethod(),
-            'action' => 'default',
-            'page_id' => 9,
+            'action' => $params['action'],
+            'page_id' => $params['page_id'],
             $params,
              //$httpRequest->getPost(), $httpRequest->getFiles(), [Request::SECURED => $httpRequest->isSecured()]
         ];
@@ -179,7 +176,7 @@ class SlugRouter implements \Nette\Routing\Router
             $prefix = null;
         }
         $url = $refUrl->getScheme() . '://' . $refUrl->getHost() . $refUrl->getPath() . $locale . $prefix . $slug;
-        $params = $param->getParameters();
+        $params = $param;
 
         if (isset($params['action']) && $params['action'] !== 'default') {
             $url .= $refUrl->getPath();

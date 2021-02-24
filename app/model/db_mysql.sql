@@ -253,7 +253,7 @@ INSERT INTO `pages_templates` (`id`, `pages_types_id`, `template`, `title`) VALU
                                                                                                (3, NULL, 'Front:Pages:default', 'Základní typ stránky'),
                                                                                                 (4, NULL, 'Front:Homepage:default', 'Homepage'),
                                                                                                 (5, NULL, 'Front:Contact:default', 'Kontaktní stránka s kontaktním formulářem'),
-                                                                                                (6, NULL, 'Front:Pages:blogDetail', 'Detail příspěvu'),
+                                                                                                (6, NULL, 'Front:Pages:blogDetail', 'Detail příspěvku'),
                                                                                                 (7, NULL, 'Front:Media:album', 'Základní galerie'),
                                                                                                 (8, NULL, 'Front:Media:folder', 'Seznam složek dokumentů'),
                                                                                                 (9, NULL, 'Front:Media:folderList', 'Seznam dokumentů dané složky'),

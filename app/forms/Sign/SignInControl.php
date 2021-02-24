@@ -4,7 +4,7 @@ namespace App\Forms\Sign;
 
 use App\Model\MemberModel;
 use Nette\Application\UI\Control;
-use Nette\Database\Context;
+use Nette\Database\Explorer;
 use Nette\Database\SqlLiteral;
 use Nette\Forms\BootstrapUIForm;
 use Nette\Security\AuthenticationException;
@@ -12,14 +12,9 @@ use Nette\Security\AuthenticationException;
 class SignInControl extends Control
 {
 
-    /** @var Context */
-    public $database;
+    public Explorer $database;
 
-    /**
-     * SignInControl constructor.
-     * @param Context $database
-     */
-    public function __construct(Context $database)
+    public function __construct(Explorer $database)
     {
         $this->database = $database;
     }
@@ -37,7 +32,7 @@ class SignInControl extends Control
             ->setRequired('Vložte heslo.');
 
         $form->addSubmit('send', 'Přihlásit se')
-            ->setAttribute('class', 'btn btn-success');
+            ->setHtmlAttribute('class', 'btn btn-success');
 
         $form->onSuccess[] = [$this, 'signInFormSucceeded'];
         return $form;
@@ -81,7 +76,7 @@ class SignInControl extends Control
         }
     }
 
-    public function render($type = 'front')
+    public function render(string $type = 'front')
     {
         $templateName = 'SignInControl';
 

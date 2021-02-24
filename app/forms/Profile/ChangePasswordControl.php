@@ -3,6 +3,7 @@
 namespace App\Forms\Profile;
 
 use DateTime;
+use Nette\Application\AbortException;
 use Nette\Application\UI\Control;
 use Nette\Database\Explorer;
 use Nette\Forms\BootstrapUIForm;
@@ -35,7 +36,7 @@ class ChangePasswordControl extends Control
 
     /**
      * @param BootstrapUIForm $form
-     * @throws \Nette\Application\AbortException
+     * @throws AbortException
      */
     public function changePasswordFormSucceeded(BootstrapUIForm $form): void
     {

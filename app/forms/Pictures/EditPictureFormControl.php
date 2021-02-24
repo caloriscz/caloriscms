@@ -1,19 +1,19 @@
 <?php
+
 namespace App\Forms\Media;
 
+use Nette\Application\AbortException;
 use Nette\Application\UI\Control;
-use Nette\Database\Context;
+use Nette\Database\Explorer;
 use Nette\Forms\BootstrapUIForm;
 
 class EditPictureFormControl extends Control
 {
 
-    /** @var Context */
-    public $database;
+    public Explorer $database;
 
-    public function __construct(Context $database)
+    public function __construct(Explorer $database)
     {
-        parent::__construct();
         $this->database = $database;
     }
 
@@ -31,8 +31,8 @@ class EditPictureFormControl extends Control
         $form->addHidden('id');
         $form->addText('title', 'Název');
         $form->addTextArea('description', 'Popisek')
-            ->setAttribute('style', 'height: 200px;')
-            ->setAttribute('class', 'form-control');
+            ->setHtmlAttribute('style', 'height: 200px;')
+            ->setHtmlAttribute('class', 'form-control');
         $form->setDefaults([
             'id' => $image->id,
             'title' => $image->title,
@@ -47,7 +47,7 @@ class EditPictureFormControl extends Control
 
     /**
      * @param BootstrapUIForm $form
-     * @throws \Nette\Application\AbortException
+     * @throws AbortException
      */
     public function editFormSucceeded(BootstrapUIForm $form): void
     {
@@ -57,9 +57,7 @@ class EditPictureFormControl extends Control
                 'description' => $form->values->description,
             ]);
 
-        $this->getPresenter()->redirect('this', [
-            'id' => $form->values->id,
-        ]);
+        $this->getPresenter()->redirect('this', ['id' => $form->values->id]);
     }
 
     public function render(): void

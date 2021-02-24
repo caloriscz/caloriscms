@@ -3,8 +3,9 @@
 namespace App\Forms\Pages;
 
 use App\Model\Document;
+use HTMLPurifier;
+use Nette\Application\AbortException;
 use Nette\Application\UI\Control;
-use Nette\Database\Context;
 use Nette\Database\Explorer;
 use Nette\Forms\BootstrapUIForm;
 
@@ -15,10 +16,8 @@ use Nette\Forms\BootstrapUIForm;
  */
 class EditorControl extends Control
 {
-    private $htmlPurifier;
-
-    /** @var Context */
-    public $database;
+    private HTMLPurifier $htmlPurifier;
+    public Explorer $database;
 
     public function __construct(Explorer $database)
     {
@@ -26,6 +25,7 @@ class EditorControl extends Control
 
         $config = \HTMLPurifier_Config::createDefault();
         $config->set('HTML.AllowedAttributes', 'img.src,*.style,*.class');
+        $config->set('Attr.AllowedClasses', 'col-*,container,text-right, text-left, btn, btn-lg');
         $config->set('HTML.ForbiddenElements', ['font']);
         $config->set('AutoFormat.RemoveEmpty', true);
 
@@ -81,7 +81,7 @@ class EditorControl extends Control
     }
 
     /**
-     * @throws \Nette\Application\AbortException
+     * @throws AbortException
      */
     public function permissionFormValidated(): void
     {
@@ -93,7 +93,7 @@ class EditorControl extends Control
 
     /**
      * @param BootstrapUIForm $form
-     * @throws \Nette\Application\AbortException
+     * @throws AbortException
      */
     public function editFormSucceeded(BootstrapUIForm $form): void
     {
@@ -109,7 +109,7 @@ class EditorControl extends Control
 
     /**
      * Toggle display
-     * @throws \Nette\Application\AbortException
+     * @throws AbortException
      */
     public function handleToggle(): void
     {
