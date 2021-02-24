@@ -5,6 +5,7 @@ namespace Caloriscz\Appearance;
 use App\Model\IO;
 use Nette\Application\UI\Control;
 use Nette\Database\Explorer;
+use Tracy\Debugger;
 
 class CarouselManagerControl extends Control
 {
@@ -23,21 +24,22 @@ class CarouselManagerControl extends Control
      */
     public function handleImages(): void
     {
-        $this->database->query('SET @i = 1000;UPDATE `carousel` SET `sorted` = @i:=@i+2 ORDER BY `sorted` ASC');
+        $sortableArray = array_map('intval', explode(',', $this->getPresenter()->getParameter('sortable')));
+
+        $this->database->query('SET @i = 1000');
+        $this->database->query('UPDATE `carousel` SET `sorted` = @i:=@i+2 ORDER BY FIELD(`id`, ?)', $sortableArray);
         exit();
     }
 
-    public function handleDelete($id): void
+    public function handleDelete(int $id): void
     {
-        for ($a = 0, $aMax = count($id); $a < $aMax; $a++) {
-            $carousel = $this->database->table('carousel')->get($id);
-            $image = $carousel->image;
+        $carousel = $this->database->table('carousel')->get($id);
+        $image = $carousel->image;
 
-            $this->database->table($carousel)->get($id)->delete();
+        $this->database->table($carousel)->get($id)->delete();
 
-            IO::remove(APP_DIR . '/images/carousel/' . $image);
-            unset($image);
-        }
+        IO::remove(APP_DIR . '/images/carousel/' . $image);
+        unset($image);
 
         $this->redirect('this', ['id' => null]);
     }
@@ -45,7 +47,6 @@ class CarouselManagerControl extends Control
     public function render(): void
     {
         $this->template->carousel = $this->database->table('carousel')->order('sorted ASC');
-
         $this->template->setFile(__DIR__ . '/CarouselManagerControl.latte');
         $this->template->render();
     }
