@@ -3,6 +3,7 @@
 namespace Apps\Forms\Pages;
 
 use App\Model\Document;
+use Nette\Application\AbortException;
 use Nette\Application\UI\Control;
 use Nette\Database\Explorer;
 use Nette\Forms\BootstrapUIForm;
@@ -35,7 +36,6 @@ class InsertFormControl extends Control
         ]);
 
         $form->addSubmit('submit', 'Vytvořit');
-
         $form->onSuccess[] = [$this, 'insertFormSucceeded'];
 
         return $form;
@@ -44,7 +44,7 @@ class InsertFormControl extends Control
     /**
      * Create new page
      * @param BootstrapUIForm $form
-     * @throws \Nette\Application\AbortException
+     * @throws AbortException
      */
     public function insertFormSucceeded(BootstrapUIForm $form): void
     {
@@ -59,10 +59,9 @@ class InsertFormControl extends Control
         }
 
         $doc->setType($form->values->section);
-
         $page = $doc->create($this->presenter->user->getId());
 
-        $this->presenter->redirect(':Admin:Pages:detail', ['id' => $page]);
+        $this->presenter->redirect(':Admin:Pages:detail', ['id' => $page->id]);
     }
 
     public function render(): void

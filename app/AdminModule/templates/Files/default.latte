@@ -19,13 +19,12 @@
                 {control dropUploadFiles}
                 <br><br>
 
-
                 <div class="row">
                     {foreach $files as $key => $file}
                         <div class="col-lg-3">
                             <div class="card">
                                 <div class="card-img text-center" style="max-height: 280px;">
-                                    <a href="{$baseUri}/images/{$key|toBaseName}" class="gallery-lightbox">
+                                    <a href="{$baseUrl}/images/{$key|toBaseName}" class="gallery-lightbox">
                                         {if exif_imagetype($key)}
                                             <a href="/images/{$key|toBaseName}">
                                                 <img src="/images/{$key|toBaseName}"

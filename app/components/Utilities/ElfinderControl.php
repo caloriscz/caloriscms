@@ -16,7 +16,7 @@ class ElfinderControl extends Control
                 [
                     'driver' => 'LocalFileSystem',           // driver for accessing file system (REQUIRED)
                     'path' => APP_DIR . '/media/' . $_GET['path'],                 // path to files (REQUIRED)
-                    'URL' => '/www/media/' . $_GET['path'], // URL to files (REQUIRED)
+                    'URL' => '/media/' . $_GET['path'], // URL to files (REQUIRED)
                     'uploadDeny' => ['all'],                // All Mimetypes not allowed to upload
                     'uploadAllow' => ['image', 'text/plain'],// Mimetype `image` and `text/plain` allowed to upload
                     'uploadOrder' => ['deny', 'allow'],      // allowed Mimetype `image` and `text/plain` only
@@ -27,7 +27,7 @@ class ElfinderControl extends Control
                 [
                     'driver' => 'LocalFileSystem',
                     'path' => APP_DIR . '/images',
-                    'URL' => '/www/images',
+                    'URL' => '/images',
                     'uploadDeny' => ['all'],
                     'uploadAllow' => ['image', 'text/plain'],
                     'uploadOrder' => ['deny', 'allow'],

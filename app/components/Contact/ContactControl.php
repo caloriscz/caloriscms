@@ -3,20 +3,14 @@
 namespace Caloriscz\Contact;
 
 use Nette\Application\UI\Control;
-use Nette\Database\Context;
+use Nette\Database\Explorer;
 
 class ContactControl extends Control
 {
-    /** @var Context */
-    public $database;
+    public Explorer $database;
 
-    /**
-     * ContactControl constructor.
-     * @param Context $database
-     */
-    public function __construct(Context $database)
+    public function __construct(Explorer $database)
     {
-        parent::__construct();
         $this->database = $database;
     }
 

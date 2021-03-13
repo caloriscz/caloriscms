@@ -13,7 +13,8 @@ class EditorSettingsControl extends Control
 
     public Explorer $database;
 
-    public $onSave;
+    /** @var callable[] */
+    public $onSave = [];
 
     public function __construct(Explorer $database)
     {

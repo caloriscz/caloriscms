@@ -23,7 +23,7 @@
     "contributte/event-dispatcher": "^0.8.0",
     "tracy/tracy": "^2.8",
     "ezyang/htmlpurifier": "~4.10",
-    "studio-42/elfinder": "2.1.16",
+    "studio-42/elfinder": "^2.1",
     "ext-json": "*",
     "ext-fileinfo": "*"
   }
