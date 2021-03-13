@@ -30,7 +30,6 @@ class InsertFormControl extends Control
         $form->addHidden('id');
         $form->addHidden('section');
         $form->addText('title');
-
         $form->setDefaults([
             'section' => $pageType,
         ]);
@@ -43,7 +42,7 @@ class InsertFormControl extends Control
     }
 
     /**
-     * Create nwe page
+     * Create new page
      * @param BootstrapUIForm $form
      * @throws \Nette\Application\AbortException
      */

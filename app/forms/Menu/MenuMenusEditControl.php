@@ -1,19 +1,16 @@
 <?php
 namespace App\Forms\Menu;
 
-use App\Model\Menu;
-use App\Model\Page;
 use Nette\Application\UI\Control;
-use Nette\Database\Context;
+use Nette\Database\Explorer;
 use Nette\Forms\BootstrapUIForm;
 
 class MenuMenusEditControl extends Control
 {
 
-    /** @var Context */
-    public $database;
+    public Explorer $database;
 
-    public function __construct(Context $database)
+    public function __construct(Explorer $database)
     {
         $this->database = $database;
     }
@@ -32,7 +29,7 @@ class MenuMenusEditControl extends Control
         $form->addText('class');
         $form->addTextArea('description');
         $form->addSelect('type', 'Typ menu', ['Menu' => 'Menu', 'BadgesMenu' => 'BadgesMenu'])
-            ->setAttribute('class', 'form-control');
+            ->setHtmlAttribute('class', 'form-control');
         $form->addSubmit('submitm');
 
         $arr = [
@@ -54,8 +51,7 @@ class MenuMenusEditControl extends Control
      */
     public function editFormSucceeded(BootstrapUIForm $form): void
     {
-        $this->database->table('menu_menus')->get($form->values->id)
-            ->update([
+        $this->database->table('menu_menus')->get($form->values->id)->update([
                 'title' => $form->values->title,
                 'description' => $form->values->description,
                 'type' => $form->values->type,

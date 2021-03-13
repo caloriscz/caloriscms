@@ -40,8 +40,8 @@ class SearchControl extends Control
         }
 
         $form->addSubmit('submitm', 'Hledat')
-            ->setAttribute('class', 'btn btn-info btn-lg')
-            ->setAttribute('placeholder', 'Hledat');
+            ->setHtmlAttribute('class', 'btn btn-info btn-lg')
+            ->setHtmlAttribute('placeholder', 'Hledat');
 
 
         $form->onSuccess[] = [$this, 'searchTopFormSucceeded'];

@@ -42,7 +42,7 @@ class LostPassControl extends Control
     public function sendFormValidated(BootstrapUIForm $form): void
     {
         if (!Validators::isEmail($form->values->email)) {
-            $this->onSave('Adresa je neplatná');
+            $this->onSave[] = ('Adresa je neplatná');
         }
 
         if ($this->database->table('users')->where(['email' => $form->values->email])->count() === 0) {

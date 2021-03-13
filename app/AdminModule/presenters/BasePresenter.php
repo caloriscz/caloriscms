@@ -83,7 +83,7 @@ abstract class BasePresenter extends Presenter
             }
 
             if (!$this->user->isLoggedIn()) {
-                if ($this->user->logoutReason === UserStorage::INACTIVITY) {
+                if ($this->user->logoutReason === UserStorage::LOGOUT_INACTIVITY) {
                     $this->flashMessage('Byli jste odhlášeni', 'note');
                 }
                 $this->redirect('Sign:in', ['backlink' => $this->storeRequest()]);

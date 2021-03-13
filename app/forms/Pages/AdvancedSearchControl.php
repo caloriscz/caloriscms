@@ -24,7 +24,7 @@ class AdvancedSearchControl extends Control
 
         $form->addHidden('idr', 'ID:');
         $form->addText('src')
-            ->setAttribute('placeholder', Strings::firstUpper('src'));
+            ->setHtmlAttribute('placeholder', Strings::firstUpper('src'));
         $form->addText('priceFrom');
         $form->addText('priceTo');
         $form->addText('brand');
@@ -36,7 +36,7 @@ class AdvancedSearchControl extends Control
         }
 
         $form->addSubmit('submitm', 'dictionary.main.Search')
-            ->setAttribute('class', 'btn btn-info btn-lg');
+            ->setHtmlAttribute('class', 'btn btn-info btn-lg');
 
         $form->onSuccess[] = [$this, 'searchFormSucceeded'];
         return $form;

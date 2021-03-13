@@ -30,21 +30,21 @@ class InsertMenuControl extends Control
         $form->addHidden('parent');
         $form->addHidden('menu_menus_id');
         $form->addText('title', 'Název')
-            ->setAttribute('class', 'form-control');
+            ->setHtmlAttribute('class', 'form-control');
         $form->addText('url', 'Odkaz')
-            ->setAttribute('class', 'form-control');
+            ->setHtmlAttribute('class', 'form-control');
 
         foreach ($languages as $item) {
             $form->addGroup($item->title);
 
             $form->addText('title_' . $item->code, 'Název')
-                ->setAttribute('class', 'form-control');
+                ->setHtmlAttribute('class', 'form-control');
             $form->addText('url_' . $item->code, 'Odkaz')
-                ->setAttribute('class', 'form-control');
+                ->setHtmlAttribute('class', 'form-control');
         }
 
         $form->addSubmit('submitm', 'Vložit')
-            ->setAttribute('class', 'btn btn-primary');
+            ->setHtmlAttribute('class', 'btn btn-primary');
 
         $form->onSuccess[] = [$this, 'insertFormSucceeded'];
         $form->onSuccess[] = [$this, 'validateFormSucceeded'];
@@ -93,10 +93,7 @@ class InsertMenuControl extends Control
         $arr['title'] = $form->values->title;
         $arr['url'] = $form->values->url;
 
-        $languages = $this->database->table('languages')->where([
-            'default' => null,
-            'used' => 1,
-        ]);
+        $languages = $this->database->table('languages')->where(['default' => null, 'used' => 1]);
 
         foreach ($languages as $item) {
             $arr['url_' . $item->code] = $form->values->{'url_' . $item->code};

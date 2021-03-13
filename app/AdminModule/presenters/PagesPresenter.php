@@ -12,9 +12,10 @@ use Caloriscz\Media\ImageBrowserControl;
 use Caloriscz\Page\FileListControl;
 use Caloriscz\Page\PageListControl;
 use Nette\Application\AbortException;
+use Tracy\Debugger;
 
 /**
- * Pages presenter.
+ * Pages presenter for administering page content and settings.
  */
 class PagesPresenter extends BasePresenter
 {
@@ -46,9 +47,6 @@ class PagesPresenter extends BasePresenter
         return $control;
     }
 
-    /**
-     * @return FilterFormControl
-     */
     protected function createComponentPageFilterRelated(): FilterFormControl
     {
         return new FilterFormControl($this->database);

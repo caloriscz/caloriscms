@@ -7,7 +7,7 @@
  */
 namespace App\Model;
 
-use Nette\Database\Context;
+use Nette\Database\Explorer;
 
 /**
  * Cart model
@@ -16,11 +16,10 @@ use Nette\Database\Context;
 class Page
 {
 
-    /** @var Context */
-    public $database;
+    public Explorer $database;
     public $user;
 
-    public function __construct(Context $database)
+    public function __construct(Explorer $database)
     {
         $this->database = $database;
     }
@@ -59,20 +58,20 @@ class Page
     {
         if ($id === null) {
             return array_reverse($arr, true);
-        } else {
-            $cat = $this->database->table('pages')->where('pages_id', $id);
-
-            if ($cat->count() > 0) {
-                foreach ($cat as $item) {
-                    $arr[] = $item->id;
-                    $arrs[] = $item->id;
-                }
-
-                return $this->getChildren($arrs, $arr);
-            } else {
-                return $arr;
-            }
         }
+
+        $cat = $this->database->table('pages')->where('pages_id', $id);
+
+        if ($cat->count() > 0) {
+            foreach ($cat as $item) {
+                $arr[] = $item->id;
+                $arrs[] = $item->id;
+            }
+
+            return $this->getChildren($arrs, $arr);
+        }
+
+        return $arr;
     }
 
 }

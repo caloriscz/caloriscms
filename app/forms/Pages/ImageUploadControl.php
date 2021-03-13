@@ -3,7 +3,7 @@ namespace App\Forms\Pages;
 
 use App\Model\IO;
 use Nette\Application\UI\Control;
-use Nette\Database\Context;
+use Nette\Database\Explorer;
 use Nette\Forms\BootstrapUIForm;
 use Nette\Forms\Form;
 use Nette\Utils\Image;
@@ -11,10 +11,9 @@ use Nette\Utils\Image;
 class ImageUploadControl extends Control
 {
 
-    /** @var Context */
-    public $database;
+    public Explorer $database;
 
-    public function __construct(Context $database)
+    public function __construct(Explorer $database)
     {
         $this->database = $database;
     }
@@ -30,7 +29,7 @@ class ImageUploadControl extends Control
         $form->addHidden('id');
         $form->addUpload('the_file', 'Vložit odstrávek');
         $form->addTextArea('description', 'Popisek')
-            ->setAttribute('class', 'form-control');
+            ->setHtmlAttribute('class', 'form-control');
         $form->addSubmit('send', 'Vložit');
 
         $form->setDefaults([
@@ -93,7 +92,7 @@ class ImageUploadControl extends Control
         $form->addUpload('the_file', 'Vložit obrázek')
             ->addRule(Form::MIME_TYPE, 'Neplatný typ', $imageTypes);
         $form->addTextArea('description', 'Popisek')
-            ->setAttribute('class', 'form-control');
+            ->setHtmlAttribute('class', 'form-control');
         $form->addSubmit('send', 'Obrázek');
 
         $form->setDefaults([

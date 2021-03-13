@@ -21,11 +21,11 @@ class InsertMenuMenusControl extends Control
         $form->getElementPrototype()->class = 'form-horizontal';
 
         $form->addText('title', 'Název')
-            ->setAttribute('class', 'form-control');
+            ->setHtmlAttribute('class', 'form-control');
         $form->addTextArea('description', 'Popisek')
-            ->setAttribute('class', 'form-control');
+            ->setHtmlAttribute('class', 'form-control');
         $form->addSubmit('submitm', 'Vložit')
-            ->setAttribute('class', 'btn btn-primary');
+            ->setHtmlAttribute('class', 'btn btn-primary');
 
         $form->onValidate[] = [$this, 'validateFormSucceeded'];
         $form->onSuccess[] = [$this, 'insertFormSucceeded'];
@@ -86,10 +86,7 @@ class InsertMenuMenusControl extends Control
     {
         $template = $this->getTemplate();
         $template->menuId = $menuId;
-        $template->languages = $this->database->table('languages')->where([
-            'default' => null,
-            'used' => 1,
-        ]);
+        $template->languages = $this->database->table('languages')->where(['default' => null, 'used' => 1]);
 
         $template->setFile(__DIR__ . '/InsertMenuMenusControl.latte');
         $template->render();

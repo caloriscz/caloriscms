@@ -4,16 +4,15 @@ namespace App\Forms\Menu;
 use App\Model\Menu;
 use App\Model\Page;
 use Nette\Application\UI\Control;
-use Nette\Database\Context;
+use Nette\Database\Explorer;
 use Nette\Forms\BootstrapUIForm;
 
 class EditMenuControl extends Control
 {
 
-    /** @var Context */
-    public $database;
+    public Explorer $database;
 
-    public function __construct(Context $database)
+    public function __construct(Explorer $database)
     {
         $this->database = $database;
     }
@@ -36,12 +35,12 @@ class EditMenuControl extends Control
         $form->addHidden('id');
         $form->addText('title', 'Název');
         $form->addTextArea('description', 'Popisek')
-            ->setAttribute('class', 'form-control');
+            ->setHtmlAttribute('class', 'form-control');
         $form->addSelect('parent', 'Nadřazená kategorie', $categories)
-            ->setAttribute('class', 'form-control');
+            ->setHtmlAttribute('class', 'form-control');
         $form->addSelect('page', 'Vyberte stránku', $pages->getPageList())
             ->setPrompt('Stránka vybrána manuálně')
-            ->setAttribute('class', 'form-control');
+            ->setHtmlAttribute('class', 'form-control');
         $form->addText('url', 'Odkaz');
         $form->addSubmit('submitm', 'Uložit');
 
@@ -66,8 +65,7 @@ class EditMenuControl extends Control
      */
     public function editFormSucceeded(BootstrapUIForm $form): void
     {
-        $this->database->table('menu')->get($form->values->id)
-            ->update([
+        $this->database->table('menu')->get($form->values->id)->update([
                 'title' => $form->values->title,
                 'description' => $form->values->description,
                 'pages_id' => $form->values->page,

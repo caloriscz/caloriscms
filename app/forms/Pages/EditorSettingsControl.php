@@ -4,19 +4,18 @@ namespace App\Forms\Pages;
 
 use App\Model\Document;
 use Nette\Application\UI\Control;
-use Nette\Database\Context;
+use Nette\Database\Explorer;
 use Nette\Forms\BootstrapUIForm;
 
 class EditorSettingsControl extends Control
 {
     private $htmlPurifier;
 
-    /** @var Context */
-    public $database;
+    public Explorer $database;
 
     public $onSave;
 
-    public function __construct(Context $database)
+    public function __construct(Explorer $database)
     {
         $this->database = $database;
 

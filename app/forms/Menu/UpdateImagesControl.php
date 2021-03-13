@@ -3,20 +3,15 @@
 namespace App\Forms\Menu;
 
 use Nette\Application\UI\Control;
-use Nette\Database\Context;
+use Nette\Database\Explorer;
 use Nette\Forms\BootstrapUIForm;
 
 class UpdateImagesControl extends Control
 {
 
-    /** @var Context */
-    public $database;
+    public Explorer $database;
 
-    /**
-     * UpdateImagesControl constructor.
-     * @param Context $database
-     */
-    public function __construct(Context $database)
+    public function __construct(Explorer $database)
     {
         $this->database = $database;
     }
