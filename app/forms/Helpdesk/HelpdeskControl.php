@@ -49,17 +49,18 @@ class HelpdeskControl extends Control
     {
         if (strlen($form->values->name) < 2) {
             $this->presenter->flashMessage('Vyplňte jméno', 'error');
-            $this->presenter->redirect(':Front:Contact:default');
+            $this->presenter->redirect('this');
         }
+
 
         if (Validators::isEmail($form->values->email) === false) {
             $this->presenter->flashMessage('Vyplňte e-mail', 'error');
-            $this->presenter->redirect(':Front:Contact:default');
+            $this->presenter->redirect('this');
         }
 
         if (strlen($form->values->message) < 2) {
             $this->presenter->flashMessage('Vyplňte zprávu', 'error');
-            $this->presenter->redirect(':Front:Contact:default');
+            $this->presenter->redirect('this');
         }
 
         // Validate by black list
@@ -77,13 +78,19 @@ class HelpdeskControl extends Control
 
         $helpdesk = $this->database->table('helpdesk')->get(1);
 
+        if ($helpdesk === null) {
+            $this->presenter->flashMessage('Neznámá chyba', 'info');
+            $this->presenter->redirect('this');
+        }
+
         if ($helpdesk->blacklist === 1 && isset($rings) && $rings) {
             $this->presenter->flashMessage('Zpráva obsahuje neplatné znaky', 'info');
-            $this->presenter->redirect(':Front:Contact:default');
+            $this->presenter->redirect('this');
         }
     }
 
     /**
+     * Sends e-mail from web form
      * @param BootstrapUIForm $form
      * @throws \Nette\Application\AbortException
      */
@@ -99,7 +106,6 @@ class HelpdeskControl extends Control
             'message' => $form->values->message,
         ];
 
-
         // Helpdesk - send to admin
         $helpdesk = new Helpdesk($this->database, $this->presenter->mailer);
         $helpdesk->setId(1);
@@ -113,6 +119,7 @@ class HelpdeskControl extends Control
         } else {
             $this->presenter->flashMessage('E-mail nebyl odeslán', 'error');
         }
+
 
         $this->presenter->redirect('this');
     }
