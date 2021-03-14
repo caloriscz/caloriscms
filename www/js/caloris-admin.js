@@ -495,6 +495,25 @@ $(function () {
 });
 
 /* Summernote ----- */
+
+
+// Custom button with 1st snippet
+var SnippetButton = function (context) {
+    var ui = $.summernote.ui;
+
+    // create button
+    var button = ui.button({
+        contents: '<i class="fa fa-tag"/>',
+        tooltip: 'Snippet do stránky',
+        click: function () {
+            context.invoke('editor.insertText', '[snippet="1"]');
+        }
+    });
+
+    return button.render();
+}
+
+
 $(function () {
     $('.summernote').summernote({
         width: "99%",
@@ -510,8 +529,12 @@ $(function () {
             ['insert', ['picture', 'link', 'elfinder']],
             ['myplugin', ['aceCodeEditor']],
             ['style', ['bold', 'italic', 'underline', 'clear']],
-            ['font', ['strikethrough', 'superscript', 'subscript']]
+            ['font', ['strikethrough', 'superscript', 'subscript', 'hello']
+            ]
         ],
+        buttons: {
+            hello: SnippetButton
+        },
         onImageUpload: function (files, editor, welEditable) {
             sendFile(files[0], editor, welEditable);
         }
