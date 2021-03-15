@@ -2,20 +2,15 @@
 namespace App\Forms\Helpdesk;
 
 use Nette\Application\UI\Control;
-use Nette\Database\Context;
+use Nette\Database\Explorer;
 use Nette\Forms\BootstrapUIForm;
 
 class EditContactFormControl extends Control
 {
 
-    /** @var \Nette\Database\Context */
-    public $database;
+    public Explorer $database;
 
-    /**
-     * EditContactFormControl constructor.
-     * @param Context $database
-     */
-    public function __construct(Context $database)
+    public function __construct(Explorer $database)
     {
         $this->database = $database;
     }
@@ -32,8 +27,8 @@ class EditContactFormControl extends Control
         $form->addHidden('helpdesk_id');
         $form->addText('title', 'Název');
         $form->addTextArea('description', 'Popisek')
-            ->setAttribute('class', 'form-control')
-            ->setAttribute('style', 'height: 200px;');
+            ->setHtmlAttribute('class', 'form-control')
+            ->setHtmlAttribute('style', 'height: 200px;');
         $form->addCheckbox('fill_phone');
 
         $helpdesk = $this->database->table('helpdesk')->get($this->presenter->getParameter('id'));
@@ -45,7 +40,7 @@ class EditContactFormControl extends Control
             'fill_phone' => $helpdesk->fill_phone,
         ]);
 
-        $form->addSubmit('submitm', 'dictionary.main.Save');
+        $form->addSubmit('submitm', 'Uložit');
 
         $form->onSuccess[] = [$this, 'editFormSucceeded'];
         return $form;
@@ -57,8 +52,7 @@ class EditContactFormControl extends Control
      */
     public function editFormSucceeded(BootstrapUIForm $form): void
     {
-        $this->database->table('helpdesk')->get($form->values->helpdesk_id)
-            ->update([
+        $this->database->table('helpdesk')->get($form->values->helpdesk_id)->update([
                 'title' => $form->values->title,
                 'description' => $form->values->description,
                 'fill_phone' => $form->values->fill_phone,

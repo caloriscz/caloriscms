@@ -111,15 +111,16 @@ CREATE TABLE `helpdesk` (
   `subject` varchar(250) COLLATE utf8_czech_ci NOT NULL,
   `body` text COLLATE utf8_czech_ci,
   `helpdesk_templates_id` int(11) DEFAULT NULL,
+  `pages_id` int(11) DEFAULT NULL,
   `log` smallint(6) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
 
-INSERT INTO `helpdesk` (`id`, `title`, `description`, `blacklist`, `email`, `subject`, `body`, `helpdesk_templates_id`, `log`) VALUES
-                                                                                                                                      (1, 'Kontaktní formulář', 'Tento formulář slouží Vašim zákazníkům, aby vás mohli kontaktovat ohledně jejich otázek nebo potávek.', 1, '@', 'Poptávka', '<br>                    {$name}<br>                    {$phone}<br>                    {$email}<br>                    <br><br>                    {$message}<br>                    {$time}<br>                    {$ipaddress}                </td>            </tr>        </tbody></table>', 1, 0),
-                                                                                                                                      (2, 'Kontaktní formulář - admin', 'Poptávkový formulář - verze pro administraci', 1, NULL, 'Poptávka od návštěvníka', '                   Děkujeme za Vaši zprávu. Budeme Vás brzy kontaktovat.                    <br>                    {$name}<br>                    {$phone}<br>                    {$email}<br>                    <br><br>                    {$message}<br>                </td>            </tr>        </tbody></table>    ', 1, 0),
-                                                                                                                                      (4, 'Odeslání hesla pro existujícího uživatele', 'Tímto formulářem bude existujícímu uživateli odesláno nové heslo. Pozor. Pokaždé, když formulář odešlete, bude heslo změněno a odesláno.', 0, NULL, 'Vytvoření nového hesla', '                    <br /><br />\r\n                    Bylo Vám vytvořeno nové heslo. Zde jsou údaje nutné k přihlášení\r\n                    <br /><br />\r\n                    uživatelské jméno: {$username}<br />\r\n                    heslo: {$password}<br />\r\n                    <br /><br />\r\n                    Přihlašte se: <a href=\"{$settings[\'site:url:base\']}/sign/in\">{$settings[\'site:url:base\']}/sign/in</a>', 1, 0),
-                                                                                                                                      (5, 'Vytvoření účtu z administrace', 'Vytvoření nového uživatelského účtu z administrace', 0, NULL, 'Nový e-mail', '                    Your account was successfully created. You can now log in.\r\n                    <br /><br />\r\n                    user name: {$username}<br />\r\n                    password: {$password}<br />\r\n                    <br /><br />\r\n                    Log in: <a href=\"{$settings[\'site:url:base\']}/admin\">{$settings[\'site:url:base\']}/admin</a>', 1, 0),
-                                                                                                                                      (14, 'Zapomenuté heslo: administrace', 'Odeslání zapomenutého hesla pro členy administrace', 0, NULL, 'Informace o novém hesle', 'Na základě Vaší žádosti Vám posíláme odkaz na obnovení hesla.\r\n<br /><br />\r\nK vytvoření nového hesla klikněte na odkaz níže:\r\n<br />\r\n<a href=\"{$settings[\'site:url:base\']}/admin/sign/resetpass/?code={$code}&email={$email}\">\r\n    {$settings[\'site:url:base\']}/admin/sign/resetpass/?code={$code}&email={$email}\r\n</a>\r\n<br /><br />\r\n<strong><a href=\"{$settings[\'site:url:base\']}\">{$settings[\'site:title\']}</a></strong>\r\n', 1, 0);
+INSERT INTO `helpdesk` (`id`, `title`, `description`, `blacklist`, `email`, `subject`, `body`, `helpdesk_templates_id`, `pages_id`, `log`) VALUES
+(1, 'Kontaktní formulář', 'Tento formulář slouží Vašim zákazníkům, aby vás mohli kontaktovat ohledně jejich otázek nebo potávek.', 1, '@', 'Poptávka', '<br>                    {$name}<br>                    {$phone}<br>                    {$email}<br>                    <br><br>                    {$message}<br>                    {$time}<br>                    {$ipaddress}                </td>            </tr>        </tbody></table>', 1, 5, 0),
+(2, 'Kontaktní formulář - admin', 'Poptávkový formulář - verze pro administraci', 1, NULL, 'Poptávka od návštěvníka', '                   Děkujeme za Vaši zprávu. Budeme Vás brzy kontaktovat.                    <br>                    {$name}<br>                    {$phone}<br>                    {$email}<br>                    <br><br>                    {$message}<br>                </td>            </tr>        </tbody></table>    ', 1, NULL, 0),
+(4, 'Odeslání hesla pro existujícího uživatele', 'Tímto formulářem bude existujícímu uživateli odesláno nové heslo. Pozor. Pokaždé, když formulář odešlete, bude heslo změněno a odesláno.', 0, NULL, 'Vytvoření nového hesla', '                    <br /><br />\r\n                    Bylo Vám vytvořeno nové heslo. Zde jsou údaje nutné k přihlášení\r\n                    <br /><br />\r\n                    uživatelské jméno: {$username}<br />\r\n                    heslo: {$password}<br />\r\n                    <br /><br />\r\n                    Přihlašte se: <a href=\"{$settings[\'site:url:base\']}/sign/in\">{$settings[\'site:url:base\']}/sign/in</a>', 1, NULL, 0),
+(5, 'Vytvoření účtu z administrace', 'Vytvoření nového uživatelského účtu z administrace', 0, NULL, 'Nový e-mail', '                    Your account was successfully created. You can now log in.\r\n                    <br /><br />\r\n                    user name: {$username}<br />\r\n                    password: {$password}<br />\r\n                    <br /><br />\r\n                    Log in: <a href=\"{$settings[\'site:url:base\']}/admin\">{$settings[\'site:url:base\']}/admin</a>', 1, NULL, 0),
+(6, 'Zapomenuté heslo: administrace', 'Odeslání zapomenutého hesla pro členy administrace', 0, NULL, 'Informace o novém hesle', 'Na základě Vaší žádosti Vám posíláme odkaz na obnovení hesla.\r\n<br /><br />\r\nK vytvoření nového hesla klikněte na odkaz níže:\r\n<br />\r\n<a href=\"{$settings[\'site:url:base\']}/admin/sign/resetpass/?code={$code}&email={$email}\">\r\n    {$settings[\'site:url:base\']}/admin/sign/resetpass/?code={$code}&email={$email}\r\n</a>\r\n<br /><br />\r\n<strong><a href=\"{$settings[\'site:url:base\']}\">{$settings[\'site:title\']}</a></strong>\r\n', 1, NULL, 0);
 
 CREATE TABLE `helpdesk_messages` (
   `id` int(11) NOT NULL,
@@ -433,7 +434,8 @@ ALTER TABLE `countries`
 ALTER TABLE `helpdesk`
   ADD PRIMARY KEY (`id`),
   ADD KEY `helpdesk_templates_id` (`helpdesk_templates_id`),
-  ADD KEY `helpdesk_templates_id_2` (`helpdesk_templates_id`);
+  ADD KEY `helpdesk_templates_id_2` (`helpdesk_templates_id`),
+  ADD KEY `pagei` (`pages_id`);
 
 ALTER TABLE `helpdesk_messages`
   ADD PRIMARY KEY (`id`),
@@ -584,7 +586,8 @@ ALTER TABLE `contacts_openinghours`
   ADD CONSTRAINT `contacts_openinghours_ibfk_1` FOREIGN KEY (`contacts_id`) REFERENCES `contacts` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 ALTER TABLE `helpdesk`
-  ADD CONSTRAINT `helpdesk_ibfk_1` FOREIGN KEY (`helpdesk_templates_id`) REFERENCES `helpdesk_templates` (`id`) ON DELETE SET NULL ON UPDATE SET NULL;
+  ADD CONSTRAINT `helpdesk_ibfk_1` FOREIGN KEY (`helpdesk_templates_id`) REFERENCES `helpdesk_templates` (`id`) ON DELETE SET NULL ON UPDATE SET NULL,
+  ADD CONSTRAINT `helpdesk_ibfk_2` FOREIGN KEY (`pages_id`) REFERENCES `pages` (`id`) ON DELETE SET NULL ON UPDATE SET NULL;
 
 ALTER TABLE `helpdesk_messages`
   ADD CONSTRAINT `helpdesk_messages_ibfk_3` FOREIGN KEY (`helpdesk_id`) REFERENCES `helpdesk` (`id`) ON DELETE SET NULL ON UPDATE SET NULL;

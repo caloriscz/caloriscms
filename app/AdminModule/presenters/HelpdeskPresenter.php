@@ -73,7 +73,7 @@ class HelpdeskPresenter extends BasePresenter
         $paginator = new Paginator();
         $paginator->setItemCount($messages->count('*'));
         $paginator->setItemsPerPage(20);
-        $paginator->setPage($this->getParameter('page'));
+        $paginator->setPage($this->getParameter('page') ?? 1);
 
         $this->template->paginator = $paginator;
         $this->template->messages = $messages->limit($paginator->getLength(), $paginator->getOffset());

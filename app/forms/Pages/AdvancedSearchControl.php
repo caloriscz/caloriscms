@@ -21,7 +21,6 @@ class AdvancedSearchControl extends Control
         $form = new BootstrapUIForm();
         $form->setTranslator($this->presenter->translator->domain('dictionary.main'));
         $form->setMethod('GET');
-
         $form->addHidden('idr', 'ID:');
         $form->addText('src')
             ->setHtmlAttribute('placeholder', Strings::firstUpper('src'));

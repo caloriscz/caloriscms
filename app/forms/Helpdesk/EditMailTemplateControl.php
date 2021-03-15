@@ -2,16 +2,15 @@
 namespace App\Forms\Helpdesk;
 
 use Nette\Application\UI\Control;
-use Nette\Database\Context;
+use Nette\Database\Explorer;
 use Nette\Forms\BootstrapUIForm;
 
 class EditMailTemplateControl extends Control
 {
 
-    /** @var Context */
-    public $database;
+    public Explorer $database;
 
-    public function __construct(Context $database)
+    public function __construct(Explorer $database)
     {
         $this->database = $database;
     }
@@ -32,7 +31,7 @@ class EditMailTemplateControl extends Control
         $form->addHidden('id');
         $form->addText('subject');
         $form->addTextArea('body')
-            ->setAttribute('style', 'width: 500px;')
+            ->setHtmlAttribute('style', 'width: 500px;')
             ->setHtmlId('wysiwyg');
 
         $form->setDefaults([
@@ -52,8 +51,7 @@ class EditMailTemplateControl extends Control
      */
     public function editFormSucceeded(BootstrapUIForm $form): void
     {
-        $this->database->table('helpdesk')->get($form->values->id)
-            ->update([
+        $this->database->table('helpdesk')->get($form->values->id)->update([
                 'subject' => $form->values->subject,
                 'body' => $form->values->body,
             ]);
