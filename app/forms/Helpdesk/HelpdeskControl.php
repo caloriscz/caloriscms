@@ -47,20 +47,39 @@ class HelpdeskControl extends Control
      */
     public function sendFormValidated(BootstrapUIForm $form): void
     {
+        $helpdesk = new Helpdesk($this->database, $this->presenter->mailer);
+        $helpdesk->setId(1);
+        $helpdeskPage = $helpdesk->getInfo()->pages->slug;
+
         if (strlen($form->values->name) < 2) {
             $this->presenter->flashMessage('Vyplňte jméno', 'error');
-            $this->presenter->redirect('this');
+
+            if ($helpdeskPage !== null) {
+                $this->presenter->redirectUrl('/' . $helpdeskPage);
+            } else {
+                die();
+            }
         }
 
 
         if (Validators::isEmail($form->values->email) === false) {
             $this->presenter->flashMessage('Vyplňte e-mail', 'error');
-            $this->presenter->redirect('this');
+
+            if ($helpdeskPage !== null) {
+                $this->presenter->redirectUrl('/' . $helpdeskPage);
+            } else {
+                die();
+            }
         }
 
         if (strlen($form->values->message) < 2) {
             $this->presenter->flashMessage('Vyplňte zprávu', 'error');
-            $this->presenter->redirect('this');
+
+            if ($helpdeskPage !== null) {
+                $this->presenter->redirectUrl('/' . $helpdeskPage);
+            } else {
+                die();
+            }
         }
 
         // Validate by black list
@@ -80,12 +99,22 @@ class HelpdeskControl extends Control
 
         if ($helpdesk === null) {
             $this->presenter->flashMessage('Neznámá chyba', 'info');
-            $this->presenter->redirect('this');
+
+            if ($helpdeskPage !== null) {
+                $this->presenter->redirectUrl('/' . $helpdeskPage);
+            } else {
+                die();
+            }
         }
 
         if ($helpdesk->blacklist === 1 && isset($rings) && $rings) {
             $this->presenter->flashMessage('Zpráva obsahuje neplatné znaky', 'info');
-            $this->presenter->redirect('this');
+
+            if ($helpdeskPage !== null) {
+                $this->presenter->redirectUrl('/' . $helpdeskPage);
+            } else {
+                die();
+            }
         }
     }
 

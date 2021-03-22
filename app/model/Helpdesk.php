@@ -114,7 +114,6 @@ class Helpdesk
         $info = $this->getInfo();
         $templateId = 1;
         $email = $this->getEmail();
-        $send = true;
 
         if ($info->email !== null) {
             $email = $info->email;
