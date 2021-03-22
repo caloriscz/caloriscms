@@ -117,13 +117,11 @@ class HelpdeskControl extends Control
         if ($send) {
             $this->flashMessage('Děkujeme za zprávu', 'success');
         } else {
-            echo 200;
             $this->flashMessage('E-mail nebyl odeslán', 'error');
         }
 
         $helpdeskPage = $helpdesk->getInfo()->pages->slug;
-echo 300;
-die();
+
         if ($helpdeskPage !== null) {
             $this->presenter->redirectUrl('/' . $helpdeskPage);
         } else {
