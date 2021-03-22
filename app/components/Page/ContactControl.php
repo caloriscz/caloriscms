@@ -9,7 +9,6 @@ use Nette\Database\Explorer;
 
 class ContactControl extends Control
 {
-
     public Explorer $database;
 
     public function __construct(Explorer $database)
@@ -42,7 +41,6 @@ class ContactControl extends Control
         return new \Caloriscz\Contact\ContactControl($this->database);
     }
 
-
     public function render(): void
     {
         $template = $this->getTemplate();
@@ -55,5 +53,4 @@ class ContactControl extends Control
         $template->setFile(__DIR__ . '/' . $template->settings['contacts_template'] . 'Control.latte');
         $template->render();
     }
-
 }
