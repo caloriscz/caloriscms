@@ -122,7 +122,7 @@ class HelpdeskControl extends Control
 
         $helpdeskPage = $helpdesk->getInfo()->pages->slug;
         if ($helpdeskPage !== null) {
-            $this->presenter->redirect('this');
+            $this->presenter->redirectUrl('/' . $helpdeskPage);
         } else {
             die();
         }
