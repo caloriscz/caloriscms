@@ -120,8 +120,12 @@ class HelpdeskControl extends Control
             $this->presenter->flashMessage('E-mail nebyl odeslán', 'error');
         }
 
-
-        $this->presenter->redirect('this');
+        $helpdeskPage = $helpdesk->getInfo()->pages->slug;
+        if ($helpdeskPage !== null) {
+            $this->presenter->redirect('this');
+        } else {
+            die();
+        }
     }
 
     public function render()

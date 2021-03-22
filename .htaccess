@@ -1,2 +1,4 @@
+Require all granted
 RewriteEngine On
+RewriteBase /
 RewriteRule (.*) www/$1 [L]
