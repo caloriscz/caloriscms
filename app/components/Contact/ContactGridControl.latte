@@ -8,7 +8,7 @@
                 </a>
             </td>
             <td><a href="{plink ':Admin:Contacts:detail', id => $contact->id}">{$contact->name}</a></td>
-            <td>{$contact->contacts_categories->title}</td>
+            <td>{$contact->contacts_categories->title ?? ''}</td>
             <td>{$contact->email}</td>
             <td>{$contact->phone}</td>
             <td>{$contact->vatin}</td>

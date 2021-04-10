@@ -38,7 +38,12 @@ class ContactsPresenter extends BasePresenter
 
     protected function createComponentInsertContact(): InsertContactControl
     {
-        return new InsertContactControl($this->database);
+        $control = new InsertContactControl($this->database);
+        $control->onSave[] = function ($id) {
+            $this->redirect('this', ['id' => $id]);
+        };
+
+        return $control;
     }
 
     protected function createComponentInsertHour(): InsertHourControl

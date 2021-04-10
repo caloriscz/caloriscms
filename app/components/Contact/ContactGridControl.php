@@ -5,7 +5,6 @@ namespace Caloriscz\Contact;
 use Caloriscz\Utilities\PagingControl;
 use Nette\Application\AbortException;
 use Nette\Application\UI\Control;
-use Nette\Database\Context;
 use Nette\Database\Explorer;
 use Nette\Utils\Paginator;
 

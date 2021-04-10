@@ -8,8 +8,8 @@ use Nette\Forms\BootstrapUIForm;
 
 class InsertContactControl extends Control
 {
-
     public Explorer $database;
+    public $onSave;
 
     public function __construct(Explorer $database)
     {
@@ -49,9 +49,9 @@ class InsertContactControl extends Control
         ];
 
         $arr['name'] = $form->values->title;
-        $id = $this->database->table('contacts')->insert($arr);
+        $contact = $this->database->table('contacts')->insert($arr);
 
-        $this->presenter->redirect(':Admin:Contacts:detail', ['id' => $id]);
+        $this->onSave($contact->id);
     }
 
     public function render(): void
