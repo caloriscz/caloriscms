@@ -31,8 +31,8 @@ class EditCarouselControl extends Control
         $form->addHidden('carousel_id');
         $form->addText('title', 'Název');
         $form->addTextArea('description', 'Popisek')
-            ->setAttribute('class', 'form-control')
-            ->setAttribute('style', 'max-height: 150px;');
+            ->setHtmlAttribute('class', 'form-control')
+            ->setHtmlAttribute('style', 'max-height: 150px;');
         $form->addText('uri', 'Odkaz');
         $form->addCheckbox('visible', 'Zobrazit');
         $form->addUpload('the_file', 'Ikonka');

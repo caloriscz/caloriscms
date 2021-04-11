@@ -5,13 +5,10 @@ namespace Caloriscz\Appearance;
 use App\Model\IO;
 use Nette\Application\UI\Control;
 use Nette\Database\Explorer;
-use Tracy\Debugger;
 
 class CarouselManagerControl extends Control
 {
-
-    /** @var Explorer */
-    public $database;
+    public Explorer $database;
 
     public function __construct(Explorer $database)
     {
@@ -34,12 +31,14 @@ class CarouselManagerControl extends Control
     public function handleDelete(int $id): void
     {
         $carousel = $this->database->table('carousel')->get($id);
-        $image = $carousel->image;
+        $image = $carousel->image ?? null;
 
-        $this->database->table($carousel)->get($id)->delete();
+        $this->database->table('carousel')->get($id)->delete();
 
-        IO::remove(APP_DIR . '/images/carousel/' . $image);
-        unset($image);
+        if ($image !== null) {
+            IO::remove(APP_DIR . '/images/carousel/' . $image);
+            unset($image);
+        }
 
         $this->redirect('this', ['id' => null]);
     }

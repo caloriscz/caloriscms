@@ -3,6 +3,7 @@
 namespace App\FrontModule\Presenters;
 
 use App\Forms\Pages\AdvancedSearchControl;
+use Caloriscz\Appearance\CarouselBoxControl;
 use Caloriscz\Menus\MenuControl;
 use Caloriscz\Navigation\AdminBarControl;
 use Caloriscz\Navigation\FooterControl;
@@ -83,7 +84,7 @@ abstract class BasePresenter extends Presenter
 
         if ($this->template->settings['site_cookie_whitelist'] !== '') {
             if ($this->template->settings['site_cookie_whitelist'] !== $secret) {
-                if ($_GET['secretx'] === $this->template->settings['site_cookie_whitelist']) {
+                if ($this->getParameter('secretx') === $this->template->settings['site_cookie_whitelist']) {
                     setcookie('secretx', $this->template->settings['site_cookie_whitelist'], time() + 3600000);
                 } else {
                     if (empty($this->template->settings['maintenance_message'])) {
@@ -173,6 +174,11 @@ abstract class BasePresenter extends Presenter
     protected function createComponentFooter(): FooterControl
     {
         return new FooterControl($this->database);
+    }
+
+    protected function createComponentCarouselBox(): CarouselBoxControl
+    {
+        return new CarouselBoxControl($this->database);
     }
 
     /**
