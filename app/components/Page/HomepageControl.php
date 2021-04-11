@@ -2,6 +2,7 @@
 
 namespace Caloriscz\Page;
 
+use App\Forms\Helpdesk\HelpdeskControl;
 use Caloriscz\Appearance\CarouselBoxControl;
 use Caloriscz\Blog\BlogPreviewControl;
 use Caloriscz\Menus\MenuControl;
@@ -51,11 +52,22 @@ class HomepageControl extends Control
         return new MenuControl($this->database);
     }
 
+    protected function createComponentHelpdesk(): HelpdeskControl
+    {
+        return new HelpdeskControl($this->database);
+    }
+
+    protected function createComponentContact(): \Caloriscz\Contact\ContactControl
+    {
+        return new \Caloriscz\Contact\ContactControl($this->database);
+    }
+
     public function render(): void
     {
-        // Choose tempalte according to Settings
+        // Choose template according to Settings
         $settings = $this->getPresenter()->template->settings;
 
+        $this->template->settings = $settings;
         $this->template->page = $this->presenter->template->page;
         $this->template->setFile(__DIR__ . '/' . $settings['homepage_template'] . 'Control.latte');
         $this->template->render();

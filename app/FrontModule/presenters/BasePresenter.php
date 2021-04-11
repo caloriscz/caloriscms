@@ -2,6 +2,7 @@
 
 namespace App\FrontModule\Presenters;
 
+use App\Forms\Helpdesk\HelpdeskControl;
 use App\Forms\Pages\AdvancedSearchControl;
 use Caloriscz\Appearance\CarouselBoxControl;
 use Caloriscz\Menus\MenuControl;
@@ -9,6 +10,7 @@ use Caloriscz\Navigation\AdminBarControl;
 use Caloriscz\Navigation\FooterControl;
 use Caloriscz\Navigation\HeadControl;
 use Caloriscz\Navigation\NavigationControl;
+use Caloriscz\Page\ContactControl;
 use Caloriscz\Page\PageDocumentControl;
 use Caloriscz\Page\PageSlugControl;
 use Caloriscz\Page\PageTitleControl;
@@ -179,6 +181,16 @@ abstract class BasePresenter extends Presenter
     protected function createComponentCarouselBox(): CarouselBoxControl
     {
         return new CarouselBoxControl($this->database);
+    }
+
+    protected function createComponentPageContact(): ContactControl
+    {
+        return new ContactControl($this->database);
+    }
+
+    protected function createComponentHelpdesk(): HelpdeskControl
+    {
+        return new HelpdeskControl($this->database);
     }
 
     /**
