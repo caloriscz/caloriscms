@@ -31,13 +31,12 @@ class EditCarouselControl extends Control
         $form->addHidden('carousel_id');
         $form->addText('title', 'Název');
         $form->addTextArea('description', 'Popisek')
-            ->setHtmlAttribute('class', 'form-control')
-            ->setHtmlAttribute('style', 'max-height: 150px;');
+            ->setAttribute('class', 'form-control')
+            ->setAttribute('style', 'max-height: 150px;');
         $form->addText('uri', 'Odkaz');
         $form->addCheckbox('visible', 'Zobrazit');
         $form->addUpload('the_file', 'Ikonka');
         $form->addSubmit('submitm', 'Uložit');
-
 
         $arr = [
             'carousel_id' => $carousel->id,
@@ -59,8 +58,6 @@ class EditCarouselControl extends Control
      */
     public function editFormSucceeded(BootstrapUIForm $form): void
     {
-        $image = $form->values->the_file->name;
-
         $arr = [
             'title' => $form->values->title,
             'description' => $form->values->description,
@@ -69,10 +66,11 @@ class EditCarouselControl extends Control
         ];
 
         if ($form->values->the_file->error === 0) {
+            $image = $form->values->the_file->name;
+
             $arr['image'] = $image;
 
             if (file_exists(APP_DIR . '/images/carousel/' . $image)) {
-
                 IO::remove(APP_DIR . '/images/carousel/' . $image);
                 IO::upload(APP_DIR . '/images/carousel/', $image);
             } else {
@@ -81,7 +79,6 @@ class EditCarouselControl extends Control
         }
 
         $this->database->table('carousel')->get($form->values->carousel_id)->update($arr);
-
 
         $this->redirect('this', ['carousel_id' => $form->values->carousel_id]);
     }

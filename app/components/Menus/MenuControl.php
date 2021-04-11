@@ -7,19 +7,14 @@ use Nette\Database\Explorer;
 
 class MenuControl extends Control
 {
-
-    /** @var Explorer */
-    public $database;
+    public Explorer $database;
 
     public function __construct(Explorer $database)
     {
         $this->database = $database;
     }
 
-    /**
-     * @param null $id
-     */
-    public function render($id = null): void
+    public function render($id = null, ?string $templateName = null): void
     {
         $presetId = null;
         $template = $this->getTemplate();
@@ -49,7 +44,8 @@ class MenuControl extends Control
         $template->id = $id;
         $template->class = $menus->class;
         $template->categories = $this->database->table('menu')->where($arr)->order('sorted ASC');
+
+        $template->setFile(__DIR__ . '/' .  ($templateName ?? 'MenuControl') . '.latte');
         $template->render();
     }
-
 }
