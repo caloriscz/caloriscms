@@ -63,7 +63,7 @@ class LostPassControl extends Control
         ];
 
         $helpdesk = new Helpdesk($this->database, $this->presenter->mailer);
-        $helpdesk->setId(11);
+        $helpdesk->setId(6);
         $helpdesk->setEmail($form->values->email);
         $helpdesk->setSettings($this->presenter->template->settings);
         $helpdesk->setParams($params);
