@@ -1,10 +1,10 @@
-{block #titles}Soubor - {$file->name}{/block}
+{block #titles}Soubor - {$files->name}{/block}
 {block content}
 
 <ol class="breadcrumb">
     <li class="breadcrumb-item"><a href="/admin/">Admin</a></li>
     <li class="breadcrumb-item active"><a href="/admin/media/albums">Galerie</a></li>
-    <li class="breadcrumb-item active"><a href="/admin/media/albums">Soubor - {$file->name}</a></li>
+    <li class="breadcrumb-item active"><a href="/admin/media/albums">Soubor - {$files->name}</a></li>
 </ol>
 
 <div class="container-fluid">
@@ -17,11 +17,11 @@
                         <table class="table">
                             <tr>
                                 <td>Soubor</a></td>
-                                <td><a href="/media/{$file->pages_id}/{$file->name}">{$file->name}</a></td>
+                                <td><a href="/media/{$files->pages_id}/{$files->name}">{$files->name}</a></td>
                             </tr>
                             <tr>
                                 <td>Velikost</td>
-                                <td>{$file->filesize}</td>
+                                <td>{$files->filesize}</td>
                             </tr>
                         </table>
 

@@ -2,18 +2,15 @@
 namespace App\Forms\Media;
 
 use Nette\Application\UI\Control;
-use Nette\Database\Context;
+use Nette\Database\Explorer;
 use Nette\Forms\BootstrapUIForm;
 
 class EditFileFormControl extends Control
 {
+    public Explorer $database;
 
-    /** @var Context */
-    public $database;
-
-    public function __construct(Context $database)
+    public function __construct(Explorer $database)
     {
-        parent::__construct();
         $this->database = $database;
     }
 

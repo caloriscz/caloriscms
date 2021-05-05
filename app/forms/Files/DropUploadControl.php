@@ -2,16 +2,15 @@
 namespace App\Forms\Files;
 
 use Nette\Application\UI\Control;
-use Nette\Database\Context;
+use Nette\Database\Explorer;
 use Nette\Forms\BootstrapUIForm;
 
 class DropUploadControl extends Control
 {
 
-    /** @var Context */
-    public $database;
+    public Explorer $database;
 
-    public function __construct(Context $database)
+    public function __construct(Explorer $database)
     {
         $this->database = $database;
     }
@@ -19,11 +18,8 @@ class DropUploadControl extends Control
     protected function createComponentDropUploadForm(): BootstrapUIForm
     {
         $form = new BootstrapUIForm();
-        $form->getElementPrototype()->class = 'form-horizontal';
-
         $form->getElementPrototype()->class = 'form-horizontal dropzone';
-        $form->addUpload('file_upload')
-            ->setHtmlId('file_upload');
+        $form->addUpload('file_upload')->setHtmlId('file_upload');
 
         $form->onSuccess[] = [$this, 'dropUploadFormSucceeded'];
         return $form;
@@ -54,5 +50,4 @@ class DropUploadControl extends Control
 
         $template->render();
     }
-
 }
