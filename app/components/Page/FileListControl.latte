@@ -2,13 +2,13 @@
     {foreach $page as $item}
         <tr>
             <td>
-                {if $item->description == ''}
+                {if $item->title == ''}
                     {$item->name}
                 {else}
-                    {$item->description}
+                    {$item->title}
                 {/if}
             </td>
-            <td><a href="{$baseUri}/media/{$item->pages_id}/{$item->name}">Stáhnout</a></td>
+            <td><a href="/media/{$item->pages_id}/{$item->name}">Stáhnout</a></td>
         </tr>
     {/foreach}
 </table>
