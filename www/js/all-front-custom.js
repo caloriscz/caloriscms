@@ -36,7 +36,7 @@ $('body').on('focus', '[contenteditable]', function (e) {
         $.ajax({
             type: 'post',
             url: '/',
-            data: 'do=pagetitle&editorId=' + $(this).data("editor-id") + '&text=' + $(this).html()
+            data: 'do=pagetitle&editorId=' + $(this).data("editor-id") + '&text=' + $(this).text()
         });
     } else {
         $.ajax({

@@ -1,7 +1,6 @@
 <?php
-
 /*
- * Page
+ * Page document editing
  *
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU GPL3
  */
@@ -18,15 +17,12 @@ use Nette\Utils\Strings;
  */
 class Document
 {
-
-    /** @var Context */
-    public $database;
+    public Explorer $database;
     public $user;
 
     private $doc;
     private $preview;
     private $pageTemplate;
-    private $date_published;
     private $slug;
     private $parent;
     private $lang;
@@ -295,8 +291,8 @@ class Document
             $arr['pages_id'] = null;
         }
 
-        if ($this->date_published) {
-            $arr['date_published'] = $this->date_published;
+        if ($values->date_published) {
+            $arr['date_published'] = $values->date_published;
         } elseif ($this->getSlug()) {
             $arr['date_published'] = date('Y-m-d H:i:s');
         }
