@@ -14,3 +14,6 @@ jobs:
           server: ${{ secrets.ftp_host }}
           username: ${{ secrets.ftp_user }}
           password: ${{ secrets.ftp_password }}
+
+      - name: Composer update
+        uses: php-actions/composer@v5
