@@ -39,12 +39,10 @@ class MembersPresenter extends BasePresenter
         $control->onSave[] = function ($message, $userId) {
             if ($message) {
                 $this->flashMessage($message, 'error');
-                $code = ':Admin:Members:default';
-            } else {
-                $code = ':Admin:Members:edit';
+                $this->redirect(':Admin:Members:edit');
             }
 
-            $this->redirect($code, ['id' => $userId]);
+            $this->redirect(':Admin:Members:edit', ['id' => $userId]);
         };
 
         return $control;
@@ -54,7 +52,7 @@ class MembersPresenter extends BasePresenter
     {
         return new InsertContactForMemberControl($this->database);
     }
-    
+
     protected function createComponentMemberGrid(): MemberGridControl
     {
         return new MemberGridControl($this->database);

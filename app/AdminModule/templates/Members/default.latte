@@ -23,6 +23,8 @@
                     <div class="card-block">
                         {if $member->users_roles->members}
                             {control insertMember}
+
+                            <span class="font-weight-bold">{$presenter->getParameter("pwd")}</span>
                         {/if}
                     </div>
                 </div>

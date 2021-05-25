@@ -28,9 +28,9 @@ class MenuPresenter extends BasePresenter
     }
 
     protected function createComponentMenuInsert(): InsertMenuControl
-{
-    return new InsertMenuControl($this->database);
-}
+    {
+        return new InsertMenuControl($this->database);
+    }
 
     protected function createComponentMenuMenusInsert(): InsertMenuMenusControl
     {

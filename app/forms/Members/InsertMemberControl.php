@@ -5,7 +5,7 @@ namespace App\Forms\Members;
 use App\Model\Helpdesk;
 use App\Model\MemberModel;
 use Nette\Application\UI\Control;
-use Nette\Database\Context;
+use Nette\Database\Explorer;
 use Nette\Forms\BootstrapUIForm;
 use Nette\Forms\Form;
 use Nette\Security\Passwords;
@@ -15,12 +15,10 @@ use Nette\Utils\Validators;
 class InsertMemberControl extends Control
 {
 
-    /** @var \Nette\Database\Context */
-    public $database;
-
+    public Explorer $database;
     public $onSave;
 
-    public function __construct(Context $database)
+    public function __construct(Explorer $database)
     {
         $this->database = $database;
     }
@@ -43,12 +41,11 @@ class InsertMemberControl extends Control
 
         if ($this->presenter->template->member->username === 'admin') {
             $form->addSelect('role', 'Uživatelská role', $roles)
-                ->setAttribute('class', 'form-control');
+                ->setHtmlAttribute('class', 'form-control');
         }
-        $form->addCheckbox('sendmail', 'Odeslat přihlašovací e-mail')
-            ->setValue(1);
 
-        $form->addSubmit('submitm', 'Vytvořit')->setAttribute('class', 'btn btn-success');
+        $form->addCheckbox('sendmail', 'Odeslat přihlašovací e-mail')->setValue(1);
+        $form->addSubmit('submitm', 'Vytvořit')->setHtmlAttribute('class', 'btn btn-success');
         $form->onSuccess[] = [$this, 'insertFormSucceeded'];
         $form->onValidate[] = [$this, 'insertFormValidated'];
 
@@ -65,15 +62,15 @@ class InsertMemberControl extends Control
         $emailExists = $member->getEmail($form->values->email);
 
         if (!$this->getPresenter()->template->member->users_roles->members) {
-            $this->onSave('Nemáte oprávnění');
+            $this->onSave('Nemáte oprávnění', true);
         }
 
         if (Validators::isEmail($form->values->email) === false) {
-            $this->onSave('Zadejte platnou e-mailovou adresu', false);
+            $this->onSave('Zadejte platnou e-mailovou adresu', true);
         } elseif ($emailExists > 0) {
-            $this->onSave('E-mail již existuje', false);
+            $this->onSave('E-mail již existuje', true);
         } elseif ($userExists > 0) {
-            $this->onSave('Uživatel již existuje', false);
+            $this->onSave('Uživatel již existuje', true);
         }
     }
 
@@ -83,17 +80,18 @@ class InsertMemberControl extends Control
     public function insertFormSucceeded(BootstrapUIForm $form): void
     {
         $pwd = Random::generate(10);
-        $pwdEncrypted = Passwords::hash($pwd);
 
-        $userId = $this->database->table('users')
-            ->insert([
-                'email' => $form->values->email,
-                'username' => $form->values->username,
-                'password' => $pwdEncrypted,
-                'date_created' => date('Y-m-d H:i:s'),
-                'users_roles_id' => $form->values->role,
-                'state' => 1,
-            ]);
+        $passwordHash = new Passwords();
+        $pwdEncrypted = $passwordHash->hash($pwd);
+
+        $userId = $this->database->table('users')->insert([
+            'email' => $form->values->email,
+            'username' => $form->values->username,
+            'password' => $pwdEncrypted,
+            'date_created' => date('Y-m-d H:i:s'),
+            'users_roles_id' => $form->values->role,
+            'state' => 1,
+        ]);
 
         if ($form->values->sendmail) {
             $params = [
@@ -109,7 +107,7 @@ class InsertMemberControl extends Control
             $helpdesk->send();
         }
 
-        $this->onSave(false, $userId);
+        $this->onSave(false, $userId, $pwd);
     }
 
     public function render(): void
@@ -117,5 +115,4 @@ class InsertMemberControl extends Control
         $this->template->setFile(__DIR__ . '/InsertMemberControl.latte');
         $this->template->render();
     }
-
 }

@@ -2,16 +2,14 @@
 namespace App\Forms\Members;
 
 use Nette\Application\UI\Control;
-use Nette\Database\Context;
+use Nette\Database\Explorer;
 use Nette\Forms\BootstrapUIForm;
 
 class EditMemberControl extends Control
 {
+    public Explorer $database;
 
-    /** @var \Nette\Database\Context */
-    public $database;
-
-    public function __construct(Context $database)
+    public function __construct(Explorer $database)
     {
         $this->database = $database;
     }
@@ -25,7 +23,6 @@ class EditMemberControl extends Control
         $form = new BootstrapUIForm();
         $form->getElementPrototype()->class = 'form-horizontal';
 
-
         $user = $this->database->table('users')->get($this->presenter->getParameter('id'));
 
         $form->addHidden('id');
@@ -33,8 +30,7 @@ class EditMemberControl extends Control
         $roles = $this->database->table('users_roles')->fetchPairs('id', 'title');
 
         if ($this->presenter->template->member->username === 'admin') {
-            $form->addSelect('role', 'Role', $roles)
-                ->setAttribute('class', 'form-control');
+            $form->addSelect('role', 'Role', $roles)->setHtmlAttribute('class', 'form-control');
         }
 
         $arr = [
@@ -45,7 +41,7 @@ class EditMemberControl extends Control
 
         $form->setDefaults(array_filter($arr));
 
-        $form->addSubmit('submitm', 'Uložit')->setAttribute('class', 'btn btn-primary');
+        $form->addSubmit('submitm', 'Uložit')->setHtmlAttribute('class', 'btn btn-primary');
 
         $form->onSuccess[] = [$this, 'editFormSucceeded'];
         $form->onValidate[] = [$this, 'editFormValidated'];
@@ -90,5 +86,4 @@ class EditMemberControl extends Control
         $this->template->setFile(__DIR__ . '/EditMemberControl.latte');
         $this->template->render();
     }
-
 }

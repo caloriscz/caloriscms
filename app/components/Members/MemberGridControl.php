@@ -37,14 +37,17 @@ class MemberGridControl extends Control
 
         $member = $this->database->table('users')->get($id);
 
-        if ($member === null) {
+        if ($member !== null) {
             if ($member->username === 'admin') {
                 $this->flashMessage('Nemůžete smazat účet administratora', 'error');
                 $this->redirect(':Admin:Members:default', ['id' => null]);
             } elseif ($member->id === $this->getPresenter()->user->getId()) {
+
+
                 $this->flashMessage('Nemůžete smazat vlastní účet', 'error');
                 $this->redirect(':Admin:Members:default', ['id' => null]);
             }
+
 
             $this->database->table('users')->get($id)->delete();
         }
@@ -60,9 +63,9 @@ class MemberGridControl extends Control
         $users = $this->database->table('users');
 
         $paginator = new Paginator();
-        $paginator->setItemCount($users->count('*'));
+        $paginator->setItemCount($users->count('*') ?? 1);
         $paginator->setItemsPerPage(20);
-        $paginator->setPage($this->presenter->getParameter('page'));
+        $paginator->setPage($this->presenter->getParameter('page') ?? 1);
 
         $template->userList = $users->limit($paginator->getLength(), $paginator->getOffset());
         $template->paginator = $paginator;

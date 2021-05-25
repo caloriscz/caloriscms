@@ -2,7 +2,6 @@
 
 namespace App\Forms\Profile;
 
-use DateTime;
 use Nette\Application\AbortException;
 use Nette\Application\UI\Control;
 use Nette\Database\Explorer;
@@ -42,7 +41,8 @@ class ChangePasswordControl extends Control
     {
         $ppwd = $form->values->password1;
         $ppwd2 = $form->values->password2;
-        $passwordEncrypted = Passwords::hash($ppwd);
+        $passwordHash = new Passwords();
+        $passwordEncrypted = $passwordHash->hash($ppwd);
 
         if (strcasecmp($ppwd, $ppwd2) !== 0) {
             $this->presenter->flashMessage('Hesla se neshodují');

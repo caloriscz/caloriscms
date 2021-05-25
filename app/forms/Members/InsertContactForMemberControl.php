@@ -2,19 +2,15 @@
 
 namespace App\Forms\Members;
 
-use App\Model\Document;
-use App\Model\IO;
 use Nette\Application\UI\Control;
-use Nette\Database\Context;
+use Nette\Database\Explorer;
 use Nette\Forms\BootstrapUIForm;
 
 class InsertContactForMemberControl extends Control
 {
+    public Explorer $database;
 
-    /** @var \Nette\Database\Context */
-    public $database;
-
-    public function __construct(Context $database)
+    public function __construct(Explorer $database)
     {
         $this->database = $database;
     }
@@ -28,8 +24,6 @@ class InsertContactForMemberControl extends Control
         $memberTable = $this->database->table('users')->get($this->presenter->getParameter('id'));
 
         $form = new BootstrapUIForm();
-
-
         $form->addHidden('user');
         $form->addHidden('page');
         $form->addSubmit('submitm', 'Vytvořit')
@@ -68,8 +62,7 @@ class InsertContactForMemberControl extends Control
             'users_id' => $form->values->user,
         ];
 
-        $this->database->table('contacts')
-            ->insert($arr);
+        $this->database->table('contacts')->insert($arr);
 
         $this->presenter->redirect('this', ['id' => $form->values->page]);
     }
@@ -79,5 +72,4 @@ class InsertContactForMemberControl extends Control
         $this->template->setFile(__DIR__ . '/InsertContactForMemberControl.latte');
         $this->template->render();
     }
-
 }
