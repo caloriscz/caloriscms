@@ -46,7 +46,7 @@
                                             {if $item->title}{$item->title}{else}<em>nemá jméno</em>{/if}
                                         </a>
                                     </td>
-                                    <td>{$item->links_categories->title}</td>
+                                    <td>{$item->links_categories ? $item->links_categories->title : ''}</td>
                                 </tr>
                             {/foreach}
                         </table>

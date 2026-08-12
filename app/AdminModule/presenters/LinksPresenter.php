@@ -53,13 +53,12 @@ class LinksPresenter extends BasePresenter
      */
     public function insertFormSucceeded(): void
     {
-        if (!empty($this->getParameter('id'))) {
-            $category = $this->getParameter('id');
-        } else {
-            $category = null;
-        }
+        $category = !empty($this->getParameter('id')) ? (int) $this->getParameter('id') : 1;
 
-        $link = $this->database->table('links')->insert(['links_categories_id' => $category]);
+        $link = $this->database->table('links')->insert([
+            'links_categories_id' => $category,
+            'title' => '',
+        ]);
         $this->redirect(':Admin:Links:detail', ['id' => $link->id]);
     }
 
