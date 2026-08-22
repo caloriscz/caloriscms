@@ -55,7 +55,7 @@ class EditMemberControl extends Control
      */
     public function editFormValidated(BootstrapUIForm $form): void
     {
-        if (!$this->presenter->template->member->users_roles->members) {
+        if (!$this->presenter->template->memberRole || !$this->presenter->template->memberRole->members) {
             $this->presenter->flashMessage('Přístup zamítnut', 'error');
             $this->presenter->redirect('this', ['id' => $form->values->id]);
         }

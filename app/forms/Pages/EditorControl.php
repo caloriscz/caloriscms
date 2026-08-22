@@ -50,7 +50,7 @@ class EditorControl extends Control
         $l = $this->presenter->getParameter('l');
         $enabled = true;
 
-        if ($this->presenter->template->member->users_roles->pages) {
+        if ($this->presenter->template->memberRole && $this->presenter->template->memberRole->pages) {
             $enabled = false;
         }
 
@@ -85,7 +85,7 @@ class EditorControl extends Control
      */
     public function permissionFormValidated(): void
     {
-        if ($this->getPresenter()->template->member->users_roles->pages === 0) {
+        if (!$this->getPresenter()->template->memberRole || $this->getPresenter()->template->memberRole->pages === 0) {
             $this->getPresenter()->flashMessage('Nemáte oprávnění k této akci', 'error');
             $this->getPresenter()->redirect('this');
         }
@@ -138,7 +138,7 @@ class EditorControl extends Control
         $template->templates = $this->database->table('pages_templates')->where('pages_types_id IS NULL')->order('title');
         $template->enabled = false;
 
-        if ($this->getPresenter()->template->member->users_roles->pages) {
+        if ($this->getPresenter()->template->memberRole && $this->getPresenter()->template->memberRole->pages) {
             $this->template->enabled = true;
         }
 

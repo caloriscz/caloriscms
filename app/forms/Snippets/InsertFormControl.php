@@ -42,7 +42,7 @@ class InsertFormControl extends Control
      */
     public function permissionValidated(): void
     {
-        if ($this->getPresenter()->template->member->users_roles->pages === 0) {
+        if (!$this->getPresenter()->template->memberRole || $this->getPresenter()->template->memberRole->pages === 0) {
             $this->getPresenter()->flashMessage('Nemáte oprávnění k této akci', 'error');
             $this->getPresenter()->redirect('this');
         }

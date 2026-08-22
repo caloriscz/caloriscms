@@ -21,7 +21,7 @@
                 <div class="card">
                     <div class="card-header">Nový účet</div>
                     <div class="card-block">
-                        {if $member->users_roles->members}
+                        {if $memberRole && $memberRole->members}
                             {control insertMember}
 
                             <span class="font-weight-bold">{$presenter->getParameter("pwd")}</span>
@@ -33,7 +33,7 @@
                 <div class="card">
                     <div class="card-header"></div>
                     <div class="card-block">
-                        {if $member->users_roles->members}
+                        {if $memberRole && $memberRole->members}
                             {control memberGrid}
                         {/if}
                     </div>

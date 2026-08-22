@@ -61,7 +61,7 @@ class InsertMemberControl extends Control
         $userExists = $member->getUserName($form->values->username);
         $emailExists = $member->getEmail($form->values->email);
 
-        if (!$this->getPresenter()->template->member->users_roles->members) {
+        if (!$this->getPresenter()->template->memberRole || !$this->getPresenter()->template->memberRole->members) {
             $this->onSave('Nemáte oprávnění', true);
         }
 

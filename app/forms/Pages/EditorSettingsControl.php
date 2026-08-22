@@ -102,7 +102,7 @@ class EditorSettingsControl extends Control
 
     public function permissionFormValidated(BootstrapUIForm $form): void
     {
-        if ($this->getPresenter()->template->member->users_roles->pages === 0) {
+        if (!$this->getPresenter()->template->memberRole || $this->getPresenter()->template->memberRole->pages === 0) {
             $this->onSave(['id' => $form->values->id, 'l' => $form->values->l], 'Nemáte oprávnění k této akci');
         }
     }
@@ -147,7 +147,7 @@ class EditorSettingsControl extends Control
         $template->templates = $this->database->table('pages_templates')->where('pages_types_id IS NULL')->order('title');
         $template->enabled = false;
 
-        if ($this->getPresenter()->template->member->users_roles->pages) {
+        if ($this->getPresenter()->template->memberRole && $this->getPresenter()->template->memberRole->pages) {
             $template->enabled = true;
         }
 

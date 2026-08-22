@@ -16,7 +16,7 @@
 <div class="container-fluid">
     <div class="animated fadeIn">
         <div class="row">
-            {if $member->users_roles->settings}
+            {if $memberRole && $memberRole->settings}
                 <div class="col-lg-3">
                     <div class="card">
                         <div class="card-header">Vložit jazyk</div>

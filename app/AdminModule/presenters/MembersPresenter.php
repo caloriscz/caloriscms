@@ -65,7 +65,7 @@ class MembersPresenter extends BasePresenter
      */
     public function handleDeleteContact($id): void
     {
-        if (!$this->template->member->users_roles->members) {
+        if (!$this->template->memberRole || !$this->template->memberRole->members) {
             $this->flashMessage('Nemáte oprávnění', 'error');
             $this->redirect(':Admin:Members:edit', ['id' => $this->getParameter('contact')]);
         }

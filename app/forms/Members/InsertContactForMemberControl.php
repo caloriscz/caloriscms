@@ -44,7 +44,7 @@ class InsertContactForMemberControl extends Control
      */
     public function insertFormValidated(BootstrapUIForm $form): void
     {
-        if (!$this->presenter->template->member->users_roles->members) {
+        if (!$this->presenter->template->memberRole || !$this->presenter->template->memberRole->members) {
             $this->presenter->flashMessage('Nemáte oprávnění', 'error');
             $this->presenter->redirect(':Admin:Members:default', ['id' => null]);
         }

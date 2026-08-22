@@ -93,9 +93,13 @@ abstract class BasePresenter extends Presenter
         if ($this->getUser()->isLoggedIn()) {
             $this->template->isLoggedIn = true;
             $this->template->member = $this->database->table('users')->get($this->getUser()->getId());
+            $this->template->memberRole = $this->template->member
+                ? $this->template->member->ref('users_roles', 'users_roles_id')
+                : false;
         } else {
             $this->template->isLoggedIn = false;
             $this->template->member = false;
+            $this->template->memberRole = false;
         }
 
         // Set values from db

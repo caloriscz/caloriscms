@@ -30,7 +30,7 @@ class MemberGridControl extends Control
      */
     public function handleDelete($id): void
     {
-        if (!$this->getPresenter()->template->member->users_roles->members) {
+        if (!$this->getPresenter()->template->memberRole || !$this->getPresenter()->template->memberRole->members) {
             $this->flashMessage('Nemáte oprávnění', 'error');
             $this->redirect('this', ['id' => null]);
         }

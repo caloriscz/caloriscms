@@ -16,7 +16,7 @@
                     </div>
                     <div class="card-block">
 
-                        {if $member->users_roles->settings}
+                        {if $memberRole && $memberRole->settings}
                             {control editSettings}
                         {else}
                             <p>Nemáte oprávnění k zobrazení této stránky</p>

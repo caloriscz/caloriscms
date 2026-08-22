@@ -73,7 +73,7 @@ class SettingsPresenter extends BasePresenter
      */
     public function handleMakeDefault($id): void
     {
-        if ($this->template->member->users_roles->settings === 0) {
+        if ($this->template->memberRole && $this->template->memberRole->settings === 0) {
             $this->database->query('UPDATE languages SET `default` = NULL');
             $this->database->table('languages')->get($id)->update(['default' => 1]);
         }
@@ -87,7 +87,7 @@ class SettingsPresenter extends BasePresenter
      */
     public function handleToggle($id): void
     {
-        if ($this->template->member->users_roles->settings === 0) {
+        if ($this->template->memberRole && $this->template->memberRole->settings === 0) {
             $toggle = $this->database->table('languages')->get($id);
 
             if ($toggle !== null) {
@@ -106,7 +106,7 @@ class SettingsPresenter extends BasePresenter
      */
     public function handleToggleCountry($id): void
     {
-        if ($this->template->member->users_roles->settings === 0) {
+        if ($this->template->memberRole && $this->template->memberRole->settings === 0) {
             $toggle = $this->database->table('countries')->get($id);
 
             if ($toggle !== null) {
