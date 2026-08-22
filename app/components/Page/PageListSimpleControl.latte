@@ -12,7 +12,7 @@
                 </a>
             </td>
             <td class="text-right w-25">
-                {if $page->pages_types->id != 9}
+                {if $page->pages_types_id != 9}
                     <a href="{link delete!, id => $page->id, type => $type}"
                        onclick="return confirm('Opravdu smazat?')" class="text-danger">
                         <i class="fa fa-times font-red"></i>

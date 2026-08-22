@@ -18,7 +18,7 @@
                         <a href="{plink':Admin:Pages:detailImages', id => $page->id}"
                            style="font-size: 18px;">{$page->title} ({$galleryDb->count()})</a>
                     </p>
-                    <p class="card-text">{$page->pages_types->content_type}</p>
+                    <p class="card-text">{$page->ref('pages_types', 'pages_types_id')->content_type}</p>
                     <a href="{plink':Admin:Pages:detailImages', id => $page->id}"
                        class="btn btn-primary btn-sm">Upravit</a>
                 </div>

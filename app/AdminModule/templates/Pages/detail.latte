@@ -7,14 +7,14 @@
 {elseif $page->pages_types_id == 6}
     {var $pageRoot = 'media?type=' . $page->pages_types_id}
     {var $pageName = 'Galerie'}
-{elseif $page->pages_types->id == 8}
+{elseif $page->pages_types_id == 8}
     {var $pageRoot = 'media?type=' . $page->pages_types_id}
     {var $pageName = 'Dokumenty'}
-{elseif $page->pages_types->id == 9}
+{elseif $page->pages_types_id == 9}
     {var $pageRoot = 'pages?type=9'}
     {var $pageName = 'Šablony'}
 {else}
-    {var $pageRoot = 'pages?type=' . $page->pages_types->id}
+    {var $pageRoot = 'pages?type=' . $page->pages_types_id}
     {var $pageName = 'Stránky'}
 {/if}
 

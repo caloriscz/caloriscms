@@ -19,10 +19,10 @@
             {if $view != 'detail' && $name != 'Admin:Pages'}
                 <a href="/admin/pages/detail/{$id}" class="btn btn-secondary">Stránky</a>
             {/if}
-            {if $page->pages_types->enable_images && $view != 'detailImages'}
+            {if $pageType && $pageType->enable_images && $view != 'detailImages'}
                 <a href="/admin/pages/detail-images/{$id}" class="btn btn-secondary">Obrázky</a>
             {/if}
-            {if $page->pages_types->enable_files && $view != 'detailFiles'}
+            {if $pageType && $pageType->enable_files && $view != 'detailFiles'}
                 <a href="/admin/pages/detail-files/{$id}" class="btn btn-secondary">Soubory</a>
             {/if}
             <a href="/admin/pages/settings/{$id}" class="btn btn-secondary">Nastavení</a>
