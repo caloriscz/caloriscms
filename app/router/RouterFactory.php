@@ -26,6 +26,13 @@ class RouterFactory
         $router = new RouteList;
 
 
+        $router->addRoute('api/v1/<presenter>[/<id>]', [
+            'module' => 'Api',
+            'presenter' => 'Me',
+            'action' => 'default',
+            'id' => null
+        ]);
+
         $router->addRoute('api/<presenter>/<action>/<id>', [
             'module' => 'Api',
             'presenter' => 'Homepage',

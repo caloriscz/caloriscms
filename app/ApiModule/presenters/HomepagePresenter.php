@@ -7,7 +7,7 @@ namespace App\ApiModule\Presenters;
 class HomepagePresenter extends BasePresenter
 {
 
-    public function startup()
+    public function startup(): void
     {
         parent::startup();
 

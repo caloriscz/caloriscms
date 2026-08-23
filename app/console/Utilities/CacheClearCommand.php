@@ -9,6 +9,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class CacheClearCommand extends Command
 {
+    protected static $defaultName = 'utilities:cache-clear';
+
     /** @var Context */
     public $database;
 

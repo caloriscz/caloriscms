@@ -16,9 +16,17 @@ session:
 services:
 	- App\Model\MyAuthenticator
 	- App\Model\Category
+	- App\Model\Api\ApiTokenAuthenticator
+	- App\Model\Api\ContentApiService
 	- App\Router\RouterFactory
 	- Model\SlugManager
 	router: App\Router\RouterFactory::createRouter
+	apiTokenCreate:
+		class: App\Console\Api\ApiTokenCreateCommand
+		tags: [kdyby.console.command]
+	apiTokenRevoke:
+		class: App\Console\Api\ApiTokenRevokeCommand
+		tags: [kdyby.console.command]
 	cacheClear:
 		class: App\Console\CacheClearCommand
 		tags: [kdyby.console.command]

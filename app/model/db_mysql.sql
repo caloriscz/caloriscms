@@ -385,6 +385,18 @@ CREATE TABLE `users` (
 INSERT INTO `users` (`id`, `username`, `email`, `name`, `password`, `date_created`, `date_visited`, `state`, `activation`, `users_roles_id`, `login_error`, `login_success`, `adminbar_enabled`) VALUES
                                                                                                                                                                                                                                                             (1, 'admin', '', '', '$2y$10$DLhMCsYpbB.xHJ501e.xMOvhneiT1U6YypGAcOna/V2kzIGZOwxla', NULL, '', 1, 'smx5anwed2dr', 1, 0, 0, 0);
 
+CREATE TABLE `api_tokens` (
+  `id` int(11) NOT NULL,
+  `users_id` int(11) NOT NULL,
+  `name` varchar(120) COLLATE utf8_czech_ci NOT NULL,
+  `token_hash` char(64) CHARACTER SET latin1 NOT NULL,
+  `scopes` varchar(255) CHARACTER SET latin1 NOT NULL,
+  `last_used_at` datetime DEFAULT NULL,
+  `created_at` datetime NOT NULL,
+  `expires_at` datetime DEFAULT NULL,
+  `revoked_at` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
+
 CREATE TABLE `users_roles` (
   `id` int(11) NOT NULL,
   `title` varchar(40) COLLATE utf8_czech_ci NOT NULL,
@@ -502,6 +514,11 @@ ALTER TABLE `users`
   ADD PRIMARY KEY (`id`),
   ADD KEY `users_roles_id` (`users_roles_id`);
 
+ALTER TABLE `api_tokens`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `token_hash` (`token_hash`),
+  ADD KEY `users_id` (`users_id`);
+
 ALTER TABLE `users_roles`
   ADD PRIMARY KEY (`id`);
 
@@ -572,6 +589,9 @@ ALTER TABLE `snippets`
 ALTER TABLE `users`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
+ALTER TABLE `api_tokens`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
 ALTER TABLE `users_roles`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
@@ -624,4 +644,7 @@ ALTER TABLE `pages_widgets`
 
 ALTER TABLE `users`
   ADD CONSTRAINT `users_ibfk_1` FOREIGN KEY (`users_roles_id`) REFERENCES `users_roles` (`id`) ON DELETE SET NULL ON UPDATE SET NULL;
+
+ALTER TABLE `api_tokens`
+  ADD CONSTRAINT `api_tokens_ibfk_1` FOREIGN KEY (`users_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
