@@ -46,9 +46,8 @@ class FeedPresenter extends BasePresenter
         $this->template->pages = $this->database->table('pages')
             ->where('public', 1)
             ->where('pages_types_id', 2)
-            ->where('date_published IS NOT NULL')
-            ->where('date_published <= ?', date('Y-m-d H:i:s'))
-            ->order('date_published DESC, date_created DESC, id DESC')
+            ->where('date_published IS NULL OR date_published <= ?', date('Y-m-d H:i:s'))
+            ->order('COALESCE(date_published, date_created) DESC, id DESC')
             ->limit($limit);
 
         $this->getHttpResponse()->setContentType('application/rss+xml', 'utf-8');

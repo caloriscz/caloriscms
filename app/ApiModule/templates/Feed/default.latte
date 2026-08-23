@@ -14,7 +14,7 @@
                 <link>{$pageUrl}</link>
                 <guid isPermaLink="true">{$pageUrl}</guid>
                 <description>{$page->document|striptags|truncate:500}</description>
-                <pubDate>{$page->date_published|date:'r'}</pubDate>
+                <pubDate>{($page->date_published ?: $page->date_created)|date:'r'}</pubDate>
             </item>
         {/foreach}
     </channel>
