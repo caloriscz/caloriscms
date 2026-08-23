@@ -10,10 +10,12 @@ class EditSettingsControl extends Control
 {
 
     public Explorer $database;
+    private ?string $keyPrefix;
 
-    public function __construct(Explorer $database)
+    public function __construct(Explorer $database, ?string $keyPrefix = null)
     {
         $this->database = $database;
+        $this->keyPrefix = $keyPrefix;
     }
 
     /**
@@ -71,15 +73,17 @@ class EditSettingsControl extends Control
         $template = $this->template;
         $template->langSelected = $this->presenter->translator->getLocale();
 
-        if (!$this->presenter->getParameter('id')) {
-            $arr = ['admin_editable' => 1];
-        } else {
-            $arr = ['admin_editable' => 1];
-        }
+        $arr = ['admin_editable' => 1];
 
         $this->template->database = $this->database;
 
-        $template->settingsDb = $this->database->table('settings')->where($arr);
+        $settingsDb = $this->database->table('settings')->where($arr);
+
+        if ($this->keyPrefix !== null) {
+            $settingsDb->where('setkey LIKE ?', $this->keyPrefix . '%');
+        }
+
+        $template->settingsDb = $settingsDb->order('id');
         $template->setFile(__DIR__ . '/EditSettingsControl.latte');
         $template->render();
     }

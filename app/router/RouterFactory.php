@@ -25,6 +25,19 @@ class RouterFactory
     {
         $router = new RouteList;
 
+        $router->addRoute('rss.xml', [
+            'module' => 'Api',
+            'presenter' => 'Feed',
+            'action' => 'default',
+            'id' => null
+        ]);
+
+        $router->addRoute('sitemap.xml', [
+            'module' => 'Api',
+            'presenter' => 'Sitemap',
+            'action' => 'default',
+            'id' => null
+        ]);
 
         $router->addRoute('api/v1/<presenter>[/<id>]', [
             'module' => 'Api',
@@ -40,9 +53,9 @@ class RouterFactory
             'id' => null
         ]);
 
-        $router->addRoute('sitemap.xml', [
+        $router->addRoute('feed.xml', [
             'module' => 'Api',
-            'presenter' => 'Sitemap',
+            'presenter' => 'Feed',
             'action' => 'default',
             'id' => null
         ]);

@@ -358,7 +358,12 @@ INSERT INTO `settings` (`id`, `setkey`, `setvalue`, `description_cs`, `type`, `a
                                                                                                                                                    (31, 'navigation_footer_template', 'Footer', 'Soubor s vybranou šablonou pro patičku', '', 1),
                                                                                                                                                    (32, 'navigation_template', 'Navigation', 'Soubor s vybranou šablonou pro hlavičku', '', 1),
                                                                                                                                                    (33, 'pages_template', 'Page', 'Soubor s vybranou šablonou pro běžné stránky', '', 1),
-                                                                                                                                                   (34, 'contacts_template', 'Contact', 'Soubor s vybranou šablonou pro stránku kontaktů', '', 1);
+                                                                                                                                                   (34, 'contacts_template', 'Contact', 'Soubor s vybranou šablonou pro stránku kontaktů', '', 1),
+                                                                                                                                                   (35, 'rss:enabled', '0', 'Povolit RSS feed aktualit', 'boolean', 1),
+                                                                                                                                                   (36, 'rss:title', 'Aktuality', 'Název RSS feedu', NULL, 1),
+                                                                                                                                                   (37, 'rss:description', '', 'Popis RSS feedu', NULL, 1),
+                                                                                                                                                   (38, 'rss:limit', '20', 'Počet položek v RSS feedu', 'numeric', 1),
+                                                                                                                                                   (39, 'rss:tags', '', 'Vyhrazeno pro budoucí filtrování podle tagů', NULL, 1);
 
 CREATE TABLE `snippets` (
   `id` int(11) NOT NULL,

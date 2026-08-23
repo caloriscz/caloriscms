@@ -20,6 +20,11 @@ class SettingsPresenter extends BasePresenter
         return new EditSettingsControl($this->database);
     }
 
+    protected function createComponentEditRssSettings(): EditSettingsControl
+    {
+        return new EditSettingsControl($this->database, 'rss:');
+    }
+
     protected function createComponentInsertLanguage(): InsertLanguageControl
     {
         return new InsertLanguageControl($this->database);

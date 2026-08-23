@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+    <channel>
+        <title>{$feedTitle}</title>
+        <link>{$baseUrl}</link>
+        <atom:link href="{$feedUrl}" rel="self" type="application/rss+xml" />
+        <description>{$feedDescription}</description>
+        <language>cs</language>
+        <lastBuildDate>{$buildDate}</lastBuildDate>
+        {foreach $pages as $page}
+            {var $pageUrl = $baseUrl . '/' . $page->slug}
+            <item>
+                <title>{$page->title}</title>
+                <link>{$pageUrl}</link>
+                <guid isPermaLink="true">{$pageUrl}</guid>
+                <description>{$page->document|striptags|truncate:500}</description>
+                <pubDate>{$page->date_published|date:'r'}</pubDate>
+            </item>
+        {/foreach}
+    </channel>
+</rss>
