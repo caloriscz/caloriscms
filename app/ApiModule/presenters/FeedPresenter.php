@@ -50,6 +50,6 @@ class FeedPresenter extends BasePresenter
             ->order('COALESCE(date_published, date_created) DESC, id DESC')
             ->limit($limit);
 
-        $this->getHttpResponse()->setContentType('application/rss+xml', 'utf-8');
+        $this->getHttpResponse()->setContentType('text/xml', 'utf-8');
     }
 }

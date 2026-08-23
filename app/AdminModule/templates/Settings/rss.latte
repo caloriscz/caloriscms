@@ -17,6 +17,17 @@
                     </div>
                     <div class="card-block">
                         {if $memberRole && $memberRole->settings}
+                            <div class="form-group row">
+                                <label class="col-md-4 form-control-label">RSS URL</label>
+                                <div class="col-sm-4">
+                                    <input id="rss-url" type="text" class="form-control" readonly value="{$settings['site:url:base']}/rss.xml">
+                                </div>
+                                <div class="col-sm-4">
+                                    <button type="button" class="btn btn-default" onclick="document.getElementById('rss-url').select(); document.execCommand('copy');">
+                                        <i class="fa fa-copy"></i> Kopirovat
+                                    </button>
+                                </div>
+                            </div>
                             {control editRssSettings}
                         {else}
                             <p>Nemate opravneni k zobrazeni teto stranky</p>
