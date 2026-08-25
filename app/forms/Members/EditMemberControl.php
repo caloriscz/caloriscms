@@ -36,7 +36,7 @@ class EditMemberControl extends Control
         $arr = [
             'id' => $this->presenter->getParameter('id'),
             'state' => $user->state,
-            'role' => $user->role
+            'role' => $user->users_roles_id
         ];
 
         $form->setDefaults(array_filter($arr));
@@ -67,18 +67,24 @@ class EditMemberControl extends Control
      */
     public function editFormSucceeded(BootstrapUIForm $form): void
     {
-        $arr = [
-            'sex' => $form->values->sex,
-            'newsletter' => $form->values->newsletter,
-            'state' => $form->values->state,
-        ];
+        $values = $form->getValues(true);
+        $arr = [];
 
-        if ($this->presenter->template->member->username) {
-            $arr['users_roles_id'] = $form->values->role;
+        foreach (['sex', 'newsletter', 'state'] as $field) {
+            if (array_key_exists($field, $values)) {
+                $arr[$field] = $values[$field];
+            }
         }
 
-        $this->database->table('users')->where(['id' => $form->values->id])->update($arr);
-        $this->presenter->redirect('this', ['' => $form->values->id]);
+        if ($this->presenter->template->member->username === 'admin' && array_key_exists('role', $values)) {
+            $arr['users_roles_id'] = $values['role'];
+        }
+
+        if ($arr) {
+            $this->database->table('users')->where(['id' => $values['id']])->update($arr);
+        }
+
+        $this->presenter->redirect('this', ['id' => $values['id']]);
     }
 
     public function render(): void
