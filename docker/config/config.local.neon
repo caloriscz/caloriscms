@@ -1,0 +1,16 @@
+parameters:
+
+
+database:
+	dsn: 'mysql:host=db;dbname=caloriscms;charset=utf8'
+	user: 'caloris'
+	password: 'caloris'
+	options:
+		lazy: yes
+
+services:
+	nette.latteFactory:
+		setup:
+			- setAutoRefresh(true)
+	cache.storage:
+		factory: Nette\Caching\Storages\FileStorage(%tempDir%)

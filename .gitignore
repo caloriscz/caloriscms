@@ -216,3 +216,19 @@ pip-log.txt
 #Mr Developer
 .mr.developer.cfg
 node_modules
+
+#############
+## Caloris local runtime
+#############
+
+/app/config/config.local.neon
+/log/*
+!/log/.gitignore
+/temp/*
+!/temp/cache/
+!/temp/cache/.gitignore
+!/temp/sessions/
+!/temp/sessions/.gitignore
+# Local MCP secrets
+.mcp.json
+.codex/config.toml

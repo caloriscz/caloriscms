@@ -11,6 +11,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class ThumbnailGeneratorCommand extends Command
 {
+    protected static $defaultName = 'pictures:thumbnail-generator';
+
     /** @var Context */
     public $database;
 

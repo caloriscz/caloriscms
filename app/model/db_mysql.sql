@@ -358,7 +358,12 @@ INSERT INTO `settings` (`id`, `setkey`, `setvalue`, `description_cs`, `type`, `a
                                                                                                                                                    (31, 'navigation_footer_template', 'Footer', 'Soubor s vybranou šablonou pro patičku', '', 1),
                                                                                                                                                    (32, 'navigation_template', 'Navigation', 'Soubor s vybranou šablonou pro hlavičku', '', 1),
                                                                                                                                                    (33, 'pages_template', 'Page', 'Soubor s vybranou šablonou pro běžné stránky', '', 1),
-                                                                                                                                                   (34, 'contacts_template', 'Contact', 'Soubor s vybranou šablonou pro stránku kontaktů', '', 1);
+                                                                                                                                                   (34, 'contacts_template', 'Contact', 'Soubor s vybranou šablonou pro stránku kontaktů', '', 1),
+                                                                                                                                                   (35, 'rss:enabled', '0', 'Povolit RSS feed aktualit', 'boolean', 1),
+                                                                                                                                                   (36, 'rss:title', 'Aktuality', 'Název RSS feedu', NULL, 1),
+                                                                                                                                                   (37, 'rss:description', '', 'Popis RSS feedu', NULL, 1),
+                                                                                                                                                   (38, 'rss:limit', '20', 'Počet položek v RSS feedu', 'numeric', 1),
+                                                                                                                                                   (39, 'rss:tags', '', 'Vyhrazeno pro budoucí filtrování podle tagů', NULL, 1);
 
 CREATE TABLE `snippets` (
   `id` int(11) NOT NULL,
@@ -384,6 +389,18 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `username`, `email`, `name`, `password`, `date_created`, `date_visited`, `state`, `activation`, `users_roles_id`, `login_error`, `login_success`, `adminbar_enabled`) VALUES
                                                                                                                                                                                                                                                             (1, 'admin', '', '', '$2y$10$DLhMCsYpbB.xHJ501e.xMOvhneiT1U6YypGAcOna/V2kzIGZOwxla', NULL, '', 1, 'smx5anwed2dr', 1, 0, 0, 0);
+
+CREATE TABLE `api_tokens` (
+  `id` int(11) NOT NULL,
+  `users_id` int(11) NOT NULL,
+  `name` varchar(120) COLLATE utf8_czech_ci NOT NULL,
+  `token_hash` char(64) CHARACTER SET latin1 NOT NULL,
+  `scopes` varchar(255) CHARACTER SET latin1 NOT NULL,
+  `last_used_at` datetime DEFAULT NULL,
+  `created_at` datetime NOT NULL,
+  `expires_at` datetime DEFAULT NULL,
+  `revoked_at` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
 
 CREATE TABLE `users_roles` (
   `id` int(11) NOT NULL,
@@ -502,6 +519,11 @@ ALTER TABLE `users`
   ADD PRIMARY KEY (`id`),
   ADD KEY `users_roles_id` (`users_roles_id`);
 
+ALTER TABLE `api_tokens`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `token_hash` (`token_hash`),
+  ADD KEY `users_id` (`users_id`);
+
 ALTER TABLE `users_roles`
   ADD PRIMARY KEY (`id`);
 
@@ -572,6 +594,9 @@ ALTER TABLE `snippets`
 ALTER TABLE `users`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
+ALTER TABLE `api_tokens`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
 ALTER TABLE `users_roles`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
@@ -624,4 +649,7 @@ ALTER TABLE `pages_widgets`
 
 ALTER TABLE `users`
   ADD CONSTRAINT `users_ibfk_1` FOREIGN KEY (`users_roles_id`) REFERENCES `users_roles` (`id`) ON DELETE SET NULL ON UPDATE SET NULL;
+
+ALTER TABLE `api_tokens`
+  ADD CONSTRAINT `api_tokens_ibfk_1` FOREIGN KEY (`users_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;

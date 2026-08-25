@@ -1,0 +1,7 @@
+.git
+.github
+.idea
+node_modules
+log/*
+temp/*
+vendor/*
