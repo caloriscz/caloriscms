@@ -291,7 +291,7 @@ class Document
             $arr['pages_id'] = null;
         }
 
-        if ($values->date_published) {
+        if (isset($values->date_published) && $values->date_published) {
             $arr['date_published'] = $values->date_published;
         } elseif ($this->getSlug()) {
             $arr['date_published'] = date('Y-m-d H:i:s');

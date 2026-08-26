@@ -24,6 +24,13 @@ class BlogPreviewControl extends Control
 
         $arr['date_published <= ?'] = date('Y-m-d H:i:s');
 
+        $blogPageType = $this->database->table('pages_types')->get(2);
+        $blogRootId = $blogPageType && $blogPageType->pages_id !== null ? (int) $blogPageType->pages_id : null;
+
+        if ($blogRootId !== null) {
+            $arr['pages_id'] = $blogRootId;
+        }
+
         $blog = $this->database->table('pages')
             ->where($arr)
             ->limit($limit)
