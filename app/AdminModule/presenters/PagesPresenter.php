@@ -165,6 +165,30 @@ class PagesPresenter extends BasePresenter
         }
     }
 
+    public function actionPreview(int $id): void
+    {
+        $page = $this->database->table('pages')->get($id);
+
+        if (!$page) {
+            $this->error('Page not found');
+        }
+
+        $destination = $this->getPreviewDestination($page);
+
+        if (!$destination) {
+            $this->error('Preview destination not found');
+        }
+
+        $params = ['page_id' => $page->id];
+        $locale = $this->getParameter('locale');
+
+        if ($locale) {
+            $params['locale'] = $locale;
+        }
+
+        $this->forward($destination, $params);
+    }
+
     public function renderDetail(): void
     {
         $this->template->pages = $this->database->table('pages')->get($this->getParameter('id'));
@@ -190,5 +214,53 @@ class PagesPresenter extends BasePresenter
         $this->template->page = $this->database->table('pages')->get($this->getParameter('id'));
         $this->template->files = $this->database->table('media')
             ->where(['pages_id' => $this->getParameter('id'), 'file_type' => 0]);
+    }
+
+    private function getPreviewDestination($page): ?string
+    {
+        if ($page->pages_templates_id !== null) {
+            return $this->getTemplateDestination($page->ref('pages_templates', 'pages_templates_id'));
+        }
+
+        $pageType = $page->ref('pages_types', 'pages_types_id');
+
+        if (!$pageType) {
+            return null;
+        }
+
+        if ($pageType->pages_templates_id !== null) {
+            $pageTemplate = $this->database->table('pages_templates')->get($pageType->pages_templates_id);
+            $destination = $this->getTemplateDestination($pageTemplate);
+
+            if ($destination) {
+                return $destination;
+            }
+        }
+
+        if ($page->pages_types_id === 9 && $page->presenter) {
+            return $this->getPresenterDestination($page->presenter);
+        }
+
+        return $this->getPresenterDestination($pageType->presenter . ':' . $pageType->action);
+    }
+
+    private function getTemplateDestination($pageTemplate): ?string
+    {
+        if (!$pageTemplate) {
+            return null;
+        }
+
+        return $this->getPresenterDestination($pageTemplate->template);
+    }
+
+    private function getPresenterDestination(string $destination): ?string
+    {
+        $templateInfo = explode(':', $destination);
+
+        if (count($templateInfo) !== 3) {
+            return null;
+        }
+
+        return ':' . implode(':', $templateInfo);
     }
 }

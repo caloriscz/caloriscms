@@ -60,10 +60,17 @@ class EditorSettingsControl extends Control
         $form->addText('date_published');
         $form->addText('title');
         $form->addText('slug');
-        $form->addSelect('parent');
+        $form->addSelect('parent')
+            ->setItems($this->getParentOptions($pages->id));
+        $form->addSelect('template')
+            ->setItems($this->getTemplateOptions());
         $form->addTextArea('metadesc');
         $form->addTextArea('metakeys');
         $form->addCheckbox('sitemap');
+
+        $pageType = $pages->ref('pages_types', 'pages_types_id');
+        $defaultTemplate = $pageType ? $pageType->pages_templates_id : null;
+        $template = $pages->pages_templates_id ?: $defaultTemplate;
 
         if ($l == '') {
             $form->setDefaults([
@@ -76,6 +83,8 @@ class EditorSettingsControl extends Control
                 'public' => $pages->public,
                 'date_published' => $pages->date_published,
                 'sitemap' => $pages->sitemap,
+                'parent' => $pages->pages_id ?: '',
+                'template' => $template ?: '',
             ]);
         } else {
             $form->setDefaults([
@@ -89,6 +98,8 @@ class EditorSettingsControl extends Control
                 'public' => $pages->public,
                 'date_published' => $pages->date_published,
                 'sitemap' => $pages->sitemap,
+                'parent' => $pages->pages_id ?: '',
+                'template' => $template ?: '',
             ]);
         }
 
@@ -109,13 +120,11 @@ class EditorSettingsControl extends Control
 
     public function editFormSucceeded(BootstrapUIForm $form): void
     {
-        $values = $form->getHttpData($form::DATA_TEXT); // get value from html input
-
         $doc = new Document($this->database);
         $doc->setForm($form->getValues());
         $doc->setLanguage($form->values->l);
-        $doc->setTemplate($values['template']);
-        $doc->setParent($values['parent']);
+        $doc->setTemplate($form->values->template);
+        $doc->setParent($form->values->parent);
         $doc->setSlug($form->values->slug_old, $form->values->slug);
         $doc->save($form->values->id, $this->getPresenter()->user->getId());
 
@@ -154,6 +163,28 @@ class EditorSettingsControl extends Control
         $template->page_id = $this->getPresenter()->getParameter('id');
         $template->setFile(__DIR__ . '/EditorSettingsControl.latte');
         $template->render();
+    }
+
+    private function getParentOptions($currentPageId): array
+    {
+        $options = ['' => 'Nadrazena stranka nevybrana --'];
+
+        foreach ($this->database->table('pages')->where('NOT id', $currentPageId)->order('title') as $page) {
+            $options[$page->id] = $page->title;
+        }
+
+        return $options;
+    }
+
+    private function getTemplateOptions(): array
+    {
+        $options = ['' => 'Zakladni sablona --'];
+
+        foreach ($this->database->table('pages_templates')->where('pages_types_id IS NULL')->order('title') as $template) {
+            $options[$template->id] = $template->title;
+        }
+
+        return $options;
     }
 
 }

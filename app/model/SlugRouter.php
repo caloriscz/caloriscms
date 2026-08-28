@@ -96,20 +96,26 @@ class SlugRouter implements \Nette\Routing\Router
             }
         }
 
+        $pageType = $row->ref('pages_types', 'pages_types_id');
+        $pageTemplate = null;
+
         if ($row->pages_templates_id !== null) {
             $pageTemplate = $row->ref('pages_templates', 'pages_templates_id');
+        } elseif ($pageType && $pageType->pages_templates_id !== null) {
+            $pageTemplate = $pageType->ref('pages_templates', 'pages_templates_id');
+        }
 
-            if (!$pageTemplate) {
-                return null;
-            }
+        if ($pageTemplate) {
 
             $templateInfo = explode(':', $pageTemplate->template);
+
+            if (count($templateInfo) !== 3) {
+                return null;
+            }
 
             $presenter = $templateInfo[0] . ':' . $templateInfo[1];
             $params['action'] = $templateInfo[2];
         } else {
-            $pageType = $row->ref('pages_types', 'pages_types_id');
-
             if (!$pageType) {
                 return null;
             }
