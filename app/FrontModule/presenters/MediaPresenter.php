@@ -28,7 +28,7 @@ class MediaPresenter extends BasePresenter
         $paginator = new Paginator();
         $paginator->setItemCount($gallery->count('*'));
         $paginator->setItemsPerPage(10);
-        $paginator->setPage($this->getParameter('page') ?? 1);
+        $paginator->setPage((int) ($this->getParameter('page') ?? 1));
 
         $this->template->paginator = $paginator;
         $this->template->gallery = $gallery->order('title')->limit($paginator->getLength(), $paginator->getOffset());
@@ -44,7 +44,7 @@ class MediaPresenter extends BasePresenter
         $paginator = new Paginator();
         $paginator->setItemCount($gallery->count('*'));
         $paginator->setItemsPerPage(20);
-        $paginator->setPage($this->getParameter('page') ?? 1);
+        $paginator->setPage((int) ($this->getParameter('page') ?? 1));
 
         $this->template->paginator = $paginator;
         $this->template->gallery = $gallery->limit($paginator->getLength(), $paginator->getOffset());
@@ -64,7 +64,7 @@ class MediaPresenter extends BasePresenter
         $paginator = new Paginator();
         $paginator->setItemCount($gallery->count('*'));
         $paginator->setItemsPerPage(10);
-        $paginator->setPage($this->getParameter('page'));
+        $paginator->setPage((int) ($this->getParameter('page') ?? 1));
 
         $this->template->paginator = $paginator;
         $this->template->gallery = $gallery->order('title')->limit($paginator->getLength(), $paginator->getOffset());
@@ -80,7 +80,7 @@ class MediaPresenter extends BasePresenter
         $paginator = new Paginator();
         $paginator->setItemCount($gallery->count('*'));
         $paginator->setItemsPerPage(20);
-        $paginator->setPage($this->getParameter('page'));
+        $paginator->setPage((int) ($this->getParameter('page') ?? 1));
 
         $this->template->paginator = $paginator;
         $this->template->gallery = $gallery->limit($paginator->getLength(), $paginator->getOffset());

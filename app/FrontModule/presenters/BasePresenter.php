@@ -54,6 +54,18 @@ abstract class BasePresenter extends Presenter
     {
         parent::startup();
 
+        $locale = $this->getParameter('locale');
+        if (\in_array($locale, ['cs', 'en'], true)) {
+            $this->translator->setLocale($locale);
+        } else {
+            $this->translator->setLocale($this->translator->getDefaultLocale());
+        }
+
+        if ($this instanceof ErrorPresenter) {
+            $this->template->settings = $this->database->table('settings')->fetchPairs('setkey', 'setvalue');
+            return;
+        }
+
         $this->template->page = $this->database->table('pages')->get($this->getParameter('page_id'));
         $this->template->settings = $this->database->table('settings')->fetchPairs('setkey', 'setvalue');
 
