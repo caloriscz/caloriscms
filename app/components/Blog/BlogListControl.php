@@ -26,10 +26,18 @@ class BlogListControl extends Control
         $template = $this->getTemplate();
         $template->settings = $this->getPresenter()->template->settings;
 
+        $blogPageType = $this->database->table('pages_types')->get(2);
+        $blogRootId = $blogPageType && $blogPageType->pages_id !== null ? (int) $blogPageType->pages_id : null;
+
         $blog = $this->database->table('pages')->where([
+            'public' => 1,
             'date_published <= ?' => date('Y-m-d H:i:s'),
             'pages_types_id' => 2,
         ])->order('date_created DESC');
+
+        if ($blogRootId !== null) {
+            $blog->where('pages_id', $blogRootId);
+        }
 
         $paginator = new Paginator();
         $paginator->setItemCount($blog->count('*'));

@@ -174,4 +174,27 @@ class SettingsPresenter extends BasePresenter
     {
         $this->template->usersRoles = $this->database->table('users_roles');
     }
+
+    public function renderRss(): void
+    {
+        $blogPageType = $this->database->table('pages_types')->get(2);
+        $blogRootId = $blogPageType && $blogPageType->pages_id !== null ? (int) $blogPageType->pages_id : null;
+
+        $parentIds = $this->database->table('pages')
+            ->where('pages_types_id', 2)
+            ->where('pages_id IS NOT NULL')
+            ->fetchPairs('pages_id', 'pages_id');
+
+        if ($blogRootId !== null) {
+            unset($parentIds[$blogRootId]);
+        }
+
+        $this->template->rssGroups = [];
+
+        if (count($parentIds) > 0) {
+            $this->template->rssGroups = $this->database->table('pages')
+                ->where('id IN ?', array_values($parentIds))
+                ->order('title');
+        }
+    }
 }

@@ -28,6 +28,10 @@ class Document
     private $lang;
     private $type;
     private $formValues;
+    private bool $documentSet = false;
+    private bool $templateSet = false;
+    private bool $parentSet = false;
+    private bool $previewSet = false;
 
     public function __construct(Explorer $database)
     {
@@ -66,13 +70,16 @@ class Document
 
     public function setTemplate($pageTemplate = false)
     {
-        $this->pageTemplate = $pageTemplate;
+        $this->templateSet = true;
+        $this->pageTemplate = ($pageTemplate === false || $pageTemplate === '' || $pageTemplate === null)
+            ? null
+            : $pageTemplate;
         return $this->pageTemplate;
     }
 
     public function getTemplate()
     {
-        if ($this->pageTemplate) {
+        if ($this->templateSet) {
             return $this->pageTemplate;
         }
 
@@ -131,7 +138,9 @@ class Document
 
     public function setParent($parent = false)
     {
-        if ($parent === false) {
+        $this->parentSet = true;
+
+        if ($parent === false || $parent === '' || $parent === null) {
             $this->parent = 0;
         } else {
             $this->parent = $parent;
@@ -151,6 +160,7 @@ class Document
 
     public function setPreview($preview = false)
     {
+        $this->previewSet = true;
         $this->preview = $preview;
         return $this->preview;
     }
@@ -166,6 +176,7 @@ class Document
 
     public function setDocument($doc = false)
     {
+        $this->documentSet = true;
         $this->doc = $doc;
         return $this->doc;
     }
@@ -241,7 +252,7 @@ class Document
     public function save(int $id, $user = null): bool
     {
         $values = $this->getForm();
-        $arr['sitemap'] = 0;
+        $arr = [];
 
         if (isset($values->title) && $this->getLanguage()) {
             $arr['title' . '_' . $this->getLanguage()] = $values->title;
@@ -249,18 +260,24 @@ class Document
             $arr['title'] = $values->title;
         }
 
-        $arr['pages_templates_id'] = $this->getTemplate();
-
-        if ($this->getDocument() && $this->getLanguage()) {
-            $arr['document' . '_' . $this->getLanguage()] = $this->getDocument();
-        } else {
-            $arr['document'] = $this->getDocument();
+        if ($this->templateSet) {
+            $arr['pages_templates_id'] = $this->getTemplate();
         }
 
-        if ($this->getPreview() && $this->getLanguage()) {
-            $arr['preview' . '_' . $this->getLanguage()] = $this->getPreview();
-        } elseif ($this->getPreview()) {
-            $arr['preview'] = $this->getPreview();
+        if ($this->documentSet) {
+            if ($this->getLanguage()) {
+                $arr['document' . '_' . $this->getLanguage()] = $this->getDocument();
+            } else {
+                $arr['document'] = $this->getDocument();
+            }
+        }
+
+        if ($this->previewSet) {
+            if ($this->getLanguage()) {
+                $arr['preview' . '_' . $this->getLanguage()] = $this->getPreview();
+            } else {
+                $arr['preview'] = $this->getPreview();
+            }
         }
 
         if (isset($values->metakeys) && $this->getLanguage()) {
@@ -276,7 +293,7 @@ class Document
         }
 
         if (isset($values->sitemap)) {
-            $arr['sitemap'] = 1;
+            $arr['sitemap'] = $values->sitemap ? 1 : 0;
         }
 
         if ($this->getSlug() && $this->getLanguage()) {
@@ -285,13 +302,15 @@ class Document
             $arr['slug'] = $this->getSlug();
         }
 
-        if ($this->getParent()) {
-            $arr['pages_id'] = $this->getParent();
-        } elseif ($this->getParent() === 0) {
-            $arr['pages_id'] = null;
+        if ($this->parentSet) {
+            if ($this->getParent()) {
+                $arr['pages_id'] = $this->getParent();
+            } elseif ($this->parent === 0) {
+                $arr['pages_id'] = null;
+            }
         }
 
-        if ($values->date_published) {
+        if (isset($values->date_published) && $values->date_published) {
             $arr['date_published'] = $values->date_published;
         } elseif ($this->getSlug()) {
             $arr['date_published'] = date('Y-m-d H:i:s');
