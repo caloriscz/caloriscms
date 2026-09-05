@@ -1,6 +1,7 @@
 <?php
 namespace App\Forms\Files;
 
+use App\Model\IO;
 use Nette\Application\UI\Control;
 use Nette\Database\Explorer;
 use Nette\Forms\BootstrapUIForm;
@@ -32,11 +33,22 @@ class DropUploadControl extends Control
             $storeFolder = 'images';
 
             $tempFile = $_FILES['file']['tmp_name'];
+            $fileName = IO::sanitizeUploadFileName($_FILES['file']['name']);
+
+            if ($fileName === null || !IO::isAllowedImageUpload($_FILES['file']['name'], $tempFile)) {
+                http_response_code(400);
+                exit();
+            }
+
             $targetPath = APP_DIR . $ds . $storeFolder . $ds;
 
-            $targetFile = $targetPath . $_FILES['file']['name'];
+            $targetFile = $targetPath . $fileName;
 
-            move_uploaded_file($tempFile, $targetFile);
+            if (!move_uploaded_file($tempFile, $targetFile)) {
+                http_response_code(400);
+                exit();
+            }
+
             chmod($targetFile, 0644);
 
             exit();

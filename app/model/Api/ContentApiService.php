@@ -3,35 +3,70 @@ declare(strict_types=1);
 
 namespace App\Model\Api;
 
+use InvalidArgumentException;
 use Nette\Database\Explorer;
 use Nette\Database\Table\ActiveRow;
+use Nette\Utils\Strings;
 
 class ContentApiService
 {
-    private const PAGE_FIELDS = [
+    private const PAGE_WRITE_FIELDS = [
         'slug',
         'title',
         'document',
         'preview',
         'pages_id',
-        'users_id',
-        'public',
         'metadesc',
         'metakeys',
-        'date_created',
         'date_published',
         'pages_types_id',
         'pages_templates_id',
-        'sorted',
-        'editable',
         'sitemap',
     ];
 
+    private const PAGE_TEXT_LENGTHS = [
+        'title' => 250,
+        'slug' => 250,
+        'metadesc' => 200,
+        'metakeys' => 150,
+    ];
+
+    private const RESERVED_SLUGS = [
+        'blog',
+        'cart',
+        'catalogue',
+        'contacts',
+        'document',
+        'documents',
+        'error',
+        'events',
+        'gallery',
+        'helpdesk',
+        'homepage',
+        'links',
+        'order',
+        'orders',
+        'pricelist',
+        'product',
+        'profile',
+        'services',
+        'sign',
+    ];
+
     private Explorer $database;
+    private \HTMLPurifier $htmlPurifier;
 
     public function __construct(Explorer $database)
     {
         $this->database = $database;
+
+        $config = \HTMLPurifier_Config::createDefault();
+        $config->set('HTML.AllowedAttributes', 'img.src,*.style,*.class');
+        $config->set('Attr.AllowedClasses', 'col-*,container,text-right, text-left, btn, btn-lg');
+        $config->set('HTML.ForbiddenElements', ['font']);
+        $config->set('AutoFormat.RemoveEmpty', true);
+
+        $this->htmlPurifier = new \HTMLPurifier($config);
     }
 
     /**
@@ -71,7 +106,7 @@ class ContentApiService
 
     public function createPage(array $data, int $userId): array
     {
-        $payload = $this->filterPageData($data);
+        $payload = $this->preparePageData($data, null, true);
         $payload['users_id'] = $userId;
         $payload += [
             'public' => 0,
@@ -90,7 +125,7 @@ class ContentApiService
             return null;
         }
 
-        $payload = $this->filterPageData($data);
+        $payload = $this->preparePageData($data, $id, false);
 
         if ($payload !== []) {
             $page->update($payload);
@@ -134,7 +169,7 @@ class ContentApiService
     public function findUnknownPageField(array $data): ?string
     {
         foreach (array_keys($data) as $field) {
-            if (!in_array($field, self::PAGE_FIELDS, true)) {
+            if (!in_array($field, self::PAGE_WRITE_FIELDS, true)) {
                 return $field;
             }
         }
@@ -142,9 +177,218 @@ class ContentApiService
         return null;
     }
 
-    private function filterPageData(array $data): array
+    private function preparePageData(array $data, ?int $currentPageId, bool $isCreate): array
     {
-        return array_intersect_key($data, array_flip(self::PAGE_FIELDS));
+        $payload = [];
+
+        foreach ($data as $field => $value) {
+            switch ($field) {
+                case 'title':
+                    $payload['title'] = $this->requireText($field, $value, self::PAGE_TEXT_LENGTHS[$field]);
+                    break;
+                case 'slug':
+                    $payload['slug'] = $this->normalizeSlug($value, $currentPageId, true);
+                    break;
+                case 'document':
+                    $payload['document'] = $this->purifyHtml($this->requireString($field, $value));
+                    break;
+                case 'preview':
+                    $payload['preview'] = $this->purifyHtml($this->requireString($field, $value));
+                    break;
+                case 'metadesc':
+                case 'metakeys':
+                    $payload[$field] = $this->nullableText($field, $value, self::PAGE_TEXT_LENGTHS[$field]);
+                    break;
+                case 'date_published':
+                    $payload[$field] = $this->normalizeDate($field, $value);
+                    break;
+                case 'pages_id':
+                    $payload[$field] = $this->normalizePageParent($value, $currentPageId);
+                    break;
+                case 'pages_types_id':
+                    $payload[$field] = $this->requireExistingId('pages_types', $field, $value);
+                    break;
+                case 'pages_templates_id':
+                    $payload[$field] = $this->normalizeTemplate($value);
+                    break;
+                case 'sitemap':
+                    $payload[$field] = $this->normalizeBoolean($field, $value);
+                    break;
+            }
+        }
+
+        if ($isCreate && !isset($payload['title'])) {
+            throw new InvalidArgumentException('Field title is required');
+        }
+
+        if ($isCreate && !isset($payload['slug'])) {
+            $payload['slug'] = $this->normalizeSlug($payload['title'], null, false);
+        }
+
+        return $payload;
+    }
+
+    private function requireString(string $field, $value): string
+    {
+        if (!is_string($value) && !is_numeric($value)) {
+            throw new InvalidArgumentException('Field ' . $field . ' must be a string');
+        }
+
+        return trim((string) $value);
+    }
+
+    private function requireText(string $field, $value, int $maxLength): string
+    {
+        $text = $this->requireString($field, $value);
+
+        if ($text === '') {
+            throw new InvalidArgumentException('Field ' . $field . ' cannot be empty');
+        }
+
+        if (Strings::length($text) > $maxLength) {
+            throw new InvalidArgumentException('Field ' . $field . ' is too long');
+        }
+
+        return $text;
+    }
+
+    private function nullableText(string $field, $value, int $maxLength): ?string
+    {
+        if ($value === null || $value === '') {
+            return null;
+        }
+
+        return $this->requireText($field, $value, $maxLength);
+    }
+
+    private function purifyHtml(string $html): string
+    {
+        return $this->htmlPurifier->purify($html);
+    }
+
+    private function normalizeSlug($value, ?int $currentPageId, bool $rejectDuplicate): string
+    {
+        $source = $this->requireText('slug', $value, self::PAGE_TEXT_LENGTHS['slug']);
+        $slug = Strings::webalize($source);
+
+        if ($slug === '') {
+            throw new InvalidArgumentException('Field slug cannot be empty after normalization');
+        }
+
+        if (in_array($slug, self::RESERVED_SLUGS, true)) {
+            $slug .= '-name';
+        }
+
+        if (Strings::length($slug) > self::PAGE_TEXT_LENGTHS['slug']) {
+            throw new InvalidArgumentException('Field slug is too long after normalization');
+        }
+
+        if ($rejectDuplicate && $this->slugExists($slug, $currentPageId)) {
+            throw new InvalidArgumentException('Field slug must be unique');
+        }
+
+        if (!$rejectDuplicate) {
+            return $this->generateUniqueSlug($slug);
+        }
+
+        return $slug;
+    }
+
+    private function slugExists(string $slug, ?int $currentPageId): bool
+    {
+        $selection = $this->database->table('pages')->where('slug', $slug);
+
+        if ($currentPageId !== null) {
+            $selection->where('NOT id', $currentPageId);
+        }
+
+        return $selection->count() > 0;
+    }
+
+    private function generateUniqueSlug(string $slug): string
+    {
+        if (!$this->slugExists($slug, null)) {
+            return $slug;
+        }
+
+        $i = 1;
+        do {
+            $candidate = $i . '-' . $slug;
+            $i++;
+        } while ($this->slugExists($candidate, null));
+
+        return $candidate;
+    }
+
+    private function normalizeDate(string $field, $value): ?string
+    {
+        if ($value === null || $value === '') {
+            return null;
+        }
+
+        if (!is_string($value) && !is_numeric($value)) {
+            throw new InvalidArgumentException('Field ' . $field . ' must be a date string');
+        }
+
+        $timestamp = strtotime((string) $value);
+
+        if ($timestamp === false) {
+            throw new InvalidArgumentException('Field ' . $field . ' must be a valid date');
+        }
+
+        return date('Y-m-d H:i:s', $timestamp);
+    }
+
+    private function normalizePageParent($value, ?int $currentPageId): ?int
+    {
+        if ($value === null || $value === '') {
+            return null;
+        }
+
+        $id = $this->requireExistingId('pages', 'pages_id', $value);
+
+        if ($currentPageId !== null && $id === $currentPageId) {
+            throw new InvalidArgumentException('Field pages_id cannot reference the same page');
+        }
+
+        return $id;
+    }
+
+    private function normalizeTemplate($value): ?int
+    {
+        if ($value === null || $value === '') {
+            return null;
+        }
+
+        return $this->requireExistingId('pages_templates', 'pages_templates_id', $value);
+    }
+
+    private function requireExistingId(string $table, string $field, $value): int
+    {
+        if (filter_var($value, FILTER_VALIDATE_INT) === false) {
+            throw new InvalidArgumentException('Field ' . $field . ' must be an integer');
+        }
+
+        $id = (int) $value;
+
+        if ($id < 1 || !$this->database->table($table)->get($id)) {
+            throw new InvalidArgumentException('Field ' . $field . ' references a missing record');
+        }
+
+        return $id;
+    }
+
+    private function normalizeBoolean(string $field, $value): int
+    {
+        if (is_bool($value)) {
+            return $value ? 1 : 0;
+        }
+
+        if ($value === 0 || $value === 1 || $value === '0' || $value === '1') {
+            return (int) $value;
+        }
+
+        throw new InvalidArgumentException('Field ' . $field . ' must be boolean');
     }
 
     private function formatPage(ActiveRow $page): array

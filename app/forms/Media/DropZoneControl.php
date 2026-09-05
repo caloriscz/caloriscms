@@ -58,13 +58,21 @@ class DropZoneControl extends Control
 
             IO::directoryMake(APP_DIR . $ds . $storeFolder);
 
-
             $tempFile = $_FILES['file']['tmp_name'];
-            $realFile = $_FILES['file']['name'];
-            $targetPath = APP_DIR . $ds . $storeFolder . $ds;
-            $targetFile = $targetPath . $_FILES['file']['name'];
+            $realFile = IO::sanitizeUploadFileName($_FILES['file']['name']);
 
-            move_uploaded_file($tempFile, $targetFile);
+            if ($realFile === null || ((int) $form->values->type === 1 && !IO::isAllowedImageUpload($_FILES['file']['name'], $tempFile))) {
+                http_response_code(400);
+                exit();
+            }
+
+            $targetPath = APP_DIR . $ds . $storeFolder . $ds;
+            $targetFile = $targetPath . $realFile;
+
+            if (!move_uploaded_file($tempFile, $targetFile)) {
+                http_response_code(400);
+                exit();
+            }
 
             $fileSize = filesize($targetFile);
 

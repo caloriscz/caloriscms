@@ -6,6 +6,7 @@ use App\Model\IO;
 use Caloriscz\Links\CategoryPanelControl;
 use Nette\Application\AbortException;
 use Nette\Forms\BootstrapUIForm;
+use Nette\Forms\Form;
 use Nette\Utils\Random;
 use Tracy\Debugger;
 
@@ -94,7 +95,8 @@ class LinksPresenter extends BasePresenter
             ->setHtmlAttribute('class', 'form-control');
         $form->addTextArea('description', 'Popisek')
             ->setHtmlAttribute('class', 'form-control summernote');
-        $form->addUpload('the_file', 'Vyberte obrázek (nepovinné)');
+        $form->addUpload('the_file', 'Vyberte obrázek (nepovinné)')
+            ->addRule(Form::MIME_TYPE, 'Neplatny typ', IO::IMAGE_MIME_TYPES);
         $form->setDefaults([
             'title' => $this->template->link->title,
             'url' => $this->template->link->url,
@@ -128,6 +130,11 @@ class LinksPresenter extends BasePresenter
             ]);
 
         if ($_FILES['the_file']['size'] > 0) {
+            if (!IO::isAllowedImageUpload($_FILES['the_file']['name'], $_FILES['the_file']['tmp_name'])) {
+                $this->flashMessage('Neplatny obrazek.', 'error');
+                $this->redirect('this', ['id' => $form->values->id]);
+            }
+
             IO::directoryMake(APP_DIR . '/links-media');
 
             if (file_exists(APP_DIR . '/links-media/link-' . $form->values->id . '.jpg') && is_uploaded_file($_FILES['the_file']['tmp_name'])) {

@@ -6,10 +6,12 @@ use Nette\Application\AbortException;
 use Nette\Application\UI\Control;
 use Nette\Database\Explorer;
 use Nette\Forms\BootstrapUIForm;
+use Nette\Forms\Form;
 use Nette\Security\Passwords;
 
 class ChangePasswordControl extends Control
 {
+    private const MIN_PASSWORD_LENGTH = 8;
 
     public Explorer $database;
 
@@ -25,8 +27,12 @@ class ChangePasswordControl extends Control
     {
         $form = new BootstrapUIForm();
         $form->getElementPrototype()->class = 'form-horizontal';
-        $form->addPassword('password1', 'Heslo');
-        $form->addPassword('password2', 'Znovu napište heslo');
+        $form->addPassword('password1', 'Heslo')
+            ->setRequired('Zadejte heslo.')
+            ->addRule(Form::MIN_LENGTH, 'Heslo musí mít alespoň %d znaků.', self::MIN_PASSWORD_LENGTH);
+        $form->addPassword('password2', 'Znovu napište heslo')
+            ->setRequired('Zadejte heslo znovu.')
+            ->addRule(Form::EQUAL, 'Hesla se neshodují.', $form['password1']);
         $form->addSubmit('name', 'Změnit');
 
         $form->onSuccess[] = [$this, 'changePasswordFormSucceeded'];
@@ -41,18 +47,20 @@ class ChangePasswordControl extends Control
     {
         $ppwd = $form->values->password1;
         $ppwd2 = $form->values->password2;
-        $passwordHash = new Passwords();
-        $passwordEncrypted = $passwordHash->hash($ppwd);
 
         if (strcasecmp($ppwd, $ppwd2) !== 0) {
-            $this->presenter->flashMessage('Hesla se neshodují');
+            $this->presenter->flashMessage('Hesla se neshodují', 'error');
+            $this->presenter->redirect('this');
         }
+
+        $passwordHash = new Passwords();
+        $passwordEncrypted = $passwordHash->hash($ppwd);
 
         $this->database->table('users')->where(['id' => $this->presenter->user->getId()])->update(
             ['password' => $passwordEncrypted]
         );
 
-        setcookie('calpwd', $passwordEncrypted, time() + 15552000, '/');
+        setcookie('calpwd', '', time() - 3600, '/');
 
         $this->presenter->redirect('this');
     }

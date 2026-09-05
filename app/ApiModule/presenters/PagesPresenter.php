@@ -4,6 +4,8 @@ declare(strict_types=1);
 namespace App\ApiModule\Presenters;
 
 use App\Model\Api\ContentApiService;
+use InvalidArgumentException;
+
 class PagesPresenter extends BasePresenter
 {
     private ContentApiService $contentApi;
@@ -75,7 +77,12 @@ class PagesPresenter extends BasePresenter
             $this->sendApiError('Unknown field: ' . $unknownField, 400);
         }
 
-        $page = $this->contentApi->createPage($data, (int) $this->getApiIdentity()->user->id);
+        try {
+            $page = $this->contentApi->createPage($data, (int) $this->getApiIdentity()->user->id);
+        } catch (InvalidArgumentException $e) {
+            $this->sendApiError($e->getMessage(), 400);
+        }
+
         $this->sendApiResponse($page, 201);
     }
 
@@ -88,7 +95,11 @@ class PagesPresenter extends BasePresenter
             $this->sendApiError('Unknown field: ' . $unknownField, 400);
         }
 
-        $page = $this->contentApi->updatePage($id, $data);
+        try {
+            $page = $this->contentApi->updatePage($id, $data);
+        } catch (InvalidArgumentException $e) {
+            $this->sendApiError($e->getMessage(), 400);
+        }
 
         if (!$page) {
             $this->sendApiError('Page not found', 404);

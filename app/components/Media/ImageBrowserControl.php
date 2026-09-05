@@ -35,16 +35,19 @@ class ImageBrowserControl extends Control
     {
         $imageDb = $this->database->table('pictures')->get($id);
 
-        if ($imageDb === null) {
+        if ($imageDb !== null) {
+            $pageId = $imageDb->pages_id;
             IO::remove(APP_DIR . '/pictures/' . $imageDb->pages_id . '/' . $imageDb->name);
             IO::remove(APP_DIR . '/pictures/' . $imageDb->pages_id . '/tn/' . $imageDb->name);
 
             $imageDb->delete();
+        } else {
+            $pageId = $this->getParameter('id');
         }
 
 
         $this->redirect('this', [
-            'id' => $imageDb->pages_id,
+            'id' => $pageId,
             'type' => $this->getParameter('type'),
         ]);
     }

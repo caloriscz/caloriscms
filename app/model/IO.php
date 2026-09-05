@@ -18,6 +18,69 @@ use Tracy\Debugger;
  */
 class IO
 {
+    public const IMAGE_MIME_TYPES = ['image/png', 'image/jpeg', 'image/jpg', 'image/gif', 'image/bmp'];
+
+    private const IMAGE_UPLOAD_EXTENSIONS = ['png', 'jpg', 'jpeg', 'gif', 'bmp'];
+
+    private const UNSAFE_UPLOAD_EXTENSIONS = [
+        'php', 'php3', 'php4', 'php5', 'php7', 'phtml', 'phar',
+        'cgi', 'pl', 'py', 'rb', 'sh', 'bash', 'zsh', 'ksh',
+        'bat', 'cmd', 'com', 'exe', 'dll', 'msi', 'jar',
+        'jsp', 'asp', 'aspx', 'shtml', 'html', 'htm', 'js', 'mjs',
+        'svg', 'swf', 'htaccess', 'htpasswd',
+    ];
+
+    public static function sanitizeUploadFileName($fileName): ?string
+    {
+        $fileName = str_replace('\\', '/', (string) $fileName);
+        $fileName = basename($fileName);
+        $fileName = preg_replace('/[[:cntrl:]]+/', '', $fileName);
+        $fileName = trim($fileName);
+
+        if ($fileName === '' || $fileName === '.' || $fileName === '..') {
+            return null;
+        }
+
+        $extension = strtolower((string) pathinfo($fileName, PATHINFO_EXTENSION));
+
+        if ($extension !== '' && in_array($extension, self::UNSAFE_UPLOAD_EXTENSIONS, true)) {
+            return null;
+        }
+
+        $name = pathinfo($fileName, PATHINFO_FILENAME);
+        $transliterated = @iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $name);
+
+        if ($transliterated !== false && $transliterated !== '') {
+            $name = $transliterated;
+        }
+
+        $name = preg_replace('/[^A-Za-z0-9_-]+/', '-', $name);
+        $name = trim($name, '-_');
+
+        if ($name === '') {
+            $name = 'file';
+        }
+
+        return $extension !== '' ? $name . '.' . $extension : $name;
+    }
+
+    public static function isAllowedUploadFileName($fileName): bool
+    {
+        return self::sanitizeUploadFileName($fileName) !== null;
+    }
+
+    public static function isAllowedImageUpload($fileName, $tmpName): bool
+    {
+        $safeFileName = self::sanitizeUploadFileName($fileName);
+
+        if ($safeFileName === null) {
+            return false;
+        }
+
+        return in_array(strtolower((string) pathinfo($safeFileName, PATHINFO_EXTENSION)), self::IMAGE_UPLOAD_EXTENSIONS, true)
+            && is_uploaded_file($tmpName)
+            && self::isImage($tmpName);
+    }
 
     /**
      * Uploads file
@@ -28,6 +91,16 @@ class IO
      */
     public static function upload($pathDirectory, $fileName, $chmod = 0644): ?bool
     {
+        $safeFileName = self::sanitizeUploadFileName($fileName);
+
+        if ($safeFileName === null
+            || $safeFileName !== (string) $fileName
+            || !isset($_FILES['the_file']['tmp_name'])
+            || !is_uploaded_file($_FILES['the_file']['tmp_name'])
+        ) {
+            return false;
+        }
+
         $path = $pathDirectory . '/' . $fileName;
 
         if (!file_exists($path)) {
@@ -199,18 +272,7 @@ class IO
         $finfo = finfo_open(FILEINFO_MIME_TYPE);
         $type = finfo_file($finfo, $path);
 
-        $valid_image_type = [];
-        $valid_image_type['image/png'] = '';
-        $valid_image_type['image/jpg'] = '';
-        $valid_image_type['image/jpeg'] = '';
-        $valid_image_type['image/gif'] = '';
-        $valid_image_type['image/bmp'] = '';
-
-        if (isset($valid_image_type[$type])) {
-            return true;
-        }
-
-        return false;
+        return in_array($type, self::IMAGE_MIME_TYPES, true);
     }
 
 }

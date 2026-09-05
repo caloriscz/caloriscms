@@ -6,6 +6,7 @@ use App\Model\IO;
 use Nette\Application\UI\Control;
 use Nette\Database\Explorer;
 use Nette\Forms\BootstrapUIForm;
+use Nette\Forms\Form;
 
 class InsertCarouselControl extends Control
 {
@@ -34,7 +35,8 @@ class InsertCarouselControl extends Control
             ->setAttribute('style', 'max-height: 150px;');
         $form->addText('uri', 'Odkaz');
         $form->addCheckbox('visible', 'Zobrazit');
-        $form->addUpload('the_file', 'Ikonka');
+        $form->addUpload('the_file', 'Ikonka')
+            ->addRule(Form::MIME_TYPE, 'Neplatny typ', IO::IMAGE_MIME_TYPES);
         $form->addSubmit('submitm', 'Uložit');
 
         $form->onSuccess[] = [$this, 'insertFormSucceeded'];
@@ -55,7 +57,14 @@ class InsertCarouselControl extends Control
         ];
 
         if ($form->values->the_file->error === 0) {
-            $arr['image'] = $form->values->the_file->name;
+            $image = IO::sanitizeUploadFileName($form->values->the_file->name);
+
+            if ($image === null || !IO::isAllowedImageUpload($form->values->the_file->name, $_FILES['the_file']['tmp_name'])) {
+                $this->flashMessage('Neplatny obrazek.', 'error');
+                $this->redirect('this', ['carousel_id' => $form->values->carousel_id]);
+            }
+
+            $arr['image'] = $image;
 
             $filePath = APP_DIR . '/images/carousel/' . $arr['image'];
 

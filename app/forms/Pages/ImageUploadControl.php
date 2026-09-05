@@ -50,15 +50,24 @@ class ImageUploadControl extends Control
         $fileDirectory = APP_DIR . '/media/' . $album . '/';
         IO::directoryMake($fileDirectory, 0755);
 
-        if (strlen($_FILES['the_file']['tmp_name']) > 1) {
+        if (is_uploaded_file($_FILES['the_file']['tmp_name'])) {
+            $fileName = IO::sanitizeUploadFileName($_FILES['the_file']['name']);
+
+            if ($fileName === null) {
+                $this->flashMessage('Neplatny soubor.', 'error');
+                $this->redirect('this', [
+                    'id' => $form->values->id,
+                ]);
+            }
+
             $imageExists = $this->database->table('media')->where([
-                'name' => $_FILES['the_file']['name'],
+                'name' => $fileName,
                 'pages_id' => $form->values->id,
             ]);
 
             if ($imageExists->count() === 0) {
                 $this->database->table('media')->insert([
-                    'name' => $_FILES['the_file']['name'],
+                    'name' => $fileName,
                     'pages_id' => $form->values->id,
                     'description' => $form->values->description,
                     'date_created' => date('Y-m-d H:i:s'),
@@ -66,11 +75,11 @@ class ImageUploadControl extends Control
                 ]);
             }
 
-            $fileName = $fileDirectory . $_FILES['the_file']['name'];
-            IO::remove($fileName);
+            $filePath = $fileDirectory . $fileName;
+            IO::remove($filePath);
 
-            copy($_FILES['the_file']['tmp_name'], $fileName);
-            chmod($fileName, 0644);
+            copy($_FILES['the_file']['tmp_name'], $filePath);
+            chmod($filePath, 0644);
         }
 
         $this->redirect('this', [
@@ -113,35 +122,44 @@ class ImageUploadControl extends Control
         $fileDirectory = APP_DIR . '/media/' . $form->values->id;
         IO::directoryMake($fileDirectory, 0755);
 
-        if (strlen($_FILES['the_file']['tmp_name']) > 1) {
+        if (is_uploaded_file($_FILES['the_file']['tmp_name'])) {
+            $fileName = IO::sanitizeUploadFileName($_FILES['the_file']['name']);
+
+            if ($fileName === null || !IO::isAllowedImageUpload($_FILES['the_file']['name'], $_FILES['the_file']['tmp_name'])) {
+                $this->flashMessage('Neplatny obrazek.', 'error');
+                $this->redirect('this', [
+                    'id' => $form->values->id,
+                ]);
+            }
+
             $imageExists = $this->database->table('media')->where([
-                'name' => $_FILES['the_file']['name'],
+                'name' => $fileName,
                 'pages_id' => $form->values->id,
             ]);
 
-            $fileName = $fileDirectory . '/' . $_FILES['the_file']['name'];
-            IO::remove($fileName);
+            $filePath = $fileDirectory . '/' . $fileName;
+            IO::remove($filePath);
 
-            copy($_FILES['the_file']['tmp_name'], $fileName);
-            chmod($fileName, 0644);
+            copy($_FILES['the_file']['tmp_name'], $filePath);
+            chmod($filePath, 0644);
 
             if ($imageExists->count() === 0) {
                 $this->database->table('media')->insert([
-                    'name' => $_FILES['the_file']['name'],
+                    'name' => $fileName,
                     'pages_id' => $form->values->id,
                     'description' => $form->values->description,
-                    'filesize' => filesize($fileDirectory . '/' . $_FILES['the_file']['name']),
+                    'filesize' => filesize($fileDirectory . '/' . $fileName),
                     'file_type' => 1,
                     'date_created' => date('Y-m-d H:i:s'),
                 ]);
             }
 
             // thumbnails
-            $image = Image::fromFile($fileName);
+            $image = Image::fromFile($filePath);
             $image->resize(400, 250, Image::SHRINK_ONLY);
             $image->sharpen();
-            $image->save(APP_DIR . '/media/' . $form->values->id . '/tn/' . $_FILES['the_file']['name']);
-            chmod(APP_DIR . '/media/' . $form->values->id . '/tn/' . $_FILES['the_file']['name'], 0644);
+            $image->save(APP_DIR . '/media/' . $form->values->id . '/tn/' . $fileName);
+            chmod(APP_DIR . '/media/' . $form->values->id . '/tn/' . $fileName, 0644);
         }
 
         $this->redirect('this', [

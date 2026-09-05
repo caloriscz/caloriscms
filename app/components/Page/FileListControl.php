@@ -21,9 +21,17 @@ class FileListControl extends Control
      */
     public function handleDeleteFile($id): void
     {
-        $this->database->table('media')->get($id)->delete();
-        IO::remove(APP_DIR . '/media/' . $id . '/' . $this->getParameter('name'));
-        $this->onSave($this->getParameter('name'));
+        $file = $this->database->table('media')->get($id);
+
+        if ($file !== null) {
+            $pageId = $file->pages_id;
+            IO::remove(APP_DIR . '/media/' . $file->pages_id . '/' . $file->name);
+            $file->delete();
+        } else {
+            $pageId = $this->getParameter('name');
+        }
+
+        $this->onSave($pageId);
     }
 
     public function render($page, $templateFile = false): void

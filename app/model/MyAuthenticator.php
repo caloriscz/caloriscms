@@ -35,6 +35,10 @@ class MyAuthenticator implements Nette\Security\Authenticator
             throw new AuthenticationException('Nesprávné heslo.', self::INVALID_CREDENTIAL);
         }
 
+        if ((int) $row->state !== 1) {
+            throw new AuthenticationException('Nesprávné heslo.', self::NOT_APPROVED);
+        }
+
         return new SimpleIdentity($row->id, $row->users_roles_id);
     }
 

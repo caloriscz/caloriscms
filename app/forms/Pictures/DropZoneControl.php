@@ -44,13 +44,23 @@ class DropZoneControl extends Control
     {
         if (!empty($_FILES)) {
             $storeFolder = 'pictures/' . $form->values->pages_id;
-            $fileName = $_FILES['file']['name'];
+            $fileName = IO::sanitizeUploadFileName($_FILES['file']['name']);
+
+            if ($fileName === null || !IO::isAllowedImageUpload($_FILES['file']['name'], $_FILES['file']['tmp_name'])) {
+                http_response_code(400);
+                exit();
+            }
+
             $targetFile = APP_DIR . '/' . $storeFolder . '/' . $fileName;
 
             IO::directoryMake(APP_DIR . '/' . $storeFolder);
             IO::directoryMake(APP_DIR . '/' . $storeFolder . '/tn');
 
-            move_uploaded_file($_FILES['file']['tmp_name'], $targetFile);
+            if (!move_uploaded_file($_FILES['file']['tmp_name'], $targetFile)) {
+                http_response_code(400);
+                exit();
+            }
+
             chmod($targetFile, 0644);
 
             $checkImage = $this->database->table('pictures')->where([

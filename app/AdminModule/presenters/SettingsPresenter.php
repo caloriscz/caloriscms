@@ -14,6 +14,24 @@ use Nette\Application\AbortException;
  */
 class SettingsPresenter extends BasePresenter
 {
+    private const LANGUAGE_COLUMNS = [
+        'pages' => [
+            'title' => 'varchar(250)',
+            'slug' => 'varchar(250)',
+            'document' => 'text',
+            'preview' => 'varchar(250)',
+            'metakeys' => 'varchar(150)',
+            'metadesc' => 'varchar(200)',
+        ],
+        'menu' => [
+            'title' => 'varchar(80)',
+            'description' => 'text',
+            'url' => 'text',
+        ],
+        'snippets' => [
+            'content' => 'text',
+        ],
+    ];
 
     protected function createComponentEditSettings(): EditSettingsControl
     {
@@ -51,23 +69,29 @@ class SettingsPresenter extends BasePresenter
      */
     public function handleInstall($id): void
     {
-        $default = $this->database->table('languages')->where('default = 1');
+        if (!$this->hasSettingsPermission()) {
+            $this->denySettingsAction();
+        }
 
-        if (strcmp($default->fetch()->code, $id) === '0') {
+        $language = $this->database->table('languages')->where('code', $id)->fetch();
+
+        if (!$language || !preg_match('/^[a-z]{2}(_[A-Z]{2})?$/', (string) $language->code)) {
+            $this->flashMessage('Invalid language code.');
+            $this->redirect('this');
+        }
+
+        $default = $this->database->table('languages')->where('default = 1')->fetch();
+
+        if ($default && (string) $default->code === (string) $language->code) {
             $this->flashMessage('This is default language. Cannot be installed with suffix.');
             $this->redirect('this');
         }
 
-        $this->checkColumn('pages', 'title', 'varchar(250)', $id);
-        $this->checkColumn('pages', 'slug', 'varchar(250)', $id);
-        $this->checkColumn('pages', 'document', 'text', $id);
-        $this->checkColumn('pages', 'preview', 'varchar(250)', $id);
-        $this->checkColumn('pages', 'metakeys', 'varchar(150)', $id);
-        $this->checkColumn('pages', 'metadesc', 'varchar(200)', $id);
-        $this->checkColumn('menu', 'title', 'varchar(80)', $id);
-        $this->checkColumn('menu', 'description', 'text', $id);
-        $this->checkColumn('menu', 'url', 'text', $id);
-        $this->checkColumn('snippets', 'content', 'text', $id);
+        foreach (self::LANGUAGE_COLUMNS as $table => $columns) {
+            foreach ($columns as $column => $type) {
+                $this->checkColumn($table, $column, $type, (string) $language->code);
+            }
+        }
 
         $this->redirect('this');
     }
@@ -78,9 +102,15 @@ class SettingsPresenter extends BasePresenter
      */
     public function handleMakeDefault($id): void
     {
-        if ($this->template->memberRole && $this->template->memberRole->settings === 0) {
+        if (!$this->hasSettingsPermission()) {
+            $this->denySettingsAction();
+        }
+
+        $language = $this->database->table('languages')->get($id);
+
+        if ($language) {
             $this->database->query('UPDATE languages SET `default` = NULL');
-            $this->database->table('languages')->get($id)->update(['default' => 1]);
+            $language->update(['default' => 1]);
         }
 
         $this->redirect('this');
@@ -92,14 +122,14 @@ class SettingsPresenter extends BasePresenter
      */
     public function handleToggle($id): void
     {
-        if ($this->template->memberRole && $this->template->memberRole->settings === 0) {
-            $toggle = $this->database->table('languages')->get($id);
+        if (!$this->hasSettingsPermission()) {
+            $this->denySettingsAction();
+        }
 
-            if ($toggle !== null) {
-                $state = $toggle->used ? 0 : 1;
-            }
+        $toggle = $this->database->table('languages')->get($id);
 
-            $this->database->table('languages')->get($id)->update(['used' => $state]);
+        if ($toggle !== null) {
+            $toggle->update(['used' => $toggle->used ? 0 : 1]);
         }
 
         $this->redirect(':Admin:Settings:languages');
@@ -111,14 +141,14 @@ class SettingsPresenter extends BasePresenter
      */
     public function handleToggleCountry($id): void
     {
-        if ($this->template->memberRole && $this->template->memberRole->settings === 0) {
-            $toggle = $this->database->table('countries')->get($id);
+        if (!$this->hasSettingsPermission()) {
+            $this->denySettingsAction();
+        }
 
-            if ($toggle !== null) {
-                $state = $toggle->show ? 0 : 1;
-            }
+        $toggle = $this->database->table('countries')->get($id);
 
-            $this->database->table('countries')->get($id)->update(['show' => $state]);
+        if ($toggle !== null) {
+            $toggle->update(['show' => $toggle->show ? 0 : 1]);
         }
 
         $this->redirect(':Admin:Settings:countries');
@@ -133,16 +163,38 @@ class SettingsPresenter extends BasePresenter
      */
     public function checkColumn($table, $column, $type, $lang): string
     {
-        $pages_title = $this->database->query('SHOW COLUMNS FROM `' . $table . '` LIKE ?', $column . '_' . $lang)->getRowCount();
+        if (!isset(self::LANGUAGE_COLUMNS[$table][$column])
+            || self::LANGUAGE_COLUMNS[$table][$column] !== $type
+            || !preg_match('/^[a-z]{2}(_[A-Z]{2})?$/', (string) $lang)
+        ) {
+            return '';
+        }
+
+        $columnName = $column . '_' . $lang;
+        $pages_title = $this->database->query('SHOW COLUMNS FROM `' . $table . '` LIKE ?', $columnName)->getRowCount();
 
         if ($pages_title > 0) {
             $message = 'shows: ' . $column . ' existed before';
         } else {
-            $this->database->query('ALTER TABLE ? ADD `' . $column . '_' . $lang . '` ' . $type, $table);
+            $this->database->query('ALTER TABLE `' . $table . '` ADD `' . $columnName . '` ' . $type);
             $message = 'not shows' . $pages_title;
         }
 
         return $message . '<br>';
+    }
+
+    private function hasSettingsPermission(): bool
+    {
+        return $this->template->memberRole && (int) $this->template->memberRole->settings === 1;
+    }
+
+    /**
+     * @throws AbortException
+     */
+    private function denySettingsAction(): void
+    {
+        $this->flashMessage('Nemáte oprávnění k této akci', 'error');
+        $this->redirect('this');
     }
 
     public function renderGlobal(): void

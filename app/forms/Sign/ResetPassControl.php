@@ -6,10 +6,12 @@ use Nette\Application\AbortException;
 use Nette\Application\UI\Control;
 use Nette\Database\Context;
 use Nette\Forms\BootstrapUIForm;
+use Nette\Forms\Form;
 use Nette\Security\Passwords;
 
 class ResetPassControl extends Control
 {
+    private const MIN_PASSWORD_LENGTH = 8;
 
     /** @var Context */
     public $database;
@@ -27,8 +29,12 @@ class ResetPassControl extends Control
         $form = new BootstrapUIForm();
         $form->addHidden('email');
         $form->addHidden('code');
-        $form->addPassword('password', 'Nové heslo');
-        $form->addPassword('password2', 'Zopakujte nové heslo');
+        $form->addPassword('password', 'Nové heslo')
+            ->setRequired('Zadejte nové heslo.')
+            ->addRule(Form::MIN_LENGTH, 'Heslo musí mít alespoň %d znaků.', self::MIN_PASSWORD_LENGTH);
+        $form->addPassword('password2', 'Zopakujte nové heslo')
+            ->setRequired('Zopakujte nové heslo.')
+            ->addRule(Form::EQUAL, 'Hesla se neshodují.', $form['password']);
         $form->addSubmit('name', 'Změnit');
         $form->setDefaults([
             'email' => $this->getPresenter()->getParameter('email'),
