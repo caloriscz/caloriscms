@@ -2,14 +2,13 @@
 
 namespace App\Forms\Members;
 
-use App\Model\Helpdesk;
+use App\Security\PasswordReset;
 use App\Model\MemberModel;
 use Nette\Application\UI\Control;
 use Nette\Database\Explorer;
 use Nette\Forms\BootstrapUIForm;
 use Nette\Forms\Form;
 use Nette\Security\Passwords;
-use Nette\Utils\Random;
 use Nette\Utils\Validators;
 
 class InsertMemberControl extends Control
@@ -31,20 +30,21 @@ class InsertMemberControl extends Control
     {
         $roles = $this->database->table('users_roles')->fetchPairs('id', 'title');
         $form = new BootstrapUIForm();
+        $form->addProtection('Platnost formuláře vypršela. Zkuste to znovu.');
 
         $form->getElementPrototype()->class = 'form-horizontal';
 
         $form->addText('username', 'Uživatel')
-            ->setRequired(false)
+            ->setRequired('Zadejte uživatelské jméno.')
             ->addRule(Form::MIN_LENGTH, 'Uživatelské jméno musí mít aspoň %d znaků', 3);
-        $form->addText('email', 'E-mail');
+        $form->addEmail('email', 'E-mail')->setRequired('Zadejte e-mail.');
 
         if ($this->presenter->template->member->username === 'admin') {
             $form->addSelect('role', 'Uživatelská role', $roles)
                 ->setHtmlAttribute('class', 'form-control');
         }
 
-        $form->addCheckbox('sendmail', 'Odeslat přihlašovací e-mail')->setValue(1);
+        $form->addCheckbox('sendmail', 'Odeslat odkaz pro nastavení hesla')->setValue(1);
         $form->addSubmit('submitm', 'Vytvořit')->setHtmlAttribute('class', 'btn btn-success');
         $form->onSuccess[] = [$this, 'insertFormSucceeded'];
         $form->onValidate[] = [$this, 'insertFormValidated'];
@@ -62,15 +62,15 @@ class InsertMemberControl extends Control
         $emailExists = $member->getEmail($form->values->email);
 
         if (!$this->getPresenter()->template->memberRole || !$this->getPresenter()->template->memberRole->members) {
-            $this->onSave('Nemáte oprávnění', true);
+            $form->addError('Nemáte oprávnění');
         }
 
         if (Validators::isEmail($form->values->email) === false) {
-            $this->onSave('Zadejte platnou e-mailovou adresu', true);
+            $form->addError('Zadejte platnou e-mailovou adresu');
         } elseif ($emailExists > 0) {
-            $this->onSave('E-mail již existuje', true);
+            $form->addError('E-mail již existuje');
         } elseif ($userExists > 0) {
-            $this->onSave('Uživatel již existuje', true);
+            $form->addError('Uživatel již existuje');
         }
     }
 
@@ -79,7 +79,8 @@ class InsertMemberControl extends Control
      */
     public function insertFormSucceeded(BootstrapUIForm $form): void
     {
-        $pwd = Random::generate(10);
+        // No usable password is disclosed; the owner chooses one through a link.
+        $pwd = bin2hex(random_bytes(32));
 
         $passwordHash = new Passwords();
         $pwdEncrypted = $passwordHash->hash($pwd);
@@ -89,25 +90,20 @@ class InsertMemberControl extends Control
             'username' => $form->values->username,
             'password' => $pwdEncrypted,
             'date_created' => date('Y-m-d H:i:s'),
-            'users_roles_id' => $form->values->role,
+            'users_roles_id' => $this->presenter->template->member->username === 'admin'
+                ? $form->values->role : null,
             'state' => 1,
         ]);
 
         if ($form->values->sendmail) {
-            $params = [
-                'username' => $form->values->username,
-                'password' => $pwd
-            ];
-
-            $helpdesk = new Helpdesk($this->database, $this->presenter->mailer);
-            $helpdesk->setId(5);
-            $helpdesk->setEmail($form->values->email);
-            $helpdesk->setSettings($this->presenter->template->settings);
-            $helpdesk->setParams($params);
-            $helpdesk->send();
+            $sent = (new PasswordReset($this->database))->send((int) $userId->id,
+                $this->presenter->mailer, $this->presenter->template->settings);
+            if (!$sent) {
+                $this->presenter->flashMessage('Uživatel byl vytvořen, ale odkaz se nepodařilo odeslat. Zkuste odeslání z detailu uživatele.', 'error');
+            }
         }
 
-        $this->onSave(false, $userId, $pwd);
+        $this->onSave(false, $userId->id);
     }
 
     public function render(): void

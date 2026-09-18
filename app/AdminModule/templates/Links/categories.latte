@@ -24,8 +24,10 @@
         </tr>
         {foreach $categories as $category}
             <tr>
-                <td class="col-xs-1"><a n:href="deleteCategory!, id => $category->id" class="btn" 
-                                        onclick="return confirm('Opravdu smazat skupina a všechny kontakty přesunout do hlavní skupiny?')" role="button"><i class="fa fa-times font-red"></i></a></td>
+                <td class="col-xs-1"><form action="{link deleteCategory!, id => $category->id}" method="post" style="display: inline;" onsubmit="return confirm('Opravdu smazat skupina a všechny kontakty přesunout do hlavní skupiny?')">
+                    <input type="hidden" name="_csrf" value="{$presenter->getMutationToken()}">
+                    <button type="submit" class="btn"><i class="fa fa-times font-red"></i></button>
+                </form></td>
                 <td>{$category->category}</td>
             </tr>
         {/foreach}    

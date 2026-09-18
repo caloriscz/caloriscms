@@ -2,12 +2,10 @@
 
 namespace App\Forms\Contacts;
 
-use App\Model\Helpdesk;
+use App\Security\PasswordReset;
 use Nette\Application\UI\Control;
 use Nette\Database\Explorer;
 use Nette\Forms\BootstrapUIForm;
-use Nette\Security\Passwords;
-use Nette\Utils\Random;
 
 class SendLoginControl extends Control
 {
@@ -26,12 +24,11 @@ class SendLoginControl extends Control
     protected function createComponentSendLoginForm(): BootstrapUIForm
     {
         $form = new BootstrapUIForm();
+        $form->addProtection('Platnost formuláře vypršela. Zkuste to znovu.');
         $form->getElementPrototype()->class = 'form-horizontal';
 
 
         $form->addHidden('contact_id');
-        $form->addCheckbox('sendmail', ' Odeslat e-mail s přihlašovacími informacemi')
-            ->setValue(0);
 
         $form->setDefaults([
             'contact_id' => $this->getPresenter()->getParameter('id'),
@@ -45,32 +42,19 @@ class SendLoginControl extends Control
 
     public function sendLoginFormSucceeded(BootstrapUIForm $form): void
     {
-        $pwd = Random::generate(10);
-        $pwdEncrypted = Passwords::hash($pwd);
-        $user = $this->database->table('users')->get($form->values->contact_id);
-
-        $this->database->table('users')->get($user->id)->update([
-            'password' => $pwdEncrypted,
-        ]);
-
-        if ($form->values->sendmail) {
-            $params = [
-                'username' => $user->username,
-                'email' => $user->email,
-                'password' => $pwd,
-            ];
-
-            $helpdesk = new Helpdesk($this->database, $this->getPresenter()->mailer);
-            $helpdesk->setId(4);
-            $helpdesk->setEmail($user->email);
-            $helpdesk->setSettings($this->getPresenter()->template->settings);
-            $helpdesk->setParams($params);
-            $helpdesk->send();
-
-            $pwd = null;
+        $role = $this->presenter->template->memberRole;
+        \App\Security\AdminPermissions::requirePermission($role ? $role->toArray() : [], 'members');
+        $userId = (int) $this->presenter->getParameter('id');
+        if ($userId !== (int) $form->values->contact_id) {
+            $form->addError('Uživatel není platný.');
+            return;
         }
-
-        $this->onSave($form->values->contact_id, $pwd);
+        if (!(new PasswordReset($this->database))->send($userId, $this->presenter->mailer,
+            $this->presenter->template->settings)) {
+            $form->addError('Odkaz nelze odeslat. Ověřte aktivní účet a e-mail, případně zkuste znovu za minutu.');
+            return;
+        }
+        $this->onSave($userId);
     }
 
     public function render(): void

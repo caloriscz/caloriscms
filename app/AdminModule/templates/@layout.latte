@@ -7,6 +7,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="admin-csrf" content="{$presenter->getMutationToken()}">
 
     <title>{block #titles}{/block} | Caloris Admin</title>
 
@@ -42,7 +43,10 @@
                         <strong>Nastavení</strong>
                     </div>
 
-                    <a class="dropdown-item" n:href=":Admin:Sign:out, id => NULL">Odhlásit</a>
+                    <form action="{link :Admin:Sign:out, id => NULL}" method="post">
+                        <input type="hidden" name="_csrf" value="{$presenter->getMutationToken()}">
+                        <button class="dropdown-item" type="submit">Odhlásit</button>
+                    </form>
                     <a class="dropdown-item" n:href=":Admin:Profile:default, id => NULL">Můj profil</a>
                     <a class="dropdown-item" n:href=":Admin:Profile:default, id => NULL">Navštívit web</a>
                 </div>
@@ -107,6 +111,8 @@
     function elfinderDialog() {
         var fm = $('<div/>').dialogelfinder({
             url: '/admin?do=elfinder-options&path=' + {$presenter->getParameter('id')},
+            requestType: 'post',
+            customHeaders: { 'X-CSRF-Token': $('meta[name="admin-csrf"]').attr('content') },
             lang: 'cs',
             uiOptions: {
                 toolbar: [
@@ -131,6 +137,13 @@
                 }
             },
             handlers: {
+                open: function (e, instance) {
+                    // The checked-in elFinder client needs this response token
+                    // forwarded to newer connectors as well as the CMS token.
+                    if (typeof e.data.csrf === 'string') {
+                        instance.customHeaders['X-elFinder-CSRF'] = e.data.csrf;
+                    }
+                },
                 upload: function (e, instance) {
                 }
             }

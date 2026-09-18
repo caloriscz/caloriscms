@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Model\Api;
 
 use InvalidArgumentException;
+use App\Model\PageWrites;
 use Nette\Database\Explorer;
 use Nette\Database\Table\ActiveRow;
 use Nette\Utils\Strings;
@@ -106,33 +107,38 @@ class ContentApiService
 
     public function createPage(array $data, int $userId): array
     {
-        $payload = $this->preparePageData($data, null, true);
-        $payload['users_id'] = $userId;
-        $payload += [
-            'public' => 0,
-            'date_created' => date('Y-m-d H:i:s'),
-        ];
+        return PageWrites::run($this->database, function () use ($data, $userId) {
+            $payload = $this->preparePageData($data, null, true);
+            $payload['users_id'] = $userId;
+            $payload += [
+                'public' => 0,
+                'date_created' => date('Y-m-d H:i:s'),
+            ];
 
-        $page = $this->database->table('pages')->insert($payload);
-        return $this->formatPage($page);
+            $page = $this->database->table('pages')->insert($payload);
+            PageWrites::renumber($this->database);
+            return $this->formatPage($this->database->table('pages')->get($page->id));
+        });
     }
 
     public function updatePage(int $id, array $data): ?array
     {
-        $page = $this->database->table('pages')->get($id);
-
-        if (!$page) {
-            return null;
-        }
-
-        $payload = $this->preparePageData($data, $id, false);
-
-        if ($payload !== []) {
-            $page->update($payload);
+        return PageWrites::run($this->database, function () use ($id, $data) {
             $page = $this->database->table('pages')->get($id);
-        }
 
-        return $this->formatPage($page);
+            if (!$page) {
+                return null;
+            }
+
+            $payload = $this->preparePageData($data, $id, false);
+
+            if ($payload !== []) {
+                $page->update($payload);
+                $page = $this->database->table('pages')->get($id);
+            }
+
+            return $this->formatPage($page);
+        });
     }
 
     public function unpublishPage(int $id): bool
@@ -307,17 +313,7 @@ class ContentApiService
 
     private function generateUniqueSlug(string $slug): string
     {
-        if (!$this->slugExists($slug, null)) {
-            return $slug;
-        }
-
-        $i = 1;
-        do {
-            $candidate = $i . '-' . $slug;
-            $i++;
-        } while ($this->slugExists($candidate, null));
-
-        return $candidate;
+        return PageWrites::uniqueSlug($this->database, $slug);
     }
 
     private function normalizeDate(string $field, $value): ?string

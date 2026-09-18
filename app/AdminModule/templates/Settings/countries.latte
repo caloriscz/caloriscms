@@ -34,10 +34,13 @@
                                 <tr>
                                     <td>{$item->title_cs}</td>
                                     <td class="text-right">
-                                        <a n:href="toggleCountry! id => $item->id"
-                                                class="btn{if $item->show} btn-success{else} btn-danger{/if} btn-sm">
-                                            {if $item->show}povoleno{else}zakázáno{/if}
-                                        </a>
+                                        <form action="{link toggleCountry! id => $item->id}" method="post">
+                                            <input type="hidden" name="_csrf" value="{$csrfToken}">
+                                            <button type="submit"
+                                                    class="btn{if $item->show} btn-success{else} btn-danger{/if} btn-sm">
+                                                {if $item->show}povoleno{else}zakázáno{/if}
+                                            </button>
+                                        </form>
                                     </td>
                                 </tr>
                             {/foreach}

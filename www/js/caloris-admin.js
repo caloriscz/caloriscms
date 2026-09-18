@@ -1,3 +1,14 @@
+// Non-form admin mutations keep signal parameters in the URL and the token in
+// the POST body. $.param preserves ampersands and other characters in tree names.
+function calorisMutation(options) {
+    options.url += (options.url.indexOf('?') < 0 ? '?' : '&') + $.param(options.data);
+    options.type = 'POST';
+    options.data = { _csrf: $('meta[name="admin-csrf"]').attr('content') };
+    return $.ajax(options).fail(function () {
+        window.alert('The change was not saved. Reload the page and try again.');
+    });
+}
+
 $(function () {
     $.nette.init();
 });
@@ -210,36 +221,30 @@ $(document).ready(function () {
         ,
         "plugins": ["dnd", "crrm", "contextmenu"]
     }).bind("move_node.jstree", function (e, data) {
-        $.ajax({
-            data: 'do=menuEditor-sort&id_from=' + data.node.id.substring(3) + '&id_to=' + data.parent.substring(3) + '&id=' +
-            data.node.id.substring(3) + '&position_old=' + data.old_position + '&position=' + data.position,
-            type: 'GET',
+        calorisMutation({
+            data: { do: 'menuEditor-sort', id_from: data.node.id.substring(3), id_to: data.parent.substring(3),
+                position_old: data.old_position, position: data.position },
             url: '/admin/menu/default'
         });
     }).on('delete_node.jstree', function (e, data) {
-        $.ajax({
-            data: 'do=menuEditor-delete&node_id=' + data.node.id.substring(3),
-            type: 'GET',
+        calorisMutation({
+            data: { do: 'menuEditor-delete', node_id: data.node.id.substring(3) },
             url: '/admin/menu/default'
         });
     }).on('create_node.jstree', function (e, data) {
-        $.ajax({
-            data: 'do=menuEditor-create&node_id=' + data.node.parent.substring(3) + '&menu=' + getParameterByName('menu') + '&text=' + data.text,
-            datatype: 'json',
-            type: 'GET',
+        calorisMutation({
+            data: { do: 'menuEditor-create', node_id: data.node.parent.substring(3), menu: getParameterByName('menu'), text: data.text },
+            dataType: 'json',
             url: '/admin/menu/default',
             success: function (output) {
-
-                var output = JSON.parse(output);
 
                 data.instance.set_id(data.node.id, 'j1_' + output.id);
                 data.node.a_attr.id = 'j1_' + output.id + '_anchor';
             }
         });
     }).on('rename_node.jstree', function (e, data) {
-        $.ajax({
-            data: 'do=menuEditor-rename&node_id=' + data.node.id.substring(3) + '&menu=' + getParameterByName('menu') + '&text=' + data.text,
-            type: 'GET',
+        calorisMutation({
+            data: { do: 'menuEditor-rename', node_id: data.node.id.substring(3), menu: getParameterByName('menu'), text: data.text },
             url: '/admin/menu/default'
         });
     });
@@ -408,36 +413,30 @@ $(document).ready(function () {
         ,
         "plugins": ["dnd", "crrm", "contextmenu"]
     }).bind("move_node.jstree", function (e, data) {
-        $.ajax({
-            data: 'do=categoryPanel-sort&id_from=' + data.node.id.substring(3) + '&id_to=' + data.parent.substring(3) + '&id=' +
-            data.node.id.substring(3) + '&position_old=' + data.old_position + '&position=' + data.position,
-            type: 'GET',
+        calorisMutation({
+            data: { do: 'categoryPanel-sort', id_from: data.node.id.substring(3), id_to: data.parent.substring(3),
+                position_old: data.old_position, position: data.position },
             url: '/admin/links/default'
         });
     }).on('delete_node.jstree', function (e, data) {
-        $.ajax({
-            data: 'do=categoryPanel-delete&node_id=' + data.node.id.substring(3),
-            type: 'GET',
+        calorisMutation({
+            data: { do: 'categoryPanel-delete', node_id: data.node.id.substring(3) },
             url: '/admin/links/default'
         });
     }).on('create_node.jstree', function (e, data) {
         console.log('renaming');
-        $.ajax({
-            data: 'do=categoryPanel-create&node_id=' + data.node.parent.substring(3) + '&text=' + data.text,
-            datatype: 'json',
-            type: 'GET',
+        calorisMutation({
+            data: { do: 'categoryPanel-create', node_id: data.node.parent.substring(3), text: data.text },
+            dataType: 'json',
             url: '/admin/links/default',
             success: function (output) {
-                var output = JSON.parse(output);
-
                 data.instance.set_id(data.node.id, 'j1_' + output.id);
                 data.node.a_attr.id = 'j1_' + output.id + '_anchor';
             }
         });
     }).on('rename_node.jstree', function (e, data) {
-        $.ajax({
-            data: 'do=categoryPanel-rename&node_id=' + data.node.id.substring(3) + '&text=' + data.text,
-            type: 'GET',
+        calorisMutation({
+            data: { do: 'categoryPanel-rename', node_id: data.node.id.substring(3), text: data.text },
             url: '/admin/links/default'
         });
     });
@@ -462,9 +461,8 @@ $(function () {
             var newOrder = $(this).sortable('toArray').toString();
             var Ids = document.querySelector('div#sorter-ids');
 
-            $.ajax({
-                data: 'do=carouselManager-images&sortable=' + newOrder + '&ids=' + Ids.dataset.images,
-                type: 'GET',
+            calorisMutation({
+                data: { do: 'carouselManager-images', sortable: newOrder, ids: Ids.dataset.images },
                 url: '/admin/appearance/carousel'
             });
         }

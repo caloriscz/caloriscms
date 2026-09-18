@@ -7,15 +7,6 @@
     <li class="breadcrumb-item active">{$members->username}</li>
 </ol>
 
-{if $presenter->getParameter('pdd') != ''}
-    <div class="col-md-12">
-        <div class="alert alert-warning alert-dismissable">
-            Adresa: {$settings['site:url:base']}/sign/in<br/>
-        Uživatel: {$members->username}<br/>
-            Heslo: {$presenter->getParameter('pdd')}
-        </div>
-    </div>
-{else}
     {foreach $flashes as $flash}
         <br/>
         <div class="alert alert-warning alert-dismissable">
@@ -23,7 +14,6 @@
             <div class="flash {$flash->type}">{$flash->message}</div>
         </div>
     {/foreach}
-{/if}
 
 <div class="container-fluid">
     <div class="animated fadeIn">
@@ -37,7 +27,7 @@
                         </div>
                     </div>
                     <div class="card">
-                        <div class="card-header">Zaslat uživateli znovu heslo</div>
+                        <div class="card-header">Odeslat odkaz pro nastavení hesla</div>
                         <div class="card-block">
                             {control sendLogin}
                         </div>
@@ -76,10 +66,12 @@
                                     {foreach $membersRelated as $item}
                                         <tr>
                                             <td>
-                                                <a n:href="deleteContact! id => $item->id, contact => $members->id"
-                                                        onclick="return confirm('Opravdu smazat?')">
+                                                <form action="{link deleteContact! id => $item->id, contact => $members->id}" method="post" style="display: inline;" onsubmit="return confirm('Opravdu smazat?')">
+                                                    <input type="hidden" name="_csrf" value="{$presenter->getMutationToken()}">
+                                                    <button type="submit" class="btn btn-link">
                                                     <i class="fa fa-times font-red"></i>
-                                                </a>
+                                                </button>
+                                                </form>
                                             </td>
                                             <td>
                                                 <a n:href=":Admin:Contacts:detail, id => $item->id">{$item->name}</a>

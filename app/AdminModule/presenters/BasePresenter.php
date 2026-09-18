@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\AdminModule\Presenters;
 
 use App\Forms\Pages\EditorControl;
+use App\Security\AdminPermissions;
 use Caloriscz\Menus\Admin\MainMenuControl;
 use Caloriscz\Menus\PageTopMenuControl;
 use Caloriscz\Utilities\PagingControl;
@@ -21,6 +22,7 @@ use Nette\Security\UserStorage;
  */
 abstract class BasePresenter extends Presenter
 {
+    use \App\Security\CsrfProtectedMutation;
 
     public Explorer $database;
 
@@ -74,14 +76,6 @@ abstract class BasePresenter extends Presenter
         // Login check
         if ($this->getName() !== 'Admin:Sign') {
 
-            $role = $this->user->getRoles();
-            $roleCheck = $this->database->table('users_roles')->get($role[0]);
-
-            if ($roleCheck && $roleCheck->sign === 'guest') {
-                $this->flashMessage('Neplatné přihlášení', 'error');
-                $this->redirect(':Admin:Sign:in');
-            }
-
             if (!$this->user->isLoggedIn()) {
                 if ($this->user->logoutReason === UserStorage::LOGOUT_INACTIVITY) {
                     $this->flashMessage('Byli jste odhlášeni', 'note');
@@ -102,6 +96,31 @@ abstract class BasePresenter extends Presenter
             $this->template->memberRole = false;
         }
 
+        $role = $this->template->memberRole ? $this->template->memberRole->toArray() : [];
+        if ($this->getName() !== 'Admin:Sign'
+            && (!$this->template->member || (int) $this->template->member->state !== 1
+                || !AdminPermissions::allows($role, 'sign'))) {
+            $this->error('Admin access denied.', 403);
+        }
+        AdminPermissions::requireRequest($role, $this->getName(), $this->getAction(), $this->getSignal());
+
+        // Nette validates POST forms through BootstrapUIForm. Other signals are
+        // mutations unless explicitly limited to a display preference or read.
+        $signal = $this->getSignal();
+        if ($signal && strtolower($signal[1]) !== 'submit') {
+            $preference = ($this->getName() === 'Admin:Pages' && $signal === ['', 'view'])
+                || $signal === ['editor', 'toggle'];
+            $command = $this->getHttpRequest()->getPost('cmd') ?? $this->getHttpRequest()->getQuery('cmd');
+            $fileRead = $signal === ['elfinder', 'options'] && is_string($command)
+                && in_array($command, ['open', 'tree', 'parents', 'tmb', 'file', 'ls', 'size', 'dim', 'info', 'search', 'get', 'url'], true);
+            if (!$preference && !$fileRead) {
+                $this->requireCsrfToken();
+            }
+        }
+        // Start before templates render CSRF-protected forms.
+        $this->getSession()->start();
+        $this->getHttpResponse()->setHeader('Cache-Control', 'private, no-store');
+
         // Set values from db
         $this->template->settings = $this->database->table('settings')->fetchPairs('setkey', 'setvalue');
 
@@ -119,6 +138,11 @@ abstract class BasePresenter extends Presenter
     protected function createComponentPaging(): PagingControl
     {
         return new PagingControl;
+    }
+
+    public function getMutationToken(): string
+    {
+        return $this->getCsrfToken();
     }
 
     /**

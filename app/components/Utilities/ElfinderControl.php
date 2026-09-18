@@ -2,6 +2,7 @@
 
 namespace Caloriscz\Utilities;
 
+use App\Security\AdminPermissions;
 use elFinder;
 use elFinderConnector;
 use Nette\Application\UI\Control;
@@ -10,12 +11,23 @@ class ElfinderControl extends Control
 {
     public function handleOptions(): void
     {
+        $presenter = $this->getPresenter();
+        $role = $presenter->template->memberRole ? $presenter->template->memberRole->toArray() : [];
+        $permissions = ['media', 'pictures'];
+        if (!$presenter->getUser()->isLoggedIn()
+            || (!AdminPermissions::allows($role, 'media') && !AdminPermissions::allows($role, 'pictures'))) {
+            throw new \Nette\Application\ForbiddenRequestException('File manager access denied.');
+        }
+
         $mediaPath = $this->getMediaPath();
         $mediaUrl = $mediaPath === '' ? '/media' : '/media/' . $mediaPath;
         $mediaDirectory = APP_DIR . '/media' . ($mediaPath === '' ? '' : '/' . $mediaPath);
 
         $opts = [
-            'debug' => true,
+            'debug' => false,
+            // Keep the Nette session open: elFinder's early close/reopen replaces
+            // its cookie settings and can lose the login on local HTTP requests.
+            'sessionCloseEarlier' => false,
             'roots' => [
                 [
                     'driver' => 'LocalFileSystem',           // driver for accessing file system (REQUIRED)
@@ -41,6 +53,14 @@ class ElfinderControl extends Control
                 ]
             ]
         ];
+
+        // Each root has its own permission; access to one must not expose the other.
+        foreach ($permissions as $index => $permission) {
+            if (!AdminPermissions::allows($role, $permission)) {
+                unset($opts['roots'][$index]);
+            }
+        }
+        $opts['roots'] = array_values($opts['roots']);
 
         // Run elFinder
         $connector = new elFinderConnector(new elFinder($opts));

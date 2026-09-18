@@ -29,6 +29,9 @@ use Nette\Mail\IMailer;
  */
 abstract class BasePresenter extends Presenter
 {
+    use \App\Security\CsrfProtectedMutation;
+
+    private bool $inlineEditingAllowed = false;
     public Explorer $database;
 
     /** @persistent */
@@ -59,11 +62,6 @@ abstract class BasePresenter extends Presenter
             $this->translator->setLocale($locale);
         } else {
             $this->translator->setLocale($this->translator->getDefaultLocale());
-        }
-
-        if ($this instanceof ErrorPresenter) {
-            $this->template->settings = $this->database->table('settings')->fetchPairs('setkey', 'setvalue');
-            return;
         }
 
         $this->template->page = $this->database->table('pages')->get($this->getParameter('page_id'));
@@ -123,16 +121,21 @@ abstract class BasePresenter extends Presenter
             $this->template->langSuffix = '_' . $this->translator->getLocale();
         }
 
-        try {
-            if ($this->user->isLoggedIn()) {
-                $this->template->isLoggedIn = true;
-
-                $this->template->member = $this->database->table('users')->get($this->user->getId());
-            } else {
-                $this->template->isLoggedIn = false;
-            }
-        } catch (\Exception $e) {
-            $this->template->isLoggedIn = false;
+        $member = $this->user->isLoggedIn()
+            ? $this->database->table('users')->get($this->user->getId()) : null;
+        $role = $member ? $member->ref('users_roles', 'users_roles_id') : null;
+        $this->template->member = $member;
+        $this->template->memberRole = $role;
+        $this->template->isLoggedIn = $member && (int) $member->state === 1;
+        if ($this->template->isLoggedIn) {
+            $this->getHttpResponse()->setHeader('Cache-Control', 'private, no-store');
+        }
+        $this->inlineEditingAllowed = $member && $role
+            && \App\Security\InlineEditing::allows($member->toArray(), $role->toArray());
+        $this->template->inlineEditingEnabled = $this->inlineEditingEnabled();
+        if ($this->inlineEditingEnabled()) {
+            $this->template->inlineCsrfToken = $this->getCsrfToken();
+            $this->getHttpResponse()->setHeader('Cache-Control', 'private, no-store');
         }
 
         $this->template->appDir = APP_DIR;
@@ -210,10 +213,7 @@ abstract class BasePresenter extends Presenter
      */
     public function handleSnippet(): void
     {
-        $this->database->table('snippets')->get($this->getParameter('snippetId'))->update([
-            'content' => $this->getParameter('text')
-        ]);
-        exit();
+        $this->saveInlineEdit('snippet', 'snippetId');
     }
 
     /**
@@ -221,9 +221,31 @@ abstract class BasePresenter extends Presenter
      */
     public function handlePagetitle(): void
     {
-        $this->database->table('pages')->where('id', $this->getParameter('editorId'))->update([
-            'title' => $this->getParameter('text')
-        ]);
-        exit();
+        $this->saveInlineEdit('title', 'editorId');
+    }
+
+    public function inlineEditingEnabled(): bool
+    {
+        return $this->inlineEditingAllowed
+            && (bool) $this->template->settings['site:admin:adminBarEnabled']
+            && (bool) $this->template->member->adminbar_enabled;
+    }
+
+    public function getMutationToken(): string
+    {
+        return $this->getCsrfToken();
+    }
+
+    private function saveInlineEdit(string $kind, string $idField): void
+    {
+        if (!$this->inlineEditingEnabled()) {
+            $this->error('Inline editing is not permitted.', 403);
+        }
+        $this->requireCsrfToken();
+        $request = $this->getHttpRequest();
+        $content = \App\Security\InlineEditing::save($this->database, $kind,
+            $request->getPost($idField), $request->getPost('text'),
+            $this->translator->getLocale(), $this->translator->getDefaultLocale());
+        $this->sendJson(['saved' => true, 'content' => $content]);
     }
 }

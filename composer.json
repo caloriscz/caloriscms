@@ -27,6 +27,9 @@
     "ext-json": "*",
     "ext-fileinfo": "*"
   },
+  "scripts": {
+    "test": "tester tests -s -C"
+  },
   "require-dev": {
     "nette/tester": "^2.4"
   }

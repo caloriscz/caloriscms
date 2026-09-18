@@ -4,7 +4,6 @@ namespace Caloriscz\Navigation;
 
 use Nette\Application\UI\Control;
 use Nette\Database\Explorer;
-use Tracy\Debugger;
 
 class HeadControl extends Control
 {

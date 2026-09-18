@@ -11,14 +11,19 @@
                 <div class="card-body">
                     <p class="card-title"><span style="font-size: 18px;">{$item->name}</span><br>
                         {$item->title}<br>{$item->description}</p>
-                    <a href="{link delete!, id => $item->id, type => $item->name}"
-                       onclick="return confirm('Opravdu smazat?')" class="btn btn-danger btn-sm">
-                        Smazat
-                    </a>
+                    <form action="{link delete! id => $item->id, type => $item->name}" method="post" style="display: inline;">
+                        <input type="hidden" name="_csrf" value="{$csrfToken}">
+                        <button type="submit" onclick="return confirm('Opravdu smazat?')" class="btn btn-danger btn-sm">
+                            Smazat
+                        </button>
+                    </form>
                     &nbsp;
-                    <a href="{link setMain!, id => $item->pages_id, image => $item->id}" class="btn btn-info btn-sm">
-                        {if $item->main_file}je hlavní{else}není hlavní{/if}
-                    </a>
+                    <form action="{link setMain! id => $item->pages_id, image => $item->id}" method="post" style="display: inline;">
+                        <input type="hidden" name="_csrf" value="{$csrfToken}">
+                        <button type="submit" class="btn btn-info btn-sm">
+                            {if $item->main_file}je hlavní{else}není hlavní{/if}
+                        </button>
+                    </form>
                     &nbsp;
                     <a href="{plink ':Admin:Files:detailPicture', id => $item->id}"
                        class="btn btn-info btn-sm pull-right">

@@ -30,10 +30,12 @@
                             <img src="{$baseUri}/links-media/link-{$id}.jpg?{$today}" style="max-width: 250px;">
 
                             <div class="mt-2">
-                                <a n:href="deleteImage!, $id" class="btn btn-danger"
-                                                              onclick="return confirm('Opravdu smazat?')">
+                                <form action="{link deleteImage!, $id}" method="post" style="display: inline;" onsubmit="return confirm('Opravdu smazat?')">
+                                    <input type="hidden" name="_csrf" value="{$presenter->getMutationToken()}">
+                                    <button type="submit" class="btn btn-danger">
                                     Smazat obrázek
-                                </a>
+                                </button>
+                                </form>
                             </div>
                         {else}
                             obrázek není

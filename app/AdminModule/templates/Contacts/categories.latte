@@ -45,7 +45,10 @@
                                                     data-target="#catModal{$item->id}" title="Přidat podkategorii">
                                                 <i class="fa fa-plus"></i>
                                             </button>
-                                            <a n:href="delete!, $item->id" class="btn btn-danger btn-xs"><i class="fa fa-times"></i></a>
+                                            <form action="{link delete!, $item->id}" method="post" style="display: inline;">
+                                                <input type="hidden" name="_csrf" value="{$presenter->getMutationToken()}">
+                                                <button type="submit" class="btn btn-danger btn-xs"><i class="fa fa-times"></i></button>
+                                            </form>
 
 
                                     {/foreach}

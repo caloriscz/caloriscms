@@ -2,10 +2,12 @@
     {foreach $contacts as $contact}
         <tr>
             <td>
-                <a href="{link delete!, id => $contact->id}"
-                   onclick="return confirm('Opravdu smazat?')" class="text-danger">
+                <form action="{link delete!, id => $contact->id}" method="post" style="display: inline;" onsubmit="return confirm('Opravdu smazat?')">
+                    <input type="hidden" name="_csrf" value="{$presenter->getMutationToken()}">
+                    <button type="submit" class="btn btn-link text-danger">
                     <i class="fa fa-times font-red"></i>
-                </a>
+                </button>
+                </form>
             </td>
             <td><a href="{plink ':Admin:Contacts:detail', id => $contact->id}">{$contact->name}</a></td>
             <td>{$contact->contacts_categories->title ?? ''}</td>

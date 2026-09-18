@@ -3,10 +3,8 @@
 namespace App;
 
 use Model\SlugManager;
-use Nette\Application\Request;
 use Nette\Http\IRequest as HttpRequest;
 use Nette\Http\UrlScript;
-use Tracy\Debugger;
 
 
 class SlugRouter implements \Nette\Routing\Router
@@ -24,77 +22,52 @@ class SlugRouter implements \Nette\Routing\Router
      */
     public function match(HttpRequest $httpRequest): ?array
     {
-        // 1) PARSE URL
         $url = $httpRequest->getUrl();
-        $path = trim($url->path, $url->scriptPath);
+        $path = trim($url->getRelativePath(), '/');
+        $parts = $path === '' ? [] : explode('/', $path);
         $params = [];
         $lang = null;
 
-        if ($path !== '') {
-            $parts = explode($url->scriptPath, $path, 4);
+        if ($parts && in_array($parts[0], $this->slugManager->getLocale(), true)) {
+            $lang = array_shift($parts);
+            $params['locale'] = $lang;
+        }
 
-            if (\in_array($parts[0], $this->slugManager->getLocale(), true) && count($parts) === 1) {
-                $params['locale'] = $parts[0];
-                $lang = $parts[0];
-
-                $parts = array_values($parts);
-
-                if (\count($parts) === 2) {
-                    $slugName = $parts[1];
-                    $params['prefix'] = $parts[0];
-                } else {
-                    $slugName = $parts[0];
-                    $params['prefix'] = null;
-                }
-            } elseif (\in_array($parts[0], $this->slugManager->getLocale(), true)) {
-                $params['locale'] = $parts[0];
-                $lang = $parts[0];
-                unset($parts[0]);
-                $parts = array_values($parts);
-
-                if (\count($parts) === 2) {
-                    $slugName = $parts[1];
-                    $params['prefix'] = $parts[0];
-                } else {
-                    $slugName = $parts[0];
-                    $params['prefix'] = null;
-                }
-            } else if (\count($parts) === 2) {
-                $slugName = $parts[1];
-                $params['prefix'] = $parts[0];
-            } else {
-                $slugName = $parts[0];
-                $params['prefix'] = null;
-            }
-
-            //get row by slug
-            $row = $this->slugManager->getRowBySlug($slugName, $lang, $params['prefix']);
-        } else {
-            $parts = ['Homepage', 'default'];
+        $params['prefix'] = null;
+        if (!$parts) {
             $row = $this->slugManager->getDefault();
+        } elseif (count($parts) === 1) {
+            $row = $this->slugManager->getRowBySlug($parts[0], $lang);
+        } elseif (count($parts) <= 3) {
+            // Prefer the existing prefix/slug shape over the slug/id variant.
+            $row = $this->slugManager->getRowBySlug($parts[1], $lang, $parts[0]);
+            if ($row) {
+                $params['prefix'] = $parts[0];
+                if (isset($parts[2])) {
+                    $params['id'] = $parts[2];
+                }
+            } elseif (count($parts) === 2) {
+                $row = $this->slugManager->getRowBySlug($parts[0], $lang);
+                $params['id'] = $parts[1];
+            }
+        } else {
+            return null;
         }
 
         if (!$row) {
             return null;
         }
 
-        if (isset($parts[2])) {
-            $id = $parts[2];
-        }
-
         $params['page_id'] = $row->id;
-        if (isset($id)) {
-            $params['id'] = $id;
-        }
 
-        //$url->query into params
-        if ($url->getQuery() !== '') {
-            $query = explode('&', $url->getQuery());
-            foreach ($query as $singlequery) {
-                $result = explode('=', $singlequery);
-                $params[$result[0]] = $result[1];
-            }
-        }
+        // Nette decodes query values, bare keys and arrays with PHP query semantics.
+        // Query input must not replace the route selected from the CMS path.
+        $query = $httpRequest->getQuery();
+        // The old nested result did not dispatch query-string signals. Keep that
+        // boundary: legacy frontend write signals need their own security review.
+        unset($query['presenter'], $query['module'], $query['action'], $query['page_id'], $query['slug'],
+            $query['locale'], $query['prefix'], $query['method'], $query['do']);
+        $params += $query;
 
         $pageType = $row->ref('pages_types', 'pages_types_id');
         $pageTemplate = null;
@@ -129,31 +102,22 @@ class SlugRouter implements \Nette\Routing\Router
             }
         }
 
-        $routeReturn = [
-            'presenter' => $presenter,
-            'method' => $httpRequest->getMethod(),
-            'action' => $params['action'],
-            'page_id' => $params['page_id'],
-            $params,
-             //$httpRequest->getPost(), $httpRequest->getFiles(), [Request::SECURED => $httpRequest->isSecured()]
-        ];
-
-        return $routeReturn;
+        $params['presenter'] = $presenter;
+        $params['method'] = $httpRequest->getMethod();
+        return $params;
 
     }
 
     /**
-     * Constructs absolute URL from Request object.
-     *
-     * @param Request $appRequest
-     * @param Url $refUrl
+     * Constructs an absolute URL from route parameters.
      */
     public function constructUrl(array $param, UrlScript $refUrl): ?string
     {
         $params = $param;
 
         $query = $params;
-        unset($query['action'], $query['page_id'], $query['slug'], $query['id'], $query['locale'], $query['prefix']);
+        unset($query['presenter'], $query['method'], $query['action'], $query['page_id'],
+            $query['slug'], $query['id'], $query['locale'], $query['prefix']);
 
         if (isset($params['slug'])) {
             $slug = strtolower($params['slug']);
@@ -161,14 +125,8 @@ class SlugRouter implements \Nette\Routing\Router
             if (isset($params['page_id'])) {
                 $row = $this->slugManager->getSlugById($params['page_id']);
 
-                // todo peekay Change cs for selected language
-
-                if (isset($query['locale'])) {
-                    unset($params['locale']);
-                }
-
                 if ($row) {
-                    if (isset($params['locale'])) {
+                    if (isset($params['locale']) && $params['locale'] !== 'cs') {
                         $slug = $row->{'slug_' . $params['locale']};
                     } else {
                         $slug = $row->{'slug'};
@@ -193,29 +151,17 @@ class SlugRouter implements \Nette\Routing\Router
         } else {
             $prefix = null;
         }
-        $url = $refUrl->getScheme() . '://' . $refUrl->getHost() . $refUrl->getPath() . $locale . $prefix . $slug;
-        $params = $param;
-
-        if (isset($params['action']) && $params['action'] !== 'default') {
-            $url .= $refUrl->getPath();
-        }
+        $url = $refUrl->getBaseUrl() . $locale . $prefix . $slug;
 
         if (isset($params['id'])) {
-            if ($params['action'] === 'default' && isset($params['action'])) {
-                $url .= $refUrl->getPath();
-            }
-            $url .= $refUrl->getPath() . $params['id'];
+            $url .= '/' . rawurlencode((string) $params['id']);
+        } elseif (isset($params['action']) && $params['action'] !== 'default') {
+            $url .= '/';
         }
 
-        if (count($query) > 0) {
-            $queryString = '?';
-
-            foreach ($query as $key => $parameter) {
-                $queryString .= $key . '=' . $parameter . '&';
-            }
-
-            $finalQueryString = substr($queryString, 0, -1);
-            $url .= $finalQueryString;
+        $queryString = http_build_query($query, '', '&', PHP_QUERY_RFC3986);
+        if ($queryString !== '') {
+            $url .= '?' . $queryString;
         }
 
         return $url;

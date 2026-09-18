@@ -2,9 +2,13 @@
 {foreach $page as $item}
     <tr>
         <td class="col-xs-1">
-            <a href="{link deleteFile!, id => $item->id, name => $item->pages_id}" class="text-danger" onclick="return confirm('Opravdu smazat')">
-                <i class="fa fa-times"></i>
-            </a>
+            <form action="{link deleteFile! id => $item->id, name => $item->pages_id}" method="post" style="display: inline;">
+                <input type="hidden" name="_csrf" value="{$csrfToken}">
+                <button type="submit" class="btn btn-link text-danger p-0"
+                        onclick="return confirm('Opravdu smazat')">
+                    <i class="fa fa-times"></i>
+                </button>
+            </form>
             <a href="{plink ':Admin:Files:detailFile', id => $item->id}" class="btn btn-default btn-xs">
                 Upravit
             </a>

@@ -6,6 +6,7 @@ use App\Forms\Files\DropUploadControl;
 use App\Forms\Media\EditFileFormControl;
 use App\Forms\Media\EditPictureFormControl;
 use App\Model;
+use App\Security\CsrfProtectedMutation;
 use Nette\Utils\Finder;
 
 /**
@@ -13,6 +14,7 @@ use Nette\Utils\Finder;
  */
 class FilesPresenter extends BasePresenter
 {
+    use CsrfProtectedMutation;
 
     protected function createComponentDropUploadFiles(): DropUploadControl
     {
@@ -25,6 +27,8 @@ class FilesPresenter extends BasePresenter
      */
     public function handleDelete(): void
     {
+        $this->requireCsrfToken();
+
         Model\IO::remove(APP_DIR . '/images/' . $this->getParameter('path'));
 
         $this->redirect('this');
@@ -33,6 +37,7 @@ class FilesPresenter extends BasePresenter
     public function renderDefault(): void
     {
         $this->template->files = Finder::findFiles('')->in(APP_DIR . '/images');
+        $this->template->csrfToken = $this->getCsrfToken();
     }
 
     protected function createComponentEditFile(): EditFileFormControl

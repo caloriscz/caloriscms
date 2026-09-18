@@ -5,6 +5,7 @@ namespace Caloriscz\Page;
 use App\Forms\Menu\InsertMenuControl;
 use App\Model\Document;
 use App\Model\IO;
+use App\Security\CsrfProtectedMutation;
 use Caloriscz\Utilities\PagingControl;
 use Nette\Application\UI\Control;
 use Nette\Database\Explorer;
@@ -12,6 +13,7 @@ use Nette\Utils\Paginator;
 
 class PageListControl extends Control
 {
+    use CsrfProtectedMutation;
 
     public Explorer $database;
 
@@ -34,9 +36,10 @@ class PageListControl extends Control
      */
     public function handleDelete($id): void
     {
+        $this->requireCsrfToken();
+
         $doc = new Document($this->database);
         $doc->delete($id);
-        IO::removeDirectory(APP_DIR . '/media/' . $id);
 
         $this->onSave($this->getParameter('type'));
     }
@@ -46,6 +49,8 @@ class PageListControl extends Control
      */
     public function handlePublic(): void
     {
+        $this->requireCsrfToken();
+
         $show = 1;
         $page = $this->database->table('pages')->get($this->getParameter('id'));
 
@@ -131,6 +136,7 @@ class PageListControl extends Control
         $template->settings = $this->getPresenter()->template->settings;
         $template->type = $type;
         $template->database = $this->database;
+        $template->csrfToken = $this->getCsrfToken();
 
         $template->render();
     }

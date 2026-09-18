@@ -16,18 +16,22 @@
                         <div class="card-block">
                             <h1 n:block="title">Vytvoření nového hesla</h1>
 
-                            <p class="text-muted">>Hesla rozeznávají malá a velká písmena a mohou obsahovat písmena a
-                                číslice od 6 až 40 znaků</p>
-
-                            {if $activationValid}
-                                <p>Hesla rozeznávají malá a velká písmena a mohou obsahovat písmena a číslice od 6 až 40
-                                    znaků</p>
-                                <br/><br/>
+                            <p class="text-muted">Použijte alespoň 8 znaků. Odkaz platí jednu hodinu a lze jej použít pouze jednou.</p>
                             {control resetPass}
-                            {else}
-                                Aktivace není platná nebo je prošlá.<br/>
-                                Zkuste to znovu.
-                            {/if}
+                            <noscript>Pro načtení odkazu zapněte JavaScript a otevřete odkaz z e-mailu znovu.</noscript>
+                            <script>
+                            (function () {
+                                var fragment = window.location.hash;
+                                if (fragment.indexOf('#reset=') === 0) {
+                                    var token = fragment.substring(7);
+                                    var field = document.querySelector('[data-reset-token]');
+                                    if (field && /^[1-9][0-9]*\.[a-f0-9]{64}$/.test(token)) {
+                                        field.value = token;
+                                    }
+                                    window.history.replaceState(null, '', window.location.pathname);
+                                }
+                            })();
+                            </script>
 
                             {control lostPass}
                         </div>

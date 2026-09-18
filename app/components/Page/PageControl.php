@@ -8,7 +8,6 @@ use Caloriscz\Blog\BlogPreviewControl;
 use Caloriscz\Snippets\SnippetControl;
 use Nette\Application\UI\Control;
 use Nette\Database\Explorer;
-use Tracy\Debugger;
 
 class PageControl extends Control
 {
@@ -55,8 +54,6 @@ class PageControl extends Control
     {
         // Choose template according to Settings
         $settings = $this->getPresenter()->template->settings;
-
-        Debugger::barDump($this->presenter->template->page);
 
         $this->template->page = $this->presenter->template->page;
         $this->template->setFile(__DIR__ . '/' . $settings['pages_template'] . 'Control.latte');

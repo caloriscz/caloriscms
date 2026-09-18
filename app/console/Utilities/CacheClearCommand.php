@@ -41,10 +41,12 @@ class CacheClearCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        try {
-           IO::removeDirectory(substr(APP_DIR, 0, -3) . 'temp\cache\latte', true);
+        $cacheDir = APP_DIR . '/temp/cache/latte';
 
-            $output->writeln(substr(APP_DIR, 0, -3) . 'temp\cache\latte');
+        try {
+            IO::removeDirectory($cacheDir, true);
+
+            $output->writeln($cacheDir);
             $output->writeln('<comment>Cache cleared</comment>');
             return 0; // zero return code means everything is ok
 

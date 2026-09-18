@@ -30,6 +30,12 @@ services:
 	cacheClear:
 		class: App\Console\CacheClearCommand
 		tags: [kdyby.console.command]
+	mediaAudit:
+		class: App\Console\MediaAuditCommand
+		tags: [kdyby.console.command]
+	slugAudit:
+		class: App\Console\SlugAuditCommand
+		tags: [kdyby.console.command]
 	thumbnailGenerator:
 		class: App\Console\ThumbnailGeneratorCommand
 		tags: [kdyby.console.command]

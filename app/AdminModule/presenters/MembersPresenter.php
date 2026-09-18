@@ -17,12 +17,9 @@ class MembersPresenter extends BasePresenter
     protected function createComponentSendLogin(): SendLoginControl
     {
         $control = new SendLoginControl($this->database);
-        $control->onSave[] = function ($contactId, $pwd) {
-            if ($pwd) {
-                $this->flashMessage($pwd, 'success');
-            }
-
-            $this->redirect('this', ['id' => $contactId, 'pdd' => $pwd]);
+        $control->onSave[] = function ($contactId) {
+            $this->flashMessage('Odkaz pro nastavení hesla byl odeslán.', 'success');
+            $this->redirect('this', ['id' => $contactId]);
         };
 
         return $control;

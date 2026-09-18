@@ -26,6 +26,7 @@ class ChangePasswordControl extends Control
     protected function createComponentChangePasswordForm(): BootstrapUIForm
     {
         $form = new BootstrapUIForm();
+        $form->addProtection('Platnost formuláře vypršela. Zkuste to znovu.');
         $form->getElementPrototype()->class = 'form-horizontal';
         $form->addPassword('password1', 'Heslo')
             ->setRequired('Zadejte heslo.')
@@ -48,7 +49,7 @@ class ChangePasswordControl extends Control
         $ppwd = $form->values->password1;
         $ppwd2 = $form->values->password2;
 
-        if (strcasecmp($ppwd, $ppwd2) !== 0) {
+        if ($ppwd !== $ppwd2) {
             $this->presenter->flashMessage('Hesla se neshodují', 'error');
             $this->presenter->redirect('this');
         }
@@ -57,7 +58,8 @@ class ChangePasswordControl extends Control
         $passwordEncrypted = $passwordHash->hash($ppwd);
 
         $this->database->table('users')->where(['id' => $this->presenter->user->getId()])->update(
-            ['password' => $passwordEncrypted]
+            ['password' => $passwordEncrypted, 'activation' => null,
+                'reset_token_hash' => null, 'reset_expires_at' => null]
         );
 
         setcookie('calpwd', '', time() - 3600, '/');

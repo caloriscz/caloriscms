@@ -39,7 +39,13 @@
                                 </div>
                                 <div class="card-block text-center"
                                      style="overflow: hidden; height: 30px; text-overflow: ellipsis; padding-bottom: 30px;">
-                                    <a n:href="delete!, path => basename($key)"><i class="fa fa-close font-red"></i></a>
+                                    <form action="{link delete! path => basename($key)}" method="post" style="display: inline;">
+                                        <input type="hidden" name="_csrf" value="{$csrfToken}">
+                                        <button type="submit" class="btn btn-link p-0"
+                                                onclick="return confirm('Opravdu smazat?')">
+                                            <i class="fa fa-close font-red"></i>
+                                        </button>
+                                    </form>
                                     <small>{$key|toBaseName}</small>
                                 </div>
                             </div>

@@ -40,50 +40,13 @@ class DropZoneControl extends Control
         return $form;
     }
 
-    public function dropUploadFormSucceeded(BootstrapUIForm $form)
+    public function dropUploadFormSucceeded(BootstrapUIForm $form): void
     {
-        if (!empty($_FILES)) {
-            $storeFolder = 'pictures/' . $form->values->pages_id;
-            $fileName = IO::sanitizeUploadFileName($_FILES['file']['name']);
-
-            if ($fileName === null || !IO::isAllowedImageUpload($_FILES['file']['name'], $_FILES['file']['tmp_name'])) {
-                http_response_code(400);
-                exit();
-            }
-
-            $targetFile = APP_DIR . '/' . $storeFolder . '/' . $fileName;
-
-            IO::directoryMake(APP_DIR . '/' . $storeFolder);
-            IO::directoryMake(APP_DIR . '/' . $storeFolder . '/tn');
-
-            if (!move_uploaded_file($_FILES['file']['tmp_name'], $targetFile)) {
-                http_response_code(400);
-                exit();
-            }
-
-            chmod($targetFile, 0644);
-
-            $checkImage = $this->database->table('pictures')->where([
-                'name' => $fileName,
-                'pages_id' => $form->values->pages_id,
-            ]);
-
-            if ($checkImage->count() === 0) {
-                $file = new Picture($this->database);
-                $file->setPageId($form->values->pages_id);
-                $file->setType(1);
-                $file->setFile($fileName);
-                $file->create();
-
-                $thumb = new Thumbnail;
-                $thumb->setFile('/pictures/' . $form->values->pages_id, $fileName);
-                $thumb->setDimensions($this->getPresenter()->template->settings['media_thumb_width'],
-                    $this->getPresenter()->template->settings['media_thumb_height']);
-                $thumb->save($this->getPresenter()->template->settings['media_thumb_dir']);
-            }
-        }
-
-        exit();
+        (new \App\Model\MediaStorage($this->database, APP_DIR))->upload(
+            'pictures', $form->values->pages_id, $_FILES['file'] ?? [],
+            1, $this->getPresenter()->template->settings
+        );
+        $this->getPresenter()->sendJson(['saved' => true]);
     }
 
     public function render()

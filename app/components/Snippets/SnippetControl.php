@@ -31,14 +31,8 @@ class SnippetControl extends Control
             $snippet = $this->template->page->{'content_' . $this->presenter->translator->getLocale()};
         }
 
-        $role = $this->presenter->user->getRoles();
-        $template->roleCheck = $this->database->table('users_roles')->get($role[0]);
-
-        if ($template->roleCheck && $template->settings['site:admin:adminBarEnabled'] && $this->presenter->template->member->adminbar_enabled) {
-            $template->enabled = true;
-        } else {
-            $template->enabled = false;
-        }
+        $template->enabled = method_exists($this->presenter, 'inlineEditingEnabled')
+            && $this->presenter->inlineEditingEnabled();
 
         $template->snippet = $snippet;
         $template->snippetId = $snippetId;

@@ -3,12 +3,14 @@
 namespace App\Forms\Pages;
 
 use App\Model\Document;
+use App\Security\CsrfProtectedMutation;
 use Nette\Application\UI\Control;
 use Nette\Database\Explorer;
 use Nette\Forms\BootstrapUIForm;
 
 class EditorSettingsControl extends Control
 {
+    use CsrfProtectedMutation;
     private $htmlPurifier;
 
     public Explorer $database;
@@ -133,6 +135,8 @@ class EditorSettingsControl extends Control
 
     public function handlePublic(): void
     {
+        $this->requireCsrfToken();
+
         $page = $this->database->table('pages')->get($this->getPresenter()->getParameter('id'));
         $show = 1;
 
@@ -161,6 +165,7 @@ class EditorSettingsControl extends Control
         }
 
         $template->page_id = $this->getPresenter()->getParameter('id');
+        $template->csrfToken = $this->getCsrfToken();
         $template->setFile(__DIR__ . '/EditorSettingsControl.latte');
         $template->render();
     }

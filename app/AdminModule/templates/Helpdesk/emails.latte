@@ -43,9 +43,11 @@
                                     </td>
                                     <td>{$item->date_created|date:'j. n. Y H:i'}</td>
                                     <td class="text-right">
-                                        <a n:href="delete!, id => $item->id, helpdesk => $item->helpdesk_id"
-                                                onclick="return confirm('Opravdu smazat?')">
-                                            <i class="fa fa-times text-danger"></i></a>
+                                        <form action="{link delete!, identifier => $item->id, helpdesk => $item->helpdesk_id}" method="post" style="display: inline;" onsubmit="return confirm('Opravdu smazat?')">
+                                            <input type="hidden" name="_csrf" value="{$presenter->getMutationToken()}">
+                                            <button type="submit" class="btn btn-link">
+                                            <i class="fa fa-times text-danger"></i></button>
+                                        </form>
                                         <a n:href=":Admin:Helpdesk:detail, id => $item->id"><i
                                                     class="fa fa-plus"></i></a>
                                     </td>

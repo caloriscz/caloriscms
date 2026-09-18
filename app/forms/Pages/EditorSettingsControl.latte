@@ -9,18 +9,22 @@
 
 {control langSelector}
 
-<form n:name="editForm" class="form-horizontal" role="form">
-    <div class="card-header">
-        <strong>Popis</strong>
-
+<div class="card-header">
+    <strong>Popis</strong>
+    <form action="{link public!}" method="post" style="display: inline;">
+        <input type="hidden" name="_csrf" value="{$csrfToken}">
         {if $page->public == 0}
-            <a href="{link public!}" class="btn btn-default">
-                <i class="fa fa-toggle-off"></i>Povolit</a>
+            <button type="submit" class="btn btn-default">
+                <i class="fa fa-toggle-off"></i>Povolit
+            </button>
         {else}
-            <a href="{link public!}" class="btn btn-default">
-                <i class="fa fa-toggle-on"></i>Zakázat</a>
+            <button type="submit" class="btn btn-default">
+                <i class="fa fa-toggle-on"></i>Zakázat
+            </button>
         {/if}
-    </div>
+    </form>
+</div>
+<form n:name="editForm" class="form-horizontal" role="form">
     <div class="card-block">
         <div class="form-group row">
             <label for="inputTitle" class="col-sm-3 control-label">Název</label>

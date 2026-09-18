@@ -381,6 +381,8 @@ CREATE TABLE `users` (
   `date_visited` datetime DEFAULT NULL,
   `state` int(11) NOT NULL DEFAULT '0',
   `activation` char(40) CHARACTER SET latin1 DEFAULT NULL,
+  `reset_token_hash` char(64) CHARACTER SET ascii COLLATE ascii_bin DEFAULT NULL,
+  `reset_expires_at` datetime DEFAULT NULL,
   `users_roles_id` int(11) DEFAULT '0',
   `login_error` int(11) NOT NULL DEFAULT '0',
   `login_success` int(11) NOT NULL DEFAULT '0',

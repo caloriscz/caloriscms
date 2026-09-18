@@ -114,15 +114,8 @@ class Document
 
     public function setSlug($slugOld, $slug = false)
     {
-        if ($slugOld !== $slug) {
-            if ($this->database->table('pages')->where('slug', $slug)->count() > 0) {
-                $this->slug = $this->generate($slugOld);
-            } else {
-                $this->slug = Strings::webalize($slug);
-            }
-        } else {
-            $this->slug = false;
-        }
+        // Allocate against current rows inside save(), including the locale column.
+        $this->slug = $slugOld !== $slug ? Strings::webalize((string) $slug) : false;
 
         return $this->slug;
     }
@@ -194,53 +187,55 @@ class Document
      */
     public function create($user = null, $category = false)
     {
-        $values = $this->getForm();
+        return PageWrites::run($this->database, function () use ($user, $category) {
+            $values = $this->getForm();
 
-        $arr['users_id'] = $user;
-        $arr['date_created'] = date('Y-m-d H:i:s');
-        $arr['date_published'] = date('Y-m-d H:i:s');
-        $arr['public'] = 0;
-        $arr['pages_templates_id'] = $this->getTemplate();
+            $arr['users_id'] = $user;
+            $arr['date_created'] = date('Y-m-d H:i:s');
+            $arr['date_published'] = date('Y-m-d H:i:s');
+            $arr['public'] = 0;
+            $arr['pages_templates_id'] = $this->getTemplate();
 
-        if ($category !== false) {
-            $arr['pages_id'] = $category;
-        }
-
-        if ($values->title) {
-            $arr['title'] = $values->title;
-        }
-
-        $arr['pages_templates_id'] = $this->getTemplate();
-
-        if ($this->getPreview()) {
-            $arr['preview'] = $this->getPreview();
-        }
-
-        if ($this->getParent()) {
-            $arr['pages_id'] = $this->getParent();
-        }
-
-        if ($this->getSlug()) {
-            $slug = $this->getSlug();
-
-        } else {
-            if ($this->checkReservedNames($arr['title'])) {
-                $slug = $arr['title'] . '-name';
-            } else {
-                $slug = $arr['title'];
+            if ($category !== false) {
+                $arr['pages_id'] = $category;
             }
-        }
 
-        $slugNew = $this->generate($slug);
+            if ($values->title) {
+                $arr['title'] = $values->title;
+            }
 
-        $arr['slug'] = $slugNew;
-        $arr['pages_types_id'] = $this->getType();
+            $arr['pages_templates_id'] = $this->getTemplate();
 
-        $id = $this->database->table('pages')->insert($arr);
+            if ($this->getPreview()) {
+                $arr['preview'] = $this->getPreview();
+            }
 
-        $this->database->query('SET @i = 1;UPDATE `pages` SET `sorted` = @i:=@i+2 ORDER BY `sorted` ASC');
+            if ($this->getParent()) {
+                $arr['pages_id'] = $this->getParent();
+            }
 
-        return $id;
+            if ($this->getSlug()) {
+                $slug = $this->getSlug();
+
+            } else {
+                if ($this->checkReservedNames($arr['title'])) {
+                    $slug = $arr['title'] . '-name';
+                } else {
+                    $slug = $arr['title'];
+                }
+            }
+
+            $slugNew = $this->generate($slug);
+
+            $arr['slug'] = $slugNew;
+            $arr['pages_types_id'] = $this->getType();
+
+            $id = $this->database->table('pages')->insert($arr);
+
+            PageWrites::renumber($this->database);
+
+            return $id;
+        });
     }
 
     /**
@@ -251,74 +246,83 @@ class Document
      */
     public function save(int $id, $user = null): bool
     {
-        $values = $this->getForm();
-        $arr = [];
+        return PageWrites::run($this->database, function () use ($id, $user) {
+            $values = $this->getForm();
+            $arr = [];
 
-        if (isset($values->title) && $this->getLanguage()) {
-            $arr['title' . '_' . $this->getLanguage()] = $values->title;
-        } elseif (isset($values->title)) {
-            $arr['title'] = $values->title;
-        }
-
-        if ($this->templateSet) {
-            $arr['pages_templates_id'] = $this->getTemplate();
-        }
-
-        if ($this->documentSet) {
-            if ($this->getLanguage()) {
-                $arr['document' . '_' . $this->getLanguage()] = $this->getDocument();
-            } else {
-                $arr['document'] = $this->getDocument();
+            if (isset($values->title) && $this->getLanguage()) {
+                $arr['title' . '_' . $this->getLanguage()] = $values->title;
+            } elseif (isset($values->title)) {
+                $arr['title'] = $values->title;
             }
-        }
 
-        if ($this->previewSet) {
-            if ($this->getLanguage()) {
-                $arr['preview' . '_' . $this->getLanguage()] = $this->getPreview();
-            } else {
-                $arr['preview'] = $this->getPreview();
+            if ($this->templateSet) {
+                $arr['pages_templates_id'] = $this->getTemplate();
             }
-        }
 
-        if (isset($values->metakeys) && $this->getLanguage()) {
-            $arr['metakeys' . '_' . $this->getLanguage()] = $values->metakeys;
-        } elseif (isset($values->metakeys)) {
-            $arr['metakeys'] = $values->metakeys;
-        }
-
-        if (isset($values->metadesc) && $this->getLanguage()) {
-            $arr['metadesc' . '_' . $this->getLanguage()] = $values->metadesc;
-        } elseif (isset($values->metadesc)) {
-            $arr['metadesc'] = $values->metadesc;
-        }
-
-        if (isset($values->sitemap)) {
-            $arr['sitemap'] = $values->sitemap ? 1 : 0;
-        }
-
-        if ($this->getSlug() && $this->getLanguage()) {
-            $arr['slug' . '_' . $this->getLanguage()] = $this->getSlug();
-        } elseif ($this->getSlug()) {
-            $arr['slug'] = $this->getSlug();
-        }
-
-        if ($this->parentSet) {
-            if ($this->getParent()) {
-                $arr['pages_id'] = $this->getParent();
-            } elseif ($this->parent === 0) {
-                $arr['pages_id'] = null;
+            if ($this->documentSet) {
+                if ($this->getLanguage()) {
+                    $arr['document' . '_' . $this->getLanguage()] = $this->getDocument();
+                } else {
+                    $arr['document'] = $this->getDocument();
+                }
             }
-        }
 
-        if (isset($values->date_published) && $values->date_published) {
-            $arr['date_published'] = $values->date_published;
-        } elseif ($this->getSlug()) {
-            $arr['date_published'] = date('Y-m-d H:i:s');
-        }
+            if ($this->previewSet) {
+                if ($this->getLanguage()) {
+                    $arr['preview' . '_' . $this->getLanguage()] = $this->getPreview();
+                } else {
+                    $arr['preview'] = $this->getPreview();
+                }
+            }
 
-        $arr['users_id'] = $user;
+            if (isset($values->metakeys) && $this->getLanguage()) {
+                $arr['metakeys' . '_' . $this->getLanguage()] = $values->metakeys;
+            } elseif (isset($values->metakeys)) {
+                $arr['metakeys'] = $values->metakeys;
+            }
 
-        return $this->database->table('pages')->get($id)->update($arr);
+            if (isset($values->metadesc) && $this->getLanguage()) {
+                $arr['metadesc' . '_' . $this->getLanguage()] = $values->metadesc;
+            } elseif (isset($values->metadesc)) {
+                $arr['metadesc'] = $values->metadesc;
+            }
+
+            if (isset($values->sitemap)) {
+                $arr['sitemap'] = $values->sitemap ? 1 : 0;
+            }
+
+            if ($this->getSlug() && $this->getLanguage()) {
+                $arr['slug' . '_' . $this->getLanguage()] = $this->getSlug();
+            } elseif ($this->getSlug()) {
+                $arr['slug'] = $this->getSlug();
+            }
+
+            if ($this->parentSet) {
+                if ($this->getParent()) {
+                    $arr['pages_id'] = $this->getParent();
+                } elseif ($this->parent === 0) {
+                    $arr['pages_id'] = null;
+                }
+            }
+
+            if (isset($values->date_published) && $values->date_published) {
+                $arr['date_published'] = $values->date_published;
+            } elseif ($this->getSlug()) {
+                $arr['date_published'] = date('Y-m-d H:i:s');
+            }
+
+            $arr['users_id'] = $user;
+
+            foreach ($arr as $column => $value) {
+                if ($column === 'slug' || strpos($column, 'slug_') === 0) {
+                    $arr[$column] = PageWrites::uniqueSlug($this->database, $value, $column, $id);
+                }
+            }
+            $page = $this->database->table('pages')->get($id);
+            if (!$page) { throw new \Nette\Application\BadRequestException('Page not found.', 404); }
+            return $page->update($arr);
+        });
     }
 
     /**
@@ -364,9 +368,7 @@ class Document
      */
     public function delete(int $id): bool
     {
-        $this->database->table('pages')->get($id)->delete();
-
-        return true;
+        return (new MediaStorage($this->database, APP_DIR))->deletePage($id);
     }
 
     /**
@@ -392,27 +394,7 @@ class Document
      */
     public function generate($slugToGenerate)
     {
-        $slug = Strings::webalize($slugToGenerate);
-
-        $slugNameOne = $this->database->table('pages')->where('slug', $slug);
-
-        if ($slugNameOne->count() === 0) {
-            return $slug;
-        }
-
-        $max = 0;
-        $slugName = $this->database->table('pages')->where('slug LIKE ?', '%' . $slug);
-
-        if ($slugName->count() > 0) {
-
-            $slugs = array_values($slugName->fetchPairs('slug', 'slug'));
-
-            while (in_array((++$max . '-' . $slug), $slugs, true)) ;
-
-            return $max . '-' . $slug;
-        }
-
-        return $slug;
+        return PageWrites::uniqueSlug($this->database, (string) $slugToGenerate);
     }
 
 }

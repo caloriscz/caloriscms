@@ -9,10 +9,12 @@
     {foreach $userList as $item}
         <tr>
             <td class="w-5">
-                <a href="{link delete!, id => $item->id}"
-                   onclick="return confirm('Opravdu smazat?')" class="text-danger">
+                <form action="{link delete!, id => $item->id}" method="post" style="display: inline;" onsubmit="return confirm('Opravdu smazat?')">
+                    <input type="hidden" name="_csrf" value="{$presenter->getMutationToken()}">
+                    <button type="submit" class="btn btn-link text-danger">
                     <i class="fa fa-times font-red"></i>
-                </a>
+                </button>
+                </form>
             </td>
             <td><a href="{plink ':Admin:Members:edit', id => $item->id}">{$item->username}</a></td>
             <td>{var $role = $item->ref('users_roles', 'users_roles_id')}{if $role}{$role->title}{/if}</td>

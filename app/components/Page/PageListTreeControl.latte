@@ -10,8 +10,13 @@
                         <i class="fa fa-plus"></i>
                     </button>
                     {if $item->pages_types_id != 9}
-                        <a href="{'link delete!', $item->id}" class="btn btn-danger btn-sm"><i
-                                    class="fa fa-times"></i></a>
+                        <form action="{link delete! id => $item->id, type => $type}" method="post" style="display: inline;">
+                            <input type="hidden" name="_csrf" value="{$csrfToken}">
+                            <button type="submit" class="btn btn-danger btn-sm"
+                                    onclick="return confirm('Opravdu smazat?')">
+                                <i class="fa fa-times"></i>
+                            </button>
+                        </form>
                     {/if}
 
                     {var $categoryCount = $database->table('pages')->where('pages_id', $item->pages_id)->count()}

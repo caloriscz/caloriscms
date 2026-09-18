@@ -31,7 +31,10 @@
             </ul>
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="{plink ':Admin:Sign:out', id => null}">Odhlásit</a>
+                    <form action="{plink ':Admin:Sign:out', id => null}" method="post">
+                        <input type="hidden" name="_csrf" value="{$presenter->getMutationToken()}">
+                        <button type="submit" class="btn btn-link nav-link">Odhlásit</button>
+                    </form>
                 </li>
             </ul>
         </div>

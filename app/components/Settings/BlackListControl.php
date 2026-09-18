@@ -2,6 +2,7 @@
 
 namespace Caloriscz\Settings;
 
+use App\Security\CsrfProtectedMutation;
 use Caloriscz\Utilities\PagingControl;
 use Nette\Application\UI\Control;
 use Nette\Database\Explorer;
@@ -9,6 +10,7 @@ use Nette\Utils\Paginator;
 
 class BlackListControl extends Control
 {
+    use CsrfProtectedMutation;
 
     public Explorer $database;
 
@@ -23,6 +25,8 @@ class BlackListControl extends Control
      */
     public function handleDelete(int $id): void
     {
+        $this->requireCsrfToken();
+
         $this->database->table('blacklist')->get($id)->delete();
         $this->presenter->redirect('this', ['id' => $this->presenter->getParameter('id')]);
     }
@@ -50,6 +54,7 @@ class BlackListControl extends Control
         $this->template->blacklist = $blacklist->limit($paginator->getLength(), $paginator->getOffset());
         $this->template->paginator = $paginator;
         $this->template->args = $this->getParameters();
+        $this->template->csrfToken = $this->getCsrfToken();
 
 
         $this->template->setFile(__DIR__ . '/BlackListControl.latte');

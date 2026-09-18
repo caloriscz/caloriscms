@@ -1,1 +1,2 @@
 composer install
+delete www/temp/cache

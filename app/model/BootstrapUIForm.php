@@ -13,6 +13,23 @@ class BootstrapUIForm extends Form
     public function __construct()
     {
         parent::__construct();
+        // Protect every admin POST form, including nested forms and uploads.
+        // Attach after factory defaults so existing explicit protection is retained.
+        $this->onAnchor[] = static function (self $form): void {
+            if ($form->getPresenter() instanceof \App\AdminModule\Presenters\BasePresenter
+                && $form->isMethod('post')) {
+                $control = $form->getComponent('_token_', false)
+                    ?? $form->addProtection('The form expired. Please try again.');
+                if ($form->isSubmitted()) {
+                    $control->loadHttpData();
+                    // Reject before legacy onValidate callbacks read values or
+                    // perform side effects on a form that failed CSRF validation.
+                    if (!Controls\CsrfProtection::validateCsrf($control)) {
+                        throw new \Nette\Application\ForbiddenRequestException('Invalid form token.');
+                    }
+                }
+            }
+        };
         $renderer = $this->getRenderer();
         $renderer->wrappers['controls']['container'] = '';
         $renderer->wrappers['pair']['container'] = 'div class="form-group"';

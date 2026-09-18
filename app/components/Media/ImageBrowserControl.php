@@ -4,6 +4,7 @@ namespace Caloriscz\Media;
 
 use App\Model\Category;
 use App\Model\IO;
+use App\Security\CsrfProtectedMutation;
 use Caloriscz\Utilities\PagingControl;
 use Nette\Application\UI\Control;
 use Nette\Database\Explorer;
@@ -11,6 +12,7 @@ use Nette\Utils\Paginator;
 
 class ImageBrowserControl extends Control
 {
+    use CsrfProtectedMutation;
 
     public Explorer $database;
 
@@ -33,18 +35,11 @@ class ImageBrowserControl extends Control
      */
     public function handleDelete($id): void
     {
-        $imageDb = $this->database->table('pictures')->get($id);
+        $this->requireCsrfToken();
 
-        if ($imageDb !== null) {
-            $pageId = $imageDb->pages_id;
-            IO::remove(APP_DIR . '/pictures/' . $imageDb->pages_id . '/' . $imageDb->name);
-            IO::remove(APP_DIR . '/pictures/' . $imageDb->pages_id . '/tn/' . $imageDb->name);
-
-            $imageDb->delete();
-        } else {
-            $pageId = $this->getParameter('id');
-        }
-
+        $pageId = (new \App\Model\MediaStorage($this->database, APP_DIR))->deleteFile(
+            'pictures', (int) $id, (string) ($this->presenter->template->settings['media_thumb_dir'] ?? 'tn')
+        ) ?? $this->getParameter('id');
 
         $this->redirect('this', [
             'id' => $pageId,
@@ -57,6 +52,8 @@ class ImageBrowserControl extends Control
      */
     public function handleSetMain(): void
     {
+        $this->requireCsrfToken();
+
         // Set all other media images in this folder as 0
         $this->database->table('pictures')->where(['pages_id' => $this->getParameter('id')])
             ->update(['main_file' => 0]);
@@ -82,6 +79,7 @@ class ImageBrowserControl extends Control
         $template->documents = $mediaDb->order('name');
         $template->paginator = $paginator;
         $template->productsArr = $mediaDb->limit($paginator->getLength(), $paginator->getOffset());
+        $template->csrfToken = $this->getCsrfToken();
 
         if ($this->getParameter('id')) {
             $category = new Category($this->database);

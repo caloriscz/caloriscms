@@ -52,49 +52,11 @@ class DropZoneControl extends Control
      */
     public function dropFormSucceeded(BootstrapUIForm $form): void
     {
-        if (!empty($_FILES)) {
-            $ds = DIRECTORY_SEPARATOR;
-            $storeFolder = 'media/' . $form->values->pages_id;
-
-            IO::directoryMake(APP_DIR . $ds . $storeFolder);
-
-            $tempFile = $_FILES['file']['tmp_name'];
-            $realFile = IO::sanitizeUploadFileName($_FILES['file']['name']);
-
-            if ($realFile === null || ((int) $form->values->type === 1 && !IO::isAllowedImageUpload($_FILES['file']['name'], $tempFile))) {
-                http_response_code(400);
-                exit();
-            }
-
-            $targetPath = APP_DIR . $ds . $storeFolder . $ds;
-            $targetFile = $targetPath . $realFile;
-
-            if (!move_uploaded_file($tempFile, $targetFile)) {
-                http_response_code(400);
-                exit();
-            }
-
-            $fileSize = filesize($targetFile);
-
-            $checkImage = $this->database->table('media')->where([
-                'name' => $realFile,
-                'pages_id' => $form->values->pages_id,
-            ]);
-
-            if ($checkImage->count() === 0) {
-                $this->database->table('media')->insert([
-                    'name' => $realFile,
-                    'pages_id' => $form->values->pages_id,
-                    'filesize' => $fileSize,
-                    'file_type' =>  $form->values->type,
-                    'date_created' => date('Y-m-d H:i:s'),
-                ]);
-            } else {
-                echo 'Nejsem reálný soubor';
-            }
-        }
-
-        exit();
+        (new \App\Model\MediaStorage($this->database, APP_DIR))->upload(
+            'media', $form->values->pages_id, $_FILES['file'] ?? [],
+            (int) $form->values->type, $this->getPresenter()->template->settings
+        );
+        $this->getPresenter()->sendJson(['saved' => true]);
     }
 
     public function render(): void
