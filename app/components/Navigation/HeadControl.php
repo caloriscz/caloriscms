@@ -17,6 +17,8 @@ class HeadControl extends Control
 
     public function render($slugArray): void
     {
+        // Keep cached CSS in sync with the layout, including after a rollback.
+        $this->template->siteStyleVersion = substr(hash_file('sha256', __DIR__ . '/../../../www/css/caloris-site.css'), 0, 16);
         $page = $this->presenter->template->page;
         $this->template->page = $page;
         $this->template->slug = $slugArray;
