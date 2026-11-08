@@ -38,22 +38,29 @@ class ErrorPresenter extends Presenter
      */
     public function renderDefault(Throwable $exception, ?Request $request = null): void
     {
-        // Error pages must work without page/settings queries or site components.
-        $this->setLayout(__DIR__ . '/../templates/Error/@layout.latte');
         $code = $exception instanceof BadRequestException ? ($exception->getHttpCode() ?: 404) : 500;
-        $this->getHttpResponse()->setCode($code);
-        $this->getHttpResponse()->setHeader('Cache-Control', 'no-store');
-        $this->template->errorCode = $code;
-        if ($exception instanceof BadRequestException) {
-            // load template 403.latte or 404.latte or ... 4xx.latte
-            $this->setView(\in_array($code, [403, 404, 405, 410], true) ? $code : '4xx');
-            // log to access.log
-            $this->logger->log(ErrorContext::describe($code, $request), 'access');
-        } else {
-            $this->setView('500'); // load template 500.latte
-            $this->logger->log(ErrorContext::describe($code, $request), 'access');
-            $this->logger->log($exception, ILogger::EXCEPTION); // and log exception
+        // Preserve the original failure even if the response can no longer change.
+        $this->logger->log(ErrorContext::describe($code, $request), 'access');
+        if (!$exception instanceof BadRequestException) {
+            $this->logger->log($exception, ILogger::EXCEPTION);
         }
+
+        $httpResponse = $this->getHttpResponse();
+        if ($httpResponse->isSent()) {
+            $this->logger->log('Error response headers already sent; body left unchanged; sent status '
+                . $httpResponse->getCode() . '; ' . ErrorContext::describe($code, $request), ILogger::WARNING);
+            // Appending HTML or JSON would corrupt an already-started response.
+            // JsonResponse also tries to set Content-Type when it is sent.
+            $this->sendResponse(new Nette\Application\Responses\VoidResponse());
+        }
+
+        // Error pages must work without page/settings queries or site components.
+        $httpResponse->setCode($code);
+        $httpResponse->setHeader('Cache-Control', 'no-store');
+        $this->setLayout(__DIR__ . '/../templates/Error/@layout.latte');
+        $this->template->errorCode = $code;
+        $this->setView($exception instanceof BadRequestException
+            ? (\in_array($code, [403, 404, 405, 410], true) ? (string) $code : '4xx') : '500');
 
         if ($this->isAjax()) { // AJAX request? Note this error in payload.
             $this->sendJson(['error' => true, 'code' => $code]);

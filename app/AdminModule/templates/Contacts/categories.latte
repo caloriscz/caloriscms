@@ -1,21 +1,11 @@
 {block #titles}Kategorie kontaktů{/block}
 {block content}
-{var $category = 0}
-{var $counter = 2}
 
 <ol class="breadcrumb">
     <li class="breadcrumb-item"><a href="/admin/">Admin</a></li>
     <li class="breadcrumb-item active"><a href="/admin/contacts">Kontakty</a></li>
-    <li class="breadcrumb-item active"><a href="/admin/contacts/{$presenter->getParameter('id')}/categories">Kategorie</a>
-    </li>
+    <li class="breadcrumb-item active"><a n:href=":Admin:Contacts:categories, id => null">Kategorie</a></li>
 </ol>
-
-{foreach $flashes as $flash}
-    <br/>
-    <div class="flash {$flash->type}">{$flash->message}</div>
-    <br/>
-{/foreach}
-
 
 <div class="container-fluid">
     <div class="animated fadeIn">
@@ -36,23 +26,47 @@
                             <a n:href=":Admin:Contacts:categories, id => null" class="btn btn-default">Všechny kategorie</a>
                         {/if}
 
-                        <div class="tree">
-                                <ul>
-                                    {foreach $menu as $item}
-                                        <li><span><i class="fa fa-folder"></i></span>
-                                            <a n:href=":Admin:Contacts:categoriesDetail, id => $item->id">{$item->title}</a>
-                                            <button type="button" class="btn btn-default" data-toggle="modal"
-                                                    data-target="#catModal{$item->id}" title="Přidat podkategorii">
-                                                <i class="fa fa-plus"></i>
-                                            </button>
-                                            <form action="{link delete!, $item->id}" method="post" style="display: inline;">
-                                                <input type="hidden" name="_csrf" value="{$presenter->getMutationToken()}">
-                                                <button type="submit" class="btn btn-danger btn-xs"><i class="fa fa-times"></i></button>
-                                            </form>
+                        {define categoryTree}
+                            <ul>
+                                {foreach $categories as $item}
+                                    <li><span><i class="fa fa-folder"></i></span>
+                                        <a n:href=":Admin:Contacts:categoryDetail, id => $item->id" title="Upravit">{$item->title}</a>
+                                        <button type="button" class="btn btn-default btn-xs" data-toggle="modal"
+                                                data-target="#catModal{$item->id}" title="Přidat podkategorii">
+                                            <i class="fa fa-plus"></i>
+                                        </button>
+                                        <form action="{link deleteCategory!, categoryId => $item->id}" method="post" style="display: inline;"
+                                              onsubmit="return confirm('Opravdu smazat kategorii?')">
+                                            <input type="hidden" name="_csrf" value="{$presenter->getMutationToken()}">
+                                            <button type="submit" class="btn btn-danger btn-xs" title="Smazat"><i class="fa fa-times"></i></button>
+                                        </form>
+                                        <div class="modal fade" id="catModal{$item->id}" tabindex="-1" role="dialog" aria-hidden="true">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title">Přidat podkategorii do „{$item->title}“</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Zavřít">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        {control categoryInsert, $item->id}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {var $children = $database->table('contacts_categories')->where('parent_id', $item->id)->order('title')}
+                                        {if $children->count('*') > 0}
+                                            {include categoryTree, categories => $children, database => $database}
+                                        {/if}
+                                    </li>
+                                {/foreach}
+                            </ul>
+                        {/define}
 
-
-                                    {/foreach}
-                                </ul>
+                        {* A plain list: the jsTree with menu editor mutations is bound only to .menu-editor-tree. *}
+                        <div class="contact-category-tree">
+                            {include categoryTree, categories => $menu, database => $database}
                         </div>
                     </div>
                 </div>

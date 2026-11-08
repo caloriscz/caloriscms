@@ -59,10 +59,19 @@ try:
     saved = fixture('read')
     assert saved['title'] == title and '<strong>Safe &amp; sound</strong>' in saved['snippet']
     assert '<script' not in saved['snippet'] and 'onerror' not in saved['snippet']
-    for invalid in ['', '<b>markup</b>', 'x' * 251]:
-        response = editor.post(url, data={'_do': 'pagetitle', '_csrf': token, 'editorId': ids['page'], 'text': invalid}, timeout=15)
-        assert response.status_code == 400
+    # Blank-looking titles (space, NBSP, zero-width, bidi override) and 4-byte
+    # characters are 400; on MariaDB's utf8mb3 columns an emoji used to be a 500.
+    # A snippet is HTML and stores the same character as a numeric reference.
+    for invalid in ['', '<b>markup</b>', 'x' * 251, ' ', ' ', '​', '‮', 'Ahoj \U0001F600']:
+        response = editor.post(url, data={'_do': 'pagetitle', '_csrf': token, 'editorId': ids['page'], 'text': invalid},
+                               headers={'X-Requested-With': 'XMLHttpRequest'}, timeout=15)
+        assert response.status_code == 400, (repr(invalid), response.status_code)
     assert fixture('read') == saved
+    for typed in ['<p>\U0001F600</p>', '<p>&#x1F600;</p>']:
+        response = editor.post(url, data={'_do': 'snippet', '_csrf': token, 'snippetId': ids['snippet'], 'text': typed},
+                               headers={'X-Requested-With': 'XMLHttpRequest'}, timeout=15)
+        assert response.status_code == 200, (typed, response.status_code)
+        assert fixture('read')['snippet'] == '<p>&#128512;</p>', fixture('read')
     assert 'Žluťoučký &amp; +' in editor.get(url, timeout=15).text
     print('PASS: anonymous/restricted/disabled/missing-role/revoked/GET/invalid-token no-write checks; safe AJAX saves and special characters')
 finally:

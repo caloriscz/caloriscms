@@ -27,7 +27,7 @@ $factory = new class implements Nette\Application\UI\TemplateFactory {
         };
         $latte->addProvider('uiControl', $control);
         $latte->addProvider('uiPresenter', $control);
-        $template = new Nette\Bridges\ApplicationLatte\Template($latte);
+        $template = new Nette\Bridges\ApplicationLatte\DefaultTemplate($latte);
         $template->basePath = '/subdir';
         return $template;
     }

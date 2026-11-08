@@ -43,9 +43,11 @@ class InsertCategoryControl extends Control
      */
     public function validateFormSucceeded(BootstrapUIForm $form): void
     {
+        $values = $form->getValues();
+        // Category::setCategory() stores a non-numeric parent as NULL; '' never matched NULL here.
         $category = $this->database->table('contacts_categories')->where([
-            'parent_id' => $form->values->parent,
-            'title' => $form->values->title,
+            'parent_id' => is_numeric($values->parent) ? (int) $values->parent : null,
+            'title' => $values->title,
         ]);
 
         if ($category->count() > 0) {
@@ -53,8 +55,19 @@ class InsertCategoryControl extends Control
             $this->presenter->redirect('this');
         }
 
-        if ($form->values->title === '') {
+        if (trim($values->title) === '') {
             $this->presenter->flashMessage('Kategorie musí mít název', 'error');
+            $this->presenter->redirect('this');
+        }
+
+        if (mb_strlen($values->title, 'UTF-8') > EditCategoryControl::TITLE_LENGTH) {
+            $this->presenter->flashMessage(sprintf('Název kategorie může mít nejvýše %d znaků. Nic nebylo uloženo.',
+                EditCategoryControl::TITLE_LENGTH), 'error');
+            $this->presenter->redirect('this');
+        }
+
+        if (is_numeric($values->parent) && $this->database->table('contacts_categories')->get((int) $values->parent) === null) {
+            $this->presenter->flashMessage('Nadřazená kategorie neexistuje.', 'error');
             $this->presenter->redirect('this');
         }
     }

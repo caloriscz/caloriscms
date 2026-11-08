@@ -1,5 +1,6 @@
 """Remaining CSRF checks with disposable local records and real rendered tokens."""
 import json
+import html
 import re
 import subprocess
 import sys
@@ -79,7 +80,10 @@ try:
         form = next(f for f in found if f['inputs'].get('_do') == signal)
         other_form = next(f for f in forms(other.get(url, timeout=15).text) if f['inputs'].get('_do') == signal)
         initial = fixture('snapshot')
-        data = {**form['inputs'], field: prefix + ' & + updated ' + str(ids['menu'])}
+        text = prefix + ' & + updated ' + str(ids['menu'])
+        # Snippet content is an HTML field: post the text as HTML and expect it
+        # back unchanged. Every other field must store the text exactly as typed.
+        data = {**form['inputs'], field: html.escape(text, quote=False) if table == 'snippets' else text}
         action = urljoin(url, form['action'])
         for bad in ['', 'bad', other_form['inputs']['_token_']]:
             response = session.post(action, data={**data, '_token_': bad}, files={'the_file': ('', b'')}, timeout=15)
@@ -88,7 +92,8 @@ try:
         response = session.post(action, data=data, files={'the_file': ('', b'')}, allow_redirects=False, timeout=15)
         assert response.status_code in (200, 302, 303), (signal, 'valid', response.status_code)
         if table:
-            assert fixture('read')[table][column] == data[field], (signal, 'valid form did not save')
+            saved = fixture('read')[table][column]
+            assert saved == data[field], (signal, 'valid form did not save as submitted', saved)
         else:
             assert fixture('snapshot')['users'] != initial['users']
         print('PASS: ' + signal + ' rejects bad tokens and accepts valid form', flush=True)
@@ -97,6 +102,10 @@ try:
     name = prefix + ' & + tree'
     response = session.post(base + '/admin/menu/', params={'do': 'menuEditor-rename', 'node_id': ids['menu'], 'text': name},
         data={'_csrf': csrf}, headers={'X-Requested-With': 'XMLHttpRequest'}, timeout=15)
+    assert response.status_code == 200 and fixture('read')['menu']['title'] == name
+    # The real jsTree client sends the node text HTML-escaped; it is stored as typed.
+    response = session.post(base + '/admin/menu/', params={'do': 'menuEditor-rename', 'node_id': ids['menu'],
+        'text': html.escape(name, quote=False)}, data={'_csrf': csrf}, headers={'X-Requested-With': 'XMLHttpRequest'}, timeout=15)
     assert response.status_code == 200 and fixture('read')['menu']['title'] == name
     # A rendered POST button works without JavaScript and removes only its fixture.
     page = session.get(base + '/admin/snippets/', timeout=15)

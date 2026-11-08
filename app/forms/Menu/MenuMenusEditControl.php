@@ -7,6 +7,8 @@ use Nette\Forms\BootstrapUIForm;
 
 class MenuMenusEditControl extends Control
 {
+    /** menu_menus.title is varchar(30) and class varchar(60); strict MariaDB refuses longer values with a 500. */
+    private const LENGTHS = ['title' => ['Název menu', 30], 'class' => ['Třída pro CSS styl', 60]];
 
     public Explorer $database;
 
@@ -22,6 +24,9 @@ class MenuMenusEditControl extends Control
     protected function createComponentEditForm(): BootstrapUIForm
     {
         $menuMenus = $this->database->table('menu_menus')->get($this->presenter->getParameter('id'));
+        if ($menuMenus === null) {
+            $this->presenter->error('Record not found.', 404);
+        }
 
         $form = new BootstrapUIForm();
         $form->addHidden('id');
@@ -51,14 +56,30 @@ class MenuMenusEditControl extends Control
      */
     public function editFormSucceeded(BootstrapUIForm $form): void
     {
-        $this->database->table('menu_menus')->get($form->values->id)->update([
-                'title' => $form->values->title,
-                'description' => $form->values->description,
-                'type' => $form->values->type,
-                'class' => $form->values->class,
+        // Read once: Nette warns when values are read from a form that has errors.
+        $values = $form->getValues();
+        $menuMenus = $this->database->table('menu_menus')->get($values->id);
+        if ($menuMenus === null) {
+            $this->presenter->error('Record not found.', 404);
+        }
+
+        foreach (self::LENGTHS as $field => [$label, $length]) {
+            if (mb_strlen((string) $values->$field, 'UTF-8') > $length) {
+                $form->addError(sprintf('%s může mít nejvýše %d znaků. Nic nebylo uloženo.', $label, $length));
+            }
+        }
+        if ($form->hasErrors()) {
+            return;
+        }
+
+        $menuMenus->update([
+                'title' => $values->title,
+                'description' => $values->description,
+                'type' => $values->type,
+                'class' => $values->class,
             ]);
 
-        $this->presenter->redirect('this', ['id' => $form->values->id]);
+        $this->presenter->redirect('this', ['id' => $values->id]);
     }
 
     public function render()

@@ -49,6 +49,15 @@ Assert::exception(function () use ($service, $page): void {
     $service->updatePage($page['id'], ['pages_id' => $page['id']]);
 }, InvalidArgumentException::class, 'Field pages_id cannot reference the same page');
 
+// pages.document/preview are TEXT: HTML that outgrows 65,535 bytes once
+// purified ('&' becomes '&amp;') is a 400, not a strict-mode 500.
+foreach (['document', 'preview'] as $field) {
+    Assert::exception(function () use ($service, $page, $field): void {
+        $service->updatePage($page['id'], ['title' => 'Too long', $field => '<p>' . str_repeat('&', 13200) . '</p>']);
+    }, InvalidArgumentException::class, 'Field ' . $field . ' is too long: 66007 bytes after sanitization, at most 65535');
+}
+Assert::same('Test Article', $service->getPage($page['id'])['title']);
+
 $updated = $service->updatePage($page['id'], ['title' => 'Updated', 'sitemap' => false]);
 Assert::same('Updated', $updated['title']);
 Assert::same(0, $updated['sitemap']);

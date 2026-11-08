@@ -52,10 +52,16 @@ class DropZoneControl extends Control
      */
     public function dropFormSucceeded(BootstrapUIForm $form): void
     {
-        (new \App\Model\MediaStorage($this->database, APP_DIR))->upload(
-            'media', $form->values->pages_id, $_FILES['file'] ?? [],
-            (int) $form->values->type, $this->getPresenter()->template->settings
-        );
+        try {
+            (new \App\Model\MediaStorage($this->database, APP_DIR))->upload(
+                'media', $form->values->pages_id, $_FILES['file'] ?? [],
+                (int) $form->values->type, $this->getPresenter()->template->settings
+            );
+        } catch (\Nette\Application\BadRequestException $error) {
+            // Dropzone shows a JSON "error" string next to the file.
+            $this->getPresenter()->getHttpResponse()->setCode($error->getHttpCode());
+            $this->getPresenter()->sendJson(['error' => $error->getMessage()]);
+        }
         $this->getPresenter()->sendJson(['saved' => true]);
     }
 

@@ -77,7 +77,8 @@ class EditHelpdeskEmailSettingsControl extends Control
             'blacklist' => $form->values->blacklist
         ]);
 
-        $this->onSave($form->values->helpdesk_templates_id);
+        // Back to this form's page: the template id named another form, or a missing one (404).
+        $this->onSave($form->values->helpdesk_id);
     }
 
     public function render(): void

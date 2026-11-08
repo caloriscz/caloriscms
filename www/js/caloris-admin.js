@@ -9,6 +9,20 @@ function calorisMutation(options) {
     });
 }
 
+// Dropzone 5.5 passes the image's error Event to "thumbnail" when it cannot
+// preview a file (a text file named .png). The default handler assigns that to
+// img.src, which requests "<page URL>/[object Event]". Keep the plain file preview.
+// Runs before Dropzone's auto-discovery on DOMContentLoaded copies the options.
+if (window.Dropzone && Dropzone.prototype.defaultOptions.thumbnail) {
+    (function (thumbnail) {
+        Dropzone.prototype.defaultOptions.thumbnail = function (file, dataUrl) {
+            if (typeof dataUrl === 'string') {
+                return thumbnail.apply(this, arguments);
+            }
+        };
+    })(Dropzone.prototype.defaultOptions.thumbnail);
+}
+
 $(function () {
     $.nette.init();
 });
@@ -170,8 +184,10 @@ $(document).ready(function () {
 });
 
 /* JSTree  Menus ----- */
+/* Only the menu editor's own tree: its drag-and-drop and context menu send menu editor
+   mutations (menuEditor-sort/-create/-rename/-delete) with the node ids of menu items. */
 $(document).ready(function () {
-    $('.tree').jstree({
+    $('.menu-editor-tree').jstree({
         "icons": true,
         "core": {
             "check_callback": true
@@ -249,12 +265,12 @@ $(document).ready(function () {
         });
     });
 
-    $('.tree').on('ready.jstree', function () {
-        $(".tree").jstree("open_all");
+    $('.menu-editor-tree').on('ready.jstree', function () {
+        $(".menu-editor-tree").jstree("open_all");
     });
 
 
-    $(".tree li").on("click", "a",
+    $(".menu-editor-tree li").on("click", "a",
         function () {
             document.location.href = this;
         }

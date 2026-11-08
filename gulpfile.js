@@ -2,6 +2,13 @@
 let gulp = require('gulp');
 let concat = require('gulp-concat');
 
+// Targeted vendor refresh keeps unrelated legacy bundle inputs byte-for-byte.
+// Use scripts-a for a full frontend rebuild after installing its dependencies.
+gulp.task('scripts-elfinder', done => {
+    require('./tools/build/elfinder.cjs')();
+    done();
+});
+
 gulp.task("scripts-a", done => {
     gulp.src([
         './node_modules/jquery/dist/jquery.min.js',

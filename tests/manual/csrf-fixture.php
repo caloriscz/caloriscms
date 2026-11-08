@@ -17,6 +17,8 @@ $records = [
     'helpdesk' => ['title' => $prefix, 'subject' => $prefix, 'helpdesk_templates_id' => 1, 'log' => 0],
     'helpdesk_messages' => ['message' => $prefix, 'email' => $prefix . '@example.invalid', 'ipaddress' => '127.0.0.1'],
     'carousel' => ['title' => $prefix, 'uri' => '', 'image' => $prefix . '.missing', 'visible' => 0, 'sorted' => 0],
+    'settings' => ['setkey' => $prefix, 'setvalue' => '', 'description_cs' => $prefix, 'type' => 'local_path'],
+    'pages' => ['slug' => $prefix, 'title' => $prefix, 'public' => 0],
 ];
 if ($mode === 'create') {
     if (is_file($file)) { throw new RuntimeException('Fixture exists.'); }
@@ -55,7 +57,19 @@ if ($mode === 'create') {
     }
     // Only disposable records are returned; no real content or credentials.
     echo json_encode($rows);
+} elseif ($mode === 'blog') {
+    // Publishes the disposable page as a blog post and turns RSS on; cleanup restores RSS.
+    $ids = json_decode(file_get_contents($file), true);
+    $root = $pdo->query('SELECT pages_id FROM pages_types WHERE id = 2')->fetchColumn();
+    $pdo->prepare('UPDATE pages SET public = 1, pages_types_id = 2, pages_id = ?, date_created = NOW(), date_published = NOW() WHERE id = ?')
+        ->execute([$root, $ids['pages']]);
+    file_put_contents($file . '.rss', (string) $pdo->query("SELECT setvalue FROM settings WHERE setkey = 'rss:enabled'")->fetchColumn());
+    $pdo->exec("UPDATE settings SET setvalue = '1' WHERE setkey = 'rss:enabled'");
 } elseif ($mode === 'cleanup') {
+    if (is_file($file . '.rss')) {
+        $pdo->prepare("UPDATE settings SET setvalue = ? WHERE setkey = 'rss:enabled'")->execute([file_get_contents($file . '.rss')]);
+        unlink($file . '.rss');
+    }
     if (is_file($file)) {
         $ids = json_decode(file_get_contents($file), true);
         foreach (array_reverse($ids, true) as $table => $id) {

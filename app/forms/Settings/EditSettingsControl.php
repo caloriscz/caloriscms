@@ -9,8 +9,13 @@ use Nette\Forms\BootstrapUIForm;
 class EditSettingsControl extends Control
 {
 
+    /** settings.setvalue is varchar(120). */
+    private const VALUE_LENGTH = 120;
+
     public Explorer $database;
     private ?string $keyPrefix;
+    /** Values of a rejected submission, shown again instead of the stored ones. */
+    private array $submitted = [];
 
     public function __construct(Explorer $database, ?string $keyPrefix = null)
     {
@@ -61,9 +66,35 @@ class EditSettingsControl extends Control
     {
         $values = $form->getHttpData($form::DATA_TEXT); // get value from html input
 
+        // Validate every value before writing any: purification can lengthen the
+        // maintenance message past settings.setvalue, and a strict-mode overflow
+        // or a 4-byte character used to fail with 500 after a partial save.
+        $updates = [];
         foreach ($values['set'] as $key => $value) {
-            $this->database->table('settings')->where(['setkey' => $key])->update(['setvalue' => $value]);
+            if ($key === 'maintenance_message') {
+                $value = \App\Security\HtmlContent::purify($value);
+            }
+            $label = function () use ($key): string {
+                return $this->database->table('settings')->where(['setkey' => $key])->fetchField('description_cs') ?: $key;
+            };
+            if (mb_strlen($value, 'UTF-8') > self::VALUE_LENGTH) {
+                $form->addError(sprintf('%s: hodnota má %d znaků (včetně HTML úprav), povoleno je nejvýše %d. Nic nebylo uloženo.',
+                    $label(), mb_strlen($value, 'UTF-8'), self::VALUE_LENGTH));
+            } elseif (preg_match('~[\x{10000}-\x{10FFFF}]~u', $value)) {
+                $form->addError($label() . ': hodnota obsahuje nepodporované znaky (např. emoji). Nic nebylo uloženo.');
+            }
+            $updates[$key] = $value;
         }
+        if ($form->hasErrors()) {
+            $this->submitted = $values['set'];
+            return;
+        }
+
+        $this->database->transaction(function () use ($updates): void {
+            foreach ($updates as $key => $value) {
+                $this->database->table('settings')->where(['setkey' => $key])->update(['setvalue' => $value]);
+            }
+        });
 
         $this->presenter->redirect('this', ['id' => $form->values->category_id]);
     }
@@ -76,6 +107,7 @@ class EditSettingsControl extends Control
         $arr = ['admin_editable' => 1];
 
         $this->template->database = $this->database;
+        $template->submitted = $this->submitted;
 
         $settingsDb = $this->database->table('settings')->where($arr);
 

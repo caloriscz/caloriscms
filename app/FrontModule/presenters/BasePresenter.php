@@ -139,6 +139,7 @@ abstract class BasePresenter extends Presenter
         }
 
         $this->template->appDir = APP_DIR;
+        $this->template->frontScriptVersion = substr(hash_file('sha256', __DIR__ . '/../../../www/js/all-front-custom.js'), 0, 16);
         $this->template->languageSelected = $this->translator->getLocale();
         $this->template->slugArray = [];
     }
@@ -201,6 +202,21 @@ abstract class BasePresenter extends Presenter
     protected function createComponentPageContact(): ContactControl
     {
         return new ContactControl($this->database);
+    }
+
+    protected function afterRender(): void
+    {
+        parent::afterRender();
+        // Nette keeps flashes for 30 seconds, so a reload of the ?_fid= page would
+        // repeat Helpdesk feedback. The template already holds this render's copy.
+        if ($this->hasFlashSession()) {
+            foreach ((array) $this->template->flashes as $flash) {
+                if (!empty($flash->helpdesk)) {
+                    $this->getFlashSession()->remove();
+                    break;
+                }
+            }
+        }
     }
 
     protected function createComponentHelpdesk(): HelpdeskControl

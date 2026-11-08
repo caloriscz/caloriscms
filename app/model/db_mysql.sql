@@ -421,7 +421,7 @@ CREATE TABLE `users_roles` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
 
 INSERT INTO `users_roles` (`id`, `title`, `sign`, `appearance`, `helpdesk`, `settings`, `settings_permissions`, `members`, `pages`, `pictures`, `media`, `menu`, `contacts`) VALUES
-                                                                                                                                                                                    (1, 'Admin', 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+                                                                                                                                                                                    (1, 'Admin', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
                                                                                                                                                                                     (2, 'Super User', 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1),
                                                                                                                                                                                     (3, 'Editor', 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1);
 

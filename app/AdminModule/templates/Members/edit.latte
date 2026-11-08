@@ -66,7 +66,7 @@
                                     {foreach $membersRelated as $item}
                                         <tr>
                                             <td>
-                                                <form action="{link deleteContact! id => $item->id, contact => $members->id}" method="post" style="display: inline;" onsubmit="return confirm('Opravdu smazat?')">
+                                                <form action="{link deleteContact! contactId => $item->id}" method="post" style="display: inline;" onsubmit="return confirm('Opravdu smazat?')">
                                                     <input type="hidden" name="_csrf" value="{$presenter->getMutationToken()}">
                                                     <button type="submit" class="btn btn-link">
                                                     <i class="fa fa-times font-red"></i>
@@ -79,7 +79,7 @@
                                             <td>{$item->street}</td>
                                             <td>{$item->zip}</td>
                                             <td>{$item->city}</td>
-                                            <td>{$item->countries->title_cs}</td>
+                                            <td>{$item->countries ? $item->countries->title_cs : ""}</td>
                                         </tr>
                                     {/foreach}
                                 {/if}

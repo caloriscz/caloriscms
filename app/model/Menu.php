@@ -138,6 +138,12 @@ class Menu
             $parent = null;
         }
 
+        $title = \App\Security\HtmlContent::menuLabel((string) $title);
+        $error = \App\Security\HtmlContent::menuLabelError($title);
+        if ($error !== null) {
+            throw new \Nette\InvalidArgumentException($error);
+        }
+
         $this->database->table('menu')->insert([
             'title' => $title,
             'slug_id' => $slug,

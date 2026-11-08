@@ -1,4 +1,8 @@
 <form n:name="editForm" class="form-horizontal" role="form">
+    {* One form is rendered per setting; show errors under the submitted one only. *}
+    <div n:if="$form->hasErrors() && (string) $form['path_id']->getValue() === (string) $item->id" class="alert alert-danger">
+        {foreach $form->getErrors() as $error}{$error} {/foreach}
+    </div>
     <div class="row">
         <div class="col-sm-2">
             {if file_exists($appDir . '/images/paths/' . $item->setvalue)}

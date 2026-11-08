@@ -6,7 +6,7 @@
         {var $mediaCategory = $selectedImage->pages_id}
         <a href="/{$itemCat->slug}">
             {if $selected->count() > 0}
-                <img src="{$baseUri}/media/{$mediaCategory}/{$mediaThumb}" class="img-responsive"  style="height: 150px; overflow: hidden;" />
+                <img src="{$basePath}/media/{$mediaCategory}/{$mediaThumb}" class="img-responsive"  style="height: 150px; overflow: hidden;" />
             {/if}
             <span>{$itemCat->title}</span>
         </a>

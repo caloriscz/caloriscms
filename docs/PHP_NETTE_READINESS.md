@@ -1,6 +1,7 @@
 # PHP and Nette upgrade readiness
 
-Task `32c1e30a`, assessed 2026-09-17 against the uncommitted reconciliation worktree.
+Task `32c1e30a`, assessed 2026-09-17; verification corrections on 2026-09-23
+against source `bf21b1b` plus the local follow-up changes. Corrections are not deployed.
 
 ## Decision
 
@@ -14,19 +15,54 @@ PHP 8.2 security support ends 2026-12-31; 8.3 ends 2027-12-31, 8.4 ends 2028-12-
 and 8.5 ends 2029-12-31. PHP 8.4 and 8.5 are in active support on the assessment
 date. See the [official PHP support schedule](https://www.php.net/supported-versions.php).
 
+Support dates rechecked on 2026-09-23. PHP 8.0 reached end of life on 2023-11-26,
+and PHP 7.4 on 2022-11-28 ([official unsupported branches](https://www.php.net/eol.php)).
+Passing compatibility tests on those versions does not make them supported targets.
+
 ## Compatibility matrix
+
+September 26 follow-up: the targeted elFinder lockfile update, non-page asset
+work and Helpdesk diagnostics pass all **16** current tests on PHP7.4.33,
+8.0.30 and 8.2.33; **194** PHP/PHPT files lint clean on PHP7.4. Current lock SHA-256
+is `43BFB8D75F51A111F1C7AF8E77DB2CA4AFAD31FAF6B08BCAE38BEA82AB876D6B`.
+Only elFinder changed (2.1.69 to2.1.70); older lock hashes/results below are
+historical. No production runtime upgrade or new browser acceptance is claimed.
+
+September 24 local follow-up: after error-response task `97fc2a75` and HTML writer
+task `51270fae`, all **13** current Tester files pass and **189** PHP/PHPT files
+lint clean on PHP 7.4.33/8.0.30/8.2.33. Local PHP7.4 protected HTML forms, menu
+insertion and existing admin CSRF/inline HTTP regressions pass. See
+`docs/ADMIN_HTML_POLICY.md` and `docs/ERROR_RESPONSES.md`. The September 23 matrix
+below remains a dated snapshot; these later CLI results do not establish
+production PHP or browser acceptance.
 
 | Runtime | Locked dependencies | Local lint/tests | HTTP/browser evidence |
 | --- | --- | --- | --- |
-| PHP 7.4.33 | Current configured runtime | 165 files lint clean; seven Tester files pass | Existing local HTTP baseline and password/member checks pass; browser unavailable |
-| PHP 8.2.33 | No PHP constraint prohibitions | 165 files lint clean; seven Tester files pass after installing intl | Home, login, reset form, documents, gallery, sitemap: 200; unauthenticated API: 401. No browser or authenticated editing/upload pass |
+| PHP 7.4.33 | Current configured local runtime | 183 files lint clean; 11 Tester files pass on September 23 | Historical local HTTP baseline; September 23 admin CSRF/elFinder/inline AJAX checks pass; browser unavailable |
+| PHP 8.0.30 | No PHP constraint prohibitions | 183 files lint clean; 11 Tester files pass on September 23 | CLI probe only; Blueboard deploy hook reports PHP 8.0, without patch version; web runtime unconfirmed |
+| PHP 8.2.33 | No PHP constraint prohibitions | 183 files lint clean; 11 Tester files pass on September 23 after correcting the template fixture | September 17 HTTP: home/login/reset/documents/gallery/sitemap 200, API 401. No current authenticated browser/editing/upload pass |
 | PHP 8.3 | Five locked packages prohibit it | Not run with an incompatible dependency set | Not tested |
 | PHP 8.4 | Fourteen locked packages prohibit it | Not run with an incompatible dependency set | Not tested |
 | PHP 8.5 | Fifteen locked packages prohibit it | Not run with an incompatible dependency set | Not tested |
 
-Counts include first-party PHP and `.phpt` files at lint time, before adding the
-small built-in-server router fixture. PHP 8.2 CLI image digest:
+Counts include first-party PHP and `.phpt` files in `app/` and `tests/` at the
+final September 23 follow-up, including the new manual Admin-role migration check.
+All three runtimes were rerun after the CSRF/assets/role changes. The old seven-file/165-file results describe the
+September 17 snapshot only. The later committed suite reproduced one failure on
+PHP 8.2: its error-response fixture assigned `basePath` on the generic Latte
+`Template`. Using `DefaultTemplate`, as the application does, removes that dynamic
+property deprecation. No application error handling or dependency was changed by
+this fixture correction. PHP 8.2 CLI base image digest used for the existing probe:
 `sha256:350410175b65a56c924871b1d7af6bd7a5aa27a9cd94fee5236fc54967ab5955`.
+
+PHP 8.0.30 probe image ID:
+`sha256:d366f1b47def0576f08a174ec571379860d2e385f6a98aef5195e3867ceadf83`.
+Its final official image uses Debian Bullseye; current indexed ICU package URLs
+returned 404 during the first build. The probe Dockerfile uses a dated Debian
+2023-11-01 snapshot for Bullseye only. Snapshot validity expiry is disabled for
+that frozen index; package signature verification remains enabled. This obsolete
+image is solely a disposable, network-disabled test environment, not a deployment
+recommendation. Other base distributions keep their normal repositories.
 
 Lockfile SHA-256:
 `5D3F367BCCA449C0E449C1BC3CD8AAB09A17A11A21815723BDA536295190805B`.
@@ -82,7 +118,10 @@ docker compose exec -T app composer prohibits php 8.4.0 --locked
 docker compose exec -T app composer prohibits php 8.5.0 --locked
 docker compose exec -T app php vendor/bin/latte-lint app
 docker compose exec -T app php tests/manual/php-readiness-lint.php
-docker build -t caloriscms-readiness:8.2 docker/readiness
+docker build --build-arg PHP_VERSION=8.0.30 -t caloriscms-readiness:8.0 docker/readiness
+docker build --build-arg PHP_VERSION=8.2.33 -t caloriscms-readiness:8.2 docker/readiness
+docker run --rm --network none -v E:/projects/apps/caloriscms/caloriscms-reconcile:/work:ro -v caloriscms-reconcile_composer_vendor:/work/vendor:ro -w /work caloriscms-readiness:8.0 php vendor/bin/tester tests -C -s
+docker run --rm --network none -v E:/projects/apps/caloriscms/caloriscms-reconcile:/work:ro -w /work caloriscms-readiness:8.0 php tests/manual/php-readiness-lint.php
 docker run --rm --network none -v E:/projects/apps/caloriscms/caloriscms-reconcile:/work:ro -v caloriscms-reconcile_composer_vendor:/work/vendor:ro -w /work caloriscms-readiness:8.2 php vendor/bin/tester tests -C -s
 docker run --rm --network none -v E:/projects/apps/caloriscms/caloriscms-reconcile:/work:ro -w /work caloriscms-readiness:8.2 php tests/manual/php-readiness-lint.php
 ```
@@ -97,13 +136,20 @@ necessary for corresponding workflows).
 
 ## Staged upgrade and release gates
 
-1. Record Blueboard's actual web and CLI PHP versions, available targets, enabled
-   extensions, Composer runtime, document root and rollback method in task
-   `d63c65f2`. These remain unverified; there is no evidence-based production target
-   until that record exists.
+1. Complete the Blueboard hosting record in task `d63c65f2`: exact web and CLI PHP
+   versions, extensions and available upgrade targets. Deployment task `a4565e37`
+   records Composer running on PHP 8.0 on September 18 (again noted September 20).
+   That is CLI evidence, not proof of the web server's PHP version or extensions.
+   The release and forward-revert procedure are recorded in
+   `docs/RELEASE_2026_09_18.md`; target selection still needs web/runtime confirmation.
 2. Accept pending security changes, expand password/media/XML and MariaDB
    regressions (`30a38cf0`), and exercise authenticated browser editing/uploads
-   (`b5a1c3a8`). A passing seven-file suite is a useful starting point only.
+   (`b5a1c3a8`). A passing CLI suite is a useful starting point only. Browser
+   discovery on September 23 again returned no available browsers; no new browser
+   result is claimed. The separate error-response regression `97fc2a75` was fixed
+   locally on September 24 with an actual HTTP late-header regression. All twelve
+   current tests pass on PHP 7.4.33/8.0.30/8.2.33; acceptance and release remain
+   separate. The earlier DefaultTemplate fixture correction alone did not fix it.
 3. In a separate upgrade branch/environment, resolve the five PHP 8.3 blockers
    first through compatible package releases. Keep a reviewed lockfile and run
    tests, template lint, full-extension HTTP/browser checks and deprecation

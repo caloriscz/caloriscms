@@ -21,7 +21,7 @@
         <li class="{$linkActive}{if $dbSubs->count() > 0} has-subs{/if}">
             <a href="/{$rowCategories->slug}" data-category="{$rowCategories->id}">
                 {if file_exists($basePath . '/www/media/' . $rowCategories->id)}
-                    <img src="{$baseUri}/media/{$rowCategories->id}" />
+                    <img src="{$basePath}/media/{$rowCategories->id}" />
                 {/if}
                 <span>{$rowCategories->title}</span>
             </a>

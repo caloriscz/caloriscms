@@ -55,19 +55,10 @@ class ContentApiService
     ];
 
     private Explorer $database;
-    private \HTMLPurifier $htmlPurifier;
 
     public function __construct(Explorer $database)
     {
         $this->database = $database;
-
-        $config = \HTMLPurifier_Config::createDefault();
-        $config->set('HTML.AllowedAttributes', 'img.src,*.style,*.class');
-        $config->set('Attr.AllowedClasses', 'col-*,container,text-right, text-left, btn, btn-lg');
-        $config->set('HTML.ForbiddenElements', ['font']);
-        $config->set('AutoFormat.RemoveEmpty', true);
-
-        $this->htmlPurifier = new \HTMLPurifier($config);
     }
 
     /**
@@ -196,10 +187,10 @@ class ContentApiService
                     $payload['slug'] = $this->normalizeSlug($value, $currentPageId, true);
                     break;
                 case 'document':
-                    $payload['document'] = $this->purifyHtml($this->requireString($field, $value));
+                    $payload['document'] = $this->purifyHtml($field, $this->requireString($field, $value));
                     break;
                 case 'preview':
-                    $payload['preview'] = $this->purifyHtml($this->requireString($field, $value));
+                    $payload['preview'] = $this->purifyHtml($field, $this->requireString($field, $value));
                     break;
                 case 'metadesc':
                 case 'metakeys':
@@ -267,9 +258,16 @@ class ContentApiService
         return $this->requireText($field, $value, $maxLength);
     }
 
-    private function purifyHtml(string $html): string
+    private function purifyHtml(string $field, string $html): string
     {
-        return $this->htmlPurifier->purify($html);
+        $html = \App\Security\HtmlContent::purify($html);
+
+        if (\App\Security\HtmlContent::textSizeError($html) !== null) {
+            throw new InvalidArgumentException('Field ' . $field . ' is too long: ' . strlen($html)
+                . ' bytes after sanitization, at most ' . \App\Security\HtmlContent::TEXT_COLUMN_BYTES);
+        }
+
+        return $html;
     }
 
     private function normalizeSlug($value, ?int $currentPageId, bool $rejectDuplicate): string

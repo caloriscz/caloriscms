@@ -10,14 +10,14 @@
 <div class="container-fluid">
     <div class="animated fadeIn">
         <div class="row">
-            <div class="col-lg-3">
+            <div class="col-lg-3" n:if="$templates">
                 <div class="card">
                     <div class="card-header">Nastavení</div>
                     <div class="card-block">{control editHelpdeskEmailSettings}</div>
                 </div>
             </div>
-            <div class="col-lg-9">
-                <div class="card">
+            <div class="{$templates ? 'col-lg-9' : 'col-lg-12'}">
+                <div class="card" n:if="$templates">
                     <div class="card-header">E-mail</div>
                     <div class="card-block">
                         {control editMailTemplate}

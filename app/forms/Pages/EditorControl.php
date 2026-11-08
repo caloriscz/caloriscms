@@ -3,7 +3,6 @@
 namespace App\Forms\Pages;
 
 use App\Model\Document;
-use HTMLPurifier;
 use Nette\Application\AbortException;
 use Nette\Application\UI\Control;
 use Nette\Database\Explorer;
@@ -16,20 +15,11 @@ use Nette\Forms\BootstrapUIForm;
  */
 class EditorControl extends Control
 {
-    private HTMLPurifier $htmlPurifier;
     public Explorer $database;
 
     public function __construct(Explorer $database)
     {
         $this->database = $database;
-
-        $config = \HTMLPurifier_Config::createDefault();
-        $config->set('HTML.AllowedAttributes', 'img.src,*.style,*.class');
-        $config->set('Attr.AllowedClasses', 'col-*,container,text-right, text-left, btn, btn-lg');
-        $config->set('HTML.ForbiddenElements', ['font']);
-        $config->set('AutoFormat.RemoveEmpty', true);
-
-        $this->htmlPurifier = new \HTMLPurifier($config);
     }
 
     protected function createComponentLangSelector(): \LangSelectorControl
@@ -98,6 +88,11 @@ class EditorControl extends Control
     public function editFormSucceeded(BootstrapUIForm $form): void
     {
         $document = $this->purify($form->values->document);
+        $error = \App\Security\HtmlContent::textSizeError($document);
+        if ($error !== null) {
+            $form->addError($error);
+            return;
+        }
 
         $doc = new Document($this->database);
         $doc->setLanguage($form->values->l);
@@ -124,7 +119,7 @@ class EditorControl extends Control
      */
     public function purify($dirtyHtml): string
     {
-        return $this->htmlPurifier->purify($dirtyHtml);
+        return \App\Security\HtmlContent::purify((string) $dirtyHtml);
     }
 
     public function render()

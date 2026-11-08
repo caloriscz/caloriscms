@@ -7,6 +7,7 @@ use Tester\Assert;
 require __DIR__ . '/../bootstrap.php';
 require __DIR__ . '/../database.php';
 $db = createTestDatabase();
+$db->query('CREATE TABLE menu (id INTEGER PRIMARY KEY, pages_id INTEGER REFERENCES pages(id) ON DELETE CASCADE, parent_id INTEGER REFERENCES menu(id) ON DELETE CASCADE)');
 foreach (['media', 'pictures'] as $table) {
     $db->query('CREATE TABLE ' . $table . ' (id INTEGER PRIMARY KEY AUTOINCREMENT, pages_id INTEGER, name TEXT,
         filesize INTEGER, file_type INTEGER, date_created TEXT, description TEXT, sorted INTEGER)');
@@ -58,15 +59,20 @@ try {
     Assert::false(file_exists($root . '/pictures/1/tn/saved.jpg'));
     Assert::null($store->deleteFile('pictures', $id));
     // Page delete covers originals, thumbnails and picture rows without a FK.
+    $db->table('menu')->insert(['id' => 1, 'pages_id' => 1]);
+    $db->table('menu')->insert(['id' => 2, 'parent_id' => 1]);
+    FileSystem::write($root . '/images/menu/2_h.png', 'menu-child');
     $store->store('pictures', 1, 'page.jpg', $write, $thumb);
     $store->store('media', 1, 'page.txt', $write);
     $db->query("CREATE TRIGGER reject_page BEFORE DELETE ON pages BEGIN SELECT RAISE(ABORT, 'reject'); END");
     Assert::exception(function () use ($store): void { $store->deletePage(1); }, Nette\Database\DriverException::class);
+    Assert::same('menu-child', file_get_contents($root . '/images/menu/2_h.png'));
     Assert::true(is_file($root . '/media/1/page.txt'));
     Assert::true(is_file($root . '/pictures/1/tn/page.jpg'));
     Assert::same(1, $db->table('pictures')->count('*'));
     $db->query('DROP TRIGGER reject_page');
     Assert::true((new App\Model\Document($db))->delete(1));
+    Assert::false(file_exists($root . '/images/menu/2_h.png'));
     Assert::false(file_exists($root . '/media/1'));
     Assert::false(file_exists($root . '/pictures/1'));
     Assert::same(0, $db->table('pictures')->count('*'));

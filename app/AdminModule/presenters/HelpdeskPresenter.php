@@ -35,9 +35,15 @@ class HelpdeskPresenter extends BasePresenter
      */
     public function handleDelete($identifier): void
     {
-        $this->database->table('helpdesk_messages')->get($identifier)->delete();
+        $message = $this->database->table('helpdesk_messages')->get($identifier);
+        if ($message === null) {
+            $this->error('Record not found.', 404);
+        }
+        $helpdeskId = $message->helpdesk_id;
+        $message->delete();
 
-        $this->redirect('this', ['id' => $this->getParameter('helpdesk')]);
+        // To the message list of its form, also from the message's own page, which no longer exists.
+        $this->redirect(':Admin:Helpdesk:emails', ['id' => $helpdeskId]);
     }
 
     /**
@@ -57,15 +63,16 @@ class HelpdeskPresenter extends BasePresenter
         $this->template->helpdesk = $this->database->table('helpdesk')->order('title');
     }
 
+    public function actionEmails(): void
+    {
+        // Without an id the page still lists messages whose form was deleted
+        // (helpdesk_id is set to NULL), with no form to edit.
+        $this->template->templates = $this->getParameter('id') === null ? null : $this->requireRecord('helpdesk');
+    }
+
     public function renderEmails(): void
     {
-        $this->template->templates = $this->database->table('helpdesk')->get($this->getParameter('id'));
-
-        if (!$this->getParameter('id')) {
-            $helpdeskId = null;
-        } else {
-            $helpdeskId = $this->getParameter('id');
-        }
+        $helpdeskId = $this->template->templates ? $this->template->templates->id : null;
 
         $messages = $this->database->table('helpdesk_messages')->where(['helpdesk_id' => $helpdeskId])
             ->order('date_created DESC');
@@ -81,9 +88,9 @@ class HelpdeskPresenter extends BasePresenter
         $this->template->args = $this->getParameters();
     }
 
-    public function renderDetail(): void
+    public function actionDetail(): void
     {
-        $this->template->helpdesk = $this->database->table('helpdesk')->get($this->getParameter('id'));
-        $this->template->message = $this->database->table('helpdesk_messages')->get($this->getParameter('id'));
+        // The id is a message id; the page shows only the message.
+        $this->template->message = $this->requireRecord('helpdesk_messages');
     }
 }

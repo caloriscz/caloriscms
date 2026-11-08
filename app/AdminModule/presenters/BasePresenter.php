@@ -110,9 +110,24 @@ abstract class BasePresenter extends Presenter
         if ($signal && strtolower($signal[1]) !== 'submit') {
             $preference = ($this->getName() === 'Admin:Pages' && $signal === ['', 'view'])
                 || $signal === ['editor', 'toggle'];
-            $command = $this->getHttpRequest()->getPost('cmd') ?? $this->getHttpRequest()->getQuery('cmd');
-            $fileRead = $signal === ['elfinder', 'options'] && is_string($command)
-                && in_array($command, ['open', 'tree', 'parents', 'tmb', 'file', 'ls', 'size', 'dim', 'info', 'search', 'get', 'url'], true);
+            $request = $this->getHttpRequest();
+            // elFinder's connector resolves the command and method from the PHP
+            // superglobals ($_SERVER['REQUEST_METHOD'], $_GET), not from Nette's
+            // parsed request. A forged query key (cmd=open&%20cmd=zipdl), a
+            // NUL-truncated one (download%00x=0), or an X-HTTP-Method-Override made
+            // Nette and the connector disagree about what would run. Decide from the
+            // same superglobals, and only for a request that carries no POST field,
+            // no upload and no raw body (the connector can reparse a raw body).
+            $command = $_GET['cmd'] ?? null;
+            $fileRead = $signal === ['elfinder', 'options']
+                && in_array($_SERVER['REQUEST_METHOD'] ?? '', ['GET', 'HEAD'], true)
+                && $_POST === [] && $_FILES === []
+                && ($request->getRawBody() ?? '') === '' && is_string($command)
+                && (in_array($command, ['open', 'tree', 'parents', 'tmb', 'file', 'ls', 'size', 'dim', 'info', 'search', 'get', 'url'], true)
+                    // The client fetches a prepared ZIP with a plain link, always with
+                    // download=1. elFinder prepares one when the value is empty, so
+                    // download=0 and download= need the token like any other mutation.
+                    || ($command === 'zipdl' && ($_GET['download'] ?? null) === '1'));
             if (!$preference && !$fileRead) {
                 $this->requireCsrfToken();
             }
@@ -125,11 +140,31 @@ abstract class BasePresenter extends Presenter
         $this->template->settings = $this->database->table('settings')->fetchPairs('setkey', 'setvalue');
 
         $this->template->appDir = APP_DIR;
+        $this->template->adminScriptVersion = substr(hash_file('sha256', __DIR__ . '/../../../www/js/caloris-admin.js'), 0, 16);
+        $this->template->adminBundleVersion = substr(hash_file('sha256', __DIR__ . '/../../../www/js/all-back.js'), 0, 16);
         $this->template->signed = true;
         $this->template->langSelected = $this->translator->getLocale();
 
         // Set language from cookie
         $this->translator->setLocale($this->translator->getDefaultLocale());
+    }
+
+    /**
+     * The row of $table named by the id parameter. A missing, non-numeric or
+     * unknown id is a 404 before any form or template reads the row.
+     * @throws \Nette\Application\BadRequestException
+     */
+    protected function requireRecord(string $table): \Nette\Database\Table\ActiveRow
+    {
+        $id = $this->getParameter('id');
+        $row = is_scalar($id) && preg_match('/^[1-9][0-9]{0,9}$/D', (string) $id)
+            ? $this->database->table($table)->get((int) $id)
+            : null;
+        if ($row === null) {
+            $this->error('Record not found.', 404);
+        }
+
+        return $row;
     }
 
     /**

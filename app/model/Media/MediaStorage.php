@@ -30,14 +30,15 @@ class MediaStorage
     public function upload(string $table, $pageId, array $file, int $type = 0, array $settings = []): int
     {
         if (!is_scalar($pageId) || !preg_match('/^[1-9][0-9]*$/D', (string) $pageId)) {
-            throw new BadRequestException('Invalid media page.');
+            throw new BadRequestException('Neplatná stránka.', 400);
         }
         $name = IO::sanitizeUploadFileName($file['name'] ?? '');
         $tmp = $file['tmp_name'] ?? '';
         if ($name === null || strlen($name) > 140 || !is_string($tmp)
             || ($file['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_OK || !is_uploaded_file($tmp)
             || (($table === 'pictures' || $type === 1) && !IO::isAllowedImageUpload($name, $tmp))) {
-            throw new BadRequestException('Invalid media upload.');
+            throw new BadRequestException(($table === 'pictures' || $type === 1) ? AssetStorage::INVALID_IMAGE
+                : 'Soubor nelze nahrát: nepovolený typ souboru, název delší než 140 znaků nebo přerušený přenos.', 400);
         }
         $thumbnail = null;
         if ($table === 'pictures') {
@@ -71,7 +72,7 @@ class MediaStorage
                 $this->lockPage($pageId);
                 if ($this->database->table($table)->where(['pages_id' => $pageId, 'name' => $name])->count('*')
                     || file_exists($directory . '/' . $name)) {
-                    throw new BadRequestException('A file with this name already exists.', 409);
+                    throw new BadRequestException(AssetStorage::DUPLICATE, 409);
                 }
                 $source = $stage . '/' . $name;
                 $write($source);
@@ -95,7 +96,7 @@ class MediaStorage
                 foreach ($targets as $from => $to) {
                     $this->safePath($to);
                     if (file_exists($to)) {
-                        throw new BadRequestException('A file with this name already exists.', 409);
+                        throw new BadRequestException(AssetStorage::DUPLICATE, 409);
                     }
                     FileSystem::rename($from, $to, false);
                     $placed[] = $to;
@@ -156,14 +157,24 @@ class MediaStorage
         if (!$this->database->table('pages')->get($id)) {
             return false;
         }
-        $this->deletion($id, function (callable $stage) use ($id): void {
-            foreach (['media', 'pictures'] as $table) {
-                $stage($this->directory($table, $id));
-                // pictures has no foreign key in the legacy schema.
-                $this->database->table($table)->where('pages_id', $id)->delete();
-            }
-            $this->database->table('pages')->where('id', $id)->delete();
-        });
+        $assetLock = AssetStorage::lock($this->root);
+        try {
+            $this->deletion($id, function (callable $stage) use ($id): void {
+                // Page deletion cascades into menu rows, including descendants.
+                $menuIds = array_values($this->database->table('menu')->where('pages_id', $id)->fetchPairs('id', 'id'));
+                foreach (AssetWrites::menuIds($this->database, $menuIds) as $menuId) {
+                    foreach (['', '_h', '_a', '_ah'] as $suffix) {
+                        $stage($this->root . '/images/menu/' . $menuId . $suffix . '.png');
+                    }
+                }
+                foreach (['media', 'pictures'] as $table) {
+                    $stage($this->directory($table, $id));
+                    // pictures has no foreign key in the legacy schema.
+                    $this->database->table($table)->where('pages_id', $id)->delete();
+                }
+                $this->database->table('pages')->where('id', $id)->delete();
+            });
+        } finally { flock($assetLock, LOCK_UN); fclose($assetLock); }
         return true;
     }
 
@@ -234,7 +245,7 @@ class MediaStorage
         $suffix = $this->database->getConnection()->getPdo()->getAttribute(\PDO::ATTR_DRIVER_NAME) === 'mysql'
             ? ' FOR UPDATE' : '';
         if (!$this->database->query('SELECT id FROM pages WHERE id = ?' . $suffix, $id)->fetch()) {
-            throw new BadRequestException('Media page not found.', 404);
+            throw new BadRequestException('Stránka neexistuje.', 404);
         }
     }
 

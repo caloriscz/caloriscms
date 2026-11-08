@@ -32,14 +32,8 @@ class PagesPresenter extends BasePresenter
 
     protected function createComponentPageList(): PageListControl
     {
-        $view = 'simple';
-
-        if ($this->request->getCookie('view')) {
-            $view = $this->request->getCookie('view');
-        }
-
         $control = new PageListControl($this->database);
-        $control->setView($view);
+        $control->setView($this->request->getCookie('view'));
         $control->onSave[] = function ($type) {
             $this->redirect('this', ['type' => $type]);
         };
@@ -151,18 +145,16 @@ class PagesPresenter extends BasePresenter
      */
     public function handleView(): void
     {
-        $this->response->setCookie('view', $this->getParameter('view'), '180 days');
+        // Only a view that exists is stored; an old "Strom" link (view=tree) stores the list.
+        $view = PageListControl::normalizeView($this->getParameter('view'));
+        $this->response->setCookie('view', $view, '180 days');
 
-        $this->redirect(':Admin:Pages:default', ['type' => $this->getParameter('type'), 'view' => $this->getParameter('view')]);
+        $this->redirect(':Admin:Pages:default', ['type' => $this->getParameter('type'), 'view' => $view]);
     }
 
     public function renderDefault(): void
     {
-        if ($this->request->getCookie('view') !== null) {
-            $this->template->view = $this->request->getCookie('view');
-        } else {
-            $this->template->view = 'simple';
-        }
+        $this->template->view = PageListControl::normalizeView($this->request->getCookie('view'));
     }
 
     public function actionPreview(int $id): void
@@ -189,19 +181,19 @@ class PagesPresenter extends BasePresenter
         $this->forward($destination, $params);
     }
 
-    public function renderDetail(): void
+    public function actionDetail(): void
     {
-        $this->template->pages = $this->database->table('pages')->get($this->getParameter('id'));
+        $this->template->pages = $this->requireRecord('pages');
     }
 
-    public function renderDetailImages(): void
+    public function actionDetailImages(): void
     {
-        $this->template->pages = $this->database->table('pages')->get($this->getParameter('id'));
+        $this->template->pages = $this->requireRecord('pages');
     }
 
-    public function renderSettings(): void
+    public function actionSettings(): void
     {
-        $this->template->pages = $this->database->table('pages')->get($this->getParameter('id'));
+        $this->template->pages = $this->requireRecord('pages');
     }
 
     public function renderImagesDetail(): void
@@ -209,11 +201,11 @@ class PagesPresenter extends BasePresenter
         $this->template->page = $this->database->table('pages')->get($this->getParameter('id'));
     }
 
-    public function renderDetailFiles(): void
+    public function actionDetailFiles(): void
     {
-        $this->template->page = $this->database->table('pages')->get($this->getParameter('id'));
+        $this->template->page = $this->requireRecord('pages');
         $this->template->files = $this->database->table('media')
-            ->where(['pages_id' => $this->getParameter('id'), 'file_type' => 0]);
+            ->where(['pages_id' => $this->template->page->id, 'file_type' => 0]);
     }
 
     private function getPreviewDestination($page): ?string

@@ -19,7 +19,7 @@
             <div class="row">
                 <div class="col-md-3">
                     {if file_exists($basePath.'images/menu/' . $presenter->getParameter('id') . '.png')}
-                        <p><img src="{$baseUri}/images/menu/{$presenter->getParameter('id')}.png?{rand(0,400)}" class="img-responsive"></p>
+                        <p><img src="{$basePath}/images/menu/{$presenter->getParameter('id')}.png?{rand(0,400)}" class="img-responsive"></p>
                         <div><form action="{link deleteImage!, identifier => $presenter->getParameter('id')}" method="post" style="display: inline;">
                             <input type="hidden" name="_csrf" value="{$presenter->getMutationToken()}">
                             <button type="submit" class="btn btn-danger btn-xs">Smazat</button>
@@ -28,7 +28,7 @@
                 </div>
                 <div class="col-md-3">
                     {if file_exists($basePath.'images/menu/' . $presenter->getParameter('id') . '_h.png')}
-                        <p><img src="{$baseUri}/images/menu/{$presenter->getParameter('id')}_h.png?{rand(0,400)}"
+                        <p><img src="{$basePath}/images/menu/{$presenter->getParameter('id')}_h.png?{rand(0,400)}"
                                 class="img-responsive"></p>
                         <div><form action="{link deleteImage!, identifier => $presenter->getParameter('id'), type => '_h'}" method="post" style="display: inline;">
                             <input type="hidden" name="_csrf" value="{$presenter->getMutationToken()}">
@@ -38,7 +38,7 @@
                 </div>
                 <div class="col-md-3">
                     {if file_exists($basePath.'images/menu/' . $presenter->getParameter('id') . '_a.png')}
-                        <p><img src="{$baseUri}/images/menu/{$presenter->getParameter('id')}_a.png?{rand(0,400)}"
+                        <p><img src="{$basePath}/images/menu/{$presenter->getParameter('id')}_a.png?{rand(0,400)}"
                                 class="img-responsive"></p>
                         <div><form action="{link deleteImage!, identifier => $presenter->getParameter('id'), type => '_a'}" method="post" style="display: inline;">
                             <input type="hidden" name="_csrf" value="{$presenter->getMutationToken()}">
@@ -48,7 +48,7 @@
                 </div>
                 <div class="col-md-3">
                     {if file_exists($basePath.'images/menu/' . $presenter->getParameter('id') . '_ah.png')}
-                        <p><img src="{$baseUri}/images/menu/{$presenter->getParameter('id')}_ah.png?{rand(0,400)}"
+                        <p><img src="{$basePath}/images/menu/{$presenter->getParameter('id')}_ah.png?{rand(0,400)}"
                                 class="img-responsive"></p>
                         <div><form action="{link deleteImage!, identifier => $presenter->getParameter('id'), type => '_ah'}" method="post" style="display: inline;">
                             <input type="hidden" name="_csrf" value="{$presenter->getMutationToken()}">

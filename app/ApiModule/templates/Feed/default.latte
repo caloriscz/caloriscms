@@ -13,7 +13,7 @@
                 <title>{$page->title}</title>
                 <link>{$pageUrl}</link>
                 <guid isPermaLink="true">{$pageUrl}</guid>
-                <description>{$page->document|striptags|truncate:500}</description>
+                <description>{$page->document|stripHtml|truncate:500|escapeHtml}</description>
                 <pubDate>{($page->date_published ?: $page->date_created)|date:'r'}</pubDate>
             </item>
         {/foreach}

@@ -46,6 +46,11 @@ carousel, editor assets and elFinder's independent mutations are outside this
 change. Existing orphan rows with no live parent require separately reviewed
 repair; the normal mutation API does not infer their ownership.
 
+September 26 follow-up `bc1cecb6` covers active non-page writers separately in
+`docs/ASSET_MUTATIONS.md`. Page deletion now also stages the menu icons whose
+rows are removed by its SQL cascade. elFinder's page-media root is read-only,
+so it cannot bypass the metadata-aware mutation path.
+
 ## Failure and deployment limits
 
 `www/temp/media-operations` must be writable and protected from HTTP access

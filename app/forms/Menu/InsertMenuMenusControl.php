@@ -8,6 +8,9 @@ use Nette\Forms\BootstrapUIForm;
 
 class InsertMenuMenusControl extends Control
 {
+    /** menu_menus.title is varchar(30); the group name is stored as typed. */
+    private const GROUP_TITLE_LENGTH = 30;
+
     public Explorer $database;
 
     public function __construct(Explorer $database)
@@ -65,11 +68,23 @@ class InsertMenuMenusControl extends Control
         $arr['title'] = $form->values->title;
         $arr['description'] = $form->values->description;
 
+        // Check the root label before the group insert, so an overflow cannot
+        // leave a group without its menu root.
+        $title = \App\Security\HtmlContent::menuLabel($arr['title']);
+        $error = \App\Security\HtmlContent::menuLabelError($title);
+        if (mb_strlen($arr['title'], 'UTF-8') > self::GROUP_TITLE_LENGTH) {
+            $error = sprintf('Název menu může mít nejvýše %d znaků. Nic nebylo uloženo.', self::GROUP_TITLE_LENGTH);
+        }
+        if ($error !== null) {
+            $this->presenter->flashMessage($error, 'error');
+            $this->presenter->redirect('this');
+        }
+
         $menuMenus = $this->database->table('menu_menus')->insert($arr);
 
         $arrMenu = [
             'menu_menus_id' => $menuMenus->id,
-            'title' => $arr['title']
+            'title' => $title
         ];
 
         // Add main menu to tree

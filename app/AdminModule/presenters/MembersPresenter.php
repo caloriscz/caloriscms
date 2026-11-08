@@ -56,23 +56,34 @@ class MembersPresenter extends BasePresenter
     }
 
     /**
-     * Contact for user delete
-     * @param $id
+     * Delete a contact assigned to this member, as the button did until 2018
+     * (owner decision of 2026-11-08). Only that member's contacts can be deleted here.
+     * @param $contactId
      * @throws \Nette\Application\AbortException
      */
-    public function handleDeleteContact($id): void
+    public function handleDeleteContact($contactId): void
     {
         if (!$this->template->memberRole || !$this->template->memberRole->members) {
             $this->flashMessage('Nemáte oprávnění', 'error');
-            $this->redirect(':Admin:Members:edit', ['id' => $this->getParameter('contact')]);
+            $this->redirect('this');
         }
 
-        $this->redirect(':Admin:Members:edit', ['id' => $this->getParameter('contact')]);
+        $contact = $this->database->table('contacts')
+            ->where(['id' => (int) $contactId, 'users_id' => $this->template->members->id])
+            ->fetch();
+        if (!$contact) {
+            $this->error('Record not found.', 404);
+        }
+        // Its opening hours go with it (contacts_openinghours cascades), as in the contact list.
+        $contact->delete();
+
+        $this->flashMessage('Kontakt byl smazán.', 'success');
+        $this->redirect('this');
     }
 
-    public function renderEdit(): void
+    public function actionEdit(): void
     {
-        $this->template->members = $this->database->table('users')->get($this->getParameter('id'));
+        $this->template->members = $this->requireRecord('users');
         $this->template->role = $this->user->getRoles();
     }
 

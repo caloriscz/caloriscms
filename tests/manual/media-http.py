@@ -38,8 +38,11 @@ try:
         records = fixture('read')[table]
         assert len(records) == 1 and records[0]['filesize'] == len(content)
         duplicate = session.post(url, data=form['inputs'], files={'file': (name, content)}, timeout=15)
-        assert duplicate.status_code == 409 and path.read_bytes() == content
+        # Dropzone shows the JSON "error" string next to the file: readable text.
+        assert duplicate.status_code == 409 and 'už existuje' in duplicate.json()['error'] and path.read_bytes() == content
         if table == 'pictures':
+            fake = session.post(url, data=form['inputs'], files={'file': ('fake.png', b'not an image')}, timeout=15)
+            assert fake.status_code == 400 and 'Neplatný obrázek' in fake.json()['error'] and not (path.parent / 'fake.png').exists()
             assert (path.parent / 'tn' / name).is_file()
             # The real protected individual delete uses the captured row/page ID.
             deleted = session.post(url, params={'do': 'imageBrowser-delete', 'imageBrowser-id': records[0]['id']}, data={'_csrf': token}, timeout=15)

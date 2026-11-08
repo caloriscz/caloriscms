@@ -13,7 +13,7 @@ if (!preg_match('/^permtest-[a-f0-9]{8}$/D', $prefix) || !in_array($mode, ['crea
 $pdo = new PDO('mysql:host=db;dbname=caloriscms;charset=utf8', 'caloris', 'caloris', [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
 $permissions = ['sign', 'pages', 'pictures', 'media', 'members', 'settings', 'menu', 'contacts', 'helpdesk', 'appearance'];
 $roles = ['denied' => ['sign'], 'full' => $permissions];
-foreach (['pages', 'media', 'menu', 'contacts', 'helpdesk', 'appearance'] as $permission) {
+foreach (['pages', 'pictures', 'media', 'menu', 'contacts', 'helpdesk', 'appearance'] as $permission) {
     $roles[$permission] = ['sign', $permission];
 }
 $pdo->beginTransaction();

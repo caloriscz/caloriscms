@@ -38,25 +38,30 @@ final class InlineEditing
         if (!array_key_exists($field, $row->toArray())) {
             throw new BadRequestException('Translation is not installed.', 400);
         }
+        if ($kind === 'title' && (int) $row->editable !== 1) {
+            throw new \Nette\Application\ForbiddenRequestException('Page is not editable.');
+        }
         if ($kind === 'title') {
-            if ((int) $row->editable !== 1) {
-                throw new \Nette\Application\ForbiddenRequestException('Page is not editable.');
+            // The schema is utf8mb3: a 4-byte character (emoji) would fail in SQL
+            // with a 500. A title is plain text, so it can't be a numeric reference.
+            if (preg_match('/[\x{10000}-\x{10FFFF}]/u', $text)) {
+                throw new BadRequestException('Characters such as emoji are not supported.', 400);
             }
-            $text = trim($text);
-            if ($text === '' || Strings::length($text) > 250 || preg_match('/[<>\x00-\x1f\x7f]/u', $text)) {
+            // contenteditable turns a typed space into NBSP; trim() misses it, as
+            // well as zero-width and bidi format characters that look blank.
+            $text = preg_replace('/^[\s\p{Z}]+|[\s\p{Z}]+$/u', '', $text);
+            if (preg_replace('/[\s\p{Z}\p{Cf}]+/u', '', $text) === '' || Strings::length($text) > 250
+                || preg_match('/[<>\x00-\x1f\x7f\x{2028}\x{2029}]/u', $text)) {
                 throw new BadRequestException('Title must be plain text, 1–250 characters.', 400);
             }
         } else {
             if (strlen($text) > 60000) {
                 throw new BadRequestException('Snippet is too long.', 400);
             }
-            // Same HTML policy as EditorControl and ContentApiService.
-            $config = \HTMLPurifier_Config::createDefault();
-            $config->set('HTML.AllowedAttributes', 'img.src,*.style,*.class');
-            $config->set('Attr.AllowedClasses', 'col-*,container,text-right, text-left, btn, btn-lg');
-            $config->set('HTML.ForbiddenElements', ['font']);
-            $config->set('AutoFormat.RemoveEmpty', true);
-            $text = (new \HTMLPurifier($config))->purify($text);
+            $text = HtmlContent::purify($text);
+            if (HtmlContent::textSizeError($text) !== null) {
+                throw new BadRequestException('Snippet is too long.', 400);
+            }
         }
         $row->update([$field => $text]);
         return $text;
