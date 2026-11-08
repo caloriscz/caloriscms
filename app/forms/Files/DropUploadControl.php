@@ -28,31 +28,18 @@ class DropUploadControl extends Control
 
     public function dropUploadFormSucceeded(): void
     {
-        if (!empty($_FILES)) {
-            $ds = DIRECTORY_SEPARATOR;
-            $storeFolder = 'images';
-
-            $tempFile = $_FILES['file']['tmp_name'];
-            $fileName = IO::sanitizeUploadFileName($_FILES['file']['name']);
-
-            if ($fileName === null || !IO::isAllowedImageUpload($_FILES['file']['name'], $tempFile)) {
-                http_response_code(400);
-                exit();
-            }
-
-            $targetPath = APP_DIR . $ds . $storeFolder . $ds;
-
-            $targetFile = $targetPath . $fileName;
-
-            if (!move_uploaded_file($tempFile, $targetFile)) {
-                http_response_code(400);
-                exit();
-            }
-
-            chmod($targetFile, 0644);
-
-            exit();
+        $file = $_FILES['file'] ?? [];
+        try {
+            $name = \App\Model\AssetStorage::imageName($file);
+            (new \App\Model\AssetStorage($this->database, APP_DIR))->run(static function ($assets) use ($file, $name): void {
+                $assets->image($file, 'images/' . $name);
+            });
+        } catch (\Nette\Application\BadRequestException $error) {
+            // Dropzone shows a JSON "error" string next to the file.
+            $this->getPresenter()->getHttpResponse()->setCode($error->getHttpCode());
+            $this->getPresenter()->sendJson(['error' => $error->getMessage()]);
         }
+        $this->getPresenter()->sendJson(['saved' => true]);
     }
 
     public function render(): void

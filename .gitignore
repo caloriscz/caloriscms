@@ -232,3 +232,10 @@ node_modules
 # Local MCP secrets
 .mcp.json
 .codex/config.toml
+
+# Reviewed source for the targeted vendor asset build (not generated output).
+!/tools/build/
+!/tools/build/elfinder.cjs
+
+# Nette Tester writes <Test>.actual/.expected diff dumps here on a failure.
+/tests/**/output/

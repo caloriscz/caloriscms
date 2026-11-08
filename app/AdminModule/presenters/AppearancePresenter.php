@@ -42,13 +42,10 @@ class AppearancePresenter extends BasePresenter
         $this->template->settingsDb = $this->database->table('settings')->where($arr);
     }
 
-    public function renderCarouselDetail(): void
+    public function actionCarouselDetail(): void
     {
-        if ($this->getParameter('id')) {
-            $this->template->carouselId = $this->getParameter('id');
-        } else {
-            $this->template->carouselId = false;
-        }
+        // Without an id this is the page for a new item.
+        $this->template->carouselId = $this->getParameter('id') === null ? false : $this->requireRecord('carousel')->id;
     }
 
 }

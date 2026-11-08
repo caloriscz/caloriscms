@@ -90,14 +90,24 @@ class InsertMenuControl extends Control
             $arr['parent_id'] = $form->values->parent;
         }
 
-        $arr['title'] = $form->values->title;
+        $arr['title'] = \App\Security\HtmlContent::menuLabel($form->values->title);
         $arr['url'] = $form->values->url;
 
         $languages = $this->database->table('languages')->where(['default' => null, 'used' => 1]);
 
         foreach ($languages as $item) {
             $arr['url_' . $item->code] = $form->values->{'url_' . $item->code};
-            $arr['title_' . $item->code] = $form->values->{'title_' . $item->code};
+            $arr['title_' . $item->code] = \App\Security\HtmlContent::menuLabel($form->values->{'title_' . $item->code});
+        }
+
+        // The form is rendered by hand (also in a modal) and shows no form
+        // errors, so report like validateFormSucceeded does, before the insert.
+        foreach ($arr as $column => $value) {
+            $error = strpos($column, 'title') === 0 ? \App\Security\HtmlContent::menuLabelError($value) : null;
+            if ($error !== null) {
+                $this->presenter->flashMessage($error, 'error');
+                $this->presenter->redirect('this');
+            }
         }
 
         $this->database->table('menu')->insert($arr);

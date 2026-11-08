@@ -33,7 +33,7 @@
             <div class="row">
                 {foreach $blogImages->where('file_type = 1') as $image}
                     <div class="col-xs-6 col-md-4" style="max-height: 150px;">
-                        <a href="{$baseUri}/media/{$page->id}/{$image->name}" class="thumbnail gallery">
+                        <a href="{$basePath}/media/{$page->id}/{$image->name}" class="thumbnail gallery">
                             <img src="/media/{$page->id}/tn/{$image->name}" class="img-responsive"
                                  style="max-height: 120px;"/>
                         </a>
@@ -52,7 +52,7 @@
                 {foreach $blogImages->where('file_type = 0') as $item}
                     <tr>
                         <td>{$item->name}</td>
-                        <td><a href="{$baseUri}/media/{$item->pages_id}/{$item->name}"
+                        <td><a href="{$basePath}/media/{$item->pages_id}/{$item->name}"
                                class="btn btn-default">Stáhnout</a>
                         </td>
                     </tr>

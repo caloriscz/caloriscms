@@ -27,7 +27,7 @@ class MenuListControl extends Control
      */
     public function handleDelete(): void
     {
-        $this->database->table('menu_menus')->get($this->getPresenter()->getParameter('id'))->delete();
+        (new \App\Model\AssetWrites($this->database, APP_DIR))->deleteMenu((int) $this->getPresenter()->getParameter('id'), true);
         $this->getPresenter()->redirect('this');
     }
 

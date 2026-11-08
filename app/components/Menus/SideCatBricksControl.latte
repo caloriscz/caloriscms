@@ -17,7 +17,7 @@
         <div class="col-md-3 {$linkActive}">
             <a href="/{$rowCategories->slug}" class="btn btn-primary btn-block" data-category="{$rowCategories->id}">
                 {if file_exists($basePath . '/www/media/' . $rowCategories->id)}
-                    <img src="{$baseUri}/media/{$rowCategories->id}"/>
+                    <img src="{$basePath}/media/{$rowCategories->id}"/>
                 {/if}
                 <span>{$rowCategories->title}</span>
             </a>

@@ -16,10 +16,13 @@
                 </a>
             </td>
             <td>
-                <a href="{link delete!, id => $item->id}"
-                   onclick="return confirm('Opravdu chcete smazat tuto stránku a všechny její podstránky s celým obsahem?')">
-                    <i class="fa fa-times font-red"></i>
-                </a>
+                <form action="{link delete! id => $item->id}" method="post">
+                    <input type="hidden" name="_csrf" value="{$csrfToken}">
+                    <button type="submit" class="btn btn-link p-0"
+                            onclick="return confirm('Opravdu chcete smazat tuto stránku a všechny její podstránky s celým obsahem?')">
+                        <i class="fa fa-times font-red"></i>
+                    </button>
+                </form>
             </td>
         </tr>
     {/foreach}

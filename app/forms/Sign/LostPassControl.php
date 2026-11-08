@@ -2,13 +2,10 @@
 
 namespace App\Forms\Sign;
 
-use App\Model\Helpdesk;
-use App\Model\MemberModel;
+use App\Security\PasswordReset;
 use Nette\Application\UI\Control;
 use Nette\Database\Explorer;
 use Nette\Forms\BootstrapUIForm;
-use Nette\Utils\Random;
-use Nette\Utils\Validators;
 
 class LostPassControl extends Control
 {
@@ -29,46 +26,24 @@ class LostPassControl extends Control
     protected function createComponentSendForm(): BootstrapUIForm
     {
         $form = new BootstrapUIForm();
+        $form->addProtection('Platnost formuláře vypršela. Zkuste to znovu.');
 
         $form->addHidden('layer');
-        $form->addText('email', 'E-mail');
+        $form->addEmail('email', 'E-mail')->setRequired('Zadejte e-mail.');
         $form->addSubmit('submitm', 'Odeslat');
 
         $form->onSuccess[] = [$this, 'sendFormSucceeded'];
-        $form->onValidate[] = [$this, 'sendFormValidated'];
         return $form;
-    }
-
-    public function sendFormValidated(BootstrapUIForm $form): void
-    {
-        if (!Validators::isEmail($form->values->email)) {
-            $this->onSave[] = ('Adresa je neplatná');
-        }
-
-        if ($this->database->table('users')->where(['email' => $form->values->email])->count() === 0) {
-            $this->onSave('E-mail nenalezen');
-        }
     }
 
     public function sendFormSucceeded(BootstrapUIForm $form): void
     {
-        $passwordGenerate = Random::generate(12, '987654321zyxwvutsrqponmlkjihgfedcba');
-
-        $member = new MemberModel($this->database);
-        $member->setActivation($form->values->email, $passwordGenerate);
-
-        $params = [
-            'code' => $passwordGenerate,
-            'email' => $form->values->email,
-        ];
-
-        $helpdesk = new Helpdesk($this->database, $this->presenter->mailer);
-        $helpdesk->setId(6);
-        $helpdesk->setEmail($form->values->email);
-        $helpdesk->setSettings($this->presenter->template->settings);
-        $helpdesk->setParams($params);
-        $helpdesk->send();
-
+        $users = $this->database->table('users')->where('email', $form->values->email);
+        if ($users->count() === 1) {
+            (new PasswordReset($this->database))->send((int) $users->fetch()->id,
+                $this->presenter->mailer, $this->presenter->template->settings);
+        }
+        // Same response for unknown, disabled, duplicate, throttled and sent cases.
         $this->onSave(false);
     }
 

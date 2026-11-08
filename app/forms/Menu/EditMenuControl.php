@@ -65,8 +65,15 @@ class EditMenuControl extends Control
      */
     public function editFormSucceeded(BootstrapUIForm $form): void
     {
+        $title = \App\Security\HtmlContent::menuLabel($form->values->title);
+        $error = \App\Security\HtmlContent::menuLabelError($title);
+        if ($error !== null) {
+            $form->addError($error);
+            return;
+        }
+
         $this->database->table('menu')->get($form->values->id)->update([
-                'title' => $form->values->title,
+                'title' => $title,
                 'description' => $form->values->description,
                 'pages_id' => $form->values->page,
                 'parent_id' => $form->values->parent,

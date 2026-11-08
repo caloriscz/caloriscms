@@ -20,6 +20,8 @@ class NavbarMenuControl extends Control
         $template = $this->getTemplate();
         $template->appDir = APP_DIR;
         $template->setFile(__DIR__ . '/NavbarMenuControl.latte');
+        // Labels are plain text unless they contain markup; never echo them raw.
+        $template->addFilter('menuLabel', [\App\Security\HtmlContent::class, 'menuLabelHtml']);
 
         $template->id = $id;
         $template->style = $style;

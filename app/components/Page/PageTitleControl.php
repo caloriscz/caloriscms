@@ -20,6 +20,8 @@ class PageTitleControl extends Control
         $template = $this->getTemplate();
 
         $template->page = $page;
+        $template->inlineEditingEnabled = $page && (int) $page->editable === 1
+            && $this->getPresenter()->inlineEditingEnabled();
 
         if ($page) {
             if ($this->getPresenter()->translator->getLocale() === $this->getPresenter()->translator->getDefaultLocale()) {

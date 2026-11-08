@@ -24,14 +24,14 @@
                         <div class="col-lg-3">
                             <div class="card">
                                 <div class="card-img text-center" style="max-height: 280px;">
-                                    <a href="{$baseUrl}/images/{$key|toBaseName}" class="gallery-lightbox">
+                                    <a href="{$baseUrl}/images/{$file->getFilename()}" class="gallery-lightbox">
                                         {if exif_imagetype($key)}
-                                            <a href="/images/{$key|toBaseName}">
-                                                <img src="/images/{$key|toBaseName}"
+                                            <a href="/images/{$file->getFilename()}">
+                                                <img src="/images/{$file->getFilename()}"
                                                      style="max-width: 275px; max-height: 140px;">
                                             </a>
                                         {else}
-                                            <a href="/images/{$key|toBaseName}">
+                                            <a href="/images/{$file->getFilename()}">
                                                 <i class="fa fa-file fa-5x" style="margin-top: 35px; margin-bottom: 30px;"></i>
                                             </a>
                                         {/if}
@@ -39,8 +39,14 @@
                                 </div>
                                 <div class="card-block text-center"
                                      style="overflow: hidden; height: 30px; text-overflow: ellipsis; padding-bottom: 30px;">
-                                    <a n:href="delete!, path => basename($key)"><i class="fa fa-close font-red"></i></a>
-                                    <small>{$key|toBaseName}</small>
+                                    <form action="{link delete! path => $file->getFilename()}" method="post" style="display: inline;">
+                                        <input type="hidden" name="_csrf" value="{$csrfToken}">
+                                        <button type="submit" class="btn btn-link p-0"
+                                                onclick="return confirm('Opravdu smazat?')">
+                                            <i class="fa fa-close font-red"></i>
+                                        </button>
+                                    </form>
+                                    <small>{$file->getFilename()}</small>
                                 </div>
                             </div>
                         </div>

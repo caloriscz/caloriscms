@@ -1,1 +1,1 @@
-<span contenteditable="true" data-editor="page_title" data-editor-id="{$pageId}">{$title}</span>
+<span n:attr="contenteditable => $inlineEditingEnabled ? 'true' : null, data-editor => $inlineEditingEnabled ? 'page_title' : null, data-editor-id => $inlineEditingEnabled ? $pageId : null">{$title}</span>

@@ -59,20 +59,24 @@ class MenuPresenter extends BasePresenter
      */
     public function handleDeleteImage($identifier): void
     {
-        $type = $this->getParameter('type');
-
-        IO::remove(APP_DIR . '/images/menu/' . $identifier . $type . '.png');
+        $type = (string) $this->getParameter('type');
+        if (!preg_match('/^[1-9][0-9]*$/D', (string) $identifier) || !in_array($type, ['', '_h', '_a', '_ah'], true)) {
+            $this->error('Invalid menu image.', 400);
+        }
+        (new \App\Model\AssetStorage($this->database, APP_DIR))->run(static function ($assets) use ($identifier, $type): void {
+            $assets->remove('images/menu/' . $identifier . $type . '.png');
+        });
 
         $this->redirect(':Admin:Menu:detail', ['id' => $identifier]);
     }
 
-    public function renderDetail(): void
+    public function actionDetail(): void
     {
-        $this->template->menu = $this->database->table('menu')->get($this->getParameter('id'));
+        $this->template->menu = $this->requireRecord('menu');
     }
 
-    public function renderMenu(): void
+    public function actionMenu(): void
     {
-        $this->template->menu = $this->database->table('menu_menus')->get($this->getParameter('id'));
+        $this->template->menu = $this->requireRecord('menu_menus');
     }
 }

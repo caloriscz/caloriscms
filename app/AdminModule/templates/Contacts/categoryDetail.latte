@@ -1,6 +1,24 @@
-{block #titles}Kategorie kontaktů{/block}
+{block #titles}Kategorie kontaktů - {$category->title}{/block}
 {block content}
 
-<h1 class="page-header">Kategorie kontaktů</h1>
+<ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="/admin/">Admin</a></li>
+    <li class="breadcrumb-item"><a href="/admin/contacts">Kontakty</a></li>
+    <li class="breadcrumb-item"><a n:href=":Admin:Contacts:categories, id => null">Kategorie</a></li>
+    <li class="breadcrumb-item active">{$category->title}</li>
+</ol>
 
-{control categoryEdit}
+<div class="container-fluid">
+    <div class="animated fadeIn">
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-header">Úprava kategorie</div>
+                    <div class="card-block">
+                        {control categoryEdit}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

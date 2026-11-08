@@ -26,7 +26,7 @@ class SavePathsControl extends Control
 
         $form->addHidden('path_id');
         $form->addUpload('path', 'Obrázek')
-            ->addRule(Form::MIME_TYPE, 'Neplatny typ', IO::IMAGE_MIME_TYPES);
+            ->addRule(Form::MIME_TYPE, \App\Model\AssetStorage::INVALID_IMAGE, IO::IMAGE_MIME_TYPES);
         $form->addSubmit('send', 'Uložit');
 
         $form->onSuccess[] = [$this, 'editSettingsSucceeded'];
@@ -40,33 +40,17 @@ class SavePathsControl extends Control
      */
     public function editSettingsSucceeded(BootstrapUIForm $form): void
     {
-        if ('' === $form->values->path->name) {
-            $this->presenter->redirect('this', ['id' => null]);
-        }
 
-        if (is_uploaded_file($_FILES['path']['tmp_name'])) {
-            $fileName = IO::sanitizeUploadFileName($form->values->path->name);
-
-            if ($fileName === null || !IO::isAllowedImageUpload($form->values->path->name, $_FILES['path']['tmp_name'])) {
-                $this->flashMessage('Neplatny obrazek.', 'error');
-                $this->redirect('this', ["id" => null]);
+        $file = $_FILES['path'] ?? [];
+        try {
+            if (\App\Model\AssetStorage::hasUpload($file)) {
+                (new \App\Model\AssetWrites($this->database, APP_DIR))->setting((int) $form->values->path_id, $file);
             }
-
-            copy($_FILES['path']['tmp_name'], APP_DIR . '/images/paths/' . $fileName);
-            chmod(APP_DIR . '/images/paths/' . $fileName, 0644);
-            chmod(APP_DIR . '/images/paths/' . $fileName, 0644);
-
-            if (file_exists(APP_DIR . '/www/images/paths/' . $fileName)) {
-                IO::remove(APP_DIR . '/www/images/paths/' . $fileName);
-            }
-
-            $this->database->table('settings')->get($form->values->path_id)->update([
-                'setvalue' => $fileName,
-            ]);
-
+        } catch (\Nette\Application\BadRequestException $error) {
+            $this->presenter->flashMessage($error->getMessage(), 'error');
         }
+        $this->redirect('this', ['id' => null]);
 
-        $this->redirect('this', ["id" => null]);
     }
 
     public function render($item): void

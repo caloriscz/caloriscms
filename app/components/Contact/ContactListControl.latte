@@ -7,7 +7,7 @@
                 {if $contactImage->count() > 0}
                     {var $contactPortrait = $contactImage->fetch()}
                     <a href="/{$contact->pages->slug}">
-                        <img src="{$baseUri}/media/{$contact->id}/{$contactPortrait->name}"
+                        <img src="{$basePath}/media/{$contact->id}/{$contactPortrait->name}"
                              class="img-responsive" style="max-height: 150px;" /><br />
                     </a>
                 {/if}

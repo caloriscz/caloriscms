@@ -35,15 +35,25 @@
                                         <td class="col-xs-1">{$item->code}</td>
                                         <td>{$item->title}</td>
                                         <td>
-                                            <a n:href="install! id => $item->code" class="btn btn-default btn-xs"
-                                                                                   onclick="return confirm('Opravdu nainstalovat?')">
-                                                Instalovat
-                                            </a>
-                                            <a n:href="toggle! id => $item->id" class="btn btn-default btn-xs">
-                                                {if $item->used}povoleno{else}zakázáno{/if}
-                                            </a>
-                                            {if $item->default == null}<a n:href="makeDefault! id => $item->id"
-                                                class="btn btn-default btn-xs">Make default</a>{/if}
+                                            <form action="{link install! id => $item->code}" method="post" style="display: inline;">
+                                                <input type="hidden" name="_csrf" value="{$csrfToken}">
+                                                <button type="submit" class="btn btn-default btn-xs"
+                                                        onclick="return confirm('Opravdu nainstalovat?')">
+                                                    Instalovat
+                                                </button>
+                                            </form>
+                                            <form action="{link toggle! id => $item->id}" method="post" style="display: inline;">
+                                                <input type="hidden" name="_csrf" value="{$csrfToken}">
+                                                <button type="submit" class="btn btn-default btn-xs">
+                                                    {if $item->used}povoleno{else}zakázáno{/if}
+                                                </button>
+                                            </form>
+                                            {if $item->default == null}
+                                                <form action="{link makeDefault! id => $item->id}" method="post" style="display: inline;">
+                                                    <input type="hidden" name="_csrf" value="{$csrfToken}">
+                                                    <button type="submit" class="btn btn-default btn-xs">Make default</button>
+                                                </form>
+                                            {/if}
                                         </td>
                                     </tr>
                                 {/foreach}

@@ -60,7 +60,12 @@ class EditFormControl extends Control
     public function editSnippetFormSucceeded(BootstrapUIForm $form): void
     {
         $langSuffix = '';
-        $content = $form->getHttpData($form::DATA_TEXT, 'content');
+        $content = \App\Security\HtmlContent::purify($form->values->content);
+        $error = \App\Security\HtmlContent::textSizeError($content);
+        if ($error !== null) {
+            $form->addError($error);
+            return;
+        }
 
         if ($form->values->l !== '') {
             $langSuffix = '_' . $form->values->l;

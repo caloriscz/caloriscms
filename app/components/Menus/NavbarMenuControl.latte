@@ -8,15 +8,15 @@
                    class="nav-link {if $rowCategories->id == $presenter->getParameter('page_id')}active{/if}">
                     {if file_exists($appDir . '/images/menu/icons/' . $rowCategories->id . '.png')}
                         <span class="image-thumb">
-                            <img src="{$baseUri}/images/menu/icons/{$rowCategories->id}.png"><br class="hidden-tn">
+                            <img src="{$basePath}/images/menu/icons/{$rowCategories->id}.png"><br class="hidden-tn">
                         </span>
                     {/if}
 
                     <span class="title">
                         {if $needsPrefix}
-                            {$rowCategories->{'title_'.$langSelected}|noescape}
+                            {$rowCategories->{'title_'.$langSelected}|menuLabel|noescape}
                         {else}
-                            {$rowCategories->title|noescape}
+                            {$rowCategories->title|menuLabel|noescape}
                         {/if}
                     </span>
                 </a>
@@ -30,15 +30,15 @@
 
                     {if file_exists($appDir . '/images/menu/icons/' . $rowCategories->id . '.png')}
                         <span class="image-thumb">
-                            <img src="{$baseUri}/images/menu/icons/{$rowCategories->id}.png"><br class="hidden-tn">
+                            <img src="{$basePath}/images/menu/icons/{$rowCategories->id}.png"><br class="hidden-tn">
                         </span>
                     {/if}
 
                     <span class="title">
                       {if $needsPrefix}
-                          {$rowCategories->{'title_'.$langSelected}|noescape}
+                          {$rowCategories->{'title_'.$langSelected}|menuLabel|noescape}
                       {else}
-                          {$rowCategories->title|noescape}
+                          {$rowCategories->title|menuLabel|noescape}
                       {/if}
                     </span>
                 </a>
@@ -57,9 +57,9 @@
                     <a href="{if $needsPrefix}/{$langSelected}{$rowCategoriesSub->{'url_'.$langSelected}}{else}{$rowCategoriesSub->url}{/if}" class="dropdown-item">
                         <span>
                           {if $needsPrefix}
-                              {$rowCategoriesSub->{'title_'.$langSelected}|noescape}
+                              {$rowCategoriesSub->{'title_'.$langSelected}|menuLabel|noescape}
                           {else}
-                              {$rowCategoriesSub->title|noescape}
+                              {$rowCategoriesSub->title|menuLabel|noescape}
                           {/if}
                         </span>
                     </a>

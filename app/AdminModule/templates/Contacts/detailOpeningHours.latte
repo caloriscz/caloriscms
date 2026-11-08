@@ -45,9 +45,12 @@
                                     <td class="col-md-1">{_ $oh}</td>
                                     <td>{$open->hourstext}</td>
                                     <td class="text-right">
-                                        <a n:href="deleteHour! id => $open->contacts_id, hour => $open->id">
+                                        <form action="{link deleteHour! id => $open->contacts_id, hour => $open->id}" method="post" style="display: inline;">
+                                            <input type="hidden" name="_csrf" value="{$presenter->getMutationToken()}">
+                                            <button type="submit" class="btn btn-link">
                                             <i class="fa fa-times font-red"></i>
-                                        </a>
+                                        </button>
+                                        </form>
                                     </td>
                                 </tr>
                             {/foreach}

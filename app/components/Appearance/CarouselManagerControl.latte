@@ -12,7 +12,10 @@
                 <p><strong>{$item->title}</strong></p>
                 <p class="card-text">{$item->description}</p>
                 <div>
-                    <a href="{link delete! id => $item->id}" class="btn  btn-danger">smazat položku</a>
+                    <form action="{link delete! id => $item->id}" method="post" style="display: inline;">
+                        <input type="hidden" name="_csrf" value="{$presenter->getMutationToken()}">
+                        <button type="submit" class="btn  btn-danger">smazat položku</button>
+                    </form>
                     <a href="{plink ':Admin:Appearance:carouselDetail' id => $item->id}" class="btn btn-info float-right">upravit
                         položku</a>
                 </div>

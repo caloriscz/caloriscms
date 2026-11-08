@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Model\Api;
 
 use InvalidArgumentException;
+use App\Model\PageWrites;
 use Nette\Database\Explorer;
 use Nette\Database\Table\ActiveRow;
 use Nette\Utils\Strings;
@@ -54,19 +55,10 @@ class ContentApiService
     ];
 
     private Explorer $database;
-    private \HTMLPurifier $htmlPurifier;
 
     public function __construct(Explorer $database)
     {
         $this->database = $database;
-
-        $config = \HTMLPurifier_Config::createDefault();
-        $config->set('HTML.AllowedAttributes', 'img.src,*.style,*.class');
-        $config->set('Attr.AllowedClasses', 'col-*,container,text-right, text-left, btn, btn-lg');
-        $config->set('HTML.ForbiddenElements', ['font']);
-        $config->set('AutoFormat.RemoveEmpty', true);
-
-        $this->htmlPurifier = new \HTMLPurifier($config);
     }
 
     /**
@@ -106,33 +98,38 @@ class ContentApiService
 
     public function createPage(array $data, int $userId): array
     {
-        $payload = $this->preparePageData($data, null, true);
-        $payload['users_id'] = $userId;
-        $payload += [
-            'public' => 0,
-            'date_created' => date('Y-m-d H:i:s'),
-        ];
+        return PageWrites::run($this->database, function () use ($data, $userId) {
+            $payload = $this->preparePageData($data, null, true);
+            $payload['users_id'] = $userId;
+            $payload += [
+                'public' => 0,
+                'date_created' => date('Y-m-d H:i:s'),
+            ];
 
-        $page = $this->database->table('pages')->insert($payload);
-        return $this->formatPage($page);
+            $page = $this->database->table('pages')->insert($payload);
+            PageWrites::renumber($this->database);
+            return $this->formatPage($this->database->table('pages')->get($page->id));
+        });
     }
 
     public function updatePage(int $id, array $data): ?array
     {
-        $page = $this->database->table('pages')->get($id);
-
-        if (!$page) {
-            return null;
-        }
-
-        $payload = $this->preparePageData($data, $id, false);
-
-        if ($payload !== []) {
-            $page->update($payload);
+        return PageWrites::run($this->database, function () use ($id, $data) {
             $page = $this->database->table('pages')->get($id);
-        }
 
-        return $this->formatPage($page);
+            if (!$page) {
+                return null;
+            }
+
+            $payload = $this->preparePageData($data, $id, false);
+
+            if ($payload !== []) {
+                $page->update($payload);
+                $page = $this->database->table('pages')->get($id);
+            }
+
+            return $this->formatPage($page);
+        });
     }
 
     public function unpublishPage(int $id): bool
@@ -190,10 +187,10 @@ class ContentApiService
                     $payload['slug'] = $this->normalizeSlug($value, $currentPageId, true);
                     break;
                 case 'document':
-                    $payload['document'] = $this->purifyHtml($this->requireString($field, $value));
+                    $payload['document'] = $this->purifyHtml($field, $this->requireString($field, $value));
                     break;
                 case 'preview':
-                    $payload['preview'] = $this->purifyHtml($this->requireString($field, $value));
+                    $payload['preview'] = $this->purifyHtml($field, $this->requireString($field, $value));
                     break;
                 case 'metadesc':
                 case 'metakeys':
@@ -261,9 +258,16 @@ class ContentApiService
         return $this->requireText($field, $value, $maxLength);
     }
 
-    private function purifyHtml(string $html): string
+    private function purifyHtml(string $field, string $html): string
     {
-        return $this->htmlPurifier->purify($html);
+        $html = \App\Security\HtmlContent::purify($html);
+
+        if (\App\Security\HtmlContent::textSizeError($html) !== null) {
+            throw new InvalidArgumentException('Field ' . $field . ' is too long: ' . strlen($html)
+                . ' bytes after sanitization, at most ' . \App\Security\HtmlContent::TEXT_COLUMN_BYTES);
+        }
+
+        return $html;
     }
 
     private function normalizeSlug($value, ?int $currentPageId, bool $rejectDuplicate): string
@@ -307,17 +311,7 @@ class ContentApiService
 
     private function generateUniqueSlug(string $slug): string
     {
-        if (!$this->slugExists($slug, null)) {
-            return $slug;
-        }
-
-        $i = 1;
-        do {
-            $candidate = $i . '-' . $slug;
-            $i++;
-        } while ($this->slugExists($candidate, null));
-
-        return $candidate;
+        return PageWrites::uniqueSlug($this->database, $slug);
     }
 
     private function normalizeDate(string $field, $value): ?string

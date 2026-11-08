@@ -2,9 +2,9 @@
 
 namespace Caloriscz\Page;
 
-use App\Forms\Menu\InsertMenuControl;
 use App\Model\Document;
 use App\Model\IO;
+use App\Security\CsrfProtectedMutation;
 use Caloriscz\Utilities\PagingControl;
 use Nette\Application\UI\Control;
 use Nette\Database\Explorer;
@@ -12,6 +12,10 @@ use Nette\Utils\Paginator;
 
 class PageListControl extends Control
 {
+    use CsrfProtectedMutation;
+
+    /** List views the admin can choose. The old 'tree' view was removed (Taskino c260ce18). */
+    public const VIEWS = ['simple', 'gallery'];
 
     public Explorer $database;
 
@@ -23,9 +27,13 @@ class PageListControl extends Control
         $this->database = $database;
     }
 
-    protected function createComponentMenuInsert(): InsertMenuControl
+    /**
+     * The stored view, or 'simple' for anything else (such as a 'tree' cookie from before).
+     * @param mixed $view
+     */
+    public static function normalizeView($view): string
     {
-        return new InsertMenuControl($this->database);
+        return in_array($view, self::VIEWS, true) ? $view : 'simple';
     }
 
     /**
@@ -34,9 +42,10 @@ class PageListControl extends Control
      */
     public function handleDelete($id): void
     {
+        $this->requireCsrfToken();
+
         $doc = new Document($this->database);
         $doc->delete($id);
-        IO::removeDirectory(APP_DIR . '/media/' . $id);
 
         $this->onSave($this->getParameter('type'));
     }
@@ -46,6 +55,8 @@ class PageListControl extends Control
      */
     public function handlePublic(): void
     {
+        $this->requireCsrfToken();
+
         $show = 1;
         $page = $this->database->table('pages')->get($this->getParameter('id'));
 
@@ -60,16 +71,12 @@ class PageListControl extends Control
 
     public function setView($view = false): ?string
     {
-        $this->view = $view;
+        $this->view = self::normalizeView($view);
         return $this->view;
     }
 
     public function getView(): ?string
     {
-        if (empty($this->view)) {
-            return $this->view;
-        }
-
         return $this->view;
     }
 
@@ -82,25 +89,16 @@ class PageListControl extends Control
     public function render(?int $type = null): void
     {
         $template = $this->getTemplate();
-        $template->category = null;
         $arr = [];
 
-        if ($this->getView() === 'tree') {
-            $template->setFile(__DIR__ . '/PageListTreeControl.latte');
-        } elseif ($this->getView() === 'gallery') {
+        if ($this->getView() === 'gallery') {
             $template->setFile(__DIR__ . '/PageListGalleryControl.latte');
         } else {
             $template->setFile(__DIR__ . '/PageListSimpleControl.latte');
         }
 
-        $order = 'FIELD(id, 1, 3, 4, 6, 2), title';
-
         if ($this->presenter->getParameter('type') != null) {
             $type = $this->presenter->getParameter('type');
-        }
-
-        if ($type === 2) {
-            $order = 'title';
         }
 
         if (is_numeric($type)) {
@@ -110,27 +108,21 @@ class PageListControl extends Control
 
         $arr['NOT pages_types_id'] = null;
 
+        $pages = $this->database->table('pages')->where($arr)->order('title ASC');
 
-        if ($this->getView() === 'tree') {
-            $arr['pages_id'] = null;
+        $paginator = new Paginator();
+        $paginator->setItemCount($pages->count('*'));
+        $paginator->setItemsPerPage(20);
+        $paginator->setPage($this->presenter->getParameter('page') ?? 1);
 
-            $template->pages = $this->database->table('pages')->where($arr)->order($order);
-        } else {
-            $pages = $this->database->table('pages')->where($arr)->order('title ASC');
-
-            $paginator = new Paginator();
-            $paginator->setItemCount($pages->count('*'));
-            $paginator->setItemsPerPage(20);
-            $paginator->setPage($this->presenter->getParameter('page') ?? 1);
-
-            $template->pages = $pages->limit($paginator->getLength(), $paginator->getOffset());
-            $template->paginator = $paginator;
-            $template->args = $this->getPresenter()->getParameters();
-        }
+        $template->pages = $pages->limit($paginator->getLength(), $paginator->getOffset());
+        $template->paginator = $paginator;
+        $template->args = $this->getPresenter()->getParameters();
 
         $template->settings = $this->getPresenter()->template->settings;
         $template->type = $type;
         $template->database = $this->database;
+        $template->csrfToken = $this->getCsrfToken();
 
         $template->render();
     }

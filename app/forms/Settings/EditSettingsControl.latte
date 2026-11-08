@@ -1,4 +1,5 @@
 <form n:name="editSettingsForm" class="form-horizontal">
+    <div n:foreach="$form->getOwnErrors() as $error" class="alert alert-danger">{$error}</div>
     {foreach $settingsDb as $item}
         <div class="form-group row">
             <label class="col-md-4 form-control-label" for="example-input">{$item->{'description_' . $langSelected}}</label>
@@ -21,7 +22,7 @@
                     </select>
                 {else}
                     <input type=text name="set[{$item->setkey}]" class="form-control tool-tip"
-                           value="{$item->setvalue}">
+                           value="{$submitted[$item->setkey] ?? $item->setvalue}">
                 {/if}
             </div>
             <div class="col-sm-4">

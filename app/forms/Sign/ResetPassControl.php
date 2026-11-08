@@ -7,7 +7,7 @@ use Nette\Application\UI\Control;
 use Nette\Database\Context;
 use Nette\Forms\BootstrapUIForm;
 use Nette\Forms\Form;
-use Nette\Security\Passwords;
+use App\Security\PasswordReset;
 
 class ResetPassControl extends Control
 {
@@ -27,8 +27,8 @@ class ResetPassControl extends Control
     protected function createComponentResetForm(): BootstrapUIForm
     {
         $form = new BootstrapUIForm();
-        $form->addHidden('email');
-        $form->addHidden('code');
+        $form->addProtection('Platnost formuláře vypršela. Zkuste to znovu.');
+        $form->addHidden('resetToken')->setHtmlAttribute('data-reset-token', '');
         $form->addPassword('password', 'Nové heslo')
             ->setRequired('Zadejte nové heslo.')
             ->addRule(Form::MIN_LENGTH, 'Heslo musí mít alespoň %d znaků.', self::MIN_PASSWORD_LENGTH);
@@ -36,10 +36,6 @@ class ResetPassControl extends Control
             ->setRequired('Zopakujte nové heslo.')
             ->addRule(Form::EQUAL, 'Hesla se neshodují.', $form['password']);
         $form->addSubmit('name', 'Změnit');
-        $form->setDefaults([
-            'email' => $this->getPresenter()->getParameter('email'),
-            'code' => $this->getPresenter()->getParameter('code'),
-        ]);
 
         $form->onSuccess[] = [$this, 'resetFormSucceeded'];
         return $form;
@@ -51,25 +47,17 @@ class ResetPassControl extends Control
      */
     public function resetFormSucceeded(BootstrapUIForm $form): void
     {
-        $email = $form->values->email;
-        $emailExistsDb = $this->database->table('users')->where([
-            'email' => $email,
-            'activation' => $form->values->code,
-        ]);
-
-        if ($emailExistsDb->count() === 0) {
-            $msg = 'Aktivace není platná';
-        } elseif (strcmp($form->getValues()->password, $form->getValues()->password2) <> 0) {
-            $msg = 'Hesla se neshodují';
-        } else {
-            $msg = 'Vytvořili jste nové heslo. Můžete se přihlásit.';
-            $this->database->table('users')->where(['email' => $email])->update([
-                'activation' => NULL,
-                'password' => Passwords::hash($form->getValues()->password),
-            ]);
+        if ($form->values->password !== $form->values->password2) {
+            $form->addError('Hesla se neshodují.');
+            return;
         }
-
-        $this->getPresenter()->flashMessage($msg, 'success');
+        if (!(new PasswordReset($this->database))->consume((string) $form->values->resetToken,
+            $form->values->password)) {
+            $form->addError('Odkaz je neplatný nebo prošlý, případně heslo nemá 8 až 72 bajtů. Požádejte o nový odkaz.');
+            return;
+        }
+        $this->getPresenter()->getHttpResponse()->deleteCookie('calpwd', '/');
+        $this->getPresenter()->flashMessage('Vytvořili jste nové heslo. Můžete se přihlásit.', 'success');
         $this->getPresenter()->redirect('Sign:in');
     }
 

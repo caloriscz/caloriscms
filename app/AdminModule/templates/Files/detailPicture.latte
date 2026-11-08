@@ -1,10 +1,10 @@
-{block #titles}Soubor - {$file->name}{/block}
+{block #titles}Soubor - {$files->name}{/block}
 {block content}
 
 <ol class="breadcrumb">
     <li class="breadcrumb-item"><a href="/admin/">Admin</a></li>
     <li class="breadcrumb-item active"><a href="/admin/media/albums">Galerie</a></li>
-    <li class="breadcrumb-item active"><a href="/admin/media/albums">Soubor - {$file->name}</a></li>
+    <li class="breadcrumb-item active"><a href="/admin/media/albums">Soubor - {$files->name}</a></li>
 </ol>
 
 <div class="container-fluid">
@@ -17,7 +17,7 @@
                         <table class="table">
                             <tr>
                                 <td>Soubor</a></td>
-                                <td><a href="/media/{$file->pages_id}/{$file->name}">{$file->name}</a></td>
+                                <td><a href="/pictures/{$files->pages_id}/{$files->name}">{$files->name}</a></td>
                             </tr>
                             <tr>
                                 <td>Typ souboru</td>
@@ -25,7 +25,7 @@
                             </tr>
                             <tr>
                                 <td>Velikost</td>
-                                <td>{$file->filesize}</td>
+                                <td>{$files->filesize}</td>
                             </tr>
                         </table>
 
@@ -38,8 +38,8 @@
                     <div class="card-header">Obrázek</div>
                     <div class="card-block text-center">
                         {if $isImage}
-                            <a href="/pictures/{$file->pages_id}/{$file->name}">
-                                <img src="/pictures/{$file->pages_id}/{$file->name}" class="img-responsive">
+                            <a href="/pictures/{$files->pages_id}/{$files->name}">
+                                <img src="/pictures/{$files->pages_id}/{$files->name}" class="img-responsive">
                             </a>
                         {/if}
                     </div>

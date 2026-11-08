@@ -1,0 +1,7 @@
+{foreach $flashes as $flash}
+    {if !empty($flash->helpdesk)}
+        <div class="container mt-3" role="status">
+            <div class="alert {if $flash->type === 'success'}alert-success{else}alert-danger{/if}">{$flash->message}</div>
+        </div>
+    {/if}
+{/foreach}

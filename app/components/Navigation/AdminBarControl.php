@@ -25,15 +25,16 @@ class AdminBarControl extends Control
         $template->enabled = false;
         $template->page = false;
 
-        $role = $this->presenter->user->getRoles();
-        $template->roleCheck = $this->database->table('users_roles')->get($role[0]);
+        $template->roleCheck = $this->presenter->template->memberRole;
 
-        if ($template->roleCheck && $template->settings['site:admin:adminBarEnabled'] && $this->presenter->template->member->adminbar_enabled) {
+        if ($this->presenter->template->isLoggedIn && $template->roleCheck
+            && (int) $template->roleCheck->sign === 1 && $template->settings['site:admin:adminBarEnabled']
+            && $this->presenter->template->member->adminbar_enabled) {
             $template->enabled = true;
         }
 
         if ($this->presenter->template->page) {
-            $template->pageId = $this->database->table('pages')->get($this->presenter->template->page->id);
+            $template->pageId = $this->presenter->template->page->id;
         } else {
             $template->pageId = null;
         }

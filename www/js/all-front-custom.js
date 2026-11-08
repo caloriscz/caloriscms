@@ -24,25 +24,47 @@
 
 })(jQuery);
 
-/* Content editable parts of the site */
-$('body').on('focus', '[contenteditable]', function (e) {
-
-}).on('keypress', '[contenteditable]', function (e) {
-    if (e.keyCode == 27) {
-        $(this).blur();
-    }
-}).on('blur', '[contenteditable]', function (e) {
-    if ($(this).data("editor") === 'page_title') {
+/* Hand-authored frontend behavior; this file is not a Gulp concatenation target. */
+(function ($) {
+    var selector = '[contenteditable="true"][data-editor-id], [contenteditable="true"][data-snippet]';
+    $('body').on('focus', selector, function () {
+        $(this).data('before-edit', $(this).html());
+    }).on('keydown', selector, function (event) {
+        if (event.key === 'Escape') {
+            $(this).html($(this).data('before-edit'));
+            $(this).blur();
+        } else if (event.key === 'Enter' && $(this).data('editor') === 'page_title') {
+            event.preventDefault();
+            $(this).blur();
+        }
+    }).on('blur', selector, function () {
+        var element = $(this);
+        if (element.html() === element.data('before-edit')) return;
+        var title = element.data('editor') === 'page_title';
+        var data = {
+            _do: title ? 'pagetitle' : 'snippet',
+            _csrf: $('meta[name="inline-csrf"]').attr('content'),
+            text: title ? element.text() : element.html()
+        };
+        data[title ? 'editorId' : 'snippetId'] = title ? element.data('editor-id') : element.data('snippet');
+        var status = element.next('[data-inline-status]');
+        if (!status.length) status = $('<span data-inline-status role="status"></span>').insertAfter(element);
+        status.text('Saving…');
+        element.attr('contenteditable', 'false');
         $.ajax({
-            type: 'post',
-            url: '/',
-            data: 'do=pagetitle&editorId=' + $(this).data("editor-id") + '&text=' + $(this).text()
+            type: 'POST', url: window.location.pathname, data: data, dataType: 'json'
+        }).done(function (response) {
+            if (response.saved !== true || typeof response.content !== 'string') {
+                status.text('Not saved. Reload the page and try again.');
+                return;
+            }
+            if (title) element.text(response.content); else element.html(response.content);
+            element.data('before-edit', element.html());
+            status.text('Saved');
+        }).fail(function () {
+            status.text('Not saved. Check your access and content, then try again.');
+        }).always(function () {
+            element.attr('contenteditable', 'true');
         });
-    } else {
-        $.ajax({
-            type: 'post',
-            url: '/',
-            data: 'do=snippet&snippetId=' + $(this).data("snippet") + '&text=' + $(this).html()
-        });
-    }
-});
+    });
+})(jQuery);

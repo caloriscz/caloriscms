@@ -3,7 +3,8 @@
 
 {var $category = 0}
 {var $counter = 2}
-<div class="tree">
+{* menu-editor-tree: caloris-admin.js turns only this element into the jsTree that sends menu editor mutations. *}
+<div class="tree menu-editor-tree">
     {block #menu}
         <ul>
             {foreach $menu as $item}
