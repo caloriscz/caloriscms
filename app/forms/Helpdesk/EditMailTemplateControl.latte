@@ -1,4 +1,5 @@
 {form editForm}
+    <div n:foreach="$form->getOwnErrors() as $error" class="alert alert-danger">{$error}</div>
     <div class="form-group">
         {input subject class => 'form-control'}<br/>
     </div>

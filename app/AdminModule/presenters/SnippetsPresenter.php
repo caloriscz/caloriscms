@@ -48,8 +48,8 @@ class SnippetsPresenter extends BasePresenter
         $this->template->snippets = $this->database->table('snippets');
     }
 
-    public function renderDetail(): void
+    public function actionDetail(): void
     {
-        $this->template->snippet = $this->database->table('snippets')->get($this->getParameter('id'));
+        $this->template->snippet = $this->requireRecord('snippets');
     }
 }

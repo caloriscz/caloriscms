@@ -15,6 +15,8 @@
 
         {control langSelector}
 
+        <div n:foreach="$form->errors as $error" class="alert alert-danger">{$error}</div>
+
         {if $page->pages_types_id == 0}
             <div class="alert alert-warning">
                 <p><i class="fa fa-exclamation-triangle"> </i><strong>Tato stránka je šablona</strong></p>

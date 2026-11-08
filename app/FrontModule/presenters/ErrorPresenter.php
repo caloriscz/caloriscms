@@ -6,13 +6,18 @@ use Nette,
     Throwable,
     Tracy\ILogger;
 use Nette\Application\BadRequestException;
-use Nette\Database\Explorer;
+use Nette\Application\Request;
+use Nette\Application\UI\Presenter;
+use App\Security\ErrorContext;
 
 /**
  * Error presenter.
  */
-class ErrorPresenter extends BasePresenter
+class ErrorPresenter extends Presenter
 {
+    // Render even when the original request used an unsupported HTTP method.
+    public $allowedMethods = [];
+    public $autoCanonicalize = false;
 
     /** @var ILogger */
     private $logger;
@@ -20,34 +25,45 @@ class ErrorPresenter extends BasePresenter
     /**
      * ErrorPresenter constructor.
      * @param ILogger $logger
-     * @param Explorer $database
      */
-    public function __construct(ILogger $logger, Explorer $database)
+    public function __construct(ILogger $logger)
     {
+        parent::__construct();
         $this->logger = $logger;
-        $this->database = $database;
     }
 
     /**
      * @param Throwable $exception
      * @throws Nette\Application\AbortException
      */
-    public function renderDefault(Throwable $exception): void
+    public function renderDefault(Throwable $exception, ?Request $request = null): void
     {
-        if ($exception instanceof BadRequestException) {
-            $code = $exception->getCode();
-            // load template 403.latte or 404.latte or ... 4xx.latte
-            $this->setView(\in_array($code, [403, 404, 405, 410], true) ? $code : '4xx');
-            // log to access.log
-            $this->logger->log("HTTP code $code: {$exception->getMessage()} in {$exception->getFile()}:{$exception->getLine()}", 'access');
-        } else {
-            $this->setView('500'); // load template 500.latte
-            $this->logger->log($exception, ILogger::EXCEPTION); // and log exception
+        $code = $exception instanceof BadRequestException ? ($exception->getHttpCode() ?: 404) : 500;
+        // Preserve the original failure even if the response can no longer change.
+        $this->logger->log(ErrorContext::describe($code, $request), 'access');
+        if (!$exception instanceof BadRequestException) {
+            $this->logger->log($exception, ILogger::EXCEPTION);
         }
 
+        $httpResponse = $this->getHttpResponse();
+        if ($httpResponse->isSent()) {
+            $this->logger->log('Error response headers already sent; body left unchanged; sent status '
+                . $httpResponse->getCode() . '; ' . ErrorContext::describe($code, $request), ILogger::WARNING);
+            // Appending HTML or JSON would corrupt an already-started response.
+            // JsonResponse also tries to set Content-Type when it is sent.
+            $this->sendResponse(new Nette\Application\Responses\VoidResponse());
+        }
+
+        // Error pages must work without page/settings queries or site components.
+        $httpResponse->setCode($code);
+        $httpResponse->setHeader('Cache-Control', 'no-store');
+        $this->setLayout(__DIR__ . '/../templates/Error/@layout.latte');
+        $this->template->errorCode = $code;
+        $this->setView($exception instanceof BadRequestException
+            ? (\in_array($code, [403, 404, 405, 410], true) ? (string) $code : '4xx') : '500');
+
         if ($this->isAjax()) { // AJAX request? Note this error in payload.
-            $this->payload->error = true;
-            $this->terminate();
+            $this->sendJson(['error' => true, 'code' => $code]);
         }
     }
 

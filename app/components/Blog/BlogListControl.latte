@@ -9,7 +9,7 @@
             <span class="pull-right"><small>{$item->date_created|date:'j. n. Y H:i'}</small></span>
         </h2>
         {if $settings['blog:preview:length'] > 0}
-            {$item->document|striptags|truncate:$settings['blog:preview:length']}
+            {$item->document|stripHtml|truncate:$settings['blog:preview:length']}
         {else}
             {$item->document|noescape}
         {/if}

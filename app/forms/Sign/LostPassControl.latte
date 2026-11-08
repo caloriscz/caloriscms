@@ -1,4 +1,5 @@
 <form n:name="sendForm" class="form-horizontal" role="form">
+    <ul class="error" n:if="$form->hasErrors()"><li n:foreach="$form->errors as $error">{$error}</li></ul>
     <input type="hidden" n:name="layer" value="{$layer}">
 
     <input type="text" n:name="email" class="form-control" placeholder="e-mailová adresa" autocomplete="off">

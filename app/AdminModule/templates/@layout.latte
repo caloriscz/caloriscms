@@ -7,10 +7,19 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="admin-csrf" content="{$presenter->getMutationToken()}">
 
     <title>{block #titles}{/block} | Caloris Admin</title>
 
     <link rel="stylesheet" href="/css/back.css">
+    <link rel="stylesheet" href="/vendor/elfinder/css/elfinder.min.css?v={$adminBundleVersion}">
+    <style>
+        /* The open File Manager gets jQuery UI's .ui-front (z-index 100), under the
+           Summernote toolbar (500) and the fixed header (1020). Its own dialogs, context
+           menu and notifications are its children, so they rise with it. Bootstrap's
+           modal backdrop starts at 1040. */
+        .dialogelfinder.ui-front { z-index: 1035; }
+    </style>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css"/>
 </head>
@@ -42,7 +51,10 @@
                         <strong>Nastavení</strong>
                     </div>
 
-                    <a class="dropdown-item" n:href=":Admin:Sign:out, id => NULL">Odhlásit</a>
+                    <form action="{link :Admin:Sign:out, id => NULL}" method="post">
+                        <input type="hidden" name="_csrf" value="{$presenter->getMutationToken()}">
+                        <button class="dropdown-item" type="submit">Odhlásit</button>
+                    </form>
                     <a class="dropdown-item" n:href=":Admin:Profile:default, id => NULL">Můj profil</a>
                     <a class="dropdown-item" n:href=":Admin:Profile:default, id => NULL">Navštívit web</a>
                 </div>
@@ -95,19 +107,22 @@
 {/if}
 
 <!-- Bootstrap and necessary plugins -->
-<script src="/js/all-back.js"></script>
+<script src="/js/all-back.js?v={$adminBundleVersion}"></script>
 <script src="/js/summernote-ext-elfinder.js"></script>
 <script src="/js/ace/src-min-noconflict/ace.js"></script>
 
 <script src="/js/app.js"></script>
-<script src="/js/caloris-admin.js"></script>
+<script src="/js/caloris-admin.js?v={$adminScriptVersion}"></script>
 
 
 <script>
     function elfinderDialog() {
         var fm = $('<div/>').dialogelfinder({
             url: '/admin?do=elfinder-options&path=' + {$presenter->getParameter('id')},
+            requestType: 'post',
+            customHeaders: { 'X-CSRF-Token': $('meta[name="admin-csrf"]').attr('content') },
             lang: 'cs',
+            baseUrl: '/vendor/elfinder/',
             uiOptions: {
                 toolbar: [
                     ['view']
@@ -118,9 +133,13 @@
             },
             startPath: '/images',
             width: 840,
-            height: 850,
+            // Taller than the window, the dialog is dragged up out of view
+            // (draggable containment: 'window'), title bar and close button too.
+            height: Math.min(850, $(window).height() - 20),
             destroyOnClose: true,
-            dragUploadAllow: false,
+            // Selects the XHR upload transport. The iframe transport cannot send
+            // the CMS or connector token headers, so both guards reject it.
+            dragUploadAllow: true,
             getFileCallback: function (files, fm) {
                 $('.summernote').summernote('editor.insertImage', files.url);
             },
@@ -131,6 +150,13 @@
                 }
             },
             handlers: {
+                open: function (e, instance) {
+                    // The 2.1.70 client already stores the connector token from
+                    // the init open response; keep this as a harmless fallback.
+                    if (typeof e.data.csrf === 'string') {
+                        instance.customHeaders['X-elFinder-CSRF'] = e.data.csrf;
+                    }
+                },
                 upload: function (e, instance) {
                 }
             }

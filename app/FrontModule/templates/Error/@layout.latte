@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex">
+    <title>Error {$errorCode}</title>
+    <style>
+        body { font: 1rem/1.6 system-ui, sans-serif; color: #333; background: #fff; margin: 0; }
+        main { max-width: 40rem; margin: 10vh auto; padding: 1.5rem; }
+        a { color: #165b91; }
+    </style>
+</head>
+<body>
+    <main>
+        {include content}
+        <p><small>error {$errorCode}</small></p>
+        <p><a href="{$basePath}/">Return to homepage</a></p>
+    </main>
+</body>
+</html>

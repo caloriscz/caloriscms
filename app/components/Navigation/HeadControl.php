@@ -4,7 +4,6 @@ namespace Caloriscz\Navigation;
 
 use Nette\Application\UI\Control;
 use Nette\Database\Explorer;
-use Tracy\Debugger;
 
 class HeadControl extends Control
 {
@@ -18,6 +17,8 @@ class HeadControl extends Control
 
     public function render($slugArray): void
     {
+        // Keep cached CSS in sync with the layout, including after a rollback.
+        $this->template->siteStyleVersion = substr(hash_file('sha256', __DIR__ . '/../../../www/css/caloris-site.css'), 0, 16);
         $page = $this->presenter->template->page;
         $this->template->page = $page;
         $this->template->slug = $slugArray;

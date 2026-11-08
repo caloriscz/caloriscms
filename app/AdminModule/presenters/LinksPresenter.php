@@ -26,6 +26,11 @@ class LinksPresenter extends BasePresenter
         $this->template->link = $this->database->table('links')->get($this->getParameter('id'));
     }
 
+    public function actionDetail(): void
+    {
+        $this->template->link = $this->requireRecord('links');
+    }
+
     /**
      * @return CategoryPanelControl
      */
@@ -70,9 +75,10 @@ class LinksPresenter extends BasePresenter
      */
     public function handleDelete($id): void
     {
-        $this->database->table('links')->get($id)->delete();
 
+        (new \App\Model\AssetWrites($this->database, APP_DIR))->deleteLink((int) $id);
         $this->redirect(':Admin:Links:default', ['id' => null]);
+
     }
 
     /**
@@ -85,6 +91,8 @@ class LinksPresenter extends BasePresenter
 
         $form = new BootstrapUIForm();
         $form->getElementPrototype()->class = 'form-horizontal';
+        // As the snippet and page forms show theirs; a size error is the only feedback.
+        $form->getRenderer()->wrappers['error'] = ['container' => null, 'item' => 'div class="alert alert-danger"'];
 
         $form->addHidden('id');
         $form->addText('title', 'Název')
@@ -96,7 +104,7 @@ class LinksPresenter extends BasePresenter
         $form->addTextArea('description', 'Popisek')
             ->setHtmlAttribute('class', 'form-control summernote');
         $form->addUpload('the_file', 'Vyberte obrázek (nepovinné)')
-            ->addRule(Form::MIME_TYPE, 'Neplatny typ', IO::IMAGE_MIME_TYPES);
+            ->addRule(Form::MIME_TYPE, \App\Model\AssetStorage::INVALID_IMAGE, IO::IMAGE_MIME_TYPES);
         $form->setDefaults([
             'title' => $this->template->link->title,
             'url' => $this->template->link->url,
@@ -118,33 +126,24 @@ class LinksPresenter extends BasePresenter
      */
     public function editFormSucceeded(BootstrapUIForm $form): void
     {
-        $this->database->table('links')
-            ->where([
-                'id' => $form->values->id,
-            ])
-            ->update([
-                'title' => $form->values->title,
-                'url' => $form->values->url,
-                'links_categories_id' => $form->values->category,
-                'description' => $form->values->description,
-            ]);
-
-        if ($_FILES['the_file']['size'] > 0) {
-            if (!IO::isAllowedImageUpload($_FILES['the_file']['name'], $_FILES['the_file']['tmp_name'])) {
-                $this->flashMessage('Neplatny obrazek.', 'error');
-                $this->redirect('this', ['id' => $form->values->id]);
-            }
-
-            IO::directoryMake(APP_DIR . '/links-media');
-
-            if (file_exists(APP_DIR . '/links-media/link-' . $form->values->id . '.jpg') && is_uploaded_file($_FILES['the_file']['tmp_name'])) {
-                IO::remove(APP_DIR . '/links-media/link-' . $form->values->id . '.jpg');
-            }
-
-            IO::upload(APP_DIR . '/links-media', 'link-' . $form->values->id . '.jpg');
+        $description = \App\Security\HtmlContent::latin1Html(\App\Security\HtmlContent::purify($form->values->description));
+        $error = \App\Security\HtmlContent::textSizeError($description);
+        if ($error !== null) {
+            $form->addError($error);
+            return;
         }
 
+        try {
+            (new \App\Model\AssetWrites($this->database, APP_DIR))->link((int) $form->values->id, [
+                'title' => $form->values->title, 'url' => $form->values->url,
+                'links_categories_id' => $form->values->category,
+                'description' => $description,
+            ], $_FILES['the_file'] ?? []);
+        } catch (\Nette\Application\BadRequestException $error) {
+            $this->flashMessage($error->getMessage(), 'error');
+        }
         $this->redirect('this', ['id' => $form->values->id]);
+
     }
 
     /**
@@ -153,20 +152,10 @@ class LinksPresenter extends BasePresenter
      */
     public function handleDeleteImage($id): void
     {
-        IO::remove(APP_DIR . '/links-media/link-' . $id . '.jpg');
-        $this->redirect(':Admin:Links:detail', ['id' => $id, 'rnd' => Random::generate(4)]);
-    }
 
-    /**
-     * Delete group
-     * @param $id
-     * @throws AbortException
-     */
-    public function handleDeleteCategory($id): void
-    {
-        $this->database->table('links')->where(['links_categories_id' => $id])->update(['links_categories_id' => 1]);
-        $this->database->table('links_categories')->get($id)->delete();
-        $this->redirect('this');
+        (new \App\Model\AssetWrites($this->database, APP_DIR))->deleteLink((int) $id, true);
+        $this->redirect(':Admin:Links:detail', ['id' => $id, 'rnd' => Random::generate(4)]);
+
     }
 
     public function renderDefault(): void
@@ -180,11 +169,6 @@ class LinksPresenter extends BasePresenter
         } else {
             $this->template->links = $this->database->table('links')->order('title');
         }
-    }
-
-    public function renderCategories(): void
-    {
-        $this->template->categories = $this->database->table('links_categories')->order('category');
     }
 
 }

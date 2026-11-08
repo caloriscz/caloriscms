@@ -18,6 +18,10 @@ RUN apt-get update \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
+# Files/default.latte calls exif_imagetype(). exif has no system dependencies,
+# so it builds without apt (the archived Bullseye mirrors answer 404).
+RUN docker-php-ext-install exif
+
 COPY --from=composer:2 /usr/bin/composer /usr/local/bin/composer
 COPY docker/php/apache-vhost.conf /etc/apache2/sites-available/000-default.conf
 COPY docker/php/php.ini /usr/local/etc/php/conf.d/caloris-local.ini

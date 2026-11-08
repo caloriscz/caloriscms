@@ -1,4 +1,5 @@
 {form editSnippetForm}
+    <div n:foreach="$form->errors as $error" class="alert alert-danger">{$error}</div>
 
     <textarea n:name="content" class="form-control" id="wysiwyg"></textarea>
     {input submitm}

@@ -14,8 +14,8 @@
             {if intval($new) <= $settings['store:new:days']}
                 <span class="badge-new">novinka</span>
             {/if}
-            <a href="{$baseUri}/media/{$page->id}/{$filename}" class="detail-image gallery">
-                <img src="{$baseUri}/media/{$page->id}/tn/{$filename}" class="img-responsive"/>
+            <a href="{$basePath}/media/{$page->id}/{$filename}" class="detail-image gallery">
+                <img src="{$basePath}/media/{$page->id}/tn/{$filename}" class="img-responsive"/>
             </a>
         </div>
         <br/>
@@ -24,7 +24,7 @@
 
     {if $filename != $image->name}
         <div class="col-xs-6 col-md-4" style="max-height: 70px;">
-            <a href="{$baseUri}/media/{$page->id}/{$image->name}" class="thumbnail gallery">
+            <a href="{$basePath}/media/{$page->id}/{$image->name}" class="thumbnail gallery">
                 <img src="/media/{$page->id}/tn/{$image->name}" class="img-responsive"
                      style="max-height: 70px;">
             </a>

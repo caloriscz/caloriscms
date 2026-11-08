@@ -18,7 +18,11 @@ class SignPresenter extends BasePresenter
     protected function startup()
     {
         parent::startup();
+        // Protected forms are created while rendering; start before any output.
+        $this->getSession()->start();
         $this->template->signed = false;
+        $this->getHttpResponse()->setHeader('Cache-Control', 'no-store');
+        $this->getHttpResponse()->setHeader('Referrer-Policy', 'no-referrer');
     }
 
     protected function createComponentResetPass(): ResetPassControl
@@ -33,7 +37,7 @@ class SignPresenter extends BasePresenter
             if ($message) {
                 $this->flashMessage($message, 'error');
             } else {
-                $this->flashMessage('Informace o zapomenutém hesle odeslány', 'success');
+                $this->flashMessage('Pokud lze pro tuto adresu obnovit přístup, obdržíte odkaz pro nastavení hesla.', 'success');
             }
 
             $this->redirect('this');
@@ -55,6 +59,7 @@ class SignPresenter extends BasePresenter
      */
     public function actionOut(): void
     {
+        $this->requireCsrfToken();
         $this->getUser()->logout();
         $this->flashMessage($this->translator->translate('Odhlášen'), 'note');
         $this->redirect('in');
@@ -63,16 +68,8 @@ class SignPresenter extends BasePresenter
 
     public function renderResetpass(): void
     {
-        $this->template->activationValid = false;
-
-        $activation = $this->database->table('users')->where([
-            'email' => $this->getParameter('email'),
-            'activation' => $this->getParameter('code')
-        ]);
-
-        if ($activation->count() > 0) {
-            $this->template->activationValid = true;
-        }
+        // The credential arrives in the fragment, then in the protected POST.
+        // Rendering (including email-link scanners) never consumes a link.
     }
 
 }

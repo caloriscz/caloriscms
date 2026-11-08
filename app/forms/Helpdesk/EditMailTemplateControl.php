@@ -1,6 +1,7 @@
 <?php
 namespace App\Forms\Helpdesk;
 
+use App\Model\Helpdesk;
 use Nette\Application\UI\Control;
 use Nette\Database\Explorer;
 use Nette\Forms\BootstrapUIForm;
@@ -22,6 +23,9 @@ class EditMailTemplateControl extends Control
     public function createComponentEditForm(): BootstrapUIForm
     {
         $emailDb = $this->database->table('helpdesk')->get($this->presenter->getParameter('id'));
+        if ($emailDb === null) {
+            $this->presenter->error('Record not found.', 404);
+        }
 
         $form = new BootstrapUIForm();
         $form->getElementPrototype()->class = 'form-horizontal';
@@ -51,9 +55,24 @@ class EditMailTemplateControl extends Control
      */
     public function editFormSucceeded(BootstrapUIForm $form): void
     {
-        $this->database->table('helpdesk')->get($form->values->id)->update([
-                'subject' => $form->values->subject,
-                'body' => $form->values->body,
+        $helpdesk = $this->database->table('helpdesk')->get($form->values->id);
+        if ($helpdesk === null) {
+            $this->presenter->error('Record not found.', 404);
+        }
+        // Subject is stored as typed; body is trusted Latte source (see Helpdesk::templateError).
+        $subject = $form->values->subject;
+        $body = Helpdesk::normalizeTemplateSource($form->values->body);
+        $frame = $this->database->table('helpdesk_templates')->get($helpdesk->helpdesk_templates_id ?: 1);
+        $error = Helpdesk::subjectError($subject)
+            ?? Helpdesk::templateError($body, Helpdesk::composeDocument($frame ? $frame->document : '%TITLE%%CONTENT%', $subject, $body));
+        if ($error !== null) {
+            $form->addError($error);
+            return;
+        }
+
+        $helpdesk->update([
+                'subject' => $subject,
+                'body' => $body,
             ]);
 
         $this->presenter->redirect('this', ['id' => $form->values->id]);

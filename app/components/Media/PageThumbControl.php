@@ -4,11 +4,13 @@ namespace Caloriscz\Media;
 
 use App\Model\Document;
 use App\Model\IO;
+use App\Security\CsrfProtectedMutation;
 use Nette\Application\UI\Control;
 use Nette\Database\Context;
 
 class PageThumbControl extends Control
 {
+    use CsrfProtectedMutation;
 
     /** @var Context */
     public $database;
@@ -24,15 +26,18 @@ class PageThumbControl extends Control
      */
     public function handleDelete($id): void
     {
+        $this->requireCsrfToken();
+
         $doc = new Document($this->database);
         $doc->delete($id);
-        IO::removeDirectory(APP_DIR . '/media/' . $id);
 
         $this->onSave($this->getParameter('type'));
     }
 
     public function handlePublic(): void
     {
+        $this->requireCsrfToken();
+
         $page = $this->database->table('pages')->get($this->getParameter('id'));
 
         if ($page->public === 1) {
@@ -64,6 +69,7 @@ class PageThumbControl extends Control
         }
 
         $template->pages = $this->database->table('pages')->where($arr);
+        $template->csrfToken = $this->getCsrfToken();
         $template->render();
     }
 

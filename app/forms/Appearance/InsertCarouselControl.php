@@ -36,7 +36,7 @@ class InsertCarouselControl extends Control
         $form->addText('uri', 'Odkaz');
         $form->addCheckbox('visible', 'Zobrazit');
         $form->addUpload('the_file', 'Ikonka')
-            ->addRule(Form::MIME_TYPE, 'Neplatny typ', IO::IMAGE_MIME_TYPES);
+            ->addRule(Form::MIME_TYPE, \App\Model\AssetStorage::INVALID_IMAGE, IO::IMAGE_MIME_TYPES);
         $form->addSubmit('submitm', 'Uložit');
 
         $form->onSuccess[] = [$this, 'insertFormSucceeded'];
@@ -49,35 +49,17 @@ class InsertCarouselControl extends Control
      */
     public function insertFormSucceeded(BootstrapUIForm $form): void
     {
-        $arr = [
-            'title' => $form->values->title,
-            'description' => $form->values->description,
-            'uri' => $form->values->uri,
-            'visible' => $form->values->visible
-        ];
 
-        if ($form->values->the_file->error === 0) {
-            $image = IO::sanitizeUploadFileName($form->values->the_file->name);
-
-            if ($image === null || !IO::isAllowedImageUpload($form->values->the_file->name, $_FILES['the_file']['tmp_name'])) {
-                $this->flashMessage('Neplatny obrazek.', 'error');
-                $this->redirect('this', ['carousel_id' => $form->values->carousel_id]);
-            }
-
-            $arr['image'] = $image;
-
-            $filePath = APP_DIR . '/images/carousel/' . $arr['image'];
-
-            if (file_exists($filePath)) {
-                IO::remove($filePath);
-            }
-
-            IO::upload(APP_DIR . '/images/carousel/', $arr['image']);
+        try {
+            (new \App\Model\AssetWrites($this->database, APP_DIR))->carousel(null, [
+                'title' => $form->values->title, 'description' => $form->values->description,
+                'uri' => $form->values->uri, 'visible' => $form->values->visible,
+            ], $_FILES['the_file'] ?? []);
+        } catch (\Nette\Application\BadRequestException $error) {
+            $this->presenter->flashMessage($error->getMessage(), 'error');
         }
-
-        $this->database->table('carousel')->insert($arr);
-
         $this->redirect('this', ['carousel_id' => $form->values->carousel_id]);
+
     }
 
     public function render(): void

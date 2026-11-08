@@ -30,17 +30,14 @@ class CarouselManagerControl extends Control
 
     public function handleDelete(int $id): void
     {
-        $carousel = $this->database->table('carousel')->get($id);
-        $image = $carousel->image ?? null;
 
-        $this->database->table('carousel')->get($id)->delete();
-
-        if ($image !== null) {
-            IO::remove(APP_DIR . '/images/carousel/' . $image);
-            unset($image);
+        try {
+            (new \App\Model\AssetWrites($this->database, APP_DIR))->deleteCarousel($id);
+        } catch (\Nette\Application\BadRequestException $error) {
+            $this->presenter->flashMessage($error->getMessage(), 'error');
         }
-
         $this->redirect('this', ['id' => null]);
+
     }
 
     public function render(): void

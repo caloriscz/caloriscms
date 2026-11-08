@@ -6,6 +6,7 @@ use App\Forms\Settings\InsertBlackListControl;
 use App\Forms\Settings\EditSettingsControl;
 use App\Forms\Settings\InsertCountryControl;
 use App\Forms\Settings\InsertLanguageControl;
+use App\Security\CsrfProtectedMutation;
 use Caloriscz\Settings\BlackListControl;
 use Nette\Application\AbortException;
 
@@ -14,6 +15,8 @@ use Nette\Application\AbortException;
  */
 class SettingsPresenter extends BasePresenter
 {
+    use CsrfProtectedMutation;
+
     private const LANGUAGE_COLUMNS = [
         'pages' => [
             'title' => 'varchar(250)',
@@ -69,6 +72,8 @@ class SettingsPresenter extends BasePresenter
      */
     public function handleInstall($id): void
     {
+        $this->requireCsrfToken();
+
         if (!$this->hasSettingsPermission()) {
             $this->denySettingsAction();
         }
@@ -102,6 +107,8 @@ class SettingsPresenter extends BasePresenter
      */
     public function handleMakeDefault($id): void
     {
+        $this->requireCsrfToken();
+
         if (!$this->hasSettingsPermission()) {
             $this->denySettingsAction();
         }
@@ -122,6 +129,8 @@ class SettingsPresenter extends BasePresenter
      */
     public function handleToggle($id): void
     {
+        $this->requireCsrfToken();
+
         if (!$this->hasSettingsPermission()) {
             $this->denySettingsAction();
         }
@@ -141,6 +150,8 @@ class SettingsPresenter extends BasePresenter
      */
     public function handleToggleCountry($id): void
     {
+        $this->requireCsrfToken();
+
         if (!$this->hasSettingsPermission()) {
             $this->denySettingsAction();
         }
@@ -205,11 +216,13 @@ class SettingsPresenter extends BasePresenter
     public function renderLanguages(): void
     {
         $this->template->languages = $this->database->table('languages');
+        $this->template->csrfToken = $this->getCsrfToken();
     }
 
     public function renderCountries(): void
     {
         $this->template->countries = $this->database->table('countries');
+        $this->template->csrfToken = $this->getCsrfToken();
     }
 
     public function renderPageTypes(): void

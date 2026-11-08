@@ -28,13 +28,13 @@ class UpdateImagesControl extends Control
 
         $form->addHidden('menu_id');
         $form->addUpload('the_file', 'Obrázek')
-            ->addRule(Form::MIME_TYPE, 'Neplatny typ', IO::IMAGE_MIME_TYPES);
+            ->addRule(Form::MIME_TYPE, \App\Model\AssetStorage::INVALID_IMAGE, IO::IMAGE_MIME_TYPES);
         $form->addUpload('the_file_2', 'Obrázek (hover)')
-            ->addRule(Form::MIME_TYPE, 'Neplatny typ', IO::IMAGE_MIME_TYPES);
+            ->addRule(Form::MIME_TYPE, \App\Model\AssetStorage::INVALID_IMAGE, IO::IMAGE_MIME_TYPES);
         $form->addUpload('the_file_3', 'Aktivní obrázek')
-            ->addRule(Form::MIME_TYPE, 'Neplatny typ', IO::IMAGE_MIME_TYPES);
+            ->addRule(Form::MIME_TYPE, \App\Model\AssetStorage::INVALID_IMAGE, IO::IMAGE_MIME_TYPES);
         $form->addUpload('the_file_4', 'Aktivní obrázek (hover)')
-            ->addRule(Form::MIME_TYPE, 'Neplatny typ', IO::IMAGE_MIME_TYPES);
+            ->addRule(Form::MIME_TYPE, \App\Model\AssetStorage::INVALID_IMAGE, IO::IMAGE_MIME_TYPES);
 
         $form->setDefaults(['menu_id' => $this->presenter->getParameter('id')]);
 
@@ -52,32 +52,19 @@ class UpdateImagesControl extends Control
     {
         $menuId = (int) $form->values->menu_id;
 
-        /* Main image */
-        $this->saveMenuImage($form, 'the_file', APP_DIR . '/images/menu/' . $menuId . '.png');
-
-        /* Hover image */
-        $this->saveMenuImage($form, 'the_file_2', APP_DIR . '/images/menu/' . $menuId . '_h.png');
-
-        /* Active image */
-        $this->saveMenuImage($form, 'the_file_3', APP_DIR . '/images/menu/' . $menuId . '_a.png');
-
-        /* Active hover image */
-        $this->saveMenuImage($form, 'the_file_4', APP_DIR . '/images/menu/' . $menuId . '_ah.png');
+        try {
+            (new \App\Model\AssetStorage($this->database, APP_DIR))->run(function ($assets) use ($menuId): void {
+                if (!$this->database->table('menu')->get($menuId)) { throw new \Nette\Application\BadRequestException('Položka menu neexistuje.', 404); }
+                foreach (['the_file' => '', 'the_file_2' => '_h', 'the_file_3' => '_a', 'the_file_4' => '_ah'] as $field => $suffix) {
+                    $file = $_FILES[$field] ?? [];
+                    if (\App\Model\AssetStorage::hasUpload($file)) { $assets->image($file, 'images/menu/' . $menuId . $suffix . '.png', true); }
+                }
+            });
+        } catch (\Nette\Application\BadRequestException $error) {
+            $this->presenter->flashMessage($error->getMessage(), 'error');
+        }
 
         $this->redirect('this', ['id' => $menuId]);
-    }
-
-    private function saveMenuImage(BootstrapUIForm $form, string $field, string $targetFile): void
-    {
-        if ($form->values->{$field}->error === 0) {
-            if (!IO::isAllowedImageUpload($_FILES[$field]['name'], $_FILES[$field]['tmp_name'])) {
-                $this->flashMessage('Neplatny obrazek.', 'error');
-                $this->redirect('this', ['id' => (int) $form->values->menu_id]);
-            }
-
-            copy($_FILES[$field]['tmp_name'], $targetFile);
-            chmod($targetFile, 0644);
-        }
     }
 
     public function render()

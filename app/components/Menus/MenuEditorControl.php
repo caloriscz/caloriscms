@@ -26,7 +26,7 @@ class MenuEditorControl extends Control
      */
     public function handleDelete(): void
     {
-        $this->database->table('menu')->get($this->getPresenter()->getParameter('node_id'))->delete();
+        (new \App\Model\AssetWrites($this->database, APP_DIR))->deleteMenu((int) $this->getPresenter()->getParameter('node_id'));
         exit();
     }
 
@@ -53,8 +53,16 @@ class MenuEditorControl extends Control
      */
     public function handleRename(): void
     {
+        $title = \App\Security\HtmlContent::menuLabelFromTree((string) $this->getPresenter()->getParameter('text'));
+        $error = \App\Security\HtmlContent::menuLabelError($title);
+        if ($error !== null) {
+            // The tree client shows its failure alert; nothing is stored.
+            $this->getPresenter()->getHttpResponse()->setCode(422);
+            $this->getPresenter()->sendJson(['error' => $error]);
+        }
+
         $this->database->table('menu')->get($this->getPresenter()->getParameter('node_id'))->update([
-            'title' => $this->getPresenter()->getParameter('text'),
+            'title' => $title,
         ]);
 
         exit();

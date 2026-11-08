@@ -35,11 +35,6 @@
                     <div class="card-header">
                         Stránky
                         <small class="pull-right font-weight-bold">
-                            <a n:href="view! 'type' => $presenter->getParameter('type'), view => 'tree'"
-                                    class="btn btn-sm{if $view === 'tree'} btn-primary{/if}"><i class="fa fa-tree"></i> Strom
-                            </a>
-                        </small>
-                        <small class="pull-right font-weight-bold">
                             <a n:href="view! 'type' => $presenter->getParameter('type'), view => 'simple'"
                                     class="btn btn-sm{if $view === 'simple'} btn-primary{/if}"><i class="fa fa-list"></i> Seznam
                             </a>

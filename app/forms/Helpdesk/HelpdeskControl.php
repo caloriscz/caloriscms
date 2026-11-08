@@ -4,8 +4,10 @@ namespace App\Forms\Helpdesk;
 
 use App\Model\Helpdesk;
 use Nette\Application\UI\Control;
+use Nette\Application\UI\Presenter;
 use Nette\Database\Explorer;
 use Nette\Forms\BootstrapUIForm;
+use Nette\Http\Url;
 use Nette\Utils\Validators;
 
 class HelpdeskControl extends Control
@@ -49,73 +51,49 @@ class HelpdeskControl extends Control
     {
         $helpdesk = new Helpdesk($this->database, $this->presenter->mailer);
         $helpdesk->setId(1);
-        $helpdeskPage = $helpdesk->getInfo()->pages->slug;
-
-        if (strlen($form->values->name) < 2) {
-            $this->presenter->flashMessage('Vyplňte jméno', 'error');
-
-            if ($helpdeskPage !== null) {
-                $this->presenter->redirectUrl('/' . $helpdeskPage);
-            } else {
-                die();
+        $error = null;
+        if (strlen($form->values->name) < 2) { $error = 'Vyplňte jméno'; }
+        elseif (!Validators::isEmail($form->values->email)) { $error = 'Vyplňte e-mail'; }
+        elseif (strlen($form->values->message) < 2) { $error = 'Vyplňte zprávu'; }
+        if ($error === null) {
+            try {
+                $info = $helpdesk->getInfo();
+                if (!$info) {
+                    $helpdesk->reportFailure('validation', 'missing_helpdesk');
+                    $error = 'E-mail nebyl odeslán';
+                } elseif ((int) $info->blacklist === 1) {
+                    foreach ($this->database->table('blacklist') as $item) {
+                        if ($item->title !== '' && (stripos($form->values->message, $item->title) !== false
+                            || stripos($form->values->name, $item->title) !== false)) {
+                            $error = 'Zpráva obsahuje neplatné znaky';
+                            break;
+                        }
+                    }
+                }
+            } catch (\Throwable $failure) {
+                $helpdesk->reportFailure('validation', 'unavailable');
+                $error = 'E-mail nebyl odeslán';
             }
         }
-
-
-        if (Validators::isEmail($form->values->email) === false) {
-            $this->presenter->flashMessage('Vyplňte e-mail', 'error');
-
-            if ($helpdeskPage !== null) {
-                $this->presenter->redirectUrl('/' . $helpdeskPage);
-            } else {
-                die();
-            }
+        if ($error !== null) {
+            $form->addError($error);
+            $this->redirectWithFeedback($helpdesk, $error, 'error');
         }
 
-        if (strlen($form->values->message) < 2) {
-            $this->presenter->flashMessage('Vyplňte zprávu', 'error');
+    }
 
-            if ($helpdeskPage !== null) {
-                $this->presenter->redirectUrl('/' . $helpdeskPage);
-            } else {
-                die();
-            }
-        }
-
-        // Validate by black list
-        $blacklistDb = $this->database->table('blacklist')->fetchAll('title');
-
-        foreach ($blacklistDb as $item) {
-            if (stripos($form->values->message, $item->title) !== false) {
-                $rings = true;
-            }
-
-            if (stripos($form->values->name, $item->title) !== false) {
-                $rings = true;
-            }
-        }
-
-        $helpdesk = $this->database->table('helpdesk')->get(1);
-
-        if ($helpdesk === null) {
-            $this->presenter->flashMessage('Neznámá chyba', 'info');
-
-            if ($helpdeskPage !== null) {
-                $this->presenter->redirectUrl('/' . $helpdeskPage);
-            } else {
-                die();
-            }
-        }
-
-        if ($helpdesk->blacklist === 1 && isset($rings) && $rings) {
-            $this->presenter->flashMessage('Zpráva obsahuje neplatné znaky', 'info');
-
-            if ($helpdeskPage !== null) {
-                $this->presenter->redirectUrl('/' . $helpdeskPage);
-            } else {
-                die();
-            }
-        }
+    /**
+     * redirectUrl() does not carry the flash key (_fid) the way redirect() does,
+     * so the return page would never see the message. Append it to the internal
+     * return path; the target itself is unchanged.
+     * @throws \Nette\Application\AbortException
+     */
+    private function redirectWithFeedback(Helpdesk $helpdesk, string $message, string $type): void
+    {
+        $this->presenter->flashMessage($message, $type)->helpdesk = true;
+        $url = new Url($helpdesk->getReturnPath());
+        $url->setQueryParameter(Presenter::FLASH_KEY, $this->presenter->getParameter(Presenter::FLASH_KEY));
+        $this->presenter->redirectUrl((string) $url);
     }
 
     /**
@@ -125,10 +103,6 @@ class HelpdeskControl extends Control
      */
     public function sendFormSucceeded(BootstrapUIForm $form): void
     {
-        if ($this->presenter->user->isLoggedIn()) {
-            $arr['users_id'] = $this->presenter->template->member->id;
-        }
-
         $params = [
             'name' => $form->values->name,
             'phone' => $form->values->phone,
@@ -144,18 +118,11 @@ class HelpdeskControl extends Control
         $send = $helpdesk->send();
 
         if ($send) {
-            $this->flashMessage('Děkujeme za zprávu', 'success');
+            $this->redirectWithFeedback($helpdesk, 'Děkujeme za zprávu', 'success');
         } else {
-            $this->flashMessage('E-mail nebyl odeslán', 'error');
+            $this->redirectWithFeedback($helpdesk, 'E-mail nebyl odeslán', 'error');
         }
 
-        $helpdeskPage = $helpdesk->getInfo()->pages->slug;
-
-        if ($helpdeskPage !== null) {
-            $this->presenter->redirectUrl('/' . $helpdeskPage);
-        } else {
-            die();
-        }
     }
 
     public function render()
