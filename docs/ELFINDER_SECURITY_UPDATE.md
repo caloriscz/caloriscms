@@ -18,7 +18,8 @@ The [upstream release](https://github.com/Studio-42/elFinder/releases/tag/2.1.70
 also patches browser-side behavior. The committed admin bundle still contained
 elFinder **2.1.16**, so a PHP-only upgrade was insufficient. Its elFinder/Czech
 locale inputs are regenerated from the locked package. Matching CSS/images/
-sounds live in `www/vendor/elfinder`; the dialog uses that base URL and the new
+sounds live in `www/elfinder` (not under a `vendor` path, which some hosts deny for
+every URL); the dialog uses that base URL and the new
 CSS after the legacy stylesheet. `all-back.js` now has a content-hash URL, also
 used to refresh elFinder CSS after a release. Existing CMS and connector token
 forwarding and the root permission checks remain in place.
@@ -247,7 +248,7 @@ that day). Where it differs, this supersedes the first round above:
   seen); with `ZipArchive` they get 755 and 644 (item E of `0c4539cc`). Since the
   third round, a folder that existed before keeps its mode (N11, below).
 - **elFinder's worker scripts ship (from `299e3de4`, same release).**
-  `tools/build/elfinder.cjs` also copies `js/worker`, so `/vendor/elfinder/js/worker/*`
+  `tools/build/elfinder.cjs` also copies `js/worker`, so `/elfinder/js/worker/*`
   is served; without it the Info dialog showed a NetworkError in its md5 and sha256
   rows. The bundle is byte-identical after the refresh.
 
@@ -395,7 +396,7 @@ Files that go back to `PREV`:
 - `app/AdminModule/templates/@layout.latte`
 - `gulpfile.js`
 
-Files that are removed: `www/vendor/elfinder/` and `tools/build/elfinder.cjs`.
+Files that are removed: `www/elfinder/` and `tools/build/elfinder.cjs`.
 
 Files that stay, whatever else is rolled back: `app/components/Utilities/ElfinderControl.php`
 and `app/AdminModule/presenters/BasePresenter.php`. They protect `www/images/.htaccess`
@@ -406,7 +407,7 @@ git fetch deploy
 git switch -c rollback-elfinder deploy/production
 git restore --source="$PREV" --staged --worktree -- composer.json composer.lock \
     www/js/all-back.js app/AdminModule/templates/@layout.latte gulpfile.js
-git rm -r -- www/vendor/elfinder tools/build/elfinder.cjs
+git rm -r -- www/elfinder tools/build/elfinder.cjs
 git status --short                  # exactly the files listed above
 git diff --cached -- composer.lock  # only studio-42/elfinder, back to 2.1.69
 git commit -m "Roll back elFinder to 2.1.69"
@@ -421,7 +422,7 @@ Verify, with `https://<site>` as the production address:
 
 ```sh
 curl -s https://<site>/js/all-back.js | grep -o 'Version 2\.1\.[0-9]*' | head -1  # Version 2.1.16
-curl -s -o /dev/null -w '%{http_code}\n' https://<site>/vendor/elfinder/css/elfinder.min.css  # 404
+curl -s -o /dev/null -w '%{http_code}\n' https://<site>/elfinder/css/elfinder.min.css  # 404
 curl -s -o /dev/null -w '%{http_code}\n' https://<site>/images/.htaccess  # 403
 ```
 

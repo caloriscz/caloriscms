@@ -12,7 +12,7 @@
     <title>{block #titles}{/block} | Caloris Admin</title>
 
     <link rel="stylesheet" href="/css/back.css">
-    <link rel="stylesheet" href="/vendor/elfinder/css/elfinder.min.css?v={$adminBundleVersion}">
+    <link rel="stylesheet" href="/elfinder/css/elfinder.min.css?v={$adminBundleVersion}">
     <style>
         /* The open File Manager gets jQuery UI's .ui-front (z-index 100), under the
            Summernote toolbar (500) and the fixed header (1020). Its own dialogs, context
@@ -122,7 +122,7 @@
             requestType: 'post',
             customHeaders: { 'X-CSRF-Token': $('meta[name="admin-csrf"]').attr('content') },
             lang: 'cs',
-            baseUrl: '/vendor/elfinder/',
+            baseUrl: '/elfinder/',
             uiOptions: {
                 toolbar: [
                     ['view']
