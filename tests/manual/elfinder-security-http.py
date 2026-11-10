@@ -63,10 +63,10 @@ csrf = re.search(r'name="admin-csrf" content="([a-f0-9]{64})"', page.text)[1]
 bundle = re.search(r'src="(/js/all-back.js\?v=([a-f0-9]{16}))"', page.text)
 assert bundle and hashlib.sha256(session.get(base + bundle[1], timeout=15).content).hexdigest().startswith(bundle[2])
 assert 'Version 2.1.70 ' in session.get(base + bundle[1], timeout=15).text
-assert session.get(base + '/vendor/elfinder/css/elfinder.min.css', timeout=15).status_code == 200
+assert session.get(base + '/elfinder/css/elfinder.min.css', timeout=15).status_code == 200
 # The Info dialog's md5/sha256 and Quick Look on ZIP/TIFF load elFinder's workers.
 for worker in ['calcfilehash.js', 'quicklook.unzip.js', 'quicklook.tiff.js']:
-    assert session.get(base + '/vendor/elfinder/js/worker/' + worker, timeout=15).status_code == 200, worker
+    assert session.get(base + '/elfinder/js/worker/' + worker, timeout=15).status_code == 200, worker
 # Apache applies www/images/.htaccess; PHP's built-in server (the PHP 8 probe) does not.
 apache = 'Apache' in session.get(base + '/', timeout=15).headers.get('Server', '')
 endpoint = base + '/admin/?do=elfinder-options'

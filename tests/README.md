@@ -74,6 +74,13 @@ Coverage:
   `contacts_categories`, no move into the own subtree, add/edit name checks, and a delete
   that refuses a category with contacts (they cascade in MariaDB) or subcategories:
   `Admin/ContactCategoriesTest.phpt`.
+- Front search filter: no `count()` of null columns (a TypeError on PHP 8), and unknown or
+  array order values fall back to the default order: `Pages/SearchFilterTest.phpt`.
+- File Manager client assets live in `www/elfinder`, and nothing points the browser at a
+  `/vendor/` URL (some hosts deny every such URL): `Security/PublicAssetPathsTest.phpt`.
+- Links list on a database without the foreign key from `links` to `links_categories`: the
+  category titles come from an id lookup, so the page renders to the end and its category
+  tree loads: `Admin/LinkCategoryTitlesTest.phpt`.
 - Pages list views (owner decision of 2026-11-08): the "Strom" view is gone, a stored
   `tree` (or unknown) view shows the list, the Pages list has no nested menu insert form,
   and the jsTree that sends menu editor mutations is bound only to the menu editor's
