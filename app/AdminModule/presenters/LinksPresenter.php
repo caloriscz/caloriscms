@@ -161,6 +161,9 @@ class LinksPresenter extends BasePresenter
     public function renderDefault(): void
     {
         $this->template->categoryId = $this->getParameter('id');
+        // Titles by id, not through each link's reference: that needs a foreign key in the
+        // database, and without one the page stopped rendering at the first link.
+        $this->template->categoryTitles = $this->database->table('links_categories')->fetchPairs('id', 'title');
 
         if ($this->getParameter('id')) {
             $this->template->links = $this->database->table('links')
