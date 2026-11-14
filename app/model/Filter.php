@@ -138,7 +138,10 @@ class Filter
         $this->connect->select('pages.id, pages.slug, pages.title AS title, pages.slug AS slugtitle, pages.preview, 
             pages.date_created, pages.document, pages.date_published, pages.public, pages.pages_types_id');
 
-        $this->connect->group('pages.title, pages.document');
+        // No GROUP BY: each pages row is already unique, and grouping by title and document
+        // while selecting other columns fails under ONLY_FULL_GROUP_BY (MySQL 5.7+ default).
+        // Only published pages, like the sitemap, feeds and lists.
+        $this->connect->where('pages.public', 1);
 
         if ($this->search !== false) {
             $this->connect->where("pages.title LIKE ? OR pages.document LIKE ?", "%" . $this->search . "%", "%" . $this->search . "%");
