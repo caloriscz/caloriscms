@@ -222,6 +222,7 @@ node_modules
 #############
 
 /app/config/config.local.neon
+/app/config/debug-ips.local.php
 /log/*
 !/log/.gitignore
 /temp/*
