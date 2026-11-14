@@ -37,7 +37,9 @@ class PagesPresenter extends BasePresenter
     public function renderSearch(): void
     {
         $filter = new Filter($this->database);
-        $filter->setText($this->getParameter('s'));
+        // Query values can be arrays (?s[]=x); only a string is a search text or page number.
+        $search = $this->getParameter('s');
+        $filter->setText(\is_string($search) ? $search : null);
         $filter->setOrder($this->getParameter('o'));
         $filter->setOptions($this->template->settings);
 
@@ -46,7 +48,8 @@ class PagesPresenter extends BasePresenter
         $paginator = new Paginator;
         $paginator->setItemCount($assembleSQL->count('*'));
         $paginator->setItemsPerPage(5);
-        $paginator->setPage($this->getParameter('page') ?? 1);
+        $page = $this->getParameter('page');
+        $paginator->setPage(\is_numeric($page) ? (int) $page : 1);
 
         $this->template->categoryArr = $this->getParameters();
         $this->template->search = $assembleSQL->order('pages.id');

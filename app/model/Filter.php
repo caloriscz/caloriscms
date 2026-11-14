@@ -7,7 +7,6 @@ use Nette\Database\Table\Selection;
 
 /**
  * Get list of filtered products
- * @property null getColumns
  * @author Petr Karásek
  */
 class Filter
@@ -17,7 +16,8 @@ class Filter
 
     public $category;
     public $connect;
-    public $columns;
+    /** Extra column conditions; empty means none (count() of null is a TypeError on PHP 8). */
+    public $columns = [];
     public $search;
     public $settings;
     public $order;
@@ -63,7 +63,8 @@ class Filter
             'od' => '`sorted` DESC'
         ];
 
-        if (empty($order)) {
+        // Unknown, empty or non-string values (?o=xyz, ?o[]=1) fall back to the default order.
+        if (!\is_string($order) || !isset($arr[$order])) {
             $order = 'na';
         }
 
@@ -114,15 +115,14 @@ class Filter
      */
     public function setColumns($arr)
     {
-        $columns = null;
+        $columns = [];
 
         foreach ($arr as $key => $value) {
             $columns[$key] = $value;
         }
 
-        $this->getColumns = $columns;
-
-        $this->columns =  $this->getColumns;
+        // No dynamic property: that is deprecated on PHP 8.2.
+        $this->columns = $columns;
     }
 
     public function getColumns()
@@ -144,7 +144,7 @@ class Filter
             $this->connect->where("pages.title LIKE ? OR pages.document LIKE ?", "%" . $this->search . "%", "%" . $this->search . "%");
         }
 
-        if (\count($this->getColumns()) > 0) {
+        if ($this->getColumns()) {
             $this->connect->where((array) $this->getColumns());
         }
 

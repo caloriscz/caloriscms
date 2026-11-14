@@ -18,7 +18,8 @@ module.exports = function refreshElfinder() {
     }
     // Replace only the two elFinder inputs in the established Gulp input order.
     fs.writeFileSync(bundlePath, bundle.slice(0, start) + client.trimEnd() + '\n' + locale.trimEnd() + '\n\n' + bundle.slice(end));
-    const output = path.join(root, 'www/vendor/elfinder');
+    // Not under www/vendor: some hosts deny every URL with a /vendor/ segment.
+    const output = path.join(root, 'www/elfinder');
     // js/worker: the Info dialog's md5/sha256 and Quick Look on ZIP/TIFF load these.
     for (const directory of ['css', 'img', 'sounds', 'js/worker']) {
         fs.cpSync(path.join(source, directory), path.join(output, directory), {recursive: true});

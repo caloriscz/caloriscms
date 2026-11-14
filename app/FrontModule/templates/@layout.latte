@@ -9,7 +9,7 @@
     {control head $slugArray}
     {if $inlineEditingEnabled}<meta name="inline-csrf" content="{$inlineCsrfToken}">{/if}
 </head>
-{var $pageSlug = (string) $page->slug}
+{var $pageSlug = $page ? (string) $page->slug : ''}
 {var $isHomepage = $pageSlug === ''}
 {var $isPrivacyPolicy = $pageSlug === 'privacy-policy' || substr($pageSlug, -15) === '-privacy-policy'}
 {var $isStandalone = $isHomepage || $isPrivacyPolicy}
