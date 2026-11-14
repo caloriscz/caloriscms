@@ -37,7 +37,15 @@ class SlugManager
         }
 
         if ($prefix !== null) {
-            $arr['pages_types.prefix'] = $prefix;
+            // Look the type up directly. A 'pages_types.prefix' condition joins through a database
+            // foreign key from pages.pages_types_id, which older installations lack, and then every
+            // two- or three-part URL (e.g. /pages/search/) failed before reaching its route.
+            $typeIds = array_values($this->database->table('pages_types')->where('prefix', $prefix)
+                ->fetchPairs(null, 'id'));
+            if ($typeIds === []) {
+                return null;
+            }
+            $arr['pages_types_id'] = $typeIds;
         }
 
         $arr['public'] = 1;
