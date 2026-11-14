@@ -19,7 +19,7 @@ class PageGalleryControl extends Control
      * @param int $page page id
      * @param int $number If numbe set, result will limit number of images shown
      */
-    public function render(int $page, int $number = null): void
+    public function render(int $page, ?int $number = null): void
     {
         $template = $this->getTemplate();
 

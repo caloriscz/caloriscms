@@ -15,6 +15,8 @@ class PageDocumentControl extends Control
     }
 
     public function parseSnippets($s) {
+        // A page without a document has null here; preg_match_all(null) is deprecated since PHP 8.1.
+        $s = (string) $s;
         preg_match_all("/\[snippet\=\"([0-9]{1,10})\"\]/s", $s, $valsimp, PREG_SET_ORDER);
         if (count($valsimp) > 0) {
             foreach ($valsimp as $n => $nValue) {

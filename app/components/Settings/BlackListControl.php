@@ -41,7 +41,7 @@ class BlackListControl extends Control
      * @param int $id
      * @param int $type Insert blaclist word or sentence
      */
-    public function render(int $id = null, int $type = null): void
+    public function render(?int $id = null, ?int $type = null): void
     {
         $this->template->type = $type;
         $blacklist = $this->database->table('blacklist')->order('title');

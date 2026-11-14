@@ -9,7 +9,7 @@
                            value="1"{if $item->setvalue == 1} checked{/if} /> ano
                     <input type="radio" name="set[{$item->setkey}]"
                            value="0"{if $item->setvalue == 0} checked{/if}/> ne
-                {elseif substr($item->type, 0, 5) == 'table'}
+                {elseif substr((string) $item->type, 0, 5) == 'table'}
                 {var $itemSelect = explode(';', $item->type)}
                 {var $table = explode(':', $itemSelect[0])}
                 {var $column = explode(':', $itemSelect[1])}
