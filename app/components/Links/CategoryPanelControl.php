@@ -85,7 +85,10 @@ class CategoryPanelControl extends Control
             }
         }
 
-        $arr = array_filter($arr, '\strlen');
+        // Drop null and '' values, as strlen did; strlen(null) is deprecated since PHP 8.1.
+        $arr = array_filter($arr, static function ($value): bool {
+            return \strlen((string) $value) > 0;
+        });
 
         $this->database->table('links_categories')->get($this->getPresenter()->getParameter('id_from'))->update($arr);
         exit();

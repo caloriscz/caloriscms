@@ -3,6 +3,11 @@ parameters:
 php:
 	date.timezone: Europe/Prague
 
+tracy:
+	# Debug mode (only for the addresses in debug-ips.local.php) shows warnings and notices
+	# as a bluescreen, but deprecations only in the bar, so they don't break pages or AJAX.
+	strictMode: 'E_ALL & ~E_DEPRECATED & ~E_USER_DEPRECATED'
+
 application:
 	errorPresenter: Front:Error
 	mapping:

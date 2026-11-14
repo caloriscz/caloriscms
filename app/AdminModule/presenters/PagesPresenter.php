@@ -100,7 +100,7 @@ class PagesPresenter extends BasePresenter
     public function createComponentEditorSettings(): EditorSettingsControl
     {
         $control = new EditorSettingsControl($this->database);
-        $control->onSave[] = function (array $querystring, string $error = null) {
+        $control->onSave[] = function (array $querystring, ?string $error = null) {
 
             if ($error) {
                 $this->flashMessage($error, 'error');
